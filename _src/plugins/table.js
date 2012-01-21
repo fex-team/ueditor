@@ -34,7 +34,7 @@ UE.plugins['table'] = function () {
         'defaultRows':5,
         'tdvalign':'top',
         'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_",
-        'tableDragable':false
+        'tableDragable':true
     });
     var commands = {
         'deletetable':1,
@@ -382,10 +382,23 @@ UE.plugins['table'] = function () {
                         }
                     }
                 });
-                table.onmousemove = function () {
-                    me.options.tableDragable && toggleDragButton(true, this, me);
+                var overFlag = false;
+                table.onmouseover = function () {
+                    if (!overFlag) {
+                        overFlag = true;
+                        me.options.tableDragable && me.fireEvent("showDragPopup");
+                    }
                 };
-                table.onmouseout = function () {
+                table.onmouseout = function (evt) {
+                    evt = evt || me.window.event;
+                    var mousePos = mouseCoords(evt),
+                        x = mousePos.x,
+                        y = mousePos.y,
+                        p = domUtils.getXY(table);
+                    if (x <= p.x || x >= (p.x + table.offsetWidth) || y <= p.y || y >= (p.y + table.offsetHeight)) {
+                        me.options.tableDragable && me.fireEvent("hideDragPopup");
+                        overFlag = false;
+                    }
                     toggleDragableState(me, false, "", null);
                     hideDragLine(me);
                 };
@@ -719,75 +732,12 @@ UE.plugins['table'] = function () {
                     //位于第一行的顶部或者第一列的左边时不可拖动
                     toggleDragableState(me, target ? !!state : false, target ? state : '', pos, target);
                 }
-//                toggleDragButton(inTable(pos,table),table);
-            } else {
-                toggleDragButton(false, table, me);
             }
 
         } catch (e) {
             showError(e);
         }
     }
-    var dragButtomTimer;
-
-    function toggleDragButton(show, table, editor) {
-        if (!show) {
-            if (dragOver)return;
-            dragButtomTimer = setTimeout(function () {
-                !dragOver && dragButton && dragButton.parentNode && dragButton.parentNode.removeChild(dragButton);
-            }, 2000);
-        } else {
-            createDragButton(table, editor);
-        }
-    }
-
-    function createDragButton(table, editor) {
-        var pos = domUtils.getXY(table),
-            doc = table.ownerDocument;
-        if (dragButton && dragButton.parentNode)return dragButton;
-        dragButton = doc.createElement("div");
-        dragButton.contentEditable = false;
-        dragButton.innerHTML = "";
-        dragButton.style.cssText = "width:15px;height:15px;background-image:url(" + editor.options.UEDITOR_HOME_URL + "dialogs/table/dragicon.png);position: absolute;cursor:move;top:" + (pos.y - 15) + "px;left:" + (pos.x) + "px;";
-        domUtils.unSelectable(dragButton);
-        dragButton.onmouseover = function (evt) {
-            dragOver = true;
-        };
-        dragButton.onmouseout = function (evt) {
-            dragOver = false;
-        };
-        domUtils.on(dragButton, 'click', function (type, evt) {
-            doClick(evt, this);
-        });
-        domUtils.on(dragButton, 'dblclick', function (type, evt) {
-            doDblClick(evt);
-        });
-        domUtils.on(dragButton, 'dragstart', function (type, evt) {
-            domUtils.preventDefault(evt);
-        });
-        var timer;
-
-        function doClick(evt, button) {
-            // 部分浏览器下需要清理
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                editor.fireEvent("tableClicked", table, button);
-            }, 300);
-        }
-
-        function doDblClick(evt) {
-            clearTimeout(timer);
-            var ut = getUETable(table),
-                start = table.rows[0].cells[0],
-                end = ut.getLastCell(),
-                range = ut.getCellsRange(start, end);
-            editor.selection.getRange().setStart(start, 0).setCursor(false, true);
-            ut.setSelected(range);
-        }
-
-        doc.body.appendChild(dragButton);
-    }
-
 
 //    function inPosition(table, pos) {
 //        var tablePos = domUtils.getXY(table),
@@ -1777,7 +1727,13 @@ UE.plugins['table'] = function () {
                         utils.each(tds, function (td) {
                             td.removeAttribute("width");
                         });
-                        table.setAttribute('width', '100%');
+                        table.setAttribute('width', getTableWidth(this,needIEHack,getDefaultValue(this,table)));
+                        setTimeout(function(){
+                            utils.each(tds,function(td){
+                                td.setAttribute("width",td.offsetWidth);
+                            })
+                        },0)
+
                     } else {
                         var ut = getUETable(table),
                             preTds = cell?ut.getSameEndPosCells(cell, "x"):table.getElementsByTagName("td");
@@ -2798,6 +2754,14 @@ UE.plugins['table'] = function () {
             }
             this.update();
             return results;
+        },
+        split:function(cell,rowsNum,colsNum){
+            var cellInfo = this.getCellInfo(cell),
+                rowSpan = cellInfo.rowSpan,
+                colSpan = cellInfo.colSpan,
+                rowIndex = cellInfo.rowIndex;
+            if(rowSpan>1 && rowsNum%rowSpan!==0 || colSpan>1 && colsNum%colSpan!==0 ) return false;
+
         },
         getPreviewMergedCellsNum:function (rowIndex, colIndex) {
             var indexRow = this.indexTable[rowIndex],
