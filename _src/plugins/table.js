@@ -1730,7 +1730,7 @@ UE.plugins['table'] = function () {
                         table.setAttribute('width', getTableWidth(this,needIEHack,getDefaultValue(this,table)));
                         setTimeout(function(){
                             utils.each(tds,function(td){
-                                td.setAttribute("width",td.offsetWidth);
+                                td.setAttribute("width",td.offsetWidth+"");
                             })
                         },0)
 
