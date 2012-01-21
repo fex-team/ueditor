@@ -67,6 +67,12 @@
     ue.addListener('ready',function(){
         this.focus()
     });
+   ue.addListener("showDragPopup",function(type,table){
+//       console.log("over");
+   });
+   ue.addListener("hideDragPopup",function(type,table){
+//       console.log("out");
+   });
     function createEditor(){
         enableBtn();
         UE.getEditor('editor')
