@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+    <style type="text/css">
+        body{
+            font-size:14px;
+        }
+    </style>
+</head>
+<body>
+    <h2>UEditor提交示例</h2>
+    <form id="form" method="post">
+        <script type="text/plain" id="myEditor" name="myEditor">
+            <p>欢迎使用UEditor！</p>
+        </script>
+        <input type="submit" value="Form内部可以直接提交">
+    </form>
+    <button onclick="document.getElementById('form').submit()">Form外部直接提交会失败</button>
+    <input type="button" value="先点我一下同步内容，左边的哥们才能生效" onclick="editor_a.sync()" />
+
+    <p>=====================================华丽的分隔线=====================================</p>
+
+    <form id="form1" method="post">
+    <textarea id="myEditor1" name="myEditor1">这里的内容将会和html，body等标签一块提交</textarea>
+        </form>
+    <button onclick="editor_a1.sync();document.getElementById('form1').submit()">Form外部提交</button>
+
+    <script type="text/javascript">
+
+        var editor_a = UE.getEditor('myEditor',{
+            minFrameHeight:150
+        });
+        var editor_a1 = UE.getEditor('myEditor1',{
+            allHtmlEnabled:true,
+            minFrameHeight:150
+        });
+
+        //--自动切换提交地址----
+        var doc=document,
+            version=editor_a.options.imageUrl||"php",
+            form=doc.getElementById("form"),
+            form1=doc.getElementById("form1");
+
+        if(version.match(/php/)){
+            form1.action=form.action="../php/getContent.php";
+        }else if(version.match(/net/)){
+            form1.action=form.action="../net/getContent.ashx";
+        }else if(version.match(/jsp/)){
+            form1.action=form.action="../jsp/getContent.jsp";
+        }
+        //-----
+    </script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,70 @@
+/*普通按钮样式及状态*/
+.edui-modern  .edui-toolbar .edui-button .edui-icon,
+.edui-modern  .edui-toolbar .edui-menubutton .edui-icon,
+.edui-modern  .edui-toolbar .edui-splitbutton .edui-icon {
+    height: 29px !important;
+    width: 29px !important;
+    background-image: url(../images/icons.png);
+    _background-image: url(../images/icons.gif);
+}
+
+.edui-modern  .edui-toolbar .edui-button .edui-state-hover .edui-icon,
+.edui-modern  .edui-toolbar .edui-menubutton .edui-state-hover .edui-icon,
+.edui-modern  .edui-toolbar .edui-splitbutton .edui-state-hover .edui-icon {
+    background-image: url(../images/icons-hover.png);
+    _background-image: url(../images/icons-hover.gif);
+}
+
+.edui-modern  .edui-toolbar .edui-button .edui-state-checked .edui-icon,
+.edui-modern  .edui-toolbar .edui-menubutton .edui-state-checked .edui-icon,
+.edui-modern  .edui-toolbar .edui-splitbutton .edui-state-checked .edui-icon {
+    background-image: url(../images/icons-checked.png);
+    _background-image: url(../images/icons-checked.gif);
+}
+.edui-modern  .edui-toolbar .edui-state-disabled .edui-label {
+    color: gray;
+}
+.edui-modern  .edui-toolbar .edui-state-disabled .edui-icon {
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+}
+/*每个按钮外面的框*/
+.edui-modern  .edui-toolbar .edui-button .edui-button-wrap {
+    padding: 1px;
+    position: relative;
+    margin-top: 5px;
+}
+
+.edui-modern  .edui-toolbar .edui-button .edui-state-hover .edui-button-wrap {
+    padding: 0;
+    border: 1px solid #7E8396;
+    background-color: #70768C;
+
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#72788E), to(#1F2949));
+    background-image: -webkit-linear-gradient(top, #72788E, #1F2949);
+    background-image: -moz-linear-gradient(top, #72788E, #1F2949);
+    background-image: -o-linear-gradient(top, #72788E, #1F2949);
+    background-image: linear-gradient(to bottom, #72788E, #1F2949);
+    border-radius: 3px;
+}
+
+.edui-modern  .edui-toolbar .edui-button .edui-state-checked .edui-button-wrap {
+    padding: 0;
+    border: 1px solid #6A7085;
+    background-color: #202949;
+
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#72788E), to(#1F2949));
+    background-image: -webkit-linear-gradient(top, #72788E, #1F2949);
+    background-image: -moz-linear-gradient(top, #72788E, #1F2949);
+    background-image: -o-linear-gradient(top, #72788E, #1F2949);
+    background-image: linear-gradient(to bottom, #72788E, #1F2949);
+    border-radius: 3px;
+}
+
+.edui-modern  .edui-toolbar .edui-button .edui-state-active .edui-button-wrap {
+    padding: 0;
+    border: 1px solid #fff;
+    background-color: transparent;
+    background-image: none;
+    border-radius: 3px;
+}

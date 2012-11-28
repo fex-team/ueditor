@@ -1,0 +1,96 @@
+/*splitbutton*/
+.edui-gorgeous .edui-toolbar .edui-splitbutton-body .edui-arrow,
+.edui-gorgeous .edui-toolbar .edui-menubutton-body .edui-arrow {
+    background: url(../images/icons.png) -1220px -2px;
+    _background: url(../images/icons.gif) -1220px -2px;
+    height: 25px;
+    width: 9px;
+}
+
+.edui-gorgeous .edui-toolbar .edui-splitbutton .edui-splitbutton-body,
+.edui-gorgeous .edui-toolbar .edui-menubutton .edui-menubutton-body {
+    padding: 1px;
+    margin-top: 5px;
+}
+
+.edui-gorgeous .edui-toolbar .edui-menubutton-body .edui-splitborder,
+.edui-gorgeous .edui-toolbar .edui-splitbutton-body .edui-splitborder{
+    width: 1px;
+    height: 29px;
+}
+.edui-gorgeous .edui-toolbar .edui-splitborder {
+    width: 1px;
+    height: 20px;
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-hover .edui-splitborder {
+    width: 1px;
+    border-left: 0 solid #A5ADB9;
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-active .edui-splitborder {
+    width: 0;
+    border-left: 1px solid #fff;
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-opened .edui-splitborder {
+    width: 1px;
+    border: 0;
+}
+
+.edui-gorgeous .edui-toolbar .edui-splitbutton .edui-state-hover .edui-splitbutton-body,
+.edui-gorgeous .edui-toolbar .edui-menubutton .edui-state-hover .edui-menubutton-body {
+    border: 1px solid #A5ADB9;
+    padding: 0;
+    border-radius: 3px;
+}
+
+.edui-gorgeous .edui-toolbar .edui-splitbutton .edui-state-checked .edui-splitbutton-body,
+.edui-gorgeous .edui-toolbar .edui-menubutton .edui-state-checked .edui-menubutton-body {
+    border: 1px solid #A5ADB9;
+    border-radius: 3px;
+    padding: 0;
+}
+
+.edui-gorgeous .edui-toolbar .edui-splitbutton .edui-state-active .edui-splitbutton-body,
+.edui-gorgeous .edui-toolbar .edui-menubutton .edui-state-active .edui-menubutton-body {
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid #fff;
+    border-radius: 3px;
+    padding: 0;
+}
+
+.edui-gorgeous .edui-state-disabled .edui-arrow {
+    opacity: 0.3;
+    _filter: alpha(opacity = 30);
+}
+
+.edui-gorgeous .edui-toolbar .edui-splitbutton .edui-state-opened .edui-splitbutton-body,
+.edui-gorgeous .edui-toolbar .edui-menubutton .edui-state-opened .edui-menubutton-body {
+    background-color: #263B55;
+    background-image: none;
+    border: 1px solid #fff;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 0;
+}
+
+.edui-gorgeous .edui-for-insertorderedlist .edui-bordereraser,
+.edui-gorgeous .edui-for-lineheight .edui-bordereraser,
+.edui-gorgeous .edui-for-rowspacingtop .edui-bordereraser,
+.edui-gorgeous .edui-for-rowspacingbottom .edui-bordereraser,
+.edui-gorgeous .edui-for-insertunorderedlist .edui-bordereraser {
+    background-color: white;
+}
+
+/* 解决嵌套导致的图标问题 */
+.edui-gorgeous .edui-for-insertorderedlist .edui-popup-body .edui-icon,
+.edui-gorgeous .edui-for-lineheight .edui-popup-body .edui-icon,
+.edui-gorgeous .edui-for-rowspacingtop .edui-popup-body .edui-icon,
+.edui-gorgeous .edui-for-rowspacingbottom .edui-popup-body .edui-icon,
+.edui-gorgeous .edui-for-insertunorderedlist .edui-popup-body .edui-icon {
+    background-position: 0 -40px;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+   
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+    <style type="text/css">
+        #myEditor{
+            width: 500px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>UEditor简单功能</h1>
+
+    <!--style给定宽度可以影响编辑器的最终宽度-->
+    <textarea id="myEditor">这里是原始的textarea中的内容，可以从数据中读取</textarea>
+    <br/>
+    <input type="button" onclick="render()" value="渲染编辑器">
+    <script type="text/javascript">
+        var editor_a = new baidu.editor.ui.Editor();
+
+        //渲染编辑器
+        function render(){
+            editor_a.render('myEditor');
+        }
+    </script>
+
+</body>
+
+
+</html>

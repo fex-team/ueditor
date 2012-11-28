@@ -1,0 +1,335 @@
+/* 弹出对话框按钮 */
+.edui-modern .edui-dialog {
+    z-index: 2000;
+    position: absolute;
+}
+
+.edui-modern .edui-dialog-wrap {
+    margin-right: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #7182a6;
+    border-radius: 5px;
+    opacity: 0.9;
+    filter: alpha(opacity = 95);
+}
+
+.edui-modern .edui-dialog-body {
+    position: relative;
+    background-color: #fff;
+    border-radius: 5px;
+    _zoom: 1;
+}
+
+.edui-modern .edui-dialog-shadow {
+    position: absolute;
+    border-radius: 5px;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    box-shadow: 0 0 10px #000;
+    -webkit-box-shadow:  0 0 10px #000;
+    -moz-box-shadow:  0 0 10px #000;
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '3', MakeShadow = 'true', ShadowOpacity = '0.5');
+}
+
+.edui-modern .edui-dialog-foot {
+    *background-color: #f5f6fa;
+}
+
+.edui-modern .edui-dialog-titlebar {
+    height: 35px;
+    position: relative;
+    cursor: move;
+    *background-color: #f5f6fa;
+}
+
+.edui-modern .edui-dialog-caption {
+    display: inline-block;
+    zoom:1;
+    padding:5px 0 0 10px;
+    width: 125px;
+    height: 25px;
+    font-size: 0;
+    line-height: 0;
+    margin-top: 5px;
+    background:url("../images/dialog_title.png") no-repeat;
+}
+
+.edui-modern .edui-dialog-draghandle {
+    height: 26px;
+}
+
+.edui-modern .edui-dialog-closebutton {
+    position: absolute !important;
+    right: 0;
+    top: -3px;
+}
+
+.edui-modern .edui-dialog-closebutton .edui-button-body {
+    height: 30px;
+    _margin-top:3px;
+    width: 48px;
+    cursor: pointer;
+    border-radius:5px;
+    background: url("../images/icons-all.png") no-repeat 0 -70px
+}
+
+.edui-modern .edui-dialog-closebutton .edui-state-hover .edui-button-body {
+    background:url("../images/icons-all.png") no-repeat -59px -69px
+}
+
+.edui-modern .edui-dialog-foot {
+    height: 40px;
+}
+
+.edui-modern .edui-dialog-buttons {
+    position: absolute;
+    right: 0;
+}
+
+.edui-modern .edui-dialog-buttons .edui-button {
+    margin-right: 10px;
+    box-shadow: 3px 3px 5px #D3D6DA;
+    opacity: 0.85;
+    filter: alpha(opacity = 85);
+}
+
+.edui-modern .edui-dialog-buttons .edui-button .edui-button-body {
+    height: 27px;
+    width: 96px;
+    font-size: 12px;
+    color: #131f40;
+    line-height: 27px;
+    text-align: center;
+    cursor: default;
+    background-image: url(../images/icons-all.gif);
+    background-position:0 -35px;
+}
+
+.edui-modern .edui-dialog-buttons .edui-button .edui-state-hover .edui-button-body {
+    background-position: 0 0;
+}
+
+.edui-modern .edui-dialog iframe {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+}
+
+.edui-modern .edui-dialog-modalmask {
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+    background-color: #000;
+    position: absolute;
+    /*z-index: 1999;*/
+}
+
+.edui-modern .edui-dialog-dragmask {
+    position: absolute;
+    /*z-index: 2001;*/
+    background-color: transparent;
+    cursor: move;
+}
+
+.edui-modern .edui-dialog-content {
+    background-color: transparent;
+    position: relative;
+}
+
+.edui-modern .dialogcontmask {
+    cursor: move;
+    visibility: hidden;
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    filter: alpha(opacity = 0);
+}
+/*link-dialog*/
+.edui-modern .edui-for-link .edui-dialog-content {
+    width: 420px;
+    height: 180px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-link .edui-dialog-caption {
+    background-position:-141px -187px
+}
+/*background-dialog*/
+.edui-modern .edui-for-background .edui-dialog-content {
+    width: 440px;
+    height: 280px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-background .edui-dialog-caption {
+    background-position: -6px -218px
+}
+
+/*template-dialog*/
+.edui-modern .edui-for-template .edui-dialog-content {
+    width: 630px;
+    height: 390px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-template .edui-dialog-caption {
+    background-position: -1px -33px
+}
+/*scrawl-dialog*/
+.edui-modern .edui-for-scrawl .edui-dialog-content {
+    width: 515px;
+    *width: 506px;
+    height: 360px;
+}
+.edui-modern .edui-for-scrawl .edui-dialog-caption {
+    background-position: -1px -67px
+}
+/*spechars-dialog*/
+.edui-modern .edui-for-spechars .edui-dialog-content {
+    width: 700px;
+    _width:730px;
+    height: 500px;
+    *height: 570px;
+}
+.edui-modern .edui-for-spechars .edui-dialog-caption {
+    background-position: -1px -126px
+}
+/*image-dialog*/
+.edui-modern .edui-for-insertimage .edui-dialog-content {
+    width: 640px;
+    height: 390px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-insertimage .edui-dialog-caption {
+    background-position: -1px -97px
+}
+/*webapp-dialog*/
+.edui-modern .edui-for-webapp .edui-dialog-content {
+    width: 560px;
+    _width: 565px;
+    height: 450px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-webapp .edui-dialog-caption {
+    background-position: -1px -258px
+}
+/*image-insertframe*/
+.edui-modern .edui-for-insertframe .edui-dialog-content {
+    width: 350px;
+    height: 200px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-insertframe .edui-dialog-caption {
+    background-position:-142px -32px
+}
+/*wordImage-dialog*/
+.edui-modern .edui-for-wordimage .edui-dialog-content {
+    width: 620px;
+    height: 380px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-wordimage .edui-dialog-caption {
+    background-position: -1px -3px;
+}
+/*attachment-dialog*/
+.edui-modern .edui-for-attachment .edui-dialog-content {
+    width: 480px;
+    height: 360px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-attachment .edui-dialog-caption {
+    background-position: -1px -185px
+}
+/*code-dialog*/
+.edui-modern .edui-for-highlightcode .edui-dialog-content {
+    width: 550px;
+    height: 360px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-highlightcode .edui-dialog-caption {
+    background-position: -142px -3px
+}
+/*map-dialog*/
+.edui-modern .edui-for-map .edui-dialog-content {
+    width: 550px;
+    height: 400px;
+}
+.edui-modern .edui-for-map .edui-dialog-caption {
+    background-position: -142px -124px
+}
+/*gmap-dialog*/
+.edui-modern .edui-for-gmap .edui-dialog-content {
+    width: 550px;
+    height: 400px;
+}
+.edui-modern .edui-for-gmap .edui-dialog-caption {
+    background-position: -1px -153px
+}
+/*video-dialog*/
+.edui-modern .edui-for-insertvideo .edui-dialog-content {
+    width: 590px;
+    height: 410px;
+}
+.edui-modern .edui-for-insertvideo .edui-dialog-caption {
+    background-position: -1px -3px;
+}
+/*anchor-dialog*/
+.edui-modern .edui-for-anchor .edui-dialog-content {
+    width: 320px;
+    height: 60px;
+    overflow: hidden;
+}
+.edui-modern .edui-for-anchor .edui-dialog-caption {
+    background-position: -139px -221px
+}
+/*searchreplace-dialog*/
+.edui-modern .edui-for-searchreplace .edui-dialog-content {
+    width: 400px;
+    height: 180px;
+}
+.edui-modern .edui-for-searchreplace .edui-dialog-caption {
+    background-position: -141px -62px
+}
+/*help-dialog*/
+.edui-modern .edui-for-help .edui-dialog-content {
+    width: 400px;
+    height: 420px;
+}
+.edui-modern .edui-for-help .edui-dialog-caption {
+    background-position: -139px -260px
+}
+/*table-dialog*/
+.edui-modern .edui-for-inserttable .edui-dialog-content {
+    width: 510px;
+    height: 275px;
+}
+.edui-modern .edui-for-inserttable .edui-dialog-caption {
+    background-position:-142px -95px
+}
+/*td-dialog*/
+.edui-modern .edui-for-edittd .edui-dialog-content {
+    width: 220px;
+    height: 115px;
+}
+.edui-modern .edui-for-edittd .edui-dialog-caption {
+    background-position: -1px -3px;
+}
+/*snapscreen-dialog*/
+.edui-modern .edui-for-snapscreen .edui-dialog-content {
+    width: 400px;
+    height: 220px;
+}
+.edui-modern .edui-for-snapscreen .edui-dialog-caption {
+     background-position: -1px -3px;
+ }
+/*music-dialog*/
+.edui-modern .edui-for-music .edui-dialog-content {
+    width: 515px;
+    height: 360px;
+}
+.edui-modern .edui-for-music .edui-dialog-caption {
+    background-position: -1px -3px;
+}

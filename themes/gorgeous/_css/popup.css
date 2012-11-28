@@ -1,0 +1,79 @@
+/* 弹出菜单 */
+.edui-gorgeous .edui-popup {
+    z-index: 3000;
+    opacity: 0.95;
+}
+
+.edui-gorgeous .edui-popup .edui-shadow {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #CACACA;
+    box-shadow:3px 3px 5px #CACACA;
+    border-radius: 5px;
+    -webkit-box-shadow:  3px 3px 5px #CACACA;
+    -moz-box-shadow:  3px 3px 5px #CACACA;
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '3', MakeShadow = 'true', ShadowOpacity = '0.5');
+}
+
+.edui-gorgeous .edui-for-autotypeset .edui-popup-content,
+.edui-gorgeous .edui-for-forecolor .edui-popup-content,
+.edui-gorgeous .edui-for-backcolor .edui-popup-content,
+.edui-gorgeous .edui-for-insertorderedlist .edui-popup-content,
+.edui-gorgeous .edui-for-insertunorderedlist .edui-popup-content,
+.edui-gorgeous .edui-for-rowspacingtop .edui-popup-content,
+.edui-gorgeous .edui-for-rowspacingbottom .edui-popup-content,
+.edui-gorgeous .edui-for-inserttable .edui-popup-content,
+.edui-gorgeous .edui-for-lineheight .edui-popup-content{
+    border: 1px solid white;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 0;
+    background-color: #263B55;
+    padding: 5px;
+    color: white;
+}
+.edui-gorgeous .edui-popup-content {
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: #263B55;
+    padding: 5px;
+    color: white;
+}
+.edui-gorgeous .edui-popup .edui-bordereraser {
+    background-color: #263B55;
+    height: 3px;
+}
+
+.edui-gorgeous .edui-menu .edui-bordereraser {
+    background-color: #263B55;
+    height: 3px;
+}
+
+.edui-gorgeous .edui-anchor-topleft .edui-bordereraser {
+    left: 1px;
+    top: -1px;
+}
+
+.edui-gorgeous .edui-anchor-topright .edui-bordereraser {
+    right: 1px;
+    top: -2px;
+}
+
+.edui-gorgeous .edui-anchor-bottomleft .edui-bordereraser {
+    left: 0;
+    bottom: -6px;
+    height: 7px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+.edui-gorgeous .edui-anchor-bottomright .edui-bordereraser {
+    right: 0;
+    bottom: -6px;
+    height: 7px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}

@@ -1,0 +1,36 @@
+/*contextmenu*/
+.edui-modern .edui-hassubmenu .edui-arrow {
+    height: 20px;
+    width: 20px;
+    float: right;
+    background: url("../images/icons-all.png") no-repeat 10px -233px;
+}
+
+.edui-modern .edui-menu-body .edui-menuitem {
+    padding: 1px;
+}
+
+.edui-modern .edui-menuseparator {
+    margin: 2px 0;
+    height: 1px;
+    overflow: hidden;
+}
+
+.edui-modern .edui-menuseparator-inner {
+    border-bottom: 1px solid #e2e3e3;
+    margin-left: 29px;
+    margin-right: 1px;
+}
+
+.edui-modern .edui-menu-body .edui-state-hover {
+    padding: 0 !important;
+    background-color: #70768C;
+    border: 1px solid #7E8396;
+
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#72788E), to(#1F2949));
+    background-image: -webkit-linear-gradient(top, #72788E, #1F2949);
+    background-image: -moz-linear-gradient(top, #72788E, #1F2949);
+    background-image: -o-linear-gradient(top, #72788E, #1F2949);
+    background-image: linear-gradient(to bottom, #72788E, #1F2949);
+    border-radius: 3px;
+}

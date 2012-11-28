@@ -1,0 +1,43 @@
+/* 颜色弹出菜单 */
+.edui-modern .edui-colorpicker-topbar {
+    height: 27px;
+    width: 200px;
+    /*border-bottom: 1px gray dashed;*/
+}
+
+.edui-modern .edui-colorpicker-preview {
+    height: 20px;
+    border: 1px inset black;
+    margin-left: 1px;
+    width: 128px;
+    float: left;
+}
+
+.edui-modern .edui-colorpicker-nocolor {
+    float: right;
+    margin-right: 1px;
+    font-size: 12px;
+    line-height: 14px;
+    height: 14px;
+    border: 1px solid #333;
+    padding: 3px 5px;
+    cursor: pointer;
+}
+
+.edui-modern .edui-colorpicker-tablefirstrow {
+    height: 30px;
+}
+
+.edui-modern .edui-colorpicker-colorcell {
+    width: 14px;
+    height: 14px;
+    display: block;
+    margin: 0;
+    cursor: pointer;
+}
+
+.edui-modern .edui-colorpicker-colorcell:hover {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+}

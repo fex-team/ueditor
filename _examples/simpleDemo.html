@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+</head>
+<body>
+    <h1>UEditor简单功能</h1>
+
+    <!--style给定宽度可以影响编辑器的最终宽度-->
+    <script type="text/plain" id="myEditor">
+        <p>这里我可以写一些输入提示</p>
+    </script>
+    <script type="text/javascript">
+        // 自定义的编辑器配置项,此处定义的配置项将覆盖editor_config.js中的同名配置
+        var editorOption = {
+            //这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
+            toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold']],
+            //focus时自动清空初始化时的内容
+            autoClearinitialContent:true,
+            //关闭字数统计
+            wordCount:false,
+            //关闭elementPath
+            elementPathEnabled:false
+            //更多其他参数，请参考editor_config.js中的配置项
+        };
+        var editor_a = new baidu.editor.ui.Editor(editorOption);
+        editor_a.render( 'myEditor' );
+    </script>
+
+</body>
+
+
+</html>

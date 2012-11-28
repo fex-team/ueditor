@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+    <!--加入高亮的js和css文件，如果你的编辑器和展示也是一个页面那么高亮的js可以不加载-->
+    <script type="text/javascript" charset="utf-8" src="../third-party/SyntaxHighlighter/shCore.js"></script>
+    <link rel="stylesheet" type="text/css" href="../third-party/SyntaxHighlighter/shCoreDefault.css"/>
+
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+
+</head>
+<body>
+<h1>代码高亮演示</h1>
+<h2>页面上已经有的代码</h2>
+<div style="width:200px">
+    <pre class="brush:js;toolbar:false;">
+        var editor_a = new baidu.editor.ui.Editor();
+        editor_a.render( 'myEditor' );
+    </pre>
+     <pre class="brush:js;toolbar:false;">
+     function adjustList(list,tag,style){
+        var nextList = list.nextSibling;
+        if(nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (domUtils.getStyle(nextList,'list-style-type')||(tag == 'ol'?'decimal' : 'disc')) == style){
+            domUtils.moveChild(nextList,list);
+            if(nextList.childNodes.length == 0){
+                domUtils.remove(nextList);
+            }
+        }
+        var preList = list.previousSibling;
+    }
+</pre>
+</div>
+
+<!--style给定宽度可以影响编辑器的最终宽度-->
+<script type="text/plain" id="myEditor" style="width:500px">
+     <pre class="brush:js;toolbar:false;">
+    function adjustList(list,tag,style){
+        var nextList = list.nextSibling;
+        if(nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (domUtils.getStyle(nextList,'list-style-type')||(tag == 'ol'?'decimal' : 'disc')) == style){
+            domUtils.moveChild(nextList,list);
+            if(nextList.childNodes.length == 0){
+                domUtils.remove(nextList);
+            }
+        }
+    }
+</pre>
+</script>
+<script type="text/javascript">
+    //为了在编辑器之外能展示高亮代码
+    SyntaxHighlighter.highlight();
+    //调整左右对齐
+    for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){
+            var tds = di.getElementsByTagName('td');
+            for(var j=0,li,ri;li=tds[0].childNodes[j];j++){
+                ri = tds[1].firstChild.childNodes[j];
+                ri.style.height = li.style.height = ri.offsetHeight + 'px';
+            }
+    }
+    var editor_a = new baidu.editor.ui.Editor();
+    editor_a.render( 'myEditor' );
+</script>
+
+</body>
+
+
+</html>

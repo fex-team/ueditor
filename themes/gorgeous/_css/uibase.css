@@ -1,0 +1,116 @@
+/*基础UI构建
+*/
+/* common layer */
+.edui-gorgeous .edui-box {
+    border: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.edui-gorgeous a.edui-box {
+    display: block;
+    text-decoration: none;
+    color: black;
+}
+
+.edui-gorgeous a.edui-box:hover {
+    text-decoration: none;
+}
+
+.edui-gorgeous a.edui-box:active {
+    text-decoration: none;
+}
+
+.edui-gorgeous table.edui-box {
+    border-collapse: collapse;
+}
+
+.edui-gorgeous ul.edui-box {
+    list-style-type: none;
+}
+
+div.edui-box {
+    position: relative;
+    display: -moz-inline-box !important;
+    display: inline-block !important;
+    vertical-align: top;
+}
+
+.edui-gorgeous .edui-clearfix {
+    zoom: 1
+}
+
+.edui-gorgeous .edui-clearfix:after {
+    content: '\20';
+    display: block;
+    clear: both;
+}
+
+* html div.edui-box {
+    display: inline !important;
+}
+
+*:first-child+html div.edui-box {
+    display: inline !important;
+}
+
+/* control layout */
+.edui-gorgeous .edui-button-body, .edui-splitbutton-body, .edui-menubutton-body, .edui-combox-body {
+    position: relative;
+}
+
+.edui-gorgeous .edui-popup {
+    position: absolute;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.edui-gorgeous .edui-popup .edui-shadow {
+    position: absolute;
+    z-index: -1;
+}
+
+.edui-gorgeous .edui-popup .edui-bordereraser {
+    position: absolute;
+    overflow: hidden;
+}
+
+.edui-gorgeous .edui-tablepicker .edui-canvas {
+    position: relative;
+}
+
+.edui-gorgeous .edui-tablepicker .edui-canvas .edui-overlay {
+    position: absolute;
+}
+
+.edui-gorgeous .edui-dialog-modalmask, .edui-dialog-dragmask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.edui-gorgeous .edui-toolbar {
+    position: relative;
+}
+
+/*
+ * default theme
+ */
+.edui-gorgeous .edui-label {
+    cursor: default;
+    font-family: "Microsoft Yahei", "微软雅黑", Tahoma, Arial, Helvetica, STHeiti;
+}
+
+.edui-gorgeous span.edui-clickable {
+    color: #39C;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.edui-gorgeous span.edui-unclickable {
+    color: gray;
+    cursor: default;
+}

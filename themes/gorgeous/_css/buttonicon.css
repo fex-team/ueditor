@@ -1,0 +1,522 @@
+/* 每个按钮的default、hover、active、checked背景位置*/
+.edui-gorgeous .edui-for-undo .edui-icon,
+.edui-gorgeous .edui-for-undo .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-undo .edui-state-checked .edui-icon {
+    background-position: -267px -3px
+}
+
+.edui-gorgeous .edui-for-redo .edui-icon,
+.edui-gorgeous .edui-for-redo .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-redo .edui-state-checked .edui-icon {
+    background-position: -166px -3px
+}
+
+.edui-gorgeous .edui-for-bold .edui-icon,
+.edui-gorgeous .edui-for-bold .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-bold .edui-state-checked .edui-icon {
+    background-position: 0 -3px
+}
+
+.edui-gorgeous .edui-for-italic .edui-icon,
+.edui-gorgeous .edui-for-italic .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-italic .edui-state-checked .edui-icon {
+    background-position: -99px -3px
+}
+
+.edui-gorgeous .edui-for-underline .edui-icon,
+.edui-gorgeous .edui-for-underline .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-underline .edui-state-checked .edui-icon {
+    background-position: -234px -3px
+}
+
+.edui-gorgeous .edui-for-strikethrough .edui-icon,
+.edui-gorgeous .edui-for-strikethrough .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-strikethrough .edui-state-checked .edui-icon {
+    background-position: -200px -3px
+}
+
+.edui-gorgeous .edui-for-subscript .edui-icon,
+.edui-gorgeous .edui-for-subscript .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-subscript .edui-state-checked .edui-icon {
+    background-position: -991px -3px
+}
+
+.edui-gorgeous .edui-for-superscript .edui-icon,
+.edui-gorgeous .edui-for-superscript .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-superscript .edui-state-checked .edui-icon {
+    background-position: -1024px -3px
+}
+
+.edui-gorgeous .edui-for-blockquote .edui-icon,
+.edui-gorgeous .edui-for-blockquote .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-blockquote .edui-state-checked .edui-icon {
+    background-position: -364px -3px
+}
+
+.edui-gorgeous .edui-for-forecolor .edui-icon,
+.edui-gorgeous .edui-for-forecolor .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-forecolor .edui-state-checked .edui-icon {
+    background-position: -1189px -3px
+}
+
+.edui-gorgeous .edui-for-backcolor .edui-icon,
+.edui-gorgeous .edui-for-backcolor .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-backcolor .edui-state-checked .edui-icon {
+    background-position: -1255px -3px
+}
+
+.edui-gorgeous .edui-for-inserttable .edui-icon,
+.edui-gorgeous .edui-for-inserttable .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-inserttable .edui-state-checked .edui-icon {
+    background-position:-960px -35px
+}
+
+.edui-gorgeous .edui-for-autotypeset .edui-icon,
+.edui-gorgeous .edui-for-autotypeset .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-autotypeset .edui-state-checked .edui-icon {
+    background-position: -1058px -68px;
+}
+
+.edui-gorgeous .edui-for-justifyleft .edui-icon,
+.edui-gorgeous .edui-for-justifyleft .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-justifyleft .edui-state-checked .edui-icon {
+    background-position: -762px -3px
+}
+
+.edui-gorgeous .edui-for-justifycenter .edui-icon,
+.edui-gorgeous .edui-for-justifycenter .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-justifycenter .edui-state-checked .edui-icon {
+    background-position: -695px -3px
+}
+
+.edui-gorgeous .edui-for-justifyright .edui-icon,
+.edui-gorgeous .edui-for-justifyright .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-justifyright .edui-state-checked .edui-icon {
+    background-position: -794px -3px
+}
+
+.edui-gorgeous .edui-for-justifyjustify .edui-icon,
+.edui-gorgeous .edui-for-justifyjustify .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-justifyjustify .edui-state-checked .edui-icon {
+    background-position: -728px -3px
+}
+
+.edui-gorgeous .edui-for-insertorderedlist .edui-icon,
+.edui-gorgeous .edui-for-insertorderedlist .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-insertorderedlist .edui-state-checked .edui-icon {
+    background-position: -134px -3px
+}
+
+.edui-gorgeous .edui-for-insertunorderedlist .edui-icon,
+.edui-gorgeous .edui-for-insertunorderedlist .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-insertunorderedlist .edui-state-checked .edui-icon {
+    background-position: -36px -1px
+}
+
+.edui-gorgeous .edui-for-lineheight .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-lineheight .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-lineheight .edui-icon {
+    background-position: -1190px -68px;
+}
+
+.edui-gorgeous .edui-for-rowspacingbottom .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-rowspacingbottom .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-rowspacingbottom .edui-icon {
+    background-position: -1223px -68px;
+}
+
+.edui-gorgeous .edui-for-rowspacingtop .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-rowspacingtop .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-rowspacingtop .edui-icon {
+    background-position: -1256px -68px;
+}
+
+.edui-gorgeous .edui-for-horizontal .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-horizontal .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-horizontal .edui-icon {
+    background-position: -595px -3px
+}
+
+.edui-gorgeous .edui-for-link .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-link .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-link .edui-icon {
+    background-position: -826px -3px
+}
+
+.edui-gorgeous .edui-for-code .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-code .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-code .edui-icon {
+    background-position: -440px -68px;
+}
+
+.edui-gorgeous .edui-for-insertimage .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-insertimage .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-insertimage .edui-icon {
+    background-position: -629px -3px
+}
+
+.edui-gorgeous .edui-for-insertframe .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-insertframe .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-insertframe .edui-icon {
+    background-position: -397px -68px
+}
+
+.edui-gorgeous .edui-for-emoticon .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-emoticon .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-emoticon .edui-icon {
+    background-position: -60px -35px;
+}
+
+.edui-gorgeous .edui-for-spechars .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-spechars .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-spechars .edui-icon {
+    background-position: -396px -3px
+}
+
+.edui-gorgeous .edui-for-help .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-help .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-help .edui-icon {
+    background-position: -563px -3px
+}
+
+.edui-gorgeous .edui-for-print .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-print .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-print .edui-icon {
+    background-position: -729px -35px
+}
+
+.edui-gorgeous .edui-for-preview .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-preview .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-preview .edui-icon {
+    background-position: -695px -35px
+}
+
+.edui-gorgeous .edui-for-selectall .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-selectall .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-selectall .edui-icon {
+    background-position: -662px -35px
+}
+
+.edui-gorgeous .edui-for-searchreplace .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-searchreplace .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-searchreplace .edui-icon {
+    background-position: -856px -35px
+}
+
+.edui-gorgeous .edui-for-map .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-map .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-map .edui-icon {
+    background-position: -69px -68px
+}
+
+.edui-gorgeous .edui-for-gmap .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-gmap .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-gmap .edui-icon {
+    background-position: -432px -68px
+}
+
+.edui-gorgeous .edui-for-insertvideo .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-insertvideo .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-insertvideo .edui-icon {
+    background-position: -530px -35px;
+}
+
+.edui-gorgeous .edui-for-time .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-time .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-time .edui-icon {
+    background-position: -267px -35px
+}
+
+.edui-gorgeous .edui-for-date .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-date .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-date .edui-icon {
+    background-position: -233px -35px
+}
+
+.edui-gorgeous .edui-for-cut .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-cut .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-cut .edui-icon {
+    background-position: -680px -3px
+}
+
+.edui-gorgeous .edui-for-copy .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-copy .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-copy .edui-icon {
+    background-position: -695px -3px
+}
+
+.edui-gorgeous .edui-for-paste .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-paste .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-paste .edui-icon {
+    background-position: -925px -3px
+}
+
+.edui-gorgeous .edui-for-formatmatch .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-formatmatch .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-formatmatch .edui-icon {
+    background-position: -69px -3px
+}
+
+.edui-gorgeous .edui-for-pasteplain .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-pasteplain .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-pasteplain .edui-icon {
+    background-position: -597px -35px;
+}
+
+.edui-gorgeous .edui-for-directionalityltr .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-directionalityltr .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-directionalityltr .edui-icon {
+    background-position: -36px -35px;
+}
+
+.edui-gorgeous .edui-for-directionalityrtl .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-directionalityrtl .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-directionalityrtl .edui-icon {
+    background-position: -69px -35px;
+}
+
+.edui-gorgeous .edui-for-source .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-source .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-source .edui-icon {
+    background-position: -430px -3px;
+}
+
+.edui-gorgeous .edui-for-removeformat .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-removeformat .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-removeformat .edui-icon {
+    background-position: -960px -3px
+}
+
+.edui-gorgeous .edui-for-unlink .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-unlink .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-unlink .edui-icon {
+    background-position: -1058px -3px
+}
+
+.edui-gorgeous .edui-for-touppercase .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-touppercase .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-touppercase .edui-icon {
+    background-position: -1289px -3px
+}
+
+.edui-gorgeous .edui-for-tolowercase .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-tolowercase .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-tolowercase .edui-icon {
+    background-position: -1321px -3px
+}
+
+.edui-gorgeous .edui-for-insertrow .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-insertrow .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-insertrow .edui-icon {
+    background-position:-1222px -35px
+}
+
+.edui-gorgeous .edui-for-insertcol .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-insertcol .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-insertcol .edui-icon {
+    background-position: -1125px -35px
+}
+
+.edui-gorgeous .edui-for-mergeright .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-mergeright .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-mergeright .edui-icon {
+    background-position: -101px -68px
+}
+
+.edui-gorgeous .edui-for-mergedown .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-mergedown .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-mergedown .edui-icon {
+    background-position:-134px -68px
+}
+
+.edui-gorgeous .edui-for-splittorows .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-splittorows .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-splittorows .edui-icon {
+    background-position: -167px -68px
+}
+
+.edui-gorgeous .edui-for-splittocols .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-splittocols .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-splittocols .edui-icon {
+    background-position: -200px -68px
+}
+
+.edui-gorgeous .edui-for-insertparagraphbeforetable .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-insertparagraphbeforetable .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-insertparagraphbeforetable .edui-icon {
+    background-position: -234px -68px
+}
+
+.edui-gorgeous .edui-for-deleterow .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-deleterow .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-deleterow .edui-icon {
+    background-position:-1091px -35px
+}
+
+.edui-gorgeous .edui-for-deletecol .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-deletecol .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-deletecol .edui-icon {
+    background-position:-1056px -35px
+}
+
+.edui-gorgeous .edui-for-splittocells .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-splittocells .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-splittocells .edui-icon {
+    background-position: -1257px -35px
+}
+
+.edui-gorgeous .edui-for-mergecells .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-mergecells .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-mergecells .edui-icon {
+    background-position: -1257px -35px
+}
+
+.edui-gorgeous .edui-for-deletetable .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-deletetable .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-deletetable .edui-icon {
+    background-position: -1025px -35px
+}
+
+.edui-gorgeous .edui-for-cleardoc .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-cleardoc .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-cleardoc .edui-icon {
+    background-position: -860px -3px
+}
+
+.edui-gorgeous .edui-for-fullscreen .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-fullscreen .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-fullscreen .edui-icon {
+    background-position: -167px -35px;
+}
+
+.edui-gorgeous .edui-for-anchor .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-anchor .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-anchor .edui-icon {
+    background-position: -332px -3px
+}
+
+.edui-gorgeous .edui-for-pagebreak .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-pagebreak .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-pagebreak .edui-icon {
+    background-position: -762px -68px
+}
+
+.edui-gorgeous .edui-for-imagenone .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-imagenone .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-imagenone .edui-icon {
+    background-position: -795px -68px;
+}
+
+.edui-gorgeous .edui-for-imageleft .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-imageleft .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-imageleft .edui-icon {
+    background-position: -827px -68px;
+}
+
+.edui-gorgeous .edui-for-wordimage .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-wordimage .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-wordimage .edui-icon {
+    background-position: -1091px -68px
+}
+
+.edui-gorgeous .edui-for-imageright .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-imageright .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-imageright .edui-icon {
+    background-position: -861px -68px
+}
+
+.edui-gorgeous .edui-for-imagecenter .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-imagecenter .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-imagecenter .edui-icon {
+    background-position:-894px -68px
+}
+
+.edui-gorgeous .edui-for-indent .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-indent .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-indent .edui-icon {
+    background-position: -661px -3px
+}
+
+.edui-gorgeous .edui-for-outdent .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-outdent .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-outdent .edui-icon {
+    background-position: -540px -3px
+}
+
+.edui-gorgeous .edui-for-webapp .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-webapp .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-webapp .edui-icon {
+    background-position: -993px -68px
+}
+
+.edui-gorgeous .edui-for-table .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-table .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-table .edui-icon {
+    background-position: -959px -35px;
+}
+
+.edui-gorgeous .edui-for-edittable .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-edittable .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-edittable .edui-icon {
+    background-position: -434px -68px
+}
+
+.edui-gorgeous .edui-for-template .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-template .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-template .edui-icon {
+    background-position: -563px -68px
+}
+
+.edui-gorgeous .edui-for-delete .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-delete .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-delete .edui-icon {
+    background-position:-597px -68px
+}
+
+.edui-gorgeous .edui-for-highlightcode .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-highlightcode .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-highlightcode .edui-icon {
+    background-position: -728px -68px
+}
+
+.edui-gorgeous .edui-for-deletehighlightcode .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-deletehighlightcode .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-deletehighlightcode .edui-icon {
+    background-position: -599px -68px
+}
+
+.edui-gorgeous .edui-for-attachment .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-attachment .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-attachment .edui-icon {
+    background-position: -1030px -68px
+}
+
+.edui-gorgeous .edui-for-edittd .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-edittd .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-edittd .edui-icon {
+    background-position: -700px -68px;
+}
+
+.edui-gorgeous .edui-for-snapscreen .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-snapscreen .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-snapscreen .edui-icon {
+    background-position: -959px -68px
+}
+
+.edui-gorgeous .edui-for-scrawl .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-scrawl .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-scrawl .edui-icon {
+    background-position: -1323px -68px
+}
+
+.edui-gorgeous .edui-for-background .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-background .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-background .edui-icon {
+    background-position: -1124px -68px
+}
+
+.edui-gorgeous .edui-for-music .edui-state-hover .edui-icon,
+.edui-gorgeous .edui-for-music .edui-state-checked .edui-icon,
+.edui-gorgeous .edui-for-music .edui-icon {
+    background-position: -1124px -68px
+}

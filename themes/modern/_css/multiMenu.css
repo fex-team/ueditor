@@ -1,0 +1,26 @@
+/*表情按钮及弹出菜单*/
+/*去除了表情的下拉箭头*/
+.edui-modern .edui-for-emotion .edui-icon {
+    background-position: -101px -35px;
+}
+
+.edui-modern .edui-for-emotion .edui-popup-content {
+    position: relative;
+    z-index: 555;
+    border: 1px solid #7182A6;
+    background-color: #F0F2F7;
+}
+
+.edui-modern .edui-for-emotion .edui-popup-content iframe {
+    width: 600px;
+    height: 380px;
+    overflow: hidden;
+}
+
+.edui-modern .edui-for-emotion .edui-splitborder {
+    display: none
+}
+
+.edui-modern .edui-for-emotion .edui-splitbutton-body .edui-arrow {
+    width: 0
+}

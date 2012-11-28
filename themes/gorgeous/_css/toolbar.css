@@ -1,0 +1,15 @@
+/* 工具栏 */
+.edui-gorgeous .edui-toolbar {
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    padding: 1px;
+    overflow: hidden; /*全屏下单独一行不占位*/
+    zoom: 1;
+}
+.edui-gorgeous .edui-toolbar .edui-button,
+.edui-gorgeous .edui-toolbar .edui-splitbutton,
+.edui-gorgeous .edui-toolbar .edui-menubutton,
+.edui-gorgeous .edui-toolbar .edui-combox {
+    margin:2px 2px 0 0;
+}

@@ -1,0 +1,56 @@
+/*普通按钮样式及状态*/
+.edui-gorgeous  .edui-toolbar .edui-button .edui-icon,
+.edui-gorgeous  .edui-toolbar .edui-menubutton .edui-icon,
+.edui-gorgeous  .edui-toolbar .edui-splitbutton .edui-icon {
+    height: 29px !important;
+    width: 29px !important;
+    background-image: url(../images/icons.png);
+    _background-image: url(../images/icons.gif);
+}
+
+.edui-gorgeous  .edui-toolbar .edui-button .edui-state-hover .edui-icon,
+.edui-gorgeous  .edui-toolbar .edui-menubutton .edui-state-hover .edui-icon,
+.edui-gorgeous  .edui-toolbar .edui-splitbutton .edui-state-hover .edui-icon {
+    background-image: url(../images/icons-hover.png);
+    _background-image: url(../images/icons-hover.gif);
+}
+
+.edui-gorgeous  .edui-toolbar .edui-button .edui-state-checked .edui-icon,
+.edui-gorgeous  .edui-toolbar .edui-menubutton .edui-state-checked .edui-icon,
+.edui-gorgeous  .edui-toolbar .edui-splitbutton .edui-state-checked .edui-icon {
+    background-image: url(../images/icons-checked.png);
+    _background-image: url(../images/icons-checked.gif);
+}
+.edui-gorgeous  .edui-toolbar .edui-state-disabled .edui-label {
+    color: gray;
+}
+.edui-gorgeous  .edui-toolbar .edui-state-disabled .edui-icon {
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+}
+/*每个按钮外面的框*/
+.edui-gorgeous  .edui-toolbar .edui-button .edui-button-wrap {
+    padding: 1px;
+    position: relative;
+    margin-top: 5px;
+}
+
+.edui-gorgeous  .edui-toolbar .edui-button .edui-state-hover .edui-button-wrap {
+    padding: 0;
+    border: 1px solid #A5ADB9;
+    border-radius: 3px;
+}
+
+.edui-gorgeous  .edui-toolbar .edui-button .edui-state-checked .edui-button-wrap {
+    padding: 0;
+    border: 1px solid #A5ADB9;
+    border-radius: 3px;
+}
+
+.edui-gorgeous  .edui-toolbar .edui-button .edui-state-active .edui-button-wrap {
+    padding: 0;
+    border: 1px solid #fff;
+    background-color: transparent;
+    background-image: none;
+    border-radius: 3px;
+}

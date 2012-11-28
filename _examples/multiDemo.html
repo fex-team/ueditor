@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+</head>
+<body>
+<h1>UEditor多实例</h1>
+
+<!--style给定宽度可以影响编辑器的最终宽度-->
+<script type="text/plain" id="myEditor1" style="margin-bottom:100px;">
+</script>
+<script type="text/plain" id="myEditor2" style="margin-bottom:100px;">
+    <p>这里我可以写一些输入提示</p>
+</script>
+<script type="text/plain" id="myEditor3" style="margin-bottom:100px;">
+</script>
+
+<script type="text/javascript">
+    UE.getEditor('myEditor1', {
+        theme:"default", //皮肤
+        lang:'zh-cn' //语言
+    });
+
+    UE.getEditor('myEditor2', {
+        autoClearinitialContent:true, //focus时自动清空初始化时的内容
+        theme:"gorgeous",
+        wordCount:true, //关闭字数统计
+        elementPathEnabled:false//关闭elementPath
+    });
+
+    UE.getEditor('myEditor3', {
+        //toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold']],//这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
+        lang:"en",
+        theme:"modern"
+        //更多其他参数，请参考editor_config.js中的配置项
+    });
+</script>
+
+</body>
+
+
+</html>

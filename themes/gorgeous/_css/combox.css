@@ -1,0 +1,73 @@
+/*不可选中菜单按钮 */
+.edui-gorgeous .edui-toolbar .edui-combox-body .edui-button-body {
+    width: 60px;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding-left: 5px;
+    white-space: nowrap;
+}
+
+.edui-gorgeous .edui-toolbar .edui-combox-body .edui-arrow {
+    background:url(../images/icons.png) -1220px -7px;
+    _background: url(../images/icons.gif) -1220px -7px;
+    height: 20px;
+    width: 9px;
+}
+
+.edui-gorgeous .edui-toolbar .edui-combox .edui-combox-body {
+    border: 1px solid #fff;
+    border-radius: 3px;
+    color: #fff;
+    margin: 9px 3px 0 0
+}
+
+.edui-gorgeous .edui-toolbar .edui-combox-body .edui-splitborder {
+    display: none;
+}
+
+.edui-gorgeous .edui-toolbar .edui-combox-body .edui-arrow {
+    border-left: 1px solid #fff;
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-hover .edui-combox-body {
+    border: 1px solid #A5ADB9;
+    border-radius: 3px;
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-active .edui-combox-body {
+    border: 1px solid #fff;
+    border-radius: 3px;
+    background-color: transparent;
+    background-image: none;
+}
+.edui-gorgeous .edui-toolbar .edui-state-hover .edui-combox-body .edui-arrow {
+    border-left: 1px solid #A5ADB9;
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-checked .edui-combox-body {
+    background-color: #263B55;
+    border: 1px solid #6A7085;
+
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#72788E), to(#1F2949));
+    background-image: -webkit-linear-gradient(top, #72788E, #1F2949);
+    background-image: -moz-linear-gradient(top, #72788E, #1F2949);
+    background-image: -o-linear-gradient(top, #72788E, #1F2949);
+    background-image: linear-gradient(to bottom, #72788E, #1F2949);
+    border-radius: 3px;
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-checked .edui-combox-body .edui-arrow {
+    border-left: 1px solid #6A7085;
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-disabled .edui-combox-body {
+    background-color: #263B55;
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+}
+
+.edui-gorgeous .edui-toolbar .edui-state-opened .edui-combox-body {
+    background-color: #263B55;
+    border: 1px solid #fff;
+}

@@ -1,0 +1,29 @@
+/*contextmenu*/
+.edui-gorgeous .edui-hassubmenu .edui-arrow {
+    height: 20px;
+    width: 20px;
+    float: right;
+    background: url("../images/icons-all.png") no-repeat 10px -233px;
+}
+
+.edui-gorgeous .edui-menu-body .edui-menuitem {
+    padding: 1px;
+}
+
+.edui-gorgeous .edui-menuseparator {
+    margin: 2px 0;
+    height: 1px;
+    overflow: hidden;
+}
+
+.edui-gorgeous .edui-menuseparator-inner {
+    border-bottom: 1px solid #e2e3e3;
+    margin-left: 29px;
+    margin-right: 1px;
+}
+
+.edui-gorgeous .edui-menu-body .edui-state-hover {
+    padding: 0 !important;
+    border: 1px solid #A5ADB9;
+    border-radius: 3px;
+}
