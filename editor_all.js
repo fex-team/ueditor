@@ -445,9 +445,15 @@ var utils = UE.utils = {
         var tmpList = [];
         function getItem(doc,obj){
             for(var i= 0,ci;ci=tmpList[i++];){
-                if(ci.doc === doc && ci.url == (obj.src || obj.href)){
-                    return ci;
+                try{
+                    if(ci.doc === doc && ci.url == (obj.src || obj.href)){
+                        return ci;
+                    }
+                }catch(e){
+                    //在ie9下，如果doc不是一个页面的，会导致拒绝访问的错误
+                    continue
                 }
+
             }
         }
         return function (doc, obj, fn) {
@@ -17174,7 +17180,7 @@ baidu.editor.ui = {};
         var editor = new baidu.editor.Editor(options);
         editor.options.editor = editor;
         utils.loadFile(document, {
-            href:editor.options.themePath + editor.options.theme + "/_css/ueditor.css",
+            href:editor.options.themePath + editor.options.theme + "/css/ueditor.css",
             tag:"link",
             type:"text/css",
             rel:"stylesheet"
