@@ -1,0 +1,173 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	border: 0;
+	height: 100%;
+}
+
+body {
+	font: 12px/1.5 Lucida Grande, Helvetica, Arial, sans-serif;
+	background: #F3F1F1;
+	color: #41464D;
+}
+
+body,#container {
+	width: 100%;
+	height: 100%;
+}
+
+.clear { /* generic container (i.e. div) for floating buttons */
+	overflow: hidden;
+	width: 100%;
+}
+
+a {
+	text-decoration: none;
+	overflow: hidden;
+}
+
+#title {
+	top: 0;
+	left: 0;
+	width: 100%;
+	padding: 5px 0;
+	background: #aaa;
+	background: #41464D;
+	color: #F3F1F1;
+	height: 30px;
+}
+
+a:link,a:visited {
+	color: #528CE0;
+}
+
+a:hover,a:active {
+	color: #41464D !important;
+	cursor: pointer !important;
+}
+
+#title h1 {
+	height: 30px;
+	font: 25px/1.1 Arial, sans-serif;
+	font-weight: bolder;
+	float: left;
+	margin: 1px 0 2px 20px;
+	text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+}
+
+h3 {
+	font-size: 14px;
+	padding: 3px 5px 1px;
+}
+
+.control {
+	background: #d5ded7;
+	width: 99%;
+}
+
+.testlist {
+	max-height: 200px;
+	overflow-y: scroll;
+	border-style: double;
+}
+
+.testlist a {
+	display: block;
+	width: 150px;
+	color: #657528;
+	background: #d5dea7;
+	border: 1px solid #c8dc7b;
+	margin: 5px 0 0 5px;
+	text-indent: 5px;
+	line-height: 24px;
+	font-size: 14px;
+	float: left;
+}
+
+a.button {
+	background: transparent url('bg_button_a.gif') no-repeat scroll top
+		right;
+	color: #444;
+	display: block;
+	float: left;
+	font: normal 12px arial, sans-serif;
+	height: 24px;
+	margin-right: 6px;
+	padding-right: 18px; /* sliding doors padding */
+	text-decoration: none;
+}
+
+a.button span {
+	background: transparent url('bg_button_span.gif') no-repeat;
+	display: block;
+	line-height: 14px;
+	padding: 5px 0 5px 18px;
+}
+
+a.button:active {
+	background-position: bottom right;
+	color: #000;
+	outline: none; /* hide dotted outline in Firefox */
+}
+
+a.button:active span {
+	background-position: bottom left;
+	padding: 6px 0 4px 18px; /* push text down 1px */
+}
+
+.testlist a:link {
+	
+}
+
+.testlist a:visited {
+	
+}
+
+.testlist a:hover {
+	background: #c8dc7b;
+}
+
+.testlist a.jsframe_jsspec {
+	background: #DDDDDD
+}
+
+.testlist a.running_case {
+	color: yellow;
+}
+
+.testlist a.fail_case {
+	color: red;
+}
+
+.testlist a.pass_case {
+	color: green;
+}
+
+.runningarea {
+	height: 60%;
+}
+
+.runningmaindiv {
+	height: 99%;
+}
+
+.runningframe {
+	height: 99.99%;
+	width: 99.99%;
+}
+
+.runningstatus {
+	clear: both;
+	height: 10%;
+	border: solid
+}
+
+.reportarea {
+	padding: 10px;
+	border: 10px blue;
+	max-height: 200px;
+	overflow-y: scroll;
+}
