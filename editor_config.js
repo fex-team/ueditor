@@ -44,7 +44,7 @@
 
         //涂鸦图片配置区
         ,scrawlUrl:URL+"php/scrawlUp.php"           //涂鸦上传地址
-        ,scrawlPath:URL+"php/"                           //图片修正地址，同imagePath
+        ,scrawlPath:URL+"php/"                            //图片修正地址，同imagePath
 
         //附件上传配置区
         ,fileUrl:URL+"php/fileUp.php"               //附件上传提交地址
