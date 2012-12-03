@@ -767,7 +767,7 @@ div.edui-box {
 .edui-gorgeous .edui-for-copy .edui-state-hover .edui-icon,
 .edui-gorgeous .edui-for-copy .edui-state-checked .edui-icon,
 .edui-gorgeous .edui-for-copy .edui-icon {
-    background-position: -695px -3px
+    background-position: -1123px -3px
 }
 
 .edui-gorgeous .edui-for-paste .edui-state-hover .edui-icon,
@@ -983,7 +983,7 @@ div.edui-box {
 .edui-gorgeous .edui-for-edittable .edui-state-hover .edui-icon,
 .edui-gorgeous .edui-for-edittable .edui-state-checked .edui-icon,
 .edui-gorgeous .edui-for-edittable .edui-icon {
-    background-position: -434px -68px
+    background-position: -2px -69px
 }
 
 .edui-gorgeous .edui-for-template .edui-state-hover .edui-icon,
@@ -1019,7 +1019,7 @@ div.edui-box {
 .edui-gorgeous .edui-for-edittd .edui-state-hover .edui-icon,
 .edui-gorgeous .edui-for-edittd .edui-state-checked .edui-icon,
 .edui-gorgeous .edui-for-edittd .edui-icon {
-    background-position: -700px -68px;
+    background-position: -35px -69px
 }
 
 .edui-gorgeous .edui-for-snapscreen .edui-state-hover .edui-icon,
@@ -1043,7 +1043,7 @@ div.edui-box {
 .edui-gorgeous .edui-for-music .edui-state-hover .edui-icon,
 .edui-gorgeous .edui-for-music .edui-state-checked .edui-icon,
 .edui-gorgeous .edui-for-music .edui-icon {
-    background-position: -1124px -68px
+    background-position: 0 -36px
 }
 /*splitbutton*/
 .edui-gorgeous .edui-toolbar .edui-splitbutton-body .edui-arrow,
@@ -1539,7 +1539,7 @@ div.edui-box {
     height: 115px;
 }
 .edui-gorgeous .edui-for-edittd .edui-dialog-caption {
-    background-position: -1px -3px;
+    background-position: -1px -300px
 }
 /*snapscreen-dialog*/
 .edui-gorgeous .edui-for-snapscreen .edui-dialog-content {
@@ -1547,7 +1547,7 @@ div.edui-box {
     height: 220px;
 }
 .edui-gorgeous .edui-for-snapscreen .edui-dialog-caption {
-     background-position: -1px -3px;
+     background-position: -138px -304px
  }
 /*music-dialog*/
 .edui-gorgeous .edui-for-music .edui-dialog-content {
@@ -1555,7 +1555,7 @@ div.edui-box {
     height: 360px;
 }
 .edui-gorgeous .edui-for-music .edui-dialog-caption {
-    background-position: -1px -3px;
+    background-position: -132px -150px
 }
 /*段落弹出菜单*/
 .edui-gorgeous .edui-for-paragraph .edui-listitem-label {

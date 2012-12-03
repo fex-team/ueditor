@@ -315,7 +315,7 @@
     height: 115px;
 }
 .edui-modern .edui-for-edittd .edui-dialog-caption {
-    background-position: -1px -3px;
+    background-position: -1px -300px
 }
 /*snapscreen-dialog*/
 .edui-modern .edui-for-snapscreen .edui-dialog-content {
@@ -323,13 +323,13 @@
     height: 220px;
 }
 .edui-modern .edui-for-snapscreen .edui-dialog-caption {
-     background-position: -1px -3px;
- }
+    background-position: -138px -304px
+}
 /*music-dialog*/
 .edui-modern .edui-for-music .edui-dialog-content {
     width: 515px;
     height: 360px;
 }
 .edui-modern .edui-for-music .edui-dialog-caption {
-    background-position: -1px -3px;
+    background-position: -132px -150px
 }
