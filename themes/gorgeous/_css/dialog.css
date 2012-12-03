@@ -315,7 +315,7 @@
     height: 115px;
 }
 .edui-gorgeous .edui-for-edittd .edui-dialog-caption {
-    background-position: -1px -3px;
+    background-position: -1px -300px
 }
 /*snapscreen-dialog*/
 .edui-gorgeous .edui-for-snapscreen .edui-dialog-content {
@@ -323,7 +323,7 @@
     height: 220px;
 }
 .edui-gorgeous .edui-for-snapscreen .edui-dialog-caption {
-     background-position: -1px -3px;
+     background-position: -138px -304px
  }
 /*music-dialog*/
 .edui-gorgeous .edui-for-music .edui-dialog-content {
@@ -331,5 +331,5 @@
     height: 360px;
 }
 .edui-gorgeous .edui-for-music .edui-dialog-caption {
-    background-position: -1px -3px;
+    background-position: -132px -150px
 }
