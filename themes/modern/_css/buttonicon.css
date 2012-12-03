@@ -242,7 +242,7 @@
 .edui-modern .edui-for-copy .edui-state-hover .edui-icon,
 .edui-modern .edui-for-copy .edui-state-checked .edui-icon,
 .edui-modern .edui-for-copy .edui-icon {
-    background-position: -695px -3px
+    background-position: -1123px -3px
 }
 
 .edui-modern .edui-for-paste .edui-state-hover .edui-icon,
@@ -458,7 +458,7 @@
 .edui-modern .edui-for-edittable .edui-state-hover .edui-icon,
 .edui-modern .edui-for-edittable .edui-state-checked .edui-icon,
 .edui-modern .edui-for-edittable .edui-icon {
-    background-position: -434px -68px
+    background-position: -2px -69px
 }
 
 .edui-modern .edui-for-template .edui-state-hover .edui-icon,
@@ -494,7 +494,7 @@
 .edui-modern .edui-for-edittd .edui-state-hover .edui-icon,
 .edui-modern .edui-for-edittd .edui-state-checked .edui-icon,
 .edui-modern .edui-for-edittd .edui-icon {
-    background-position: -700px -68px;
+    background-position: -35px -69px
 }
 
 .edui-modern .edui-for-snapscreen .edui-state-hover .edui-icon,
@@ -518,5 +518,5 @@
 .edui-modern .edui-for-music .edui-state-hover .edui-icon,
 .edui-modern .edui-for-music .edui-state-checked .edui-icon,
 .edui-modern .edui-for-music .edui-icon {
-    background-position: -1124px -68px
+    background-position: 0 -36px
 }
