@@ -284,6 +284,10 @@ var scrawl = function (options) {
         _saveOPerate:function (saveNum) {
             var me = this;
             if (drawStep.length <= saveNum) {
+                if(drawStepIndex<drawStep.length-1){
+                    me.btn2disable("J_nextStep");
+                    drawStep.splice(drawStepIndex);
+                }
                 drawStep.push(context.getImageData(0, 0, context.canvas.width, context.canvas.height));
                 drawStepIndex = drawStep.length;
             } else {
