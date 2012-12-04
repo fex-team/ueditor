@@ -1898,7 +1898,12 @@ var domUtils = dom.domUtils = {
      * getComputedStyle(form,"color")  =>  "#ffccdd"
      */
     getComputedStyle:function (element, styleName) {
+        //一下的属性单独处理
+        var pros = 'width height top left';
 
+        if(pros.indexOf(styleName) > -1){
+            return element['offset' + styleName.replace(/^\w/,function(s){return s.toUpperCase()})] + 'px';
+        }
         //忽略文本节点
         if (element.nodeType == 3) {
             element = element.parentNode;
