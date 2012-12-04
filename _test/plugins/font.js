@@ -282,11 +282,11 @@ test( 'trace 802：为设置了字体的文本添加删除线', function() {
         editor.setContent( '<p><strong>你好早安</strong></p>' );
         var text = editor.body.firstChild.firstChild.firstChild;
         range.setStart( text, 0 ).setEnd( text, 2 ).select();
-        editor.execCommand( 'fontfamily', '隶书' );
         editor.execCommand( 'strikethrough' );
         var p1 = editor.document.createElement( 'p' );
-        p1.innerHTML = '<strong><span style="font-family: 隶书; text-decoration: line-through; ">你好</span></strong><strong>早安</strong>';
+        p1.innerHTML = '<strong><span style="text-decoration: line-through; ">你好</span></strong><strong>早安</strong>';
         ok( ua.haveSameAllChildAttribs( editor.body.firstChild, p1 ), '检查删除线是否正确' );
+        editor.execCommand( 'fontfamily', '隶书' );
         editor.execCommand( 'source' );
         var txt='隶书';
         if(ua.browser.opera)
