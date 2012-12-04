@@ -309,11 +309,19 @@
             if ( options.fullscreen && me.ui ) {
                 me.ui.setFullScreen( true );
             }
-            //解决ff下点击图片会复制问题
-            //ff下的table不能编辑
-            if(browser.gecko){
+            try {
+                me.document.execCommand( '2D-position', false, false );
+            } catch ( e ) {}
+            try {
+                me.document.execCommand( 'enableInlineTableEditing', false, options.tableNativeEditInFF );
+            } catch ( e ) {}
+            try {
                 me.document.execCommand( 'enableObjectResizing', false, false );
-                me.document.execCommand( 'enableInlineTableEditing', false,options.tableNativeEditInFF );
+            } catch ( e ) {
+                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
+                    domUtils.preventDefault(evt)
+                });
+
             }
             me.isReady = 1;
             me.fireEvent( 'ready' );
