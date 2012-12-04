@@ -1037,6 +1037,9 @@ test( 'getComputedStyle', function() {
     equal( domUtils.getComputedStyle( div.firstChild, 'font-size' ), '12px' );
     equal( domUtils.getComputedStyle( div.firstChild, 'display' ), 'block' );
     equal( domUtils.getComputedStyle( div.lastChild, 'display' ), 'inline' );
+    equal( domUtils.getComputedStyle( div.firstChild, 'width' ),div.firstChild.offsetWidth + 'px');
+    div.innerHTML = '<div class="div_class" name="div_name" style="width:30px;"></div><span></span>';
+    equal( domUtils.getComputedStyle( div.firstChild, 'width' ),'30px');
 } );
 
 test( 'getComputedStyle--获取默认的背景色', function() {
