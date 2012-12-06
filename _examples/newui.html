@@ -21,9 +21,9 @@
     <script type="text/plain" id="myEditor" style="width:1000px">
         <p>这里我可以写一些输入提示</p>
     </script>
-<!--<script type="text/plain" id="myEditor1" style="width:1000px">-->
-        <!--<p>这里我可以写一些输入提示</p>-->
-    <!--</script>-->
+<script type="text/plain" id="myEditor1" style="width:1000px">
+        <p>这里我可以写一些输入提示</p>
+    </script>
     <script type="text/javascript">
         // 自定义的编辑器配置项,此处定义的配置项将覆盖editor_config.js中的同名配置
         var editorOption = {
@@ -84,8 +84,8 @@
         };
         var editor_a = UE.getEditor(editorOption);
         editor_a.render( 'myEditor' );
-//        var editor_a1 = UE.getEditor(editorOption);
-//                editor_a1.render( 'myEditor1' );
+        var editor_a1 = UE.getEditor(editorOption);
+                editor_a1.render( 'myEditor1' );
     </script>
 <!--br />
 <iframe src="newui_1.html" frameborder="0" width="100%" height="450"></iframe>
