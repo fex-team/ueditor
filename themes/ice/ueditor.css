@@ -3,9 +3,9 @@ body{font:12px/1.2 '宋体', 'tahoma', 'sans-serif';background-color:#fff;}
 ul, li{list-style:none;}
 
 /**container element**/
-.edui-wrapper{margin-left:100px;border:1px solid #CBDFEA;}
+.edui-wrapper{margin-left:100px;border:1px solid #CBDFEA;background-color: #ffffff;}
 
-.edui-toolbar{position:relative;height:54px;padding-top:29px;background:#E1EEFF url(images/toolbar_bg.png) repeat-x;border:1px solid #fff;cursor:default;border-radius:2px;}
+.edui-toolbar{position:relative;height:54px;padding-top:29px;background:#E1EEFF url(images/toolbar_bg.png) repeat-x;cursor:default;border-radius:2px;}
 .edui-statusbar{overflow: hidden;}
 .edui-statusbar .edui-elementpath{float: left;}
 .edui-statusbar .edui-wordcount{float: right;}
