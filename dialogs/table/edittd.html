@@ -72,21 +72,17 @@
             domUtils.on( ci, "click", function () {
                 var me = this;
                 showColorPicker( colorPicker, me );
-                colorPicker.content.onpickcolor = function ( t, color ) {
-                    me.value = color.toUpperCase();
+                colorPicker.onsetcolor = function(t,color){
+                    me.value = 'default' === color ? "" : color.toUpperCase();
                     colorPicker.hide();
-                };
-                colorPicker.content.onpicknocolor = function () {
-                    me.value = '';
-                    colorPicker.hide();
-                };
+                }
             } );
             domUtils.on( ci, "keyup", function () {
                 colorPicker.hide();
             } );
         }
         domUtils.on( document, 'mousedown', function () {
-            UE.ui.Popup.postHide( this );
+            colorPicker.hide( );
         } );
     }
 
@@ -94,13 +90,7 @@
      * 实例化一个colorpicker对象
      */
     function getColorPicker() {
-        return new UE.ui.Popup( {
-            editor:editor,
-            content:new UE.ui.ColorPicker( {
-                noColorText:lang.noColor,
-                editor:editor
-            } )
-        } );
+        return new UE.ui.View.ColorPicker(dialog.ui);
     }
 
     /**
@@ -108,7 +98,7 @@
      * @param anchorObj
      */
     function showColorPicker( colorPicker, anchorObj ) {
-        colorPicker.showAnchor( anchorObj );
+        colorPicker.show( anchorObj );
     }
 </script>
 </body>
