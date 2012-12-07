@@ -16,19 +16,15 @@
             opt = opt || {viewType: 'arrowbutton'};
             this.init(cmd, opt);
             this.appendChild( this.arrow = new views({'viewType':'arrow'}) );
-        };
-    arrowbtn.prototype = {
-        setArrowRelPop: function(pop){
             var arrow = this.arrow,
                 me = this;
             arrow.setProxyListener('click');
             arrow.startReflectByMouse();
             arrow.addListener('click', function(t, e){
-                pop.show(me.dom);
                 utils.stopPropagation(e);
+                me.fireEvent("open");
             });
-        }
-    };
+        };
     utils.inherits(arrowbtn, views.Button);
     arrowbtn = null;
 })(UE.ui);

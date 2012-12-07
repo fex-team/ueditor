@@ -13,7 +13,7 @@
          * @name ui.View.ColorPicker
          * @grammar cpk = new ui.View.ColorPicker(ui)
          */
-        cpk = views.ColorPicker = function(ui){
+        cpk = views.ColorPicker = function(ui,cmd){
             var me = this,
                 clearColor = ui.getLang('clearColor') || '清除颜色',
                 themeColor = ui.getLang('themeColor') || '主题颜色',
@@ -32,7 +32,7 @@
                     '<table style="border-collapse: collapse;" cellspacing="0" cellpadding="0">' +
                     '<tr style="border-bottom: 1px solid #ddd;font-size: 13px;line-height: 25px;color:#366092;padding-top: 2px"><td colspan="10">'+themeColor+'</td> </tr>'+
                     '<tr class="edui-colorpicker-tablefirstrow" >';
-
+            me.cmd = cmd;
             for (var i=0; i<COLORS.length; i++) {
                 if (i && i%10 === 0) {
                     html += '</tr>'+(i==60?'<tr style="border-bottom: 1px solid #ddd;font-size: 13px;line-height: 25px;color:#366092;"><td colspan="10">'+standardColor+'</td></tr>':'')+'<tr'+(i==60?' class="edui-colorpicker-tablefirstrow"':'')+'>';
@@ -71,6 +71,7 @@
                 } );
             });
         };
+
 
     utils.inherits(cpk, views.Pop);
 })(UE.ui);

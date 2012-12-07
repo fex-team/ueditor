@@ -7,22 +7,20 @@ UE.registerEditorui(
     function(editor, name){
         var uiView = UE.ui.View,
             btn = new uiView.ArrowButton(name),
-            picker = new uiView.ColorPicker(editor.ui, name);
+            picker = UE.getColorPicker(editor, name);
 
-        btn.setArrowRelPop(picker);
-        picker.addListener('setcolor', function(t, val){
-            editor.execCommand(name, val );
-            var cont = btn.getInnerDom('content');
-            if(val==='default'){
-                cont.style.borderColor = 'transparent';
-                btn.color = 'default';
-            }else{
-                cont.style.borderColor = btn.color = val;
+        btn.onopen = function(){
+            picker.show(this.dom);
+            picker.onsetcolor = function(t,color){
+                editor.execCommand(name, color );
+                var cont = btn.getInnerDom('content');
+                btn.color = cont.style.borderColor = color==='default'?'transparent':color;
             }
-        });
-
+        };
         btn.addListener('click', function(){editor.execCommand(name, btn.color)} );
-        editor.addListener('click', function(){picker.hide()});
+        editor.addListener("click",function(){
+            picker.hide()
+        });
         editor.addListener('selectionchange', function(){
             var state = editor.queryCommandState(name);
             btn.state!==state && btn.reflectState(btn.state=state);

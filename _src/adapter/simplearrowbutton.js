@@ -9,7 +9,9 @@ UE.registerEditorui(
             btn = new uiView.ArrowButton(name),
             menu = new uiView.Menu(editor.ui, name);
 
-        btn.setArrowRelPop(menu);
+        btn.onopen = function(){
+            menu.show(this.dom);
+        }
         btn.addListener('click', function(){
             editor.execCommand(name, btn.value);
         });

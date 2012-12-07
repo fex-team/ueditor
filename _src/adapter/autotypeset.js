@@ -9,7 +9,9 @@ UE.registerEditorui(
             btn = new uiView.ArrowButton(name),
             typeset = new uiView.AutoTypeset(editor.ui);
 
-        btn.setArrowRelPop(typeset);
+        btn.onopen = function(){
+            typeset.show(this.dom);
+        }
         typeset.addListener('setoption', function(t, opt){
             editor.execCommand(name, opt);
         });

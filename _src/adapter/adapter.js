@@ -45,7 +45,20 @@
         UE.dialog = dlg;
         return dlg;
     };
-
+    /**
+     * @name getColorPicker
+     * @desc 返回公用的colorpicker
+     * @grammar UE.getColorPicker()
+     * */
+    UE.getColorPicker = function(editor,name){
+        var cp = UE.colorpicker,
+            uiView = UE.ui.View;
+        if(!cp){
+            cp = new uiView.ColorPicker(editor.ui,name);
+        }
+        UE.colorpicker = cp;
+        return cp;
+    };
     /**
      * @name getEditor
      * @desc 返回一个包装过的editor实例

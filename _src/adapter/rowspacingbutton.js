@@ -11,7 +11,9 @@ UE.registerEditorui(
             cmd = 'rowspacing',
             dir = name.replace(cmd, '');
 
-        btn.setArrowRelPop(menu);
+        btn.onopen = function(){
+            menu.show(this.dom);
+        }
         btn.addListener('click', function(){
             editor.execCommand(cmd, btn.value, dir);
         });

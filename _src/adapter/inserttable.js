@@ -11,10 +11,12 @@ UE.registerEditorui(
             table = new uiView.Tableset(ui),
             cmd = 'inserttable';
 
+        btn.onopen = function(){
+            table.show(this.dom);
+        }
         table.addListener(cmd, function(t, prop){
             editor.execCommand(cmd , prop );
         } );
-        btn.setArrowRelPop(table);
         btn.addListener('click', function(){
             UE.getDialog(editor).open(name);
         });
