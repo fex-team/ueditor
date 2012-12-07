@@ -4,7 +4,7 @@ var me = editor,
     cp = $G("colorPicker"),
     bkbodyStyle = "",
     bkcolor = "";
-var popup = new UE.ui.View.ColorPicker(dialog.ui);
+var popup = UE.getColorPicker(me);
 
 popup.addListener('setcolor', function(t, color){
     var ret = 'transparent';

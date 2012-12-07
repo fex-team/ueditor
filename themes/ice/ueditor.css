@@ -149,7 +149,7 @@ ul, li{list-style:none;}
 .edui-customstyle .edui-menuitem{line-height:25px;}
 
 .edui-forecolor .button-content,
-.edui-backcolor .button-content{display:inline-block;border-bottom:2px solid transparent;}
+.edui-backcolor .button-content{display:inline-block;border-bottom:2px solid transparent;_border-color:tomato;_filter:chroma(color=tomato);}
 
 /**contextmenu**/
 .edui-contextmenu ul{background:#fff;}

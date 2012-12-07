@@ -13,7 +13,7 @@
          * @name ui.View.ColorPicker
          * @grammar cpk = new ui.View.ColorPicker(ui)
          */
-        cpk = views.ColorPicker = function(ui,cmd){
+        cpk = views.ColorPicker = function(ui){
             var me = this,
                 clearColor = ui.getLang('clearColor') || '清除颜色',
                 themeColor = ui.getLang('themeColor') || '主题颜色',
@@ -25,14 +25,14 @@
                     'a5a5a5,262626,494429,17365d,366092,953734,76923c,5f497a,31859b,e36c09,' +
                     '7f7f7f,0c0c0c,1d1b10,0f243e,244061,632423,4f6128,3f3151,205867,974806,' +
                     'c00000,ff0000,ffc000,ffff00,92d050,00b050,00b0f0,0070c0,002060,7030a0').split(','),
-                html = '<div class="edui-colorpicker-topbar edui-clearfix">' +
+                html = ' <iframe style="position:absolute;z-index:-1;left:0;top:0;background-color: #ffffff;" frameborder="0" width="100%" height="100%"></iframe>' +
+                        '<div id="{ID}-content"><div class="edui-colorpicker-topbar edui-clearfix">' +
                     '<div unselectable="on" id="{ID}-preview" class="edui-colorpicker-preview"></div>' +
                     '<div unselectable="on" id="{ID}-clearcolor" class="edui-colorpicker-nocolor">'+ clearColor +'</div>' +
                     '</div>' +
                     '<table style="border-collapse: collapse;" cellspacing="0" cellpadding="0">' +
                     '<tr style="border-bottom: 1px solid #ddd;font-size: 13px;line-height: 25px;color:#366092;padding-top: 2px"><td colspan="10">'+themeColor+'</td> </tr>'+
                     '<tr class="edui-colorpicker-tablefirstrow" >';
-            me.cmd = cmd;
             for (var i=0; i<COLORS.length; i++) {
                 if (i && i%10 === 0) {
                     html += '</tr>'+(i==60?'<tr style="border-bottom: 1px solid #ddd;font-size: 13px;line-height: 25px;color:#366092;"><td colspan="10">'+standardColor+'</td></tr>':'')+'<tr'+(i==60?' class="edui-colorpicker-tablefirstrow"':'')+'>';
@@ -46,7 +46,7 @@
                     '"' +
                     '></a></td>':'';
             }
-            html += '</tr></table>';
+            html += '</tr></table></div>';
 
             this.init({viewText: html});
             this.setProxyListener(['mouseover', 'mouseout', 'click']);
@@ -69,6 +69,12 @@
                     me.fireEvent('setcolor', 'default');
                     me.hide();
                 } );
+            });
+            this.addListener("open",function(){
+                var dom = this.getInnerDom("content"),
+                        rect = utils.getClientRect(dom);
+                this.dom.style.width = rect.width+"px";
+                this.dom.style.height = rect.height+"px";
             });
         };
 

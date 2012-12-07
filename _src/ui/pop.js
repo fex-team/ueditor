@@ -63,6 +63,7 @@
                 this.once = 1;
             }
             dom.style.display = 'block';
+            this.fireEvent('open');
         }
     };
 

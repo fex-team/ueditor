@@ -73,9 +73,14 @@
                 ftbar.appendChild(okBtn.dom);
                 ftbar.appendChild(noBtn.dom);
             });
+            this.addListener("open",function(){
+                var dom = this.getInnerDom("content"),
+                        rect = utils.getClientRect(dom);
+                this.getInnerDom("wrap").style.width = rect.width+"px";
+            });
             var html = '<div class="edui-dialog-shadow"></div>' +
-                    '<div class="edui-dialog-wrap"><a id="{ID}-closeBtn" class="edui-dialog-closebutton">close</a><div id="{ID}-titlebar" class="edui-dialog-titlebar"></div>' +
-                    '<div class="edui-dialog-content"><div id="{ID}-contmask" style="cursor: move;visibility: hidden;position: absolute;width: 100%;height: 100%;opacity: 0;filter: alpha(opacity=0);"></div>' +
+                    '<div class="edui-dialog-wrap" id="{ID}-wrap"><a id="{ID}-closeBtn" class="edui-dialog-closebutton">close</a><div id="{ID}-titlebar" class="edui-dialog-titlebar"></div>' +
+                    '<div class="edui-dialog-content" id="{ID}-content"><div id="{ID}-contmask" style="cursor: move;visibility: hidden;position: absolute;width: 100%;height: 100%;opacity: 0;filter: alpha(opacity=0);"></div>' +
                         '<iframe width="100%" height="100%" id="{ID}-iframe" frameborder="0"></iframe></div>' +
                     '<div class="edui-dialog-footbar" id="{ID}-footbar"></div></div>';
             this.makeDom({viewText: html, viewType: 'dialog'});
@@ -126,8 +131,8 @@
             this.getInnerDom('titlebar').innerHTML = this.ui.getDialogTitleByCmd(me.cmd);
             this.getInnerDom('iframe').src = this.ui.getIframeUrlByCmd(me.cmd);
             this.getMask().show();
-            me.updateRect2Win();
             me.fireEvent('open');
+            me.updateRect2Win();
         },
 
         /**
@@ -160,11 +165,12 @@
                 d = this.dom,
                 viewportEl = utils.getViewportElement(),
                 w = window.innerWidth || viewportEl.clientWidth ,
-                h = window.innerHeight || viewportEl.clientHeight ;
-            m.style.width = w+'px';
-            m.style.height = h+'px';
-            d.style.left = Math.round((w - d.offsetWidth)/2) + 'px';
-            d.style.top = Math.round((h - d.offsetHeight)/2) + 'px';
+                h = window.innerHeight || viewportEl.clientHeight ,
+                    scroll = utils.getPageScroll();
+            m.style.width = w+scroll.x+'px';
+            m.style.height = h+scroll.y+'px';
+            d.style.left = Math.round((w - d.offsetWidth)/2)+scroll.x + 'px';
+            d.style.top = Math.round((h - d.offsetHeight)/2)+scroll.y + 'px';
         },
 
         safeSetOffset: function (offset){

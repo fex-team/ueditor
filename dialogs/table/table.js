@@ -134,7 +134,7 @@
      * 绑定取色器监听事件
      */
     function addColorPickListener(){
-        var colorPicker = getColorPicker(),
+        var colorPicker = UE.getColorPicker(editor),
             ids = ["bgColor","borderColor"];
         for(var i=0,ci;ci = $G(ids[i++]); ){
             domUtils.on(ci,"click",function(){
@@ -155,14 +155,6 @@
             colorPicker.hide()
         });
     }
-
-    /**
-     * 实例化一个colorpicker对象
-     */
-    function getColorPicker(){
-        return new UE.ui.View.ColorPicker(dialog.ui);
-    }
-
     /**
      * 在anchorObj上显示colorpicker
      * @param anchorObj

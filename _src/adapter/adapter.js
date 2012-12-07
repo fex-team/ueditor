@@ -50,11 +50,11 @@
      * @desc 返回公用的colorpicker
      * @grammar UE.getColorPicker()
      * */
-    UE.getColorPicker = function(editor,name){
+    UE.getColorPicker = function(editor){
         var cp = UE.colorpicker,
             uiView = UE.ui.View;
         if(!cp){
-            cp = new uiView.ColorPicker(editor.ui,name);
+            cp = new uiView.ColorPicker(editor.ui);
         }
         UE.colorpicker = cp;
         return cp;

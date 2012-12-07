@@ -213,6 +213,20 @@
 
                 return Math.max(document.body[scrollDir], document.documentElement[scrollDir]);
             },
+            getPageScroll:function() {
+                var xScroll, yScroll;
+                if (self.pageYOffset) {
+                    yScroll = self.pageYOffset;
+                    xScroll = self.pageXOffset;
+                } else if (document.documentElement && document.documentElement.scrollTop) {	 // Explorer 6 Strict
+                    yScroll = document.documentElement.scrollTop;
+                    xScroll = document.documentElement.scrollLeft;
+                } else if (document.body) {// all other Explorers
+                    yScroll = document.body.scrollTop;
+                    xScroll = document.body.scrollLeft;
+                }
+                return {x:xScroll,y:yScroll};
+            },
 
             stopPropagation: function(e){
                 try{
