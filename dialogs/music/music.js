@@ -90,7 +90,7 @@ function Music() {
             var param = 'from=tiebasongwidget&url=&name=' + encodeURIComponent(me._removeHtml(selectedItem.title)) + '&artist='
                 + encodeURIComponent(me._removeHtml(selectedItem.author)) + '&extra='
                 + encodeURIComponent(me._removeHtml(selectedItem.album_title))
-                + '&autoPlay=true' + '&loop=true';
+                + '&autoPlay=false' + '&loop=true';
             return  me.playerUrl + "?" + param;
         },
         _getTryingElem:function () {
