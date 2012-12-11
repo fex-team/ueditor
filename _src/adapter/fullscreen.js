@@ -5,7 +5,8 @@
 UE.registerEditorui(
     'fullscreen',
     function(editor, name){
-        var ui = editor.ui;
+        var ui = editor.ui,
+                domUtils = UE.dom.domUtils;
         UE.utils.extend(ui, {
             /**
              * @name isFullScreen
@@ -109,6 +110,13 @@ UE.registerEditorui(
                 }
             }
         });
+        var timerId,
+            updateFullScreenTime = function () {
+                clearTimeout(timerId);
+                timerId = setTimeout(function () {
+                    ui._updateFullScreen();
+                });
+            };
 
         var btn = new UE.ui.View.Button(name);
 
@@ -116,7 +124,10 @@ UE.registerEditorui(
             ui.setFullScreen( !ui.isFullScreen() );
             btn.reflectState( btn.state=!!ui.isFullScreen() );
         });
-
+        btn.addListener("destroy",function(){
+            domUtils.un(window, 'resize', updateFullScreenTime);
+        });
+        domUtils.on(window, 'resize', updateFullScreenTime);
         return btn;
     }
 );

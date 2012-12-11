@@ -262,6 +262,7 @@
                 parent = dom.parentElement;
             parent && parent.removeChild(dom);
             dom = this.dom = null;
+            this.fireEvent("destroy");
         }
 
 
