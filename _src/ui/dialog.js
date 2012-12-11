@@ -169,8 +169,8 @@
                     scroll = utils.getPageScroll();
             m.style.width = w+scroll.x+'px';
             m.style.height = h+scroll.y+'px';
-            d.style.left = Math.round((w - d.offsetWidth)/2)+scroll.x + 'px';
-            d.style.top = Math.round((h - d.offsetHeight)/2)+scroll.y + 'px';
+            d.style.left = Math.round((w - d.offsetWidth)/2)+ 'px';
+            d.style.top = Math.round((h - d.offsetHeight)/2) + 'px';
         },
 
         safeSetOffset: function (offset){
