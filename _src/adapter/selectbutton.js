@@ -9,7 +9,12 @@ UE.registerEditorui(
             btn = new uiView.ArrowButton(name, {viewType: 'selectbox'}),
             menu = new uiView.Menu(editor.ui, name);
 
-        btn.addListener('click', function(){menu.show(btn.dom)} );
+        btn.addListener('click', function(){
+            menu.show(btn.dom)
+        } );
+        btn.addListener('open', function(){
+            menu.show(btn.dom)
+        } );
 
         menu.addListener('select', function(t, val){
             editor.execCommand(name, val);

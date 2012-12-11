@@ -23,7 +23,10 @@ UE.registerEditorui(
                 btn.color = color;
             }
         };
-        btn.addListener('click', function(){editor.execCommand(name, btn.color)} );
+        btn.addListener('click', function(){
+            editor.execCommand(name, btn.color||"default")
+        } );
+
         editor.addListener("click",function(){
             picker.hide()
         });
