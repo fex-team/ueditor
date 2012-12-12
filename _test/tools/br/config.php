@@ -50,7 +50,7 @@
                  * 源码路径配置，会在所有位置寻找源码
                  * @var ArrayIterator::String
                  */
-                public static $SOURCE_PATH = array( "../../../_src/" );
+                public static $SOURCE_PATH = array( "../../../_src1/" );
 
                 public static $test_PATH = "../../../_test/";
 
