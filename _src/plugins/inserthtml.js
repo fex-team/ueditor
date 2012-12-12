@@ -29,7 +29,6 @@
                 me.adjustTable && me.adjustTable(div);
             }catch(e){}
 
-
             if(tds && tds.length){
                 for(var i=0,ti;ti=tds[i++];){
                     ti.className = '';
@@ -110,7 +109,7 @@
 
             //用chrome可能有空白展位符
             if(domUtils.isBlockElm(child) && domUtils.isEmptyNode(child)){
-                child.innerHTML = browser.ie ? '' : '<br/>';
+                child.innerHTML = browser.ie ? domUtils.fillChar : '<br/>';
             }
             //加上true因为在删除表情等时会删两次，第一次是删的fillData
             range.select(true);
@@ -120,9 +119,5 @@
                 range = me.selection.getRange();
                 range.scrollToView(me.autoHeightEnabled,me.autoHeightEnabled ? domUtils.getXY(me.iframe).y:0);
             },200);
-
-
-
-            
         }
     };

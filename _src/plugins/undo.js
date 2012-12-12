@@ -94,7 +94,6 @@ UE.plugins['undo'] = function() {
         this.hasUndo = false;
         this.hasRedo = false;
         this.undo = function() {
-
             if ( this.hasUndo ) {
                 var currentScene = this.getScene(),
                     lastScene = this.list[this.index];
@@ -249,7 +248,7 @@ UE.plugins['undo'] = function() {
         this.clearKey = function(){
             keycont = 0;
             lastKeyCode = null;
-            me.fireEvent('contentchange');
+           //me.fireEvent('contentchange');
         };
     }
 
@@ -257,6 +256,10 @@ UE.plugins['undo'] = function() {
     function saveScene() {
         this.undoManger.save();
     }
+
+    me.addListener('saveScene',function(){
+        me.undoManger.save();
+    });
 
     me.addListener( 'beforeexeccommand', saveScene );
     me.addListener( 'afterexeccommand', saveScene );
@@ -289,6 +292,8 @@ UE.plugins['undo'] = function() {
         var keyCode = evt.keyCode || evt.which;
         if ( !keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey ) {
             if ( me.undoManger.list.length == 0 || ((keyCode == 8 ||keyCode == 46) && lastKeyCode != keyCode) ) {
+
+                me.fireEvent('contentchange');
                 me.undoManger.save(true);
                 lastKeyCode = keyCode;
                 return;
@@ -303,7 +308,9 @@ UE.plugins['undo'] = function() {
             keycont++;
             if ( keycont >= maxInputCount ) {
                 if(me.selection.getRange().collapsed)
+                    me.fireEvent('contentchange');
                     me.undoManger.save();
+
             }
         }
     } );

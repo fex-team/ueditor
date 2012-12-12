@@ -309,6 +309,12 @@
             if ( options.fullscreen && me.ui ) {
                 me.ui.setFullScreen( true );
             }
+            //解决ff下点击图片会复制问题
+            //ff下的table不能编辑
+//            if(browser.gecko){
+//                me.document.execCommand( 'enableObjectResizing', false, false );
+//                me.document.execCommand( 'enableInlineTableEditing', false,options.tableNativeEditInFF );
+//            }
             try {
                 me.document.execCommand( '2D-position', false, false );
             } catch ( e ) {}
@@ -323,6 +329,7 @@
                 });
 
             }
+
             me.isReady = 1;
             me.fireEvent( 'ready' );
             options.onready && options.onready.call(me);
@@ -748,11 +755,13 @@
                 if ( me.queryCommandState( cmdName ) != -1 ) {
                     me.fireEvent( 'beforeexeccommand', cmdName );
                     result = this._callCmdFn( 'execCommand', arguments );
+                    me.fireEvent('contentchange');
                     me.fireEvent( 'afterexeccommand', cmdName );
                 }
                 me.__hasEnterExecCommand = false;
             } else {
                 result = this._callCmdFn( 'execCommand', arguments );
+                me.fireEvent('contentchange')
             }
             !me.__hasEnterExecCommand && me._selectionChange();
             return result;

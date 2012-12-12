@@ -102,7 +102,7 @@
         var ieRange;
         //ie下有可能报错
         try {
-            ieRange = sel.getNative().createRange();
+                ieRange = sel.getNative().createRange();
         } catch ( e ) {
             return null;
         }
