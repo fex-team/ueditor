@@ -276,7 +276,7 @@
                     var oldExecCommand = me.execCommand;
                     me.execCommand = function () {
                         me.fireEvent( 'firstBeforeExecCommand' );
-                        oldExecCommand.apply( me, arguments );
+                        return oldExecCommand.apply( me, arguments );
                     };
                     this._setDefaultContent( options.initialContent );
                 } else
