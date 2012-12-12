@@ -170,7 +170,7 @@ var scrawl = function (options) {
                 context.clearRect(0, 0, context.canvas.width, context.canvas.height);
                 drawStep = [];
                 me._saveOPerate(saveNum);
-                drawStepIndex = 0;
+                drawStepIndex = 1;
                 me.isScrawl = false;
                 me.btn2disable("J_previousStep");
                 me.btn2disable("J_nextStep");
