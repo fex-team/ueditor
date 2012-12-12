@@ -194,9 +194,12 @@
 
                    me.fireEvent('beforepaste',html);
                     //不用在走过滤了
-                   me.execCommand( 'insertHtml',html.html,true);
+                   if(html.html){
+                       me.execCommand( 'insertHtml',html.html,true);
 
-	               me.fireEvent("afterpaste");
+                       me.fireEvent("afterpaste");
+
+                   }
 
                 }
         }
@@ -216,8 +219,8 @@
                     if((browser.ie || browser.opera) && (!e.ctrlKey || e.keyCode != '86')){
                         return;
                     }
-
                     getClipboardData.call( me, function( div ) {
+
                         filter(div);
                     } );
 

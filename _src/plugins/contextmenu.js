@@ -130,6 +130,62 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'splittocols'
                         },
                         {
+                            label:'insertcaption',
+                            cmdName:'insertcaption'
+                        },
+                        {
+                            label:'deletecaption',
+                            cmdName:'deletecaption'
+                        },
+                        {
+                            label:'inserttitle',
+                            cmdName:'inserttitle'
+                        },
+                        {
+                            label:'adaptbytext',
+                            cmdName:'adaptbytext'
+                        },
+                        {
+                            label:'adaptbywindow',
+                            cmdName:'adaptbywindow'
+                        },
+                        {
+                            label:'adaptbycustomer',
+                            cmdName:'adaptbycustomer'
+                        },
+                        {
+                            label:'insertrownext',
+                            cmdName:'insertrownext'
+                        },
+                        {
+                            label:'tdAlignCenter',
+                            cmdName:'cellalign',
+                            exec:function () {
+
+                                this.execCommand( 'cellalign' ,'center')
+                            }
+                        },
+                        {
+                            label:'tdvAlignCenter',
+                            cmdName:'cellvalign',
+                            exec:function () {
+
+                                this.execCommand( 'cellvalign' ,'top')
+                            }
+                        },
+                        {
+                            label:'averageDiseRow',
+                            cmdName:'averagedistributerow'
+                        },
+                        {
+                            label:'averageDisCol',
+                            cmdName:'averagedistributecol'
+                        },
+                        {
+                            label:'deletetitle',
+                            cmdName:'deletetitle'
+                        },
+                        {
                             label:lang.mergecells,
                             cmdName:'mergecells'
                         },

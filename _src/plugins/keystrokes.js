@@ -47,6 +47,7 @@ UE.plugins['keystrokes'] = function() {
 
         }
 
+
         //处理backspace/del
         if (keyCode == 8 ) {//|| keyCode == 46
 
@@ -130,6 +131,10 @@ UE.plugins['keystrokes'] = function() {
         }
         //处理tab键的逻辑
         if (keyCode == 9) {
+            if(evt._ue_table_tab){
+                return ;
+            }
+
             range = me.selection.getRange();
             me.undoManger && me.undoManger.save();
 
@@ -137,7 +142,7 @@ UE.plugins['keystrokes'] = function() {
                 txt += tabNode;
             }
             var span = me.document.createElement('span');
-            span.innerHTML = txt;
+            span.innerHTML = txt + domUtils.fillChar;
             if (range.collapsed) {
 
 
