@@ -11,7 +11,7 @@
         $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
         var editor = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','initialContent':'<p>欢迎使用ueditor</p>','autoFloatEnabled':false});
 
-        var ue = new UE.ui.Editor({'autoFloatEnabled':true});
+        var ue = new UE.ui.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':true});
 
 //        setTimeout(function(){
             editor.render(div);
@@ -21,7 +21,7 @@
                 te.obj.push( editor );
                 te.obj.push(range);
                 te.obj.push( ue );
-            },20);
+            },50);
 //        },20);
         stop();
         document.getElementsByClassName = function(eleClassName) {
