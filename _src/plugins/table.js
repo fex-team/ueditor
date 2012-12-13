@@ -1037,27 +1037,39 @@ UE.plugins['table'] = function () {
     };
     UE.commands['cellalign'] = {
         queryCommandState:function () {
-            return getSelectedArr(this).length ? 0 : -1
+            return getTableItemsByRange().cell?0:-1
         },
         execCommand:function (cmd,align) {
-            var selectedTds = getSelectedArr(this);
-            if( selectedTds.length ){
-                for(var i= 0,ci;ci=selectedTds[i++];){
-                    ci.setAttribute('align',align);
-                }
+            var me=this,
+                ut = getUETableBySelected(me);
+
+            if(!ut){
+                var start = me.selection.getStart(),
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th"],true);
+                cell.setAttribute('align',align);
+            }else{
+                utils.each(ut.selectedTds,function(cell){
+                    cell.setAttribute('align',align);
+                });
             }
         }
     };
     UE.commands['cellvalign'] = {
         queryCommandState:function () {
-            return getSelectedArr(this).length ? 0 : -1;
+            return getTableItemsByRange().cell?0:-1
         },
         execCommand:function (cmd,valign) {
-            var selectedTds = getSelectedArr(this);
-            if(selectedTds.length){
-                for(var i= 0,ci;ci = selectedTds[i++];){
-                    ci.setAttribute('valign',valign);
-                }
+            var me=this,
+                ut = getUETableBySelected(me);
+
+            if(!ut){
+                var start = me.selection.getStart(),
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th"],true);
+                cell.setAttribute('valign',valign);
+            }else{
+                utils.each(ut.selectedTds,function(cell){
+                    cell.setAttribute('valign',valign);
+                });
             }
         }
     };
