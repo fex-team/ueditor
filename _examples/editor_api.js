@@ -88,6 +88,7 @@
             'ui/tablebutton.js',
             'ui/autotypesetpicker.js',
             'ui/autotypesetbutton.js',
+            'ui/cellalignpicker.js',
             'ui/toolbar.js',
             'ui/menu.js',
             'ui/combox.js',

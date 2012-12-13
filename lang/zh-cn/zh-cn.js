@@ -81,6 +81,7 @@ UE.I18N['zh-cn'] = {
         'unlink':"删除超链接",
         'paragraph':"段落格式",
         'edittable':"表格属性",
+        'aligntd':"单元格对齐方式",
         'edittd':"单元格属性",
         'justifyleft':'左对齐',
         'justifyright':'右对齐',
