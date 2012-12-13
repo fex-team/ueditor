@@ -69,7 +69,7 @@
             'plugins/customstyle.js',
             'plugins/catchremoteimage.js',
             'plugins/snapscreen.js',
-            'plugins/attachment.js',
+            'plugins/insertparagraph.js',
             'plugins/webapp.js',
             'plugins/template.js',
             'plugins/music.js',
