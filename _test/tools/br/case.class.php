@@ -141,7 +141,7 @@ class Kiss
 
     public static function listcase( $matcher = "*" , $projroot = '../../../' )
     {
-        $srcpath = $projroot . '_src1/';
+        $srcpath = $projroot . '_src/';
         $testpath = $projroot . '_test/';
         require_once 'filehelper.php';
         $caselist = getSameFile( $srcpath , $testpath , '' );
@@ -164,7 +164,7 @@ class Kiss
 
     public static function listSrcOnly( $print = true , $projroot = '../../../' )
     {
-        $srcpath = $projroot . '_src1/';
+        $srcpath = $projroot . '_src/';
         $testpath = $projroot . '_test/';
         require_once 'filehelper.php';
         $caselist = getSameFile( $srcpath , $testpath , '' );

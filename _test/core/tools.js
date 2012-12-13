@@ -7,7 +7,7 @@
         var div = document.body.appendChild( document.createElement( 'div' ) );
         div.id = 'test';
         var utils = baidu.editor.utils;
-        var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
+        var editor = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':false});
         editor.render( div );
         stop();
         setTimeout(function(){

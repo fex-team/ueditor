@@ -16,7 +16,7 @@
         var div = document.createElement('div');
         document.body.appendChild(div);
         div.id = 'editor';
-        var ue = new UE.ui.Editor({'autoFloatEnabled':true});
+        var ue = new UE.ui.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':true});
         setTimeout(function(){
             te.dom.push(div);
             te.obj.push(ui);
