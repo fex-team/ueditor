@@ -42,7 +42,7 @@
             this.setProxyListener('click');
             this.addListener('render', function(){
                 utils.on(me.getInnerDom('run'), 'click', function(){
-                    var opt =  {},
+                    var opt =  ui.editor.options.autotypeset,
                         cont = me.dom,
                         ipts = utils.getElementsByTagName(cont,"input");
 

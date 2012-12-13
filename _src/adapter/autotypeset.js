@@ -13,8 +13,8 @@ UE.registerEditorui(
             typeset.show(this.dom);
         }
         typeset.addListener('setoption', function(t, opt){
-            debugger;
-            editor.execCommand(name, opt);
+            editor.options.autotypeset = opt;
+            editor.execCommand(name);
         });
 
         btn.addListener('click', function(){
