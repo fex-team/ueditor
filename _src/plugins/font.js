@@ -60,14 +60,7 @@ UE.plugins['font'] = function() {
 
 
                     } else {
-                        if(me.currentSelectedArr && me.currentSelectedArr.length > 0){
-                            for(var i=0,ci;ci=me.currentSelectedArr[i++];){
-                                range.selectNodeContents(ci);
-                                range.applyInlineStyle( 'span', {'style':style + ':' + value} );
 
-                            }
-                            range.selectNodeContents(this.currentSelectedArr[0]).select();
-                        }else{
                             if ( !range.collapsed ) {
                                 if((cmd == 'underline'||cmd=='strikethrough') && me.queryCommandValue(cmd)){
                                      me.execCommand( 'removeFormat', 'span,a', style );
@@ -141,7 +134,7 @@ UE.plugins['font'] = function() {
                                 }
                                 domUtils.remove(text);
                             }
-                        }
+
 
                     }
                     return true;
@@ -168,9 +161,6 @@ UE.plugins['font'] = function() {
                     return  domUtils.getComputedStyle( startNode, style );
                 },
                 queryCommandState : function(cmdName){
-                    if(this.highlight){
-                       return -1;
-                   }
                     if(!(cmdName == 'underline'||cmdName=='strikethrough')){
                         return 0;
                     }
