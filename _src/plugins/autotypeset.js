@@ -74,7 +74,6 @@ UE.plugins['autotypeset'] = function(){
     }
     function autotype(type,html){
 
-        debugger;
         var cont;
         if(html){
             if(!opt.pasteFilter){
