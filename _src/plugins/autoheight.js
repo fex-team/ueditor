@@ -25,7 +25,8 @@ UE.plugins['autoheight'] = function () {
         var me = this;
         clearTimeout(timer);
         timer = setTimeout(function () {
-            if (me.queryCommandState('source') != 1) {
+
+            if (me.queryCommandState && me.queryCommandState('source') != 1) {
                 if (!span) {
                     span = me.document.createElement('span');
                     //trace:1764
