@@ -39,9 +39,6 @@ UE.plugins['anchor'] = function (){
                     range.insertNode(anchor).setStartAfter(anchor).setCursor(false,true);
                 }
             }
-        },
-        queryCommandState:function () {
-            return this.highlight ? -1 : 0;
         }
 
     };

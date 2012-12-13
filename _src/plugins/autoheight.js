@@ -22,6 +22,7 @@ UE.plugins['autoheight'] = function () {
         timer;
 
     function adjustHeight() {
+        var me = this;
         clearTimeout(timer);
         timer = setTimeout(function () {
             if (me.queryCommandState('source') != 1) {
@@ -67,7 +68,7 @@ UE.plugins['autoheight'] = function () {
         me.addListener('mouseup', adjustHeight);
         //ff不给事件算得不对
         setTimeout(function () {
-            adjustHeight();
+            adjustHeight.call(this);
         }, browser.gecko ? 100 : 0);
         me.fireEvent('autoheightchanged', me.autoHeightEnabled);
     };
@@ -88,7 +89,7 @@ UE.plugins['autoheight'] = function () {
         domUtils.on(browser.ie ? me.body : me.document, browser.webkit ? 'dragover' : 'drop', function () {
             clearTimeout(timer);
             timer = setTimeout(function () {
-                adjustHeight();
+                adjustHeight.call(this);
             }, 100);
 
         });
