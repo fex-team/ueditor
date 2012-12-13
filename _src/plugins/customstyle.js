@@ -107,9 +107,6 @@ UE.plugins['customstyle'] = function() {
                 function(node){return node.getAttribute('label')}
             );
             return  parent ? parent.getAttribute('label') : '';
-        },
-        queryCommandState : function() {
-            return this.highlight ? -1 : 0;
         }
     };
     //当去掉customstyle是，如果是块元素，用p代替
