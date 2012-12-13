@@ -559,7 +559,7 @@
                                 me.body.appendChild( p );
                                 break;
                             } else {
-                                me.body.insertBefore( p, child );
+                                child.parentNode.insertBefore( p, child );
                                 p = me.document.createElement( 'p' );
                             }
                         }
