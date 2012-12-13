@@ -973,29 +973,42 @@ UE.plugins['table'] = function () {
 
         }
     };
+
     UE.commands['cellalign'] = {
         queryCommandState:function () {
-            return getSelectedArr(this).length ? 0 : -1
+            return getTableItemsByRange().cell?0:-1
         },
         execCommand:function (cmd,align) {
-            var selectedTds = getSelectedArr(this);
-            if( selectedTds.length ){
-                for(var i= 0,ci;ci=selectedTds[i++];){
-                    ci.align = align;
-                }
+            var me=this,
+                ut = getUETableBySelected(me);
+
+            if(!ut){
+                var start = me.selection.getStart(),
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th"],true);
+                cell.setAttribute('align',align);
+            }else{
+                utils.each(ut.selectedTds,function(cell){
+                    cell.setAttribute('align',align);
+                });
             }
         }
     };
     UE.commands['cellvalign'] = {
         queryCommandState:function () {
-            return getSelectedArr(this).length ? 0 : -1;
+            return getTableItemsByRange().cell?0:-1
         },
         execCommand:function (cmd,valign) {
-            var selectedTds = getSelectedArr(this);
-            if(selectedTds.length){
-                for(var i= 0,ci;ci = selectedTds[i++];){
-                    ci.vAlign = valign;
-                }
+            var me=this,
+                ut = getUETableBySelected(me);
+
+            if(!ut){
+                var start = me.selection.getStart(),
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th"],true);
+                cell.setAttribute('valign',valign);
+            }else{
+                utils.each(ut.selectedTds,function(cell){
+                    cell.setAttribute('valign',valign);
+                });
             }
         }
     };
@@ -1462,7 +1475,8 @@ UE.plugins['table'] = function () {
     //平均分配各列
     UE.commands['averagedistributecol'] = {
         queryCommandState:function () {
-            var ut = getUETableBySelected();
+            var me=this,
+                ut = getUETableBySelected(me);
             if (!ut) return -1;
             return ut.isFullRow() ? 0 : -1;
         },
@@ -1492,7 +1506,8 @@ UE.plugins['table'] = function () {
     //平均分配各行
     UE.commands['averagedistributerow'] = {
         queryCommandState:function () {
-            var ut = getUETableBySelected();
+            var me=this,
+                ut = getUETableBySelected(me);
             if (!ut) return -1;
             return ut.isFullCol() ? 0 : -1;
         },
@@ -1517,6 +1532,16 @@ UE.plugins['table'] = function () {
             if (ut && ut.selectedTds.length) {
                 setAverageHeight(getAverageHeight());
             }
+        }
+    };
+
+    //表格属性
+    UE.commands['edittable']={
+        queryCommandState:function () {
+            return getTableItemsByRange().cell?0:-1
+        },
+        execCommand:function (cmd) {
+
         }
     };
 

@@ -82,6 +82,7 @@ UE.I18N['en'] = {
         'unlink':"Unlink",
         'paragraph':"Paragraph",
         'edittable':"Table property",
+        'aligncell':'Align cell',
         'edittd':"Cell property",
         'table':"Table",
         'justifyleft':'Justify Left',

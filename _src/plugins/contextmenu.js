@@ -195,6 +195,84 @@ UE.plugins['contextmenu'] = function () {
                         }
                     ]
                 },
+                {
+                    group:lang.aligntd,
+                    icon:'aligntd',
+                    subMenu:[
+                        {
+                            label:'上左',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'left');
+                                this.execCommand( 'cellvalign' ,'top');
+                            }
+                        },
+                        {
+                            label:'上中',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'center');
+                                this.execCommand( 'cellvalign' ,'top');
+                            }
+                        },
+                        {
+                            label:'上右',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'right');
+                                this.execCommand( 'cellvalign' ,'top');
+                            }
+                        },
+                        {
+                            label:'中左',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'left');
+                                this.execCommand( 'cellvalign' ,'middle');
+                            }
+                        },
+                        {
+                            label:'中中',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'center');
+                                this.execCommand( 'cellvalign' ,'middle');
+                            }
+                        },
+                        {
+                            label:'中右',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'right');
+                                this.execCommand( 'cellvalign' ,'middle');
+                            }
+                        },
+                        {
+                            label:'下左',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'left');
+                                this.execCommand( 'cellvalign' ,'bottom');
+                            }
+                        },
+                        {
+                            label:'下中',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'center');
+                                this.execCommand( 'cellvalign' ,'bottom');
+                            }
+                        },
+                        {
+                            label:'下右',
+                            cmdName:'cellalign',
+                            exec:function () {
+                                this.execCommand( 'cellalign' ,'right');
+                                this.execCommand( 'cellvalign' ,'bottom');
+                            }
+                        }
+                    ]
+                },
                 '-',
                 {
                     label:lang['copy'],
@@ -257,7 +335,7 @@ UE.plugins['contextmenu'] = function () {
                                         'label':subItem.label || me.getLang( "contextMenu." + subItem.cmdName + (subItem.value || '') ),
                                         'className':'edui-for-' + subItem.cmdName + (subItem.value || ''),
                                         onclick:subItem.exec ? function () {
-                                            subItem.exec.call( me );
+                                                subItem.exec.call( me );
                                         } : function () {
                                             me.execCommand( subItem.cmdName, subItem.value );
                                         }
@@ -267,9 +345,19 @@ UE.plugins['contextmenu'] = function () {
                         })( cj );
                     }
                     if ( subMenu.length ) {
+                        function getLabel(){
+                            if(item.icon=="table")
+                                return me.getLang( "contextMenu.table" );
+                            else if(item.icon=="justifyjustify")
+                                return me.getLang( "contextMenu.paragraph" );
+                            else if(item.icon=="aligntd"){
+                                return me.getLang("contextMenu.aligntd");
+                            }
+                        }
                         contextItems.push( {
                             //todo 修正成自动获取方式
-                            'label':item.icon == "table" ? me.getLang( "contextMenu.table" ) : me.getLang( "contextMenu.paragraph" ),
+                            'label':getLabel(),
+//                            'label':item.icon == "table" ? me.getLang( "contextMenu.table" ) : me.getLang( "contextMenu.paragraph" ),
                             className:'edui-for-' + item.icon,
                             'subMenu':{
                                 items:subMenu,

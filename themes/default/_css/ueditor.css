@@ -41,6 +41,8 @@
 @import "colorpicker.css";
     /*自动排版弹出菜单*/
 @import "autotypesetpicker.css";
+    /*平均分布菜单*/
+@import "cellalignpicker.css";
     /*分隔线*/
 @import "separtor.css";
     /*颜色按钮--依赖splitbutton*/

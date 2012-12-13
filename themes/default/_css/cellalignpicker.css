@@ -1,0 +1,24 @@
+/*自动排版弹出菜单*/
+.edui-default .edui-aligncellpicker .edui-aligncellpicker-body {
+    width: 100px;
+    font-size: 12px;
+    cursor: default;
+}
+
+.edui-default .edui-aligncellpicker-body table {
+    border-collapse: separate;
+    border-spacing: 2px;
+    width: 100%;
+}
+
+.edui-default .edui-aligncellpicker-body td {
+    height: 20px;
+    padding: 1px;
+    text-align: center;
+    vertical-align: middle;
+}
+.edui-default .edui-aligncellpicker-body td:hover {
+    background-color: #fff5d4;
+    padding: 0;
+    border: 1px solid #dcac6c;
+}
