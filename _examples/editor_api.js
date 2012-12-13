@@ -31,8 +31,6 @@
             'plugins/indent.js',
             'plugins/print.js',
             'plugins/preview.js',
-            'plugins/spechars.js',
-            'plugins/emotion.js',
             'plugins/selectall.js',
             'plugins/paragraph.js',
             'plugins/directionality.js',
