@@ -55,9 +55,6 @@ UE.commands['tolowercase'] = {
         }else{
             convertCase().select();
         }
-    },
-    queryCommandState:function () {
-        return this.highlight ? -1 : 0;
     }
 };
 

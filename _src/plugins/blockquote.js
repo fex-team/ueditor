@@ -148,9 +148,6 @@ UE.plugins['blockquote'] = function(){
             range.moveToBookmark( bookmark ).select();
         },
         queryCommandState : function() {
-            if(this.highlight){
-                return -1;
-            }
             return getObj(this) ? 1 : 0;
         }
     };

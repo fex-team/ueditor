@@ -79,40 +79,24 @@
         };
     UE.commands['directionality'] = {
         execCommand : function( cmdName,forward ) {
-            var range = new dom.Range(this.document);
-            if(this.currentSelectedArr && this.currentSelectedArr.length > 0){
-                for(var i=0,ti;ti=this.currentSelectedArr[i++];){
-                    if(ti.style.display != 'none'){
-                        doDirectionality(range.selectNode(ti),this,forward);
-                    }
-                }
-                range.selectNode(this.currentSelectedArr[0]).select();
-            }else{
-                range = this.selection.getRange();
-                //闭合时单独处理
-                if(range.collapsed){
-                    var txt = this.document.createTextNode('d');
-                    range.insertNode(txt);
-                }
-                doDirectionality(range,this,forward);
-                if(txt){
-                    range.setStartBefore(txt).collapse(true);
-                    domUtils.remove(txt);
-                }
-
-                range.select();
-                
-
+            var range = this.selection.getRange();
+            //闭合时单独处理
+            if(range.collapsed){
+                var txt = this.document.createTextNode('d');
+                range.insertNode(txt);
             }
+            doDirectionality(range,this,forward);
+            if(txt){
+                range.setStartBefore(txt).collapse(true);
+                domUtils.remove(txt);
+            }
+
+            range.select();
             return true;
         },
         queryCommandValue : function() {
-
             var node = getObj(this);
             return node ? node.getAttribute('dir') : 'ltr';
-        },
-       queryCommandState : function(){
-            return this.highlight ? -1 :0;
         }
     };
 })();

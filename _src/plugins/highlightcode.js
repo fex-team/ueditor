@@ -24,7 +24,7 @@ UE.plugins['highlightcode'] = function() {
                 var div = me.document.getElementById(SyntaxHighlighter.getHighlighterDivId());
                 div.setAttribute('highlighter',pre.className);
                 domUtils.remove(pre);
-                adjustHeight();
+                adjustHeight(me);
             }else{
                 var range = this.selection.getRange(),
                    start = domUtils.findParentByTagName(range.startContainer, 'table', true),
@@ -47,16 +47,47 @@ UE.plugins['highlightcode'] = function() {
             }
         },
         queryCommandState: function(){
+            return queryHighlight.call(this);
+        }
+    };
+
+    function queryHighlight(){
+        try{
             var range = this.selection.getRange(),start,end;
             range.adjustmentBoundary();
-                start = domUtils.findParent(range.startContainer,function(node){
-                    return node.nodeType == 1 && node.tagName == 'DIV' && domUtils.hasClass(node,'syntaxhighlighter');
-                },true);
-                end = domUtils.findParent(range.endContainer,function(node){
-                    return node.nodeType == 1 && node.tagName == 'DIV' && domUtils.hasClass(node,'syntaxhighlighter');
-                },true);
+            start = domUtils.findParent(range.startContainer,function(node){
+                return node.nodeType == 1 && node.tagName == 'DIV' && domUtils.hasClass(node,'syntaxhighlighter');
+            },true);
+            end = domUtils.findParent(range.endContainer,function(node){
+                return node.nodeType == 1 && node.tagName == 'DIV' && domUtils.hasClass(node,'syntaxhighlighter');
+            },true);
             return start && end && start == end  ? 1 : 0;
+        }catch(e){
+            return 0;
         }
+    }
+
+    //不需要判断highlight的command列表
+    me.notNeedHighlightQuery ={
+        help:1,
+        undo:1,
+        redo:1,
+        source:1,
+        print:1,
+        searchreplace:1,
+        fullscreen:1,
+        autotypeset:1,
+        pasteplain:1,
+        preview:1,
+        insertparagraph:1
+    };
+    //将queyCommamndState重置
+    var orgQuery = me.queryCommandState;
+    me.queryCommandState = function(cmd){
+        if(!me.notNeedHighlightQuery[cmd.toLowerCase()] && queryHighlight.call(this) == 1){
+            return -1;
+        }
+        return orgQuery.apply(this,arguments)
     };
 
     me.addListener('beforeselectionchange afterselectionchange',function(type){
@@ -74,7 +105,7 @@ UE.plugins['highlightcode'] = function() {
                 type : "text/javascript",
                 defer : "defer"
             },function(){
-                changePre();
+                changePre.call(me);
             });
         }
         if(!me.document.getElementById("syntaxhighlighter_css")){
@@ -114,10 +145,9 @@ UE.plugins['highlightcode'] = function() {
     });
     me.addListener("aftergetcontent aftersetcontent",changePre);
 
-    function adjustHeight(){
+    function adjustHeight(editor){
         setTimeout(function(){
-            var div = me.document.getElementById(SyntaxHighlighter.getHighlighterDivId());
-
+            var div = editor.document.getElementById(SyntaxHighlighter.getHighlighterDivId());
             if(div){
                 var tds = div.getElementsByTagName('td');
                 for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
@@ -133,6 +163,7 @@ UE.plugins['highlightcode'] = function() {
 
     }
     function changePre(){
+        var me = this;
         for(var i=0,pr,pres = domUtils.getElementsByTagName(me.document,"pre");pr=pres[i++];){
             if(pr.className.indexOf("brush")>-1){
                 
@@ -148,7 +179,7 @@ UE.plugins['highlightcode'] = function() {
                     return ;
                 }
 
-                div = me.document.createElement("div");
+                div = editor.document.createElement("div");
                 div.innerHTML = txt;
 
                 div.firstChild.setAttribute('highlighter',pre.className);
@@ -157,7 +188,7 @@ UE.plugins['highlightcode'] = function() {
                 domUtils.remove(pre);
                 domUtils.remove(pr);
                 
-                adjustHeight();
+                adjustHeight(me);
             }
         }
     }

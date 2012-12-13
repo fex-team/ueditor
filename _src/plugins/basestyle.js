@@ -23,81 +23,40 @@ UE.plugins['basestyle'] = function(){
         (function( cmd, tagNames ) {
             me.commands[cmd] = {
                 execCommand : function( cmdName ) {
-
-                    var range = new dom.Range(me.document),obj = '';
-                    //table的处理
-                    if(me.currentSelectedArr && me.currentSelectedArr.length > 0){
-                        for(var i=0,ci;ci=me.currentSelectedArr[i++];){
-                            if(ci.style.display != 'none'){
-                                range.selectNodeContents(ci).select();
-                                //trace:943
-                                !obj && (obj = getObj(this,tagNames));
-                                if(cmdName == 'superscript' || cmdName == 'subscript'){
-                                    
-                                    if(!obj || obj.tagName.toLowerCase() != cmdName){
-                                        range.removeInlineStyle(['sub','sup']);
-                                    }
-
-                                }
-                                obj ? range.removeInlineStyle( tagNames ) : range.applyInlineStyle( tagNames[0] );
-                            }
-
-                        }
-                        range.selectNodeContents(me.currentSelectedArr[0]).select();
-                    }else{
-                        range = me.selection.getRange();
-                        obj = getObj(this,tagNames);
-
-                        if ( range.collapsed ) {
-                            if ( obj ) {
-                                var tmpText =  me.document.createTextNode('');
-                                range.insertNode( tmpText ).removeInlineStyle( tagNames );
-
-                                range.setStartBefore(tmpText);
-                                domUtils.remove(tmpText);
-                            } else {
-                                
-                                var tmpNode = range.document.createElement( tagNames[0] );
-                                if(cmdName == 'superscript' || cmdName == 'subscript'){
-                                    tmpText = me.document.createTextNode('');
-                                    range.insertNode(tmpText)
-                                        .removeInlineStyle(['sub','sup'])
-                                        .setStartBefore(tmpText)
-                                        .collapse(true);
-
-                                }
-                                range.insertNode( tmpNode ).setStart( tmpNode, 0 );
-                                
-
-
-                            }
-                            range.collapse( true );
-
+                    var range = me.selection.getRange(),obj = getObj(this,tagNames);
+                    if ( range.collapsed ) {
+                        if ( obj ) {
+                            var tmpText =  me.document.createTextNode('');
+                            range.insertNode( tmpText ).removeInlineStyle( tagNames );
+                            range.setStartBefore(tmpText);
+                            domUtils.remove(tmpText);
                         } else {
+                            var tmpNode = range.document.createElement( tagNames[0] );
                             if(cmdName == 'superscript' || cmdName == 'subscript'){
-                                if(!obj || obj.tagName.toLowerCase() != cmdName){
-                                    range.removeInlineStyle(['sub','sup']);
-                                }
-
+                                tmpText = me.document.createTextNode('');
+                                range.insertNode(tmpText)
+                                    .removeInlineStyle(['sub','sup'])
+                                    .setStartBefore(tmpText)
+                                    .collapse(true);
                             }
-                            obj ? range.removeInlineStyle( tagNames ) : range.applyInlineStyle( tagNames[0] );
+                            range.insertNode( tmpNode ).setStart( tmpNode, 0 );
                         }
-
-                        range.select();
-                        
+                        range.collapse( true );
+                    } else {
+                        if(cmdName == 'superscript' || cmdName == 'subscript'){
+                            if(!obj || obj.tagName.toLowerCase() != cmdName){
+                                range.removeInlineStyle(['sub','sup']);
+                            }
+                        }
+                        obj ? range.removeInlineStyle( tagNames ) : range.applyInlineStyle( tagNames[0] );
                     }
-
-                    return true;
+                    range.select();
                 },
                 queryCommandState : function() {
-                   if(this.highlight){
-                       return -1;
-                   }
                    return getObj(this,tagNames) ? 1 : 0;
                 }
             };
         })( style, basestyles[style] );
-
     }
 };
 

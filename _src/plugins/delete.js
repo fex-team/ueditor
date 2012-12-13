@@ -92,10 +92,6 @@ UE.commands['delete'] = {
         range.select(true);
     },
     queryCommandState : function(){
-
-        if(this.currentSelectedArr && this.currentSelectedArr.length > 0){
-            return 0;
-        }
-        return this.highlight || this.selection.getRange().collapsed ? -1 : 0;
+        return this.selection.getRange().collapsed ? -1 : 0;
     }
 };

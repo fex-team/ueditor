@@ -10,11 +10,11 @@ UE.plugins['catchremoteimage'] = function () {
     }
     var me = this;
     this.setOpt({
-            localDomain:["127.0.0.1","localhost","img.baidu.com"],
-            separater:'ue_separate_ue',
-            catchFieldName:"upfile",
-            catchRemoteImageEnable:true
-        });
+        localDomain:["127.0.0.1","localhost","img.baidu.com"],
+        separater:'ue_separate_ue',
+        catchFieldName:"upfile",
+        catchRemoteImageEnable:true
+    });
     var ajax = UE.ajax,
         localDomain = me.options.localDomain ,
         catcherUrl = me.options.catcherUrl,

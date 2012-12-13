@@ -276,7 +276,7 @@
                     var oldExecCommand = me.execCommand;
                     me.execCommand = function () {
                         me.fireEvent( 'firstBeforeExecCommand' );
-                        oldExecCommand.apply( me, arguments );
+                        return oldExecCommand.apply( me, arguments );
                     };
                     this._setDefaultContent( options.initialContent );
                 } else
@@ -559,7 +559,7 @@
                                 me.body.appendChild( p );
                                 break;
                             } else {
-                                me.body.insertBefore( p, child );
+                                child.parentNode.insertBefore( p, child );
                                 p = me.document.createElement( 'p' );
                             }
                         }
