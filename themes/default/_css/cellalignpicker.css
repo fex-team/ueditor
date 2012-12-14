@@ -17,7 +17,7 @@
     text-align: center;
     vertical-align: middle;
 }
-.edui-default .edui-aligncellpicker-body td:hover {
+.edui-default .edui-aligncellpicker-body td.edui-state-hover {
     background-color: #fff5d4;
     padding: 0;
     border: 1px solid #dcac6c;
