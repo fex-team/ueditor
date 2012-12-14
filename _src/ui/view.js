@@ -32,18 +32,11 @@
         show: function(x, y, tar){
                 var dom = this.dom,
                     css = dom.style.cssText;
-
                 tar = (tar&&tar.nodeType===1) ? tar : document.body;
                 x = x| 0;
                 y = y| 0;
                 dom.style.cssText = css.replace(/;$/, '') + ';left:'+x+'px;top:'+y+'px;';
                 tar.appendChild(dom);
-
-            //修改后的代码
-//            return function(){
-//                dom.style.display == 'none' && (dom.style.display = 'block');
-//            };
-            //修改前的代码
                 this.show = function(){
                     dom.style.display == 'none' && (dom.style.display = 'block');
                 };
