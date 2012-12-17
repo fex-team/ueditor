@@ -21,7 +21,7 @@
         if(!optsAutoFloatEnabled){
             return;
         }
-        var uiUtils = UE.ui.uiUtils,
+        var uiUtils = UE.ui.Utils,
        		LteIE6 = browser.ie && browser.version <= 6,
             quirks = browser.quirks;
 
@@ -94,8 +94,8 @@
             if(checkHasUI(me)){
 
                 getPosition = uiUtils.getClientRect;
-                toolbarBox = me.ui.getDom('toolbarbox');
-                orgTop = getPosition(toolbarBox).top;
+                toolbarBox = me.ui.toolbar.dom;
+                orgTop = (document.body.scrollTop||document.documentElement.scrollTop)+getPosition(toolbarBox).top;
                 bakCssText = toolbarBox.style.cssText;
                 placeHolder.style.height = toolbarBox.offsetHeight + 'px';
                 if(LteIE6){
