@@ -567,12 +567,12 @@ var imageUploader = {};
                     maskIframe.style.display = "none";
                     //处理确定按钮的状态
                     if (selectedImageCount) {
-                        dialog.buttons[0].setDisabled(true);
+                        dialog.submitDisabled( true );
                     }
                 } else {
                     toggleFlash(false);
                     maskIframe.style.display = "";
-                    dialog.buttons[0].setDisabled(false);
+                    dialog.submitDisabled( false );
                 }
                 var list = g("imageList");
                 list.style.display = "none";

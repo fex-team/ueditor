@@ -11,7 +11,6 @@
         addPxChangeListener();
         addFloatListener();
         addBorderTypeChangeListener();
-
     };
 
     function addBorderTypeChangeListener(){
@@ -89,13 +88,9 @@
         cellSpacing = setMax(cellSpacing,5);
 
         var html = ["<table "];
-        if(cellSpacing>0){
-            html.push(' style="border-collapse:separate;" ')
-        }else{
-            html.push(' style="border-collapse:collapse;" ')
-        }
+        html.push(' style="border-collapse:'+(cellSpacing>0?"separate":"collapse")+';" ');
         cellSpacing>0 && html.push(' cellSpacing="' + cellSpacing + '" ');
-        html.push(' border="' + (border||1) +'" borderColor="' + (borderColor||'#000000') +'"');
+        html.push(' border="' + border +'" borderColor="' + borderColor +'"');
         bgColor && html.push(' bgColor="' + bgColor + '"');
         html.push(' ><tr><td colspan="3"><var id="lang_forPreview">'+lang.static.lang_forPreview+'</var></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></table>');
         var preview = $G("preview");
@@ -139,22 +134,17 @@
      * 绑定取色器监听事件
      */
     function addColorPickListener(){
-        var colorPicker = getColorPicker(),
+        var colorPicker = UE.getColorPicker(editor),
             ids = ["bgColor","borderColor"];
         for(var i=0,ci;ci = $G(ids[i++]); ){
             domUtils.on(ci,"click",function(){
                 var me = this;
                 showColorPicker(colorPicker,me);
-                colorPicker.content.onpickcolor = function(t, color){
-                    me.value = color.toUpperCase();
+                colorPicker.onsetcolor = function(t,color){
+                    me.value = 'default' === color ? "" : color.toUpperCase();
                     colorPicker.hide();
                     createTable();
-                };
-                colorPicker.content.onpicknocolor = function(){
-                    me.value = '';
-                    colorPicker.hide();
-                    createTable();
-                };
+                }
             });
             domUtils.on(ci,"keyup",function(){
                 colorPicker.hide();
@@ -162,27 +152,13 @@
             });
         }
         domUtils.on(document, 'mousedown', function (){
-            UE.ui.Popup.postHide(this);
+            colorPicker.hide()
         });
     }
-
-    /**
-     * 实例化一个colorpicker对象
-     */
-    function getColorPicker(){
-        return new UE.ui.Popup({
-            editor:editor,
-            content: new UE.ui.ColorPicker({
-                noColorText: lang.noColor,
-                editor:editor
-            })
-        });
-    }
-
     /**
      * 在anchorObj上显示colorpicker
      * @param anchorObj
      */
     function showColorPicker(colorPicker,anchorObj){
-        colorPicker.showAnchor(anchorObj);
+        colorPicker.show(anchorObj);
     }
