@@ -35,7 +35,7 @@ function report()
         if ($key == 'config')
             continue;
         $info = explode(";", $value);
-        if (substr_count($key, $filter) == 0)
+        if ($filter!='' && substr_count($key, $filter) == 0)
             continue;
         //errornum + ',' + allnum + ','+ kissPerc || 0 + ',' + wb.kissstart + ','+ wb.kissend;
         $casetime = ($info[4] - $info[3]) / 1000;
