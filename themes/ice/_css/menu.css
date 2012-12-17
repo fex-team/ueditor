@@ -1,0 +1,43 @@
+/**contextmenu**/
+.edui-contextmenu ul{background:#fff;}
+.edui-contextmenu{padding:0;width:150px;}
+.edui-contextmenu .edui-menuitem{width:142px;}
+.edui-contextmenu .edui-icon{display:inline-block;height:20px;*zoom:1;margin-right:4px;}
+.edui-contextmenu .edui-menuitem{padding:0 4px;}
+.edui-menu-selectall .edui-icon{background-position:-400px -19px;}
+.edui-menu-cleardoc .edui-icon{background-position:-520px 1px;}
+.edui-menu-justifyjustify .edui-icon{background-position:-440px 1px;}
+.edui-menu-copy .edui-icon{background-position:-700px 1px;}
+.edui-menu-paste .edui-icon{background-position:-560px 1px;}
+.edui-menu-justifyleft .edui-icon{background-position:-460px 1px;}
+.edui-menu-justifyright .edui-icon{background-position:-480px 1px;}
+.edui-menu-justifycenter .edui-icon{background-position:-420px 1px;}
+.edui-menu-edittable .edui-icon{background-position:-420px -38px;}
+.edui-menu-edittd .edui-icon{background-position:-700px -38px;}
+.edui-menu-table .edui-icon{background-position:-580px -19px;}
+
+.edui-menu-deletetable .edui-icon{background-position:-620px -19px;}
+.edui-menu-insertparagraphbeforetable .edui-icon{background-position:-140px -38px;}
+.edui-menu-deleterow .edui-icon{background-position:-660px -19px;}
+.edui-menu-deletecol .edui-icon{background-position:-640px -19px;}
+.edui-menu-insertrow .edui-icon{background-position:-740px -19px;}
+.edui-menu-insertcol .edui-icon{background-position:-700px -19px;}
+.edui-menu-mergeright .edui-icon{background-position:-60px -39px;}
+.edui-menu-mergedown .edui-icon{background-position:-80px -39px;}
+.edui-menu-mergecells .edui-icon{background-position:-760px -19px;}
+.edui-menu-delete .edui-icon{background-position:-360px -40px;}
+.edui-menu-splittorows .edui-icon{background-position:-100px -39px;}
+.edui-menu-splittocols .edui-icon{background-position:-120px -39px;}
+.edui-menu-splittocells .edui-icon{background-position:-800px -19px;}
+.edui-menu-unlink .edui-icon{background-position:-640px 1px;}
+
+/*.edui-contextmenu .edui-arrow{background:url(../images/icons-all.png) 0 -256px no-repeat;}*/
+.edui-contextmenu .edui-arrow{background:url(../images/icons-all.gif) 0 -232px no-repeat;background:url(../images/icons-all.gif) 0 -236px no-repeat\9;}
+.edui-menuseparator{margin:1px 0;height:1px;overflow:hidden;font-size:0;background-color:#ccc;}
+
+.edit-tips{padding:0 8px;line-height:30px;border-color:#ADC7DE;background:#ECF5FB;}
+.edui-clickable{text-decoration:underline;color:#0000CC;cursor:pointer;}
+
+/**render effect**/
+
+.edui-popup .item-checked{border-left:2px solid #F3E17B;}

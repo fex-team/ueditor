@@ -7,6 +7,7 @@
 (function(){
     var utils = UE.utils,
         _editorui = {},
+        instances = {},
         _editorWidget = {};
 
     /**
@@ -64,14 +65,27 @@
      * @desc 返回一个包装过的editor实例
      * @grammar UE.getEditor(options, renderId) //options-同配置文件， renderId-自动渲染时的元素id
      */
-    UE.getEditor = function(options){
-        options = options || {};
-        var editor = new baidu.editor.Editor( options),
-            oldRender = editor.render,
-            renderid = options.renderid,
-            aui = editor.ui = new UE.ui(editor);
-
-        editor.render = function ( holder ) {
+    UE.getEditor = function(id,options){
+        var editor= {},oldRender,aui;
+        if(UE.utils.isString(id)){
+            //字符串
+            editor = instances[id];
+            if (!editor) {
+                editor = instances[id] = new baidu.editor.Editor( options);
+                oldRender = editor.render;
+                aui = editor.ui = new UE.ui(editor);
+                !!id && newrender(id);
+                utils.loadFile(document, {
+                    href:editor.options.themePath + editor.options.theme + "/_css/ueditor.css",
+                    tag:"link",
+                    type:"text/css",
+                    rel:"stylesheet"
+                });
+            }
+        }else{
+            //元素
+        }
+        function newrender ( holder ) {
             if(!(holder=document.getElementById(holder))){
                 alert('cannot render editor in '+holder);
                 return false;
@@ -95,6 +109,7 @@
 
                         //so as follows, what about other attributes?
                         newDiv.id = holder.id;
+                        editor.key = holder.id
                         holder.className && (newDiv.className = holder.className);
                         holder.style.cssText && (newDiv.style.cssText = holder.style.cssText);
                         editorOptions.textarea = holder.getAttribute( 'name' )||'';
@@ -117,12 +132,16 @@
                     oldRender = aui = holder = newDiv = renderui = null;
                 }
             } )
-        };
-
-        !!renderid && editor.render(renderid);
+        }
         return editor;
     };
-
+    UE.delEditor = function (id) {
+        var editor;
+        if (editor = instances[id]) {
+            editor.key && editor.destroy();
+            delete instances[id]
+        }
+    }
     /**
      * @name adapt
      * @desc 适配editor和ui

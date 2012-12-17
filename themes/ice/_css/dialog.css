@@ -1,0 +1,52 @@
+/* dialog */
+.edui-dialog-mask{position:absolute;background:#aaa;opacity:.5;filter:alpha(opacity=50);}
+.edui-dialog {position:absolute;border: 1px solid #c6c6c6;background:#fff;overflow:hidden;}
+.edui-dialog-wrap{background-color:#fff;}
+.edui-dialog-shadow,
+.edui-shadow {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    box-shadow: 3px 3px 5px #818181;
+    -webkit-box-shadow: 3px 3px 5px #818181;
+    -moz-box-shadow: 3px 3px 5px #818181;
+    -ms-filter: 'progid:DXImageTransform.Microsoft.Blur(PixelRadius='3', MakeShadow='true', ShadowOpacity='0.5')';
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='3', MakeShadow='true', ShadowOpacity='0.5');
+}
+.edui-dialog-titlebar {color:#016DAE;text-indent:16px;font-weight:600;height: 29px;line-height:29px;border-bottom: 1px solid #c6c6c6;background: url(../images/dialog-title-bg.png) repeat-x bottom;cursor: move;}
+.edui-dialog-title{margin-left:10px;font-weight:600;}
+.edui-dialog-closebutton{position: absolute;right: 0;top: 0;height: 31px;width: 33px;line-height:100px;overflow:hidden;background: url("../images/icons-all.png") no-repeat 0 -58px;cursor:pointer;}
+.edui-dialog-closebutton:hover{background-position:0 -91px;}
+.edui-dialog-footbar{text-align:right;height: 40px;padding-right:10px;}
+.edui-dialog-confirm,
+.edui-dialog-cancel{display:inline-block;width:55px;height:24px;line-height:24px;margin-left:14px;text-align:center;color:#fff;zoom:1;cursor:default;background:url(../images/icons-all.png) no-repeat;}
+.edui-dialog-confirm-disabled{opacity:.3;filter:alpha(opacity=30);}
+.edui-dialog-confirm-hover,
+.edui-dialog-cancel-hover{background-position:0 -28px}
+
+/* dialog iframe setup */
+.edui-dialog-insertimage .edui-dialog-content {height: 390px;width: 640px;}
+.edui-dialog-link .edui-dialog-content{width:420px;height:200px;}
+.edui-dialog-background .edui-dialog-content  {width:440px;height:280px;}
+.edui-dialog-template .edui-dialog-content{width:630px;height:390px;}
+.edui-dialog-scrawl .edui-dialog-content{width:515px; height:360px;}
+.edui-dialog-spechars .edui-dialog-content{width:620px;height:570px;}
+.edui-dialog-insertimage .edui-dialog-content{width:640px;height:390px;}
+.edui-dialog-webapp .edui-dialog-content  {width:560px;height:450px;}
+.edui-dialog-insertframe .edui-dialog-content  { width:350px;height:200px;}
+.edui-dialog-wordimage .edui-dialog-content  {width:620px;height:380px;}
+.edui-dialog-attachment .edui-dialog-content  {width:480px;height:360px;}
+.edui-dialog-highlightcode .edui-dialog-content  {width:550px;height:360px;}
+.edui-dialog-map .edui-dialog-content  {width:550px;height:400px;}
+.edui-dialog-gmap .edui-dialog-content  {width:550px;height:400px;}
+.edui-dialog-insertvideo .edui-dialog-content  {width:590px;height:390px;}
+.edui-dialog-anchor .edui-dialog-content  {width:320px;height:60px;}
+.edui-dialog-searchreplace .edui-dialog-content  {width:400px;height:180px;}
+.edui-dialog-help .edui-dialog-content  { width:400px;height:420px;}
+.edui-dialog-inserttable .edui-dialog-content  {width:510px;height:275px;}
+.edui-dialog-edittd .edui-dialog-content  {width:220px; height:125px;}
+.edui-dialog-snapscreen .edui-dialog-content  {width:400px;height:220px;}

@@ -1,0 +1,6 @@
+html, body, div, p, a, span, h1, h2, h3, h4, form, iframe, input, img, ul, li{margin:0; padding:0;}
+body{font:12px/1.2 '宋体', 'tahoma', 'sans-serif';background-color:#fff;}
+ul, li{list-style:none;}
+
+/**container element**/
+.edui-wrapper{margin-left:100px;border:1px solid #CBDFEA;background-color: #ffffff;}

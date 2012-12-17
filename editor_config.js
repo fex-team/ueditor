@@ -79,19 +79,51 @@
         ,getMovieUrl:URL+"php/getMovie.php"                   //视频数据获取地址
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
-        // ,toolbars:[
-            // ['fullscreen', 'source', '|', 'undo', 'redo', '|',
-                // 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch','autotypeset','blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','selectall', 'cleardoc', '|',
-                // 'rowspacingtop', 'rowspacingbottom','lineheight','|',
-                // 'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
-                // 'directionalityltr', 'directionalityrtl', 'indent', '|',
-                // 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|','touppercase','tolowercase','|',
-                // 'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright','imagecenter', '|',
-                // 'insertimage', 'emotion','scrawl', 'insertvideo','music','attachment', 'map', 'gmap', 'insertframe','highlightcode','webapp','pagebreak','template','background', '|',
-                // 'horizontal', 'date', 'time', 'spechars','snapscreen', 'wordimage', '|',
-                // 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|',
-                // 'print', 'preview', 'searchreplace','help']
-        // ]
+        ,toolbars:[
+            {
+                tab:'常用',
+                tools:[
+                    [ ['source'] ],
+                    [ ['undo', 'redo'] ],
+                    [
+                        'fontfamily', 'fontsize',
+                        ['forecolor', 'backcolor'],
+                        ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'touppercase', 'tolowercase']
+                    ],
+                    [ ['removeformat','cleardoc','selectall', 'searchreplace', 'fullscreen', 'preview'] ],
+                    [ ['formatmatch', 'pasteplain'] ]
+                ]
+            },
+            {
+                tab:'插入',
+                tools:[
+                    [ ['pagebreak','insertimage', 'emotion', 'insertvideo', 'attachment', 'map', 'gmap', 'highlightcode'] ],
+                    [ ['inserttable','deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow',  'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols'] ],
+                    [ ['link', 'unlink', 'insertframe'] ],
+                    [ ['date', 'time'] ],
+                    [ ['horizontal', 'anchor', 'spechars', 'blockquote'] ]
+                ]
+            },
+            {
+                tab:'格式化',
+                tools:[
+                    [ ['insertorderedlist', 'insertunorderedlist'] ],
+                    [ ['directionalityltr', 'directionalityrtl'] ],
+                    [ ['indent', 'autotypeset'] ],
+                    ['customstyle'],
+                    ['paragraph', ['rowspacingtop', 'rowspacingbottom', 'lineheight'] ],
+                    [ ['imagenone', 'imageleft', 'imageright', 'imagecenter'] ],
+                    [ ['justifyleft', 'justifycenter', 'justifyright', 'justifyjustify'] ]
+                ]
+            },
+            {
+                tab:'其它',
+                tools:[
+                    [ ['help', 'print'] ],
+                    [ ['scrawl', 'webapp', 'template', 'background', 'snapscreen', 'wordimage'] ]
+                ]
+            }
+        ]
 		,statusbars:['elementpath', 'wordcount']
         ,widgets:['contextmenu', 'edittips']
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
@@ -108,8 +140,8 @@
         //,langPath:URL +"lang/"
 
         //主题配置项,默认是default。有需要的话也可以使用如下这样的方式来自动多主题切换，当然，前提条件是themes文件夹下存在对应的主题文件：
-        //现有如下皮肤:default,modern,gorgeous
-        //,theme:'default'
+        //现有如下皮肤:default,modern,gorgeous,ice
+        ,theme:'ice'
         //,themePath:URL +"themes/"
 
         //若实例化编辑器的页面手动修改的domain，此处需要设置为true
