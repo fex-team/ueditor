@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="newui_editor_api.js"></script>
+    <link rel="stylesheet" type="text/css" href="../themes/ice/ueditor.css"/>
+</head>
+<body>
+<!--iframe src="newui_2.html" frameborder="0" width="100%" height="450"></iframe>
+<br /-->
+    <h1>横向Tab工具条</h1>
+    <!--style给定宽度可以影响编辑器的最终宽度-->
+    <script type="text/plain" id="myEditor" style="width:1000px">
+        <p>这里我可以写一些输入提示</p>
+    </script>
+<script type="text/plain" id="myEditor1" style="width:1000px">
+        <p>这里我可以写一些输入提示</p>
+    </script>
+    <script type="text/javascript">
+        // 自定义的编辑器配置项,此处定义的配置项将覆盖editor_config.js中的同名配置
+        var editorOption = {
+            //这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
+            toolbars:[
+				{
+					tab:'常用',
+					tools:[
+						[ ['source'] ],
+						[ ['undo', 'redo'] ],
+						[
+							'fontfamily', 'fontsize',
+							['forecolor', 'backcolor'],
+							['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'touppercase', 'tolowercase']
+						],
+						[ ['removeformat','cleardoc','selectall', 'searchreplace', 'fullscreen', 'preview'] ],
+						[ ['formatmatch', 'pasteplain'] ]
+					]
+				},
+				{
+					tab:'插入',
+					tools:[
+						[ ['pagebreak','insertimage', 'emotion', 'insertvideo', 'attachment', 'map', 'gmap', 'highlightcode'] ],
+						[ ['inserttable','deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow',  'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols'] ],
+						[ ['link', 'unlink', 'insertframe'] ],
+						[ ['date', 'time'] ],
+						[ ['horizontal', 'anchor', 'spechars', 'blockquote'] ]
+					]
+				},
+				{
+					tab:'格式化',
+					tools:[
+						[ ['insertorderedlist', 'insertunorderedlist'] ],
+						[ ['directionalityltr', 'directionalityrtl'] ],
+						[ ['indent', 'autotypeset'] ],
+						['customstyle'],
+						['paragraph', ['rowspacingtop', 'rowspacingbottom', 'lineheight'] ],
+						[ ['imagenone', 'imageleft', 'imageright', 'imagecenter'] ],
+						[ ['justifyleft', 'justifycenter', 'justifyright', 'justifyjustify'] ]
+					]
+				},
+				{
+					tab:'其它',
+					tools:[
+						[ ['help', 'print'] ],
+						[ ['scrawl', 'webapp', 'template', 'background', 'snapscreen', 'wordimage'] ]
+					]
+				}
+				
+			],
+            //focus时自动清空初始化时的内容
+            autoClearinitialContent:true,
+            //关闭字数统计
+            wordCount:true,
+            //关闭elementPath
+            elementPathEnabled:true
+            //更多其他参数，请参考editor_config.js中的配置项
+        };
+        var editor_a = UE.getEditor(editorOption);
+        editor_a.render( 'myEditor' );
+        var editor_a1 = UE.getEditor(editorOption);
+                editor_a1.render( 'myEditor1' );
+    </script>
+<!--br />
+<iframe src="newui_1.html" frameborder="0" width="100%" height="450"></iframe>
+<br />
+<iframe src="newui_3.html" frameborder="0" width="100%" height="450"></iframe>
+<br /><br /><br /><br /><br /><br /-->
+</body>
+</html>

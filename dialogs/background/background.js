@@ -4,35 +4,18 @@ var me = editor,
     cp = $G("colorPicker"),
     bkbodyStyle = "",
     bkcolor = "";
-var popup = new UE.ui.Popup({
-    content:new UE.ui.ColorPicker({
-        noColorText:me.getLang("clearColor"),
-        editor:me,
-        onpickcolor:function (t, color) {
-            domUtils.setStyle(cp, "background-color", color);
-            bkcolor = color;
-            UE.ui.Popup.postHide();
-        },
-        onpicknocolor:function (t, color) {
-            domUtils.setStyle(cp, "background-color", "transparent");
-            bkcolor = "";
-            UE.ui.Popup.postHide();
-        }
-    }),
-    editor:me,
-    onhide:function () {
-        setBody();
+var popup = UE.getColorPicker(me);
+
+popup.addListener('setcolor', function(t, color){
+    var ret = 'transparent';
+    if(color !== 'default'){
+        bkcolor = ret = color;
     }
+    domUtils.setStyle(cp, "background-color", color);
+    setBody();
 });
 domUtils.on(cp, "click", function () {
-    popup.showAnchor(this);
-});
-domUtils.on(document, 'mousedown', function (evt) {
-    var el = evt.target || evt.srcElement;
-    UE.ui.Popup.postHide(el);
-});
-domUtils.on(window, 'scroll', function () {
-    UE.ui.Popup.postHide();
+    popup.show(this);
 });
 //获得head
 var getHead = function () {
@@ -162,10 +145,7 @@ var getCheckedTab = function () {
 
 var init = function () {
     bindClick();
-    var el = getHead()[0],
-            bodyid = el.getAttribute("tabsrc");
-    toggleHead(el);
-    toggleBody(bodyid);
+    getHead()[0].click();
     $G("alignment").style.display = "none";
     $G("custom").style.display = "none";
     //初始化颜色
@@ -338,10 +318,10 @@ var setBody = function () {
 
 
 
-dialog.onok = function () {
+dialog.addListener('confirm', function () {
     setBody();
-};
-dialog.oncancel = function () {
+});
+dialog.addListener('cancel', function () {
     utils.cssRule('body',bkbodyStyle,doc)
-};
+});
 bkbodyStyle = utils.cssRule('body',undefined,doc);
