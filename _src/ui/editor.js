@@ -75,7 +75,6 @@
             editor.addListener('keydown', function (cmd, evt) {
                 var keyCode = evt.keyCode || evt.which;
                 if (keyCode == 8) {
-                    debugger;
                     var state = editor.queryCommandState("edittip");
                     if (state != -1) {
                         if (UE.ui['edittip']) {
