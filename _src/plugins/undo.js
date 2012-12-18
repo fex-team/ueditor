@@ -248,7 +248,6 @@ UE.plugins['undo'] = function() {
         this.clearKey = function(){
             keycont = 0;
             lastKeyCode = null;
-           //me.fireEvent('contentchange');
         };
     }
 
@@ -288,9 +287,21 @@ UE.plugins['undo'] = function() {
         keycont = 0,
         lastKeyCode;
 
+    var inputType = false;
+    me.addListener('ready',function(){
+        domUtils.on(me.body,'compositionstart',function(){
+            inputType = true;
+        });
+        domUtils.on(me.body,'compositionend',function(){
+            inputType = false;
+        })
+    });
+
     me.addListener( 'keydown', function( type, evt ) {
         var keyCode = evt.keyCode || evt.which;
         if ( !keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey ) {
+            if(inputType)
+                return;
             if ( me.undoManger.list.length == 0 || ((keyCode == 8 ||keyCode == 46) && lastKeyCode != keyCode) ) {
 
                 me.fireEvent('contentchange');
@@ -309,7 +320,7 @@ UE.plugins['undo'] = function() {
             if ( keycont >= maxInputCount ) {
                 if(me.selection.getRange().collapsed)
                     me.fireEvent('contentchange');
-                    me.undoManger.save();
+                me.undoManger.save();
 
             }
         }
