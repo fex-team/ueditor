@@ -141,6 +141,9 @@ var domUtils = dom.domUtils = {
             i = 0;
         while (preNode = preNode.previousSibling) {
             if (ignoreTextNode && preNode.nodeType == 3) {
+                if(preNode.nodeType != preNode.nextSibling.nodeType ){
+                    i++;
+                }
                 continue;
             }
             i++;
@@ -1227,6 +1230,43 @@ var domUtils = dom.domUtils = {
             start = start.parentNode;
         }
         return 1;
+    },
+    getAddr : function(node){
+        var parents = domUtils.findParents(node,false,function(node){return !domUtils.isBody(node)},true),
+            addrs = [],firstIndex;
+
+        for(var i = 0,ci;ci = parents[i++];){
+            addrs.push(domUtils.getNodeIndex(ci,true));
+        }
+        firstIndex = domUtils.getNodeIndex(node,true);
+        if(node.nodeType == 3){
+            var tmpNode = node;
+            while(tmpNode = tmpNode.previousSibling){
+                if(tmpNode.nodeType == 3){
+                    firstIndex += tmpNode.nodeValue.replace(fillCharReg,'').length;
+                }else{
+                    break;
+                }
+            }
+        }
+        addrs.push(firstIndex);
+        return addrs;
+    },
+    setAddr : function(node,addr){
+        var tmpNode = node.ownerDocument.body,
+            parentNode;
+        for(var i= 0,ci,l=addr.length;i<l;i++){
+            ci = addr[i];
+            parentNode = tmpNode;
+            tmpNode = tmpNode.childNodes[ci];
+            if(!tmpNode)
+                break;
+        }
+        if(tmpNode){
+            parentNode.insertBefore(node,tmpNode)
+        }else{
+            parentNode.appendChild(node)
+        }
     }
 };
 var fillCharReg = new RegExp(domUtils.fillChar, 'g');
