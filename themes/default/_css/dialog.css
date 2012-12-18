@@ -276,3 +276,8 @@
     width: 515px;
     height: 360px;
 }
+/*edittip-dialog*/
+.edui-default .edui-for-edittip .edui-dialog-content {
+    width: 300px;
+    height: 150px;
+}

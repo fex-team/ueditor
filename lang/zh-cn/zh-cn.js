@@ -22,7 +22,7 @@ UE.I18N['zh-cn'] = {
         'insertunorderedlist':'无序列表', 'fullscreen':'全屏', 'directionalityltr':'从左向右输入', 'directionalityrtl':'从右向左输入',
         'rowspacingtop':'段前距', 'rowspacingbottom':'段后距', 'highlightcode':'插入代码', 'pagebreak':'分页', 'insertframe':'插入Iframe', 'imagenone':'默认',
         'imageleft':'左浮动', 'imageright':'右浮动', 'attachment':'附件', 'imagecenter':'居中', 'wordimage':'图片转存',
-        'lineheight':'行间距','edittd':'单元格', 'customstyle':'自定义标题', 'autotypeset':'自动排版', 'webapp':'百度应用',
+        'lineheight':'行间距','edittd':'单元格','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版', 'webapp':'百度应用',
         'touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦','music':'音乐'
     },
     'insertorderedlist':{
@@ -470,6 +470,10 @@ UE.I18N['zh-cn'] = {
             align:{options:["默认", "居中对齐", "左对齐", "右对齐"]}
         },
         clearColor:"清除颜色"
+    },
+    'edittip':{
+        'static':{
+        }
     },
     'wordimage':{
         'static':{

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>表格删除提示</title>
+    <style type="text/css"></style>
+    <script type="text/javascript" src="../internal.js"></script>
+</head>
+<body>
+    <label><input type="radio" id="J_delRow" name="cmd" checked="checked" />删除整行</label>
+    <label><input type="radio" id="J_delCol" name="cmd" />删除整列</label>
+<script type="text/javascript">
+        if($G("J_delRow").checked=="checked"){
+            editor.execCommand("deleterow")
+        }else{
+            editor.execCommand("deletecol")
+        }
+</script>
+</body>
+</html>

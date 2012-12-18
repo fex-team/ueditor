@@ -201,75 +201,48 @@ UE.plugins['contextmenu'] = function () {
                     subMenu:[
                         {
                             label:'上左',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'left');
-                                this.execCommand( 'cellvalign' ,'top');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'left',valign:'top'}
                         },
                         {
                             label:'上中',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'center');
-                                this.execCommand( 'cellvalign' ,'top');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'center',valign:'top'}
                         },
                         {
                             label:'上右',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'right');
-                                this.execCommand( 'cellvalign' ,'top');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'right',valign:'top'}
                         },
                         {
                             label:'中左',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'left');
-                                this.execCommand( 'cellvalign' ,'middle');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'left',valign:'middle'}
                         },
                         {
                             label:'中中',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'center');
-                                this.execCommand( 'cellvalign' ,'middle');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'center',valign:'middle'}
                         },
                         {
                             label:'中右',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'right');
-                                this.execCommand( 'cellvalign' ,'middle');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'right',valign:'middle'}
                         },
                         {
                             label:'下左',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'left');
-                                this.execCommand( 'cellvalign' ,'bottom');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'left',valign:'bottom'}
                         },
                         {
                             label:'下中',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'center');
-                                this.execCommand( 'cellvalign' ,'bottom');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'center',valign:'bottom'}
                         },
                         {
                             label:'下右',
-                            cmdName:'cellalign',
-                            exec:function () {
-                                this.execCommand( 'cellalign' ,'right');
-                                this.execCommand( 'cellvalign' ,'bottom');
-                            }
+                            cmdName:'cellalignment',
+                            value:{align:'right',valign:'bottom'}
                         }
                     ]
                 },
