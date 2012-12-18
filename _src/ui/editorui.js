@@ -46,6 +46,7 @@
         'attachment':'~/dialogs/attachment/attachment.html',
         'insertframe':'~/dialogs/insertframe/insertframe.html',
         'edittd':'~/dialogs/table/edittd.html',
+        'edittip':'~/dialogs/table/edittip.html',
         'webapp':'~/dialogs/webapp/webapp.html',
         'snapscreen':'~/dialogs/snapscreen/snapscreen.html',
         'scrawl':'~/dialogs/scrawl/scrawl.html',
@@ -175,7 +176,7 @@
     var dialogBtns = {
         noOk:['searchreplace', 'help', 'spechars', 'webapp'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-            'insertvideo', 'highlightcode', 'insertframe', 'edittd', 'scrawl', 'template','music', 'background']
+            'insertvideo', 'highlightcode', 'insertframe', 'edittd','edittip', 'scrawl', 'template','music', 'background']
 
     };
 

@@ -90,7 +90,7 @@
             iframeCssUrl:me.options.UEDITOR_HOME_URL + 'themes/iframe.css',
             textarea:'editorValue',
             focus:false,
-            initialFrameWidth:1000,
+            initialFrameWidth:'100%',
             initialFrameHeight:me.options.minFrameHeight||320,//兼容老版本配置项
             minFrameWidth:800,
             minFrameHeight:220,

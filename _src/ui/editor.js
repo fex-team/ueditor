@@ -7,7 +7,7 @@
         uiUtils = baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase,
         domUtils = baidu.editor.dom.domUtils;
-    var nodeStack=[];
+    var nodeStack = [];
 
     function EditorUI(options) {
         this.initOptions(options);
@@ -49,11 +49,11 @@
                 }
                 editor.ui._scale();
                 if (editor.options.scaleEnabled) {
-                    if(editor.autoHeightEnabled){
+                    if (editor.autoHeightEnabled) {
                         editor.disableAutoHeight();
                     }
                     me.enableScale();
-                }else{
+                } else {
                     me.disableScale();
                 }
                 if (!editor.options.elementPathEnabled && !editor.options.wordCount && !editor.options.scaleEnabled) {
@@ -71,6 +71,19 @@
             editor.addListener('mousedown', function (t, evt) {
                 var el = evt.target || evt.srcElement;
                 baidu.editor.ui.Popup.postHide(el);
+            });
+            editor.addListener('keydown', function (cmd, evt) {
+                var keyCode = evt.keyCode || evt.which;
+                if (keyCode == 8) {
+                    debugger;
+                    var state = editor.queryCommandState("edittip");
+                    if (state != -1) {
+                        if (UE.ui['edittip']) {
+                            new UE.ui['edittip'](editor);
+                        }
+                        editor.getDialog('edittip').open();
+                    }
+                }
             });
             editor.addListener('contextmenu', function (t, evt) {
                 baidu.editor.ui.Popup.postHide();
@@ -329,8 +342,8 @@
                     var bk = editor.selection.getRange().createBookmark();
                 }
                 if (fullscreen) {
-                    while(container.tagName!="BODY"){
-                        var position = baidu.editor.dom.domUtils.getComputedStyle(container,"position");
+                    while (container.tagName != "BODY") {
+                        var position = baidu.editor.dom.domUtils.getComputedStyle(container, "position");
                         nodeStack.push(position);
                         container.style.position = "static";
                         container = container.parentNode;
@@ -350,7 +363,7 @@
                     this._bakCssText1 = this.getDom('iframeholder').style.cssText;
                     this._updateFullScreen();
                 } else {
-                    while(container.tagName!="BODY"){
+                    while (container.tagName != "BODY") {
                         container.style.position = nodeStack.shift();
                         container = container.parentNode;
                     }
@@ -376,8 +389,8 @@
                             editor.selection.getRange().moveToBookmark(bk).select(true);
                             baidu.editor.dom.domUtils.remove(input);
                             fullscreen && window.scroll(0, 0);
-                        },0)
-                    },0)
+                        }, 0)
+                    }, 0)
                 }
                 this.editor.fireEvent('fullscreenchanged', fullscreen);
                 this.triggerLayout();
@@ -473,18 +486,19 @@
                 domUtils.on(editorDocument, "mouseup", up);
                 domUtils.on(doc, "mouseup", up);
             }
+
             var me = this;
             //by xuheng 全屏时关掉缩放
-            this.editor.addListener('fullscreenchanged',function(e,fullScreen){
-                if(fullScreen){
+            this.editor.addListener('fullscreenchanged', function (e, fullScreen) {
+                if (fullScreen) {
                     me.disableScale();
 
-                }else{
-                    if(me.editor.options.scaleEnabled){
+                } else {
+                    if (me.editor.options.scaleEnabled) {
                         me.enableScale();
                         var tmpNode = me.editor.document.createElement('span');
                         me.editor.body.appendChild(tmpNode);
-                        me.editor.body.style.height = Math.max(domUtils.getXY(tmpNode).y,me.editor.iframe.offsetHeight - 20 ) + 'px';
+                        me.editor.body.style.height = Math.max(domUtils.getXY(tmpNode).y, me.editor.iframe.offsetHeight - 20) + 'px';
                         domUtils.remove(tmpNode)
                     }
                 }
@@ -531,7 +545,7 @@
 
             this.enableScale = function () {
                 //trace:2868
-                if(editor.queryCommandState("source")==1)    return;
+                if (editor.queryCommandState("source") == 1)    return;
                 scale.style.display = "";
                 this.scaleEnabled = true;
                 domUtils.on(scale, "mousedown", down);
@@ -608,7 +622,7 @@
 
         var oldRender = editor.render;
         editor.render = function (holder) {
-            if(holder.constructor === String){
+            if (holder.constructor === String) {
                 editor.key = holder;
                 instances[holder] = editor;
             }
@@ -652,7 +666,12 @@
                     var iframeholder = editor.ui.getDom('iframeholder');
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + editor.options.initialFrameWidth + "px";
+                    var tmpWt=editor.container.parentNode.style.width,
+                        defaultWt=editor.options.initialFrameWidth;
+                    if(tmpWt)   defaultWt=tmpWt;
+
+                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:"+ defaultWt
+                        + (/%|px/g.test(defaultWt) ? "" : "px");
                     oldRender.call(editor, iframeholder);
 
                 }
@@ -660,7 +679,6 @@
         };
         return editor;
     };
-
 
 
     /**
