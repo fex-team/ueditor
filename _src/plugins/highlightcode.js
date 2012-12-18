@@ -6,15 +6,8 @@
 ///commandsDialog  dialogs\code\code.html
 UE.plugins['highlightcode'] = function() {
     var me = this;
-    if(me.options.toolbars){
-        var bool = false;
-        for(var i=0,tool;tool = me.options.toolbars[i++];){
-            if(/highlightcode/i.test(tool.tools.join(","))){
-                bool = true;
-            }
-        }
-        if(!bool)
-            return
+    if(!/highlightcode/i.test(me.options.toolbars.join(''))){
+        return;
     }
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
