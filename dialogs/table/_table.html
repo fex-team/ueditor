@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="../internal.js"></script>
+    <style type="text/css">
+        .wrapper{margin: 10px auto 0;font-size:12px;}
+        .wrapper .left{float: left;margin-left: 10px;;}
+        .wrapper .right{float: right;margin-right:10px;border-left: 1px dotted #EDEDED;padding-left: 15px;}
+        .section{margin-bottom: 20px;}
+        .section h3{font-weight: bold;padding:5px 0;margin-bottom:10px;border-bottom: 1px solid #EDEDED;font-size: 12px;}
+        .section ul{list-style: none;overflow:hidden;}
+        .section li{float: left;}
+        .section .preview{width: 220px;}
+        .section .preview table{text-align: center;vertical-align:middle;color: #666;}
+        .section .preview caption{font-weight: bold;}
+        .section .preview td{border: 1px solid #DDD;height: 22px;}
+        .section .preview th{border-style:solid;border-color:#DDD;border-width:2px 1px 1px 1px;height: 22px;background-color: #F7F7F7;}
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="left">
+        <div class="section">
+            <h3>表格样式</h3>
+            <ul>
+                <li>
+                    <label><input type="checkbox" id="J_title" name="style" checked/>添加表格标题行</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" id="J_caption" name="style" checked/>添加表格名称行</label>
+                </li>
+            </ul>
+        </div>
+        <div class="section">
+            <h3>自动调整表格尺寸</h3>
+            <ul>
+                <li>
+                    <label><input type="radio" id="J_autoSizeContent" name="size" checked/>按表格文字自适应</label>
+                </li>
+                <li>
+                    <label><input type="radio" id="J_autoSizePage" name="size" />按页面宽度自适应</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="right">
+        <div class="section">
+            <h3>示例</h3>
+            <div class="preview">
+                <table id="example">
+                    <caption>表格名称</caption>
+                    <tr><th>标题</th><th>标题</th><th>标题</th><th>标题</th><th>标题</th></tr>
+                    <tbody>
+                    <tr>
+                        <td>内容</td><td>内容</td><td>内容</td><td>内容</td><td>内容</td>
+                    </tr>
+                    <tr>
+                        <td>内容</td><td>内容</td><td>内容</td><td>内容</td><td>内容</td>
+                    </tr>
+                    <tr>
+                        <td>内容</td><td>内容</td><td>内容</td><td>内容</td><td>内容</td>
+                    </tr>
+                    <tr>
+                        <td>内容</td><td>内容</td><td>内容</td><td>内容</td><td>内容</td>
+                    </tr>
+                    <tr>
+                        <td>内容</td><td>内容</td><td>内容</td><td>内容</td><td>内容</td>
+                    </tr>
+                    <tr>
+                        <td>内容</td><td>内容</td><td>内容</td><td>内容</td><td>内容</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var title=$G("J_title"),
+        caption=$G("J_caption"),
+        autoSizeContent=$G("J_autoSizeContent"),
+        autoSizePage=$G("J_autoSizePage");
+    (function(){
+        var table=$G("example"),
+                flag1=false,
+                flag2=false;
+
+        function titleHanler(){
+            if(flag1){
+                var title=document.createElement("tr");
+                title.innerHTML = "<th>标题</th><th>标题</th><th>标题</th><th>标题</th><th>标题</th>";
+                table.insertBefore(title,table.firstChild);
+                flag1=false;
+            }else{
+                domUtils.remove(table.rows[0]);
+                flag1=true;
+            }
+        }
+        function captionHanler(){
+            if(flag2){
+                var caption = document.createElement('caption');
+                caption.innerHTML = "表格名称";
+                table.insertBefore(caption,table.firstChild);
+                flag2=false;
+            }else{
+                domUtils.remove(domUtils.getElementsByTagName(table,'caption')[0]);
+                flag2=true;
+            }
+        }
+        function autoSizeContentHanler(){
+            table.removeAttribute("width");
+        }
+        function autoSizePageHanler(){
+            var tds = table.getElementsByTagName(table,"td");
+            utils.each(tds,function(td){
+                td.removeAttribute("width");
+            });
+            table.setAttribute('width','100%');
+        }
+        domUtils.on(title,"click",titleHanler);
+        domUtils.on(caption,"click",captionHanler);
+        domUtils.on(autoSizeContent,"click",autoSizeContentHanler);
+        domUtils.on(autoSizePage,"click",autoSizePageHanler);
+    })();
+    dialog.onok=function(){
+        title.checked?editor.execCommand("inserttitle"):editor.execCommand("deletetitle");
+        caption.checked?editor.execCommand("insertcaption"):editor.execCommand("deletecaption");
+        autoSizeContent.checked? editor.execCommand("adaptbytext"): editor.execCommand("adaptbywindow");
+    };
+</script>
+</body>
+</html>

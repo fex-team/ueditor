@@ -1649,6 +1649,13 @@ UE.plugins['table'] = function () {
             return ut.selectedTds.length > 0 ? 0 : -1;
         }
     };
+    //表格属性
+    UE.commands['edittable'] = {
+        queryCommandState:function () {
+            return getTableItemsByRange().cell ? 0 : -1
+        }
+    };
+
 
     /**
      * UE表格操作类
