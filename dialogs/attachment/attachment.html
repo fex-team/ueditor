@@ -66,7 +66,7 @@
             file_dialog_complete_handler:function(numFilesSelected, numFilesQueued) {
                 var me = this;        //此处的this是swfupload对象
                 if (numFilesQueued > 0) {
-                    dialog.submitDisabled( true );
+                    dialog.buttons[0].setDisabled(true);
                     var start = $G(this.customSettings.startUploadId);
                     start.style.display = "";
                     start.onclick = function(){
@@ -99,7 +99,7 @@
             upload_complete_handler:uploadComplete,
             //队列完成回调
             queue_complete_handler:function(numFilesUploaded){
-                dialog.submitDisabled( false );
+                dialog.buttons[0].setDisabled(false);
 //                var status = $G("divStatus");
 //                var num = status.innerHTML.match(/\d+/g);
 //                status.innerHTML = ((num && num[0] ?parseInt(num[0]):0) + numFilesUploaded) +lang.statusPrompt;

@@ -66,33 +66,49 @@
      * 绑定取色器监听事件
      */
     function addColorPickListener() {
-        var colorPicker = UE.getColorPicker(editor),
+        var colorPicker = getColorPicker(),
                 ids = ["bgColor"];
         for ( var i = 0, ci; ci = $G( ids[i++] ); ) {
             domUtils.on( ci, "click", function () {
                 var me = this;
                 showColorPicker( colorPicker, me );
-                colorPicker.onsetcolor = function(t,color){
-                    me.value = 'default' === color ? "" : color.toUpperCase();
+                colorPicker.content.onpickcolor = function ( t, color ) {
+                    me.value = color.toUpperCase();
                     colorPicker.hide();
-                }
+                };
+                colorPicker.content.onpicknocolor = function () {
+                    me.value = '';
+                    colorPicker.hide();
+                };
             } );
             domUtils.on( ci, "keyup", function () {
                 colorPicker.hide();
             } );
         }
         domUtils.on( document, 'mousedown', function () {
-            colorPicker.hide( );
+            UE.ui.Popup.postHide( this );
         } );
     }
 
+    /**
+     * 实例化一个colorpicker对象
+     */
+    function getColorPicker() {
+        return new UE.ui.Popup( {
+            editor:editor,
+            content:new UE.ui.ColorPicker( {
+                noColorText:lang.noColor,
+                editor:editor
+            } )
+        } );
+    }
 
     /**
      * 在anchorObj上显示colorpicker
      * @param anchorObj
      */
     function showColorPicker( colorPicker, anchorObj ) {
-        colorPicker.show( anchorObj );
+        colorPicker.showAnchor( anchorObj );
     }
 </script>
 </body>

@@ -62,7 +62,7 @@ function getMatchCase(id) {
     return $G(id).checked ? true : false;
 }
 //查找
-$G("nextFindBtn").onclick = function () {
+$G("nextFindBtn").onclick = function (txt, dir, mcase) {
     var findtxt = $G("findtxt").value, obj;
     if (!findtxt) {
         return false;
@@ -76,7 +76,7 @@ $G("nextFindBtn").onclick = function () {
         alert(lang.getEnd);
     }
 };
-$G("nextReplaceBtn").onclick = function () {
+$G("nextReplaceBtn").onclick = function (txt, dir, mcase) {
     var findtxt = $G("findtxt1").value, obj;
     if (!findtxt) {
         return false;
@@ -155,7 +155,6 @@ $G("repalceAllBtn").onclick = function () {
 };
 //执行
 var frCommond = function (obj) {
-    var bool = editor.execCommand("searchreplace", obj);
-    return bool;
+    return editor.execCommand("searchreplace", obj);
 };
 switchTab("searchtab");

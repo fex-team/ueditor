@@ -51,7 +51,7 @@ function InsertSmiley( url, evt ) {
     obj.data_ue_src = obj.src;
     editor.execCommand( 'insertimage', obj );
     if ( !evt.ctrlKey ) {
-        dialog.hide();
+        dialog.popup.hide();
     }
 }
 
@@ -77,8 +77,8 @@ function switchTab( index ) {
 }
 
 function autoHeight( index ) {
-    var iframe = dialog.getInnerDom( "iframe" ),
-            parent = iframe.parentNode;
+    var iframe = dialog.getDom( "iframe" ),
+            parent = iframe.parentNode.parentNode;
     switch ( index ) {
         case 0:
             iframe.style.height = "380px";
