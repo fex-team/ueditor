@@ -49,3 +49,8 @@
 /*@import "multiMenu.css";*/
     /*右键菜单*/
 /*@import "contextmenu.css";*/
+
+/*elementpath*/
+@import "elementpath.css";
+/*wordcount*/
+@import "wordcount.css";

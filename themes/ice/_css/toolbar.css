@@ -1,6 +1,6 @@
 
 .edui-toolbar{position:relative;height:54px;padding-top:29px;background:#E1EEFF url(../images/toolbar_bg.png) repeat-x;cursor:default;border-radius:2px;}
-.edui-statusbar{overflow: hidden;}
+.edui-statusbar{overflow: hidden;border-top: 1px solid #CBDFEA;padding: 3px;}
 .edui-statusbar .edui-elementpath{float: left;}
 .edui-statusbar .edui-wordcount{float: right;}
 .edui-tabtoolbar{position:absolute;width:100%;padding:8px 0;background:#ECF5FB;border-top:1px solid #C8DCE8;}
