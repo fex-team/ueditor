@@ -161,6 +161,17 @@ UE.plugins['contextmenu'] = function () {
                         {
                             label:lang.insertparagraphaftertable,
                             cmdName:'insertparagraph'
+                        },
+                        '-',
+                        {
+                            label:lang.edittable,
+                            cmdName:'edittable',
+                            exec:function () {
+                                if ( UE.ui['edittable'] ) {
+                                    new UE.ui['edittable']( this );
+                                }
+                                this.getDialog('edittable').open();
+                            }
                         }
                     ]
                 },
@@ -214,16 +225,6 @@ UE.plugins['contextmenu'] = function () {
                             value:{align:'right',valign:'bottom'}
                         }
                     ]
-                },
-                {
-                    label:lang.edittable,
-                    cmdName:'edittable',
-                    exec:function () {
-                        if ( UE.ui['edittable'] ) {
-                            new UE.ui['edittable']( this );
-                        }
-                        this.getDialog('edittable').open();
-                    }
                 },
                 '-',
                 {
