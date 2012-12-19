@@ -11,12 +11,13 @@
         };
 
     var allPopups = [];
-    function closeAllPopup( el ){
+    function closeAllPopup( evt,el ){
         var newAll = [];
         for ( var i = 0; i < allPopups.length; i++ ) {
             var pop = allPopups[i];
             if (!pop.isHidden()) {
                 if (pop.queryAutoHide(el) !== false) {
+                    if(/scroll/ig.test(evt.type)&&pop.className=="edui-pastelayout")   return;
                     pop.hide();
                 }
             }
@@ -171,10 +172,10 @@
     
     domUtils.on( document, 'mousedown', function ( evt ) {
         var el = evt.target || evt.srcElement;
-        closeAllPopup( el );
+        closeAllPopup( evt,el );
     } );
-    domUtils.on( window, 'scroll', function () {
-        closeAllPopup();
+    domUtils.on( window, 'scroll', function (evt,el) {
+        closeAllPopup( evt,el );
     } );
 
 //    var lastVpRect = uiUtils.getViewportRect();
