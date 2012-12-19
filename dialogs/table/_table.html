@@ -77,12 +77,12 @@
     </div>
 </div>
 <script type="text/javascript">
-    var title=$G("J_title"),
-        caption=$G("J_caption"),
-        autoSizeContent=$G("J_autoSizeContent"),
-        autoSizePage=$G("J_autoSizePage");
     (function(){
-        var table=$G("example"),
+        var title=$G("J_title"),
+                caption=$G("J_caption"),
+                autoSizeContent=$G("J_autoSizeContent"),
+                autoSizePage=$G("J_autoSizePage"),
+                table=$G("example"),
                 flag1=false,
                 flag2=false;
 
@@ -122,12 +122,13 @@
         domUtils.on(caption,"click",captionHanler);
         domUtils.on(autoSizeContent,"click",autoSizeContentHanler);
         domUtils.on(autoSizePage,"click",autoSizePageHanler);
+
+        dialog.onok=function(){
+            title.checked?editor.execCommand("inserttitle"):editor.execCommand("deletetitle");
+            caption.checked?editor.execCommand("insertcaption"):editor.execCommand("deletecaption");
+            autoSizeContent.checked? editor.execCommand("adaptbytext"): editor.execCommand("adaptbywindow");
+        };
     })();
-    dialog.onok=function(){
-        title.checked?editor.execCommand("inserttitle"):editor.execCommand("deletetitle");
-        caption.checked?editor.execCommand("insertcaption"):editor.execCommand("deletecaption");
-        autoSizeContent.checked? editor.execCommand("adaptbytext"): editor.execCommand("adaptbywindow");
-    };
 </script>
 </body>
 </html>
