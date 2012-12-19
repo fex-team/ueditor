@@ -196,10 +196,14 @@
 
         new editTable;
 
+        function adaptByTextTable(){
+            editor.execCommand("adaptbywindow");
+            editor.execCommand('adaptbytext');
+        }
         dialog.onok = function () {
             title.checked ? editor.execCommand("inserttitle") : editor.execCommand("deletetitle");
             caption.checked ? editor.execCommand("insertcaption") : editor.execCommand("deletecaption");
-            autoSizeContent.checked ? editor.execCommand("adaptbytext") : editor.execCommand("adaptbywindow");
+            autoSizeContent.checked ? adaptByTextTable(): editor.execCommand("adaptbywindow");
         };
     })();
 </script>
