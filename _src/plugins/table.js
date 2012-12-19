@@ -29,8 +29,6 @@ UE.plugins['table'] = function () {
     //todo 判断混乱模式
         needIEHack = true;
 
-    domUtils.fillChar = browser.ie ? '\ufeff' : '\u200b';
-
     me.setOpt({
         'maxColNum' : 20,
         'maxRowNum' : 100,
@@ -176,6 +174,13 @@ UE.plugins['table'] = function () {
             }
         });
         me.addListener('beforepaste',function(cmd,html){
+            var rng = me.selection.getRange();
+            if(domUtils.findParentByTagName(rng.startContainer,'caption',true)){
+                var div = me.document.createElement("div");
+                div.innerHTML = html.html;
+                html.html = div[browser.ie ? 'innerText':'textContent'];
+                return;
+            }
             var table = getUETableBySelected();
             if(tableCopyList){
                 me.fireEvent('saveScene');
@@ -252,9 +257,7 @@ UE.plugins['table'] = function () {
                     }
                     ut.update();
                 }else{
-                    if(domUtils.findParentByTagName(rng.startContainer,'caption',true)){
-                        return;
-                    }
+
                     table = me.document.createElement('table');
                     for(var i= 0,ci;ci=tableCopyList[i++];){
                         var tr = table.insertRow(table.rows.length);
@@ -285,7 +288,7 @@ UE.plugins['table'] = function () {
                 if(domUtils.findParentByTagName(me.selection.getStart(),'table')){
                     utils.each(tables,function(t){
                         domUtils.remove(t)
-                    })
+                    });
                     if(domUtils.findParentByTagName(me.selection.getStart(),'caption',true)){
                         div.innerHTML = div[browser.ie?'innerText':'textContent'];
                     }
@@ -343,6 +346,11 @@ UE.plugins['table'] = function () {
             if(getUETableBySelected())return;
             utils.each(domUtils.getElementsByTagName(me.document,'table'),function(table){
                 table.ueTable = new UETable(table);
+                utils.each(domUtils.getElementsByTagName(me.document,'td'),function(td){
+                    if(domUtils.isEmptyBlock(td)){
+                        domUtils.fillNode(me.document,td)
+                    }
+                });
                 table.onmouseout = function(){
                     toggleDragableState(false,"",null);
                     hideDragLine();
@@ -478,24 +486,28 @@ UE.plugins['table'] = function () {
                 me.__hasEnterExecCommand = true;
                 me.fireEvent("beforeexeccommand",cmd);
                 tds = ut.selectedTds;
-                var firstState,state;
+                var firstState,state,firstTd;
                 for(var i = 0,td;td=tds[i];i++){
-                    range.selectNodeContents(td).select();
+                    if(isEmptyBlock(td)){
+                        range.setStart(td,0).setCursor(false,true)
+                    }else{
+                        range.selectNodeContents(td).select();
+                    }
+
                     state = me.queryCommandState( cmd );
-                    if(i==0){
+                    if(firstState === undefined && !isEmptyBlock(td)){
+                        firstTd = td;
                         firstState = state;
                     }
-                    if(state != -1 && firstState == state){
+                    if(state != -1 && (firstState === undefined || firstState == state)){
+                        var isEmpty = domUtils.isEmptyNode(td);
                         result = oldExecCommand.apply( me, arguments );
+                        if(isEmpty != domUtils.isEmptyNode(td)){
+                            domUtils.fillNode(me.document,td)
+                        }
                     }
                 }
-                var td = tds[0];
-                if(isEmptyBlock(td)){
-                    range.setStart(td,0).collapse(true)
-                }else{
-                    range.selectNodeContents(td)
-                }
-                range.select();
+                range.setStart(tds[0],0).shrinkBoundary(true).setCursor(false,true);
                 me.fireEvent('contentchange');
                 me.fireEvent("afterexeccommand",cmd);
                 me.__hasEnterExecCommand = false;
@@ -694,6 +706,7 @@ UE.plugins['table'] = function () {
                 });
                 if(!flag){
                     removeSelectedClass(domUtils.getElementsByTagName(me.body,"td"));
+                    removeSelectedClass(domUtils.getElementsByTagName(me.body,"th"));
                     ut.clearSelected()
                 }else{
                     td = ut.selectedTds[0];
@@ -711,6 +724,7 @@ UE.plugins['table'] = function () {
         }
 
         removeSelectedClass(domUtils.getElementsByTagName(me.body,"td"));
+        removeSelectedClass(domUtils.getElementsByTagName(me.body,"th"));
         startTd = getTargetTd(evt);
         if (!startTd ) return;
         var table = domUtils.findParentByTagName(startTd,"table",true);
@@ -836,8 +850,9 @@ UE.plugins['table'] = function () {
         //正常状态下的mouseup
         var range = null;
         if(!startTd){
-            var target = evt.target||evt.srcElement;
-            if(target.tagName == "TD" ||target.tagName == "TH"){
+            var target = domUtils.findParentByTagName(evt.target||evt.srcElement,"td",true);
+            if(!target) target = domUtils.findParentByTagName(evt.target||evt.srcElement,"th",true);
+            if(target && (target.tagName == "TD" ||target.tagName == "TH")){
                 range = new dom.Range(me.document);
                 range.setStart(target,0).setCursor(false,true);
             }
@@ -1672,7 +1687,6 @@ UE.plugins['table'] = function () {
                 for (var j = 0, cj; cj = row.cells[j++];) {
                     currentMax = Math.max(cj.rowSpan||1,currentMax);
                 }
-
                 maxLen = Math.max(currentMax + i,maxLen);
             }
             return maxLen;
@@ -1701,6 +1715,9 @@ UE.plugins['table'] = function () {
                 maxLen = Math.max(cellsNum,maxLen);
             }
             return maxLen;
+        },
+        getCellColIndex:function(cell){
+
         },
         /**
          * 获取当前cell旁边的单元格，
@@ -1799,28 +1816,8 @@ UE.plugins['table'] = function () {
          */
         update:function (table) {
             this.table = table || this.table;
-
-            //当框选后删除行或者列后撤销，需要重建选区。
-            var tds= domUtils.getElementsByTagName(this.table,"td"),
-                selectTds=[];
-            utils.each(tds,function(td){
-                if(domUtils.hasClass(td,"selectTdClass")){
-                    selectTds.push(td);
-                }
-            });
-            if(selectTds.length){
-                this.selectedTds = selectTds;
-                this.cellsRange = {
-                    beginRowIndex:selectTds[0].parentNode.rowIndex,
-                    beginColIndex:getIndex(selectTds[0]),
-                    endRowIndex:selectTds[selectTds.length -1].parentNode.rowIndex,
-                    endColIndex:getIndex(selectTds[selectTds.length -1])
-                };
-
-            }else{
-                this.selectedTds =[];
-                this.cellsRange = {};
-            }
+            this.selectedTds = [];
+            this.cellsRange = {};
             this.indexTable = [];
             var rows = this.table.rows,
             //暂时采用rows Length,对残缺表格可能存在问题，
@@ -1878,6 +1875,27 @@ UE.plugins['table'] = function () {
                     }
                 }
             }
+            //当框选后删除行或者列后撤销，需要重建选区。
+            var tds= domUtils.getElementsByTagName(this.table,"td"),
+                selectTds=[];
+            utils.each(tds,function(td){
+                if(domUtils.hasClass(td,"selectTdClass")){
+                    selectTds.push(td);
+                }
+            });
+            if(selectTds.length){
+                var start = selectTds[0],
+                    end = selectTds[selectTds.length - 1],
+                    startInfo = this.getCellInfo(start),
+                    endInfo = this.getCellInfo(end);
+                this.selectedTds = selectTds;
+                this.cellsRange = {
+                    beginRowIndex:startInfo.rowIndex,
+                    beginColIndex:startInfo.colIndex,
+                    endRowIndex:endInfo.rowIndex + endInfo.rowSpan - 1,
+                    endColIndex:endInfo.colIndex + endInfo.colSpan - 1
+                };
+            }
 
         },
         //获取单元格行号
@@ -1926,6 +1944,65 @@ UE.plugins['table'] = function () {
          * 根据始末两个单元格获取被框选的所有单元格范围
          */
         getCellsRange:function (cellA, cellB) {
+            function checkRange(beginRowIndex, beginColIndex, endRowIndex, endColIndex) {
+                var tmpBeginRowIndex = beginRowIndex,
+                    tmpBeginColIndex = beginColIndex,
+                    tmpEndRowIndex = endRowIndex,
+                    tmpEndColIndex = endColIndex,
+                    cellInfo, colIndex, rowIndex;
+                // 通过indexTable检查是否存在超出TableRange上边界的情况
+                if (beginRowIndex > 0) {
+                    for (colIndex = beginColIndex; colIndex < endColIndex; colIndex++) {
+                        cellInfo = me.indexTable[beginRowIndex][colIndex];
+                        rowIndex = cellInfo.rowIndex;
+                        if (rowIndex < beginRowIndex) {
+                            tmpBeginRowIndex = Math.min(rowIndex, tmpBeginRowIndex);
+                        }
+                    }
+                }
+                // 通过indexTable检查是否存在超出TableRange右边界的情况
+                if (endColIndex < me.colsNum) {
+                    for (rowIndex = beginRowIndex; rowIndex < endRowIndex; rowIndex++) {
+                        cellInfo = me.indexTable[rowIndex][endColIndex];
+                        colIndex = cellInfo.colIndex + cellInfo.colSpan - 1;
+                        if (colIndex > endColIndex) {
+                            tmpEndColIndex = Math.max(colIndex, tmpEndColIndex);
+                        }
+                    }
+                }
+                // 检查是否有超出TableRange下边界的情况
+                if (endRowIndex < me.rowsNum) {
+                    for (colIndex = beginColIndex; colIndex < endColIndex; colIndex++) {
+                        cellInfo = me.indexTable[endRowIndex][colIndex];
+                        rowIndex = cellInfo.rowIndex + cellInfo.rowSpan - 1;
+                        if (rowIndex > endRowIndex) {
+                            tmpEndRowIndex = Math.max(rowIndex, tmpEndRowIndex);
+                        }
+                    }
+                }
+                // 检查是否有超出TableRange左边界的情况
+                if (beginColIndex > 0) {
+                    for (rowIndex = beginRowIndex; rowIndex < endRowIndex; rowIndex++) {
+                        cellInfo = me.indexTable[rowIndex][beginColIndex];
+                        colIndex = cellInfo.colIndex;
+                        if (colIndex < beginColIndex) {
+                            tmpBeginColIndex = Math.min(cellInfo.colIndex, tmpBeginColIndex);
+                        }
+                    }
+                }
+                //递归调用直至所有完成所有框选单元格的扩展
+                if (tmpBeginRowIndex != beginRowIndex || tmpBeginColIndex != beginColIndex || tmpEndRowIndex != endRowIndex || tmpEndColIndex != endColIndex) {
+                    return checkRange(tmpBeginRowIndex, tmpBeginColIndex, tmpEndRowIndex, tmpEndColIndex);
+                } else {
+                    // 不需要扩展TableRange的情况
+                    return {
+                        beginRowIndex:beginRowIndex,
+                        beginColIndex:beginColIndex,
+                        endRowIndex:endRowIndex,
+                        endColIndex:endColIndex
+                    };
+                }
+            }
             try{
                 var me = this,
                     cellAInfo = me.getCellInfo(cellA);
@@ -1946,65 +2023,7 @@ UE.plugins['table'] = function () {
 
                 return checkRange(beginRowIndex, beginColIndex, endRowIndex, endColIndex);
 
-                function checkRange(beginRowIndex, beginColIndex, endRowIndex, endColIndex) {
-                    var tmpBeginRowIndex = beginRowIndex,
-                        tmpBeginColIndex = beginColIndex,
-                        tmpEndRowIndex = endRowIndex,
-                        tmpEndColIndex = endColIndex,
-                        cellInfo, colIndex, rowIndex;
-                    // 通过indexTable检查是否存在超出TableRange上边界的情况
-                    if (beginRowIndex > 0) {
-                        for (colIndex = beginColIndex; colIndex < endColIndex; colIndex++) {
-                            cellInfo = me.indexTable[beginRowIndex][colIndex];
-                            rowIndex = cellInfo.rowIndex;
-                            if (rowIndex < beginRowIndex) {
-                                tmpBeginRowIndex = Math.min(rowIndex, tmpBeginRowIndex);
-                            }
-                        }
-                    }
-                    // 通过indexTable检查是否存在超出TableRange右边界的情况
-                    if (endColIndex < me.colsNum) {
-                        for (rowIndex = beginRowIndex; rowIndex < endRowIndex; rowIndex++) {
-                            cellInfo = me.indexTable[rowIndex][endColIndex];
-                            colIndex = cellInfo.colIndex + cellInfo.colSpan - 1;
-                            if (colIndex > endColIndex) {
-                                tmpEndColIndex = Math.max(colIndex, tmpEndColIndex);
-                            }
-                        }
-                    }
-                    // 检查是否有超出TableRange下边界的情况
-                    if (endRowIndex < me.rowsNum) {
-                        for (colIndex = beginColIndex; colIndex < endColIndex; colIndex++) {
-                            cellInfo = me.indexTable[endRowIndex][colIndex];
-                            rowIndex = cellInfo.rowIndex + cellInfo.rowSpan - 1;
-                            if (rowIndex > endRowIndex) {
-                                tmpEndRowIndex = Math.max(rowIndex, tmpEndRowIndex);
-                            }
-                        }
-                    }
-                    // 检查是否有超出TableRange左边界的情况
-                    if (beginColIndex > 0) {
-                        for (rowIndex = beginRowIndex; rowIndex < endRowIndex; rowIndex++) {
-                            cellInfo = me.indexTable[rowIndex][beginColIndex];
-                            colIndex = cellInfo.colIndex;
-                            if (colIndex < beginColIndex) {
-                                tmpBeginColIndex = Math.min(cellInfo.colIndex, tmpBeginColIndex);
-                            }
-                        }
-                    }
-                    //递归调用直至所有完成所有框选单元格的扩展
-                    if (tmpBeginRowIndex != beginRowIndex || tmpBeginColIndex != beginColIndex || tmpEndRowIndex != endRowIndex || tmpEndColIndex != endColIndex) {
-                        return checkRange(tmpBeginRowIndex, tmpBeginColIndex, tmpEndRowIndex, tmpEndColIndex);
-                    } else {
-                        // 不需要扩展TableRange的情况
-                        return {
-                            beginRowIndex:beginRowIndex,
-                            beginColIndex:beginColIndex,
-                            endRowIndex:endRowIndex,
-                            endColIndex:endColIndex
-                        };
-                    }
-                }
+
             }catch(e){
                 if(debug) throw e;
             }
@@ -2063,7 +2082,7 @@ UE.plugins['table'] = function () {
                 table = this.table,
                 ths = table.getElementsByTagName("th"),
                 rows = range.endRowIndex - range.beginRowIndex + 1;
-            return  rows == (!ths.length ? this.rowsNum :this.rowsNum - 1);
+            return  !ths.length ? rows == this.rowsNum : rows ==this.rowsNum || (rows == this.rowsNum-1);
 
         },
         /**
@@ -2258,7 +2277,7 @@ UE.plugins['table'] = function () {
                         }else{
                             if(nextRow.cells.length) nextRow.insertBefore(clone,nextRow.cells[0])
                         }
-                        count += cell.colSpan||1;
+                        count += 1;
                         //cell.parentNode.removeChild(cell);
                     }
                 }
@@ -2373,52 +2392,20 @@ UE.plugins['table'] = function () {
             this.update();
         },
         splitToCells:function(cell){
-            var cellInfo = this.getCellInfo(cell),
-                rowIndex = cellInfo.rowIndex,
-                colIndex = cellInfo.colIndex,
-                width =  parseInt((cell.offsetWidth - cell.colSpan * 20) / cell.colSpan, 10);
-            // 修改Cell的rowSpan和colSpan
-            cell.rowSpan = 1;
-            cell.colSpan = 1;
-            cell.setAttribute("width",width);
-            cell.setAttribute('valign',me.options.tdvalign);
-            // 补齐单元格
-            for(var i = rowIndex,endRow = rowIndex + cellInfo.rowSpan ;i < endRow;i++){
-                for(var j = colIndex,endCol= colIndex + cellInfo.colSpan;j<endCol;j++){
-                    var tableRow = this.table.rows[i],
-                        index = this.indexTable[i][j],
-                        tmpCell;
-                    if( i == rowIndex) {
-                        if(j == colIndex )continue;
-                        tmpCell = tableRow.insertCell(index.cellIndex + 1);
-                    }else{
-                        tmpCell = tableRow.insertCell(tableRow.cells.length);
-                    }
-                    this.setCellContent(tmpCell);
-                    tmpCell.setAttribute("width",width);
-                    tmpCell.setAttribute('valign',me.options.tdvalign);
-                    if(cell.style.cssText){
-                        tmpCell.style.cssText = cell.style.cssText;
-                    }
-                    //处理th的情况
-                    if(cell.tagName == 'TH'){
-                        var th = tmpCell.ownerDocument.createElement('th');
-                        th.appendChild(tmpCell.firstChild);
-                        tableRow.insertBefore(th,tmpCell);
-                        th.setAttribute("width", tmpCell.getAttribute("width"));
-                        th.setAttribute("valign", tmpCell.getAttribute("valign"));
-                        domUtils.remove(tmpCell)
-                    }
-                }
-            }
-            this.update();
+            var me = this,
+                cells = this.splitToRows(cell);
+            utils.each(cells,function(cell){
+                me.splitToCols(cell);
+            })
         },
         splitToRows:function(cell){
             var cellInfo = this.getCellInfo(cell),
                 rowIndex = cellInfo.rowIndex,
-                colIndex = cellInfo.colIndex;
+                colIndex = cellInfo.colIndex,
+                results = [];
             // 修改Cell的rowSpan
             cell.rowSpan = 1;
+            results.push(cell);
             // 补齐单元格
             for(var i = rowIndex,endRow = rowIndex + cellInfo.rowSpan ;i < endRow;i++){
                 if(i==rowIndex)continue;
@@ -2430,8 +2417,10 @@ UE.plugins['table'] = function () {
                 if(cell.style.cssText){
                     tmpCell.style.cssText = cell.style.cssText;
                 }
+                results.push(tmpCell);
             }
             this.update();
+            return results;
         },
         getPreviewMergedCellsNum:function(rowIndex,colIndex){
             var indexRow = this.indexTable[rowIndex],
@@ -2447,9 +2436,11 @@ UE.plugins['table'] = function () {
         splitToCols:function(cell){
             var cellInfo = this.getCellInfo(cell),
                 rowIndex = cellInfo.rowIndex,
-                colIndex = cellInfo.colIndex;
+                colIndex = cellInfo.colIndex,
+                results =[];
             // 修改Cell的rowSpan
             cell.colSpan = 1;
+            results.push(cell);
             // 补齐单元格
             for(var j = colIndex,endCol= colIndex + cellInfo.colSpan;j<endCol;j++){
                 if(j==colIndex)continue;
@@ -2470,13 +2461,19 @@ UE.plugins['table'] = function () {
                     tableRow.insertBefore(th,tmpCell);
                     domUtils.remove(tmpCell)
                 }
+                results.push(tmpCell);
             }
             this.update();
+            return results;
         },
         isLastCell:function(cell){
             var cellInfo = this.getCellInfo(cell);
             return ((cellInfo.rowIndex + cellInfo.rowSpan) == this.rowsNum) &&
                 ((cellInfo.colIndex + cellInfo.colSpan) == this.colsNum);
+        },
+        getLastCell:function(cells){
+            cells = cells||this.table.getElementsByTagName("td");
+
         },
         selectRow:function(rowIndex){
             var indexRow = this.indexTable[rowIndex],
@@ -2489,7 +2486,6 @@ UE.plugins['table'] = function () {
             var tds = this.table.getElementsByTagName("td"),
                 range = this.getCellsRange(tds[0],tds[tds.length-1]);
             this.setSelected(range);
-
         }
     };
 

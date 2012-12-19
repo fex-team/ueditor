@@ -3,16 +3,16 @@
 ///commandsName  Undo,Redo
 ///commandsTitle  撤销,重做
 /**
-* @description 回退
-* @author zhanyi
-*/
+ * @description 回退
+ * @author zhanyi
+ */
 
 UE.plugins['undo'] = function() {
     var me = this,
         maxUndoCount = me.options.maxUndoCount || 20,
         maxInputCount = me.options.maxInputCount || 20,
         fillchar = new RegExp(domUtils.fillChar + '|<\/hr>','gi'),// ie会产生多余的</hr>
-        //在比较时，需要过滤掉这些属性
+    //在比较时，需要过滤掉这些属性
         specialAttr = /\b(?:href|src|name)="[^"]*?"/gi;
 
     //场景的range实例
@@ -100,7 +100,7 @@ UE.plugins['undo'] = function() {
                 if ( lastScene.content.replace(specialAttr,'') != currentScene.content.replace(specialAttr,'') ) {
                     this.save();
                 }
-                                    if(!this.list[this.index - 1] && this.list.length == 1){
+                if(!this.list[this.index - 1] && this.list.length == 1){
                     this.reset();
                     return;
                 }
@@ -170,28 +170,20 @@ UE.plugins['undo'] = function() {
             }catch(e){}
 
             this.update();
-            //table的单独处理
-            if(me.currentSelectedArr){
-                me.currentSelectedArr = [];
-                var tds = me.document.getElementsByTagName('td');
-                for(var i=0,td;td=tds[i++];){
-                    if(td.className == me.options.selectedTdClass){
-                         me.currentSelectedArr.push(td);
-                    }
-                }
-            }
+
             this.clearKey();
             //不能把自己reset了
             me.fireEvent('reset',true);
         };
 
         this.getScene = function() {
+            me.fireEvent('beforegetscene');
             var range = me.selection.getRange(),
                 cont = me.body.innerHTML.replace(fillchar,'');
             //有可能边界落到了<table>|<tbody>这样的位置，所以缩一下位置
             range.shrinkBoundary();
-            browser.ie && (cont = cont.replace(/>&nbsp;</g,'><').replace(/\s*</g,'').replace(/>\s*/g,'>'));
-
+            browser.ie && (cont = cont.replace(/>&nbsp;</g,'><').replace(/\s*</g,'<').replace(/>\s*/g,'>'));
+            me.fireEvent('aftergetscene');
             if(browser.opera || browser.safari){
                 return {
                     senceRange : new sceneRange(range),
@@ -210,16 +202,15 @@ UE.plugins['undo'] = function() {
 
         };
         this.save = function(notCompareRange) {
-
             var currentScene = this.getScene(),
                 lastScene = this.list[this.index];
             //内容相同位置相同不存
             if ( lastScene && lastScene.content == currentScene.content &&
                 (
                     notCompareRange ? 1 :
-                    ( (browser.opera || browser.safari) ? lastScene.senceRange.compare(currentScene.senceRange) : lastScene.bookcontent == currentScene.bookcontent)
-                )
-            ) {
+                        ( (browser.opera || browser.safari) ? lastScene.senceRange.compare(currentScene.senceRange) : lastScene.bookcontent == currentScene.bookcontent)
+                    )
+                ) {
                 return;
             }
 
@@ -279,14 +270,14 @@ UE.plugins['undo'] = function() {
     };
 
     var keys = {
-         //  /*Backspace*/ 8:1, /*Delete*/ 46:1,
+            //  /*Backspace*/ 8:1, /*Delete*/ 46:1,
             /*Shift*/ 16:1, /*Ctrl*/ 17:1, /*Alt*/ 18:1,
             37:1, 38:1, 39:1, 40:1,
             13:1 /*enter*/
         },
         keycont = 0,
         lastKeyCode;
-
+    //输入法状态下不计算字符数
     var inputType = false;
     me.addListener('ready',function(){
         domUtils.on(me.body,'compositionstart',function(){
@@ -295,7 +286,7 @@ UE.plugins['undo'] = function() {
         domUtils.on(me.body,'compositionend',function(){
             inputType = false;
         })
-    });
+    })
 
     me.addListener( 'keydown', function( type, evt ) {
         var keyCode = evt.keyCode || evt.which;

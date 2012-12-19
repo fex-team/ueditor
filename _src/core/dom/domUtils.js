@@ -1232,7 +1232,7 @@ var domUtils = dom.domUtils = {
         return 1;
     },
     getAddr : function(node){
-        var parents = domUtils.findParents(node,false,function(node){return !domUtils.isBody(node)},true),
+        var parents = domUtils.findParents(node,false,function(node){return !domUtils.isBody(node)}),
             addrs = [],firstIndex;
 
         for(var i = 0,ci;ci = parents[i++];){
@@ -1265,6 +1265,7 @@ var domUtils = dom.domUtils = {
         if(tmpNode){
             parentNode.insertBefore(node,tmpNode)
         }else{
+
             parentNode.appendChild(node)
         }
     }

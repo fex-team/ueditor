@@ -187,7 +187,7 @@
                     while (tmpNode && domUtils.isEmptyInlineElement(tmpNode) &&
                         //safari的contains有bug
                         (browser.safari ? !(domUtils.getPosition(tmpNode,excludeNode) & domUtils.POSITION_CONTAINS) : !tmpNode.contains(excludeNode))
-                    ) {
+                        ) {
                         fillData = tmpNode.parentNode;
                         domUtils.remove(tmpNode);
                         tmpNode = fillData;
@@ -1069,6 +1069,15 @@
             domUtils.scrollToView(span, win, offset);
             domUtils.remove(span);
             return me;
+        },
+        inFillChar : function(){
+            var start = this.startContainer;
+            if(this.collapsed && start.nodeType == 3
+                && !start.nodeValue.replace(new RegExp(domUtils.fillChar),'').length
+                ){
+                return true;
+            }
+            return false;
         }
     };
 })();
