@@ -1,6 +1,6 @@
 /*
-*   处理特殊键的兼容性问题
-*/
+ *   处理特殊键的兼容性问题
+ */
 UE.plugins['keystrokes'] = function() {
     var me = this,
         flag = 0,
@@ -21,7 +21,7 @@ UE.plugins['keystrokes'] = function() {
     function sameListNode(nodeA,nodeB){
         if(nodeA.tagName !== nodeB.tagName ||
             domUtils.getComputedStyle(nodeA,'list-style-type') !== domUtils.getComputedStyle(nodeB,'list-style-type')
-        ){
+            ){
             return false
         }
         return true;
@@ -33,7 +33,7 @@ UE.plugins['keystrokes'] = function() {
             this.selectAll = false;
             if((keyCode == 8 || keyCode == 46)){
                 me.undoManger && me.undoManger.save();
-                 //trace:1633
+                //trace:1633
                 me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
 
                 new dom.Range(me.document).setStart(me.body.firstChild,0).setCursor(false,true);
@@ -42,6 +42,13 @@ UE.plugins['keystrokes'] = function() {
                 browser.ie && me._selectionChange();
                 domUtils.preventDefault(evt);
                 return;
+            }else{
+                if(browser.ie && me.body.firstChild && domUtils.isTagNode(me.body.firstChild,'table')){
+                    if(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)
+                        return;
+                    me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
+                    new dom.Range(me.document).setStart(me.body.firstChild,0).setCursor(false,true);
+                }
             }
 
 
@@ -77,11 +84,15 @@ UE.plugins['keystrokes'] = function() {
                     return;
 
                 }
+
             }
 
-            if (range.collapsed && range.startContainer.nodeType == 3 && range.startContainer.nodeValue.replace(new RegExp(domUtils.fillChar, 'g'), '').length == 0) {
-                range.setStartBefore(range.startContainer).collapse(true);
+            if(range.inFillChar()){
+                start = range.startContainer;
+                range.setStartBefore(start).shrinkBoundary(true).collapse(true);
+                domUtils.remove(start)
             }
+
             //解决选中control元素不能删除的问题
             if (start = range.getClosedNode()) {
                 me.undoManger && me.undoManger.save();
@@ -201,7 +212,7 @@ UE.plugins['keystrokes'] = function() {
                         parentList.appendChild(start.parentNode);
                     } else {
                         parentLi = start.parentNode;
-                            list = me.document.createElement(parentLi.tagName);
+                        list = me.document.createElement(parentLi.tagName);
 
                         index = utils.indexOf(listStyle[list.tagName], domUtils.getComputedStyle(parentLi, 'list-style-type'));
                         index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
