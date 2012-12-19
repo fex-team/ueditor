@@ -124,11 +124,12 @@
                     }
 
                     aui.render( newDiv||holder );
+
+
                     editor.container = aui.wrapper.dom;
                     editor.container.style.zIndex = editorOptions.zIndex;
                     oldRender.call( editor, aui.editorHolder.dom );
                     editor.fireEvent('render');
-
                     oldRender = aui = holder = newDiv = renderui = null;
                 }
             } )

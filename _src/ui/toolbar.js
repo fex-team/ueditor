@@ -19,8 +19,9 @@
             var title = obj.title;
 
             this.ownerui = ownerui;
-            this.makeDom({viewType: (obj.viewType||'toolbar'), viewHtmlTag: 'div'});
+            this.makeDom({viewType: (obj.viewType||'toolbar'), viewHtmlTag: obj.viewHtmlTag||'div'});
             this.toolList = [];
+
 
             //处理带选项卡的工具条
             if(title){
@@ -67,9 +68,7 @@
                 toolsk = this.tabKey.tools;
 
             tools = utils.isArray(tools) ? tools : [tools];
-            var len = tools.length;
-
-            for(; i<len;){
+            for(; i<tools.length;){
                 it = tools[i++];
                 if(typeof it === 'string'){//添加一个按钮
                     tmp = ui.getButton(it);
@@ -111,6 +110,7 @@
                 tab.addClass(this.currentClassname);
                 toolbar.currentTab = tab;
             }
+            utils.setStyle(toolbar.dom,"height",tab.dom.offsetHeight+"px");
         }
     };
 
