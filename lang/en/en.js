@@ -85,8 +85,6 @@ UE.I18N['en'] = {
         'edittable':"Table property",
         'aligncell':'Align cell',
         'aligntd':'Cell alignment',
-        'cellalignment':{topLeft:"TopLeft",topCenter:'TopCenter',topRight:'TopRight',middleLeft:'MiddleLeft',middleCenter:'MiddleCenter',
-            middleRight:'MiddleRight',bottomLeft:"BottomLeft",bottomCenter:"BottomCenter",bottomRight:"BottomRight"},
         'edittd':"Cell property",
         'table':"Table",
         'justifyleft':'Justify Left',

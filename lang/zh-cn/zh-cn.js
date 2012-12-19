@@ -82,8 +82,6 @@ UE.I18N['zh-cn'] = {
         'paragraph':"段落格式",
         'edittable':"表格属性",
         'aligntd':"单元格对齐方式",
-        'cellalignment':{topLeft:"上左",topCenter:'上中',topRight:'上右',middleLeft:'中左',middleCenter:'中中',
-            middleRight:'中右',bottomLeft:"下左",bottomCenter:"下中",bottomRight:"下右"},
         'edittd':"单元格属性",
         'justifyleft':'左对齐',
         'justifyright':'右对齐',

@@ -1,6 +1,6 @@
 /*自动排版弹出菜单*/
 .edui-default .edui-aligncellpicker .edui-aligncellpicker-body {
-    width: auto;
+    width: 75px;
     font-size: 12px;
     cursor: default;
 }
@@ -8,14 +8,25 @@
 .edui-default .edui-aligncellpicker-body table {
     border-collapse: separate;
     border-spacing: 2px;
-    width: 100%;
 }
-
-.edui-default .edui-aligncellpicker-body td {
-    height: 20px;
+.edui-default .edui-aligncellpicker-body td{
     padding: 1px;
-    text-align: center;
-    vertical-align: middle;
+}
+.edui-default .edui-aligncellpicker-body .edui-icon{
+    height: 20px;
+    width: 20px;
+    padding: 1px;
+    background-image: url(../images/icons.png);
+    background-image: url(../images/icons.gif) \9;
+}
+.edui-default .edui-aligncellpicker-body .edui-left{
+    background-position: -460px 0;
+}
+.edui-default .edui-aligncellpicker-body .edui-center{
+    background-position: -420px 0;
+}
+.edui-default .edui-aligncellpicker-body .edui-right{
+    background-position: -480px 0;
 }
 .edui-default .edui-aligncellpicker-body td.edui-state-hover {
     background-color: #fff5d4;
