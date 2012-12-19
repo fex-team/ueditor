@@ -437,10 +437,22 @@ UE.I18N['zh-cn'] = {
     },
     'edittable':{
         'static':{
-        }
+            'lang_tableStyle':'表格样式',
+            'lang_insertCaption':'添加表格标题行',
+            'lang_insertTitle':'添加表格名称行',
+            'lang_tableSize':'自动调整表格尺寸',
+            'lang_autoSizeContent':'按表格文字自适应',
+            'lang_autoSizePage':'按页面宽度自适应',
+            'lang_example':'示例'
+        },
+        captionName:'表格名称',
+        titleName:'标题',
+        cellsName:'内容'
     },
     'edittip':{
         'static':{
+            lang_delRow:'删除整行',
+            lang_delCol:'删除整列'
         }
     },
     'wordimage':{

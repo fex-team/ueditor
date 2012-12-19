@@ -454,10 +454,22 @@ UE.I18N['en'] = {
     },
     'edittable':{
         'static':{
-        }
+            'lang_tableStyle':'Table style',
+            'lang_insertCaption':'Add table header row',
+            'lang_insertTitle':'Add table title row',
+            'lang_tableSize':'Automatically adjust table size',
+                'lang_autoSizeContent':'Adaptive by form text',
+            'lang_autoSizePage':'Page width adaptive',
+            'lang_example':'Example'
+        },
+        captionName:'Caption',
+        titleName:'Title',
+        cellsName:'content'
     },
     'edittip':{
         'static':{
+            lang_delRow:'Delete entire row',
+            lang_delCol:'Delete entire col'
         }
     },
     wordimage:{
