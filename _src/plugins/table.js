@@ -12,7 +12,7 @@ UE.plugins['table'] = function () {
         domUtils = dom.domUtils,
         utils = baidu.editor.utils,
         browser = baidu.editor.browser,
-        debug = false,
+        debug = true,
         dtd = dom.dtd;
     function showError(e){
         if(debug) throw e;
@@ -131,7 +131,7 @@ UE.plugins['table'] = function () {
                 if(caption){
                     var table =  domUtils.findParentByTagName(caption,'table');
                     if(!rng.collapsed){
-                        me.fireEvent('saveScene');
+
                         rng.deleteContents();
                         me.fireEvent('saveScene');
                     }else{
@@ -445,9 +445,13 @@ UE.plugins['table'] = function () {
                     obj = getTableItemsByRange();
                 if(range.collapsed && obj.table){
                     if(getUETable(obj.cell).isLastCell(obj.cell)){
+                        me.fireEvent('saveScene');
+                        me.__hasEnterExecCommand = true;
                         this.execCommand('insertrownext');
+                        me.__hasEnterExecCommand = false;
                         range = this.selection.getRange();
                         range.setStart(obj.table.rows[obj.table.rows.length-1].cells[0],0).setCursor();
+                        me.fireEvent('saveScene');
                         domUtils.preventDefault(evt);
                         evt._ue_table_tab = 1;
                         return;
@@ -942,13 +946,14 @@ UE.plugins['table'] = function () {
     function showDragLineAt(state,cell){
         if(!cell) return;
         var table = domUtils.findParentByTagName(cell,"table"),
+            caption = table.getElementsByTagName('caption'),
             width = table.offsetWidth,
-            height = table.offsetHeight,
+            height = table.offsetHeight - (caption.length > 0 ? caption[0].offsetHeight : 0),
             tablePos = domUtils.getXY(table),
             cellPos = domUtils.getXY(cell),css;
         switch(state){
             case "h":
-                css = 'height:' + height + 'px;top:' + tablePos.y + 'px;left:' + (cellPos.x + cell.offsetWidth - 2);
+                css = 'height:' + height + 'px;top:' + (tablePos.y + (caption.length > 0 ? caption[0].offsetHeight : 0)) + 'px;left:' + (cellPos.x + cell.offsetWidth - 2);
                 dragLine.style.cssText = css +'px;position: absolute;display:block;background-color:blue;width:1px;border:0; color:blue;opacity:.3;filter:alpha(opacity=30)';
                 break;
             case "v":
@@ -1289,7 +1294,7 @@ UE.plugins['table'] = function () {
                     rng.setStart(nextSibling,0).setCursor(false,true);
                 }
             }else{
-                if(cellInfo.rowSpan==1){
+                if(cellInfo.rowSpan==1 || cellInfo.rowSpan == cellsRange.endRowIndex - cellsRange.beginRowIndex + 1){
                     if( nextCell || preCell) rng.selectNodeContents(nextCell||preCell).setCursor(false,true);
                 }else{
                     var newCell = ut.getCell(cellInfo.rowIndex,ut.indexTable[cellInfo.rowIndex][cellInfo.colIndex].cellIndex);
@@ -1614,39 +1619,6 @@ UE.plugins['table'] = function () {
             if (ut && ut.selectedTds.length) {
                 setAverageHeight(getAverageHeight());
             }
-        }
-    };
-
-    //单元格对齐方式
-    UE.commands['cellalignment'] = {
-        queryCommandState:function () {
-            return getTableItemsByRange().cell ? 0 : -1
-        },
-        execCommand:function (cmd, data) {
-            var me = this,
-                ut = getUETableBySelected(me);
-
-            if (!ut) {
-                var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
-                cell.setAttribute('valign', data.valign);
-                cell.setAttribute('align', data.align);
-            } else {
-                utils.each(ut.selectedTds, function (cell) {
-                    cell.setAttribute('valign', data.valign);
-                    cell.setAttribute('align', data.align);
-                });
-            }
-        }
-    };
-
-    //删除提示
-    UE.commands['edittip'] = {
-        queryCommandState:function () {
-            var me = this,
-                ut = getUETableBySelected(me);
-            if(!ut||ut.isFullCol() ||ut.isFullRow()) return -1;
-            return ut.selectedTds.length > 0 ? 0 : -1;
         }
     };
 
@@ -2156,7 +2128,7 @@ UE.plugins['table'] = function () {
             //由于合并操作可以在任意时刻进行，所以无法通过鼠标位置等信息实时生成range，只能通过缓存实例中的cellsRange对象来访问
             var range = this.cellsRange,
                 leftTopCell = this.getCell(range.beginRowIndex,this.indexTable[range.beginRowIndex][range.beginColIndex].cellIndex);
-            if(leftTopCell.tagName =="TH"){
+            if(leftTopCell.tagName =="TH" && range.endRowIndex!==range.beginRowIndex){
                 var index = this.indexTable,
                     info = this.getCellInfo(leftTopCell);
                 leftTopCell = this.getCell(1,index[1][info.colIndex].cellIndex);
