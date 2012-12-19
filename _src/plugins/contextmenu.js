@@ -64,13 +64,6 @@ UE.plugins['contextmenu'] = function () {
                 },
                 '-',
                 {
-                    label:lang.edittable,
-                    cmdName:'edittable',
-                    exec:function () {
-                        this.ui._dialogs['inserttableDialog'].open();
-                    }
-                },
-                {
                     label:lang.edittd,
                     cmdName:'edittd',
                     exec:function () {
@@ -93,10 +86,7 @@ UE.plugins['contextmenu'] = function () {
                             label:lang.deletetable,
                             cmdName:'deletetable'
                         },
-                        {
-                            label:lang.insertparagraphbeforetable,
-                            cmdName:'insertparagraphbeforetable'
-                        },
+                        '-',
                         {
                             label:lang.deleterow,
                             cmdName:'deleterow'
@@ -106,12 +96,42 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'deletecol'
                         },
                         {
+                            label:lang.insertcol,
+                            cmdName:'insertcol'
+                        },
+                        {
+                            label:lang.insertcolnext,
+                            cmdName:'insertcolnext'
+                        },
+                        {
                             label:lang.insertrow,
                             cmdName:'insertrow'
                         },
                         {
-                            label:lang.insertcol,
-                            cmdName:'insertcol'
+                            label:lang.insertrownext,
+                            cmdName:'insertrownext'
+                        },
+                        '-',
+                        {
+                            label:lang.insertcaption,
+                            cmdName:'insertcaption'
+                        },
+                        {
+                            label:lang.deletecaption,
+                            cmdName:'deletecaption'
+                        },
+                        {
+                            label:lang.inserttitle,
+                            cmdName:'inserttitle'
+                        },
+                        {
+                            label:lang.deletetitle,
+                            cmdName:'deletetitle'
+                        },
+                        '-',
+                        {
+                            label:lang.mergecells,
+                            cmdName:'mergecells'
                         },
                         {
                             label:lang.mergeright,
@@ -121,6 +141,7 @@ UE.plugins['contextmenu'] = function () {
                             label:lang.mergedown,
                             cmdName:'mergedown'
                         },
+                        '-',
                         {
                             label:lang.splittorows,
                             cmdName:'splittorows'
@@ -130,68 +151,27 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'splittocols'
                         },
                         {
-                            label:'insertcaption',
-                            cmdName:'insertcaption'
+                            label:lang.splittocells,
+                            cmdName:'splittocells'
                         },
+                        '-',
                         {
-                            label:'deletecaption',
-                            cmdName:'deletecaption'
-                        },
-                        {
-                            label:'inserttitle',
-                            cmdName:'inserttitle'
-                        },
-                        {
-                            label:'adaptbytext',
-                            cmdName:'adaptbytext'
-                        },
-                        {
-                            label:'adaptbywindow',
-                            cmdName:'adaptbywindow'
-                        },
-                        {
-                            label:'adaptbycustomer',
-                            cmdName:'adaptbycustomer'
-                        },
-                        {
-                            label:'insertrownext',
-                            cmdName:'insertrownext'
-                        },
-                        {
-                            label:'tdAlignCenter',
-                            cmdName:'cellalign',
-                            exec:function () {
-
-                                this.execCommand( 'cellalign' ,'center')
-                            }
-                        },
-                        {
-                            label:'tdvAlignCenter',
-                            cmdName:'cellvalign',
-                            exec:function () {
-
-                                this.execCommand( 'cellvalign' ,'top')
-                            }
-                        },
-                        {
-                            label:'averageDiseRow',
+                            label:lang.averageDiseRow,
                             cmdName:'averagedistributerow'
                         },
                         {
-                            label:'averageDisCol',
+                            label:lang.averageDisCol,
                             cmdName:'averagedistributecol'
                         },
+                        '-',
                         {
-                            label:'deletetitle',
-                            cmdName:'deletetitle'
+                            label:lang.insertparagraphbeforetable,
+                            cmdName:'insertparagraph',
+                            value:true
                         },
                         {
-                            label:lang.mergecells,
-                            cmdName:'mergecells'
-                        },
-                        {
-                            label:lang.splittocells,
-                            cmdName:'splittocells'
+                            label:lang.insertparagraphaftertable,
+                            cmdName:'insertparagraph'
                         }
                     ]
                 },
@@ -245,6 +225,13 @@ UE.plugins['contextmenu'] = function () {
                             value:{align:'right',valign:'bottom'}
                         }
                     ]
+                },
+                {
+                    label:lang.edittable,
+                    cmdName:'edittable',
+                    exec:function () {
+                        this.ui._dialogs['inserttableDialog'].open();
+                    }
                 },
                 '-',
                 {
