@@ -121,16 +121,9 @@
 
                 title.checked = editor.queryCommandState("inserttitle") == -1;
                 caption.checked = editor.queryCommandState("insertcaption") == -1;
-                me.createTable(title.checked, caption.checked);
 
-                var flag=me.isAutoSizeContent();
-                if(flag){
-                    autoSizeContent.checked=flag;
-                    me.autoSizeContentHanler();
-                }else{
-                    autoSizePage.checked=!flag;
-                    me.autoSizePageHanler();
-                }
+                me.createTable(title.checked, caption.checked);
+                me.setAutoSize();
 
                 domUtils.on(title, "click", me.titleHanler);
                 domUtils.on(caption, "click", me.captionHanler);
@@ -187,9 +180,17 @@
                 });
                 example.setAttribute('width', '100%');
             },
-            isAutoSizeContent:function(){
-                var start = editor.selection.getStart();
-                return !domUtils.findParentByTagName(start, "table",true).width;
+            setAutoSize:function(){
+                var me=this,
+                    start = editor.selection.getStart(),
+                    flag=!domUtils.findParentByTagName(start, "table",true).width;
+                if(flag){
+                    autoSizeContent.checked=flag;
+                    me.autoSizeContentHanler();
+                }else{
+                    autoSizePage.checked=!flag;
+                    me.autoSizePageHanler();
+                }
             }
         };
 
