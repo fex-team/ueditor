@@ -42,7 +42,7 @@
             var target= evt.target || evt.srcElement;
             if(/icon/.test(target.className)){
                 this.items[target.parentNode.getAttribute("index")].onclick();
-                Popup.postHide();
+                Popup.postHide(evt);
             }
         },
         _UIBase_render:UIBase.prototype.render
