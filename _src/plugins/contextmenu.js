@@ -64,17 +64,6 @@ UE.plugins['contextmenu'] = function () {
                 },
                 '-',
                 {
-                    label:lang.edittd,
-                    cmdName:'edittd',
-                    exec:function () {
-                        //如果没有创建，创建一下先
-                        if ( UE.ui['edittd'] ) {
-                            new UE.ui['edittd']( this );
-                        }
-                        this.ui._dialogs['edittdDialog'].open();
-                    }
-                },
-                {
                     group:lang.table,
                     icon:'table',
                     subMenu:[
@@ -230,7 +219,10 @@ UE.plugins['contextmenu'] = function () {
                     label:lang.edittable,
                     cmdName:'edittable',
                     exec:function () {
-                        this.ui._dialogs['inserttableDialog'].open();
+                        if ( UE.ui['edittable'] ) {
+                            new UE.ui['edittable']( this );
+                        }
+                        this.getDialog('edittable').open();
                     }
                 },
                 '-',

@@ -16,14 +16,14 @@ UE.I18N['en'] = {
         'deleterow':'DeleteRow', 'deletecol':'DeleteCol', 'splittorows':'SplitToRows',
         'splittocols':'SplitToCols', 'splittocells':'SplitToCells','deletecaption':'DeleteCaption','inserttitle':'InsertTitle',
         'mergecells':'MergeCells', 'deletetable':'DeleteTable', 'cleardoc':'Clear', 'insertparagraphbeforetable':"InsertParagraphBeforeTable",
-        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph', 'insertimage':'Image', 'inserttable':'Table', 'link':'Link',
+        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph', 'insertimage':'Image', 'edittable':'Edit Table', 'link':'Link',
         'emotion':'Emotion', 'spechars':'Spechars', 'searchreplace':'SearchReplace', 'map':'BaiduMap', 'gmap':'GoogleMap',
         'insertvideo':'Video', 'help':'Help', 'justifyleft':'JustifyLeft', 'justifyright':'JustifyRight', 'justifycenter':'JustifyCenter',
         'justifyjustify':'Justify', 'forecolor':'FontColor', 'backcolor':'BackColor', 'insertorderedlist':'OL',
         'insertunorderedlist':'UL', 'fullscreen':'FullScreen', 'directionalityltr':'EnterFromLeft', 'directionalityrtl':'EnterFromRight',
         'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'highlightcode':'Code', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
-        'lineheight':'LineHeight','edittd':'EditTD', 'edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
+        'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
         'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',
         'music':'Music'
     },
@@ -452,50 +452,13 @@ UE.I18N['en'] = {
         pyzm:"Phonetic",
         zyzf:"Others"
     },
-    inserttable:{
+    'edittable':{
         'static':{
-            lang_baseInfo:"Base info",
-            lang_rows:"Rows",
-            lang_rowUnit:"row",
-            lang_width:"Width",
-            lang_widthUnit:"Unit",
-            lang_height:"Height",
-            lang_heightUnit:"Unit",
-            lang_cols:"Cols",
-            lang_colUnit:"col",
-            lang_warmPrompt:"Warm prompt",
-            lang_maxPadding:"Margins maximum can't more than 13 px! ",
-            lang_extendInfo:"Extend info",
-            lang_preview:"Can preview",
-            lang_tableBorder:"Border",
-            lang_borderSize:"Size",
-            lang_borderColor:"Color",
-            lang_mar_pad:"MarginPad",
-            lang_margin:"Mar",
-            lang_padding:"Pad",
-            lang_table_background:"Table background",
-            lang_table_alignment:"Table alignment",
-            lang_borderFor:"Border for",
-            align:{options:["Default", "Justify", "Justify Left", "Justify Right"]},
-            borderType:{options:["Only table", "All cells"]},
-            lang_forPreview:"This is used for preview"
-        },
-        errorNum:"Please enter the right number!",
-        errorColor:"Please enter the right color!",
-        clearColor:"Clear",
-        overflowMsg:"Maximum can't more than {#value} px!",
-        overflowPreviewMsg:"More than {#value} px no longer provide real-time preview!"
+        }
     },
-    edittd:{
+    'edittip':{
         'static':{
-            lang_background:"Back Color",
-            lang_alignment:"Alignment",
-            lang_horizontal:"H",
-            lang_vertical:"V",
-            vAlign:{options:["Default", "Justify", "Justify Top", "Justify Bottom"]},
-            align:{options:["Default", "Justify", "Justify Left", "Justify Right"]}
-        },
-        clearColor:"Clear"
+        }
     },
     wordimage:{
         'static':{

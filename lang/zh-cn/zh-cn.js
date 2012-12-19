@@ -15,14 +15,14 @@ UE.I18N['zh-cn'] = {
         'unlink':'取消链接', 'insertrow':'前插入行', 'insertcol':'前插入列', 'mergeright':'右合并单元格', 'mergedown':'下合并单元格',
         'deleterow':'删除行', 'deletecol':'删除列', 'splittorows':'拆分成行', 'splittocols':'拆分成列', 'splittocells':'完全拆分单元格',
         'mergecells':'合并多个单元格', 'deletetable':'删除表格', 'cleardoc':'清空文档','insertparagraphbeforetable':"表格前插入行",
-        'fontfamily':'字体', 'fontsize':'字号', 'paragraph':'段落格式', 'insertimage':'图片', 'inserttable':'表格', 'link':'超链接',
+        'fontfamily':'字体', 'fontsize':'字号', 'paragraph':'段落格式', 'insertimage':'图片', 'edittable':'表格属性', 'link':'超链接',
         'emotion':'表情', 'spechars':'特殊字符', 'searchreplace':'查询替换', 'map':'Baidu地图', 'gmap':'Google地图',
         'insertvideo':'视频', 'help':'帮助', 'justifyleft':'居左对齐', 'justifyright':'居右对齐', 'justifycenter':'居中对齐',
         'justifyjustify':'两端对齐', 'forecolor':'字体颜色', 'backcolor':'背景色', 'insertorderedlist':'有序列表',
         'insertunorderedlist':'无序列表', 'fullscreen':'全屏', 'directionalityltr':'从左向右输入', 'directionalityrtl':'从右向左输入',
         'rowspacingtop':'段前距', 'rowspacingbottom':'段后距', 'highlightcode':'插入代码', 'pagebreak':'分页', 'insertframe':'插入Iframe', 'imagenone':'默认',
         'imageleft':'左浮动', 'imageright':'右浮动', 'attachment':'附件', 'imagecenter':'居中', 'wordimage':'图片转存',
-        'lineheight':'行间距','edittd':'单元格','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版', 'webapp':'百度应用',
+        'lineheight':'行间距','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版', 'webapp':'百度应用',
         'touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦','music':'音乐'
     },
     'insertorderedlist':{
@@ -435,50 +435,9 @@ UE.I18N['zh-cn'] = {
         pyzm:"拼音字母",
         zyzf:"注音及其他"
     },
-    'inserttable':{
+    'edittable':{
         'static':{
-            lang_baseInfo:"基础信息",
-            lang_rows:"行数",
-            lang_rowUnit:"行",
-            lang_width:"宽度",
-            lang_widthUnit:"px",
-            lang_height:"高度",
-            lang_heightUnit:"px",
-            lang_cols:"列数",
-            lang_colUnit:"列",
-            lang_warmPrompt:"温馨提示",
-            lang_maxPadding:"边距最大不能超过13px! ",
-            lang_extendInfo:"扩展信息",
-            lang_preview:"可预览",
-            lang_tableBorder:"表格边框",
-            lang_borderSize:"大小",
-            lang_borderColor:"颜色",
-            lang_mar_pad:"边距间距",
-            lang_margin:"边距",
-            lang_padding:"间距",
-            lang_table_background:"表格的背景颜色",
-            lang_table_alignment:"表格的对齐方式",
-            lang_borderFor:"边框设置作用于",
-            align:{options:["默认", "居中", "居左", "居右"]},
-            borderType:{options:["仅表格", "所有单元格"]},
-            lang_forPreview:"这是用来预览的"
-        },
-        errorNum:"请输入正确的数值，如124,358",
-        errorColor:"请输入正确的颜色值，如#34abdd，red",
-        clearColor:"清除颜色",
-        overflowMsg:"最大值不能超过{#value}px!",
-        overflowPreviewMsg:"超过{#value} px时将不再提供实时预览。"
-    },
-    'edittd':{
-        'static':{
-            lang_background:"背景颜色",
-            lang_alignment:"对齐方式",
-            lang_horizontal:"水平",
-            lang_vertical:"垂直",
-            vAlign:{options:["默认", "居中对齐", "顶端对齐", "底部对齐"]},
-            align:{options:["默认", "居中对齐", "左对齐", "右对齐"]}
-        },
-        clearColor:"清除颜色"
+        }
     },
     'edittip':{
         'static':{

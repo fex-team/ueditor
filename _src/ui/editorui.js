@@ -32,7 +32,6 @@
     var iframeUrlMap = {
         'anchor':'~/dialogs/anchor/anchor.html',
         'insertimage':'~/dialogs/image/image.html',
-        'inserttable':'~/dialogs/table/_table.html',
         'link':'~/dialogs/link/link.html',
         'spechars':'~/dialogs/spechars/spechars.html',
         'searchreplace':'~/dialogs/searchreplace/searchreplace.html',
@@ -45,8 +44,8 @@
         'wordimage':'~/dialogs/wordimage/wordimage.html',
         'attachment':'~/dialogs/attachment/attachment.html',
         'insertframe':'~/dialogs/insertframe/insertframe.html',
-        'edittd':'~/dialogs/table/edittd.html',
         'edittip':'~/dialogs/table/edittip.html',
+        'edittable':'~/dialogs/table/edittable.html',
         'webapp':'~/dialogs/webapp/webapp.html',
         'snapscreen':'~/dialogs/snapscreen/snapscreen.html',
         'scrawl':'~/dialogs/scrawl/scrawl.html',
@@ -176,7 +175,7 @@
     var dialogBtns = {
         noOk:['searchreplace', 'help', 'spechars', 'webapp'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-            'insertvideo', 'highlightcode', 'insertframe', 'edittd','edittip', 'scrawl', 'template','music', 'background']
+            'insertvideo', 'highlightcode', 'insertframe','edittip','edittable', 'scrawl', 'template','music', 'background']
 
     };
 
@@ -256,7 +255,7 @@
                         });
                         editor.addListener('selectionchange', function () {
                             //只存在于右键菜单而无工具栏按钮的ui不需要检测状态
-                            var unNeedCheckState = {'edittd':1, 'edittable':1};
+                            var unNeedCheckState = {'edittable':1};
                             if (cmd in unNeedCheckState)return;
 
                             var state = editor.queryCommandState(cmd);
@@ -550,47 +549,7 @@
         return ui;
     };
     editorui.inserttable = function (editor, iframeUrl, title) {
-        iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})['inserttable'] || iframeUrlMap['inserttable'];
         title = editor.options.labelMap['inserttable'] || editor.getLang("labelMap.inserttable") || '';
-        if (iframeUrl) {
-            var dialog = new editorui.Dialog({
-                iframeUrl:editor.ui.mapUrl(iframeUrl),
-                editor:editor,
-                className:'edui-for-inserttable',
-                title:title,
-                buttons:[
-                    {
-                        className:'edui-okbutton',
-                        label:editor.getLang("ok"),
-                        editor:editor,
-                        onclick:function () {
-                            dialog.close(true);
-                        }
-                    },
-                    {
-                        className:'edui-cancelbutton',
-                        label:editor.getLang("cancel"),
-                        editor:editor,
-                        onclick:function () {
-                            dialog.close(false);
-                        }
-                    }
-                ]
-
-            });
-            dialog.render();
-            editor.ui._dialogs['inserttableDialog'] = dialog;
-        }
-        var openDialog = function () {
-            if (dialog) {
-                //打开后再关闭再打开是为了解决fieldset文字错位问题
-                if (browser.webkit) {
-                    dialog.open();
-                    dialog.close();
-                }
-                dialog.open();
-            }
-        };
         var ui = new editorui.TableButton({
             editor:editor,
             title:title,
@@ -598,8 +557,9 @@
             onpicktable:function (t, numCols, numRows) {
                 editor.execCommand('InsertTable', {numRows:numRows, numCols:numCols, border:1});
             },
-            onmore:openDialog,
-            onbuttonclick:openDialog
+            onbuttonclick:function () {
+                this.showPopup();
+            }
         });
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('inserttable') == -1);

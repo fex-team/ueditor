@@ -26,7 +26,6 @@
                  '<div class="edui-tablepicker-body">' +
                   '<div class="edui-infoarea">' +
                    '<span id="##_label" class="edui-label"></span>' +
-                   '<span class="edui-clickable" onclick="$$._onMore();">'+me.editor.getLang("more")+'</span>' +
                   '</div>' +
                   '<div class="edui-pickarea"' +
                    ' onmousemove="$$._onMouseMove(event, this);"' +
@@ -78,9 +77,6 @@
         },
         _onClick: function (){
             this.fireEvent('picktable', this.numCols, this.numRows);
-        },
-        _onMore: function (){
-            this.fireEvent('more');
         }
     };
     utils.inherits(TablePicker, UIBase);

@@ -253,16 +253,10 @@
     height: 420px;
 }
 
-/*table-dialog*/
-.edui-default .edui-for-inserttable .edui-dialog-content {
+/*edittable-dialog*/
+.edui-default .edui-for-edittable .edui-dialog-content {
     width: 520px;
     height: 265px;
-}
-
-/*td-dialog*/
-.edui-default .edui-for-edittd .edui-dialog-content {
-    width: 220px;
-    height: 125px;
 }
 
 /*snapscreen-dialog*/
