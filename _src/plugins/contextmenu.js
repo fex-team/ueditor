@@ -154,16 +154,6 @@ UE.plugins['contextmenu'] = function () {
                         },
                         '-',
                         {
-                            label:lang.insertparagraphbeforetable,
-                            cmdName:'insertparagraph',
-                            value:true
-                        },
-                        {
-                            label:lang.insertparagraphaftertable,
-                            cmdName:'insertparagraph'
-                        },
-                        '-',
-                        {
                             label:lang.edittable,
                             cmdName:'edittable',
                             exec:function () {
@@ -218,6 +208,15 @@ UE.plugins['contextmenu'] = function () {
                     ]
                 },
                 '-',
+                {
+                    label:lang.insertparagraphbefore,
+                    cmdName:'insertparagraph',
+                    value:true
+                },
+                {
+                    label:lang.insertparagraphafter,
+                    cmdName:'insertparagraph'
+                },
                 {
                     label:lang['copy'],
                     cmdName:'copy',
