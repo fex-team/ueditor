@@ -72,17 +72,11 @@
                 var el = evt.target || evt.srcElement;
                 baidu.editor.ui.Popup.postHide(el);
             });
-            editor.addListener('keydown', function (cmd, evt) {
-                var keyCode = evt.keyCode || evt.which;
-                if (keyCode == 8) {
-                    var state = editor.queryCommandState("edittip");
-                    if (state != -1) {
-                        if (UE.ui['edittip']) {
-                            new UE.ui['edittip'](editor);
-                        }
-                        editor.getDialog('edittip').open();
+            editor.addListener("delcells",function(){
+                if (UE.ui['edittip']) {
+                        new UE.ui['edittip'](editor);
                     }
-                }
+                editor.getDialog('edittip').open();
             });
             editor.addListener('contextmenu', function (t, evt) {
                 baidu.editor.ui.Popup.postHide();
