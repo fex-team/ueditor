@@ -200,12 +200,20 @@ UE.plugins['table'] = function () {
                                 if(!cell){
                                     cell = tr.insertCell(j)
                                 }
-                                cell.innerHTML = cj.innerHTML
+                                cell.innerHTML = cj.innerHTML;
+                                cj.getAttribute('width') && cell.setAttribute('width',cj.getAttribute('width'));
+                                cj.getAttribute('valign') && cell.setAttribute('valign',cj.getAttribute('valign'));
+                                cj.getAttribute('align') && cell.setAttribute('align',cj.getAttribute('align'));
+                                cj.style.cssText && (cell.style.cssText = cj.style.cssText)
                             }
                             for(var j= 0,cj;cj=tr.cells[j];j++){
                                 if(!ci[j])
                                     break;
                                 cj.innerHTML = ci[j].innerHTML;
+                                ci[j].getAttribute('width') && cj.setAttribute('width',ci[j].getAttribute('width'));
+                                ci[j].getAttribute('valign') && cj.setAttribute('valign',ci[j].getAttribute('valign'));
+                                ci[j].getAttribute('align') && cj.setAttribute('align',ci[j].getAttribute('align'));
+                                ci[j].style.cssText && (cj.style.cssText = ci[j].style.cssText)
                             }
                         }
                     }else{
@@ -234,7 +242,7 @@ UE.plugins['table'] = function () {
                                     cj.getAttribute('width') && td.setAttribute('width',cj.getAttribute('width'));
                                     cj.getAttribute('valign') && td.setAttribute('valign',cj.getAttribute('valign'));
                                     cj.getAttribute('align') && td.setAttribute('align',cj.getAttribute('align'));
-
+                                    cj.style.cssText && (td.style.cssText = cj.style.cssText)
                                     preNode = td;
                                     td = td.nextSibling;
                                 }else{
@@ -349,6 +357,11 @@ UE.plugins['table'] = function () {
                 utils.each(domUtils.getElementsByTagName(me.document,'td'),function(td){
                     if(domUtils.isEmptyBlock(td)){
                         domUtils.fillNode(me.document,td)
+                    }
+                });
+                utils.each(domUtils.getElementsByTagName(me.document,'th'),function(th){
+                    if(domUtils.isEmptyBlock(th)){
+                        domUtils.fillNode(me.document,th)
                     }
                 });
                 table.onmouseout = function(){
@@ -1637,36 +1650,6 @@ UE.plugins['table'] = function () {
         }
     };
 
-    //单元格对齐方式
-    UE.commands['cellalignment'] = {
-        queryCommandState:function () {
-            return getTableItemsByRange().cell ? 0 : -1
-        },
-        execCommand:function (cmd, data) {
-            var me = this,
-                ut = getUETableBySelected(me);
-
-            if (!ut) {
-                var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
-                if(cell){
-                    domUtils.setAttributes(cell,data);
-                }
-            } else {
-                utils.each(ut.selectedTds, function (cell) {
-                    domUtils.setAttributes(cell,data);
-                });
-            }
-        }
-    };
-
-    //表格属性
-    UE.commands['edittable'] = {
-        queryCommandState:function () {
-            return getTableItemsByRange().cell ? 0 : -1
-        }
-    };
-
     /**
      * UE表格操作类
      * @param table
@@ -2521,5 +2504,13 @@ UE.plugins['table'] = function () {
         return target && !domUtils.findParent(target, function (node) {
             return node.tagName == "DIV" && /highlighter/.test(node.id);
         }) ? target : null;
+    }
+    function getIndex( cell ) {
+        var cells = cell.parentNode.cells;
+        for ( var i = 0, ci; ci = cells[i]; i++ ) {
+            if ( ci === cell ) {
+                return i;
+            }
+        }
     }
 };
