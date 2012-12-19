@@ -1,6 +1,6 @@
 /*自动排版弹出菜单*/
 .edui-default .edui-aligncellpicker .edui-aligncellpicker-body {
-    width: 100px;
+    width: auto;
     font-size: 12px;
     cursor: default;
 }

@@ -180,47 +180,47 @@ UE.plugins['contextmenu'] = function () {
                     icon:'aligntd',
                     subMenu:[
                         {
-                            label:'上左',
+                            label:lang.cellalignment.topLeft,
                             cmdName:'cellalignment',
                             value:{align:'left',valign:'top'}
                         },
                         {
-                            label:'上中',
+                            label:lang.cellalignment.topCenter,
                             cmdName:'cellalignment',
                             value:{align:'center',valign:'top'}
                         },
                         {
-                            label:'上右',
+                            label:lang.cellalignment.topRight,
                             cmdName:'cellalignment',
                             value:{align:'right',valign:'top'}
                         },
                         {
-                            label:'中左',
+                            label:lang.cellalignment.middleLeft,
                             cmdName:'cellalignment',
                             value:{align:'left',valign:'middle'}
                         },
                         {
-                            label:'中中',
+                            label:lang.cellalignment.middleCenter,
                             cmdName:'cellalignment',
                             value:{align:'center',valign:'middle'}
                         },
                         {
-                            label:'中右',
+                            label:lang.cellalignment.middleRight,
                             cmdName:'cellalignment',
                             value:{align:'right',valign:'middle'}
                         },
                         {
-                            label:'下左',
+                            label:lang.cellalignment.bottomLeft,
                             cmdName:'cellalignment',
                             value:{align:'left',valign:'bottom'}
                         },
                         {
-                            label:'下中',
+                            label:lang.cellalignment.bottomCenter,
                             cmdName:'cellalignment',
                             value:{align:'center',valign:'bottom'}
                         },
                         {
-                            label:'下右',
+                            label:lang.cellalignment.bottomRight,
                             cmdName:'cellalignment',
                             value:{align:'right',valign:'bottom'}
                         }
