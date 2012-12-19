@@ -2522,12 +2522,4 @@ UE.plugins['table'] = function () {
             return node.tagName == "DIV" && /highlighter/.test(node.id);
         }) ? target : null;
     }
-    function getIndex( cell ) {
-        var cells = cell.parentNode.cells;
-        for ( var i = 0, ci; ci = cells[i]; i++ ) {
-            if ( ci === cell ) {
-                return i;
-            }
-        }
-    }
 };
