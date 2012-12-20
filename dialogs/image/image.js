@@ -5,12 +5,14 @@
  * Time: 下午2:52
  * To change this template use File | Settings | File Templates.
  */
-var imageUploader = {};
+var imageUploader = {},
+    flashObj = null,
+    postConfig=[];
 (function () {
     var g = $G,
         ajax = parent.baidu.editor.ajax,
-        maskIframe = g("maskIframe"), //tab遮罩层,用来解决flash和其他dom元素的z-index层级不一致问题
-        flashObj;               //flash上传对象
+        maskIframe = g("maskIframe"); //tab遮罩层,用来解决flash和其他dom元素的z-index层级不一致问题
+       // flashObj;                   //flash上传对象
 
     var flagImg = null, flashContainer;
     imageUploader.init = function (opt, callbacks) {
@@ -37,6 +39,15 @@ var imageUploader = {};
         addScrollListener();
         addSearchListener();
         $focus(g("url"));
+    };
+    imageUploader.setPostParams = function(obj,index){
+        if(index===undefined){
+            utils.each(postConfig,function(config){
+                config.data = obj;
+            })
+        }else{
+            postConfig[index].data = obj;
+        }
     };
 
     function insertImage(imgObjs) {
@@ -298,6 +309,8 @@ var imageUploader = {};
      */
     function addUploadListener() {
         g("upload").onclick = function () {
+            //此处设置针对单次上传图片
+            imageUploader.setPostParams({"dir":g("savePath").value});
             flashObj.upload();
             this.style.display = "none";
         };

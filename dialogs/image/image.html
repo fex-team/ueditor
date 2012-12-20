@@ -55,6 +55,13 @@
                 <div id="local" class="panel">
                     <div id="flashContainer"></div>
                     <div><div id="upload" style="display: none" ></div><div id="duiqi"></div><div id="localFloat"></div></div>
+
+                    <div class="saveDir">
+                        <var id="lang_savePath" ></var>：<select id="savePath">
+                            <option value="1">upload</option>
+                            <option value="2">upload1</option>
+                        </select>
+                    </div>
                 </div>
                 <div id="imgManager" class="panel">
                     <div id="imageList"><var id="lang_imgLoading"></var></div>
@@ -120,12 +127,21 @@
             var callbacks = {
                 // 选择文件的回调
                 selectFileCallback: function(selectFiles){
+                    utils.each(selectFiles,function(file){
+                        var tmp = {};
+                        tmp.id = file.index;
+                        tmp.data = {};
+                        postConfig.push(tmp);
+                    });
                     selectedImageCount += selectFiles.length;
                     if(selectedImageCount) baidu.g("upload").style.display = "";
                     dialog.buttons[0].setDisabled(true); //初始化时置灰确定按钮
                 },
                 // 删除文件的回调
                 deleteFileCallback: function(delFiles){
+//                    utils.each(delFiles,function(file){
+//                         delete postConfig[file.index];
+//                    });
                     selectedImageCount -= delFiles.length;
                     if (!selectedImageCount) {
                         baidu.g("upload").style.display = "none";
@@ -152,11 +168,16 @@
                 // 全部上传完成时的回调
                 allCompleteCallback: function(){
                     dialog.buttons[0].setDisabled(false);    //上传完毕后点亮按钮
-                }
+                },
                 // 文件超出限制的最大体积时的回调
                 //exceedFileCallback: 'exceedFileCallback',
                 // 开始上传某个文件时的回调
-                //startUploadCallback: startUploadCallback
+                startUploadCallback: function(){
+                    //此处设置针对单张图片
+//                    imageUploader.setPostParams({"action":"http://127.0.0.1/1.241/php/imageUp.php"})
+                    var config = postConfig.shift();
+                    flashObj.addCustomizedParams(config.id,config.data);
+                }
             };
             imageUploader.init(flashOptions,callbacks);
             
