@@ -16,13 +16,21 @@
             this.Stateful_init();
         },
         getHtmlTpl:function () {
-            var items=this.items;
             return '<div id="##" class="edui-aligncellpicker %%">' +
                 '<div class="edui-aligncellpicker-body">' +
                 '<table onclick="$$._onClick(event);">' +
-                '<tr><td index="0" stateful>'+items[0].label+'</td><td index="1" stateful>'+items[1].label+'</td><td index="2" stateful>'+items[2].label+'</td></tr>' +
-                '<tr><td index="3" stateful>'+items[3].label+'</td><td index="4" stateful>'+items[4].label+'</td><td index="5" stateful>'+items[5].label+'</td></tr>' +
-                '<tr><td index="6" stateful>'+items[6].label+'</td><td index="7" stateful>'+items[7].label+'</td><td index="8" stateful>'+items[8].label+'</td></tr>' +
+                '<tr><td index="0" stateful><div class="edui-icon edui-left"></div></td>' +
+                '<td index="1" stateful><div class="edui-icon edui-center"></div></td>' +
+                '<td index="2" stateful><div class="edui-icon edui-right"></div></td>' +
+                '</tr>' +
+                '<tr><td index="3" stateful><div class="edui-icon edui-left"></div></td>' +
+                '<td index="4" stateful><div class="edui-icon edui-center"></div></td>' +
+                '<td index="5" stateful><div class="edui-icon edui-right"></div></td>' +
+                '</tr>' +
+                '<tr><td index="6" stateful><div class="edui-icon edui-left"></div></td>' +
+                '<td index="7" stateful><div class="edui-icon edui-center"></div></td>' +
+                '<td index="8" stateful><div class="edui-icon edui-right"></div></td>' +
+                '</tr>' +
                 '</table>' +
                 '</div>' +
                 '</div>';
@@ -32,9 +40,9 @@
         },
         _onClick: function (evt){
             var target= evt.target || evt.srcElement;
-            if(target.tagName.toLowerCase()=="td"){
-                this.items[target.getAttribute("index")].onclick();
-                Popup.postHide();
+            if(/icon/.test(target.className)){
+                this.items[target.parentNode.getAttribute("index")].onclick();
+                Popup.postHide(evt);
             }
         },
         _UIBase_render:UIBase.prototype.render

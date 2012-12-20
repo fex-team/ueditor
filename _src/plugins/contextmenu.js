@@ -154,16 +154,6 @@ UE.plugins['contextmenu'] = function () {
                         },
                         '-',
                         {
-                            label:lang.insertparagraphbeforetable,
-                            cmdName:'insertparagraph',
-                            value:true
-                        },
-                        {
-                            label:lang.insertparagraphaftertable,
-                            cmdName:'insertparagraph'
-                        },
-                        '-',
-                        {
                             label:lang.edittable,
                             cmdName:'edittable',
                             exec:function () {
@@ -180,53 +170,53 @@ UE.plugins['contextmenu'] = function () {
                     icon:'aligntd',
                     subMenu:[
                         {
-                            label:lang.cellalignment.topLeft,
                             cmdName:'cellalignment',
                             value:{align:'left',valign:'top'}
                         },
                         {
-                            label:lang.cellalignment.topCenter,
                             cmdName:'cellalignment',
                             value:{align:'center',valign:'top'}
                         },
                         {
-                            label:lang.cellalignment.topRight,
                             cmdName:'cellalignment',
                             value:{align:'right',valign:'top'}
                         },
                         {
-                            label:lang.cellalignment.middleLeft,
                             cmdName:'cellalignment',
                             value:{align:'left',valign:'middle'}
                         },
                         {
-                            label:lang.cellalignment.middleCenter,
                             cmdName:'cellalignment',
                             value:{align:'center',valign:'middle'}
                         },
                         {
-                            label:lang.cellalignment.middleRight,
                             cmdName:'cellalignment',
                             value:{align:'right',valign:'middle'}
                         },
                         {
-                            label:lang.cellalignment.bottomLeft,
                             cmdName:'cellalignment',
                             value:{align:'left',valign:'bottom'}
                         },
                         {
-                            label:lang.cellalignment.bottomCenter,
                             cmdName:'cellalignment',
                             value:{align:'center',valign:'bottom'}
                         },
                         {
-                            label:lang.cellalignment.bottomRight,
                             cmdName:'cellalignment',
                             value:{align:'right',valign:'bottom'}
                         }
                     ]
                 },
                 '-',
+                {
+                    label:lang.insertparagraphbefore,
+                    cmdName:'insertparagraph',
+                    value:true
+                },
+                {
+                    label:lang.insertparagraphafter,
+                    cmdName:'insertparagraph'
+                },
                 {
                     label:lang['copy'],
                     cmdName:'copy',
@@ -285,7 +275,7 @@ UE.plugins['contextmenu'] = function () {
                                 if ( (me.commands[subItem.cmdName] || UE.commands[subItem.cmdName] || subItem.query) &&
                                         (subItem.query ? subItem.query() : me.queryCommandState( subItem.cmdName )) > -1 ) {
                                     subMenu.push( {
-                                        'label':subItem.label || me.getLang( "contextMenu." + subItem.cmdName + (subItem.value || '') ),
+                                        'label':subItem.label || me.getLang( "contextMenu." + subItem.cmdName + (subItem.value || '') )||"",
                                         'className':'edui-for-' + subItem.cmdName + (subItem.value || ''),
                                         onclick:subItem.exec ? function () {
                                                 subItem.exec.call( me );
@@ -310,7 +300,6 @@ UE.plugins['contextmenu'] = function () {
                         contextItems.push( {
                             //todo 修正成自动获取方式
                             'label':getLabel(),
-//                            'label':item.icon == "table" ? me.getLang( "contextMenu.table" ) : me.getLang( "contextMenu.paragraph" ),
                             className:'edui-for-' + item.icon,
                             'subMenu':{
                                 items:subMenu,

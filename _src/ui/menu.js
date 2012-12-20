@@ -242,7 +242,7 @@
                 if (this.subMenu) {
                     this.showSubMenu();
                 } else {
-                    Popup.postHide();
+                    Popup.postHide(event);
                 }
             }
         },

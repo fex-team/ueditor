@@ -1,0 +1,19 @@
+/*粘贴弹出菜单*/
+.edui-default .edui-pastelayout .edui-popup-body {
+    border: 1px solid #DCAC6C;
+    background-color: #FFF6D9;
+    padding: 5px;
+    font-size: 10pt;
+    font-family: "宋体";
+}
+.edui-default .edui-pastelayout .edui-popup-content {
+     width: 190px;
+     height: 20px;
+     border: none;
+     background-color: transparent;
+     padding: 2px;
+ }
+.edui-default .edui-pastelayout .edui-popup-content label {
+    color: blue;
+    cursor: pointer;
+}
