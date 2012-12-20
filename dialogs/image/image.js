@@ -34,7 +34,6 @@ var imageUploader = {},
 
         }
         addUrlChangeListener();
-        addUploadListener();
         addOKListener();
         addScrollListener();
         addSearchListener();
@@ -302,18 +301,6 @@ var imageUploader = {},
             }
         }
         return property;
-    }
-
-    /**
-     * 绑定开始上传事件
-     */
-    function addUploadListener() {
-        g("upload").onclick = function () {
-            //此处设置针对单次上传图片
-            imageUploader.setPostParams({"dir":g("savePath").value});
-            flashObj.upload();
-            this.style.display = "none";
-        };
     }
 
     /**
