@@ -1,13 +1,13 @@
 /*自动排版弹出菜单*/
 .edui-default .edui-aligncellpicker .edui-aligncellpicker-body {
-    width: 75px;
+    width: 70px;
     font-size: 12px;
     cursor: default;
 }
 
 .edui-default .edui-aligncellpicker-body table {
     border-collapse: separate;
-    border-spacing: 2px;
+    border-spacing: 0;
 }
 .edui-default .edui-aligncellpicker-body td{
     padding: 1px;
