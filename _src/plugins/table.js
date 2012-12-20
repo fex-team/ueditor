@@ -1650,6 +1650,36 @@ UE.plugins['table'] = function () {
         }
     };
 
+    //单元格对齐方式
+    UE.commands['cellalignment'] = {
+        queryCommandState:function () {
+            return getTableItemsByRange().cell ? 0 : -1
+        },
+        execCommand:function (cmd, data) {
+            var me = this,
+                ut = getUETableBySelected(me);
+
+            if (!ut) {
+                var start = me.selection.getStart(),
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
+                if(cell){
+                    domUtils.setAttributes(cell,data);
+                }
+            } else {
+                utils.each(ut.selectedTds, function (cell) {
+                    domUtils.setAttributes(cell,data);
+                });
+            }
+        }
+    };
+
+    //表格属性
+    UE.commands['edittable'] = {
+        queryCommandState:function () {
+            return getTableItemsByRange().cell ? 0 : -1
+        }
+    };
+
     /**
      * UE表格操作类
      * @param table
