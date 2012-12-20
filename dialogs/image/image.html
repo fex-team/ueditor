@@ -167,6 +167,7 @@
                 },
                 // 全部上传完成时的回调
                 allCompleteCallback: function(){
+
                     dialog.buttons[0].setDisabled(false);    //上传完毕后点亮按钮
                 },
                 // 文件超出限制的最大体积时的回调
@@ -189,6 +190,7 @@
                 imageUploader.setPostParams({"dir":baidu.g("savePath").value});
                 flashObj.upload();
                 this.style.display = "none";
+                baidu.g("savePath").parentNode.style.display = "none";
             };
             
         });
