@@ -97,7 +97,18 @@ UE.plugins['undo'] = function() {
             if ( this.hasUndo ) {
                 var currentScene = this.getScene(),
                     lastScene = this.list[this.index];
-                if ( lastScene.content.replace(specialAttr,'') != currentScene.content.replace(specialAttr,'') ) {
+                var lastContent = lastScene.content.replace(specialAttr,'')
+                        .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(a,b,c){
+                            return b.toLowerCase() + '=' + c.replace(/['"]/g,'').toLowerCase()})
+                        .replace(/(<[\w\-]+)|([\w\-]+>)/gi,function(a,b,c){
+                            return (b||c).toLowerCase()
+                        }),
+                    currentContent = currentScene.content.replace(specialAttr,'')
+                        .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(a,b,c){return b.toLowerCase() + '=' + c.replace(/['"]/g,'').toLowerCase()})
+                        .replace(/(<[\w\-]+)|([\w\-]+>)/gi,function(a,b,c){
+                            return (b||c).toLowerCase()
+                        });
+                if ( lastContent != currentContent ) {
                     this.save();
                 }
                 if(!this.list[this.index - 1] && this.list.length == 1){
