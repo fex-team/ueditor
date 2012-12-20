@@ -8,14 +8,17 @@
     header("Content-Type: text/html; charset=utf-8");
     error_reporting( E_ERROR | E_WARNING );
     include "Uploader.class.php";
+    //上传图片框中的描述表单名称，
+    $title = htmlspecialchars( $_POST[ 'pictitle' ] , ENT_QUOTES );
+    $path =  htmlspecialchars($_POST['dir'],ENT_QUOTES);
+
     //上传配置
     $config = array(
-        "savePath" => "upload/" ,
+        "savePath" => ($path == 1 ? "upload/":"upload1/") ,
         "maxSize" => 1000 , //单位KB
         "allowFiles" => array( ".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp"  )
     );
-    //上传图片框中的描述表单名称，
-    $title = htmlspecialchars( $_POST[ 'pictitle' ] , ENT_QUOTES );
+
     //生成上传实例对象并完成上传
     $up = new Uploader( "upfile" , $config );
 
@@ -41,5 +44,5 @@
      *   'state'    :'SUCCESS'  //上传状态，成功时返回SUCCESS,其他任何值将原样返回至图片上传框中
      * }
      */
-    echo "{'url':'" . $info["url"] . "','title':'" . $title . "','original':'" . $info["originalName"] . "','state':'" . $info["state"] . "'}";
+    echo "{'url':'" . $info["url"] . "','title':'" . $title .$_POST['dir']. "','original':'" . $info["originalName"] . "','state':'" . $info["state"] . "'}";
 
