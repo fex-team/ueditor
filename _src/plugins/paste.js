@@ -80,7 +80,7 @@
             },
             notNeedUndo : 1
         };
-        var txtContent,htmlContent;
+        var txtContent,bkRange,htmlContent;
         function filter(div){
 
             var html;
