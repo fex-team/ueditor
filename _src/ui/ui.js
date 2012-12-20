@@ -20,6 +20,7 @@
         init: function(){
             var zV = ui.View;
             this.wrapper = new zV({viewType: 'wrapper',viewHtmlTag: 'div',unselectable: true});
+            this.toolbarhandle = new zV.Toolbar(this,{viewType: 'handlebar'});
             this.toolbar = new zV.Toolbar(this);
             this.editorHolder = new zV({viewType: 'editorholder',viewHtmlTag: 'div'});
             this.statusbar = new zV.Toolbar(this, {viewType: 'statusbar'});
@@ -36,7 +37,7 @@
                 optstatusbars = options.statusbars;
 
             node.appendChild(this.wrapper.dom);
-            this.wrapper.appendChild(this.toolbar).appendChild(this.editorHolder).appendChild(this.statusbar);
+            this.wrapper.appendChild(this.toolbarhandle).appendChild(this.toolbar).appendChild(this.editorHolder).appendChild(this.statusbar);
             opttoolbars && this.toolbar.addTool(opttoolbars);
             optstatusbars && this.statusbar.addTool(optstatusbars);
         }

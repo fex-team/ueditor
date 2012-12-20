@@ -1,7 +1,7 @@
 /* tablepicker */
-.edui-tablepicker .edui-infoarea {height: 14px;line-height: 14px;font-size: 12px;width: 220px;margin-bottom: 3px;clear: both;}
-.edui-tablepicker .edui-infoarea .edui-label {float: left;}
-.edui-dialog-buttons .edui-label{line-height: 24px;}
-.edui-tablepicker .edui-infoarea .edui-clickable {float: right;}
-.edui-tablepicker .edui-pickarea {background: url("../images/tablepicker/unhighlighted.gif") repeat;height: 220px;width: 220px;overflow:hidden;}
-.edui-tablepicker .edui-pickarea .edui-overlay {background: url("../images/tablepicker/highlighted.gif") repeat;}
+.edui-wrapper  .edui-tablepicker .edui-infoarea {height: 14px;line-height: 14px;font-size: 12px;width: 220px;margin-bottom: 3px;clear: both;}
+.edui-wrapper  .edui-tablepicker .edui-infoarea .edui-label {float: left;}
+.edui-wrapper  .edui-dialog-buttons .edui-label{line-height: 24px;}
+.edui-wrapper  .edui-tablepicker .edui-infoarea .edui-clickable {float: right;}
+.edui-wrapper  .edui-tablepicker .edui-pickarea {background: url("../images/tablepicker/unhighlighted.gif") repeat;height: 220px;width: 220px;overflow:hidden;}
+.edui-wrapper  .edui-tablepicker .edui-pickarea .edui-overlay {background: url("../images/tablepicker/highlighted.gif") repeat;}

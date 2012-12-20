@@ -87,9 +87,10 @@
                     [ ['undo', 'redo'] ],
                     [
                         'fontfamily', 'fontsize',
-                        ['forecolor', 'backcolor'],
-                        ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'touppercase', 'tolowercase']
+                        ['forecolor', 'backcolor']
+
                     ],
+                    [['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'touppercase', 'tolowercase']],
                     [ ['removeformat','cleardoc','selectall', 'searchreplace', 'fullscreen', 'preview'] ],
                     [ ['formatmatch', 'pasteplain'] ]
                 ]

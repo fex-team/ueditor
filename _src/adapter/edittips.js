@@ -4,7 +4,7 @@
  */
 UE.registerEditorWidget('edittips', function(){
     var editor = this,
-        editTips = new UE.ui.View.Pop;
+        editTips = new UE.ui.View.Pop();
 
     editTips.addClass('edit-tips');
     editTips.setProxyListener('click');

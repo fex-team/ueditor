@@ -88,7 +88,7 @@
             'ui/tablebutton.js',
             'ui/autotypesetpicker.js',
             'ui/autotypesetbutton.js',
-            'ui/toolbar.js',
+            'ui/toolbar_z.js',
             'ui/menu.js',
             'ui/combox.js',
             'ui/dialog.js',

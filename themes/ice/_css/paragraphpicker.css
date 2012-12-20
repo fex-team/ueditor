@@ -1,9 +1,9 @@
 /*fake tag*/
-.edui-menu-paragraph .edui-menuitem{font-weight:600;}
-.edui-tag-p{font-weight:normal;font-size: 22px;}
-.edui-tag-h1{font-size: 32px;}
-.edui-tag-h2{font-size: 27px;}
-.edui-tag-h3{font-size: 19px;}
-.edui-tag-h4{font-size: 16px;}
-.edui-tag-h5{font-size: 13px;}
-.edui-tag-h6{font-size: 12px;}
+.edui-wrapper .edui-menu-paragraph .edui-menuitem{font-weight:600;}
+.edui-wrapper .edui-tag-p{font-weight:normal;font-size: 22px;}
+.edui-wrapper .edui-tag-h1{font-size: 32px;}
+.edui-wrapper .edui-tag-h2{font-size: 27px;}
+.edui-wrapper .edui-tag-h3{font-size: 19px;}
+.edui-wrapper .edui-tag-h4{font-size: 16px;}
+.edui-wrapper .edui-tag-h5{font-size: 13px;}
+.edui-wrapper .edui-tag-h6{font-size: 12px;}

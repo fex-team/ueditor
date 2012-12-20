@@ -31,7 +31,8 @@
                 tab.ownertoolbar = this;
                 tab.setProxyListener('click');//只设置点击代理，鼠标移上去划出暂时没有需求。是否考虑加在基类的实例化时默认设置所有dom事件
                 tab.addListener('click', utils.bind(this.switchoverTab, this, this));
-                this.appendChild(tab);
+                this.ownerui.toolbarhandle.appendChild(tab);
+//                this.appendChild(tab);
                 ownerui = tab = null;
             }
             obj = null;
@@ -88,7 +89,8 @@
                         tmp = group[tabk+(tabid++)] = new views.Toolbar(ui, {title: it[tabk], tabodr:tabid});
                         if(isFirstTab){
                             tmp.addClass(this.currentClassname);
-                            this.currentTab = tmp;
+                            tmp.tab.addClass(this.currentClassname)
+                            this.currentTab = tmp
                             isFirstTab = null;
                         }
                         tmp.addTool(it[toolsk]);
@@ -104,13 +106,13 @@
         switchoverTab: function(tab){
             var toolbar = this.ownertoolbar,
                 current = toolbar.currentTab;
-
             if(tab != current){
                 current.removeClass(this.currentClassname);
-                tab.addClass(this.currentClassname);
+                current.tab.removeClass(this.currentClassname);
+                tab.addClass(this.currentClassname)
+                tab.tab.addClass(this.currentClassname);
                 toolbar.currentTab = tab;
             }
-            utils.setStyle(toolbar.dom,"height",tab.dom.offsetHeight+"px");
         }
     };
 
