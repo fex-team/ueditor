@@ -188,7 +188,8 @@ UE.I18N['zh-cn'] = {
             'imgSearchBtn':{value:"百度一下"},
             'imgSearchReset':{value:"清空搜索"},
             'upload':{style:'background: url(upload.png);'},
-            'duiqi':{style:'background: url(imglabel.png) -12px 2px no-repeat;'}
+            'duiqi':{style:'background: url(imglabel.png) -12px 2px no-repeat;'},
+            'lang_savePath':'选择保存目录'
         },
         'netError':"网络链接错误，请检查配置后重试！",
         'noUploadImage':"当前未上传过任何图片！",
