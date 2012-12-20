@@ -310,7 +310,6 @@ var imageUploader = {},
     function addUploadListener() {
         g("upload").onclick = function () {
             //此处设置针对单次上传图片
-            debugger
             imageUploader.setPostParams({"dir":g("savePath").value});
             flashObj.upload();
             this.style.display = "none";
