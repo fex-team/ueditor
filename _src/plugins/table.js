@@ -8,12 +8,7 @@
  */
 UE.plugins['table'] = function () {
     var me = this,
-        dom = baidu.editor.dom,
-        domUtils = dom.domUtils,
-        utils = baidu.editor.utils,
-        browser = baidu.editor.browser,
-        debug = true,
-        dtd = dom.dtd;
+        debug = true;
     function showError(e){
         if(debug) throw e;
     }
