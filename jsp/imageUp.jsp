@@ -5,8 +5,11 @@
     <%
     request.setCharacterEncoding("utf-8");
 	response.setCharacterEncoding("utf-8");
+	String savePath = request.getParameter("dir");
     Uploader up = new Uploader(request);
-    up.setSavePath("upload");
+    if(savePath == "1"){
+        up.setSavePath("upload");
+    }
     String[] fileType = {".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp"};
     up.setAllowFiles(fileType);
     up.setMaxSize(10000); //单位KB
