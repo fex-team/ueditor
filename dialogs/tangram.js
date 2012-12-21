@@ -693,7 +693,7 @@ baidu.flash._Base = (function(){
         me.call = function(fnName, params, callBack){
             if(!fnName) return null;
             callBack = callBack || new Function();
-    
+
             var result = null;
     
             if(isReady){
@@ -813,6 +813,9 @@ baidu.flash.imageUploader = baidu.flash.imageUploader || function(options){
     me.pause = function(){
         _flash.call('pause');
     };
+    me.addCustomizedParams = function(index,obj){
+        _flash.call('addCustomizedParams',[index,obj]);
+    }
 };
 
 /**
