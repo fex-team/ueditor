@@ -128,6 +128,20 @@
                         }
                     }
 
+                    utils.each(domUtils.getElementsByTagName(div,'span',function(node){
+                        if(node.style.cssText){
+                            node.style.cssText =  node.style.cssText.replace(/white-space[^;]+;/g,'');
+                            if(!node.style.cssText){
+                                domUtils.removeAttributes(node,'style');
+                                if(domUtils.hasNoAttributes(node)){
+                                    return 1
+                                }
+                            }
+                        }
+                        return 0
+                    }),function(si){
+                        domUtils.remove(si,true)
+                    })
                 }
                 if(browser.gecko){
                     var dirtyNodes = div.querySelectorAll('[_moz_dirty]');
