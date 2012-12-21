@@ -330,7 +330,9 @@ UE.plugins['serialize'] = function () {
                     //所以在这里去掉这个属性
                     attrs[k] = utils.optCss(value.replace(/windowtext/g,'#000'))
                         .replace(/white-space[^;]+;/g,'');
-
+                    if(!attrs[k]){
+                        continue;
+                    }
                 }
 
                 buff.push( k + '="' + unhtml1( attrs[k] ) + '"' );
