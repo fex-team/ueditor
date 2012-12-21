@@ -681,10 +681,14 @@ var domUtils = dom.domUtils = {
      * @name getElementsByTagName
      * @grammar UE.dom.domUtils.getElementsByTagName(node,tagName)  => Array  //节点集合数组
      */
-    getElementsByTagName:function (node, name) {
+    getElementsByTagName:function (node, name,filter) {
+        if(filter){
+           filter = utils.isString(filter) ? function(node){return domUtils.hasClass(node,filter)} : filter;
+        }
         var list = node.getElementsByTagName(name), arr = [];
         for (var i = 0, ci; ci = list[i++];) {
-            arr.push(ci);
+            if(!filter || filter(ci))
+                arr.push(ci);
         }
         return arr;
     },
@@ -795,6 +799,7 @@ var domUtils = dom.domUtils = {
      * <span style="font-size:14px;">xxxxx</span>
      */
     removeAttributes:function (node, attrNames) {
+        attrNames = utils.isArray(attrNames) ? attrNames : utils.trim(attrNames).replace(/[ ]{2,}/g,' ').split(' ');
         for (var i = 0, ci; ci = attrNames[i++];) {
             ci = attrFix[ci] || ci;
             switch (ci) {
@@ -1265,8 +1270,14 @@ var domUtils = dom.domUtils = {
         if(tmpNode){
             parentNode.insertBefore(node,tmpNode)
         }else{
+            if(parentNode){
+                if(parentNode.nodeType == 3){
+                    console.log(parentNode.nodeValue)
+                }else{
+                    parentNode.appendChild(node)
+                }
+            }
 
-            parentNode.appendChild(node)
         }
     }
 };
