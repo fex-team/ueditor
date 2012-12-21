@@ -84,14 +84,37 @@
             editor.addListener("afterpaste",function(){
                 if(pastePop)
                     pastePop.dispose();
+                var lang=editor.getLang();
                 pastePop = new baidu.editor.ui.Popup({
                     editor:editor,
                     className:'edui-pastelayout',
                     format:function(isTransfer){
                         editor.fireEvent('pasteTransfer',isTransfer)
                     },
-                    content:'<label><input type="radio" name="layout" onclick="$$.format(false)" checked/>保留源格式</label>'+
-                        '<label><input type="radio" name="layout"  onclick="$$.format(true)"/>只保留文本</label>'
+                    _showItem:function(obj){
+                        var tmp=domUtils.getNextDomNode(obj);
+                        if(/none/ig.test(domUtils.getComputedStyle(tmp,"display"))){
+                            tmp.style.display="block";
+                            obj.style.backgroundPosition="0 -34px";
+                        }else{
+                            tmp.style.display="none";
+                            obj.style.backgroundPosition="";
+                        }
+                    },
+                    _openHover:function(obj){
+                        obj.style.backgroundPositionY="-34px";
+                    },
+                    _closeHover:function(obj){
+                        obj.style.backgroundPositionY="";
+                    },
+                    content:'<div class="edui-pasteicon" onclick="$$._showItem(this)"></div>' +
+                        '<div class="edui-pastecontainer">' +
+                        '<div class="edui-title">'+lang.pasteOpt+'</div>'+
+                        '<div class="edui-icon">' +
+                        '<div class="edui-richtxticon" title="'+lang.pasteSourceFormat+'" onclick="$$.format(false)" onmouseout="$$._closeHover(this)" onmouseover="$$._openHover(this)"></div>'+
+                        '<div class="edui-plaintxticon" title="'+lang.pasteTextFormat+'" onclick="$$.format(true)" onmouseout="$$._closeHover(this)" onmouseover="$$._openHover(this)"></div>' +
+                        '</div>' +
+                        '</div>'
                 });
                 pastePop.render();
                 isPaste=true;
