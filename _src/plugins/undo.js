@@ -194,6 +194,8 @@ UE.plugins['undo'] = function() {
             //有可能边界落到了<table>|<tbody>这样的位置，所以缩一下位置
             range.shrinkBoundary();
             browser.ie && (cont = cont.replace(/>&nbsp;</g,'><').replace(/\s*</g,'<').replace(/>\s*/g,'>'));
+            var bookmark = range.createBookmark( true, true ),
+                bookCont = me.body.innerHTML.replace(fillchar,'');
             me.fireEvent('aftergetscene');
             if(browser.opera || browser.safari){
                 return {
@@ -202,8 +204,7 @@ UE.plugins['undo'] = function() {
                     bookcontent : cont
                 }
             }else{
-                var bookmark = range.createBookmark( true, true ),
-                    bookCont = me.body.innerHTML.replace(fillchar,'');
+
                 bookmark && range.moveToBookmark( bookmark ).select( true );
                 return {
                     bookcontent : bookCont,
