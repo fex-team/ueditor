@@ -1,17 +1,17 @@
 
-.edui-wrapper  .edui-toolbar{position:relative;background:#E1EEFF url(../images/toolbar_bg.png) repeat-x;cursor:default;border-radius:2px;}
-.edui-wrapper  .edui-statusbar{overflow: hidden;border-top: 1px solid #CBDFEA;padding: 3px;}
-.edui-wrapper  .edui-statusbar .edui-elementpath{float: left;}
-.edui-wrapper  .edui-statusbar .edui-wordcount{float: right;}
-.edui-wrapper  .edui-tabtoolbar{display:none;width:100%;padding:8px 0;background:#ECF5FB;border-top:1px solid #C8DCE8;}
-.edui-wrapper  .edui-tabtoolbar .edui-toolbar{white-space: nowrap;margin-left:6px;padding:4px 0 4px 6px;height:auto;display:inline-block;*display:inline;*zoom:1;vertical-align:top;border:1px solid #ADC7DE;background:url(../images/toolgroup_bg.png) repeat-x;}
-.edui-wrapper  .edui-tabtoolbar .edui-toolbar .edui-toolbar{margin:0 6px 0 0;padding:0;height:24px;border-color:#A5CAE0;border-right:none;*display:inline;*zoom:1;}
+  .edui-toolbar{position:relative;background:#E1EEFF url(../images/toolbar_bg.png) repeat-x;cursor:default;border-radius:2px;}
+  .edui-statusbar{overflow: hidden;border-top: 1px solid #CBDFEA;padding: 3px;}
+  .edui-statusbar .edui-elementpath{float: left;}
+  .edui-statusbar .edui-wordcount{float: right;}
+  .edui-tabtoolbar{display:none;width:100%;padding:8px 0;background:#ECF5FB;border-top:1px solid #C8DCE8;}
+  .edui-tabtoolbar .edui-toolbar{white-space: nowrap;margin-left:6px;padding:4px 0 4px 6px;height:auto;display:inline-block;*display:inline;*zoom:1;vertical-align:top;border:1px solid #ADC7DE;background:url(../images/toolgroup_bg.png) repeat-x;}
+  .edui-tabtoolbar .edui-toolbar .edui-toolbar{margin:0 6px 0 0;padding:0;height:24px;border-color:#A5CAE0;border-right:none;*display:inline;*zoom:1;}
 
-.edui-wrapper .current{display: inline-block;}
+ .current{display: inline-block;}
 /*.current{z-index:2;}*/
 /*.current .edui-tab{background:url(../images/toolbar_tab_bg.png);border-bottom-color:#ECF5FB;color:#006DAE;}*/
 
-.edui-wrapper  .edui-handlebar .edui-tab{display:inline-block;height:23px;line-height:23px;padding:0 10px;background:#FAFCFF;border:1px solid #C8DCE8;border-radius:2px;}
-.edui-wrapper  .edui-handlebar{background: url(../images/toolbar_bg.png) repeat-x;cursor: pointer;}
-.edui-wrapper  .edui-handlebar .current{background:url(../images/toolbar_tab_bg.png);border-bottom-color:#ECF5FB;color:#006DAE;}
-.edui-wrapper  .edui-editorholder{position:relative;}
+  .edui-handlebar .edui-tab{display:inline-block;height:23px;line-height:23px;padding:0 10px;background:#FAFCFF;border:1px solid #C8DCE8;border-radius:2px;}
+  .edui-handlebar{background: url(../images/toolbar_bg.png) repeat-x;cursor: pointer;}
+  .edui-handlebar .current{background:url(../images/toolbar_tab_bg.png);border-bottom-color:#ECF5FB;color:#006DAE;}
+  .edui-editorholder{position:relative;}

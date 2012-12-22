@@ -65,7 +65,7 @@
      * @desc 返回一个包装过的editor实例
      * @grammar UE.getEditor(options, renderId) //options-同配置文件， renderId-自动渲染时的元素id
      */
-    UE.getEditor = function(id,options){
+    UE.getEditor = function(id,options,oui){
         var editor= {},oldRender,aui;
         if(UE.utils.isString(id)){
             //字符串
@@ -73,7 +73,11 @@
             if (!editor) {
                 editor = instances[id] = new baidu.editor.Editor( options);
                 oldRender = editor.render;
-                aui = editor.ui = new UE.ui(editor);
+                if(oui){
+                    aui = editor.ui = oui
+                }else{
+                    aui = editor.ui = new UE.ui(editor);
+                }
                 !!id && newrender(id);
                 utils.loadFile(document, {
                     href:editor.options.themePath + editor.options.theme + "/_css/ueditor.css",
@@ -81,6 +85,7 @@
                     type:"text/css",
                     rel:"stylesheet"
                 });
+                editor.addItem = UE.addItem;
             }
         }else{
             //元素
@@ -100,7 +105,6 @@
                     editor.setOpt({
                         labelMap:editorOptions.labelMap||UE.I18N[editorOptions.lang].labelMap
                     });
-
                     if ( /script|textarea/i.test( holder.tagName ) ) {
                         var newDiv = document.createElement( 'div'),
                             cont = holder.value || holder.innerHTML;
@@ -108,8 +112,7 @@
                         !/^[\t\r\n ]*$/.test( cont ) && (editorOptions.initialContent=cont);
 
                         //so as follows, what about other attributes?
-                        newDiv.id = holder.id;
-                        editor.key = holder.id
+                        newDiv.id = editor.key =holder.id;
                         holder.className && (newDiv.className = holder.className);
                         holder.style.cssText && (newDiv.style.cssText = holder.style.cssText);
                         editorOptions.textarea = holder.getAttribute( 'name' )||'';
@@ -123,18 +126,52 @@
                         }
                     }
 
-                    aui.render( newDiv||holder );
-
-
+                    !oui&&aui.render( newDiv||holder );
                     editor.container = aui.wrapper.dom;
                     editor.container.style.zIndex = editorOptions.zIndex;
-                    oldRender.call( editor, aui.editorHolder.dom );
+                    if(oui){
+                        oldRender.call( editor,newDiv );
+                    }else{
+                        oldRender.call( editor, aui.editorHolder.dom );
+                    }
+
                     editor.fireEvent('render');
                     oldRender = aui = holder = newDiv = renderui = null;
+                    //增加ui插件
+                    var pluginuis = UE.pluginui;
+                    for(var k in pluginuis){
+                        pluginuis[k].call(editor);
+                    }
                 }
             } )
         }
         return editor;
+    };
+    UE.addItem = function(btn,opt){
+        var editor = this;
+        opt = utils.extend({
+            tabnum:0,
+            groupnum:0,
+            indexnum:0
+        },opt||{});
+        var tablist = editor.ui.toolbar.toolList[opt.tabnum],
+            grouplist = tablist.toolList[opt.groupnum],
+            btnlist = grouplist.toolList,
+            inum = opt.indexnum,
+            arrdom = [];
+        for(var i= 0;i<btnlist.length;i++){
+            var tool = btnlist[i];
+            if(tool instanceof UE.ui.View.Toolbar){
+                arrdom = arrdom.concat(tool.toolList);
+            }else{
+                arrdom.push(tool);
+            }
+        }
+        if(arrdom>=inum){
+            arrdom[inum].dom.parentNode.insertBefore(btn.dom,arrdom[inum].dom);
+        }else{
+            arrdom[0].dom.parentNode.appendChild(btn.dom);
+        }
     };
     UE.delEditor = function (id) {
         var editor;

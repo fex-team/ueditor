@@ -73,7 +73,7 @@
             'ui/ui.js',
             'ui/utils.js',
             'ui/view.js',
-            'ui/toolbar_z.js',
+            'ui/toolbar.js',
             'ui/button.js',
             'ui/buttonwitharrow.js',
             'ui/pop.js',

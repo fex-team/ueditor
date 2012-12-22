@@ -1,43 +1,43 @@
 /*UI工具栏、编辑区域、底部*/
-.edui-wrapper  .edui-editor {
+  .edui-editor {
     border: 1px solid #ccc;
     background-color: white;
     position: relative;
     overflow: visible;
 }
 
-.edui-wrapper .edui-editor-toolbarbox {
+ .edui-editor-toolbarbox {
     position: relative;
     zoom: 1;
 }
 
-.edui-wrapper .edui-editor-toolbarboxouter {
+ .edui-editor-toolbarboxouter {
     border-bottom: 1px solid #ccc;
     background: white url(../images/toolbar_bg.png) repeat-x bottom left;
 }
 
-.edui-wrapper .edui-editor-toolbarboxinner {
+ .edui-editor-toolbarboxinner {
     padding: 2px;
 }
 
-.edui-wrapper  .edui-editor-iframeholder {
+  .edui-editor-iframeholder {
     position: relative;
     /*for fix ie6 toolbarmsg under iframe bug. relative -> static */
     /*_position: static !important;*/
 }
 
-.edui-wrapper  .edui-editor-iframeholder textarea {
+  .edui-editor-iframeholder textarea {
     font-family: consolas, "Courier New", "lucida console", monospace;
     font-size: 12px;
     line-height: 18px;
 }
 
 
-.edui-wrapper .edui-editor-bottomContainer {
+ .edui-editor-bottomContainer {
     overflow: hidden;
 }
 
-.edui-wrapper .edui-editor-bottomContainer table {
+ .edui-editor-bottomContainer table {
     width: 100%;
     height: 0;
     overflow: hidden;
@@ -45,7 +45,7 @@
     border-collapse: collapse;
 }
 
-.edui-wrapper .edui-editor-bottomContainer td {
+ .edui-editor-bottomContainer td {
     white-space: nowrap;
     border-top: 1px solid #ccc;
     line-height: 20px;
@@ -53,15 +53,15 @@
     font-family: Arial, Helvetica, Tahoma, Verdana, Sans-Serif;
 }
 
-.edui-wrapper .edui-editor-wordcount {
+ .edui-editor-wordcount {
     text-align: right;
     margin-right: 5px;
     color: #aaa;
 }
-.edui-wrapper .edui-editor-scale {
+ .edui-editor-scale {
     width: 12px;
 }
-.edui-wrapper .edui-editor-scale .edui-editor-icon {
+ .edui-editor-scale .edui-editor-icon {
     float: right;
     width: 100%;
     height: 12px;
@@ -69,21 +69,21 @@
     background: url(../images/scale.png) no-repeat;
     cursor: se-resize;
 }
-.edui-wrapper .edui-editor-breadcrumb {
+ .edui-editor-breadcrumb {
     margin: 2px 0 0 3px;
 }
 
-.edui-wrapper .edui-editor-breadcrumb span {
+ .edui-editor-breadcrumb span {
     cursor: pointer;
     text-decoration: underline;
     color: blue;
 }
 
-.edui-wrapper .edui-toolbar .edui-for-fullscreen {
+ .edui-toolbar .edui-for-fullscreen {
     float: right;
 }
 
-.edui-wrapper .edui-bubble .edui-popup-content {
+ .edui-bubble .edui-popup-content {
     border: 1px solid #DCAC6C;
     background-color: #fff6d9;
     padding: 5px;
@@ -91,14 +91,14 @@
     font-family: "宋体";
 }
 
-.edui-wrapper .edui-bubble .edui-shadow {
+ .edui-bubble .edui-shadow {
     box-shadow: 1px 1px 3px #818181;
     -webkit-box-shadow: 2px 2px 3px #818181;
     -moz-box-shadow: 2px 2px 3px #818181;
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '2', MakeShadow = 'true', ShadowOpacity = '0.5');
 }
 
-.edui-wrapper .edui-editor-toolbarmsg {
+ .edui-editor-toolbarmsg {
     background-color: #FFF6D9;
     border-bottom: 1px solid #ccc;
     position: absolute;
@@ -108,7 +108,7 @@
     width: 99.9%;
 }
 
-.edui-wrapper .edui-editor-toolbarmsg-upload {
+ .edui-editor-toolbarmsg-upload {
     font-size: 14px;
     color: blue;
     width: 100px;
@@ -120,13 +120,13 @@
     left: 350px;
 }
 
-.edui-wrapper .edui-editor-toolbarmsg-label {
+ .edui-editor-toolbarmsg-label {
     font-size: 12px;
     line-height: 16px;
     padding: 4px;
 }
 
-.edui-wrapper .edui-editor-toolbarmsg-close {
+ .edui-editor-toolbarmsg-close {
     float: right;
     width: 20px;
     height: 16px;

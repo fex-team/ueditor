@@ -3,4 +3,4 @@ body{font:12px/1.2 '宋体', 'tahoma', 'sans-serif';background-color:#fff;}
 ul, li{list-style:none;}
 
 /**container element**/
-.edui-wrapper{margin-left:100px;border:1px solid #CBDFEA;background-color: #ffffff;}
+.edui-wrapper{border:1px solid #CBDFEA;background-color: #ffffff;}

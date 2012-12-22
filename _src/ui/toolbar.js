@@ -109,7 +109,7 @@
             if(tab != current){
                 current.removeClass(this.currentClassname);
                 current.tab.removeClass(this.currentClassname);
-                tab.addClass(this.currentClassname)
+                tab.addClass(this.currentClassname);
                 tab.tab.addClass(this.currentClassname);
                 toolbar.currentTab = tab;
             }

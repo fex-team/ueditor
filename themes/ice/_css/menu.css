@@ -1,43 +1,43 @@
 /**contextmenu**/
-.edui-wrapper .edui-contextmenu ul{background:#fff;}
-.edui-wrapper .edui-contextmenu{padding:0;width:150px;}
-.edui-wrapper .edui-contextmenu .edui-menuitem{width:142px;}
-.edui-wrapper .edui-contextmenu .edui-icon{display:inline-block;height:20px;*zoom:1;margin-right:4px;}
-.edui-wrapper .edui-contextmenu .edui-menuitem{padding:0 4px;}
-.edui-wrapper .edui-menu-selectall .edui-icon{background-position:-400px -19px;}
-.edui-wrapper .edui-menu-cleardoc .edui-icon{background-position:-520px 1px;}
-.edui-wrapper .edui-menu-justifyjustify .edui-icon{background-position:-440px 1px;}
-.edui-wrapper .edui-menu-copy .edui-icon{background-position:-700px 1px;}
-.edui-wrapper .edui-menu-paste .edui-icon{background-position:-560px 1px;}
-.edui-wrapper .edui-menu-justifyleft .edui-icon{background-position:-460px 1px;}
-.edui-wrapper .edui-menu-justifyright .edui-icon{background-position:-480px 1px;}
-.edui-wrapper .edui-menu-justifycenter .edui-icon{background-position:-420px 1px;}
-.edui-wrapper .edui-menu-edittable .edui-icon{background-position:-420px -38px;}
-.edui-wrapper .edui-menu-edittd .edui-icon{background-position:-700px -38px;}
-.edui-wrapper .edui-menu-table .edui-icon{background-position:-580px -19px;}
+ .edui-contextmenu ul{background:#fff;}
+ .edui-contextmenu{padding:0;width:150px;}
+ .edui-contextmenu .edui-menuitem{width:142px;}
+ .edui-contextmenu .edui-icon{display:inline-block;height:20px;*zoom:1;margin-right:4px;}
+ .edui-contextmenu .edui-menuitem{padding:0 4px;}
+.edui-contextmenu .edui-menu-selectall .edui-icon{background-position:-400px -19px;}
+.edui-contextmenu .edui-menu-cleardoc .edui-icon{background-position:-520px 1px;}
+.edui-contextmenu .edui-menu-justifyjustify .edui-icon{background-position:-440px 1px;}
+.edui-contextmenu .edui-menu-copy .edui-icon{background-position:-700px 1px;}
+.edui-contextmenu .edui-menu-paste .edui-icon{background-position:-560px 1px;}
+.edui-contextmenu  .edui-menu-justifyleft .edui-icon{background-position:-460px 1px;}
+.edui-contextmenu .edui-menu-justifyright .edui-icon{background-position:-480px 1px;}
+.edui-contextmenu .edui-menu-justifycenter .edui-icon{background-position:-420px 1px;}
+.edui-contextmenu .edui-menu-edittable .edui-icon{background-position:-420px -38px;}
+.edui-contextmenu .edui-menu-edittd .edui-icon{background-position:-700px -38px;}
+.edui-contextmenu .edui-menu-table .edui-icon{background-position:-580px -19px;}
 
-.edui-wrapper .edui-menu-deletetable .edui-icon{background-position:-620px -19px;}
-.edui-wrapper .edui-menu-insertparagraphbeforetable .edui-icon{background-position:-140px -38px;}
-.edui-wrapper .edui-menu-deleterow .edui-icon{background-position:-660px -19px;}
-.edui-wrapper .edui-menu-deletecol .edui-icon{background-position:-640px -19px;}
-.edui-wrapper .edui-menu-insertrow .edui-icon{background-position:-740px -19px;}
-.edui-wrapper .edui-menu-insertcol .edui-icon{background-position:-700px -19px;}
-.edui-wrapper .edui-menu-mergeright .edui-icon{background-position:-60px -39px;}
-.edui-wrapper .edui-menu-mergedown .edui-icon{background-position:-80px -39px;}
-.edui-wrapper .edui-menu-mergecells .edui-icon{background-position:-760px -19px;}
-.edui-wrapper .edui-menu-delete .edui-icon{background-position:-360px -40px;}
-.edui-wrapper .edui-menu-splittorows .edui-icon{background-position:-100px -39px;}
-.edui-wrapper .edui-menu-splittocols .edui-icon{background-position:-120px -39px;}
-.edui-wrapper .edui-menu-splittocells .edui-icon{background-position:-800px -19px;}
-.edui-wrapper .edui-menu-unlink .edui-icon{background-position:-640px 1px;}
+.edui-contextmenu .edui-menu-deletetable .edui-icon{background-position:-620px -19px;}
+.edui-contextmenu .edui-menu-insertparagraphbeforetable .edui-icon{background-position:-140px -38px;}
+.edui-contextmenu .edui-menu-deleterow .edui-icon{background-position:-660px -19px;}
+.edui-contextmenu .edui-menu-deletecol .edui-icon{background-position:-640px -19px;}
+.edui-contextmenu .edui-menu-insertrow .edui-icon{background-position:-740px -19px;}
+.edui-contextmenu  .edui-menu-insertcol .edui-icon{background-position:-700px -19px;}
+.edui-contextmenu .edui-menu-mergeright .edui-icon{background-position:-60px -39px;}
+.edui-contextmenu .edui-menu-mergedown .edui-icon{background-position:-80px -39px;}
+.edui-contextmenu .edui-menu-mergecells .edui-icon{background-position:-760px -19px;}
+.edui-contextmenu .edui-menu-delete .edui-icon{background-position:-360px -40px;}
+.edui-contextmenu  .edui-menu-splittorows .edui-icon{background-position:-100px -39px;}
+.edui-contextmenu .edui-menu-splittocols .edui-icon{background-position:-120px -39px;}
+.edui-contextmenu .edui-menu-splittocells .edui-icon{background-position:-800px -19px;}
+.edui-contextmenu  .edui-menu-unlink .edui-icon{background-position:-640px 1px;}
 
 /*.edui-contextmenu .edui-arrow{background:url(../images/icons-all.png) 0 -256px no-repeat;}*/
-.edui-wrapper .edui-contextmenu .edui-arrow{background:url(../images/icons-all.gif) 0 -232px no-repeat;background:url(../images/icons-all.gif) 0 -236px no-repeat\9;}
-.edui-wrapper .edui-menuseparator{margin:1px 0;height:1px;overflow:hidden;font-size:0;background-color:#ccc;}
+ .edui-contextmenu .edui-arrow{background:url(../images/icons-all.gif) 0 -232px no-repeat;background:url(../images/icons-all.gif) 0 -236px no-repeat\9;}
+ .edui-menuseparator{margin:1px 0;height:1px;overflow:hidden;font-size:0;background-color:#ccc;}
 
-.edui-wrapper .edit-tips{padding:0 8px;line-height:30px;border-color:#ADC7DE;background:#ECF5FB;}
-.edui-wrapper .edui-clickable{text-decoration:underline;color:#0000CC;cursor:pointer;}
+ .edit-tips{padding:0 8px;line-height:30px;border-color:#ADC7DE;background:#ECF5FB;}
+ .edui-clickable{text-decoration:underline;color:#0000CC;cursor:pointer;}
 
 /**render effect**/
 
-.edui-wrapper .edui-popup .item-checked{border-left:2px solid #F3E17B;}
+ .edui-popup .item-checked{border-left:2px solid #F3E17B;}
