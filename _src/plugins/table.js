@@ -709,7 +709,7 @@ UE.plugins['table'] = function () {
             var ut = getUETableBySelected(me),
                 flag = false;
             if(ut){
-                var td = getTargetTd(evt);
+                var td = getTargetTd(me,evt);
                 utils.each(ut.selectedTds,function(ti){
                     if(ti===td){
                         flag = true;
@@ -736,7 +736,7 @@ UE.plugins['table'] = function () {
 
         removeSelectedClass(domUtils.getElementsByTagName(me.body,"td"));
         removeSelectedClass(domUtils.getElementsByTagName(me.body,"th"));
-        startTd = getTargetTd(evt);
+        startTd = getTargetTd(me,evt);
         if (!startTd ) return;
         var table = domUtils.findParentByTagName(startTd,"table",true);
         ut = getUETable(table);
@@ -2526,19 +2526,9 @@ UE.plugins['table'] = function () {
      * 获取需要触发对应点击或者move事件的td对象
      * @param evt
      */
-    function getTargetTd(evt) {
+    function getTargetTd(editor,evt) {
         var target = domUtils.findParentByTagName(evt.target || evt.srcElement, ["td", "th"], true);
         //排除了非td内部以及用于代码高亮部分的td
-        return target && !domUtils.findParent(target, function (node) {
-            return node.tagName == "DIV" && /highlighter/.test(node.id);
-        }) ? target : null;
-    }
-    function getIndex( cell ) {
-        var cells = cell.parentNode.cells;
-        for ( var i = 0, ci; ci = cells[i]; i++ ) {
-            if ( ci === cell ) {
-                return i;
-            }
-        }
+        return target && !(editor.fireEvent("excludeTable",target)===true) ? target : null;
     }
 };
