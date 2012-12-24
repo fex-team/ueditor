@@ -244,7 +244,6 @@
         }
 
         me.addListener('clearPasteBookmark',function(){
-            debugger
             var bk;
             while(bk = me.document.getElementById('_ue_paste_id_start')){
                 domUtils.remove(bk)
