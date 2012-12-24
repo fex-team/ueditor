@@ -1237,14 +1237,15 @@ var domUtils = dom.domUtils = {
         }
         return 1;
     },
-    getAddr : function(node){
+    getAddr : function(node,ignoreTxt){
+
         var parents = domUtils.findParents(node,false,function(node){return !domUtils.isBody(node)}),
             addrs = [],firstIndex;
 
         for(var i = 0,ci;ci = parents[i++];){
             addrs.push(domUtils.getNodeIndex(ci,true));
         }
-        firstIndex = domUtils.getNodeIndex(node,true);
+        firstIndex = domUtils.getNodeIndex(node,ignoreTxt);
         if(node.nodeType == 3){
             var tmpNode = node;
             while(tmpNode = tmpNode.previousSibling){
@@ -1272,11 +1273,7 @@ var domUtils = dom.domUtils = {
             parentNode.insertBefore(node,tmpNode)
         }else{
             if(parentNode){
-                if(parentNode.nodeType == 3){
-                    parentNode.parentNode.insertBefore(node,parentNode)
-                }else{
-                    parentNode.appendChild(node)
-                }
+                parentNode.appendChild(node)
             }
 
         }
