@@ -231,31 +231,28 @@
                 me.fireEvent('beforepaste',html);
                 //不用在走过滤了
                 if(html.html){
-                    clearBk();
+                    me.fireEvent('clearPasteBookmark');
                     txtContent = '<span style="display:none;line-height:0px;" id="_ue_paste_id_start">\ufeff</span>'
                         + txtContent + '<span style="display:none;line-height:0px;" id="_ue_paste_id_end">\ufeff</span>';
                     htmlContent =  '<span style="display:none;line-height:0px;" id="_ue_paste_id_start">\ufeff</span>'
                         + html.html + '<span style="display:none;line-height:0px;" id="_ue_paste_id_end">\ufeff</span>';
                     me.execCommand( 'insertHtml',htmlContent,true);
-                    me.addListener('mouseup keydown',clearBk);
                     me.fireEvent("afterpaste");
                 }
 
             }
         }
-        function clearBk(){
-            var bk,flag = 0;
+
+        me.addListener('clearPasteBookmark',function(){
+            var bk;
             while(bk = me.document.getElementById('_ue_paste_id_start')){
-                flag = 1;
                 domUtils.remove(bk)
             }
             while(bk = me.document.getElementById('_ue_paste_id_end')){
                 domUtils.remove(bk)
             }
-            if(flag){
-                me.removeListener('mouseup keydown',arguments.callee)
-            }
-        }
+        });
+
         var startAddr,endAddr;
         me.addListener('beforegetscene',function(){
 
