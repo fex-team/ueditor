@@ -92,21 +92,28 @@
                 pastePop.render();
                 isPaste=true;
             });
+            var timer;
             editor.addListener("afterinserthtml",function(){
-                if(!pastePop)    return;
-                if(!isPaste)    return;
-                var span = domUtils.createElement(editor.document,'span',{
-                    'style' : "line-height:0px;",
-                    'innerHTML' : '\ufeff'
-                }),
-                    range = editor.selection.getRange(),
-                    node=pastePop.getDom();
+                clearTimeout(timer);
+                var me = this;
+                timer = setTimeout(function(){
+                    if(!pastePop)    return;
+                    if(!isPaste)    return;
+                    var span = domUtils.createElement(editor.document,'span',{
+                            'style' : "line-height:0px;",
+                            'innerHTML' : '\ufeff'
+                        }),
+                        range = editor.selection.getRange(),
+                        node=pastePop.getDom();
+                    if(!node)return;
+                    range.insertNode(span);
+                    pastePop.showAnchor(span);
+                    node.style.top=node.offsetTop-20+"px";
+                    domUtils.remove(span);
+                    me.fireEvent('clearPasteBookmark');
+                    isPaste=false;
+                },200)
 
-                range.insertNode(span);
-                pastePop.showAnchor(span);
-                node.style.top=node.offsetTop-20+"px";
-                domUtils.remove(span);
-                isPaste=false;
             });
             editor.addListener('contextmenu', function (t, evt) {
                 baidu.editor.ui.Popup.postHide(evt);
