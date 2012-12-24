@@ -84,37 +84,10 @@
             editor.addListener("afterpaste",function(){
                 if(pastePop)
                     pastePop.dispose();
-                var lang=editor.getLang();
                 pastePop = new baidu.editor.ui.Popup({
+                    content:new baidu.editor.ui.PastePicker({editor:editor}),
                     editor:editor,
-                    className:'edui-pastelayout',
-                    format:function(isTransfer){
-                        editor.fireEvent('pasteTransfer',isTransfer)
-                    },
-                    _showItem:function(obj){
-                        var tmp=domUtils.getNextDomNode(obj);
-                        if(/none/ig.test(domUtils.getComputedStyle(tmp,"display"))){
-                            tmp.style.display="block";
-                            obj.style.backgroundPosition="0 -34px";
-                        }else{
-                            tmp.style.display="none";
-                            obj.style.backgroundPosition="";
-                        }
-                    },
-                    _openHover:function(obj){
-                        obj.style.backgroundPositionY="-34px";
-                    },
-                    _closeHover:function(obj){
-                        obj.style.backgroundPositionY="";
-                    },
-                    content:'<div class="edui-pasteicon" onclick="$$._showItem(this)"></div>' +
-                        '<div class="edui-pastecontainer">' +
-                        '<div class="edui-title">'+lang.pasteOpt+'</div>'+
-                        '<div class="edui-icon">' +
-                        '<div class="edui-richtxticon" title="'+lang.pasteSourceFormat+'" onclick="$$.format(false)" onmouseout="$$._closeHover(this)" onmouseover="$$._openHover(this)"></div>'+
-                        '<div class="edui-plaintxticon" title="'+lang.pasteTextFormat+'" onclick="$$.format(true)" onmouseout="$$._closeHover(this)" onmouseover="$$._openHover(this)"></div>' +
-                        '</div>' +
-                        '</div>'
+                    className:'edui-wordpastepop'
                 });
                 pastePop.render();
                 isPaste=true;
@@ -137,6 +110,10 @@
             });
             editor.addListener('contextmenu', function (t, evt) {
                 baidu.editor.ui.Popup.postHide(evt);
+            });
+            editor.addListener('keydown', function (t, evt) {
+                if(!pastePop)   return;
+                pastePop.dispose(evt);
             });
             editor.addListener('selectionchange', function () {
                 //if(!editor.selection.isFocus())return;

@@ -87,6 +87,7 @@
             'ui/autotypesetpicker.js',
             'ui/autotypesetbutton.js',
             'ui/cellalignpicker.js',
+            'ui/pastepicker.js',
             'ui/toolbar.js',
             'ui/menu.js',
             'ui/combox.js',
