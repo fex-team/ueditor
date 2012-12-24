@@ -27,16 +27,10 @@
                             content: "required"
                         },
                         errorPlacement: function(label, element) {
-                            // position error label after generated textarea
-                            if (element.is("textarea")) {
-                                label.insertAfter(element.next());
-                            } else {
-                                label.insertAfter(element)
-                            }
+                            label.insertAfter(element.is("textarea") ? element.next() : element);
                         }
                     });
             validator.focusInvalid = function() {
-                // put focus on tinymce on submit validation
                 if( this.settings.focusInvalid ) {
                     try {
                         var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
