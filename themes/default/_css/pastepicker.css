@@ -17,7 +17,8 @@
 }
 
 .edui-default  .edui-pastecontainer {
-    display: none;
+    position: relative;
+    visibility: hidden;
     width: 90px;
     background: #fff;
     border: 1px solid #ccc;

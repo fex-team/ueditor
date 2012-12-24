@@ -3,6 +3,7 @@
 (function () {
     var utils = baidu.editor.utils,
         Stateful = baidu.editor.ui.Stateful,
+        uiUtils= baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase;
 
     var PastePicker = baidu.editor.ui.PastePicker = function (options) {
@@ -30,14 +31,20 @@
         format:function(isTransfer){
             this.editor.fireEvent('pasteTransfer',isTransfer)
         },
-        _onClick: function (obj){
-            var tmp=domUtils.getNextDomNode(obj);
-            if(/none/ig.test(domUtils.getComputedStyle(tmp,"display"))){
-                tmp.style.display="block";
-                domUtils.addClass(obj,"edui-state-opened")
+        _onClick: function (cur){
+            var node=domUtils.getNextDomNode(cur),
+                screenHt = uiUtils.getViewportRect().height,
+                subPop=uiUtils.getClientRect(node);
+
+            if(/hidden/ig.test(domUtils.getComputedStyle(node,"visibility"))){
+                if((subPop.top+subPop.height)>screenHt)
+                    node.style.top=(-subPop.height-cur.offsetHeight)+"px";
+
+                node.style.visibility="visible";
+                domUtils.addClass(cur,"edui-state-opened");
             }else{
-                tmp.style.display="none";
-                domUtils.removeClasses(obj,"edui-state-opened")
+                node.style.visibility="hidden";
+                domUtils.removeClasses(cur,"edui-state-opened")
             }
         },
         _UIBase_render:UIBase.prototype.render
