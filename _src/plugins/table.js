@@ -349,6 +349,7 @@ UE.plugins['table'] = function () {
             hideDragLine(me);
             if(getUETableBySelected(me))return;
             utils.each(domUtils.getElementsByTagName(me.document,'table'),function(table){
+                if(me.fireEvent("excludeTable",table)===true) return;
                 table.ueTable = new UETable(table);
                 utils.each(domUtils.getElementsByTagName(me.document,'td'),function(td){
                     if(domUtils.isEmptyBlock(td)){
