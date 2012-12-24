@@ -168,7 +168,6 @@
                 },
                 // 全部上传完成时的回调
                 allCompleteCallback: function(){
-
                     dialog.buttons[0].setDisabled(false);    //上传完毕后点亮按钮
                 },
                 // 文件超出限制的最大体积时的回调
@@ -176,6 +175,10 @@
                 // 开始上传某个文件时的回调
                 startUploadCallback: function(){
                     var config = postConfig.shift();
+                    //也可以在这里更改
+                    //if(config.id==2){ //设置第三张图片的对应参数
+                    //     config.data={"myParam":"value"}
+                    // }
                     flashObj.addCustomizedParams(config.id,config.data);
                 }
             };
