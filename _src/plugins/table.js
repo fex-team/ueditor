@@ -72,12 +72,12 @@ UE.plugins['table'] = function () {
         var tableCopyList,isFullCol,isFullRow;
         //注册del/backspace事件
         me.addListener('keydown',function(cmd,evt){
-
+            var me = this;
             var keyCode = evt.keyCode || evt.which;
 
             if(keyCode == 8){
 
-                var ut = getUETableBySelected();
+                var ut = getUETableBySelected(me);
                 if(ut && ut.selectedTds.length){
                     me.fireEvent('saveScene');
                     if(ut.isFullCol()){
@@ -105,7 +105,7 @@ UE.plugins['table'] = function () {
 
             if(keyCode == 46){
 
-                ut = getUETableBySelected();
+                ut = getUETableBySelected(me);
                 if(ut){
                     me.fireEvent('saveScene');
                     for(var i= 0,ci;ci=ut.selectedTds[i++];){
@@ -151,7 +151,7 @@ UE.plugins['table'] = function () {
 
             if((evt.ctrlKey || evt.metaKey) && evt.keyCode == '67'){
                 tableCopyList = null;
-                table = getUETableBySelected();
+                table = getUETableBySelected(me);
                 if(table){
                     var tds = table.selectedTds;
                     isFullCol = table.isFullCol();
@@ -169,6 +169,7 @@ UE.plugins['table'] = function () {
             }
         });
         me.addListener('beforepaste',function(cmd,html){
+            var me = this;
             var rng = me.selection.getRange();
             if(domUtils.findParentByTagName(rng.startContainer,'caption',true)){
                 var div = me.document.createElement("div");
@@ -176,7 +177,7 @@ UE.plugins['table'] = function () {
                 html.html = div[browser.ie ? 'innerText':'textContent'];
                 return;
             }
-            var table = getUETableBySelected();
+            var table = getUETableBySelected(me);
             if(tableCopyList){
                 me.fireEvent('saveScene');
                 var rng = me.selection.getRange();
@@ -343,10 +344,10 @@ UE.plugins['table'] = function () {
         //内容变化时触发索引更新
         //todo 可否考虑标记检测，如果不涉及表格的变化就不进行索引重建和更新
         me.addListener("contentchange",function(){
-
+             var me = this;
             //尽可能排除一些不需要更新的状况
-            hideDragLine();
-            if(getUETableBySelected())return;
+            hideDragLine(me);
+            if(getUETableBySelected(me))return;
             utils.each(domUtils.getElementsByTagName(me.document,'table'),function(table){
                 table.ueTable = new UETable(table);
                 utils.each(domUtils.getElementsByTagName(me.document,'td'),function(td){
@@ -360,8 +361,8 @@ UE.plugins['table'] = function () {
                     }
                 });
                 table.onmouseout = function(){
-                    toggleDragableState(false,"",null);
-                    hideDragLine();
+                    toggleDragableState(me,false,"",null);
+                    hideDragLine(me);
                 };
                 table.onclick = function(evt){
                     evt = me.window.event || evt;
@@ -442,7 +443,7 @@ UE.plugins['table'] = function () {
         domUtils.on(me.document,"mouseout",function(evt){
             var target = evt.target||evt.srcElement;
             if(target.tagName == "TABLE"){
-                toggleDragableState(false,"",null);
+                toggleDragableState(me,false,"",null);
             }
         });
 
@@ -451,6 +452,7 @@ UE.plugins['table'] = function () {
         me.addListener("mouseup", mouseUpEvent);
 
         me.addListener("keydown", function (type, evt) {
+            var me = this;
             //处理在表格的最后一个输入tab产生新的表格
             var keyCode = evt.keyCode || evt.which;
             if(keyCode == 8 || keyCode == 46){
@@ -458,7 +460,7 @@ UE.plugins['table'] = function () {
             }
             if (keyCode == 9) {
                 var range = this.selection.getRange(),
-                    obj = getTableItemsByRange();
+                    obj = getTableItemsByRange(me);
                 if(range.collapsed && obj.table){
                     if(getUETable(obj.cell).isLastCell(obj.cell)){
                         me.fireEvent('saveScene');
@@ -476,7 +478,7 @@ UE.plugins['table'] = function () {
             }
             var notCtrlKey = !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey;
             notCtrlKey && removeSelectedClass(domUtils.getElementsByTagName(me.body,"td"));
-            var ut = getUETableBySelected();
+            var ut = getUETableBySelected(me);
             if(!ut) return;
             notCtrlKey && ut.clearSelected();
         });
@@ -484,8 +486,9 @@ UE.plugins['table'] = function () {
         //重写execCommand命令，用于处理框选时的处理
         var oldExecCommand = me.execCommand;
         me.execCommand = function (cmd) {
+            var me = this;
             cmd = cmd.toLowerCase();
-            var ut = getUETableBySelected(),tds,
+            var ut = getUETableBySelected(me),tds,
                 range = new dom.Range(me.document),
                 cmdFun = me.commands[cmd]||UE.commands[cmd],
                 result;
@@ -580,7 +583,7 @@ UE.plugins['table'] = function () {
                 me.document.body.style.webkitUserSelect = 'none';
                 me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
                 pos = mouseCoords(evt);
-                toggleDragableState(true,"",pos,target);
+                toggleDragableState(me,true,"",pos,target);
                 if(onDrag == "h" ){
                     dragLine.style.left = getPermissionX(dragTd,evt)  +"px";
                 }else if(onDrag=="v"){
@@ -607,7 +610,7 @@ UE.plugins['table'] = function () {
                         target = getUETable(target).getPreviewCell(target,state=="v");
                     }
                     //位于第一行的顶部或者第一列的左边时不可拖动
-                    toggleDragableState( target ? !!state:false,target ? state : '',pos,target);
+                    toggleDragableState(me, target ? !!state:false,target ? state : '',pos,target);
                 }
             }
         }catch(e){
@@ -661,15 +664,15 @@ UE.plugins['table'] = function () {
      * @param dragable
      * @param dir
      */
-    function toggleDragableState(dragable,dir,mousePos,cell){
+    function toggleDragableState(editor,dragable,dir,mousePos,cell){
         try{
-            me.body.style.cursor = dir == "h" ? "col-resize":dir=="v"? "row-resize":"text";
+            editor.body.style.cursor = dir == "h" ? "col-resize":dir=="v"? "row-resize":"text";
             if(browser.ie){
-                if(dir && !mousedown && !getUETableBySelected()){
-                    getDragLine(me.document);
+                if(dir && !mousedown && !getUETableBySelected(editor)){
+                    getDragLine(editor,editor.document);
                     showDragLineAt(dir,cell);
                 }else{
-                    hideDragLine()
+                    hideDragLine(editor)
                 }
             }
             onBorder = dragable;
@@ -703,7 +706,7 @@ UE.plugins['table'] = function () {
 
         //右键菜单单独处理
         if (evt.button == 2) {
-            var ut = getUETableBySelected(),
+            var ut = getUETableBySelected(me),
                 flag = false;
             if(ut){
                 var td = getTargetTd(evt);
@@ -750,8 +753,8 @@ UE.plugins['table'] = function () {
                 state = state.replace(/\d/,'');
                 startTd = getUETable(startTd).getPreviewCell(startTd,state == 'v');
             }
-            hideDragLine();
-            getDragLine(me.document);
+            hideDragLine(me);
+            getDragLine(me,me.document);
             showDragLineAt(state,startTd);
             mousedown = true;
             //拖动开始
@@ -852,7 +855,7 @@ UE.plugins['table'] = function () {
             onDrag = "";
             dragTd = null;
 
-            hideDragLine();
+            hideDragLine(me);
             return;
         }
         //正常状态下的mouseup
@@ -926,16 +929,16 @@ UE.plugins['table'] = function () {
     /**
      * 根据当前框选的td来获取ueTable对象
      */
-    function getUETableBySelected(){
-        var table = getTableItemsByRange().table;
+    function getUETableBySelected(editor){
+        var table = getTableItemsByRange(editor).table;
         if(table && table.ueTable && table.ueTable.selectedTds.length){
             return table.ueTable;
         }
         return null;
     }
-    function getDragLine(doc){
+    function getDragLine(editor,doc){
         if(mousedown)return;
-        dragLine = me.document.createElement("div");
+        dragLine = editor.document.createElement("div");
         domUtils.setAttributes(dragLine,{
             id:"ue_tableDragLine",
             unselectable:'on',
@@ -948,15 +951,15 @@ UE.plugins['table'] = function () {
 //            domUtils.on(dragLine,['resizestart','dragstart','selectstart'],function(evt){
 //                domUtils.preventDefault(evt);
 //            });
-        me.body.appendChild(dragLine);
+        editor.body.appendChild(dragLine);
 
 
     }
 
-    function hideDragLine(){
+    function hideDragLine(editor){
         if(mousedown)return;
         var line;
-        while(line = me.document.getElementById('ue_tableDragLine')){
+        while(line = editor.document.getElementById('ue_tableDragLine')){
             domUtils.remove(line)
         }
     }
@@ -992,7 +995,7 @@ UE.plugins['table'] = function () {
 
     UE.commands['inserttable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange().cell?-1:0;
+            return getTableItemsByRange(this).cell?-1:0;
         },
         execCommand:function (cmd, opt) {
             function createTable(opt,tableWidth,tdWidth) {
@@ -1027,10 +1030,10 @@ UE.plugins['table'] = function () {
 
     UE.commands['insertparagraphbeforetable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange().cell?0:-1;
+            return getTableItemsByRange(this).cell?0:-1;
         },
         execCommand:function () {
-            var table = getTableItemsByRange().table;
+            var table = getTableItemsByRange(this).table;
             if(table){
                 var p = this.document.createElement( "p");
                 p.innerHTML = browser.ie? '&nbsp;' :'<br />';
@@ -1064,7 +1067,7 @@ UE.plugins['table'] = function () {
                     rng.setStart(next,0)
                 }
                 rng.setCursor(false,true)
-                toggleDragableState(false,"",null);
+                toggleDragableState(this,false,"",null);
             }
 
         }
@@ -1097,14 +1100,14 @@ UE.plugins['table'] = function () {
     };
     UE.commands['insertcaption'] = {
         queryCommandState:function () {
-            var table = getTableItemsByRange().table;
+            var table = getTableItemsByRange(this).table;
             if(table){
                 return table.getElementsByTagName('caption').length == 0 ? 1 : -1;
             }
             return -1;
         },
         execCommand:function () {
-            var table = getTableItemsByRange().table;
+            var table = getTableItemsByRange(this).table;
             if(table){
                 var caption = this.document.createElement('caption');
                 caption.innerHTML = browser.ie ? domUtils.fillChar : '<br/>';
@@ -1137,7 +1140,7 @@ UE.plugins['table'] = function () {
     };
     UE.commands['inserttitle'] = {
         queryCommandState:function () {
-            var table = getTableItemsByRange().table;
+            var table = getTableItemsByRange(this).table;
             if(table){
                 var firstRow = table.rows[0];
                 return firstRow.getElementsByTagName('th').length == 0 ? 0 : -1
@@ -1145,7 +1148,7 @@ UE.plugins['table'] = function () {
             return -1;
         },
         execCommand:function () {
-            var table = getTableItemsByRange().table;
+            var table = getTableItemsByRange(this).table;
             if(table){
                 getUETable(table).insertRow(0,'th');
             }
@@ -1155,7 +1158,7 @@ UE.plugins['table'] = function () {
     };
     UE.commands['deletetitle'] = {
         queryCommandState:function () {
-            var table = getTableItemsByRange().table;
+            var table = getTableItemsByRange(this).table;
             if(table){
                 var firstRow = table.rows[0];
                 return firstRow.getElementsByTagName('th').length ? 0 : -1
@@ -1163,7 +1166,7 @@ UE.plugins['table'] = function () {
             return -1;
         },
         execCommand:function () {
-            var table = getTableItemsByRange().table;
+            var table = getTableItemsByRange(this).table;
             if(table){
                 domUtils.remove(table.rows[0])
             }
@@ -1174,7 +1177,7 @@ UE.plugins['table'] = function () {
 
     UE.commands["mergeright"] = {
         queryCommandState:function (cmd) {
-            var tableItems = getTableItemsByRange();
+            var tableItems = getTableItemsByRange(this);
             if (!tableItems.cell) return -1;
             var ut = getUETable(tableItems.table);
             if(ut.selectedTds.length) return -1;
@@ -1188,7 +1191,7 @@ UE.plugins['table'] = function () {
         execCommand:function (cmd) {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell);
             ut.mergeRight(cell);
             rng.moveToBookmark(bk).select();
@@ -1196,7 +1199,7 @@ UE.plugins['table'] = function () {
     };
     UE.commands["mergedown"] = {
         queryCommandState:function (cmd) {
-            var tableItems = getTableItemsByRange(),
+            var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             if (!cell || cell.tagName=="TH") return -1;
             var ut = getUETable(tableItems.table);
@@ -1213,7 +1216,7 @@ UE.plugins['table'] = function () {
         execCommand:function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell);
             ut.mergeDown(cell);
             rng.moveToBookmark(bk).select();
@@ -1221,13 +1224,13 @@ UE.plugins['table'] = function () {
     };
     UE.commands["mergecells"] = {
         queryCommandState:function () {
-            return getUETableBySelected() ? 0:-1;
+            return getUETableBySelected(this) ? 0:-1;
         },
         execCommand:function () {
-            var ut = getUETableBySelected(me);
+            var ut = getUETableBySelected(this);
             if(ut && ut.selectedTds.length){
                 var cell = ut.selectedTds[0];
-                getUETableBySelected().mergeRange();
+                getUETableBySelected(this).mergeRange();
                 var rng = this.selection.getRange();
                 if(domUtils.isEmptyBlock(cell)){
                     rng.setStart(cell,0).collapse(true)
@@ -1242,14 +1245,14 @@ UE.plugins['table'] = function () {
     };
     UE.commands["insertrow"] ={
         queryCommandState:function(){
-            var tableItems = getTableItemsByRange(),
+            var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             return cell && cell.tagName =="TD" && getUETable(tableItems.table).rowsNum < this.options.maxRowNum? 0: -1;
         },
         execCommand:function(){
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length ? cellInfo.rowIndex:ut.cellsRange.beginRowIndex,'');
@@ -1267,14 +1270,14 @@ UE.plugins['table'] = function () {
     //后插入行
     UE.commands["insertrownext"] ={
         queryCommandState:function(){
-            var tableItems = getTableItemsByRange(),
+            var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             return cell && (cell.tagName =="TD" || cell.tagName == 'TH') && getUETable(tableItems.table).rowsNum < this.options.maxRowNum ? 0: -1;
         },
         execCommand:function(){
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length? cellInfo.rowIndex + cellInfo.rowSpan : ut.cellsRange.endRowIndex + 1,'');
@@ -1291,11 +1294,11 @@ UE.plugins['table'] = function () {
     };
     UE.commands["deleterow"] = {
         queryCommandState:function(){
-            var tableItems = getTableItemsByRange();
+            var tableItems = getTableItemsByRange(this);
             if(!tableItems.cell) {return -1;}
         },
         execCommand:function(){
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 cellsRange = ut.cellsRange,
                 cellInfo = ut.getCellInfo(cell),
@@ -1328,7 +1331,7 @@ UE.plugins['table'] = function () {
     };
     UE.commands["insertcol"] = {
         queryCommandState:function(cmd){
-            var tableItems = getTableItemsByRange(),
+            var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             return cell &&  (cell.tagName =="TD" || cell.tagName == 'TH') && getUETable(tableItems.table).colsNum < this.options.maxColNum? 0: -1;
         },
@@ -1336,7 +1339,7 @@ UE.plugins['table'] = function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             if(this.queryCommandState(cmd)==-1)return;
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex:ut.cellsRange.beginColIndex);
@@ -1353,14 +1356,14 @@ UE.plugins['table'] = function () {
     };
     UE.commands["insertcolnext"] = {
         queryCommandState:function(){
-            var tableItems = getTableItemsByRange(),
+            var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             return cell && getUETable(tableItems.table).colsNum < this.options.maxColNum ?0:-1;
         },
         execCommand:function(){
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex + cellInfo.colSpan:ut.cellsRange.endColIndex +1);
@@ -1378,11 +1381,11 @@ UE.plugins['table'] = function () {
 
     UE.commands["deletecol"] = {
         queryCommandState:function(){
-            var tableItems = getTableItemsByRange();
+            var tableItems = getTableItemsByRange(this);
             if(!tableItems.cell) return -1;
         },
         execCommand:function(){
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 range = ut.cellsRange,
                 cellInfo = ut.getCellInfo(cell),
@@ -1420,7 +1423,7 @@ UE.plugins['table'] = function () {
     };
     UE.commands["splittocells"] = {
         queryCommandState:function(){
-            var tableItems = getTableItemsByRange(),
+            var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             if (!cell) return -1;
             var ut = getUETable(tableItems.table);
@@ -1430,7 +1433,7 @@ UE.plugins['table'] = function () {
         execCommand:function(){
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell);
             ut.splitToCells(cell);
             rng.moveToBookmark(bk).select();
@@ -1438,7 +1441,7 @@ UE.plugins['table'] = function () {
     };
     UE.commands["splittorows"] = {
         queryCommandState:function(){
-            var tableItems = getTableItemsByRange(),
+            var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             if (!cell) return -1;
             var ut = getUETable(tableItems.table);
@@ -1448,7 +1451,7 @@ UE.plugins['table'] = function () {
         execCommand:function(){
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell);
             ut.splitToRows(cell);
             rng.moveToBookmark(bk).select();
@@ -1456,7 +1459,7 @@ UE.plugins['table'] = function () {
     };
     UE.commands["splittocols"] = {
         queryCommandState:function(){
-            var tableItems = getTableItemsByRange(),
+            var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             if (!cell) return -1;
             var ut = getUETable(tableItems.table);
@@ -1466,7 +1469,7 @@ UE.plugins['table'] = function () {
         execCommand:function(){
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange().cell,
+            var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell);
             ut.splitToCols(cell);
             rng.moveToBookmark(bk).select();
@@ -1516,10 +1519,10 @@ UE.plugins['table'] = function () {
     UE.commands["adaptbytext"] =
         UE.commands["adaptbywindow"] = {
             queryCommandState:function(){
-                return getTableItemsByRange().cell?0:-1
+                return getTableItemsByRange(this).cell?0:-1
             },
             execCommand:function(cmd){
-                var tableItems = getTableItemsByRange(),
+                var tableItems = getTableItemsByRange(this),
                     table = tableItems.table,
                     cell = tableItems.cell;
                 if(table){
@@ -1555,7 +1558,7 @@ UE.plugins['table'] = function () {
     //平均分配各列
     UE.commands['averagedistributecol'] = {
         queryCommandState:function () {
-            var ut = getUETableBySelected();
+            var ut = getUETableBySelected(this);
             if (!ut) return -1;
             return ut.isFullRow() ? 0 : -1;
         },
@@ -1588,7 +1591,7 @@ UE.plugins['table'] = function () {
     //平均分配各行
     UE.commands['averagedistributerow'] = {
         queryCommandState:function () {
-            var ut = getUETableBySelected();
+            var ut = getUETableBySelected(this);
             if (!ut) return -1;
             return ut.isFullCol() ? 0 : -1;
         },
@@ -1648,7 +1651,7 @@ UE.plugins['table'] = function () {
     //单元格对齐方式
     UE.commands['cellalignment'] = {
         queryCommandState:function () {
-            return getTableItemsByRange().cell ? 0 : -1
+            return getTableItemsByRange(this).cell ? 0 : -1
         },
         execCommand:function (cmd, data) {
             var me = this,
@@ -1671,7 +1674,7 @@ UE.plugins['table'] = function () {
     //表格属性
     UE.commands['edittable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange().cell ? 0 : -1
+            return getTableItemsByRange(this).cell ? 0 : -1
         }
     };
 
@@ -2367,7 +2370,7 @@ UE.plugins['table'] = function () {
             this.updateWidth(backWidth);
         },
         updateWidth:function(width){
-            var tds = domUtils.getElementsByTagName(this.table,["td","th"]);
+            var tds = domUtils.getElementsByTagName(this.table,"td");
             utils.each(tds,function(td){
                 td.setAttribute("width",width);
             })
@@ -2498,16 +2501,16 @@ UE.plugins['table'] = function () {
     };
 
 
-    function getSelectedArr(me){
-        var ut = getTableItemsByRange(me).cell || getUETableBySelected(me);
+    function getSelectedArr(editor){
+        var ut = getTableItemsByRange(editor).cell || getUETableBySelected(editor);
         return ut ? (ut.nodeType ? [ut] : ut.selectedTds) : [];
     }
     /**
      * 根据当前选区获取相关的table信息
      * @return {Object}
      */
-    function getTableItemsByRange() {
-        var start = me.selection.getStart(),
+    function getTableItemsByRange(editor) {
+        var start = editor.selection.getStart(),
         //在table或者td边缘有可能存在选中tr的情况
             cell = start && domUtils.findParentByTagName(start, ["td", "th"],true),
             tr = cell && cell.parentNode,
