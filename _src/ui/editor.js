@@ -89,6 +89,11 @@
                     editor:editor,
                     className:'edui-wordpastepop'
                 });
+                var orgDispose = pastePop.dispose;
+                pastePop.dispose = function(){
+                    editor.fireEvent('clearPasteBookmark');
+                    orgDispose.apply(this,arguments)
+                };
                 pastePop.render();
                 isPaste=true;
             });
@@ -110,7 +115,7 @@
                     pastePop.showAnchor(span);
                     node.style.top=node.offsetTop+"px";
                     domUtils.remove(span);
-                    me.fireEvent('clearPasteBookmark');
+
                     isPaste=false;
                 },200)
 
@@ -122,6 +127,8 @@
                 if(!pastePop)   return;
                 pastePop.dispose(evt);
             });
+
+
             editor.addListener('selectionchange', function () {
                 //if(!editor.selection.isFocus())return;
                 if (editor.options.elementPathEnabled) {
