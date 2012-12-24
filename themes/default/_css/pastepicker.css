@@ -44,7 +44,7 @@
     height: 29px;
     margin-left: 10px;
     background-image: url('../images/wordpaste.png');
-    background-position: -72px 0;
+    background-position: -109px 0;
 }
 
 .edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon {
@@ -54,13 +54,14 @@
     height: 29px;
     margin-right: 10px;
     background-image: url('../images/wordpaste.png');
-    background-position: -109px 0;
+    background-position: -72px 0;
 }
 
 .edui-default  .edui-pastecontainer .edui-button .edui-richtxticon.edui-state-hover {
-    background-position: -72px -34px;
+    background-position: -109px -34px;
+
 }
 
 .edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon.edui-state-hover {
-    background-position: -109px -34px;
+    background-position: -72px -34px;
 }
