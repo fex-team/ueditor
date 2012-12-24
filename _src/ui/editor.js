@@ -108,7 +108,7 @@
                     if(!node)return;
                     range.insertNode(span);
                     pastePop.showAnchor(span);
-                    node.style.top=node.offsetTop-20+"px";
+                    node.style.top=node.offsetTop+"px";
                     domUtils.remove(span);
                     me.fireEvent('clearPasteBookmark');
                     isPaste=false;
