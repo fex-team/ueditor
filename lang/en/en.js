@@ -139,6 +139,9 @@ UE.I18N['en'] = {
     'unset':'Language hasn\'t been set!',
     't_row':'row',
     't_col':'col',
+    'pasteOpt':'Paste Option',
+    'pasteSourceFormat':"Keep Source Formatting",
+    'pasteTextFormat':'Keep Text only',
     'more':'More',
     'autoTypeSet':{
         mergeLine:"Merge empty line",

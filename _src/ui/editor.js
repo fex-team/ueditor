@@ -85,13 +85,9 @@
                 if(pastePop)
                     pastePop.dispose();
                 pastePop = new baidu.editor.ui.Popup({
+                    content:new baidu.editor.ui.PastePicker({editor:editor}),
                     editor:editor,
-                    className:'edui-pastelayout',
-                    format:function(isTransfer){
-                        editor.fireEvent('pasteTransfer',isTransfer)
-                    },
-                    content:'<label><input type="radio" name="layout" onclick="$$.format(false)" checked/>保留源格式</label>'+
-                        '<label><input type="radio" name="layout"  onclick="$$.format(true)"/>只保留文本</label>'
+                    className:'edui-wordpastepop'
                 });
                 pastePop.render();
                 isPaste=true;
@@ -114,6 +110,10 @@
             });
             editor.addListener('contextmenu', function (t, evt) {
                 baidu.editor.ui.Popup.postHide(evt);
+            });
+            editor.addListener('keydown', function (t, evt) {
+                if(!pastePop)   return;
+                pastePop.dispose(evt);
             });
             editor.addListener('selectionchange', function () {
                 //if(!editor.selection.isFocus())return;
