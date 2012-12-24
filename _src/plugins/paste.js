@@ -253,18 +253,21 @@
             }
         });
 
+        me.addListener('mousedown keydown',function(cmd,e){
+            if(cmd == 'mousedown' || !e.ctrlKey && !e.metaKey){
+                me.fireEvent('clearPasteBookmark')
+            }
+        });
         var startAddr,endAddr;
         me.addListener('beforegetscene',function(){
 
             var start = me.document.getElementById('_ue_paste_id_start');
             if(start){
                 startAddr = domUtils.getAddr(start);
-
             }
             var end = me.document.getElementById('_ue_paste_id_end');
             if(end){
                 endAddr = domUtils.getAddr(end);
-
             }
             if(start && end){
                 domUtils.remove(start);
@@ -317,7 +320,7 @@
             //ie下beforepaste在点击右键时也会触发，所以用监控键盘才处理
             domUtils.on(me.body, browser.ie || browser.opera ? 'keydown' : 'paste',function(e){
 
-                if((browser.ie || browser.opera) && (!e.ctrlKey || e.keyCode != '86')){
+                if((browser.ie || browser.opera) && ((!e.ctrlKey && !e.metaKey) || e.keyCode != '86')){
                     return;
                 }
 
