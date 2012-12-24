@@ -82,8 +82,7 @@
                 isPaste=false;
 
             editor.addListener("afterpaste",function(){
-                if(pastePop)
-                    pastePop.dispose();
+
                 pastePop = new baidu.editor.ui.Popup({
                     content:new baidu.editor.ui.PastePicker({editor:editor}),
                     editor:editor,
