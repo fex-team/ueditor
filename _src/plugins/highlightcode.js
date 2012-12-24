@@ -13,11 +13,12 @@ UE.plugins['highlightcode'] = function() {
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
             if(code && syntax){
+
                 me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+code+'</pre>',true);
+
                 var pre = me.document.getElementById('highlightcode_id');
                 domUtils.removeAttributes(pre,'id');
                 me.window.SyntaxHighlighter.highlight(pre);
-                adjustHeight(me);
             }else{
                 var range = this.selection.getRange(),
                    start = domUtils.findParentByTagName(range.startContainer, 'table', true),
@@ -72,7 +73,8 @@ UE.plugins['highlightcode'] = function() {
         autotypeset:1,
         pasteplain:1,
         preview:1,
-        insertparagraph:1
+        insertparagraph:1,
+        elementpath:1
     };
     //将queyCommamndState重置
     var orgQuery = me.queryCommandState;
@@ -127,23 +129,30 @@ UE.plugins['highlightcode'] = function() {
     });
     me.addListener("aftergetcontent aftersetcontent",changePre);
 
-    function adjustHeight(editor){
-        setTimeout(function(){
-            var div = editor.document.getElementById(editor.window.SyntaxHighlighter.getHighlighterDivId());
-            if(div){
-                var tds = div.getElementsByTagName('td');
-                for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
-                    ri = tds[1].firstChild.childNodes[i];
-                    //trace:1949
-                    if(ri){
-                        ri.style.height = li.style.height = ri.offsetHeight + 'px';
-                    }
+    me.addListener('afterinserthtml',function(){
+        utils.each(domUtils.getElementsByTagName(this.document,'div',function(node){
+            return /SyntaxHighlighter/i.test(node.className)
+        }),function(di){
+            var tds = di.getElementsByTagName('td');
+            for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
+                ri = tds[1].firstChild.childNodes[i];
+                //trace:1949
+                if(ri){
+                    ri.style.height = li.style.height = ri.offsetHeight + 'px';
                 }
-
             }
-        });
+        })
+    });
 
-    }
+    //避免table插件对于代码高亮的影响
+    me.addListener('excludetable',function(cmd,target){
+        if(target && domUtils.findParent(target,function(node){
+            return node.tagName == 'div' && domUtils.hasClass(node,'syntaxhighlighter');
+        },true)){
+            return true;
+        }
+    });
+
     function changePre(){
         var me = this;
         utils.each(domUtils.getElementsByTagName(me.document,"pre"),function(pi){
