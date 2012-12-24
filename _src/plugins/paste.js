@@ -244,6 +244,7 @@
         }
 
         me.addListener('clearPasteBookmark',function(){
+            debugger
             var bk;
             while(bk = me.document.getElementById('_ue_paste_id_start')){
                 domUtils.remove(bk)
@@ -303,7 +304,6 @@
                 me.__hasEnterExecCommand = true;
                 me.execCommand('inserthtml',plainType ? txtContent : htmlContent,true);
                 me.__hasEnterExecCommand = false;
-                me.addListener('mouseup keydown',clearBk)
             }
         });
         me.addListener('ready',function(){
