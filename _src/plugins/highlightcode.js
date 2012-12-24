@@ -9,21 +9,14 @@ UE.plugins['highlightcode'] = function() {
     if(!/highlightcode/i.test(me.options.toolbars.join(''))){
         return;
     }
+
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
             if(code && syntax){
-                var pre = document.createElement("pre");
-                pre.className = "brush: "+syntax+";toolbar:false;";
-                pre.style.display = "";
-                pre.appendChild(document.createTextNode(code));
-                document.body.appendChild(pre);
-                if(me.queryCommandState("highlightcode")){
-                    me.execCommand("highlightcode");
-                }
-                me.execCommand('inserthtml', SyntaxHighlighter.highlight(pre,null,true),true);
-                var div = me.document.getElementById(SyntaxHighlighter.getHighlighterDivId());
-                div.setAttribute('highlighter',pre.className);
-                domUtils.remove(pre);
+                me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+code+'</pre>',true);
+                var pre = me.document.getElementById('highlightcode_id');
+                domUtils.removeAttributes(pre,'id');
+                me.window.SyntaxHighlighter.highlight(pre);
                 adjustHeight(me);
             }else{
                 var range = this.selection.getRange(),
@@ -98,7 +91,7 @@ UE.plugins['highlightcode'] = function() {
     me.addListener("ready",function(){
         //避免重复加载高亮文件
         if(typeof XRegExp == "undefined"){
-            utils.loadFile(document,{
+            utils.loadFile(me.document,{
                 id : "syntaxhighlighter_js",
                 src : me.options.highlightJsUrl || me.options.UEDITOR_HOME_URL + "third-party/SyntaxHighlighter/shCore.js",
                 tag : "script",
@@ -120,34 +113,23 @@ UE.plugins['highlightcode'] = function() {
 
     });
     me.addListener("beforegetcontent",function(){
-        for(var i=0,di,divs=domUtils.getElementsByTagName(me.body,'div');di=divs[i++];){
-            if(di.className == 'container'){
-                var pN = di.parentNode;
-                while(pN){
-                    if(pN.tagName == 'DIV' && /highlighter/.test(pN.id)){
-                        break;
-                    }
-                    pN = pN.parentNode;
-                }
-                if(!pN){
-                    return;
-                }
-                var pre = me.document.createElement('pre');
-                for(var str=[],c=0,ci;ci=di.childNodes[c++];){
-                    str.push(ci[browser.ie?'innerText':'textContent']);
-                }
-                pre.appendChild(me.document.createTextNode(str.join('\n')));
-                pre.className = pN.getAttribute('highlighter');
-                pN.parentNode.insertBefore(pre,pN);
-                domUtils.remove(pN);
-            }
-        }
+        utils.each(domUtils.getElementsByTagName(me.body,'div','syntaxhighlighter'),function(di){
+            var str = [];
+            utils.each(di.getElementsByTagName('code'),function(ci){
+                str.push(ci[browser.ie?'innerText':'textContent'])
+            });
+            var pre = domUtils.createElement(me.document,'pre',{
+                innerHTML : str.join('\n'),
+                'class' : 'brush: '+di.className.match(/[\w-]+$/)[0]+';toolbar:false;'
+            });
+            di.parentNode.replaceChild(pre,di);
+        });
     });
     me.addListener("aftergetcontent aftersetcontent",changePre);
 
     function adjustHeight(editor){
         setTimeout(function(){
-            var div = editor.document.getElementById(SyntaxHighlighter.getHighlighterDivId());
+            var div = editor.document.getElementById(editor.window.SyntaxHighlighter.getHighlighterDivId());
             if(div){
                 var tds = div.getElementsByTagName('td');
                 for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
@@ -164,33 +146,11 @@ UE.plugins['highlightcode'] = function() {
     }
     function changePre(){
         var me = this;
-        for(var i=0,pr,pres = domUtils.getElementsByTagName(me.document,"pre");pr=pres[i++];){
-            if(pr.className.indexOf("brush")>-1){
-                
-                var pre = document.createElement("pre"),txt,div;
-                pre.className = pr.className;
-                pre.style.display = "none";
-                pre.appendChild(document.createTextNode(pr[browser.ie?'innerText':'textContent']));
-                document.body.appendChild(pre);
-                try{
-                    txt = SyntaxHighlighter.highlight(pre,null,true);
-                }catch(e){
-                    domUtils.remove(pre);
-                    return ;
-                }
-
-                div = editor.document.createElement("div");
-                div.innerHTML = txt;
-
-                div.firstChild.setAttribute('highlighter',pre.className);
-                pr.parentNode.insertBefore(div.firstChild,pr);
-
-                domUtils.remove(pre);
-                domUtils.remove(pr);
-                
-                adjustHeight(me);
+        utils.each(domUtils.getElementsByTagName(me.document,"pre"),function(pi){
+            if(pi.className.indexOf("brush")>-1){
+                me.window.SyntaxHighlighter.highlight(pi);
             }
-        }
+        });
     }
 
     me.addListener('getAllHtml',function(type,html){
