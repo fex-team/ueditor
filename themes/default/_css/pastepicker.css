@@ -40,27 +40,27 @@
 .edui-default  .edui-pastecontainer .edui-button .edui-richtxticon {
     float: left;
     cursor: pointer;
-    width: 24px;
+    width: 27px;
     height: 29px;
     margin-left: 10px;
     background-image: url('../images/wordpaste.png');
-    background-position: -74px 0;
+    background-position: -72px 0;
 }
 
 .edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon {
     float: right;
     cursor: pointer;
-    width: 24px;
+    width: 29px;
     height: 29px;
     margin-right: 10px;
     background-image: url('../images/wordpaste.png');
-    background-position: -112px 0;
+    background-position: -109px 0;
 }
 
 .edui-default  .edui-pastecontainer .edui-button .edui-richtxticon.edui-state-hover {
-    background-position: -74px -34px;
+    background-position: -72px -34px;
 }
 
 .edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon.edui-state-hover {
-    background-position: -112px -34px;
+    background-position: -109px -34px;
 }
