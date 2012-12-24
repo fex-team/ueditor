@@ -115,7 +115,6 @@
                     pastePop.showAnchor(span);
                     node.style.top=node.offsetTop+"px";
                     domUtils.remove(span);
-
                     isPaste=false;
                 },200)
 
