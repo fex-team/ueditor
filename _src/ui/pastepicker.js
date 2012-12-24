@@ -32,11 +32,12 @@
         },
         _onClick: function (obj){
             var tmp=domUtils.getNextDomNode(obj);
-            if(/none/ig.test(domUtils.getComputedStyle(tmp,"display"))){
-                tmp.style.display="block";
+
+            if(/hidden/ig.test(domUtils.getComputedStyle(tmp,"visibility"))){
+                tmp.style.visibility="visible";
                 domUtils.addClass(obj,"edui-state-opened")
             }else{
-                tmp.style.display="none";
+                tmp.style.visibility="hidden";
                 domUtils.removeClasses(obj,"edui-state-opened")
             }
         },
