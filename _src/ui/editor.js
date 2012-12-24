@@ -99,7 +99,6 @@
             var timer;
             editor.addListener("afterinserthtml",function(){
                 clearTimeout(timer);
-                var me = this;
                 timer = setTimeout(function(){
                     if(!pastePop)    return;
                     if(!isPaste)    return;
