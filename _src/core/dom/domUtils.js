@@ -682,8 +682,9 @@ var domUtils = dom.domUtils = {
      * @grammar UE.dom.domUtils.getElementsByTagName(node,tagName)  => Array  //节点集合数组
      */
     getElementsByTagName:function (node, name,filter) {
-        if(filter){
-           filter = utils.isString(filter) ? function(node){return domUtils.hasClass(node,filter)} : filter;
+        if(filter && utils.isString(filter)){
+           var className = filter;
+           filter =  function(node){return domUtils.hasClass(node,className)}
         }
         var list = node.getElementsByTagName(name), arr = [];
         for (var i = 0, ci; ci = list[i++];) {
