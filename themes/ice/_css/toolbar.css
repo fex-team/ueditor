@@ -15,3 +15,6 @@
   .edui-handlebar{background: url(../images/toolbar_bg.png) repeat-x;cursor: pointer;}
   .edui-handlebar .current{background:url(../images/toolbar_tab_bg.png);border-bottom-color:#ECF5FB;color:#006DAE;}
   .edui-editorholder{position:relative;}
+
+
+  /*.edui-toolbar span{width:20px;height: 20px;display: inline-block;}*/

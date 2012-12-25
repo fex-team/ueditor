@@ -74,17 +74,17 @@
                 editor = instances[id] = new baidu.editor.Editor( options);
                 oldRender = editor.render;
                 if(oui){
-                    aui = editor.ui = oui
+                    aui = editor.ui = oui;
                 }else{
                     aui = editor.ui = new UE.ui(editor);
+                    !!id && newrender(id);
+                    utils.loadFile(document, {
+                        href:editor.options.themePath + editor.options.theme + "/_css/ueditor.css",
+                        tag:"link",
+                        type:"text/css",
+                        rel:"stylesheet"
+                    });
                 }
-                !!id && newrender(id);
-                utils.loadFile(document, {
-                    href:editor.options.themePath + editor.options.theme + "/_css/ueditor.css",
-                    tag:"link",
-                    type:"text/css",
-                    rel:"stylesheet"
-                });
                 editor.addItem = UE.addItem;
             }
         }else{
@@ -126,7 +126,7 @@
                         }
                     }
 
-                    !oui&&aui.render( newDiv||holder );
+                    aui.render( newDiv||holder );
                     editor.container = aui.wrapper.dom;
                     editor.container.style.zIndex = editorOptions.zIndex;
                     if(oui){

@@ -55,7 +55,9 @@
 <script type="text/javascript">
 
    //实例化编辑器
-    var ue = UE.getEditor('editor');
+    var ue = UE.getEditor('editor',{
+        toolbars:[["bold"]]
+    });
     function createEditor(){
         enableBtn();
         ue = UE.getEditor('editor')
