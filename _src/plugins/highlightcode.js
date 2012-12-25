@@ -13,12 +13,14 @@ UE.plugins['highlightcode'] = function() {
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
             if(code && syntax){
-
+                console.log('a')
                 me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+code+'</pre>',true);
 
                 var pre = me.document.getElementById('highlightcode_id');
-                domUtils.removeAttributes(pre,'id');
-                me.window.SyntaxHighlighter.highlight(pre);
+                if(pre){
+                    domUtils.removeAttributes(pre,'id');
+                    me.window.SyntaxHighlighter.highlight(pre);
+                }
             }else{
                 var range = this.selection.getRange(),
                    start = domUtils.findParentByTagName(range.startContainer, 'table', true),
@@ -114,7 +116,8 @@ UE.plugins['highlightcode'] = function() {
         }
 
     });
-    me.addListener("beforegetcontent",function(){
+    me.addListener("beforegetcontent beforegetscene",function(){
+        console.log('g')
         utils.each(domUtils.getElementsByTagName(me.body,'div','syntaxhighlighter'),function(di){
             var str = [];
             utils.each(di.getElementsByTagName('code'),function(ci){
@@ -127,7 +130,7 @@ UE.plugins['highlightcode'] = function() {
             di.parentNode.replaceChild(pre,di);
         });
     });
-    me.addListener("aftergetcontent aftersetcontent",changePre);
+    me.addListener("aftergetcontent aftersetcontent aftergetscene",changePre);
 
     me.addListener('afterinserthtml',function(){
         utils.each(domUtils.getElementsByTagName(this.document,'div',function(node){
@@ -147,7 +150,7 @@ UE.plugins['highlightcode'] = function() {
     //避免table插件对于代码高亮的影响
     me.addListener('excludetable',function(cmd,target){
         if(target && domUtils.findParent(target,function(node){
-            return node.tagName == 'div' && domUtils.hasClass(node,'syntaxhighlighter');
+            return node.tagName == 'DIV' && domUtils.hasClass(node,'syntaxhighlighter');
         },true)){
             return true;
         }
