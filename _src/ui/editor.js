@@ -88,18 +88,12 @@
                     editor:editor,
                     className:'edui-wordpastepop'
                 });
-                var orgDispose = pastePop.dispose;
-                pastePop.dispose = function(){
-                    editor.fireEvent('clearPasteBookmark');
-                    orgDispose.apply(this,arguments)
-                };
                 pastePop.render();
                 isPaste=true;
             });
             var timer;
             editor.addListener("afterinserthtml",function(){
                 clearTimeout(timer);
-                var me = this;
                 timer = setTimeout(function(){
                     if(!pastePop)    return;
                     if(!isPaste)    return;
