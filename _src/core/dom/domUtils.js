@@ -1273,7 +1273,12 @@ var domUtils = dom.domUtils = {
             parentNode.insertBefore(node,tmpNode)
         }else{
             if(parentNode){
-                parentNode.appendChild(node)
+                if(parentNode.nodeType == 3){
+                    parentNode.parentNode.insertBefore(node,parentNode)
+                }else{
+                    parentNode.appendChild(node)
+                }
+
             }
 
         }
