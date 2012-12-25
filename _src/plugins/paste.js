@@ -244,13 +244,22 @@
         }
 
         me.addListener('clearPasteBookmark',function(){
-            var bk;
-            while(bk = me.document.getElementById('_ue_paste_id_start')){
-                domUtils.remove(bk)
+            function removeNode(id){
+                var node;
+                while(node = me.document.getElementById(id)){
+                    var parentNode = node.parentNode;
+                    domUtils.remove(node);
+                    while(parentNode && !domUtils.isBody(parentNode)){
+                        var currentNode = parentNode;
+                        parentNode = currentNode.parentNode;
+                        if(domUtils.isEmptyNode(currentNode)){
+                            domUtils.remove(currentNode)
+                        }
+                    }
+                }
             }
-            while(bk = me.document.getElementById('_ue_paste_id_end')){
-                domUtils.remove(bk)
-            }
+            removeNode('_ue_paste_id_start');
+            removeNode('_ue_paste_id_end')
         });
 
         me.addListener('mousedown keydown',function(cmd,e){
