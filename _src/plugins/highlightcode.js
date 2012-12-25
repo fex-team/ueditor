@@ -121,9 +121,9 @@ UE.plugins['highlightcode'] = function() {
                 str.push(ci[browser.ie?'innerText':'textContent'])
             });
             var pre = domUtils.createElement(me.document,'pre',{
-                innerHTML : str.join('\n'),
                 'class' : 'brush: '+di.className.replace(/\s+/g,' ').split(' ')[1]+';toolbar:false;'
             });
+            pre.appendChild(me.document.createTextNode(str.join('\n')));
             di.parentNode.replaceChild(pre,di);
         });
     });
