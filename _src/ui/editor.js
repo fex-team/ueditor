@@ -116,8 +116,8 @@
                 baidu.editor.ui.Popup.postHide(evt);
             });
             editor.addListener('keydown', function (t, evt) {
-                if(!pastePop)   return;
-                pastePop.dispose(evt);
+                if(pastePop)
+                    pastePop.dispose(evt);
             });
 
 
