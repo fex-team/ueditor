@@ -13,9 +13,7 @@ UE.plugins['highlightcode'] = function() {
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
             if(code && syntax){
-                console.log('a')
                 me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+code+'</pre>',true);
-
                 var pre = me.document.getElementById('highlightcode_id');
                 if(pre){
                     domUtils.removeAttributes(pre,'id');
@@ -117,7 +115,6 @@ UE.plugins['highlightcode'] = function() {
 
     });
     me.addListener("beforegetcontent beforegetscene",function(){
-        console.log('g')
         utils.each(domUtils.getElementsByTagName(me.body,'div','syntaxhighlighter'),function(di){
             var str = [];
             utils.each(di.getElementsByTagName('code'),function(ci){
@@ -125,7 +122,7 @@ UE.plugins['highlightcode'] = function() {
             });
             var pre = domUtils.createElement(me.document,'pre',{
                 innerHTML : str.join('\n'),
-                'class' : 'brush: '+di.className.match(/[\w-]+$/)[0]+';toolbar:false;'
+                'class' : 'brush: '+di.className.replace(/\s+/g,' ').split(' ')[1]+';toolbar:false;'
             });
             di.parentNode.replaceChild(pre,di);
         });
@@ -165,29 +162,19 @@ UE.plugins['highlightcode'] = function() {
         });
     }
 
-    me.addListener('getAllHtml',function(type,html){
+    me.addListener('getAllHtml',function(type,headHtml){
         var coreHtml = '';
-
         for(var i= 0,ci,divs=domUtils.getElementsByTagName(me.document,'div');ci=divs[i++];){
             if(domUtils.hasClass(ci,'syntaxhighlighter')){
-                if(!me.document.getElementById('syntaxhighlighter_css')){
-                    coreHtml = '<link id="syntaxhighlighter_css" rel="stylesheet" type="text/css" href="' +
-                        (me.options.highlightCssUrl ||me.options.UEDITOR_HOME_URL + 'third-party/SyntaxHighlighter/shCoreDefault.css"') + ' ></link>'
-                }
-                if(!me.window.XRegExp){
-                    coreHtml += '<script id="syntaxhighlighter_js"  type="text/javascript" src="' +
-                        (me.options.highlightJsUrl || me.options.UEDITOR_HOME_URL + 'third-party/SyntaxHighlighter/shCore.js"') + ' ></script>'+
-                        '<script type="text/javascript">window.onload = function(){SyntaxHighlighter.highlight();' +
-
-                        'setTimeout(function(){' +
-                            'for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){' +
-                            'var tds = di.getElementsByTagName("td");' +
-                            'for(var j=0,li,ri;li=tds[0].childNodes[j];j++){' +
-                            'ri = tds[1].firstChild.childNodes[j];' +
-                            'ri.style.height = li.style.height = ri.offsetHeight + "px";' +
-                            '}' +
-                        '}},100)}</script>'
-                }
+                coreHtml = '<script type="text/javascript">window.onload = function(){SyntaxHighlighter.highlight();' +
+                    'setTimeout(function(){' +
+                    'for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){' +
+                    'var tds = di.getElementsByTagName("td");' +
+                    'for(var j=0,li,ri;li=tds[0].childNodes[j];j++){' +
+                    'ri = tds[1].firstChild.childNodes[j];' +
+                    'ri.style.height = li.style.height = ri.offsetHeight + "px";' +
+                    '}' +
+                    '}},100)}</script>'
                 break;
             }
         }
@@ -201,7 +188,7 @@ UE.plugins['highlightcode'] = function() {
 
             }
         }
-        html.html += coreHtml;
+        coreHtml && headHtml.push(coreHtml)
     });
     //全屏时，重新算一下宽度
     me.addListener('fullscreenchanged',function(){
