@@ -349,7 +349,7 @@ UE.plugins['table'] = function () {
             hideDragLine(me);
             if(getUETableBySelected(me))return;
             utils.each(domUtils.getElementsByTagName(me.document,'table'),function(table){
-                if(me.fireEvent("excludeTable",table)===true) return;
+                if(me.fireEvent("excludetable",table)===true) return;
                 table.ueTable = new UETable(table);
                 utils.each(domUtils.getElementsByTagName(me.document,'td'),function(td){
                     if(domUtils.isEmptyBlock(td)){
@@ -599,9 +599,11 @@ UE.plugins['table'] = function () {
                     table = domUtils.findParentByTagName(target,"table",true);
                 if(inTableSide(table,target,evt,true)){
                     //toggleCursor(pos,true,"_h");
+                    if(me.fireEvent("excludetable",table)===true) return;
                     me.body.style.cursor = "url("+ me.options.cursorpath + "h.png),pointer";
                 }else if(inTableSide(table,target,evt)){
                     //toggleCursor(pos,true,"_v");
+                    if(me.fireEvent("excludetable",table)===true) return;
                     me.body.style.cursor = "url("+ me.options.cursorpath + "v.png),pointer";
                 }else{
                     //toggleCursor(pos,false,"");
@@ -865,6 +867,7 @@ UE.plugins['table'] = function () {
             var target = domUtils.findParentByTagName(evt.target||evt.srcElement,"td",true);
             if(!target) target = domUtils.findParentByTagName(evt.target||evt.srcElement,"th",true);
             if(target && (target.tagName == "TD" ||target.tagName == "TH")){
+                if(me.fireEvent("excludetable",target) ===true) return;
                 range = new dom.Range(me.document);
                 range.setStart(target,0).setCursor(false,true);
             }
@@ -2530,6 +2533,6 @@ UE.plugins['table'] = function () {
     function getTargetTd(editor,evt) {
         var target = domUtils.findParentByTagName(evt.target || evt.srcElement, ["td", "th"], true);
         //排除了非td内部以及用于代码高亮部分的td
-        return target && !(editor.fireEvent("excludeTable",target)===true) ? target : null;
+        return target && !(editor.fireEvent("excludetable",target)===true) ? target : null;
     }
 };
