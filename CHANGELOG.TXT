@@ -1,5 +1,15 @@
 Ueditor Change List
 
+Version 1.2.5
+新增功能
+  . table整体重构
+  . table支持插入表头和标题
+  . table支持拷贝
+  . table支持任意调整宽高
+  . table支持任意前插后插行列
+  . 粘贴支持纯文本和源码模式选择
+  . 添加计算字数的getContentLength接口
+
 Version 1.2.4
 新增功能
    . 官网新增API文档

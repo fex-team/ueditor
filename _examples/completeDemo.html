@@ -27,6 +27,12 @@
 <div class="clear"></div>
 <div id="btns">
     <div >
+       当前输入的字数(包括html标签)共 : <span id="htmlcount"></span>
+    </div>
+    <div >
+       当前输入的字数共 : <span id="txtcount"></span>
+    </div>
+    <div >
         <input type="button" value="获得整个html的内容" onclick="getAllHtml()">
         <input type="button" value="获得内容" onclick="getContent()">
         <input type="button" value="写入内容" onclick="setContent()">
@@ -54,8 +60,11 @@
 <script type="text/javascript">
 
    //实例化编辑器
-    var ue=UE.getEditor('editor');
-
+    var ue = UE.getEditor('editor');
+    ue.addListener('selectionchange',function(){
+        document.getElementById('htmlcount').innerHTML = this.getContentLength();
+        document.getElementById('txtcount').innerHTML = this.getContentLength(true);
+    });
     function createEditor(){
         enableBtn();
         UE.getEditor('editor')
