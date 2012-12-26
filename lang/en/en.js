@@ -16,7 +16,7 @@ UE.I18N['en'] = {
         'deleterow':'DeleteRow', 'deletecol':'DeleteCol', 'splittorows':'SplitToRows',
         'splittocols':'SplitToCols', 'splittocells':'SplitToCells','deletecaption':'DeleteCaption','inserttitle':'InsertTitle',
         'mergecells':'MergeCells', 'deletetable':'DeleteTable', 'cleardoc':'Clear', 'insertparagraphbeforetable':"InsertParagraphBeforeTable",
-        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph', 'insertimage':'Image', 'edittable':'Edit Table', 'link':'Link',
+        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph', 'insertimage':'Image', 'edittable':'Edit Table', edittd:'Edit Td','link':'Link',
         'emotion':'Emotion', 'spechars':'Spechars', 'searchreplace':'SearchReplace', 'map':'BaiduMap', 'gmap':'GoogleMap',
         'insertvideo':'Video', 'help':'Help', 'justifyleft':'JustifyLeft', 'justifyright':'JustifyRight', 'justifycenter':'JustifyCenter',
         'justifyjustify':'Justify', 'forecolor':'FontColor', 'backcolor':'BackColor', 'insertorderedlist':'OL',
@@ -464,16 +464,23 @@ UE.I18N['en'] = {
             'lang_tableSize':'Automatically adjust table size',
                 'lang_autoSizeContent':'Adaptive by form text',
             'lang_autoSizePage':'Page width adaptive',
-            'lang_example':'Example'
+            'lang_example':'Example',
+            'lang_borderStyle':'Table Border',
+            'lang_color':'Color:'
         },
         captionName:'Caption',
         titleName:'Title',
-        cellsName:'content'
+        cellsName:'text'
     },
     'edittip':{
         'static':{
             lang_delRow:'Delete entire row',
             lang_delCol:'Delete entire col'
+        }
+    },
+    'edittd':{
+        'static':{
+            lang_tdBkColor:'Background Color:'
         }
     },
     wordimage:{

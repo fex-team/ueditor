@@ -15,7 +15,7 @@ UE.I18N['zh-cn'] = {
         'unlink':'取消链接', 'insertrow':'前插入行', 'insertcol':'前插入列', 'mergeright':'右合并单元格', 'mergedown':'下合并单元格',
         'deleterow':'删除行', 'deletecol':'删除列', 'splittorows':'拆分成行', 'splittocols':'拆分成列', 'splittocells':'完全拆分单元格',
         'mergecells':'合并多个单元格', 'deletetable':'删除表格', 'cleardoc':'清空文档','insertparagraphbeforetable':"表格前插入行",
-        'fontfamily':'字体', 'fontsize':'字号', 'paragraph':'段落格式', 'insertimage':'图片', 'edittable':'表格属性', 'link':'超链接',
+        'fontfamily':'字体', 'fontsize':'字号', 'paragraph':'段落格式', 'insertimage':'图片', 'edittable':'表格属性','edittd':'单元格属性', 'link':'超链接',
         'emotion':'表情', 'spechars':'特殊字符', 'searchreplace':'查询替换', 'map':'Baidu地图', 'gmap':'Google地图',
         'insertvideo':'视频', 'help':'帮助', 'justifyleft':'居左对齐', 'justifyright':'居右对齐', 'justifycenter':'居中对齐',
         'justifyjustify':'两端对齐', 'forecolor':'字体颜色', 'backcolor':'背景色', 'insertorderedlist':'有序列表',
@@ -447,7 +447,9 @@ UE.I18N['zh-cn'] = {
             'lang_tableSize':'自动调整表格尺寸',
             'lang_autoSizeContent':'按表格文字自适应',
             'lang_autoSizePage':'按页面宽度自适应',
-            'lang_example':'示例'
+            'lang_example':'示例',
+            'lang_borderStyle':'表格边框',
+            'lang_color':'颜色:'
         },
         captionName:'表格名称',
         titleName:'标题',
@@ -457,6 +459,11 @@ UE.I18N['zh-cn'] = {
         'static':{
             lang_delRow:'删除整行',
             lang_delCol:'删除整列'
+        }
+    },
+    'edittd':{
+        'static':{
+            lang_tdBkColor:'背景颜色:'
         }
     },
     'wordimage':{
