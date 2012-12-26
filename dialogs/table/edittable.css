@@ -36,6 +36,10 @@
     float: left;
 }
 
+.section .tone{
+    width: 80px;;
+}
+
 .section .preview {
     width: 220px;
 }

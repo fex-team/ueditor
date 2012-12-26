@@ -171,39 +171,39 @@ UE.plugins['contextmenu'] = function () {
                     subMenu:[
                         {
                             cmdName:'cellalignment',
-                            value:{align:'left',valign:'top'}
+                            value:{align:'left',vAlign:'top'}
                         },
                         {
                             cmdName:'cellalignment',
-                            value:{align:'center',valign:'top'}
+                            value:{align:'center',vAlign:'top'}
                         },
                         {
                             cmdName:'cellalignment',
-                            value:{align:'right',valign:'top'}
+                            value:{align:'right',vAlign:'top'}
                         },
                         {
                             cmdName:'cellalignment',
-                            value:{align:'left',valign:'middle'}
+                            value:{align:'left',vAlign:'middle'}
                         },
                         {
                             cmdName:'cellalignment',
-                            value:{align:'center',valign:'middle'}
+                            value:{align:'center',vAlign:'middle'}
                         },
                         {
                             cmdName:'cellalignment',
-                            value:{align:'right',valign:'middle'}
+                            value:{align:'right',vAlign:'middle'}
                         },
                         {
                             cmdName:'cellalignment',
-                            value:{align:'left',valign:'bottom'}
+                            value:{align:'left',vAlign:'bottom'}
                         },
                         {
                             cmdName:'cellalignment',
-                            value:{align:'center',valign:'bottom'}
+                            value:{align:'center',vAlign:'bottom'}
                         },
                         {
                             cmdName:'cellalignment',
-                            value:{align:'right',valign:'bottom'}
+                            value:{align:'right',vAlign:'bottom'}
                         }
                     ]
                 },

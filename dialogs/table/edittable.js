@@ -10,6 +10,7 @@
         caption = $G("J_caption"),
         autoSizeContent = $G("J_autoSizeContent"),
         autoSizePage = $G("J_autoSizePage"),
+        tone = $G("J_tone"),
         preview = $G("J_preview");
 
     var editTable = function () {
@@ -17,51 +18,69 @@
     };
     editTable.prototype = {
         init:function () {
-            var me = this;
+            var me = this,
+                colorPiker = new UE.ui.ColorPicker({
+                    editor:editor
+                }),
+                colorPop = new UE.ui.Popup({
+                    editor:editor,
+                    content:colorPiker
+                });
 
             title.checked = editor.queryCommandState("inserttitle") == -1;
             caption.checked = editor.queryCommandState("insertcaption") == -1;
 
             me.createTable(title.checked, caption.checked);
             me.setAutoSize();
+            me.setColor();
 
             domUtils.on(title, "click", me.titleHanler);
             domUtils.on(caption, "click", me.captionHanler);
             domUtils.on(autoSizeContent, "click", me.autoSizeContentHanler);
             domUtils.on(autoSizePage, "click", me.autoSizePageHanler);
+
+            domUtils.on(tone, "click", function () {
+                colorPop.showAnchor(tone);
+            });
+            domUtils.on(document, 'mousedown', function () {
+                colorPop.hide();
+            });
+            colorPiker.addListener("pickcolor", function () {
+                tone.value = arguments[1];
+                colorPop.hide();
+            });
         },
 
         createTable:function (hasCaption, hasTitle) {
-            var doc = document,
-                arr = [];
+            var arr = [];
             arr.push("<table id='J_example'>");
             if (hasCaption) {
-                arr.push("<caption>"+lang.captionName+"</caption>")
+                arr.push("<caption>" + lang.captionName + "</caption>")
             }
             if (hasTitle) {
                 arr.push("<tr>");
-                for(var j=0;j<5;j++){
-                    arr.push("<th>"+lang.titleName+"</th>")
+                for (var j = 0; j < 5; j++) {
+                    arr.push("<th>" + lang.titleName + "</th>")
                 }
                 arr.push("</tr>");
             }
             for (var i = 0; i < 6; i++) {
                 arr.push("<tr>");
-                for(var k=0;k<5;k++){
-                    arr.push("<td>"+lang.cellsName+"</td>")
+                for (var k = 0; k < 5; k++) {
+                    arr.push("<td>" + lang.cellsName + "</td>")
                 }
                 arr.push("</tr>");
             }
             arr.push("</table>");
-            $G("J_preview").innerHTML = arr.join("");
+            preview.innerHTML = arr.join("");
         },
 
         titleHanler:function () {
             var example = $G("J_example");
             if (title.checked) {
                 var row = document.createElement("tr");
-                row.innerHTML = "<th>"+lang.titleName+"</th><th>"+lang.titleName+"</th><th>"+lang.titleName+"</th><th>"
-                    +lang.titleName+"</th><th>"+lang.titleName+"</th>";
+                row.innerHTML = "<th>" + lang.titleName + "</th><th>" + lang.titleName + "</th><th>" + lang.titleName + "</th><th>"
+                    + lang.titleName + "</th><th>" + lang.titleName + "</th>";
                 example.insertBefore(row, example.firstChild);
             } else {
                 domUtils.remove(example.rows[0]);
@@ -89,15 +108,21 @@
             });
             example.setAttribute('width', '100%');
         },
-        setAutoSize:function(){
-            var me=this,
+
+        setColor:function(){
+            var start = editor.selection.getStart(),
+                color =domUtils.findParentByTagName(start, "td", true);
+            tone.value=domUtils.getComputedStyle(color,"border-color");
+        },
+        setAutoSize:function () {
+            var me = this,
                 start = editor.selection.getStart(),
-                flag=!domUtils.findParentByTagName(start, "table",true).width;
-            if(flag){
-                autoSizeContent.checked=flag;
+                flag = !domUtils.findParentByTagName(start, "table", true).width;
+            if (flag) {
+                autoSizeContent.checked = flag;
                 me.autoSizeContentHanler();
-            }else{
-                autoSizePage.checked=!flag;
+            } else {
+                autoSizePage.checked = !flag;
                 me.autoSizePageHanler();
             }
         }
@@ -105,13 +130,15 @@
 
     new editTable;
 
-    function adaptByTextTable(){
+    function adaptByTextTable() {
         editor.execCommand("adaptbywindow");
         editor.execCommand('adaptbytext');
     }
+
     dialog.onok = function () {
         title.checked ? editor.execCommand("inserttitle") : editor.execCommand("deletetitle");
         caption.checked ? editor.execCommand("insertcaption") : editor.execCommand("deletecaption");
-        autoSizeContent.checked ? adaptByTextTable(): editor.execCommand("adaptbywindow");
+        autoSizeContent.checked ? adaptByTextTable() : editor.execCommand("adaptbywindow");
+        editor.execCommand("edittable",tone.value);
     };
 })();

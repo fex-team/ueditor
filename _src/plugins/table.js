@@ -1097,7 +1097,7 @@ UE.plugins['table'] = function () {
             var selectedTds = getSelectedArr(this);
             if(selectedTds.length){
                 for(var i= 0,ci;ci = selectedTds[i++];){
-                    ci.setAttribute('valign',valign);
+                    ci.setAttribute('vAlign',valign);
                 }
             }
         }
@@ -1679,6 +1679,18 @@ UE.plugins['table'] = function () {
     UE.commands['edittable'] = {
         queryCommandState:function () {
             return getTableItemsByRange(this).cell ? 0 : -1
+        },
+        execCommand:function(cmd,color){
+            var table = getTableItemsByRange(this).table;
+            if(table){
+                var arr = domUtils.getElementsByTagName( table,"td").concat(
+                    domUtils.getElementsByTagName( table,"th"),
+                    domUtils.getElementsByTagName( table,"caption")
+                );
+                utils.each(arr,function(node){
+                    node.style.borderColor=color;
+                });
+            }
         }
     };
 

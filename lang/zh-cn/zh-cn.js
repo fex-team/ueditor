@@ -447,7 +447,9 @@ UE.I18N['zh-cn'] = {
             'lang_tableSize':'自动调整表格尺寸',
             'lang_autoSizeContent':'按表格文字自适应',
             'lang_autoSizePage':'按页面宽度自适应',
-            'lang_example':'示例'
+            'lang_example':'示例',
+            'lang_borderStyle':'表格边框',
+            'lang_color':'颜色:'
         },
         captionName:'表格名称',
         titleName:'标题',

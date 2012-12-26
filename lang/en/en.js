@@ -464,7 +464,9 @@ UE.I18N['en'] = {
             'lang_tableSize':'Automatically adjust table size',
                 'lang_autoSizeContent':'Adaptive by form text',
             'lang_autoSizePage':'Page width adaptive',
-            'lang_example':'Example'
+            'lang_example':'Example',
+            'lang_borderStyle':'Table Border',
+            'lang_color':'Color:'
         },
         captionName:'Caption',
         titleName:'Title',
