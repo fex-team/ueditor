@@ -144,8 +144,9 @@ UE.plugins['highlightcode'] = function() {
         })
     });
 
+
     //避免table插件对于代码高亮的影响
-    me.addListener('excludetable',function(cmd,target){
+    me.addListener('excludetable excludeNodeinautotype',function (cmd,target){
         if(target && domUtils.findParent(target,function(node){
             return node.tagName == 'DIV' && domUtils.hasClass(node,'syntaxhighlighter');
         },true)){
