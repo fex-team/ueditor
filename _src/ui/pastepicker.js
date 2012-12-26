@@ -40,6 +40,8 @@
             if(/hidden/ig.test(domUtils.getComputedStyle(node,"visibility"))){
                 if((subPop.top+subPop.height)>screenHt)
                     node.style.top=(-subPop.height-cur.offsetHeight)+"px";
+                else
+                    node.style.top="";
 
                 node.style.visibility="visible";
                 domUtils.addClass(cur,"edui-state-opened");
