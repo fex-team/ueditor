@@ -520,7 +520,8 @@ UE.plugins['table'] = function () {
                     if (state != -1 && (firstState === undefined || firstState == state)) {
                         var isEmpty = domUtils.isEmptyNode(td);
                         result = oldExecCommand.apply(me, arguments);
-                        if (isEmpty != domUtils.isEmptyNode(td)) {
+                        var reg = new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
+                        if (isEmpty != domUtils.isEmptyNode(td) && !td[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length) {
                             domUtils.fillNode(me.document, td)
                         }
                     }
