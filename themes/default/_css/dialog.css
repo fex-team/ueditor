@@ -259,6 +259,17 @@
     height: 265px;
 }
 
+/*edittip-dialog*/
+.edui-default .edui-for-edittip .edui-dialog-content {
+    width: 225px;
+    height: 60px;
+}
+
+/*edittd-dialog*/
+.edui-default .edui-for-edittd .edui-dialog-content {
+    width: 240px;
+    height: 50px;
+}
 /*snapscreen-dialog*/
 .edui-default .edui-for-snapscreen .edui-dialog-content {
     width: 400px;
@@ -269,9 +280,4 @@
 .edui-default .edui-for-music .edui-dialog-content {
     width: 515px;
     height: 360px;
-}
-/*edittip-dialog*/
-.edui-default .edui-for-edittip .edui-dialog-content {
-    width: 225px;
-    height: 60px;
 }

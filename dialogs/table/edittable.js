@@ -109,15 +109,17 @@
             example.setAttribute('width', '100%');
         },
 
-        setColor:function(){
+        setColor:function () {
             var start = editor.selection.getStart(),
-                color =domUtils.findParentByTagName(start, "td", true);
-            tone.value=domUtils.getComputedStyle(color,"border-color");
+                color = domUtils.findParentByTagName(start, "td", true);
+            tone.value = domUtils.getComputedStyle(color, "border-color");
         },
         setAutoSize:function () {
             var me = this,
                 start = editor.selection.getStart(),
-                flag = !domUtils.findParentByTagName(start, "table", true).width;
+                wt = domUtils.findParentByTagName(start, "table", true).width,
+                flag = !wt;
+            if (wt && !(/%/.test(wt)))   return;
             if (flag) {
                 autoSizeContent.checked = flag;
                 me.autoSizeContentHanler();
@@ -138,7 +140,8 @@
     dialog.onok = function () {
         title.checked ? editor.execCommand("inserttitle") : editor.execCommand("deletetitle");
         caption.checked ? editor.execCommand("insertcaption") : editor.execCommand("deletecaption");
-        autoSizeContent.checked ? adaptByTextTable() : editor.execCommand("adaptbywindow");
-        editor.execCommand("edittable",tone.value);
+        autoSizeContent.checked ? adaptByTextTable() : "";
+        autoSizePage.checked ? editor.execCommand("adaptbywindow") : "";
+        editor.execCommand("edittable", tone.value);
     };
 })();

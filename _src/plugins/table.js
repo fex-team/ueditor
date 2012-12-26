@@ -1693,6 +1693,28 @@ UE.plugins['table'] = function () {
             }
         }
     };
+    //单元格属性
+    UE.commands['edittd'] = {
+        queryCommandState:function () {
+            return getTableItemsByRange(this).cell ? 0 : -1
+        },
+        execCommand:function(cmd,bkColor){
+            var me = this,
+                ut = getUETableBySelected(me);
+
+            if (!ut) {
+                var start = me.selection.getStart(),
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th",'caption'], true);
+                if(cell){
+                    cell.style.backgroundColor=bkColor;
+                }
+            } else {
+                utils.each(ut.selectedTds, function (cell) {
+                    cell.style.backgroundColor=bkColor;
+                });
+            }
+        }
+    };
 
     /**
      * UE表格操作类

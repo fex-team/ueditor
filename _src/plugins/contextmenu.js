@@ -154,6 +154,16 @@ UE.plugins['contextmenu'] = function () {
                         },
                         '-',
                         {
+                            label:lang.edittd,
+                            cmdName:'edittd',
+                            exec:function () {
+                                if ( UE.ui['edittd'] ) {
+                                    new UE.ui['edittd']( this );
+                                }
+                                this.getDialog('edittd').open();
+                            }
+                        },
+                        {
                             label:lang.edittable,
                             cmdName:'edittable',
                             exec:function () {
