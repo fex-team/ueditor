@@ -33,31 +33,14 @@
 
     UE.commands['unlink'] = {
         execCommand : function() {
-            var as,
-                range = new dom.Range(this.document),
-                tds = this.currentSelectedArr,
+            var range = this.selection.getRange(),
                 bookmark;
-            if(tds && tds.length >0){
-                for(var i=0,ti;ti=tds[i++];){
-                    as = domUtils.getElementsByTagName(ti,'a');
-                    for(var j=0,aj;aj=as[j++];){
-                        domUtils.remove(aj,true);
-                    }
-                }
-                if(domUtils.isEmptyNode(tds[0])){
-                    range.setStart(tds[0],0).setCursor();
-                }else{
-                    range.selectNodeContents(tds[0]).select();
-                }
-            }else{
-                range = this.selection.getRange();
-                if(range.collapsed && !domUtils.findParentByTagName( range.startContainer, 'a', true )){
-                    return;
-                }
-                bookmark = range.createBookmark();
-                optimize( range );
-                range.removeInlineStyle( 'a' ).moveToBookmark( bookmark ).select();
+            if(range.collapsed && !domUtils.findParentByTagName( range.startContainer, 'a', true )){
+                return;
             }
+            bookmark = range.createBookmark();
+            optimize( range );
+            range.removeInlineStyle( 'a' ).moveToBookmark( bookmark ).select();
         },
         queryCommandState : function(){
             return !this.highlight && this.queryCommandValue('link') ?  0 : -1;
@@ -106,97 +89,61 @@
         }
     }
     UE.commands['link'] = {
-        queryCommandState : function(){
-            return this.highlight ? -1 :0;
-        },
         execCommand : function( cmdName, opt ) {
-
-            var range = new dom.Range(this.document),
-                tds = this.currentSelectedArr;
-
+            var range;
             opt.data_ue_src && (opt.data_ue_src = utils.unhtml(opt.data_ue_src,/[<">]/g));
             opt.href && (opt.href = utils.unhtml(opt.href,/[<">]/g));
             opt.textValue && (opt.textValue = utils.unhtml(opt.textValue,/[<">]/g));
-            if(tds && tds.length){
-                for(var i=0,ti;ti=tds[i++];){
-                    if(domUtils.isEmptyNode(ti)){
-                        ti[browser.ie ? 'innerText' : 'textContent'] =   utils.html(opt.textValue || opt.href);
-                    }
-                    doLink(range.selectNodeContents(ti),opt,this);
-                }
-                range.selectNodeContents(tds[0]).select();
+            doLink(range=this.selection.getRange(),opt,this);
+            //闭合都不加占位符，如果加了会在a后边多个占位符节点，导致a是图片背景组成的列表，出现空白问题
+            range.collapse().select(true);
 
-
-            }else{
-                doLink(range=this.selection.getRange(),opt,this);
-                //闭合都不加占位符，如果加了会在a后边多个占位符节点，导致a是图片背景组成的列表，出现空白问题
-                range.collapse().select(true);
-
-            }
         },
         queryCommandValue : function() {
-
-
-            var range = new dom.Range(this.document),
-                tds = this.currentSelectedArr,
-                as,
+            var range = this.selection.getRange(),
                 node;
-            if(tds && tds.length){
-                for(var i=0,ti;ti=tds[i++];){
-                    as = ti.getElementsByTagName('a');
-                    if(as[0]){
-                        return as[0];
-                    }
-                }
-            }else{
-                range = this.selection.getRange();
 
 
 
-                if ( range.collapsed ) {
+            if ( range.collapsed ) {
 //                    node = this.selection.getStart();
-                    //在ie下getstart()取值偏上了
-                    node = range.startContainer;
-                    node = node.nodeType == 1 ? node : node.parentNode;
+                //在ie下getstart()取值偏上了
+                node = range.startContainer;
+                node = node.nodeType == 1 ? node : node.parentNode;
 
-                    if ( node && (node = domUtils.findParentByTagName( node, 'a', true )) && ! domUtils.isInNodeEndBoundary(range,node)) {
-
-                        return node;
-                    }
-                } else {
-                    //trace:1111  如果是<p><a>xx</a></p> startContainer是p就会找不到a
-                    range.shrinkBoundary();
-                    var start = range.startContainer.nodeType  == 3 || !range.startContainer.childNodes[range.startOffset] ? range.startContainer : range.startContainer.childNodes[range.startOffset],
-                        end =  range.endContainer.nodeType == 3 || range.endOffset == 0 ? range.endContainer : range.endContainer.childNodes[range.endOffset-1],
-
-                        common = range.getCommonAncestor();
-
-
-                    node = domUtils.findParentByTagName( common, 'a', true );
-                    if ( !node && common.nodeType == 1){
-
-                        var as = common.getElementsByTagName( 'a' ),
-                            ps,pe;
-
-                        for ( var i = 0,ci; ci = as[i++]; ) {
-                            ps = domUtils.getPosition( ci, start ),pe = domUtils.getPosition( ci,end);
-                            if ( (ps & domUtils.POSITION_FOLLOWING || ps & domUtils.POSITION_CONTAINS)
-                                &&
-                                (pe & domUtils.POSITION_PRECEDING || pe & domUtils.POSITION_CONTAINS)
-                                ) {
-                                node = ci;
-                                break;
-                            }
-                        }
-                    }
+                if ( node && (node = domUtils.findParentByTagName( node, 'a', true )) && ! domUtils.isInNodeEndBoundary(range,node)) {
 
                     return node;
                 }
-            }
+            } else {
+                //trace:1111  如果是<p><a>xx</a></p> startContainer是p就会找不到a
+                range.shrinkBoundary();
+                var start = range.startContainer.nodeType  == 3 || !range.startContainer.childNodes[range.startOffset] ? range.startContainer : range.startContainer.childNodes[range.startOffset],
+                    end =  range.endContainer.nodeType == 3 || range.endOffset == 0 ? range.endContainer : range.endContainer.childNodes[range.endOffset-1],
 
+                    common = range.getCommonAncestor();
+
+
+                node = domUtils.findParentByTagName( common, 'a', true );
+                if ( !node && common.nodeType == 1){
+
+                    var as = common.getElementsByTagName( 'a' ),
+                        ps,pe;
+
+                    for ( var i = 0,ci; ci = as[i++]; ) {
+                        ps = domUtils.getPosition( ci, start ),pe = domUtils.getPosition( ci,end);
+                        if ( (ps & domUtils.POSITION_FOLLOWING || ps & domUtils.POSITION_CONTAINS)
+                            &&
+                            (pe & domUtils.POSITION_PRECEDING || pe & domUtils.POSITION_CONTAINS)
+                            ) {
+                            node = ci;
+                            break;
+                        }
+                    }
+                }
+                return node;
+            }
 
         }
     };
-
-
 })();
