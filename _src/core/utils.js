@@ -309,6 +309,9 @@ var utils = UE.utils = {
                     element.onload = element.onreadystatechange = null;
                 }
             };
+            element.onerror = function(){
+                throw Error('The load '+(obj.href||obj.src)+' fails,check the url settings of file editor_config.js ')
+            };
             doc.getElementsByTagName("head")[0].appendChild(element);
         }
     }(),
