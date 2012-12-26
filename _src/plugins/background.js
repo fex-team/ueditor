@@ -9,7 +9,7 @@ UE.plugins['background'] = function(){
         }else{
             url =  su!="none" ? su.replace(/url\("?|"?\)/ig,""):"";
         }
-        headHtml.html += '<style type="text/css">body{';
+        var html = '<style type="text/css">body{';
         var bgObj = {
             "background-color" : domUtils.getComputedStyle(body,"background-color")||"#ffffff",
             'background-image' : url ? 'url('+url+')' : '',
@@ -19,9 +19,10 @@ UE.plugins['background'] = function(){
         };
         for ( var name in bgObj ) {
             if ( bgObj.hasOwnProperty( name ) ) {
-                headHtml.html += name+":"+bgObj[name]+";";
+                html += name+":"+bgObj[name]+";";
             }
         }
-        headHtml.html += '}</style> ';
+        html += '}</style> ';
+        headHtml.push(html);
     });
 }

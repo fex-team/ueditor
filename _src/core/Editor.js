@@ -453,10 +453,11 @@
          */
         getAllHtml:function () {
             var me = this,
-                    headHtml = {html:''},
+                    headHtml = [],
                     html = '';
             me.fireEvent( 'getAllHtml', headHtml );
-            return '<html><head>' + (me.options.charset ? '<meta http-equiv="Content-Type" content="text/html; charset=' + me.options.charset + '"/>' : '') + me.document.getElementsByTagName( 'head' )[0].innerHTML + headHtml.html + '</head>'
+            return '<html><head>' + (me.options.charset ? '<meta http-equiv="Content-Type" content="text/html; charset=' + me.options.charset + '"/>' : '')
+                + me.document.getElementsByTagName( 'head' )[0].innerHTML + headHtml.join('\n') + '</head>'
                     + '<body ' + (ie && browser.version < 9 ? 'class="view"' : '') + '>' + me.getContent( null, null, true ) + '</body></html>';
         },
         /**

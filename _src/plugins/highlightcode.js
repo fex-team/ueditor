@@ -13,12 +13,12 @@ UE.plugins['highlightcode'] = function() {
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
             if(code && syntax){
-
                 me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+code+'</pre>',true);
-
                 var pre = me.document.getElementById('highlightcode_id');
-                domUtils.removeAttributes(pre,'id');
-                me.window.SyntaxHighlighter.highlight(pre);
+                if(pre){
+                    domUtils.removeAttributes(pre,'id');
+                    me.window.SyntaxHighlighter.highlight(pre);
+                }
             }else{
                 var range = this.selection.getRange(),
                    start = domUtils.findParentByTagName(range.startContainer, 'table', true),
@@ -114,20 +114,20 @@ UE.plugins['highlightcode'] = function() {
         }
 
     });
-    me.addListener("beforegetcontent",function(){
+    me.addListener("beforegetcontent beforegetscene",function(){
         utils.each(domUtils.getElementsByTagName(me.body,'div','syntaxhighlighter'),function(di){
             var str = [];
             utils.each(di.getElementsByTagName('code'),function(ci){
                 str.push(ci[browser.ie?'innerText':'textContent'])
             });
             var pre = domUtils.createElement(me.document,'pre',{
-                innerHTML : str.join('\n'),
-                'class' : 'brush: '+di.className.match(/[\w-]+$/)[0]+';toolbar:false;'
+                'class' : 'brush: '+di.className.replace(/\s+/g,' ').split(' ')[1]+';toolbar:false;'
             });
+            pre.appendChild(me.document.createTextNode(str.join('\n')));
             di.parentNode.replaceChild(pre,di);
         });
     });
-    me.addListener("aftergetcontent aftersetcontent",changePre);
+    me.addListener("aftergetcontent aftersetcontent aftergetscene",changePre);
 
     me.addListener('afterinserthtml',function(){
         utils.each(domUtils.getElementsByTagName(this.document,'div',function(node){
@@ -147,7 +147,7 @@ UE.plugins['highlightcode'] = function() {
     //避免table插件对于代码高亮的影响
     me.addListener('excludetable',function(cmd,target){
         if(target && domUtils.findParent(target,function(node){
-            return node.tagName == 'div' && domUtils.hasClass(node,'syntaxhighlighter');
+            return node.tagName == 'DIV' && domUtils.hasClass(node,'syntaxhighlighter');
         },true)){
             return true;
         }
@@ -162,29 +162,19 @@ UE.plugins['highlightcode'] = function() {
         });
     }
 
-    me.addListener('getAllHtml',function(type,html){
+    me.addListener('getAllHtml',function(type,headHtml){
         var coreHtml = '';
-
         for(var i= 0,ci,divs=domUtils.getElementsByTagName(me.document,'div');ci=divs[i++];){
             if(domUtils.hasClass(ci,'syntaxhighlighter')){
-                if(!me.document.getElementById('syntaxhighlighter_css')){
-                    coreHtml = '<link id="syntaxhighlighter_css" rel="stylesheet" type="text/css" href="' +
-                        (me.options.highlightCssUrl ||me.options.UEDITOR_HOME_URL + 'third-party/SyntaxHighlighter/shCoreDefault.css"') + ' ></link>'
-                }
-                if(!me.window.XRegExp){
-                    coreHtml += '<script id="syntaxhighlighter_js"  type="text/javascript" src="' +
-                        (me.options.highlightJsUrl || me.options.UEDITOR_HOME_URL + 'third-party/SyntaxHighlighter/shCore.js"') + ' ></script>'+
-                        '<script type="text/javascript">window.onload = function(){SyntaxHighlighter.highlight();' +
-
-                        'setTimeout(function(){' +
-                            'for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){' +
-                            'var tds = di.getElementsByTagName("td");' +
-                            'for(var j=0,li,ri;li=tds[0].childNodes[j];j++){' +
-                            'ri = tds[1].firstChild.childNodes[j];' +
-                            'ri.style.height = li.style.height = ri.offsetHeight + "px";' +
-                            '}' +
-                        '}},100)}</script>'
-                }
+                coreHtml = '<script type="text/javascript">window.onload = function(){SyntaxHighlighter.highlight();' +
+                    'setTimeout(function(){' +
+                    'for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){' +
+                    'var tds = di.getElementsByTagName("td");' +
+                    'for(var j=0,li,ri;li=tds[0].childNodes[j];j++){' +
+                    'ri = tds[1].firstChild.childNodes[j];' +
+                    'ri.style.height = li.style.height = ri.offsetHeight + "px";' +
+                    '}' +
+                    '}},100)}</script>'
                 break;
             }
         }
@@ -198,7 +188,7 @@ UE.plugins['highlightcode'] = function() {
 
             }
         }
-        html.html += coreHtml;
+        coreHtml && headHtml.push(coreHtml)
     });
     //全屏时，重新算一下宽度
     me.addListener('fullscreenchanged',function(){
