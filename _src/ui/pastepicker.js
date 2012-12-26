@@ -29,7 +29,8 @@
             return this.target;
         },
         format:function(isTransfer){
-            this.editor.fireEvent('pasteTransfer',isTransfer)
+            this.editor.ui._isTransfer=true;
+            this.editor.fireEvent('pasteTransfer',isTransfer);
         },
         _onClick: function (cur){
             var node=domUtils.getNextDomNode(cur),
