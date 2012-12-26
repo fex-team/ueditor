@@ -1078,6 +1078,65 @@
                 return true;
             }
             return false;
+        },
+        createAddress : function(ingoreEnd,ingoreTxt){
+            var addr = {},me = this;
+            this.trimBoundary();
+            function getAddress(isStart){
+                var node;
+                if(isStart){
+                    node = me.startContainer.childNodes[me.startOffset]  || me.startContainer;
+                }else{
+                    node = me.endContainer.childNodes[me.endOffset]  || me.endContainer;
+                }
+                var parents = domUtils.findParents(node,false,function(node){return !domUtils.isBody(node)}),
+                    addrs = [];
+                for(var i = 0,ci;ci = parents[i++];){
+                    addrs.push(domUtils.getNodeIndex(ci,ingoreTxt));
+                }
+                addrs.push(domUtils.getNodeIndex(node,ingoreTxt));
+                //有可能是空的位置 <b>xxxx|</b>
+                if(node == (isStart ? me.startContainer : me.endContainer)){
+                    addrs.push(isStart ? me.startOffset : me.endOffset)
+                }
+                return addrs;
+            }
+            addr.startAddress = getAddress(true);
+            if(!ingoreEnd){
+                addr.endAddress = getAddress();
+            }
+            return addr;
+        },
+        moveToAddress : function(addr){
+            var me = this;
+            function getNode(address,isStart){
+                var tmpNode = me.startContainer.ownerDocument.body,
+                    parentNode,offset;
+                for(var i= 0,ci,l=address.length;i<l;i++){
+                    ci = address[i];
+                    parentNode = tmpNode;
+                    tmpNode = tmpNode.childNodes[ci];
+                    if(!tmpNode){
+                        offset = ci;
+                    }
+                }
+                if(isStart){
+                    if(tmpNode){
+                        me.setStartBefore(tmpNode)
+                    }else{
+                        me.setStart(parentNode,offset)
+                    }
+                }else{
+                    if(tmpNode){
+                        me.setEndBefore(tmpNode)
+                    }else{
+                        me.setEnd(parentNode,offset)
+                    }
+                }
+            }
+            getNode(addr.startAddress,true);
+            addr.endAddress &&  getNode(addr.endAddress);
+            return me;
         }
     };
 })();
