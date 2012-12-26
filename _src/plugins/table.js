@@ -1645,6 +1645,7 @@ UE.plugins['table'] = function () {
         queryCommandState:function () {
             var ut = getUETableBySelected(this);
             if (!ut) return -1;
+            if (ut.selectedTds && /th/ig.test(ut.selectedTds[0].tagName)) return -1;
             return ut.isFullRow() || ut.isFullCol() ? 0 : -1;
         },
         execCommand:function (cmd) {
@@ -1652,7 +1653,7 @@ UE.plugins['table'] = function () {
                 ut = getUETableBySelected(me);
 
             function getAverageHeight() {
-                var averageHeight, rowNum, sumHeight,
+                var averageHeight, rowNum, sumHeight=0,
                     tb = ut.table,
                     tbAttr = getDefaultValue(me, tb);
 
@@ -1668,19 +1669,21 @@ UE.plugins['table'] = function () {
                         thHeight = thArr[0].offsetHeight;
                     }
 
-                    sumHeight = tb.offsetHeight - (captionHeight||0) - (thHeight||0);
+                    sumHeight = tb.offsetHeight - (captionHeight || 0) - (thHeight || 0);
                     rowNum = thArr.length == 0 ? ut.rowsNum : (ut.rowsNum - 1);
                 } else {
                     var begin = ut.cellsRange.beginRowIndex,
                         end = ut.cellsRange.endRowIndex,
+                        count= 0,
                         trs = domUtils.getElementsByTagName(tb, "tr");
                     for (var i = begin; i <= end; i++) {
                         sumHeight += trs[i].offsetHeight;
+                        count+=1;
                     }
-                    rowNum = end + 1;
+                    rowNum = count;
                 }
                 //ie8下是混杂模式
-                if (browser.ie && browser.version < 9) {
+                if (browser.ie && browser.version < 9)  {
                     averageHeight = Math.ceil(sumHeight / rowNum);
                 } else {
                     averageHeight = Math.ceil(sumHeight / rowNum) - tbAttr.tdBorder * 2;
