@@ -1704,7 +1704,7 @@ UE.plugins['table'] = function () {
 
             if (!ut) {
                 var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th",'caption'], true);
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
                 if(cell){
                     cell.style.backgroundColor=bkColor;
                 }
