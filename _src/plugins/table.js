@@ -1645,6 +1645,7 @@ UE.plugins['table'] = function () {
         queryCommandState:function () {
             var ut = getUETableBySelected(this);
             if (!ut) return -1;
+            if (ut.selectedTds && /th/ig.test(ut.selectedTds[0].tagName)) return -1;
             return ut.isFullRow() || ut.isFullCol() ? 0 : -1;
         },
         execCommand:function (cmd) {
@@ -1668,7 +1669,7 @@ UE.plugins['table'] = function () {
                         thHeight = thArr[0].offsetHeight;
                     }
 
-                    sumHeight = tb.offsetHeight - (captionHeight||0) - (thHeight||0);
+                    sumHeight = tb.offsetHeight - (captionHeight || 0) - (thHeight || 0);
                     rowNum = thArr.length == 0 ? ut.rowsNum : (ut.rowsNum - 1);
                 } else {
                     var begin = ut.cellsRange.beginRowIndex,
