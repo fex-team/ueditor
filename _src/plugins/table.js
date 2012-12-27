@@ -65,7 +65,7 @@ UE.plugins['table'] = function () {
         utils.cssRule('table',
             //选中的td上的样式
             '.selectTdClass{background-color:#edf5fa !important}' +
-                'table.noBorderTable td,table.noBorderTable th{border:1px dashed #ddd !important}' +
+                'table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}' +
                 //插入的表格的默认样式
                 'table{line-height:22px; margin-bottom:10px;border-collapse:collapse;display:table;}' +
                 'td,th{ background:white; padding: 0 10px;border: 1px solid #DDD;line-height: 22px;}' +
@@ -441,6 +441,8 @@ UE.plugins['table'] = function () {
                     }
                 }
             });
+
+            switchBoderColor(true);
         });
 
         //仅IE8以上支持
@@ -488,6 +490,13 @@ UE.plugins['table'] = function () {
             var ut = getUETableBySelected(me);
             if (!ut) return;
             notCtrlKey && ut.clearSelected();
+        });
+
+        me.addListener("beforegetcontent", function () {
+            switchBoderColor(false);
+        });
+        me.addListener("aftergetcontent", function () {
+            switchBoderColor(true);
         });
 
         //重写execCommand命令，用于处理框选时的处理
@@ -1021,6 +1030,22 @@ UE.plugins['table'] = function () {
         }
     }
 
+    /**
+     * 当表格边框颜色为白色时设置为虚线,true为添加虚线
+     * @param flag
+     */
+    function switchBoderColor(flag) {
+        var tableArr = domUtils.getElementsByTagName(me.body, "table"), color;
+        for (var i = 0, node; node = tableArr[i++];) {
+            if (flag) {
+                color = (domUtils.getElementsByTagName(node, "td")[0].style.borderColor).replace(/\s/g, "");
+                if (/(#ffffff)|(rgb\(255,255,255\))/ig.test(color))
+                    domUtils.addClass(node, "noBorderTable")
+            } else {
+                domUtils.removeClasses(node, "noBorderTable")
+            }
+        }
+    }
 
     UE.commands['inserttable'] = {
         queryCommandState:function () {
@@ -1654,7 +1679,7 @@ UE.plugins['table'] = function () {
                 ut = getUETableBySelected(me);
 
             function getAverageHeight() {
-                var averageHeight, rowNum, sumHeight=0,
+                var averageHeight, rowNum, sumHeight = 0,
                     tb = ut.table,
                     tbAttr = getDefaultValue(me, tb);
 
@@ -1675,16 +1700,16 @@ UE.plugins['table'] = function () {
                 } else {
                     var begin = ut.cellsRange.beginRowIndex,
                         end = ut.cellsRange.endRowIndex,
-                        count= 0,
+                        count = 0,
                         trs = domUtils.getElementsByTagName(tb, "tr");
                     for (var i = begin; i <= end; i++) {
                         sumHeight += trs[i].offsetHeight;
-                        count+=1;
+                        count += 1;
                     }
                     rowNum = count;
                 }
                 //ie8下是混杂模式
-                if (browser.ie && browser.version < 9)  {
+                if (browser.ie && browser.version < 9) {
                     averageHeight = Math.ceil(sumHeight / rowNum);
                 } else {
                     averageHeight = Math.ceil(sumHeight / rowNum) - tbAttr.tdBorder * 2;
@@ -1742,14 +1767,9 @@ UE.plugins['table'] = function () {
                     domUtils.getElementsByTagName(table, "th"),
                     domUtils.getElementsByTagName(table, "caption")
                 );
-                if(/#ffffff/ig.test(color)) {
-                    domUtils.addClass(table,"noBorderTable");
-                }else{
-                    domUtils.removeClasses(table,["noBorderTable"]);
-                    utils.each(arr, function (node) {
-                        node.style.borderColor = color;
-                    });
-                }
+                utils.each(arr, function (node) {
+                    node.style.borderColor = color;
+                });
             }
         }
     };
