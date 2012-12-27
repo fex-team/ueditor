@@ -354,16 +354,21 @@ UE.plugins['table'] = function () {
             //尽可能排除一些不需要更新的状况
             hideDragLine(me);
             if (getUETableBySelected(me))return;
+            var rng = me.selection.getRange();
+            var start = rng.startContainer;
+            start = domUtils.findParentByTagName(start,['td', 'th'],true);
             utils.each(domUtils.getElementsByTagName(me.document, 'table'), function (table) {
                 if (me.fireEvent("excludetable", table) === true) return;
                 table.ueTable = new UETable(table);
+
                 utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
-                    if (domUtils.isEmptyBlock(td)) {
+
+                    if (domUtils.isEmptyBlock(td) && td !== start) {
                         domUtils.fillNode(me.document, td)
                     }
                 });
                 utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
-                    if (domUtils.isEmptyBlock(th)) {
+                    if (domUtils.isEmptyBlock(th) && th !== start ) {
                         domUtils.fillNode(me.document, th)
                     }
                 });
