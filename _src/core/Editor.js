@@ -989,16 +989,16 @@
         },
         /**
          * 计算编辑器当前内容的长度
-         * @name  getLang
-         * @grammar editor.getLang(path)  =>  （JSON|String) 路径根据的是lang目录下的语言文件的路径结构
+         * @name  getContentLength
+         * @grammar editor.getContentLength(ingoneHtml,tagNames)  =>
          * @example
-         * editor.getLang('contextMenu.delete') //如果当前是中文，那返回是的是删除
+         * editor.getLang(true)
          */
         getContentLength : function(ingoneHtml,tagNames){
             var count = this.getContent().length;
             if(ingoneHtml){
                 tagNames = (tagNames||[]).concat([ 'hr','img','iframe']);
-                count = this.getContentTxt().replace(/[ \t\r\n]+/g,'').length;
+                count = this.getContentTxt().replace(/[\t\r\n]+/g,'').length;
                 for(var i= 0,ci;ci=tagNames[i++];){
                     count += this.document.getElementsByTagName(ci).length;
                 }
