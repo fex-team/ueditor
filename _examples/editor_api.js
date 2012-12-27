@@ -48,7 +48,6 @@
             'plugins/paste.js',           //粘贴时候的提示依赖了UI
             'plugins/list.js',
             'plugins/source.js',
-            'plugins/shortcutkeys.js',
             'plugins/enterkey.js',
             'plugins/keystrokes.js',
             'plugins/fiximgclick.js',
