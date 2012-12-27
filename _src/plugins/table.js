@@ -1451,7 +1451,7 @@ UE.plugins['table'] = function () {
             }
             var table = ut.table,
                 rng = this.selection.getRange();
-            ;
+
             if (!table.getElementsByTagName('td').length) {
                 var nextSibling = table.nextSibling;
                 domUtils.remove(table);
