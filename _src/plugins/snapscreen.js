@@ -50,6 +50,6 @@ UE.commands['snapscreen'] = {
         }
     },
     queryCommandState: function(){
-        return this.highlight || !browser.ie ? -1 :0;
+        return !browser.ie ? -1 :0;
     }
 };

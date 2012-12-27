@@ -142,9 +142,6 @@ UE.plugins['formatmatch'] = function(){
 
         },
         queryCommandState : function() {
-             if(this.highlight){
-                       return -1;
-                   }
             return flag;
         },
         notNeedUndo : 1

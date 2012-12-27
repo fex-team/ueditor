@@ -68,7 +68,7 @@ UE.plugins['music'] = function () {
             var me = this,
                 img = me.selection.getRange().getClosedNode(),
                 flag = img && (img.className == "edui-faked-music");
-            return me.highlight ? -1 : (flag ? 1 : 0);
+            return flag ? 1 : 0;
         }
     };
 };

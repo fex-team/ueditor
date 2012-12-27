@@ -298,8 +298,12 @@ UE.plugins['undo'] = function() {
         domUtils.on(me.body,'compositionend',function(){
             inputType = false;
         })
-    })
-
+    });
+    //快捷键
+    me.addshortcutkey({
+        "Undo" :  "ctrl+90",//undo
+        "Redo" : "ctrl+89" //redo
+    });
     me.addListener( 'keydown', function( type, evt ) {
         var keyCode = evt.keyCode || evt.which;
         if ( !keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey ) {

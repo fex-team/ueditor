@@ -30,13 +30,13 @@ UE.plugins['selectall'] = function(){
         },
         notNeedUndo : 1
     };
-
     me.addListener('ready',function(){
-
         domUtils.on(me.document,'click',function(evt){
-
             me.selectAll = false;
         });
     });
-
+    //快捷键
+    me.addshortcutkey({
+         "selectAll" : "ctrl+65"
+    });
 };

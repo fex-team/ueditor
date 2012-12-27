@@ -354,16 +354,21 @@ UE.plugins['table'] = function () {
             //尽可能排除一些不需要更新的状况
             hideDragLine(me);
             if (getUETableBySelected(me))return;
+            var rng = me.selection.getRange();
+            var start = rng.startContainer;
+            start = domUtils.findParentByTagName(start,['td', 'th'],true);
             utils.each(domUtils.getElementsByTagName(me.document, 'table'), function (table) {
                 if (me.fireEvent("excludetable", table) === true) return;
                 table.ueTable = new UETable(table);
+
                 utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
-                    if (domUtils.isEmptyBlock(td)) {
+
+                    if (domUtils.isEmptyBlock(td) && td !== start) {
                         domUtils.fillNode(me.document, td)
                     }
                 });
                 utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
-                    if (domUtils.isEmptyBlock(th)) {
+                    if (domUtils.isEmptyBlock(th) && th !== start ) {
                         domUtils.fillNode(me.document, th)
                     }
                 });
@@ -868,10 +873,24 @@ UE.plugins['table'] = function () {
 
     function mouseUpEvent(type, evt) {
         if (evt.button == 2)return;
+        var me = this;
+        //清除表格上原生跨选问题
+        var range = me.selection.getRange(),
+            start = domUtils.findParentByTagName(range.startContainer,'table',true),
+            end = domUtils.findParentByTagName(range.endContainer,'table',true);
+
+        if(start || end ){
+            if(start === end){
+                start = domUtils.findParentByTagName(range.startContainer,['td','th','caption'],true);
+                end = domUtils.findParentByTagName(range.endContainer,['td','th','caption'],true);
+                if(start !== end){
+                    me.selection.clearRange()
+                }
+            }else{
+                me.selection.clearRange()
+            }
+        }
         mousedown = false;
-//        if(browser.ie && !me.body.contentEditable){
-//            me.body.contentEditable = true;
-//        }
         me.document.body.style.webkitUserSelect = '';
         //拖拽状态下的mouseUP
         if ((!browser.ie || (browser.ie && browser.version > 7)) && onDrag && dragTd) {
@@ -894,7 +913,6 @@ UE.plugins['table'] = function () {
             return;
         }
         //正常状态下的mouseup
-        var range = null;
         if (!startTd) {
             var target = domUtils.findParentByTagName(evt.target || evt.srcElement, "td", true);
             if (!target) target = domUtils.findParentByTagName(evt.target || evt.srcElement, "th", true);
@@ -931,6 +949,7 @@ UE.plugins['table'] = function () {
     }
 
     function mouseOverEvent(type, evt) {
+        var me = this;
         currentTd = evt.target || evt.srcElement;
         //需要判断两个TD是否位于同一个表格内
         if (startTd &&
@@ -1457,7 +1476,7 @@ UE.plugins['table'] = function () {
             }
             var table = ut.table,
                 rng = this.selection.getRange();
-            ;
+
             if (!table.getElementsByTagName('td').length) {
                 var nextSibling = table.nextSibling;
                 domUtils.remove(table);

@@ -633,10 +633,6 @@ UE.plugins['serialize'] = function () {
                 }
                 if ( ie && node.attributes.style ) {
                     optStyle( node );
-
-                }
-                if(node.attributes['class'] == 'selectTdClass'){
-                    delete node.attributes['class']
                 }
                 break;
             case 'img'://锚点，img==>a
