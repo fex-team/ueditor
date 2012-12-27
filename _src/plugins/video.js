@@ -70,7 +70,7 @@ UE.plugins['video'] = function (){
         queryCommandState : function(){
             var img = me.selection.getRange().getClosedNode(),
                 flag = img && (img.className == "edui-faked-video");
-            return this.highlight ? -1 :(flag?1:0);
+            return flag ? 1 : 0;
         }
     };
 };

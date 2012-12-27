@@ -33,9 +33,6 @@ UE.plugins['rowspacing'] = function(){
             }
             return 0;
 
-        },
-        queryCommandState : function(){
-            return this.highlight ? -1 :0;
         }
     };
 };

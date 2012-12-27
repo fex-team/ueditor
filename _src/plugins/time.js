@@ -23,9 +23,6 @@ UE.commands['time'] = UE.commands["date"] = {
         this.execCommand('insertHtml',cmd == "time" ?
             (date.getHours()+":"+ (date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes())+":"+(date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds())) :
             (date.getFullYear()+"-"+((date.getMonth()+1)<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1)+"-"+(date.getDate()<10?"0"+date.getDate():date.getDate())));
-    },
-    queryCommandState : function(){
-            return this.highlight ? -1 :0;
     }
 };
 

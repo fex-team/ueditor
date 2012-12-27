@@ -45,9 +45,6 @@ UE.plugins['webapp'] = function () {
     me.commands['webapp'] = {
         execCommand:function ( cmd, obj ) {
             me.execCommand( "inserthtml", createInsertStr( obj, false,true ) );
-        },
-        queryCommandState:function () {
-            return me.highlight ? -1 : 0;
         }
     };
 };
