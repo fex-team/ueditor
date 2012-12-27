@@ -326,6 +326,9 @@
                 return browser.ie ? nativeRange.text : nativeRange.toString();
             }
             return '';
+        },
+        clearRange : function(){
+            this.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
         }
     };
 })();
