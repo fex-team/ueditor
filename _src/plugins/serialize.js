@@ -614,9 +614,6 @@ UE.plugins['serialize'] = function () {
 
                     optStyle( node );
                 }
-                if(node.attributes['class'] == 'noBorderTable'){
-                    delete node.attributes['class'];
-                }
                 break;
             case 'td':
             case 'th':
