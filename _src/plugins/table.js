@@ -65,7 +65,7 @@ UE.plugins['table'] = function () {
         utils.cssRule('table',
             //选中的td上的样式
             '.selectTdClass{background-color:#edf5fa !important}' +
-                'table.noBorderTable td{border:1px dashed #ddd !important}' +
+                'table.noBorderTable td,table.noBorderTable th{border:1px dashed #ddd !important}' +
                 //插入的表格的默认样式
                 'table{line-height:22px; margin-bottom:10px;border-collapse:collapse;display:table;}' +
                 'td,th{ background:white; padding: 0 10px;border: 1px solid #DDD;line-height: 22px;}' +
@@ -1741,9 +1741,14 @@ UE.plugins['table'] = function () {
                     domUtils.getElementsByTagName(table, "th"),
                     domUtils.getElementsByTagName(table, "caption")
                 );
-                utils.each(arr, function (node) {
-                    node.style.borderColor = color;
-                });
+                if(/#ffffff/ig.test(color)) {
+                    domUtils.addClass(table,"noBorderTable");
+                }else{
+                    domUtils.removeClasses(table,["noBorderTable"]);
+                    utils.each(arr, function (node) {
+                        node.style.borderColor = color;
+                    });
+                }
             }
         }
     };
