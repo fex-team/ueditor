@@ -14,11 +14,6 @@ UE.plugins['insertframe'] = function() {
     me.addListener("selectionchange",function(){
         deleteIframe();
     });
-    me.commands["insertframe"] = {
 
-        queryCommandState : function(){
-            return this.highlight ? -1 :0;
-        }
-    };
 };
 

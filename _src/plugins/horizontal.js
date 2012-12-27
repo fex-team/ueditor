@@ -41,6 +41,6 @@ UE.commands['horizontal'] = {
     },
     //边界在table里不能加分隔线
     queryCommandState : function() {
-        return this.highlight || domUtils.filterNodeList(this.selection.getStartElementPath(),'table') ? -1 : 0;
+        return domUtils.filterNodeList(this.selection.getStartElementPath(),'table') ? -1 : 0;
     }
 };

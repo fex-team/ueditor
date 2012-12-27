@@ -15,7 +15,6 @@ UE.commands['indent'] = {
          me.execCommand('Paragraph','p',{style:'text-indent:'+ value});
     },
     queryCommandState : function() {
-        if(this.highlight){return -1;}
         var pN = domUtils.filterNodeList(this.selection.getStartElementPath(),'p h1 h2 h3 h4 h5 h6');
         return pN && pN.style.textIndent && parseInt(pN.style.textIndent) ?  1 : 0;
     }

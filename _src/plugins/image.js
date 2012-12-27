@@ -183,8 +183,5 @@ UE.commands['insertimage'] = {
 
             me.execCommand( 'insertHtml', html.join( '' ) );
         }
-    },
-    queryCommandState:function () {
-        return this.highlight ? -1 : 0;
     }
 };
