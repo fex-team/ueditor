@@ -29,7 +29,8 @@
             return this.target;
         },
         format:function(isTransfer){
-            this.editor.fireEvent('pasteTransfer',isTransfer)
+            this.editor.ui._isTransfer=true;
+            this.editor.fireEvent('pasteTransfer',isTransfer);
         },
         _onClick: function (cur){
             var node=domUtils.getNextDomNode(cur),
@@ -39,6 +40,8 @@
             if(/hidden/ig.test(domUtils.getComputedStyle(node,"visibility"))){
                 if((subPop.top+subPop.height)>screenHt)
                     node.style.top=(-subPop.height-cur.offsetHeight)+"px";
+                else
+                    node.style.top="";
 
                 node.style.visibility="visible";
                 domUtils.addClass(cur,"edui-state-opened");

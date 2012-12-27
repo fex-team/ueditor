@@ -7,7 +7,7 @@
         uiUtils = baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase,
         domUtils = baidu.editor.dom.domUtils;
-    var nodeStack=[];
+    var nodeStack = [];
 
     function EditorUI(options) {
         this.initOptions(options);
@@ -49,11 +49,11 @@
                 }
                 editor.ui._scale();
                 if (editor.options.scaleEnabled) {
-                    if(editor.autoHeightEnabled){
+                    if (editor.autoHeightEnabled) {
                         editor.disableAutoHeight();
                     }
                     me.enableScale();
-                }else{
+                } else {
                     me.disableScale();
                 }
                 if (!editor.options.elementPathEnabled && !editor.options.wordCount && !editor.options.scaleEnabled) {
@@ -70,59 +70,51 @@
 
             editor.addListener('mousedown', function (t, evt) {
                 var el = evt.target || evt.srcElement;
-                baidu.editor.ui.Popup.postHide(evt,el);
+                baidu.editor.ui.Popup.postHide(evt, el);
             });
-            editor.addListener("delcells",function(){
+            editor.addListener("delcells", function () {
                 if (UE.ui['edittip']) {
                     new UE.ui['edittip'](editor);
                 }
                 editor.getDialog('edittip').open();
             });
-            var pastePop=null,
-                isPaste=false;
 
-            editor.addListener("afterpaste",function(){
-
+            var pastePop, isPaste = false, timer;
+            editor.addListener("afterpaste", function () {
                 pastePop = new baidu.editor.ui.Popup({
                     content:new baidu.editor.ui.PastePicker({editor:editor}),
                     editor:editor,
                     className:'edui-wordpastepop'
                 });
                 pastePop.render();
-                isPaste=true;
+                isPaste = true;
             });
-            var timer;
-            editor.addListener("afterinserthtml",function(){
-                clearTimeout(timer);
-                timer = setTimeout(function(){
-                    if(!pastePop)    return;
-                    if(!isPaste)    return;
-                    var span = domUtils.createElement(editor.document,'span',{
-                            'style' : "line-height:0px;",
-                            'innerHTML' : '\ufeff'
-                        }),
-                        range = editor.selection.getRange(),
-                        node=pastePop.getDom();
-                    if(!node)return;
-                    range.insertNode(span);
-                    pastePop.showAnchor(span);
-                    node.style.top=node.offsetTop+"px";
-                    domUtils.remove(span);
-                    isPaste=false;
-                },200)
 
+            editor.addListener("afterinserthtml", function () {
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    if(pastePop&&(isPaste||editor.ui._isTransfer)){
+                        var span = domUtils.createElement(editor.document, 'span', {
+                                'style':"line-height:0px;",
+                                'innerHTML':'\ufeff'
+                            }),
+                            range = editor.selection.getRange();
+                        range.insertNode(span);
+                        pastePop.showAnchor(span);
+                        domUtils.remove(span);
+                        delete editor.ui._isTransfer;
+                        isPaste = false;
+                    }
+                }, 200)
             });
             editor.addListener('contextmenu', function (t, evt) {
                 baidu.editor.ui.Popup.postHide(evt);
             });
             editor.addListener('keydown', function (t, evt) {
-                if(pastePop)
-                    pastePop.dispose(evt);
+                if (pastePop)    pastePop.dispose(evt);
             });
 
-
             editor.addListener('selectionchange', function () {
-                //if(!editor.selection.isFocus())return;
                 if (editor.options.elementPathEnabled) {
                     me[(editor.queryCommandState('elementpath') == -1 ? 'dis' : 'en') + 'ableElementPath']()
                 }
@@ -375,8 +367,8 @@
                     var bk = editor.selection.getRange().createBookmark();
                 }
                 if (fullscreen) {
-                    while(container.tagName!="BODY"){
-                        var position = baidu.editor.dom.domUtils.getComputedStyle(container,"position");
+                    while (container.tagName != "BODY") {
+                        var position = baidu.editor.dom.domUtils.getComputedStyle(container, "position");
                         nodeStack.push(position);
                         container.style.position = "static";
                         container = container.parentNode;
@@ -396,7 +388,7 @@
                     this._bakCssText1 = this.getDom('iframeholder').style.cssText;
                     this._updateFullScreen();
                 } else {
-                    while(container.tagName!="BODY"){
+                    while (container.tagName != "BODY") {
                         container.style.position = nodeStack.shift();
                         container = container.parentNode;
                     }
@@ -422,8 +414,8 @@
                             editor.selection.getRange().moveToBookmark(bk).select(true);
                             baidu.editor.dom.domUtils.remove(input);
                             fullscreen && window.scroll(0, 0);
-                        },0)
-                    },0)
+                        }, 0)
+                    }, 0)
                 }
                 this.editor.fireEvent('fullscreenchanged', fullscreen);
                 this.triggerLayout();
@@ -519,18 +511,19 @@
                 domUtils.on(editorDocument, "mouseup", up);
                 domUtils.on(doc, "mouseup", up);
             }
+
             var me = this;
             //by xuheng 全屏时关掉缩放
-            this.editor.addListener('fullscreenchanged',function(e,fullScreen){
-                if(fullScreen){
+            this.editor.addListener('fullscreenchanged', function (e, fullScreen) {
+                if (fullScreen) {
                     me.disableScale();
 
-                }else{
-                    if(me.editor.options.scaleEnabled){
+                } else {
+                    if (me.editor.options.scaleEnabled) {
                         me.enableScale();
                         var tmpNode = me.editor.document.createElement('span');
                         me.editor.body.appendChild(tmpNode);
-                        me.editor.body.style.height = Math.max(domUtils.getXY(tmpNode).y,me.editor.iframe.offsetHeight - 20 ) + 'px';
+                        me.editor.body.style.height = Math.max(domUtils.getXY(tmpNode).y, me.editor.iframe.offsetHeight - 20) + 'px';
                         domUtils.remove(tmpNode)
                     }
                 }
@@ -577,7 +570,7 @@
 
             this.enableScale = function () {
                 //trace:2868
-                if(editor.queryCommandState("source")==1)    return;
+                if (editor.queryCommandState("source") == 1)    return;
                 scale.style.display = "";
                 this.scaleEnabled = true;
                 domUtils.on(scale, "mousedown", down);
@@ -654,7 +647,7 @@
 
         var oldRender = editor.render;
         editor.render = function (holder) {
-            if(holder.constructor === String){
+            if (holder.constructor === String) {
                 editor.key = holder;
                 instances[holder] = editor;
             }
@@ -706,7 +699,6 @@
         };
         return editor;
     };
-
 
 
     /**
