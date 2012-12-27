@@ -14,6 +14,7 @@ UE.plugins['wordcount'] = function(){
     var me = this;
     me.setOpt({
         wordCount:true,
+        wordCountIngoreHtml:true,
         maximumWords:10000,
         wordCountMsg: me.options.wordCountMsg||me.getLang("wordCountMsg"),
         wordOverFlowMsg:me.options.wordOverFlowMsg||me.getLang("wordOverFlowMsg")
@@ -27,20 +28,15 @@ UE.plugins['wordcount'] = function(){
     }
     me.commands["wordcount"]={
         queryCommandValue:function(cmd,onlyCount){
-            var length,contentText,reg;
+            var length;
             if(onlyCount){
-                reg = new RegExp("[\r\t\n]","g");
-                contentText = this.getContentTxt().replace(reg,"");
-                return contentText.length;
+                return this.getContentLength(this.options.wordCountIngoreHtml);
             }
-            reg = new RegExp("[\r\t\n]","g");
-            contentText = this.getContentTxt().replace(reg,"");
-            length = contentText.length;
+            length = this.getContentLength(this.options.wordCountIngoreHtml);
             if(max-length<0){
                 me.fireEvent('wordcountoverflow',length);
                 return errMsg;
             }
-
             return msg.replace("{#leave}",max-length >= 0 ? max-length:0).replace("{#count}",length);
         }
     };

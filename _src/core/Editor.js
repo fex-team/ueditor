@@ -986,6 +986,25 @@
                 if ( !lang )break;
             }
             return lang;
+        },
+        /**
+         * 计算编辑器当前内容的长度
+         * @name  getContentLength
+         * @grammar editor.getContentLength(ingoneHtml,tagNames)  =>
+         * @example
+         * editor.getLang(true)
+         */
+        getContentLength : function(ingoneHtml,tagNames){
+            var count = this.getContent().length;
+            if(ingoneHtml){
+                tagNames = (tagNames||[]).concat([ 'hr','img','iframe']);
+                count = this.getContentTxt().replace(/[\t\r\n]+/g,'').length;
+                for(var i= 0,ci;ci=tagNames[i++];){
+                    count += this.document.getElementsByTagName(ci).length;
+                }
+                this.fireEvent('wordCount',count);
+            }
+            return count;
         }
         /**
          * 得到dialog实例对象

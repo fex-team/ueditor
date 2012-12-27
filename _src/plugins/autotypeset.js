@@ -87,8 +87,9 @@ UE.plugins['autotypeset'] = function(){
 
           // 行首缩进，段落方向，段间距，段内间距
         for(var i=0,ci;ci=nodes[i++];){
-            if(!highlightCont && ci.tagName == 'DIV' && ci.getAttribute('highlighter')){
-                highlightCont = ci;
+
+            if(me.fireEvent('excludeNodeinautotype',ci) === true){
+                continue;
             }
              //font-size
             if(opt.clearFontSize && ci.style.fontSize){
