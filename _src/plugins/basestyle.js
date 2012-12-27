@@ -19,6 +19,12 @@ UE.plugins['basestyle'] = function(){
             return domUtils.filterNodeList(editor.selection.getStartElementPath(),tagNames);
         },
         me = this;
+    //添加快捷键
+    me.addshortcutkey({
+        "Bold" : "ctrl+66",//^B
+        "Italic" : "ctrl+73", //^I
+        "Underline" : "ctrl+85"//^U
+    });
     for ( var style in basestyles ) {
         (function( cmd, tagNames ) {
             me.commands[cmd] = {

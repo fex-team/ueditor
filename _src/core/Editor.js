@@ -82,6 +82,7 @@
         EventBase.call( me );
         me.commands = {};
         me.options = utils.extend( utils.clone(options || {}),UEDITOR_CONFIG, true );
+        me.shortcutkeys = {};
         //设置默认的常用属性
         me.setOpt( {
             isShow:true,
@@ -309,12 +310,7 @@
             if ( options.fullscreen && me.ui ) {
                 me.ui.setFullScreen( true );
             }
-            //解决ff下点击图片会复制问题
-            //ff下的table不能编辑
-//            if(browser.gecko){
-//                me.document.execCommand( 'enableObjectResizing', false, false );
-//                me.document.execCommand( 'enableInlineTableEditing', false,options.tableNativeEditInFF );
-//            }
+
             try {
                 me.document.execCommand( '2D-position', false, false );
             } catch ( e ) {}
@@ -327,9 +323,8 @@
                 domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
                     domUtils.preventDefault(evt)
                 });
-
             }
-
+            me._bindshortcutKeys();
             me.isReady = 1;
             me.fireEvent( 'ready' );
             options.onready && options.onready.call(me);
@@ -396,6 +391,35 @@
             this.document.body.style.height = height - 20 + 'px';
         },
 
+        addshortcutkey : function(cmd,keys){
+            var obj = {};
+            if(keys){
+                obj[keys] = cmd
+            }else{
+                obj = cmd;
+            }
+            utils.extend(this.shortcutkeys,obj)
+        },
+        _bindshortcutKeys : function(){
+            var me = this,shortcutkeys = this.shortcutkeys;
+            me.addListener('keydown',function(type,e){
+                var keyCode = e.keyCode || e.which,value;
+                for ( var i in shortcutkeys ) {
+                    var key = shortcutkeys[i];
+                    if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( key.toLowerCase() ) || /^(\d+)$/.test( key ) ) {
+                        if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey||browser.opera && keyCode == 17) : 0)
+                            && (RegExp.$2 != "" ? e[RegExp.$2.slice(1) + "Key"] : 1)
+                            && keyCode == RegExp.$3
+                            ) ||
+                            keyCode == RegExp.$1
+                            ){
+                            me.execCommand(i);
+                            domUtils.preventDefault(e);
+                        }
+                    }
+                }
+            });
+        },
         /**
          * 获取编辑器内容
          * @name getContent
