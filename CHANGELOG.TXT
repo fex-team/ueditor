@@ -9,6 +9,7 @@ Version 1.2.5
   . table支持任意前插后插行列
   . 粘贴支持纯文本和源码模式选择
   . 添加计算字数的getContentLength接口
+  . 图片上传支持参数动态绑定
 
 Version 1.2.4
 新增功能
