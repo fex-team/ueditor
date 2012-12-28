@@ -242,14 +242,14 @@
         }
 
         me.addListener('pasteTransfer',function(cmd,plainType){
-
-
             if(address && txtContent && htmlContent && txtContent != htmlContent){
                 var range = me.selection.getRange();
-                range.moveToAddress(address).deleteContents().select();
+                range.moveToAddress(address).deleteContents().select(true);
                 me.__hasEnterExecCommand = true;
                 me.execCommand('inserthtml',plainType ? txtContent : htmlContent,true);
                 me.__hasEnterExecCommand = false;
+                var tmpAddress = me.selection.getRange().createAddress(true);
+                address.endAddress = tmpAddress.startAddress;
             }
         });
         me.addListener('ready',function(){
