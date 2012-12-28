@@ -7,6 +7,11 @@ Version 1.2.5
   . table支持拷贝
   . table支持任意调整宽高
   . table支持任意前插后插行列
+  . 添加table平均分布行、列
+  . 添加table单元格对齐方式
+  . 添加table对齐方式
+  . 添加选中部分表格,点击backspace或delete删除功能
+  . 重写表格属性、单元格属性dialog
   . 粘贴支持纯文本和源码模式选择
   . 添加计算字数的getContentLength接口
   . 图片上传支持参数动态绑定
