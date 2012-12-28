@@ -120,10 +120,7 @@
                 range.shrinkBoundary();
                 var start = range.startContainer.nodeType  == 3 || !range.startContainer.childNodes[range.startOffset] ? range.startContainer : range.startContainer.childNodes[range.startOffset],
                     end =  range.endContainer.nodeType == 3 || range.endOffset == 0 ? range.endContainer : range.endContainer.childNodes[range.endOffset-1],
-
                     common = range.getCommonAncestor();
-
-
                 node = domUtils.findParentByTagName( common, 'a', true );
                 if ( !node && common.nodeType == 1){
 
