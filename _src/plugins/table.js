@@ -365,11 +365,17 @@ UE.plugins['table'] = function () {
 
                     if (domUtils.isEmptyBlock(td) && td !== start) {
                         domUtils.fillNode(me.document, td)
+                        if(browser.ie && browser.version == 6){
+                            td.innerHTML = '&nbsp;'
+                        }
                     }
                 });
                 utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
                     if (domUtils.isEmptyBlock(th) && th !== start ) {
                         domUtils.fillNode(me.document, th)
+                        if(browser.ie && browser.version == 6){
+                            th.innerHTML = '&nbsp;'
+                        }
                     }
                 });
                 table.onmouseout = function () {
@@ -538,6 +544,7 @@ UE.plugins['table'] = function () {
                         if (isEmpty != domUtils.isEmptyNode(td) && !td[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length) {
                             domUtils.fillNode(me.document, td)
                         }
+
                     }
                 }
                 range.setStart(tds[0], 0).shrinkBoundary(true).setCursor(false, true);
