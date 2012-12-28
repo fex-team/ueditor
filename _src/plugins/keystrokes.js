@@ -29,32 +29,71 @@ UE.plugins['keystrokes'] = function() {
     me.addListener('keydown', function(type, evt) {
         var keyCode = evt.keyCode || evt.which;
 
-        if(this.selectAll){
-            this.selectAll = false;
-            if((keyCode == 8 || keyCode == 46)){
-                me.undoManger && me.undoManger.save();
-                //trace:1633
-                me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
+//        if(this.selectAll){
+//            debugger
+//            this.selectAll = false;
+//            if((keyCode == 8 || keyCode == 46)){
+//                me.undoManger && me.undoManger.save();
+//                //trace:1633
+//                me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
+//
+//                new dom.Range(me.document).setStart(me.body.firstChild,0).setCursor(false,true);
+//                me.undoManger && me.undoManger.save();
+//                //todo 对性能会有影响
+//                browser.ie && me._selectionChange();
+//                domUtils.preventDefault(evt);
+//                return;
+//            }else{
+//                if(browser.ie && me.body.firstChild && domUtils.isTagNode(me.body.firstChild,'table')){
+//                    if(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)
+//                        return;
+//                    me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
+//                    new dom.Range(me.document).setStart(me.body.firstChild,0).setCursor(false,true);
+//                }
+//            }
+//
+//
+//        }
 
-                new dom.Range(me.document).setStart(me.body.firstChild,0).setCursor(false,true);
-                me.undoManger && me.undoManger.save();
-                //todo 对性能会有影响
-                browser.ie && me._selectionChange();
-                domUtils.preventDefault(evt);
-                return;
-            }else{
-                if(browser.ie && me.body.firstChild && domUtils.isTagNode(me.body.firstChild,'table')){
-                    if(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)
-                        return;
-                    me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
-                    new dom.Range(me.document).setStart(me.body.firstChild,0).setCursor(false,true);
+        var rng = me.selection.getRange();
+
+        function isBoundaryNode(node,dir){
+            var tmp;
+            while(!domUtils.isBody(node)){
+                tmp = node;
+                node = node.parentNode;
+                if(tmp !== node[dir]){
+                    return false;
                 }
             }
-
-
+            return true;
         }
 
-
+        if(!rng.collapsed && !(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)){
+            var tmpNode = rng.startContainer;
+            if(domUtils.isFillChar(tmpNode)){
+                rng.setStartBefore(tmpNode)
+            }
+            tmpNode = rng.endContainer;
+            if(domUtils.isFillChar(tmpNode)){
+                rng.setEndAfter(tmpNode)
+            }
+            rng.txtToElmBoundary();
+            if(rng.startOffset == 0){
+                tmpNode = rng.startContainer;
+                if(isBoundaryNode(tmpNode,'firstChild')){
+                    tmpNode = rng.endContainer;
+                    if(rng.endOffset == rng.endContainer.childNodes.length && isBoundaryNode(tmpNode,'lastChild') ){
+                        me.fireEvent('saveScene');
+                        me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
+                        rng.setStart(me.body.firstChild,0).setCursor(false,true);
+                        me.fireEvent('saveScene');
+                        browser.ie && me._selectionChange();
+                        return;
+                    }
+                }
+            }
+        }
         //处理backspace/del
         if (keyCode == 8 ) {//|| keyCode == 46
 
@@ -347,39 +386,9 @@ UE.plugins['keystrokes'] = function() {
                 }
             }
 
-            var range,start,parent,
-                tds = this.currentSelectedArr;
-            if (tds && tds.length > 0) {
-                for (var i = 0,ti; ti = tds[i++];) {
-                    ti.innerHTML = browser.ie ? ( browser.version < 9 ? '&#65279' : '' ) : '<br/>';
-
-                }
-                range = new dom.Range(this.document);
-                range.setStart(tds[0], 0).setCursor();
-                if (flag) {
-                    me.undoManger.save();
-                    flag = 0;
-                }
-                //阻止chrome执行默认的动作
-                if (browser.webkit) {
-                    evt.preventDefault();
-                }
-                return;
-            }
+            var range,start,parent;
 
             range = me.selection.getRange();
-
-            //ctrl+a 后全部删除做处理
-//
-//            if (domUtils.isEmptyBlock(me.body) && !range.startOffset) {
-//                //trace:1633
-//                me.body.innerHTML = '<p>'+(browser.ie ? '&nbsp;' : '<br/>')+'</p>';
-//                range.setStart(me.body.firstChild,0).setCursor(false,true);
-//                me.undoManger && me.undoManger.save();
-//                //todo 对性能会有影响
-//                browser.ie && me._selectionChange();
-//                return;
-//            }
 
             //处理删除不干净的问题
 

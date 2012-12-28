@@ -24,16 +24,49 @@ UE.plugins['selectall'] = function(){
                 }
                 range.collapse(true);
             }
-
             range.select(true);
-            this.selectAll = true;
         },
         notNeedUndo : 1
     };
-    me.addListener('ready',function(){
-        domUtils.on(me.document,'click',function(evt){
-            me.selectAll = false;
-        });
+    function isBoundaryNode(node,dir){
+        var tmp;
+        while(!domUtils.isBody(node)){
+            tmp = node;
+            node = node.parentNode;
+            if(tmp !== node[dir]){
+                return false;
+            }
+        }
+        return true;
+    }
+    me.addListener('keydown', function(type, evt) {
+        var rng = me.selection.getRange();
+
+        if(!rng.collapsed && !(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)){
+            var tmpNode = rng.startContainer;
+            if(domUtils.isFillChar(tmpNode)){
+                rng.setStartBefore(tmpNode)
+            }
+            tmpNode = rng.endContainer;
+            if(domUtils.isFillChar(tmpNode)){
+                rng.setEndAfter(tmpNode)
+            }
+            rng.txtToElmBoundary();
+            if(rng.startOffset == 0){
+                tmpNode = rng.startContainer;
+                if(isBoundaryNode(tmpNode,'firstChild')){
+                    tmpNode = rng.endContainer;
+                    if(rng.endOffset == rng.endContainer.childNodes.length && isBoundaryNode(tmpNode,'lastChild') ){
+                        me.fireEvent('saveScene');
+                        me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
+                        rng.setStart(me.body.firstChild,0).setCursor(false,true);
+                        me.fireEvent('saveScene');
+                        browser.ie && me._selectionChange();
+                        return;
+                    }
+                }
+            }
+        }
     });
     //快捷键
     me.addshortcutkey({

@@ -228,7 +228,6 @@
                 sourceMode = !sourceMode;
                 if (sourceMode) {
                     me.undoManger && me.undoManger.save();
-                    this.currentSelectedArr && domUtils.clearSelectedArr(this.currentSelectedArr);
                     if(browser.gecko){
                         me.body.contentEditable = false;
                     }

@@ -21,12 +21,11 @@ UE.plugins['blockquote'] = function(){
             var range = this.selection.getRange(),
                 obj = getObj(this),
                 blockquote = dtd.blockquote,
-                bookmark = range.createBookmark(),
-                tds = this.currentSelectedArr;
+                bookmark = range.createBookmark();
+
             if ( obj ) {
-                if(tds && tds.length){
-                    domUtils.remove(obj,true);
-                }else{
+
+
                     var start = range.startContainer,
                         startBlock = domUtils.isBlockElm(start) ? start : domUtils.findParent(start,function(node){return domUtils.isBlockElm(node)}),
 
@@ -64,7 +63,7 @@ UE.plugins['blockquote'] = function(){
                             domUtils.remove(bi,true);
                         }
                     }
-                }
+
 
 
 

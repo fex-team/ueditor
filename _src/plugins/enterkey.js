@@ -103,8 +103,6 @@ UE.plugins['enterkey'] = function() {
                     return;
                 }
             }
-            me.currentSelectedArr && domUtils.clearSelectedArr(me.currentSelectedArr);
-
             if (tag == 'p') {
 
 

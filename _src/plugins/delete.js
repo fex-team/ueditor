@@ -25,16 +25,6 @@ UE.commands['delete'] = {
             me.selectAll = false;
             return;
         }
-        if(me.currentSelectedArr && me.currentSelectedArr.length > 0){
-            for(var i=0,ci;ci=me.currentSelectedArr[i++];){
-                if(ci.style.display != 'none'){
-                    ci.innerHTML = browser.ie ? domUtils.fillChar : '<br/>';
-                }
-
-            }
-            range.setStart(me.currentSelectedArr[0],0).setCursor();
-            return;
-        }
         if(range.collapsed){
             return;
         }
