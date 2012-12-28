@@ -87,10 +87,8 @@
         queryCommandState:function () {
             var start = this.selection.getStart(),
                 cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
-            if (cell) {
-                return -1;
-            }
-            return 0;
+
+            return cell? -1:0;
         }
 
     };
