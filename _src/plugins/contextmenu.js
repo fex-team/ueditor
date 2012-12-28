@@ -329,6 +329,8 @@ UE.plugins['contextmenu'] = function () {
                                     return me.getLang("contextMenu.aligntd");
                                 case "aligntable":
                                     return me.getLang("contextMenu.aligntable");
+                                default :
+                                    return '';
                             }
                         }
                         contextItems.push( {
