@@ -217,6 +217,27 @@ UE.plugins['contextmenu'] = function () {
                         }
                     ]
                 },
+                {
+                    group:lang.aligntable,
+                    icon:'aligntable',
+                    subMenu:[
+                        {
+                            cmdName:'tablealignment',
+                            label:lang.tableleft,
+                            value:['float','left']
+                        },
+                        {
+                            cmdName:'tablealignment',
+                            label:lang.tablecenter,
+                            value:['margin','0 auto']
+                        },
+                        {
+                            cmdName:'tablealignment',
+                            label:lang.tableright,
+                            value:['float','right']
+                        }
+                    ]
+                },
                 '-',
                 {
                     label:lang.insertparagraphbefore,
@@ -286,7 +307,7 @@ UE.plugins['contextmenu'] = function () {
                                         (subItem.query ? subItem.query() : me.queryCommandState( subItem.cmdName )) > -1 ) {
                                     subMenu.push( {
                                         'label':subItem.label || me.getLang( "contextMenu." + subItem.cmdName + (subItem.value || '') )||"",
-                                        'className':'edui-for-' + subItem.cmdName + (subItem.value || ''),
+                                        'className':'edui-for-' +subItem.cmdName,
                                         onclick:subItem.exec ? function () {
                                                 subItem.exec.call( me );
                                         } : function () {
@@ -299,12 +320,15 @@ UE.plugins['contextmenu'] = function () {
                     }
                     if ( subMenu.length ) {
                         function getLabel(){
-                            if(item.icon=="table")
-                                return me.getLang( "contextMenu.table" );
-                            else if(item.icon=="justifyjustify")
-                                return me.getLang( "contextMenu.paragraph" );
-                            else if(item.icon=="aligntd"){
-                                return me.getLang("contextMenu.aligntd");
+                            switch (item.icon){
+                                case "table":
+                                    return me.getLang( "contextMenu.table" );
+                                case "justifyjustify":
+                                    return me.getLang( "contextMenu.paragraph" );
+                                case "aligntd":
+                                    return me.getLang("contextMenu.aligntd");
+                                case "aligntable":
+                                    return me.getLang("contextMenu.aligntable");
                             }
                         }
                         contextItems.push( {

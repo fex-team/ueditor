@@ -1773,6 +1773,23 @@ UE.plugins['table'] = function () {
             }
         }
     };
+    //表格对齐方式
+    UE.commands['tablealignment']={
+        queryCommandState:function () {
+            return getTableItemsByRange(this).cell ? 0 : -1
+        },
+        execCommand:function (cmd, data) {
+            var me = this,
+                start = me.selection.getStart(),
+                table = start && domUtils.findParentByTagName(start, ["table"], true);
+
+            if (table) {
+                table.style.margin="";
+                table.style.float="";
+                table.style[data[0]]=data[1];
+            }
+        }
+    };
 
     //表格属性
     UE.commands['edittable'] = {
@@ -1781,7 +1798,7 @@ UE.plugins['table'] = function () {
         },
         execCommand:function (cmd, color) {
             var table = getTableItemsByRange(this).table;
-            if (table) {
+            if (table && color) {
                 var arr = domUtils.getElementsByTagName(table, "td").concat(
                     domUtils.getElementsByTagName(table, "th"),
                     domUtils.getElementsByTagName(table, "caption")
