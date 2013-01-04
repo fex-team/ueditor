@@ -251,9 +251,7 @@
                     //重置getContent，源码模式下取值也能是最新的数据
                     me.getContent = function (){
                         var cont = sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
-                        cont = cont.replace(/>[\n\r\t]+([ ]{4})+/g,'>').replace(/[\n\r\t]+([ ]{4})+</g,'<').replace(/>[\n\r\t]+</g,'><');
-                        me.setContent(cont,true);
-                        return oldGetContent.apply(this);
+                        return cont.replace(/>[\n\r\t]+([ ]{4})+/g,'>').replace(/[\n\r\t]+([ ]{4})+</g,'<').replace(/>[\n\r\t]+</g,'><');
                     };
                 } else {
                     me.iframe.style.cssText = bakCssText;

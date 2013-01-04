@@ -1,8 +1,6 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE>
 <html>
 <head>
-    <!--<meta http-equiv="X-UA-Compatible" content="IE=8">-->
     <title>完整demo</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
@@ -60,10 +58,10 @@
 <script type="text/javascript">
    //实例化编辑器
     var ue = UE.getEditor('editor');
-//    ue.addListener('contentchange',function(){
-//        document.getElementById('htmlcount').innerHTML = this.getContentLength();
-//        document.getElementById('txtcount').innerHTML = this.getContentLength(true);
-//    });
+    ue.addListener('contentchange',function(){
+        document.getElementById('htmlcount').innerHTML = this.getContentLength();
+        document.getElementById('txtcount').innerHTML = this.getContentLength(true);
+    });
     function createEditor(){
         enableBtn();
         UE.getEditor('editor')
