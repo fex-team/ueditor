@@ -478,12 +478,8 @@ UE.plugins['table'] = function () {
             if(obj.table){
                 var cell = obj.cell,
                     ua = getUETable(cell);
-                if(cell.rowSpan > 1){
-
-                }
                 currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
                 var nextCell = ua.getTabNextCell(cell,currentRowIndex);
-
                 if(nextCell){
                     if(isEmptyBlock(nextCell)){
                         range.setStart(nextCell,0).setCursor(false,true)
