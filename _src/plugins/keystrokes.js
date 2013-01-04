@@ -29,32 +29,6 @@ UE.plugins['keystrokes'] = function() {
     me.addListener('keydown', function(type, evt) {
         var keyCode = evt.keyCode || evt.which;
 
-//        if(this.selectAll){
-//            debugger
-//            this.selectAll = false;
-//            if((keyCode == 8 || keyCode == 46)){
-//                me.undoManger && me.undoManger.save();
-//                //trace:1633
-//                me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
-//
-//                new dom.Range(me.document).setStart(me.body.firstChild,0).setCursor(false,true);
-//                me.undoManger && me.undoManger.save();
-//                //todo 对性能会有影响
-//                browser.ie && me._selectionChange();
-//                domUtils.preventDefault(evt);
-//                return;
-//            }else{
-//                if(browser.ie && me.body.firstChild && domUtils.isTagNode(me.body.firstChild,'table')){
-//                    if(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)
-//                        return;
-//                    me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
-//                    new dom.Range(me.document).setStart(me.body.firstChild,0).setCursor(false,true);
-//                }
-//            }
-//
-//
-//        }
-
         var rng = me.selection.getRange();
 
         function isBoundaryNode(node,dir){
@@ -69,7 +43,7 @@ UE.plugins['keystrokes'] = function() {
             return true;
         }
 
-        if(!rng.collapsed && !(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)){
+        if(!rng.collapsed && !(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey || keyCode == 9 )){
             var tmpNode = rng.startContainer;
             if(domUtils.isFillChar(tmpNode)){
                 rng.setStartBefore(tmpNode)
@@ -83,12 +57,15 @@ UE.plugins['keystrokes'] = function() {
                 tmpNode = rng.startContainer;
                 if(isBoundaryNode(tmpNode,'firstChild')){
                     tmpNode = rng.endContainer;
-                    if(rng.endOffset == rng.endContainer.childNodes.length && isBoundaryNode(tmpNode,'lastChild') ){
+                    var lastChild = rng.endContainer.childNodes[rng.endOffset];
+                    if(rng.endOffset == rng.endContainer.childNodes.length
+                        || ((domUtils.isBr(lastChild)||domUtils.isWhitespace(lastChild))&& lastChild === rng.endContainer.lastChild )
+                        && isBoundaryNode(tmpNode,'lastChild') ){
                         me.fireEvent('saveScene');
                         me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
                         rng.setStart(me.body.firstChild,0).setCursor(false,true);
-                        me.fireEvent('saveScene');
                         browser.ie && me._selectionChange();
+                        domUtils.preventDefault(evt);
                         return;
                     }
                 }
@@ -181,134 +158,50 @@ UE.plugins['keystrokes'] = function() {
         }
         //处理tab键的逻辑
         if (keyCode == 9) {
-            if(evt._ue_table_tab){
-                return ;
+            //不处理以下标签
+            var excludeTagNameForTabKey = {
+                'ol' : 1,
+                'ul' : 1,
+                'table':1
+            };
+            //处理组件里的tab按下事件
+            if(me.fireEvent('tabkeydown')){
+                domUtils.preventDefault(evt);
+                return;
             }
-
             range = me.selection.getRange();
-            me.undoManger && me.undoManger.save();
-
+            me.fireEvent('saveScene');
             for (var i = 0,txt = '',tabSize = me.options.tabSize|| 4,tabNode =  me.options.tabNode || '&nbsp;'; i < tabSize; i++) {
                 txt += tabNode;
             }
             var span = me.document.createElement('span');
             span.innerHTML = txt + domUtils.fillChar;
             if (range.collapsed) {
-
-
-                var li = domUtils.findParentByTagName(range.startContainer, 'li', true);
-
-                if (li && domUtils.isStartInblock(range)) {
-                    bk = range.createBookmark();
-                    var parentLi = li.parentNode,
-                        list = me.document.createElement(parentLi.tagName);
-                    var index = utils.indexOf(listStyle[list.tagName], domUtils.getComputedStyle(parentLi, 'list-style-type'));
-                    index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
-                    domUtils.setStyle(list, 'list-style-type', listStyle[list.tagName][index]);
-                    parentLi.insertBefore(list, li);
-                    list.appendChild(li);
-
-                    //trace:2721
-                    //合并上下相同的列表
-                    var preList = list.previousSibling;
-                    if(preList && sameListNode(preList,list)){
-                        domUtils.moveChild(list,preList);
-                        domUtils.remove(list);
-                        list = preList
-                    }
-                    var nextList = list.nextSibling;
-                    if(nextList && sameListNode(nextList,list)){
-                        domUtils.moveChild(nextList,list);
-                        domUtils.remove(nextList);
-                    }
-
-                    range.moveToBookmark(bk).select();
-
-                } else{
-                    range.insertNode(span.cloneNode(true).firstChild).setCursor(true);
-                }
-
+                range.insertNode(span.cloneNode(true).firstChild).setCursor(true);
             } else {
-                //处理table
-                start = domUtils.findParentByTagName(range.startContainer, 'table', true);
-                end = domUtils.findParentByTagName(range.endContainer, 'table', true);
-                if (start || end) {
-                    evt.preventDefault ? evt.preventDefault() : (evt.returnValue = false);
-                    return;
-                }
-                //处理列表 再一个list里处理
-                start = domUtils.findParentByTagName(range.startContainer, ['ol','ul'], true);
-                end = domUtils.findParentByTagName(range.endContainer, ['ol','ul'], true);
+                //普通的情况
+                start = domUtils.findParent(range.startContainer, filterFn);
+                end = domUtils.findParent(range.endContainer, filterFn);
                 if (start && end && start === end) {
-                    var bk = range.createBookmark();
-                    start = domUtils.findParentByTagName(range.startContainer, 'li', true);
-                    end = domUtils.findParentByTagName(range.endContainer, 'li', true);
-                    //在开始单独处理
-                    if (start === start.parentNode.firstChild) {
-                        var parentList = me.document.createElement(start.parentNode.tagName);
-
-                        start.parentNode.parentNode.insertBefore(parentList, start.parentNode);
-                        parentList.appendChild(start.parentNode);
-                    } else {
-                        parentLi = start.parentNode;
-                        list = me.document.createElement(parentLi.tagName);
-
-                        index = utils.indexOf(listStyle[list.tagName], domUtils.getComputedStyle(parentLi, 'list-style-type'));
-                        index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
-                        domUtils.setStyle(list, 'list-style-type', listStyle[list.tagName][index]);
-                        start.parentNode.insertBefore(list, start);
-                        var nextLi;
-                        while (start !== end) {
-                            nextLi = start.nextSibling;
-                            list.appendChild(start);
-                            start = nextLi;
-                        }
-                        list.appendChild(end);
-
-                    }
-                    range.moveToBookmark(bk).select();
-
+                    range.deleteContents();
+                    range.insertNode(span.cloneNode(true).firstChild).setCursor(true);
                 } else {
-                    if (start || end) {
-                        evt.preventDefault ? evt.preventDefault() : (evt.returnValue = false);
-                        return
+                    var bookmark = range.createBookmark(),
+                        filterFn = function(node) {
+                            return domUtils.isBlockElm(node) && !excludeTagNameForTabKey[node.tagName.toLowerCase()]
+
+                        };
+                    range.enlarge(true);
+                    var bookmark2 = range.createBookmark(),
+                        current = domUtils.getNextDomNode(bookmark2.start, false, filterFn);
+                    while (current && !(domUtils.getPosition(current, bookmark2.end) & domUtils.POSITION_FOLLOWING)) {
+                        current.insertBefore(span.cloneNode(true).firstChild, current.firstChild);
+                        current = domUtils.getNextDomNode(current, false, filterFn);
                     }
-                    //普通的情况
-                    start = domUtils.findParent(range.startContainer, filterFn);
-                    end = domUtils.findParent(range.endContainer, filterFn);
-                    if (start && end && start === end) {
-                        range.deleteContents();
-                        range.insertNode(span.cloneNode(true).firstChild).setCursor(true);
-                    } else {
-                        var bookmark = range.createBookmark(),
-                            filterFn = function(node) {
-                                return domUtils.isBlockElm(node);
-
-                            };
-
-                        range.enlarge(true);
-                        var bookmark2 = range.createBookmark(),
-                            current = domUtils.getNextDomNode(bookmark2.start, false, filterFn);
-
-
-                        while (current && !(domUtils.getPosition(current, bookmark2.end) & domUtils.POSITION_FOLLOWING)) {
-
-
-                            current.insertBefore(span.cloneNode(true).firstChild, current.firstChild);
-
-                            current = domUtils.getNextDomNode(current, false, filterFn);
-
-                        }
-
-                        range.moveToBookmark(bookmark2).moveToBookmark(bookmark).select();
-                    }
-
+                    range.moveToBookmark(bookmark2).moveToBookmark(bookmark).select();
                 }
-
-
             }
-            me.undoManger && me.undoManger.save();
-            evt.preventDefault ? evt.preventDefault() : (evt.returnValue = false);
+            domUtils.preventDefault(evt)
         }
         //trace:1634
         //ff的del键在容器空的时候，也会删除

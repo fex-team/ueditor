@@ -471,30 +471,42 @@ UE.plugins['table'] = function () {
         me.addListener("mousedown", mouseDownEvent);
         me.addListener("mouseup", mouseUpEvent);
 
+        me.addListener('tabkeydown',function(){
+            var range = this.selection.getRange(),
+                obj = getTableItemsByRange(me);
+            if(obj.table){
+                var cell = obj.cell,
+                    ua = getUETable(cell);
+                var nextCell = ua.getTabNextCell(cell,cell.getAttribute('preRowIndex'));
+
+                if(nextCell){
+                    if(nextCell.rowSpan > 1){
+                        nextCell.setAttribute('preRowIndex',ua.getCellInfo(cell).rowIndex);
+                    }
+                    if(isEmptyBlock(nextCell)){
+                        range.setStart(nextCell,0).setCursor(false,true)
+                    }else{
+                        range.selectNodeContents(nextCell).select()
+                    }
+                }else{
+                    me.fireEvent('saveScene');
+                    me.__hasEnterExecCommand = true;
+                    this.execCommand('insertrownext');
+                    me.__hasEnterExecCommand = false;
+                    range = this.selection.getRange();
+                    range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
+                    me.fireEvent('saveScene');
+                }
+                return true;
+            }
+
+        });
         me.addListener("keydown", function (type, evt) {
             var me = this;
             //处理在表格的最后一个输入tab产生新的表格
             var keyCode = evt.keyCode || evt.which;
             if (keyCode == 8 || keyCode == 46) {
                 return;
-            }
-            if (keyCode == 9) {
-                var range = this.selection.getRange(),
-                    obj = getTableItemsByRange(me);
-                if (range.collapsed && obj.table) {
-                    if (getUETable(obj.cell).isLastCell(obj.cell)) {
-                        me.fireEvent('saveScene');
-                        me.__hasEnterExecCommand = true;
-                        this.execCommand('insertrownext');
-                        me.__hasEnterExecCommand = false;
-                        range = this.selection.getRange();
-                        range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
-                        me.fireEvent('saveScene');
-                        domUtils.preventDefault(evt);
-                        evt._ue_table_tab = 1;
-                        return;
-                    }
-                }
             }
             var notCtrlKey = !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey;
             notCtrlKey && removeSelectedClass(domUtils.getElementsByTagName(me.body, "td"));
@@ -1913,6 +1925,24 @@ UE.plugins['table'] = function () {
             } catch (e) {
                 showError(e);
             }
+        },
+        getTabNextCell : function(cell,preRowIndex){
+            var cellInfo = this.getCellInfo(cell),
+                rowIndex = preRowIndex || cellInfo.rowIndex,
+                colIndex = cellInfo.colIndex + 1,
+                nextCell;
+            try{
+                nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
+            }catch(e){
+                try{
+                    rowIndex = rowIndex * 1 + 1;
+                    colIndex = 0;
+                    nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
+                }catch(e){
+                }
+            }
+            return nextCell;
+
         },
         /**
          * 获取视觉上的后置单元格
