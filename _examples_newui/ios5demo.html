@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript">
+        window.UEDITOR_HOME_URL = "/gitworkspace/ueditor/";
+    </script>
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js">
+    </script>
+    <style type="text/css">
+        .clear {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <script  id="editor" type="text/plain" style="width:1076px;" >编辑器你的内容</script>
+</body>
+<script type="text/javascript">
+    UE.getEditor('editor',{
+        autoFloatEnabled:false,
+        initialFrameHeight:480
+    })
+</script>
+</html>

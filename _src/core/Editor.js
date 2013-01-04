@@ -166,7 +166,6 @@
          * @grammar editor.destroy();
          */
         destroy:function () {
-
             var me = this;
             me.fireEvent( 'destroy' );
             var container = me.container.parentNode;

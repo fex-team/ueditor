@@ -1,0 +1,6 @@
+/* color picker */
+.edui-colorpicker-topbar {height:27px;width: 200px;margin-top:4px;}
+.edui-colorpicker-preview {height: 20px;border: 1px inset black;margin-left: 1px;width: 128px;float: left;}
+.edui-colorpicker-nocolor {float:right;margin-right:1px;font-size:12px;line-height:1;height: 14px;border:1px solid #333;padding:3px 5px;cursor: pointer;}
+.edui-colorpicker-tablefirstrow {height:30px;}
+.edui-colorpicker-colorcell {width:14px;height:14px;display: block;cursor: pointer;}

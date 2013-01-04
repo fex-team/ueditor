@@ -1,0 +1,25 @@
+
+  .edui-toolbar{position:relative;background:#E1EEFF url(../images/toolbar_bg.png) repeat-x;cursor:default;border-radius:2px;}
+  .edui-statusbar{overflow: hidden;border-top: 1px solid #CBDFEA;padding: 3px;}
+  .edui-statusbar .edui-elementpath{float: left;}
+  .edui-statusbar .edui-wordcount{float: right;}
+  .edui-tabtoolbar{width:100%;padding:4px 0;background:#ECF5FB;}
+
+ .current{display: inline-block;}
+/*.current{z-index:2;}*/
+/*.current .edui-tab{background:url(../images/toolbar_tab_bg.png);border-bottom-color:#ECF5FB;color:#006DAE;}*/
+
+  .edui-tabhandle .edui-tab{display:inline-block;height:23px;line-height:23px;padding:0 10px;background:#FAFCFF;border:1px solid #C8DCE8;border-radius:2px;}
+  .edui-tabhandle{background: url(../images/toolbar_bg.png) repeat-x;cursor: pointer;}
+  .edui-tabhandle .current{background:url(../images/toolbar_tab_bg.png);border-bottom-color:#ECF5FB;color:#006DAE;}
+  .edui-editorholder{position:relative;}
+  .current .edui-tab {background: url(../images/toolbar_tab_bg.png);border-bottom-color: #ECF5FB;color: #006DAE;}
+
+
+  /*.edui-toolbar span{width:20px;height: 20px;display: inline-block;}*/
+  .edui-toolbar{position:relative;background:#E1EEFF url(../images/toolbar_bg.png) repeat-x;cursor:default;border-radius:2px;padding: 2px;}
+  .edui-toolbar .edui-group{border-radius: 2px;margin: 4px;padding: 4px;height: auto;display: inline-block;vertical-align: top;border: 1px solid #ADC7DE;background: url(../images/toolgroup_bg.png) repeat-x;*display:inline; *zoom:1; }
+  .edui-toolbar  .first{border-left: 1px solid #A6CAE4;}
+  .edui-toolbar  .last{border-right: 1px solid #A6CAE4;}
+  .edui-tabbody{padding: 4px 0;background: #ECF5FB;border-top: 1px solid #C8DCE8;margin-top: -1px;}
+

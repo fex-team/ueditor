@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=8">-->
+    <title>完整demo</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript">
+        window.UEDITOR_HOME_URL = "/gitworkspace/ueditor/";
+    </script>
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js">
+    </script>
+    <script type="text/javascript" charset="utf-8" src="pluginui.js"></script>
+    <style type="text/css">
+        .clear {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <script  id="editor" type="text/plain" >这里可以书写，编辑器的初始内容</script>
+</div>
+
+
+<div class="clear"></div>
+</body>
+<script type="text/javascript">
+
+   //实例化编辑器
+    var ue = UE.getEditor('editor');
+
+
+   //获得编辑器实例以后添加按钮
+   setTimeout(function(){
+       var btn = new UE.ui.View.Button("getcontent");
+         btn.addListener('click', function(){
+             alert(ue.getContent())
+         });
+       ue.addItem(btn,{
+           tabnum:0,
+           groupnum:1,
+           indexnum:5
+       });
+
+       ue
+   },300)
+</script>
+</html>

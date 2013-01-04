@@ -137,7 +137,16 @@
             child instanceof ui.View && this.dom.appendChild(child.dom);
             return this;
         },
-
+        /**
+         * @name appendChild
+         * @grammar view.appendChild(childView) //childView为子view
+         */
+        insertChild : function(child,index){
+            if(child instanceof ui.View){
+                var list = this.dom.childNodes;
+                this.dom.insertBefore(child.dom,this.dom.childNodes[index])
+            }
+        },
         /**
          * @name setProxyListener
          * @desc 设置DOM事件代理，统一由自定义事件分发

@@ -16,4 +16,6 @@ UE.I18N = {};
 
 UE.version = "1.2.4.0";
 
+UE.pluginui = {};
+
 var dom = UE.dom = {};

@@ -4,116 +4,94 @@
  * @import ui/ui.view.js
  * 工具条Toolbar实现类，负责添加工具
  */
-
 (function(ue){
     var ui = ue.ui,
-            utils = ui.Utils,
+        utils = ui.Utils,
         views = ui.View,
-        /**
-         * @name ui.View.Toolbar
-         * @grammar toolbar = new ui.View.Toolbar(ui, obj) //ui实例，obj-可选参数对象[title, viewType, tabodr]
-         */
+        tabtoolbar = views.TabToolbar,
         toolbar = views.Toolbar = function(ownerui, obj){
             obj = obj || {};
-
-            var title = obj.title;
-
             this.ownerui = ownerui;
-            this.makeDom({viewType: (obj.viewType||'toolbar'), viewHtmlTag: 'div'});
-            this.toolList = [];
-
-            //处理带选项卡的工具条
-            if(title){
-                this.setClass('edui-tabtoolbar' );
-                this.addClass('edui-tabtoolbar'+obj.tabodr );
-                var tab = this.tab = new views({viewType: 'tab', viewText: title, unselectable: true});
-                tab.ownertoolbar = this;
-                tab.setProxyListener('click');//只设置点击代理，鼠标移上去划出暂时没有需求。是否考虑加在基类的实例化时默认设置所有dom事件
-                tab.addListener('click', utils.bind(this.switchoverTab, this, this));
-                this.appendChild(tab);
-                ownerui = tab = null;
-            }
-            obj = null;
+            this.itemList = [];
+            this.groupList = [];
+            this.tabList = [];
+            this.makeDom({viewType: (obj.viewType||'toolbar'), viewHtmlTag: obj.viewHtmlTag||'div'});
         };
-
     toolbar.prototype = {
-        /**
-         * @name currentClassname
-         * @desc 配置项-当前tan的样式名
-         */
-        currentClassname: 'current',
-        /**
-         * @name tabKey
-         * @desc 配置项里的tabtoolbar配置键
-         */
-        tabKey:{
-            tab: 'tab',
-            tools: 'tools'
+        //当需要tabtoolbar的时候，先创建一个展示标题的地方
+        initTab:function(){
+            this.tabhandle = new views({viewType: 'tabhandle', unselectable: true,viewHtmlTag:'div'});
+            this.appendChild(this.tabhandle);
+            this.setProxyListener('toggletab');
+            this.addListener("toggletab",function(t,evt){
+                this.currentTab.hide();
+            })
         },
-
-        /**
-         * @name addTool
-         * @desc 初始化工具栏按钮，可以是单独的按钮或者组合工具
-         * @grammar toolbar.addTool(tools)
-         *        tools {String|Array|Object} 配置项中的工具栏按钮
-         *              {String} 工具栏按钮名称
-         *              {Array} 工具栏分组
-         *              {Object} tabtoolbar的实现 @example {tab:'这是一个tab_1标题', tools:['bold', 'source']}
-         */
-        addTool: function(tools){
-            var group, tmp, it, isFirstTab, tabid = 0,  i = 0,
-                ui = this.ownerui,
-                tabk = this.tabKey.tab,
-                toolsk = this.tabKey.tools;
-
-            tools = utils.isArray(tools) ? tools : [tools];
-            var len = tools.length;
-
-            for(; i<len;){
-                it = tools[i++];
-                if(typeof it === 'string'){//添加一个按钮
-                    tmp = ui.getButton(it);
-                }else{
-                    (group = this.group) || (group=this.group=[]);
-                    //handle config likes [a, b,[c, d..]...]
-                    //添加一组按钮
-                    if(utils.isArray(it)){
-                        tmp = group[group.length] = new views.Toolbar(ui);
-                        tmp.addTool(it);
+        addTool:function(opt){
+            this.toollist = opt;
+            for(var i= 0;i<this.toollist.length;i++){
+                var tool = this.toollist[i],tmp;
+                if(utils.isObject(tool)){
+                    //obj
+                    if(this.tabList.length==0){
+                        this.initTab();
                     }
-                    //添加一个tabtoolbar
-                    else if(utils.isObject(it) && tabk in it){
-                        if(tabid===0){
-                            isFirstTab = true;
-                        }
-                        tmp = group[tabk+(tabid++)] = new views.Toolbar(ui, {title: it[tabk], tabodr:tabid});
-                        if(isFirstTab){
-                            tmp.addClass(this.currentClassname);
-                            this.currentTab = tmp;
-                            isFirstTab = null;
-                        }
-                        tmp.addTool(it[toolsk]);
-                    }
+                    this.addTabToolbar(tool);
+                }else if(utils.isArray(tool)){
+                    //array
+                    this.appendChild(this.addGroup(tool));
+//                    this.tabbody.appendChild(this.addGroup(tool))
+                }else if(utils.isString(tool)){
+                    //string
+                    this.addItem(tool);
                 }
-
-                this.toolList.push(tmp);
-                tmp.ownertoolbar = this;
-                this.appendChild(tmp);//组合tool添加button到工具栏
             }
         },
-
-        switchoverTab: function(tab){
-            var toolbar = this.ownertoolbar,
-                current = toolbar.currentTab;
-
-            if(tab != current){
-                current.removeClass(this.currentClassname);
-                tab.addClass(this.currentClassname);
-                toolbar.currentTab = tab;
+        addTabToolbar:function(tool,index){
+            var tmp;
+            if(tool instanceof views.TabToolbar){
+                tmp = tool;
+            }else if(utils.isObject(tool)){
+                tmp = new views.TabToolbar(this.ownerui,{
+                    tab:tool
+                });
+            }else{
+                return tmp;
             }
+            if(index>=0&&index<this.tabList.length){
+                var item = this.tabList[index];
+                item.dom.parentNode.insertBefore(tmp.dom,item.dom);
+                this.tabList.splice(index,0,tmp);
+                return tmp;
+            }
+            this.tabList.push(tmp);
+            return tmp;
+        },
+        removeTabToolbar:function(index){
+            if(index>=0&&index<this.tabList.length){
+                var item = this.tabList[index];
+                if(this.tabList.length != 1){
+                    utils.remove(item.tab.dom);
+                    utils.remove(item.tabbody.dom);
+                    this.tabList[index+1].show();
+                    this.tabList.splice(index,1);
+                }else{
+                    alert("最后一个tab不能删")
+                }
+            }
+        },
+        replaceTabToolbar:function(tabtoolbar,index){
+            if(index>=0&&index<this.tabList.length&&tabtoolbar){
+                this.removeTabToolbar(index);
+                this.addTabToolbar(tabtoolbar,index);
+            }
+        },
+        getTabToolbar:function(index){
+            if(index>=0&&index<this.tabList.length){
+                return this.tabList[index||0];
+            }
+            return null;
         }
     };
-
-    utils.inherits(toolbar, views);
-    toolbar = null;
+    utils.inherits(toolbar, tabtoolbar);
 })(UE);
