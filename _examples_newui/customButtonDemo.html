@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript">
+        window.UEDITOR_HOME_URL = "../";
+    </script>
+    <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
+
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+</head>
+<body>
+<h1>UEditor自定义插件</h1>
+
+<!--style给定宽度可以影响编辑器的最终宽度-->
+<script type="text/plain" id="myEditor">
+    <p>自定义button示例</p>
+</script>
+<script type="text/javascript">
+    UE.plugins['getcontent'] = function (){
+        var me = this;
+        me.commands['getcontent'] = {
+            execCommand:function (cmd) {
+                alert(me.getContent())
+            }
+        }
+    };
+    UE.registerEditorui(
+        ['getcontent'],
+        function(editor, name){
+            var btn = new UE.ui.View.Button(name);
+            btn.addListener('click', function(){
+                editor.execCommand(name);
+            });
+            return btn;
+        }
+    );
+    var editor_a = UE.getEditor('myEditor',{
+        toolbars:[
+            {
+                tab:'常用',
+                tools:[
+                    [ ['getcontent','source'] ],
+                    [ ['undo', 'redo'] ],
+                    [
+                        'fontfamily', 'fontsize',
+                        ['forecolor', 'backcolor']
+
+                    ],
+                    [['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'touppercase', 'tolowercase']],
+                    [ ['removeformat','cleardoc','selectall', 'searchreplace', 'fullscreen', 'preview'] ],
+                    [ ['formatmatch', 'pasteplain'] ]
+                ]
+            }
+        ]
+    });
+</script>
+
+</body>
+
+
+</html>

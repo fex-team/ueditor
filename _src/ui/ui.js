@@ -22,7 +22,7 @@
             this.wrapper = new zV({viewType: 'wrapper',viewHtmlTag: 'div',unselectable: true});
             this.toolbar = new zV.Toolbar(this);
             this.editorHolder = new zV({viewType: 'editorholder',viewHtmlTag: 'div'});
-            this.statusbar = new zV.Toolbar(this, {viewType: 'statusbar'});
+//            this.statusbar = new zV.Toolbar(this, {viewType: 'statusbar'});
         },
         /**
          * @name render
@@ -36,9 +36,11 @@
                 optstatusbars = options.statusbars;
 
             node.appendChild(this.wrapper.dom);
-            this.wrapper.appendChild(this.toolbar).appendChild(this.editorHolder).appendChild(this.statusbar);
+            this.wrapper.appendChild(this.toolbar).appendChild(this.editorHolder);
+//            this.toolbar.addTool(opttoolbars);
+//            this.wrapper.appendChild(this.toolbarhandle).appendChild(this.toolbar).appendChild(this.editorHolder).appendChild(this.statusbar);
             opttoolbars && this.toolbar.addTool(opttoolbars);
-            optstatusbars && this.statusbar.addTool(optstatusbars);
+//            optstatusbars && this.statusbar.addTool(optstatusbars);
         }
     };
 

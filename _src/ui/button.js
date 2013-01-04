@@ -21,7 +21,7 @@
         init: function(cmd, opt){
             opt = opt || {};
             // viewText中的cmd实际上设置的是label
-            this.makeDom({viewType:(opt.viewType||'button'), viewText:'<span class="button-content" id="{ID}-content">'+cmd+'</span>'} );
+            this.makeDom({viewType:(opt.viewType||'button'), viewText:'<span class="button-content" id="{ID}-content">'+(opt.label?opt.label:"")+'</span>'} );
             this.addClass('edui-' + cmd);
             this.startReflectByMouse();
             this.setProxyListener('click');
