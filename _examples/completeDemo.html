@@ -58,13 +58,12 @@
 
 </body>
 <script type="text/javascript">
-
    //实例化编辑器
     var ue = UE.getEditor('editor');
-    ue.addListener('selectionchange',function(){
-        document.getElementById('htmlcount').innerHTML = this.getContentLength();
-        document.getElementById('txtcount').innerHTML = this.getContentLength(true);
-    });
+//    ue.addListener('contentchange',function(){
+//        document.getElementById('htmlcount').innerHTML = this.getContentLength();
+//        document.getElementById('txtcount').innerHTML = this.getContentLength(true);
+//    });
     function createEditor(){
         enableBtn();
         UE.getEditor('editor')
