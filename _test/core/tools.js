@@ -9,11 +9,22 @@
         var utils = baidu.editor.utils;
         var editor = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':false});
         editor.render( div );
+
+        var iframe = document.createElement( 'iframe' );
+        document.body.appendChild( iframe );
+        iframe.id = 'iframe';
+//        te.dom.push( div );
+//
+        var range = new baidu.editor.dom.Range( document );
+        var domUtils = baidu.editor.dom.domUtils;
         stop();
         setTimeout(function(){
             te.dom.push( div );
+            te.dom.push( iframe );
             te.obj.push( utils );
             te.obj.push( editor );
+            te.obj.push( range );
+            te.obj.push( domUtils );
         },50);
     }
 

@@ -12,9 +12,10 @@ test( 'sub--table', function () {
         range.selectNode( body.firstChild ).select();
         var tds = body.firstChild.getElementsByTagName( 'td' );
         var td;
-        for ( var index = 0; td = tds[index++]; ) {
-                editor.currentSelectedArr.push( td );
-        }
+//        for ( var index = 0; td = tds[index++]; ) {
+//
+//                editor.currentSelectedArr.push( td );
+//        }
         editor.execCommand( 'subscript' );
         equal( ua.getChildHTML( tbody.firstChild.firstChild ), '<sub>hello1</sub>', '检查第1个单元格中文本是否是下标' );
         equal( ua.getChildHTML( tbody.firstChild.firstChild.nextSibling ), '<sub>hello2</sub>', '检查第2个单元格中文本是否是下标' );

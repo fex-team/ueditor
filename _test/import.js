@@ -5,11 +5,11 @@
 ///import core.browser;
 ///import core.utils;
 ///import core.EventBase;
-///import core.dom.dom;
-///import core.dom.dtd;
-///import core.dom.domUtils;
-///import core.dom.Range;
-///import core.dom.Selection;
+///import core.dom;
+///import core.dtd;
+///import core.domUtils;
+///import core.Range;
+///import core.Selection;
 ///import core.Editor;
 ///import core.ajax;
 ///import core.filterword;

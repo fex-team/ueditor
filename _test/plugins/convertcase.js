@@ -104,13 +104,13 @@ test('标签table',function(){
     var text="<table><tr><td>hello1</td><td>hello2</td></tr><tr><td>hello3</td><td>hello4</td></tr></table>";
     editor.setContent(text);
     var tds=body.firstChild.getElementsByTagName('td');
-    editor.currentSelectedArr.push(tds[1]);
+    range.selectNode(tds[1]);
     editor.execCommand("touppercase");
     equal(tds[1].innerHTML,"HELLO2","table--up");
     editor.execCommand("tolowercase");
     equal(tds[1].innerHTML,"hello2","table--low");
 
-    editor.currentSelectedArr.push(tds[2]);
+    range.selectNode(tds[2]);
     editor.execCommand("touppercase");
     equal(tds[1].innerHTML,"HELLO2","table--单元格2--up");
     equal(tds[2].innerHTML,"HELLO3","table--单元格3--up");
@@ -118,8 +118,8 @@ test('标签table',function(){
     equal(tds[1].innerHTML,"hello2","table--单元格2--low");
     equal(tds[2].innerHTML,"hello3","table--单元格3--low");
 
-    editor.currentSelectedArr.push(tds[0]);
-    editor.currentSelectedArr.push(tds[3]);
+    range.selectNode(tds[0]);
+    range.selectNode(tds[3]);
     editor.execCommand("touppercase");
     equal(tds[0].innerHTML,"HELLO1","table--单元格1--up");
     equal(tds[1].innerHTML,"HELLO2","table--单元格2--up");
