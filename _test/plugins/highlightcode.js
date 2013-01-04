@@ -10,35 +10,43 @@ module('plugins.highlightcode');
 test('插入代码',function(){
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.focus();
-    editor.setContent('<p></p>')
-    range.setStart(editor.body.firstChild,0).select();
-    editor.execCommand('highlightcode','<?php echo "Hello World"; ?>','php');
+    var div = te.dom[0];
+    editor.render( div );
     stop();
-    setTimeout(function(){
-        ua.manualDeleteFillData(editor.body);
-        equal( editor.getContent().substring(0, 78),'<pre class=\"brush:php;toolbar:false;\">&lt;?php echo "Hello World"; ?&gt;</pre>','代码高亮');
-        var tds = editor.body.firstChild.getElementsByTagName('td');
-        range.selectNode(tds[0]).select();
-        equal(editor.queryCommandState('highlightcode'),1,'插入代码高亮');
-        editor.execCommand('highlightcode','<?php echo "Hello World"; echo "Hello World"; echo "Hello World"; echo "Hello World"; echo "Hello World"; ?>','php');
-        stop();
+    editor.ready(function(){
+        var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
+        editor.setContent('<p>' + br + '</p>');
+        debugger
+        range.setStart(editor.body.firstChild,0).collapse(1).select();
+        debugger
         setTimeout(function(){
-            equal( editor.getContent().substring(0, 158),'<pre class=\"brush:php;toolbar:false;\">&lt;?php echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; ?&gt;</pre>','代码修改');
-            editor.fireEvent('fullscreenchanged');
-            var html = {html:''};
-            editor.fireEvent('getAllHtml',html);
-            ok(html.html.indexOf('third-party/SyntaxHighlighter/shCoreDefault.css')!=-1,'加载shCoreDefault.css');
-            ok(html.html.indexOf('third-party/SyntaxHighlighter/shCore.js')!=-1,'加载shCore.js');
+            debugger
+            editor.execCommand('highlightcode','<?php echo "Hello World"; ?>','php');
             ua.manualDeleteFillData(editor.body);
-            tds = editor.body.getElementsByTagName('td');
+            equal( editor.getContent().substring(0, 78),'<pre class=\"brush:php;toolbar:false;\">&lt;?php echo "Hello World"; ?&gt;</pre>','代码高亮');
+            var tds = editor.body.firstChild.getElementsByTagName('td');
             range.selectNode(tds[0]).select();
-            editor.execCommand('highlightcode');
-            var br = ua.browser.ie?'&nbsp;':'<br>'
-            equal(ua.getChildHTML(editor.body),'<p>'+br+'</p>','去掉代码高亮');
-            start();
-        },50);
+            equal(editor.queryCommandState('highlightcode'),1,'插入代码高亮');
+            editor.execCommand('highlightcode','<?php echo "Hello World"; echo "Hello World"; echo "Hello World"; echo "Hello World"; echo "Hello World"; ?>','php');
+            stop();
+            setTimeout(function(){
+                equal( editor.getContent().substring(0, 158),'<pre class=\"brush:php;toolbar:false;\">&lt;?php echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; ?&gt;</pre>','代码修改');
+                editor.fireEvent('fullscreenchanged');
+                var html = {html:''};
+                editor.fireEvent('getAllHtml',html);
+                ok(html.html.indexOf('third-party/SyntaxHighlighter/shCoreDefault.css')!=-1,'加载shCoreDefault.css');
+                ok(html.html.indexOf('third-party/SyntaxHighlighter/shCore.js')!=-1,'加载shCore.js');
+                ua.manualDeleteFillData(editor.body);
+                tds = editor.body.getElementsByTagName('td');
+                range.selectNode(tds[0]).select();
+                editor.execCommand('highlightcode');
+                var br = ua.browser.ie?'&nbsp;':'<br>'
+                equal(ua.getChildHTML(editor.body),'<p>'+br+'</p>','去掉代码高亮');
+                start();
+            },50);
+        },500);
     },50);
+
 });
 /*trace 2648*/
 test('切换源码不插入br',function(){
