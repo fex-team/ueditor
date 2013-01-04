@@ -1,12 +1,12 @@
 .edui-seprt,
 .edui-button,
 .edui-arrowbutton,
-.edui-selectbox{position:relative;height:24px;display:inline-block;vertical-align:top;line-height:1000px;overflow:hidden;}
+.edui-selectbox{position:relative;height:24px;display:inline-block;vertical-align:top;line-height:24px;overflow:hidden;*display:inline; *zoom:1;_height: 1%;}
 
 .edui-arrowbutton,
-.edui-button{background:url(../images/tool_bg.png) repeat-x;border-right:1px solid #A6CAE4;}
+.edui-button{background:url(../images/tool_bg.png) repeat-x;border-top:1px solid #A6CAE4;border-bottom:1px solid #A6CAE4; border-left:1px solid #A6CAE4;}
 .button-content,
-.edui-contextmenu .edui-icon{width:22px;float:left;white-space:nowrap;background:url(../images/icons.png) -1px 2px no-repeat;overflow:hidden;}
+.edui-contextmenu .edui-icon{width:22px;height:24px;white-space:nowrap;background:url(../images/icons.png) -1px 2px no-repeat;overflow:hidden;float:left; }
 
 .edui-button-hover,
 .edui-arrowbutton-hover{background-position:0 -23px;}
@@ -103,8 +103,8 @@
 
 .edui-seprt{width:0;background-color:#fff;overflow:hidden;border-left:1px solid #A5CAE0;border-right:1px solid #fff;}
 
-.edui-selectbox{background:#fff;line-height:24px;margin-right:3px;padding-left:4px;border:1px solid #A5CAE0;}
-.edui-selectbox .button-content{width:100px;background:none;}
+.edui-selectbox{background:#fff;height:24px;line-height:24px;margin-right:3px;padding-left:4px;border:1px solid #A5CAE0;_height: 1%;}
+.edui-selectbox .button-content{width:100px;background:none;height:24px;line-height:24px;_height: 1%;}
 .edui-fontsize .button-content{width:45px;}
 
 
@@ -121,7 +121,7 @@
 .edui-pop-emotion iframe{height:380px;width:514px;}
 .edui-colorpicker{padding:4px;}
 
-.edui-menuitem{padding:0 10px;line-height:22px;white-space:nowrap;}
+.edui-menuitem{padding:0 10px;line-height:34px;white-space:nowrap;}
 .edui-menuitem-hover{background-color:#EFEFB1;}
 .edui-fontfamily .edui-menuitem span{padding:0 4px 0 26px;display:block;background:url(../images/icons-all.png) 4px -122px no-repeat;}
 .edui-customstyle .edui-menuitem{line-height:25px;}

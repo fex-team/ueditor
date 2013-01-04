@@ -15,6 +15,9 @@
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
     <style type="text/css">
+        #editor{margin: 20px;}
+    </style>
+    <style type="text/css">
         .clear {
             clear: both;
         }
@@ -56,7 +59,31 @@
 
    //实例化编辑器
     var ue = UE.getEditor('editor',{
-        toolbars:[["bold"]]
+        focus:true
+//        toolbars:[{
+//            tab:"常用",
+//            tools:[["bold","italic","strikethrough","underline"]],
+//            active:true,
+//            disable:true,
+//            onclick:function(){
+//                alert("click")
+//            }
+//        },
+//        {
+//            tab:'插入',
+//            tools:[
+//                ['pagebreak','insertimage', 'emotion', 'insertvideo', 'attachment', 'map', 'gmap', 'highlightcode'] ,
+//                 ['inserttable','deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow',  'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols'] ,
+//                 ['link', 'unlink', 'insertframe'] ,
+//                 ['date', 'time'] ,
+//                 ['horizontal', 'anchor', 'spechars', 'blockquote']
+//            ],
+//            onclick:function(){
+//                alert("click1")
+//            }
+//        }]
+//        toolbars:["bold","italic","strikethrough","underline"]
+//        toolbars:[["bold","italic","strikethrough"],["underline"]]
     });
     function createEditor(){
         enableBtn();

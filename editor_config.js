@@ -83,45 +83,46 @@
             {
                 tab:'常用',
                 tools:[
-                    [ ['source'] ],
-                    [ ['undo', 'redo'] ],
+                    [ 'source' ],
+                    [ 'undo', 'redo' ],
                     [
                         'fontfamily', 'fontsize',
-                        ['forecolor', 'backcolor']
+                        'forecolor', 'backcolor'
 
                     ],
-                    [['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'touppercase', 'tolowercase']],
-                    [ ['removeformat','cleardoc','selectall', 'searchreplace', 'fullscreen', 'preview'] ],
-                    [ ['formatmatch', 'pasteplain'] ]
-                ]
+                    ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'touppercase', 'tolowercase'],
+                    [ 'removeformat','cleardoc','selectall', 'searchreplace', 'fullscreen', 'preview' ],
+                    [ 'formatmatch', 'pasteplain' ]
+                ],
+                active:true
             },
             {
                 tab:'插入',
                 tools:[
-                    [ ['pagebreak','insertimage', 'emotion', 'insertvideo', 'attachment', 'map', 'gmap', 'highlightcode'] ],
-                    [ ['inserttable','deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow',  'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols'] ],
-                    [ ['link', 'unlink', 'insertframe'] ],
-                    [ ['date', 'time'] ],
-                    [ ['horizontal', 'anchor', 'spechars', 'blockquote'] ]
+                    [ 'pagebreak','insertimage', 'emotion', 'insertvideo', 'attachment', 'map', 'gmap', 'highlightcode' ],
+                    [ 'inserttable','deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow',  'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols' ],
+                    [ 'link', 'unlink', 'insertframe'],
+                    [ 'date', 'time' ],
+                    [ 'horizontal', 'anchor', 'spechars', 'blockquote' ]
                 ]
             },
             {
                 tab:'格式化',
                 tools:[
-                    [ ['insertorderedlist', 'insertunorderedlist'] ],
-                    [ ['directionalityltr', 'directionalityrtl'] ],
-                    [ ['indent', 'autotypeset'] ],
+                    [ 'insertorderedlist', 'insertunorderedlist'],
+                    [ 'directionalityltr', 'directionalityrtl' ],
+                    [ 'indent', 'autotypeset' ],
                     ['customstyle'],
-                    ['paragraph', ['rowspacingtop', 'rowspacingbottom', 'lineheight'] ],
-                    [ ['imagenone', 'imageleft', 'imageright', 'imagecenter'] ],
-                    [ ['justifyleft', 'justifycenter', 'justifyright', 'justifyjustify'] ]
+                    ['paragraph', 'rowspacingtop', 'rowspacingbottom', 'lineheight' ],
+                    [ 'imagenone', 'imageleft', 'imageright', 'imagecenter' ],
+                    [ 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify' ]
                 ]
             },
             {
                 tab:'其它',
                 tools:[
-                    [ ['help', 'print'] ],
-                    [ ['scrawl', 'webapp', 'template', 'background', 'snapscreen', 'wordimage'] ]
+                    [ 'help', 'print'],
+                    [ 'scrawl', 'webapp', 'template', 'background', 'snapscreen', 'wordimage' ]
                 ]
             }
         ]
