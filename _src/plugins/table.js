@@ -471,18 +471,20 @@ UE.plugins['table'] = function () {
         me.addListener("mousedown", mouseDownEvent);
         me.addListener("mouseup", mouseUpEvent);
 
+        var currentRowIndex = 0;
         me.addListener('tabkeydown',function(){
             var range = this.selection.getRange(),
                 obj = getTableItemsByRange(me);
             if(obj.table){
                 var cell = obj.cell,
                     ua = getUETable(cell);
-                var nextCell = ua.getTabNextCell(cell,cell.getAttribute('preRowIndex'));
+                if(cell.rowSpan > 1){
+
+                }
+                currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
+                var nextCell = ua.getTabNextCell(cell,currentRowIndex);
 
                 if(nextCell){
-                    if(nextCell.rowSpan > 1){
-                        nextCell.setAttribute('preRowIndex',ua.getCellInfo(cell).rowIndex);
-                    }
                     if(isEmptyBlock(nextCell)){
                         range.setStart(nextCell,0).setCursor(false,true)
                     }else{
