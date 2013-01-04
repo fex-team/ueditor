@@ -29,12 +29,15 @@ UE.I18N['zh-cn'] = {
         'lower-alpha':'a,b,c...',
         'lower-roman':'i,ii,iii...',
         'upper-alpha':'A,B,C...',
-        'upper-roman':'I,II,III...'
+        'upper-roman':'I,II,III...',
+        'chinese':'(一)(二)(三)....',
+        'number':'(1)(2)(3)...'
     },
     'insertunorderedlist':{
         'circle':'○ 小圆圈',
         'disc':'● 小圆点',
-        'square':'■ 小方块 '
+        'square':'■ 小方块 ',
+        'dash' :'— 破折号'
     },
     'paragraph':{'p':'段落', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
     'fontfamily':{
