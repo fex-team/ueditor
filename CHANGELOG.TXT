@@ -7,6 +7,7 @@ Version 1.2.5
   . table支持拷贝
   . table支持任意调整宽高
   . table支持任意前插后插行列
+  . table键盘操作仿word用户体验
   . 添加table平均分布行、列
   . 添加table单元格对齐方式
   . 添加table对齐方式
@@ -15,6 +16,7 @@ Version 1.2.5
   . 粘贴支持纯文本和源码模式选择
   . 添加计算字数的getContentLength接口
   . 图片上传支持参数动态绑定
+  . 重写了list功能，支持(一),(1),——等新的列表标签
 
 Version 1.2.4
 新增功能
