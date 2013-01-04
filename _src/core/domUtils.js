@@ -686,11 +686,16 @@ var domUtils = dom.domUtils = {
            var className = filter;
            filter =  function(node){return domUtils.hasClass(node,className)}
         }
-        var list = node.getElementsByTagName(name), arr = [];
-        for (var i = 0, ci; ci = list[i++];) {
-            if(!filter || filter(ci))
-                arr.push(ci);
+        name = utils.trim(name).replace(/[ ]{2,}/g,' ').split(' ');
+        var arr = [];
+        for(var n = 0,ni;ni=name[n++];){
+            var list = node.getElementsByTagName(ni);
+            for (var i = 0, ci; ci = list[i++];) {
+                if(!filter || filter(ci))
+                    arr.push(ci);
+            }
         }
+
         return arr;
     },
     /**

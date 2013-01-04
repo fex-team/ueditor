@@ -318,6 +318,10 @@
                 me.document.execCommand( 'enableInlineTableEditing', false, options.tableNativeEditInFF );
             } catch ( e ) {}
             try {
+
+
+
+
                 me.document.execCommand( 'enableObjectResizing', false, false );
             } catch ( e ) {
                 domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
