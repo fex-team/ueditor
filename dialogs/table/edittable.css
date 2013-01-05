@@ -55,7 +55,8 @@
 }
 
 .section .preview td {
-    border: 1px solid #DDD;
+    border-width: 1px;
+    border-style: solid;
     height: 22px;
 }
 

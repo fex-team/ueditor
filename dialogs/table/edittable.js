@@ -11,15 +11,16 @@
         autoSizeContent = $G("J_autoSizeContent"),
         autoSizePage = $G("J_autoSizePage"),
         tone = $G("J_tone"),
+        me,
         preview = $G("J_preview");
 
     var editTable = function () {
+        me=this;
         this.init();
     };
     editTable.prototype = {
         init:function () {
-            var me = this,
-                colorPiker = new UE.ui.ColorPicker({
+            var colorPiker = new UE.ui.ColorPicker({
                     editor:editor
                 }),
                 colorPop = new UE.ui.Popup({
@@ -32,7 +33,7 @@
 
             me.createTable(title.checked, caption.checked);
             me.setAutoSize();
-            me.setColor();
+            me.setColor(me.getColor());
 
             domUtils.on(title, "click", me.titleHanler);
             domUtils.on(caption, "click", me.captionHanler);
@@ -46,7 +47,7 @@
                 colorPop.hide();
             });
             colorPiker.addListener("pickcolor", function () {
-                tone.value = arguments[1];
+                me.setColor(arguments[1]);
                 colorPop.hide();
             });
         },
@@ -76,7 +77,9 @@
         },
 
         titleHanler:function () {
-            var example = $G("J_example");
+            var example = $G("J_example"),
+                color=domUtils.getComputedStyle(domUtils.getElementsByTagName(example,"td")[0],"border-color");
+
             if (title.checked) {
                 var row = document.createElement("tr");
                 row.innerHTML = "<th>" + lang.titleName + "</th><th>" + lang.titleName + "</th><th>" + lang.titleName + "</th><th>"
@@ -85,6 +88,7 @@
             } else {
                 domUtils.remove(example.rows[0]);
             }
+            me.setColor(color);
         },
         captionHanler:function () {
             var example = $G("J_example");
@@ -109,10 +113,23 @@
             example.setAttribute('width', '100%');
         },
 
-        setColor:function () {
-            var start = editor.selection.getStart(),
-                color = domUtils.findParentByTagName(start, "td", true);
-            tone.value = domUtils.getComputedStyle(color, "border-color");
+        getColor:function(){
+          var  start = editor.selection.getStart(),
+               color = domUtils.findParentByTagName(start, ["td","th","caption"], true);
+            return domUtils.getComputedStyle(color, "border-color");
+        },
+        setColor:function (color) {
+            var example = $G("J_example"),
+                arr = domUtils.getElementsByTagName(example, "td").concat(
+                    domUtils.getElementsByTagName(example, "th"),
+                    domUtils.getElementsByTagName(example, "caption")
+                );
+
+            tone.value = color;
+            utils.each(arr, function (node) {
+                node.style.borderColor =  color ;
+            });
+
         },
         setAutoSize:function () {
             var me = this,
@@ -140,8 +157,8 @@
     dialog.onok = function () {
         title.checked ? editor.execCommand("inserttitle") : editor.execCommand("deletetitle");
         caption.checked ? editor.execCommand("insertcaption") : editor.execCommand("deletecaption");
+        editor.execCommand("edittable", tone.value);
         autoSizeContent.checked ? adaptByTextTable() : "";
         autoSizePage.checked ? editor.execCommand("adaptbywindow") : "";
-        editor.execCommand("edittable", tone.value);
     };
 })();
