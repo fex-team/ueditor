@@ -52,7 +52,7 @@
             });
         },
 
-        createTable:function (hasCaption, hasTitle) {
+        createTable:function (hasTitle,hasCaption) {
             var arr = [];
             arr.push("<table id='J_example'>");
             if (hasCaption) {
