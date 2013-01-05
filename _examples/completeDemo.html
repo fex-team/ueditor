@@ -31,7 +31,7 @@
        当前输入的字数共 : <span id="txtcount"></span>
     </div>
     <div >
-        <input type="button" value="获得整个html的内容" onclick="getAllHtml()">
+        <input type="button" value="获得整个html的内容" onclick="getAllHtml()" />
         <input type="button" value="获得内容" onclick="getContent()">
         <input type="button" value="写入内容" onclick="setContent()">
         <input type="button" value="获得纯文本" onclick="getContentTxt()">
@@ -61,6 +61,15 @@
     ue.addListener('contentchange',function(){
         document.getElementById('htmlcount').innerHTML = this.getContentLength();
         document.getElementById('txtcount').innerHTML = this.getContentLength(true);
+    });
+    var timer;
+    ue.addListener('keyup',function(){
+        clearTimeout(timer);
+        var me = this;
+        timer = setTimeout(function(){
+            document.getElementById('htmlcount').innerHTML = me.getContentLength();
+            document.getElementById('txtcount').innerHTML = me.getContentLength(true);
+        },200)
     });
     function createEditor(){
         enableBtn();
