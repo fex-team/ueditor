@@ -1811,10 +1811,13 @@ UE.plugins['table'] = function () {
     //表格属性
     UE.commands['edittable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            var rng = this.selection.getRange(),
+                table = domUtils.findParentByTagName(rng.startContainer, 'table');
+            return table ? 1 : -1;
         },
         execCommand:function (cmd, color) {
-            var table = getTableItemsByRange(this).table;
+            var rng = this.selection.getRange(),
+                table = domUtils.findParentByTagName(rng.startContainer, 'table');
             if (table && color) {
                 var arr = domUtils.getElementsByTagName(table, "td").concat(
                     domUtils.getElementsByTagName(table, "th"),
