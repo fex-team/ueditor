@@ -374,7 +374,6 @@ div.edui-box {
     line-height: 20px;
     height: 20px;
     padding-left: 10px;
-    padding-right: 20px;
 }
 
 .edui-default .edui-state-checked .edui-menuitem-body {
@@ -1229,18 +1228,23 @@ div.edui-box {
     height: 420px;
 }
 
-/*table-dialog*/
-.edui-default .edui-for-inserttable .edui-dialog-content {
-    width: 510px;
-    height: 275px;
+/*edittable-dialog*/
+.edui-default .edui-for-edittable .edui-dialog-content {
+    width: 540px;
+    height: 265px;
 }
 
-/*td-dialog*/
+/*edittip-dialog*/
+.edui-default .edui-for-edittip .edui-dialog-content {
+    width: 225px;
+    height: 60px;
+}
+
+/*edittd-dialog*/
 .edui-default .edui-for-edittd .edui-dialog-content {
-    width: 220px;
-    height: 125px;
+    width: 240px;
+    height: 50px;
 }
-
 /*snapscreen-dialog*/
 .edui-default .edui-for-snapscreen .edui-dialog-content {
     width: 400px;
@@ -1393,6 +1397,41 @@ div.edui-box {
     margin: 3px 3px 3px 4px;
     *margin: 1px 0 0 0;
 }
+/*自动排版弹出菜单*/
+.edui-default .edui-aligncellpicker .edui-aligncellpicker-body {
+    width: 70px;
+    font-size: 12px;
+    cursor: default;
+}
+
+.edui-default .edui-aligncellpicker-body table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.edui-default .edui-aligncellpicker-body td{
+    padding: 1px;
+}
+.edui-default .edui-aligncellpicker-body .edui-icon{
+    height: 20px;
+    width: 20px;
+    padding: 1px;
+    background-image: url(../images/icons.png);
+    background-image: url(../images/icons.gif) \9;
+}
+.edui-default .edui-aligncellpicker-body .edui-left{
+    background-position: -460px 0;
+}
+.edui-default .edui-aligncellpicker-body .edui-center{
+    background-position: -420px 0;
+}
+.edui-default .edui-aligncellpicker-body .edui-right{
+    background-position: -480px 0;
+}
+.edui-default .edui-aligncellpicker-body td.edui-state-hover {
+    background-color: #fff5d4;
+    padding: 0;
+    border: 1px solid #dcac6c;
+}
 /*分隔线*/
 .edui-default .edui-toolbar .edui-separator {
     width: 2px;
@@ -1463,4 +1502,72 @@ div.edui-box {
     padding: 0 !important;
     background-color: #fff5d4;
     border: 1px solid #dcac6c;
+}
+/*粘贴弹出菜单*/
+.edui-default .edui-wordpastepop .edui-popup-content{
+    border: none;
+    padding: 0;
+    width: 54px;
+    height: 21px;
+}
+.edui-default  .edui-pasteicon {
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/wordpaste.png');
+    background-position: 0 0;
+}
+
+.edui-default  .edui-pasteicon.edui-state-opened {
+    background-position: 0 -34px;
+}
+
+.edui-default  .edui-pastecontainer {
+    position: relative;
+    visibility: hidden;
+    width: 90px;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+.edui-default  .edui-pastecontainer .edui-title {
+    font-weight: bold;
+    background: #F8F8FF;
+    height: 25px;
+    line-height: 25px;
+    font-size: 12px;
+    padding-left: 5px;
+}
+
+.edui-default  .edui-pastecontainer .edui-button {
+    overflow: hidden;
+    margin: 3px 0;
+}
+
+.edui-default  .edui-pastecontainer .edui-button .edui-richtxticon {
+    float: left;
+    cursor: pointer;
+    width: 29px;
+    height: 29px;
+    margin-left: 10px;
+    background-image: url('../images/wordpaste.png');
+    background-position: -109px 0;
+}
+
+.edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon {
+    float: right;
+    cursor: pointer;
+    width: 29px;
+    height: 29px;
+    margin-right: 10px;
+    background-image: url('../images/wordpaste.png');
+    background-position: -72px 0;
+}
+
+.edui-default  .edui-pastecontainer .edui-button .edui-richtxticon.edui-state-hover {
+    background-position: -109px -34px;
+
+}
+
+.edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon.edui-state-hover {
+    background-position: -72px -34px;
 }
