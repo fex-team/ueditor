@@ -46,7 +46,7 @@
 
 </div>
 <div >
-    <input type="button" value="创建编辑器" onclick="UE.getEditor('editor')"/>
+    <input type="button" value="创建编辑器" onclick="createEditor()"/>
     <input type="button" value="删除编辑器" onclick="deleteEditor()"/>
 </div>
 </body>
@@ -55,7 +55,10 @@
    //实例化编辑器
     UE.getEditor('editor');
 
-
+    function createEditor(){
+        enableBtn();
+        UE.getEditor('editor')
+    }
     function getAllHtml() {
         alert( UE.getEditor('editor').getAllHtml() )
     }

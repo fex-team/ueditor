@@ -44,7 +44,7 @@
 
         //涂鸦图片配置区
         ,scrawlUrl:URL+"php/scrawlUp.php"           //涂鸦上传地址
-        ,scrawlPath:URL+"php/"                           //图片修正地址，同imagePath
+        ,scrawlPath:URL+"php/"                            //图片修正地址，同imagePath
 
         //附件上传配置区
         ,fileUrl:URL+"php/fileUp.php"               //附件上传提交地址
@@ -302,10 +302,10 @@
         //注意默认codemirror只能在ie8+和非ie中使用
         //,sourceEditor:"codemirror"
         //如果sourceEditor是codemirror，还用配置一下两个参数
-        //codeMirrorJsUrl js加载的路径，默认是 URL + "third-party/codemirror2.15/codemirror.js"
-        //,codeMirrorJsUrl:URL + "third-party/codemirror2.15/codemirror.js"
-        //codeMirrorCssUrl css加载的路径，默认是 URL + "third-party/codemirror2.15/codemirror.css"
-        //,codeMirrorCssUrl:URL + "third-party/codemirror2.15/codemirror.css"
+        //codeMirrorJsUrl js加载的路径，默认是 URL + "third-party/codemirror/codemirror.js"
+        //,codeMirrorJsUrl:URL + "third-party/codemirror/codemirror.js"
+        //codeMirrorCssUrl css加载的路径，默认是 URL + "third-party/codemirror/codemirror.css"
+        //,codeMirrorCssUrl:URL + "third-party/codemirror/codemirror.css"
         //编辑器初始化完成后是否进入源码模式，默认为否。
         //,sourceEditorFirst:false
 
