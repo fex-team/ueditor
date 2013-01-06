@@ -1114,7 +1114,7 @@
                                 break;
                             }
                         }
-                        firstIndex += (isStart ? me.startOffset : me.endOffset)
+                        firstIndex += domUtils.isFillChar(node) ? 0 : (isStart ? me.startOffset : me.endOffset)
                     }else{
                         node =  node.childNodes[ isStart ? me.startOffset : me.endOffset];
                         if(node){
@@ -1123,6 +1123,10 @@
                             node = isStart ? me.startContainer : me.endContainer;
                             var first = node.firstChild;
                             while(first){
+                                if(domUtils.isFillChar(first)){
+                                    first = first.nextSibling;
+                                    continue;
+                                }
                                 firstIndex++;
                                 if(first.nodeType == 3){
                                     while( first && first.nodeType == 3){
@@ -1131,7 +1135,6 @@
                                 }else{
                                     first = first.nextSibling;
                                 }
-
                             }
                         }
 
