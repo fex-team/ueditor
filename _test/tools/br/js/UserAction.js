@@ -1257,6 +1257,15 @@ UserAction = {
         equal( range.startOffset, so, "check startOffset--" + descript );
         equal( range.endOffset, eo, "check endOffset--" + descript );
     },
+    isSameRange:function ( rangeA, rangeB, descript ) {
+        descript = descript ? descript : '';
+        equal( rangeA.collapsed, rangeB.collapsed, "check collapsed --" + descript );
+        ok( rangeA.document === rangeB.document, "check document--" + descript );
+        ok( rangeA.startContainer === rangeB.startContainer, "check startContainer--" + descript );
+        ok( rangeA.endContainer === rangeB.endContainer, "check endContainer--" + descript );
+        equal( rangeA.startOffset, rangeB.startOffset, "check startOffset--" + descript );
+        equal( rangeA.endOffset, rangeB.endOffset, "check endOffset--" + descript );
+    },
     manualDeleteFillData:function ( node ) {
             var childs = node.childNodes;
             for ( var i = 0; i < childs.length; i++ ) {
