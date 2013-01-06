@@ -12,62 +12,8 @@ UE.plugins['undo'] = function() {
         maxUndoCount = me.options.maxUndoCount || 20,
         maxInputCount = me.options.maxInputCount || 20,
         fillchar = new RegExp(domUtils.fillChar + '|<\/hr>','gi'),// ie会产生多余的</hr>
-    //在比较时，需要过滤掉这些属性
+        //在比较时，需要过滤掉这些属性
         specialAttr = /\b(?:href|src|name)="[^"]*?"/gi;
-
-    //场景的range实例
-    function sceneRange(rng){
-        var me = this;
-        me.collapsed = rng.collapsed;
-        me.startAddr = getAddr(rng.startContainer,rng.startOffset);
-        me.endAddr = rng.collapsed ? me.startAddr : getAddr(rng.endContainer,rng.endOffset)
-
-    }
-    sceneRange.prototype ={
-        compare : function(obj){
-            var me = this;
-            if(me.collapsed !== obj.collapsed){
-                return 0;
-            }
-            if(!compareAddr(me.startAddr,obj.startAddr) || !compareAddr(me.endAddr,obj.endAddr)){
-                return 0;
-            }
-            return 1;
-        },
-        transformRange : function(rng){
-            var me = this;
-            rng.collapsed = me.collapsed;
-            setAddr(rng,'start',me.startAddr);
-            rng.collapsed ? rng.collapse(true) : setAddr(rng,'end',me.endAddr)
-
-        }
-    };
-    function getAddr(node,index){
-        for(var i= 0,parentsIndex = [index],ci,
-                parents = domUtils.findParents(node,true,function(node){return !domUtils.isBody(node)},true);
-            ci=parents[i++];){
-            //修正偏移位置
-            if(i == 1 && ci.nodeType == 3){
-
-                var tmpNode = ci;
-                while(tmpNode = tmpNode.previousSibling){
-                    if(tmpNode.nodeType == 3){
-//                        console.log(index)
-                        index += tmpNode.nodeValue.replace(fillCharReg,'').length;
-                    }else{
-                        break;
-                    }
-                }
-                parentsIndex[0] = index;
-            }
-
-            parentsIndex.push(domUtils.getNodeIndex(ci,true));
-
-        }
-
-        return parentsIndex.reverse();
-
-    }
 
     function compareAddr(indexA,indexB){
         if(indexA.length != indexB.length)
@@ -78,17 +24,17 @@ UE.plugins['undo'] = function() {
         }
         return 1;
     }
-    function setAddr(range,boundary,addr){
-
-        node = range.document.body;
-        for(var i= 0,node,l = addr.length - 1;i<l;i++){
-            node = node.childNodes[addr[i]];
+    function compareRangeAddress(rngAddrA,rngAddrB){
+        if(rngAddrA.collapsed != rngAddrB.collapsed){
+            return 0;
         }
-        range[boundary+'Container'] = node;
-        range[boundary+'Offset'] =  addr[addr.length-1];
+        if(!compareAddr(rngAddrA.startAddress,rngAddrB.startAddress) || !compareAddr(rngAddrA.endAddress,rngAddrB.endAddress)){
+            return 0;
+        }
+        return 1;
     }
-    function UndoManager() {
 
+    function UndoManager() {
         this.list = [];
         this.index = 0;
         this.hasUndo = false;
@@ -149,14 +95,11 @@ UE.plugins['undo'] = function() {
                     }
                 }
             }
-
             var range = new dom.Range( me.document );
-
-
             //有可能再save时没有bookmark
             try{
-                if(browser.opera || browser.safari){
-                    scene.senceRange.transformRange(range)
+                if(scene.address){
+                    range.moveToAddress(scene.address)
                 }else{
                     range.moveToBookmark( {
                         start : '_baidu_bookmark_start_',
@@ -165,13 +108,7 @@ UE.plugins['undo'] = function() {
                         //去掉true 是为了<b>|</b>，回退后还能在b里
                     } );
                 }
-
-                //trace:1278 ie9block元素为空，将出现光标定位的问题，必须填充内容
-                if(browser.ie && browser.version == 9 && range.collapsed && domUtils.isBlockElm(range.startContainer) && domUtils.isEmptyNode(range.startContainer)){
-                    domUtils.fillNode(range.document,range.startContainer);
-
-                }
-                range.select(!browser.gecko);
+                range.select();
                 if(!(browser.opera || browser.safari)){
                     setTimeout(function(){
                         range.scrollToView(me.autoHeightEnabled,me.autoHeightEnabled ? domUtils.getXY(me.iframe).y:0);
@@ -194,23 +131,28 @@ UE.plugins['undo'] = function() {
             //有可能边界落到了<table>|<tbody>这样的位置，所以缩一下位置
             range.shrinkBoundary();
             browser.ie && (cont = cont.replace(/>&nbsp;</g,'><').replace(/\s*</g,'<').replace(/>\s*/g,'>'));
-            var bookmark = range.createBookmark( true, true ),
-                bookCont = me.body.innerHTML.replace(fillchar,'');
+            var rngAddress = range.createAddress(false,true);
+//                bookmark = range.createBookmark( true, true ),
+//                bookCont = me.body.innerHTML.replace(fillchar,'');
             me.fireEvent('aftergetscene');
-            if(browser.opera || browser.safari){
-                return {
-                    senceRange : new sceneRange(range),
-                    content : cont,
-                    bookcontent : cont
-                }
-            }else{
-
-                bookmark && range.moveToBookmark( bookmark ).select( true );
-                return {
-                    bookcontent : bookCont,
-                    content : cont
-                };
+            return {
+                address : rngAddress,
+                content : cont,
+                bookcontent : cont
             }
+//            if(browser.opera || browser.safari){
+//                return {
+//                    address : rngAddress,
+//                    content : cont,
+//                    bookcontent : cont
+//                }
+//            }else{
+//                bookmark && range.moveToBookmark( bookmark ).select( true );
+//                return {
+//                    bookcontent : bookCont,
+//                    content : cont
+//                };
+//            }
 
         };
         this.save = function(notCompareRange) {
@@ -220,12 +162,11 @@ UE.plugins['undo'] = function() {
             if ( lastScene && lastScene.content == currentScene.content &&
                 (
                     notCompareRange ? 1 :
-                        ( (browser.opera || browser.safari) ? lastScene.senceRange.compare(currentScene.senceRange) : lastScene.bookcontent == currentScene.bookcontent)
+                        ( lastScene.address ? compareRangeAddress(lastScene.address,currentScene.address) : lastScene.bookcontent == currentScene.bookcontent)
                     )
                 ) {
                 return;
             }
-
             this.list = this.list.slice( 0, this.index + 1 );
             this.list.push( currentScene );
             //如果大于最大数量了，就把最前的剔除
@@ -303,6 +244,7 @@ UE.plugins['undo'] = function() {
     me.addshortcutkey({
         "Undo" :  "ctrl+90",//undo
         "Redo" : "ctrl+89" //redo
+
     });
     me.addListener( 'keydown', function( type, evt ) {
         var keyCode = evt.keyCode || evt.which;
@@ -312,6 +254,7 @@ UE.plugins['undo'] = function() {
             if ( me.undoManger.list.length == 0 || ((keyCode == 8 ||keyCode == 46) && lastKeyCode != keyCode) ) {
 
                 me.fireEvent('contentchange');
+
                 me.undoManger.save(true);
                 lastKeyCode = keyCode;
                 return;

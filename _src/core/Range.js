@@ -1022,21 +1022,34 @@
                 // trace:870 chrome/safari后边是br对于闭合得range不能定位 所以去掉了判断
                 // this.startContainer.nodeType != 3 &&! ((child = this.startContainer.childNodes[this.startOffset]) && child.nodeType == 1 && child.tagName == 'BR'
                 if (this.collapsed) {
-                    //opear如果没有节点接着，原生的不能够定位,不能在body的第一级插入空白节点
-                    if (notInsertFillData && browser.opera && !domUtils.isBody(this.startContainer) && this.startContainer.nodeType == 1) {
-                        var tmp = this.document.createTextNode('');
-                        this.insertNode(tmp).setStart(tmp, 0).collapse(true);
-                    }
-
-                    //处理光标落在文本节点的情况
-                    //处理以下的情况
-                    //<b>|xxxx</b>
-                    //<b>xxxx</b>|xxxx
-                    //xxxx<b>|</b>
-                    if (!notInsertFillData && (
-                        this.startContainer.nodeType != 3 ||
-                            this.startOffset == 0 && (!this.startContainer.previousSibling || this.startContainer.previousSibling.nodeType !=3)
-                        )) {
+//                    //opear如果没有节点接着，原生的不能够定位,不能在body的第一级插入空白节点
+//                    if (notInsertFillData && browser.opera && !domUtils.isBody(this.startContainer) && this.startContainer.nodeType == 1) {
+//                        var tmp = this.document.createTextNode('');
+//                        this.insertNode(tmp).setStart(tmp, 0).collapse(true);
+//                    }
+//
+//                    //处理光标落在文本节点的情况
+//                    //处理以下的情况
+//                    //<b>|xxxx</b>
+//                    //<b>xxxx</b>|xxxx
+//                    //xxxx<b>|</b>
+//                    if (!notInsertFillData && (
+//                        this.startContainer.nodeType != 3 ||
+//                            this.startOffset == 0 && (!this.startContainer.previousSibling || this.startContainer.previousSibling.nodeType !=3)
+//                        )) {
+//                        txtNode = this.document.createTextNode(fillChar);
+//                        //跟着前边走
+//                        this.insertNode(txtNode);
+//                        removeFillData(this.document, txtNode);
+//                        mergeSibling(txtNode, 'previousSibling');
+//                        mergeSibling(txtNode, 'nextSibling');
+//                        fillData = txtNode;
+//                        this.setStart(txtNode, browser.webkit ? 1 : 0).collapse(true);
+//                    }
+                    var start = this.startContainer;
+                    if(start.nodeType == 1 && (domUtils.isEmptyNode(start) ||
+                        this.startOffset == 0 && (!start.previousSibling || start.previousSibling.nodeType !=3))
+                        ){
                         txtNode = this.document.createTextNode(fillChar);
                         //跟着前边走
                         this.insertNode(txtNode);
@@ -1081,24 +1094,53 @@
         },
         createAddress : function(ingoreEnd,ingoreTxt){
             var addr = {},me = this;
-            this.trimBoundary();
+
             function getAddress(isStart){
-                var node;
-                if(isStart){
-                    node = me.startContainer.childNodes[me.startOffset]  || me.startContainer;
-                }else{
-                    node = me.endContainer.childNodes[me.endOffset]  || me.endContainer;
-                }
-                var parents = domUtils.findParents(node,false,function(node){return !domUtils.isBody(node)}),
+                var node = isStart ? me.startContainer : me.endContainer;
+                var parents = domUtils.findParents(node,true,function(node){return !domUtils.isBody(node)}),
                     addrs = [];
                 for(var i = 0,ci;ci = parents[i++];){
                     addrs.push(domUtils.getNodeIndex(ci,ingoreTxt));
                 }
-                addrs.push(domUtils.getNodeIndex(node,ingoreTxt));
-                //有可能是空的位置 <b>xxxx|</b>
-                if(node == (isStart ? me.startContainer : me.endContainer)){
-                    addrs.push(isStart ? me.startOffset : me.endOffset)
+                var firstIndex = 0;
+
+                if(ingoreTxt){
+                    if(node.nodeType == 3){
+                        var tmpNode = node;
+                        while(tmpNode = tmpNode.previousSibling){
+                            if(tmpNode.nodeType == 3){
+                                firstIndex += tmpNode.nodeValue.replace(fillCharReg,'').length;
+                            }else{
+                                break;
+                            }
+                        }
+                        firstIndex += (isStart ? me.startOffset : me.endOffset)
+                    }else{
+                        node =  node.childNodes[ isStart ? me.startOffset : me.endOffset];
+                        if(node){
+                            firstIndex = domUtils.getNodeIndex(node,ingoreTxt);
+                        }else{
+                            node = isStart ? me.startContainer : me.endContainer;
+                            var first = node.firstChild;
+                            while(first){
+                                firstIndex++;
+                                if(first.nodeType == 3){
+                                    while( first && first.nodeType == 3){
+                                        first = first.nextSibling;
+                                    }
+                                }else{
+                                    first = first.nextSibling;
+                                }
+
+                            }
+                        }
+
+                    }
+
+                }else{
+                    firstIndex = isStart ? me.startOffset : me.endOffset
                 }
+                addrs.push(firstIndex);
                 return addrs;
             }
             addr.startAddress = getAddress(true);
@@ -1110,7 +1152,7 @@
         moveToAddress : function(addr){
             var me = this;
             function getNode(address,isStart){
-                var tmpNode = me.startContainer.ownerDocument.body,
+                var tmpNode = me.document.body,
                     parentNode,offset;
                 for(var i= 0,ci,l=address.length;i<l;i++){
                     ci = address[i];
@@ -1118,6 +1160,7 @@
                     tmpNode = tmpNode.childNodes[ci];
                     if(!tmpNode){
                         offset = ci;
+                        break;
                     }
                 }
                 if(isStart){
