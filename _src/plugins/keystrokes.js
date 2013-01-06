@@ -64,9 +64,9 @@ UE.plugins['keystrokes'] = function() {
             //解决选中control元素不能删除的问题
             if (start = rng.getClosedNode()) {
                 me.fireEvent('saveScene');
-                range.setStartBefore(start);
+                rng.setStartBefore(start);
                 domUtils.remove(start);
-                range.setCursor();
+                rng.setCursor();
                 me.fireEvent('saveScene');
                 domUtils.preventDefault(evt);
                 return;
