@@ -1545,8 +1545,27 @@ test('range.createAddress,range.moveAddress',function(){
     addr = rng.setStartAfter(div.lastChild.firstChild).collapse(true).createAddress(false);
     rng1.moveToAddress(addr);
     ok(equalRange(rng,rng1))
-    domUtils.fillNode(document,div);
+    div.innerHTML ='';
+    div.appendChild(document.createTextNode(domUtils.fillChar));
     div.appendChild(document.createTextNode('aaa'));
-    addr = rng.setStartAtLast(div.firstChild).collapsed(true).createAddress(false,true);
-
+    addr = rng.setStartAtLast(div).collapse(true).createAddress(false,true);
+    div.innerHTML = 'aaa';
+    rng1.moveToAddress(addr);
+    rng.setStartAtLast(div).collapse(true);
+    ok(equalRange(rng,rng1));
+    div.innerHTML = 'aaa<b>sss</b>';
+    div.appendChild(document.createTextNode(domUtils.fillChar));
+    addr = rng.setStartAtLast(div).collapse(true).createAddress(false,true);
+    div.innerHTML = 'aaa<b>sss</b>';
+    rng1.moveToAddress(addr);
+    rng.setStartAtLast(div).collapse(true);
+    ok(equalRange(rng,rng1));
+    div.innerHTML = 'aaa';
+    div.appendChild(document.createTextNode(domUtils.fillChar));
+    div.appendChild(document.createTextNode('aaa'));
+    addr = rng.setStart(div.firstChild.nextSibling,1).collapse(true).createAddress(false,true);
+    div.innerHTML = 'aaaaaa';
+    rng1.moveToAddress(addr);
+    rng.setStart(div.firstChild,3).collapse(true);
+    ok(equalRange(rng,rng1));
 });
