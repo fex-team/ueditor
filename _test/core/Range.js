@@ -1518,3 +1518,35 @@ test('文本节点中间取range',function(){
 
 
 
+test('range.createAddress,range.moveAddress',function(){
+    function equalRange(rngA,rngB){
+        return rngA.startContainer === rngB.startContainer && rngA.startOffset === rngB.startOffset
+            && rngA.endContainer === rngB.endContainer && rngA.endOffset === rngB.endOffset
+
+    }
+    var div = te.dom[0];
+    var rng = new UE.dom.Range(document);
+    div.innerHTML = '<b>xxxx</b>';
+    var addr = rng.setStart(div.firstChild,0).collapse(true).createAddress(true);
+    var rng1 = new UE.dom.Range(document);
+    rng1.moveToAddress(addr);
+    ok(equalRange(rng,rng1));
+    div.innerHTML = 'aaa';
+    div.appendChild(document.createTextNode('aaa'));
+    div.appendChild(document.createTextNode('aaa'));
+    addr = rng.setStart(div.lastChild,0).setEnd(div.lastChild,div.lastChild.nodeValue.length).createAddress();
+    rng1.moveToAddress(addr);
+    ok(equalRange(rng,rng1));
+    addr = rng.setStart(div.lastChild,0).setEnd(div.lastChild,div.lastChild.nodeValue.length).createAddress(false,true);
+    div.innerHTML = 'aaaaaabbb';
+    rng1.moveToAddress(addr);
+    equal(rng1.cloneContents().firstChild.nodeValue,'bbb');
+    div.innerHTML = 'aaaaaabbb<b>sss</b>';
+    addr = rng.setStartAfter(div.lastChild.firstChild).collapse(true).createAddress(false);
+    rng1.moveToAddress(addr);
+    ok(equalRange(rng,rng1))
+    domUtils.fillNode(document,div);
+    div.appendChild(document.createTextNode('aaa'));
+    addr = rng.setStartAtLast(div.firstChild).collapsed(true).createAddress(false,true);
+
+});
