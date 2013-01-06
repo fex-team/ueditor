@@ -5,7 +5,7 @@
                 window.UEDITOR_CONFIG[config] = window.UEDITOR_CONFIG[config].replace('_test/tools/br/', '');
         }
         var div = document.body.appendChild( document.createElement( 'div' ) );
-        div.id = 'test';
+//        div.id = 'test';
         var utils = baidu.editor.utils;
         var editor = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':false});
         editor.render( div );
@@ -17,10 +17,13 @@
 //
         var range = new baidu.editor.dom.Range( document );
         var domUtils = baidu.editor.dom.domUtils;
+        var div_dom = document.body.appendChild( document.createElement( 'div' ) );
+        div_dom.id = 'test';
         stop();
         setTimeout(function(){
             te.dom.push( div );
             te.dom.push( iframe );
+            te.dom.push( div_dom);
             te.obj.push( utils );
             te.obj.push( editor );
             te.obj.push( range );
