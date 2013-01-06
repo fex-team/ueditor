@@ -317,17 +317,13 @@
             try {
                 me.document.execCommand( 'enableInlineTableEditing', false, options.tableNativeEditInFF );
             } catch ( e ) {}
-            try {
-
-
-
-
-                me.document.execCommand( 'enableObjectResizing', false, false );
-            } catch ( e ) {
-                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
-                    domUtils.preventDefault(evt)
-                });
-            }
+//            try {
+//                me.document.execCommand( 'enableObjectResizing', false, false );
+//            } catch ( e ) {
+//                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
+//                    domUtils.preventDefault(evt)
+//                });
+//            }
             me._bindshortcutKeys();
             me.isReady = 1;
             me.fireEvent( 'ready' );
