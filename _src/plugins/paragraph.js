@@ -145,9 +145,6 @@ UE.plugins['paragraph'] = function() {
         queryCommandValue : function() {
             var node = domUtils.filterNodeList(this.selection.getStartElementPath(),'p h1 h2 h3 h4 h5 h6');
             return node ? node.tagName.toLowerCase() : '';
-        },
-        queryCommandState : function(){
-            return this.highlight ? -1 :0;
         }
     };
 };
