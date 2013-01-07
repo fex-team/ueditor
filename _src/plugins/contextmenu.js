@@ -300,6 +300,8 @@ UE.plugins['contextmenu'] = function () {
                             if ( subItem == '-' ) {
                                 if ( (last = subMenu[subMenu.length - 1 ] ) && last !== '-' ) {
                                     subMenu.push( '-' );
+                                }else{
+                                    subMenu.splice(subMenu.length-1);
                                 }
                             } else {
                                 if ( (me.commands[subItem.cmdName] || UE.commands[subItem.cmdName] || subItem.query) &&
