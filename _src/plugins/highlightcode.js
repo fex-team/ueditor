@@ -115,7 +115,7 @@ UE.plugins['highlightcode'] = function() {
         }
 
     });
-    me.addListener("beforegetcontent beforegetscene",function(){
+    me.addListener("beforegetcontent",function(){
         utils.each(domUtils.getElementsByTagName(me.body,'table','syntaxhighlighter'),function(di){
             var str = [],parentCode = '';
             utils.each(di.getElementsByTagName('code'),function(ci){
@@ -133,7 +133,7 @@ UE.plugins['highlightcode'] = function() {
 
         });
     });
-    me.addListener("aftergetcontent aftersetcontent aftergetscene",changePre);
+    me.addListener("aftergetcontent aftersetcontent",changePre);
 
 
     //避免table插件对于代码高亮的影响
