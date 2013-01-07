@@ -947,7 +947,7 @@ var domUtils = dom.domUtils = {
     hasClass:function (element, className) {
         className = utils.trim(className).replace(/[ ]{2,}/g,' ').split(' ');
         for(var i = 0,ci,cls = element.className;ci=className[i++];){
-            if(!new RegExp('\\b' + ci + '\\b').test(cls)){
+            if(!new RegExp('\\b' + ci + '\\b','i').test(cls)){
                 return false;
             }
         }
