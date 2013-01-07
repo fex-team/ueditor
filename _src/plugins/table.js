@@ -1075,7 +1075,7 @@ UE.plugins['table'] = function () {
         for (var i = 0, node; node = tableArr[i++];) {
             if (flag) {
                 color = (domUtils.getElementsByTagName(node, "td")[0].style.borderColor).replace(/\s/g, "");
-                if (/(#ffffff)|(rgb\(255,255,255\))/ig.test(color))
+                if (/(#ffffff)|(rgb\(255,f55,255\))/ig.test(color))
                     domUtils.addClass(node, "noBorderTable")
             } else {
                 domUtils.removeClasses(node, "noBorderTable")
@@ -2723,12 +2723,14 @@ UE.plugins['table'] = function () {
         //在table或者td边缘有可能存在选中tr的情况
             cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
             tr = cell && cell.parentNode,
-            table = tr && tr.parentNode.parentNode;
+            caption = start && domUtils.findParentByTagName(start, 'caption', true),
+            table = caption ? caption.parentNode : tr && tr.parentNode.parentNode;
 
         return {
             cell:cell,
             tr:tr,
-            table:table
+            table:table,
+            caption:caption
         }
     }
 
