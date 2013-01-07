@@ -80,7 +80,7 @@
             },
             notNeedUndo : 1
         };
-        var txtContent,htmlContent,address;
+        var txtContent,htmlContent,address,onlyHtml;
 
         function filter(div){
 
@@ -199,6 +199,7 @@
                         }
 
                         html = f.toHTML(node,pasteplain);
+                        onlyHtml = html.replace(/<(\/?)([\w\-]+)[^>]+>/gi,function(a,b){return '<' + a + b + '>'});
                         txtContent = f.filter(node,{
                             whiteList: {
                                 'p': {'br':1,'BR':1,$:{}},
@@ -242,11 +243,18 @@
         }
 
         me.addListener('pasteTransfer',function(cmd,plainType){
-            if(address && txtContent && htmlContent && txtContent != htmlContent){
+            if(address && txtContent && onlyHtml && htmlContent && txtContent != htmlContent){
                 var range = me.selection.getRange();
                 range.moveToAddress(address).deleteContents().select(true);
                 me.__hasEnterExecCommand = true;
-                me.execCommand('inserthtml',plainType ? txtContent : htmlContent,true);
+                var html = htmlContent;
+                if(plainType === 2){
+                    html = onlyHtml;
+                }
+                if(plainType){
+                    html = txtContent;
+                }
+                me.execCommand('inserthtml',html,true);
                 me.__hasEnterExecCommand = false;
                 var tmpAddress = me.selection.getRange().createAddress(true);
                 address.endAddress = tmpAddress.startAddress;
@@ -263,17 +271,12 @@
             });
             //ie下beforepaste在点击右键时也会触发，所以用监控键盘才处理
             domUtils.on(me.body, browser.ie || browser.opera ? 'keydown' : 'paste',function(e){
-
                 if((browser.ie || browser.opera) && ((!e.ctrlKey && !e.metaKey) || e.keyCode != '86')){
                     return;
                 }
-
                 getClipboardData.call( me, function( div ) {
-
                     filter(div);
                 } );
-
-
             });
 
         });
