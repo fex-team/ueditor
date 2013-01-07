@@ -11,9 +11,9 @@ UE.plugins['undo'] = function() {
     var me = this,
         maxUndoCount = me.options.maxUndoCount || 20,
         maxInputCount = me.options.maxInputCount || 20,
-        fillchar = new RegExp(domUtils.fillChar + '|<\/hr>','gi'),// ie会产生多余的</hr>
-        //在比较时，需要过滤掉这些属性
-        specialAttr = /\b(?:href|src|name)="[^"]*?"/gi;
+        fillchar = new RegExp(domUtils.fillChar + '|<\/hr>','gi');// ie会产生多余的</hr>
+
+
 
     function compareAddr(indexA,indexB){
         if(indexA.length != indexB.length)
@@ -34,6 +34,15 @@ UE.plugins['undo'] = function() {
         return 1;
     }
 
+    function adjustContent(cont){
+        var  specialAttr = /\b(?:href|src|name)="[^"]*?"/gi;
+        return cont.replace(specialAttr,'')
+            .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(a,b,c){
+                return b.toLowerCase() + '=' + c.replace(/['"]/g,'').toLowerCase()})
+            .replace(/(<[\w\-]+)|([\w\-]+>)/gi,function(a,b,c){
+                return (b||c).toLowerCase()
+            });
+    }
     function UndoManager() {
         this.list = [];
         this.index = 0;
@@ -42,18 +51,10 @@ UE.plugins['undo'] = function() {
         this.undo = function() {
             if ( this.hasUndo ) {
                 var currentScene = this.getScene(),
-                    lastScene = this.list[this.index];
-                var lastContent = lastScene.content.replace(specialAttr,'')
-                        .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(a,b,c){
-                            return b.toLowerCase() + '=' + c.replace(/['"]/g,'').toLowerCase()})
-                        .replace(/(<[\w\-]+)|([\w\-]+>)/gi,function(a,b,c){
-                            return (b||c).toLowerCase()
-                        }),
-                    currentContent = currentScene.content.replace(specialAttr,'')
-                        .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(a,b,c){return b.toLowerCase() + '=' + c.replace(/['"]/g,'').toLowerCase()})
-                        .replace(/(<[\w\-]+)|([\w\-]+>)/gi,function(a,b,c){
-                            return (b||c).toLowerCase()
-                        });
+                    lastScene = this.list[this.index],
+                    lastContent = adjustContent(lastScene.content),
+                    currentContent = adjustContent(currentScene.content);
+
                 if ( lastContent != currentContent ) {
                     this.save();
                 }
@@ -86,7 +87,7 @@ UE.plugins['undo'] = function() {
             var scene = this.list[this.index];
             //trace:873
             //去掉展位符
-            me.document.body.innerHTML = scene.bookcontent.replace(fillchar,'');
+            me.document.body.innerHTML = scene.content.replace(fillchar,'');
             //处理undo后空格不展位的问题
             if(browser.ie){
                 for(var i=0,pi,ps = me.document.getElementsByTagName('p');pi = ps[i++];){
@@ -95,30 +96,8 @@ UE.plugins['undo'] = function() {
                     }
                 }
             }
-            var range = new dom.Range( me.document );
-            //有可能再save时没有bookmark
-            try{
-                if(scene.address){
-                    range.moveToAddress(scene.address)
-                }else{
-                    range.moveToBookmark( {
-                        start : '_baidu_bookmark_start_',
-                        end : '_baidu_bookmark_end_',
-                        id : true
-                        //去掉true 是为了<b>|</b>，回退后还能在b里
-                    } );
-                }
-                range.select();
-                if(!(browser.opera || browser.safari)){
-                    setTimeout(function(){
-                        range.scrollToView(me.autoHeightEnabled,me.autoHeightEnabled ? domUtils.getXY(me.iframe).y:0);
-                    },200);
-                }
-
-            }catch(e){}
-
+            new dom.Range( me.document).moveToAddress(scene.address).select();
             this.update();
-
             this.clearKey();
             //不能把自己reset了
             me.fireEvent('reset',true);
@@ -132,38 +111,18 @@ UE.plugins['undo'] = function() {
             range.shrinkBoundary();
             browser.ie && (cont = cont.replace(/>&nbsp;</g,'><').replace(/\s*</g,'<').replace(/>\s*/g,'>'));
             var rngAddress = range.createAddress(false,true);
-//                bookmark = range.createBookmark( true, true ),
-//                bookCont = me.body.innerHTML.replace(fillchar,'');
             me.fireEvent('aftergetscene');
             return {
                 address : rngAddress,
-                content : cont,
-                bookcontent : cont
+                content : cont
             }
-//            if(browser.opera || browser.safari){
-//                return {
-//                    address : rngAddress,
-//                    content : cont,
-//                    bookcontent : cont
-//                }
-//            }else{
-//                bookmark && range.moveToBookmark( bookmark ).select( true );
-//                return {
-//                    bookcontent : bookCont,
-//                    content : cont
-//                };
-//            }
-
         };
         this.save = function(notCompareRange) {
             var currentScene = this.getScene(),
                 lastScene = this.list[this.index];
             //内容相同位置相同不存
             if ( lastScene && lastScene.content == currentScene.content &&
-                (
-                    notCompareRange ? 1 :
-                        ( lastScene.address ? compareRangeAddress(lastScene.address,currentScene.address) : lastScene.bookcontent == currentScene.bookcontent)
-                    )
+                ( notCompareRange ? 1 : compareRangeAddress(lastScene.address,currentScene.address) )
                 ) {
                 return;
             }

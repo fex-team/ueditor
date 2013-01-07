@@ -1021,34 +1021,21 @@
                 sel.removeAllRanges();
                 // trace:870 chrome/safari后边是br对于闭合得range不能定位 所以去掉了判断
                 // this.startContainer.nodeType != 3 &&! ((child = this.startContainer.childNodes[this.startOffset]) && child.nodeType == 1 && child.tagName == 'BR'
-                if (this.collapsed) {
+                if (this.collapsed && !notInsertFillData) {
 //                    //opear如果没有节点接着，原生的不能够定位,不能在body的第一级插入空白节点
 //                    if (notInsertFillData && browser.opera && !domUtils.isBody(this.startContainer) && this.startContainer.nodeType == 1) {
 //                        var tmp = this.document.createTextNode('');
 //                        this.insertNode(tmp).setStart(tmp, 0).collapse(true);
 //                    }
 //
-//                    //处理光标落在文本节点的情况
-//                    //处理以下的情况
-//                    //<b>|xxxx</b>
-//                    //<b>xxxx</b>|xxxx
-//                    //xxxx<b>|</b>
-//                    if (!notInsertFillData && (
-//                        this.startContainer.nodeType != 3 ||
-//                            this.startOffset == 0 && (!this.startContainer.previousSibling || this.startContainer.previousSibling.nodeType !=3)
-//                        )) {
-//                        txtNode = this.document.createTextNode(fillChar);
-//                        //跟着前边走
-//                        this.insertNode(txtNode);
-//                        removeFillData(this.document, txtNode);
-//                        mergeSibling(txtNode, 'previousSibling');
-//                        mergeSibling(txtNode, 'nextSibling');
-//                        fillData = txtNode;
-//                        this.setStart(txtNode, browser.webkit ? 1 : 0).collapse(true);
-//                    }
+                    //处理光标落在文本节点的情况
+                    //处理以下的情况
+                    //<b>|xxxx</b>
+                    //<b>xxxx</b>|xxxx
+                    //xxxx<b>|</b>
                     var start = this.startContainer;
-                    if(start.nodeType == 1 && (domUtils.isEmptyNode(start) ||
-                        this.startOffset == 0 && (!start.previousSibling || start.previousSibling.nodeType !=3))
+                    if((start.nodeType == 1 && domUtils.isEmptyNode(start)) ||
+                        this.startOffset == 0 && (start.nodeType == 1 || !start.previousSibling || start.previousSibling.nodeType !=3)
                         ){
                         txtNode = this.document.createTextNode(fillChar);
                         //跟着前边走
