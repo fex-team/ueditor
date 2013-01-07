@@ -148,6 +148,7 @@ UE.I18N['en'] = {
     't_col':'col',
     'pasteOpt':'Paste Option',
     'pasteSourceFormat':"Keep Source Formatting",
+    'tagFormat':'Keep tag',
     'pasteTextFormat':'Keep Text only',
     'more':'More',
     'autoTypeSet':{

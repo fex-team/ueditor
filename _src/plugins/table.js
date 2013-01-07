@@ -1663,7 +1663,7 @@ UE.plugins['table'] = function () {
 
             function getAverageWidth() {
                 var tb = ut.table,
-                    averageWidth, sumWidth, colsNum,
+                    averageWidth, sumWidth=0, colsNum=0,
                     tbAttr = getDefaultValue(me, tb);
 
                 if (ut.isFullRow()) {
@@ -1676,7 +1676,7 @@ UE.plugins['table'] = function () {
                     for (var i = begin; i <= end;) {
                         node = ut.selectedTds[i];
                         sumWidth += node.offsetWidth;
-                        i += node.colspan;
+                        i += node.colSpan;
                         colsNum += 1;
                     }
                 }
@@ -1811,9 +1811,7 @@ UE.plugins['table'] = function () {
     //表格属性
     UE.commands['edittable'] = {
         queryCommandState:function () {
-            var rng = this.selection.getRange(),
-                table = domUtils.findParentByTagName(rng.startContainer, 'table');
-            return table ? 1 : -1;
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, color) {
             var rng = this.selection.getRange(),
@@ -1832,7 +1830,7 @@ UE.plugins['table'] = function () {
     //单元格属性
     UE.commands['edittd'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, bkColor) {
             var me = this,
