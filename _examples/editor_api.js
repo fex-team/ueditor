@@ -39,7 +39,6 @@
             'plugins/lineheight.js',
             'plugins/cleardoc.js',
             'plugins/anchor.js',
-            'plugins/delete.js',
             'plugins/wordcount.js',
             'plugins/pagebreak.js',
             'plugins/wordimage.js',

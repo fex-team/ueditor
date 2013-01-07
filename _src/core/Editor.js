@@ -317,17 +317,13 @@
             try {
                 me.document.execCommand( 'enableInlineTableEditing', false, options.tableNativeEditInFF );
             } catch ( e ) {}
-            try {
-
-
-
-
-                me.document.execCommand( 'enableObjectResizing', false, false );
-            } catch ( e ) {
-                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
-                    domUtils.preventDefault(evt)
-                });
-            }
+//            try {
+//                me.document.execCommand( 'enableObjectResizing', false, false );
+//            } catch ( e ) {
+//                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
+//                    domUtils.preventDefault(evt)
+//                });
+//            }
             me._bindshortcutKeys();
             me.isReady = 1;
             me.fireEvent( 'ready' );
@@ -411,7 +407,7 @@
                 for ( var i in shortcutkeys ) {
                     var key = shortcutkeys[i];
                     if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( key.toLowerCase() ) || /^(\d+)$/.test( key ) ) {
-                        if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey||browser.opera && keyCode == 17) : 0)
+                        if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey) : 0)
                             && (RegExp.$2 != "" ? e[RegExp.$2.slice(1) + "Key"] : 1)
                             && keyCode == RegExp.$3
                             ) ||

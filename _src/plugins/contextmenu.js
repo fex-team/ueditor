@@ -14,7 +14,6 @@ UE.plugins['contextmenu'] = function () {
             lang = me.getLang( "contextMenu" ),
             menu,
             items = me.options.contextMenu || [
-                {label:lang['delete'], cmdName:'delete'},
                 {label:lang['selectall'], cmdName:'selectall'},
                 {
                     label:lang.deletecode,
