@@ -57,15 +57,20 @@
     //为了在编辑器之外能展示高亮代码
     SyntaxHighlighter.highlight();
     //调整左右对齐
-    for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){
-            var tds = di.getElementsByTagName('td');
-            for(var j=0,li,ri;li=tds[0].childNodes[j];j++){
-                ri = tds[1].firstChild.childNodes[j];
-                ri.style.height = li.style.height = ri.offsetHeight + 'px';
+    var tables = document.getElementsByTagName('table');
+    for(var t= 0,ti;ti=tables[t++];){
+        if(/SyntaxHighlighter/i.test(ti.className)){
+            var tds = ti.getElementsByTagName('td');
+            for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
+                ri = tds[1].firstChild.childNodes[i];
+                //trace:1949
+                if(ri){
+                    ri.style.height = li.style.height = ri.offsetHeight + 'px';
+                }
             }
+        }
     }
-    var editor_a = new baidu.editor.ui.Editor();
-    editor_a.render( 'myEditor' );
+   UE.getEditor('myEditor');
 </script>
 
 </body>
