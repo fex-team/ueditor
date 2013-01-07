@@ -1811,7 +1811,7 @@ UE.plugins['table'] = function () {
     //表格属性
     UE.commands['edittable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, color) {
             var rng = this.selection.getRange(),
@@ -1830,7 +1830,7 @@ UE.plugins['table'] = function () {
     //单元格属性
     UE.commands['edittd'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, bkColor) {
             var me = this,
