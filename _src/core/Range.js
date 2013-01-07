@@ -1033,10 +1033,18 @@
                     //<b>|xxxx</b>
                     //<b>xxxx</b>|xxxx
                     //xxxx<b>|</b>
-                    var start = this.startContainer;
-                    if((start.nodeType == 1 && domUtils.isEmptyNode(start)) ||
-                        this.startOffset == 0 && (start.nodeType == 1 || !start.previousSibling || start.previousSibling.nodeType !=3)
-                        ){
+                    var start = this.startContainer,child = start;
+                    if(start.nodeType == 1){
+                        child = start.childNodes[this.startOffset];
+
+                    }
+                    if( !(start.nodeType == 3 && this.startOffset)  &&
+                        (child ?
+                            (!child.previousSibling || child.previousSibling.nodeType != 3)
+                            :
+                            (!start.lastChild || start.lastChild.nodeType != 3)
+                        )
+                    ){
                         txtNode = this.document.createTextNode(fillChar);
                         //跟着前边走
                         this.insertNode(txtNode);
