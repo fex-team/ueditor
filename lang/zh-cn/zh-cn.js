@@ -145,6 +145,7 @@ UE.I18N['zh-cn'] = {
     'more':'更多',
     'pasteOpt':'粘贴选项',
     'pasteSourceFormat':"保留源格式",
+    'tagFormat':'只保留标签',
     'pasteTextFormat':'只保留文本',
     'autoTypeSet':{
         mergeLine:"合并空行",

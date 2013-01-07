@@ -20,17 +20,18 @@
                 '<div class="edui-pastecontainer">' +
                 '<div class="edui-title">'+this.editor.getLang("pasteOpt")+'</div>'+
                 '<div class="edui-button">' +
-                '<div class="edui-richtxticon" title="'+this.editor.getLang("pasteSourceFormat")+'" onclick="$$.format(false)" stateful></div>'+
-                '<div class="edui-plaintxticon" title="'+this.editor.getLang("pasteTextFormat")+'" onclick="$$.format(true)" stateful></div>' +
+                '<div class="edui-richtxticon edui-icon" title="'+this.editor.getLang("pasteSourceFormat")+'" onclick="$$.format(false)" stateful></div>'+
+                '<div class="edui-tagicon edui-icon" title="'+this.editor.getLang("tagFormat")+'" onclick="$$.format(2)" stateful></div>' +
+                '<div class="edui-plaintxticon edui-icon" title="'+this.editor.getLang("pasteTextFormat")+'" onclick="$$.format(true)" stateful></div>' +
                 '</div>' +
                 '</div>'
         },
         getStateDom: function (){
             return this.target;
         },
-        format:function(isTransfer){
+        format:function(param){
             this.editor.ui._isTransfer=true;
-            this.editor.fireEvent('pasteTransfer',isTransfer);
+            this.editor.fireEvent('pasteTransfer',param);
         },
         _onClick: function (cur){
             var node=domUtils.getNextDomNode(cur),
