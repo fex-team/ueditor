@@ -1811,9 +1811,7 @@ UE.plugins['table'] = function () {
     //表格属性
     UE.commands['edittable'] = {
         queryCommandState:function () {
-            var rng = this.selection.getRange(),
-                table = domUtils.findParentByTagName(rng.startContainer, 'table');
-            return table ? 1 : -1;
+            return getTableItemsByRange(this).cell ? 0 : -1
         },
         execCommand:function (cmd, color) {
             var rng = this.selection.getRange(),
