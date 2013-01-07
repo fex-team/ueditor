@@ -9,17 +9,10 @@ test('闭合选择',function(){
         range.setStart(body.firstChild,1).collapse(true).select();
         editor.execCommand("touppercase");
         equal(editor.getContent(), "<p>hello</p>", "闭合选择--up");
-        range.setStart(body.firstChild,2).collapse(true).select();
-        editor.execCommand("tolowercase");
-        ua.manualDeleteFillData( body );
-        equal(editor.getContent(), "<p>hello</p>", "闭合选择--low");
         start();
     }, 50 );
     stop();
-
-
 });
-
 test('非闭合选择----字符串全选',function(){
     var editor=te.obj[0];
     var range=te.obj[1];
@@ -38,9 +31,7 @@ test('非闭合选择----字符串全选',function(){
         start();
     }, 50 );
     stop();
-
 });
-
 test('非闭合选择----子字符串',function(){
     var editor=te.obj[0];
     var range=te.obj[1];
@@ -56,7 +47,6 @@ test('非闭合选择----子字符串',function(){
     }, 50 );
     stop();
 });
-
 test('非闭合选择----字符串包括大写跟小写',function(){
     var editor=te.obj[0];
     var range=te.obj[1];
@@ -64,10 +54,10 @@ test('非闭合选择----字符串包括大写跟小写',function(){
     var text="<p>HEllo1</p><p>heLLo2</p>";
     editor.setContent(text);
     setTimeout(function(){
-    range.selectNode(body).select();
-    editor.execCommand("touppercase");
-    equal(editor.getContent(),"<p>HELLO1</p><p>HELLO2</p>","非闭合--包含大小写--up");
-    editor.setContent(text);
+        range.selectNode(body).select();
+        editor.execCommand("touppercase");
+        equal(editor.getContent(),"<p>HELLO1</p><p>HELLO2</p>","非闭合--包含大小写--up");
+        editor.setContent(text);
         setTimeout(function(){
             range.selectNode(body).select();
             editor.execCommand("tolowercase");
@@ -77,7 +67,6 @@ test('非闭合选择----字符串包括大写跟小写',function(){
     },50);
     stop();
 });
-
 test('非闭合选择----字符串包括换行跟空格',function(){
     var editor=te.obj[0];
     var range=te.obj[1];
@@ -92,10 +81,7 @@ test('非闭合选择----字符串包括换行跟空格',function(){
         start();
     },50);
     stop();
-
-
 });
-
 test('标签table',function(){
     //单个单元格，多个单元格，两个表格
     var editor=te.obj[0];
@@ -104,13 +90,13 @@ test('标签table',function(){
     var text="<table><tr><td>hello1</td><td>hello2</td></tr><tr><td>hello3</td><td>hello4</td></tr></table>";
     editor.setContent(text);
     var tds=body.firstChild.getElementsByTagName('td');
-    range.selectNode(tds[1]);
+    range.selectNode(tds[1]).select();
     editor.execCommand("touppercase");
     equal(tds[1].innerHTML,"HELLO2","table--up");
     editor.execCommand("tolowercase");
     equal(tds[1].innerHTML,"hello2","table--low");
 
-    range.selectNode(tds[2]);
+    range.setStart(tds[1],0).setEnd(tds[2],1).select();
     editor.execCommand("touppercase");
     equal(tds[1].innerHTML,"HELLO2","table--单元格2--up");
     equal(tds[2].innerHTML,"HELLO3","table--单元格3--up");
@@ -118,8 +104,7 @@ test('标签table',function(){
     equal(tds[1].innerHTML,"hello2","table--单元格2--low");
     equal(tds[2].innerHTML,"hello3","table--单元格3--low");
 
-    range.selectNode(tds[0]);
-    range.selectNode(tds[3]);
+    range.setStart(tds[0],0).setEnd(tds[3],1).select();
     editor.execCommand("touppercase");
     equal(tds[0].innerHTML,"HELLO1","table--单元格1--up");
     equal(tds[1].innerHTML,"HELLO2","table--单元格2--up");
