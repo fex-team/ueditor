@@ -1663,7 +1663,7 @@ UE.plugins['table'] = function () {
 
             function getAverageWidth() {
                 var tb = ut.table,
-                    averageWidth, sumWidth, colsNum,
+                    averageWidth, sumWidth=0, colsNum=0,
                     tbAttr = getDefaultValue(me, tb);
 
                 if (ut.isFullRow()) {
@@ -1676,7 +1676,7 @@ UE.plugins['table'] = function () {
                     for (var i = begin; i <= end;) {
                         node = ut.selectedTds[i];
                         sumWidth += node.offsetWidth;
-                        i += node.colspan;
+                        i += node.colSpan;
                         colsNum += 1;
                     }
                 }
