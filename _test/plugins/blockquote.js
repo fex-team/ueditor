@@ -169,7 +169,6 @@ test('列表内引用',function(){
     var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':(ua.browser.webkit?' style=\"padding-left: 30px;\"':' style=\"padding-left: 30px;\"');
 
     editor.setContent('<ol><li><blockquote><p>hello1</p></blockquote></li><blockquote><li><p>hello2</p></li></blockquote></ol>');
-    debugger
     range.selectNode(editor.body).select();
     editor.execCommand('blockquote');
     equal(ua.getChildHTML(editor.body ),'<ol'+padding+'><li><p>hello1</p></li><ul'+padding+'><li><p>hello2</p></li></ul></ol>','引用删除');
