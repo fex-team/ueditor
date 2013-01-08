@@ -1085,7 +1085,7 @@ UE.plugins['table'] = function () {
 
     UE.commands['inserttable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? -1 : 0;
+            return getTableItemsByRange(this).table ? -1 : 0;
         },
         execCommand:function (cmd, opt) {
             function createTable(opt, tableWidth, tdWidth) {
@@ -1935,7 +1935,7 @@ UE.plugins['table'] = function () {
         getTabNextCell : function(cell,preRowIndex){
             var cellInfo = this.getCellInfo(cell),
                 rowIndex = preRowIndex || cellInfo.rowIndex,
-                colIndex = cellInfo.colIndex + 1,
+                colIndex = cellInfo.colIndex + 1 + (cellInfo.colSpan - 1),
                 nextCell;
             try{
                 nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
