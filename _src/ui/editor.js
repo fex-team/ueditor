@@ -33,6 +33,10 @@
                     baidu.editor.ui.Popup.postHide(evt);
                 });
 
+                //提供编辑器实时宽高(全屏时宽高不变化)
+                editor.ui.actualFrameWidth = editor.options.initialFrameWidth;
+                editor.ui.actualFrameHeight = editor.options.initialFrameHeight;
+
                 //display bottom-bar label based on config
                 if (editor.options.elementPathEnabled) {
                     editor.ui.getDom('elementpath').innerHTML = '<div class="edui-editor-breadcrumb">' + editor.getLang("elementPathTip") + ':</div>';
@@ -93,7 +97,7 @@
             editor.addListener("afterinserthtml", function () {
                 clearTimeout(timer);
                 timer = setTimeout(function () {
-                    if(pastePop&&(isPaste||editor.ui._isTransfer)){
+                    if (pastePop && (isPaste || editor.ui._isTransfer)) {
                         var span = domUtils.createElement(editor.document, 'span', {
                                 'style':"line-height:0px;",
                                 'innerHTML':'\ufeff'
@@ -549,8 +553,11 @@
             function up() {
                 if (isMouseMove) {
                     isMouseMove = false;
-                    editorHolder.style.width = scalelayer.offsetWidth - 2 + 'px';
-                    editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2);
+                    editor.ui.actualFrameWidth = scalelayer.offsetWidth - 2;
+                    editorHolder.style.width = editor.ui.actualFrameWidth + 'px';
+
+                    editor.ui.actualFrameHeight = scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2;
+                    editor.setHeight(editor.ui.actualFrameHeight);
                 }
                 if (scalelayer) {
                     scalelayer.style.display = "none";
@@ -691,8 +698,8 @@
                     var iframeholder = editor.ui.getDom('iframeholder');
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    var width=editor.options.initialFrameWidth;
-                    if(!/%/g.test(width))  width+="px";
+                    var width = editor.options.initialFrameWidth;
+                    if (!/%/g.test(width))  width += "px";
                     editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + width;
                     oldRender.call(editor, iframeholder);
 
