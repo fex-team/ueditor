@@ -1085,7 +1085,7 @@ UE.plugins['table'] = function () {
 
     UE.commands['inserttable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? -1 : 0;
+            return getTableItemsByRange(this).table ? -1 : 0;
         },
         execCommand:function (cmd, opt) {
             function createTable(opt, tableWidth, tdWidth) {
