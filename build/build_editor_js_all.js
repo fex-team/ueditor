@@ -6,26 +6,26 @@
     var match;
     var inFile = new File(inFilePath+'/_examples/editor_api.js');
     var html = getStringOfFile(inFile);
-	
-	var rootDir = new File(inFilePath+'/_src');
-	var arr = html.match(/(\/\/)?'[^']+\.js/gi);
-	
-	
-	var buff = [];
+
+    var rootDir = new File(inFilePath+'/_src');
+    var arr = html.match(/(\/\/)?'[^']+\.js/gi);
+
+
+    var buff = [];
     for (var i=0; i<arr.length; i++) {
-	    var s = arr[i].replace(/'|(\/\/[^.]+\.js)/ig,'');
-	    if(s!=""){
-		    System.out.println(s);
-		    var file = new File(rootDir, s);
-		}
-        
-        
+        var s = arr[i].replace(/'|(\/\/[^.]+\.js)/ig,'');
+        if(s!=""){
+            System.out.println(s);
+            var file = new File(rootDir, s);
+        }
+
+
         buff.push(getStringOfFile(file));
     }
     var outFile = new File(outFilePath);
     setStringOfFile(outFile, "(function(){"+buff.join('\n')+"})();");
-	
-	
+
+
     function getStringOfFile(file){
         var buff = java.lang.reflect.Array.newInstance(
             java.lang.Character.TYPE, file.length());
@@ -33,7 +33,7 @@
             var input = new java.io.InputStreamReader(
                 new java.io.BufferedInputStream(
                     new java.io.FileInputStream(file)
-                    ), 'UTF-8');
+                ), 'UTF-8');
             input.read(buff);
         } finally {
             if (input) {
@@ -47,7 +47,7 @@
             var output = new java.io.OutputStreamWriter(
                 new java.io.BufferedOutputStream(
                     new java.io.FileOutputStream(file)
-                    ), 'UTF-8');
+                ), 'UTF-8');
             output.write(str);
         } finally {
             if (output) {
