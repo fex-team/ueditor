@@ -74,8 +74,11 @@ UE.plugins['list'] = function () {
                 }
             }
             node.style.paddingLeft = paddingLeft + 'px';
-            utils.each(node.children,function(li){
-                if(li.tagName != 'LI')return;
+            utils.each(domUtils.getElementsByTagName(node,'li'),function(li){
+                if(!li.firstChild){
+                    domUtils.remove(li);
+                    return;
+                }
                 index++;
                 if(domUtils.hasClass(node,'custom') ){
                     var paddingLeft = '40px',currentStyle = node.getAttribute('_custom_style');
@@ -339,6 +342,13 @@ UE.plugins['list'] = function () {
                             } else {
                                 start = domUtils.findParentByTagName(range.startContainer, 'p', true);
                                 if (start && start !== first) {
+                                    var parentList = domUtils.findParentByTagName(start,['ol','ul']);
+                                    domUtils.breakParent(start,parentList);
+                                    clearEmptySibling(start);
+                                    me.fireEvent('contentchange');
+                                    range.setStart(start,0).setCursor(false,true);
+                                    me.fireEvent('saveScene');
+                                    domUtils.preventDefault(evt);
                                     return;
                                 }
                                 span = me.document.createElement('span');
