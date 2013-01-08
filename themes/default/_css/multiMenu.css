@@ -22,3 +22,6 @@
 .edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow {
     width: 0
 }
+.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder{
+    border-left: 1px solid transparent;
+}

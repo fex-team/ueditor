@@ -1788,6 +1788,7 @@ UE.plugins['table'] = function () {
                     cell.style.textAlign=data.align;
                     cell.style.verticalAlign=data.vAlign;
                 }
+                me.selection.getRange().setCursor(true);
             } else {
                 utils.each(ut.selectedTds, function (cell) {
                     domUtils.setAttributes(cell, data);
