@@ -1241,6 +1241,17 @@ var domUtils = dom.domUtils = {
             start = start.parentNode;
         }
         return 1;
+    },
+    isBoundaryNode : function (node,dir){
+        var tmp;
+        while(!domUtils.isBody(node)){
+            tmp = node;
+            node = node.parentNode;
+            if(tmp !== node[dir]){
+                return false;
+            }
+        }
+        return true;
     }
 };
 var fillCharReg = new RegExp(domUtils.fillChar, 'g');
