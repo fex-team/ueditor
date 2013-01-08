@@ -1,4 +1,13 @@
 /* 表格弹出菜单 */
+.edui-default .edui-for-inserttable .edui-splitborder {
+    display: none
+}
+.edui-default .edui-for-inserttable  .edui-splitbutton-body .edui-arrow {
+    width: 0
+}
+.edui-default .edui-toolbar .edui-for-inserttable  .edui-state-active .edui-splitborder{
+    border-left: 1px solid transparent;
+}
 .edui-default .edui-tablepicker .edui-infoarea {
     height: 14px;
     line-height: 14px;
