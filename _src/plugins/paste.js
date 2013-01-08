@@ -164,10 +164,12 @@
                 if(f){
                     //如果过滤出现问题，捕获它，直接插入内容，避免出现错误导致粘贴整个失败
                     try{
+                        onlyHtml = html = UE.filterWord(html);
+
                         var node =  f.transformInput(
                             f.parseHTML(
                                 //todo: 暂时不走dtd的过滤
-                                f.word(html)//, true
+                                html//, true
                             ),word_img_flag
                         );
                         //trace:924
@@ -199,7 +201,7 @@
                         }
 
                         html = f.toHTML(node,pasteplain);
-                        onlyHtml = html.replace(/<(\/?)([\w\-]+)[^>]+>/gi,function(a,b){return '<' + a + b + '>'});
+
                         txtContent = f.filter(node,{
                             whiteList: {
                                 'p': {'br':1,'BR':1,$:{}},
@@ -243,15 +245,36 @@
         }
 
         me.addListener('pasteTransfer',function(cmd,plainType){
-            if(address && txtContent && onlyHtml && htmlContent && txtContent != htmlContent){
+            if(address && txtContent && htmlContent && txtContent != htmlContent){
                 var range = me.selection.getRange();
-                range.moveToAddress(address).deleteContents().select(true);
+                range.moveToAddress(address,true).deleteContents();
+                range.select();
                 me.__hasEnterExecCommand = true;
                 var html = htmlContent;
                 if(plainType === 2){
-                    html = onlyHtml;
-                }
-                if(plainType){
+                    html = onlyHtml.replace(/<(\/?)([\w\-]+)([^>]*)>/gi,function(a,b,c,d){
+                        d = d.replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(str,atr,val){
+                            if({
+                                'src':1,
+                                'href':1,
+                                'name':1
+                            }[atr.toLowerCase()]){
+                                return atr + '=' + val + ' '
+                            }
+                            return ''
+                        });
+                        if({
+                            'span':1,
+                            'script':1,
+                            'style':1
+                        }[c.toLowerCase()]){
+                            return ''
+                        }else{
+                            return '<' + b + c + ' ' + utils.trim(d) + '>'
+                        }
+
+                    });
+                }else if(plainType){
                     html = txtContent;
                 }
                 me.execCommand('inserthtml',html,true);
@@ -262,7 +285,6 @@
         });
         me.addListener('ready',function(){
             domUtils.on(me.body,'cut',function(){
-
                 var range = me.selection.getRange();
                 if(!range.collapsed && me.undoManger){
                     me.undoManger.save();
