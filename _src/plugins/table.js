@@ -515,6 +515,11 @@ UE.plugins['table'] = function () {
 
         me.addListener("beforegetcontent", function () {
             switchBoderColor(false);
+            browser.ie && utils.each(me.document.getElementsByTagName('caption'),function(ci){
+                if(domUtils.isEmptyNode(ci)){
+                    ci.innerHTML = '&nbsp;'
+                }
+            });
         });
         me.addListener("aftergetcontent", function () {
             switchBoderColor(true);
