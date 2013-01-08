@@ -174,6 +174,7 @@ UE.plugins['table'] = function () {
                 }
             }
         });
+
         me.addListener('beforepaste', function (cmd, html) {
             var me = this;
             var rng = me.selection.getRange();
@@ -518,6 +519,25 @@ UE.plugins['table'] = function () {
         });
         me.addListener("aftergetcontent", function () {
             switchBoderColor(true);
+        });
+        //修正全屏状态下插入的表格宽度在非全屏状态下撑开编辑器的情况
+        me.addListener("fullscreenchanged",function(type,fullscreen){
+            if(!fullscreen){
+                var ratio = this.body.offsetWidth/document.body.offsetWidth,
+                    tables = domUtils.getElementsByTagName(this.body,"table");
+                utils.each(tables,function(table){
+                    if(table.offsetWidth < me.body.offsetWidth) return false;
+                    var tds = domUtils.getElementsByTagName(table,"td"),
+                        backWidths = [];
+                    utils.each(tds,function(td){
+                        backWidths.push(td.offsetWidth);
+                    });
+                    for(var i = 0,td;td=tds[i];i++){
+                        td.setAttribute("width",Math.floor(backWidths[i]*ratio));
+                    }
+                    table.setAttribute("width",Math.floor(getTableWidth(me,needIEHack,getDefaultValue(me))))
+                });
+            }
         });
 
         //重写execCommand命令，用于处理框选时的处理
@@ -1083,6 +1103,11 @@ UE.plugins['table'] = function () {
         }
     }
 
+    function getTableWidth(editor,needIEHack,defaultValue){
+        var body = editor.body;
+        return body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (editor.options.offsetWidth || 0);
+    }
+
     UE.commands['inserttable'] = {
         queryCommandState:function () {
             return getTableItemsByRange(this).cell ? -1 : 0;
@@ -1111,7 +1136,7 @@ UE.plugins['table'] = function () {
             }
             var me = this,
                 defaultValue = getDefaultValue(me),
-                tableWidth = me.body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(me.body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (me.options.offsetWidth || 0),
+                tableWidth = getTableWidth(me,needIEHack,defaultValue),
                 tdWidth = Math.floor(tableWidth / opt.numCols - defaultValue.tdPadding * 2 - defaultValue.tdBorder);
             //todo其他属性
             !opt.tdvalign && (opt.tdvalign = me.options.tdvalign);
@@ -1641,7 +1666,7 @@ UE.plugins['table'] = function () {
                             var width = table.offsetWidth,
                                 bodyWidth = me.body.offsetWidth;
                             if (width > bodyWidth) {
-                                table.setAttribute('width', me.body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(me.body, 'margin-left'), 10) * 2 : 0 ) - defaultValue.tableBorder * 2)
+                                table.setAttribute('width',getTableWidth(me,needIEHack,defaultValue));
                             }
 
                         }
