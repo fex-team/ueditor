@@ -3,7 +3,7 @@
 ///commands 插入框架
 ///commandsName  InsertFrame
 ///commandsTitle  插入Iframe
-///commandsDialog  dialogs\insertframe\insertframe.html
+///commandsDialog  dialogs\insertframe
 
 UE.plugins['insertframe'] = function() {
    var me =this;

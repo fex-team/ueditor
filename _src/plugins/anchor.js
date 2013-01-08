@@ -2,7 +2,7 @@
 ///commands 锚点
 ///commandsName  Anchor
 ///commandsTitle  锚点
-///commandsDialog  dialogs\anchor\anchor.html
+///commandsDialog  dialogs\anchor
 /**
  * 锚点
  * @function

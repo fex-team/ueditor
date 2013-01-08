@@ -3,7 +3,7 @@
 ///commands 特殊字符
 ///commandsName  Spechars
 ///commandsTitle  特殊字符
-///commandsDialog  dialogs\spechars\spechars.html
+///commandsDialog  dialogs\spechars
 UE.commands['spechars'] = {
     queryCommandState : function(){
         return this.highlight ? -1 :0;

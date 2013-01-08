@@ -1,3 +1,7 @@
+///import core
+///commands 自动提交
+///commandsName  autosubmit
+///commandsTitle  自动提交
 UE.commands['autosubmit'] = {
     execCommand:function () {
         var me=this,

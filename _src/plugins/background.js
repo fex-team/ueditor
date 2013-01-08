@@ -1,3 +1,8 @@
+///import core
+///commands 插入背景
+///commandsName  background
+///commandsTitle  插入背景
+///commandsDialog  dialogs\background
 (function() {
     UE.plugins['background'] = function(){
         var me = this;

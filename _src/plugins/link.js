@@ -2,7 +2,7 @@
 ///commands 超链接,取消链接
 ///commandsName  Link,Unlink
 ///commandsTitle  超链接,取消链接
-///commandsDialog  dialogs\link\link.html
+///commandsDialog  dialogs\link
 /**
  * 超链接
  * @function

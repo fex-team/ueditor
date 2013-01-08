@@ -1,3 +1,9 @@
+///import core
+///import plugins/inserthtml.js
+///commands 百度应用
+///commandsName webapp
+///commandsTitle  百度应用
+///commandsDialog  dialogs\webapp
 /**
  * Created by JetBrains PhpStorm.
  * User: taoqili

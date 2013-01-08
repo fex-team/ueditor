@@ -2,7 +2,7 @@
 ///commands 查找替换
 ///commandsName  SearchReplace
 ///commandsTitle  查询替换
-///commandsDialog  dialogs\searchreplace\searchreplace.html
+///commandsDialog  dialogs\searchreplace
 /**
  * @description 查找替换
  * @author zhanyi
@@ -17,7 +17,6 @@ UE.plugins['searchreplace'] = function(){
         first = null;
     });
     me.commands['searchreplace'] = {
-
             execCommand : function(cmdName,opt){
                	var me = this,
                     sel = me.selection,

@@ -1,3 +1,8 @@
+///import core
+///commands 涂鸦
+///commandsName  Scrawl
+///commandsTitle  涂鸦
+///commandsDialog  dialogs\scrawl
 /**
  * Created with JetBrains PhpStorm.
  * User: xuheng
