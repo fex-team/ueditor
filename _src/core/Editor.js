@@ -792,7 +792,7 @@
                 me.__hasEnterExecCommand = false;
             } else {
                 result = this._callCmdFn( 'execCommand', arguments );
-                !ingoreContentChange && me.fireEvent('contentchange')
+                !me._ignoreContentChange && me.fireEvent('contentchange')
             }
             !me._ignoreContentChange && me._selectionChange();
             return result;
