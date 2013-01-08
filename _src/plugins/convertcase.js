@@ -1,8 +1,7 @@
 ///import core
 ///commands 大小写转换
-///commandsName touppercase
-///commandsName tolowercase
-///commandsTitle  大小写转换
+///commandsName touppercase,tolowercase
+///commandsTitle  大写,小写
 /**
  * 大小写转换
  * @function

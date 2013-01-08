@@ -1,8 +1,9 @@
 ///import core
+///import plugins\inserthtml.js
 ///commands 模板
 ///commandsName  template
 ///commandsTitle  模板
-///commandsDialog  dialogs\template\template.html
+///commandsDialog  dialogs\template
 UE.plugins['template'] = function () {
     UE.commands['template'] = {
         execCommand:function (cmd, obj) {

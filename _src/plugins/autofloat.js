@@ -95,7 +95,7 @@
 
                 getPosition = uiUtils.getClientRect;
                 toolbarBox = me.ui.getDom('toolbarbox');
-                orgTop = getPosition(toolbarBox).top;
+                orgTop = (document.body.scrollTop||document.documentElement.scrollTop)+getPosition(toolbarBox).top;
                 bakCssText = toolbarBox.style.cssText;
                 placeHolder.style.height = toolbarBox.offsetHeight + 'px';
                 if(LteIE6){

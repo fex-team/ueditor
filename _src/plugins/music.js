@@ -3,7 +3,7 @@
 ///commands 音乐
 ///commandsName InsertMusic
 ///commandsTitle  插入音乐
-///commandsDialog  dialogs\music\music.html
+///commandsDialog  dialogs\music
 UE.plugins['music'] = function () {
     var me = this,
         div;
