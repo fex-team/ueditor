@@ -57,9 +57,12 @@
     /*by zhanyi*/
     /*white-space: pre !important;*/
 }
-.syntaxhighlighter {
-    width: 100% !important;
+/*by zhanyi*/
+.syntaxhighlighter .gutter div {
+    white-space: pre !important;
+    word-wrap: normal;
 }
+
 .syntaxhighlighter caption {
     text-align: left !important;
     padding: .5em 0 0.5em 1em !important;

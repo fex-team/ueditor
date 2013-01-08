@@ -767,7 +767,7 @@
          * @name execCommand
          * @grammar editor.execCommand(cmdName)   => {*}
          */
-        execCommand:function ( cmdName ) {
+        execCommand:function ( cmdName ,ingoreContentChange) {
             cmdName = cmdName.toLowerCase();
             var me = this,
                     result,
@@ -780,13 +780,13 @@
                 if ( me.queryCommandState( cmdName ) != -1 ) {
                     me.fireEvent( 'beforeexeccommand', cmdName );
                     result = this._callCmdFn( 'execCommand', arguments );
-                    me.fireEvent('contentchange');
+                    !ingoreContentChange && me.fireEvent('contentchange');
                     me.fireEvent( 'afterexeccommand', cmdName );
                 }
                 me.__hasEnterExecCommand = false;
             } else {
                 result = this._callCmdFn( 'execCommand', arguments );
-                me.fireEvent('contentchange')
+                !ingoreContentChange && me.fireEvent('contentchange')
             }
             !me.__hasEnterExecCommand && me._selectionChange();
             return result;
