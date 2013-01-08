@@ -1614,7 +1614,7 @@ UE.plugins['table'] = function () {
     UE.commands["adaptbytext"] =
         UE.commands["adaptbywindow"] = {
             queryCommandState:function () {
-                return getTableItemsByRange(this).cell ? 0 : -1
+                return getTableItemsByRange(this).table ? 0 : -1
             },
             execCommand:function (cmd) {
                 var tableItems = getTableItemsByRange(this),
@@ -1771,7 +1771,7 @@ UE.plugins['table'] = function () {
     //单元格对齐方式
     UE.commands['cellalignment'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, data) {
             var me = this,
@@ -1779,9 +1779,12 @@ UE.plugins['table'] = function () {
 
             if (!ut) {
                 var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
-                if (cell) {
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
+                if (!/caption/ig.test(cell.tagName)) {
                     domUtils.setAttributes(cell, data);
+                }else{
+                    cell.style.textAlign=data.align;
+                    cell.style.verticalAlign=data.vAlign;
                 }
             } else {
                 utils.each(ut.selectedTds, function (cell) {
@@ -1793,7 +1796,7 @@ UE.plugins['table'] = function () {
     //表格对齐方式
     UE.commands['tablealignment']={
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, data) {
             var me = this,
