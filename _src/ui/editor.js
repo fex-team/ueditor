@@ -691,7 +691,9 @@
                     var iframeholder = editor.ui.getDom('iframeholder');
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + editor.options.initialFrameWidth + "px";
+                    var width=editor.options.initialFrameWidth;
+                    if(!/%/g.test(width))  width+="px";
+                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + width;
                     oldRender.call(editor, iframeholder);
 
                 }
