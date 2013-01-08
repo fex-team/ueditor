@@ -1932,7 +1932,7 @@ UE.plugins['table'] = function () {
         getTabNextCell : function(cell,preRowIndex){
             var cellInfo = this.getCellInfo(cell),
                 rowIndex = preRowIndex || cellInfo.rowIndex,
-                colIndex = cellInfo.colIndex + 1,
+                colIndex = cellInfo.colIndex + 1 + (cellInfo.colSpan - 1),
                 nextCell;
             try{
                 nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
