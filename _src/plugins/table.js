@@ -1802,7 +1802,7 @@ UE.plugins['table'] = function () {
 
             if (table) {
                 table.style.margin="";
-                table.style.float="";
+                browser.ie?table.style.styleFloat="":table.style.cssFloat="";
                 table.style[data[0]]=data[1];
             }
         }
