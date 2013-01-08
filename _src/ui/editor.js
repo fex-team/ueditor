@@ -35,7 +35,6 @@
 
                 //提供编辑器实时宽高(全屏时宽高不变化)
                 editor.ui._actualFrameWidth = editor.options.initialFrameWidth;
-                editor.ui._actualFrameHeight = editor.options.initialFrameHeight;
 
                 //display bottom-bar label based on config
                 if (editor.options.elementPathEnabled) {
@@ -556,8 +555,7 @@
                     editor.ui._actualFrameWidth = scalelayer.offsetWidth - 2;
                     editorHolder.style.width = editor.ui._actualFrameWidth + 'px';
 
-                    editor.ui._actualFrameHeight = scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2;
-                    editor.setHeight(editor.ui._actualFrameWidth);
+                    editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2);
                 }
                 if (scalelayer) {
                     scalelayer.style.display = "none";
