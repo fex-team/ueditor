@@ -1087,7 +1087,7 @@
             }
             return false;
         },
-        createAddress : function(ingoreEnd,ingoreTxt){
+        createAddress : function(ignoreEnd,ignoreTxt){
             var addr = {},me = this;
 
             function getAddress(isStart){
@@ -1095,11 +1095,11 @@
                 var parents = domUtils.findParents(node,true,function(node){return !domUtils.isBody(node)}),
                     addrs = [];
                 for(var i = 0,ci;ci = parents[i++];){
-                    addrs.push(domUtils.getNodeIndex(ci,ingoreTxt));
+                    addrs.push(domUtils.getNodeIndex(ci,ignoreTxt));
                 }
                 var firstIndex = 0;
 
-                if(ingoreTxt){
+                if(ignoreTxt){
                     if(node.nodeType == 3){
                         var tmpNode = node;
                         while(tmpNode = tmpNode.previousSibling){
@@ -1113,7 +1113,7 @@
                     }else{
                         node =  node.childNodes[ isStart ? me.startOffset : me.endOffset];
                         if(node){
-                            firstIndex = domUtils.getNodeIndex(node,ingoreTxt);
+                            firstIndex = domUtils.getNodeIndex(node,ignoreTxt);
                         }else{
                             node = isStart ? me.startContainer : me.endContainer;
                             var first = node.firstChild;
@@ -1141,12 +1141,12 @@
                 return addrs;
             }
             addr.startAddress = getAddress(true);
-            if(!ingoreEnd){
+            if(!ignoreEnd){
                 addr.endAddress = getAddress();
             }
             return addr;
         },
-        moveToAddress : function(addr,ingoreEnd){
+        moveToAddress : function(addr,ignoreEnd){
             var me = this;
             function getNode(address,isStart){
                 var tmpNode = me.document.body,
@@ -1175,7 +1175,7 @@
                 }
             }
             getNode(addr.startAddress,true);
-            !ingoreEnd && addr.endAddress &&  getNode(addr.endAddress);
+            !ignoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
         }
     };
