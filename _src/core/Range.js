@@ -1132,7 +1132,6 @@
                                 }
                             }
                         }
-
                     }
 
                 }else{
@@ -1147,7 +1146,7 @@
             }
             return addr;
         },
-        moveToAddress : function(addr){
+        moveToAddress : function(addr,ingoreEnd){
             var me = this;
             function getNode(address,isStart){
                 var tmpNode = me.document.body,
@@ -1176,7 +1175,7 @@
                 }
             }
             getNode(addr.startAddress,true);
-            addr.endAddress &&  getNode(addr.endAddress);
+            !ingoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
         }
     };
