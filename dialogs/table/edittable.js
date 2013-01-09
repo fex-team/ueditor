@@ -115,8 +115,8 @@
 
         getColor:function () {
             var start = editor.selection.getStart(),
-                color = domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
-            return domUtils.getComputedStyle(color, "border-color");
+                cell = domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
+            return domUtils.getComputedStyle(cell, "border-color");
         },
         setColor:function (color) {
             var example = $G("J_example"),
