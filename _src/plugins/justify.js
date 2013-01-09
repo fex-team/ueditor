@@ -9,8 +9,9 @@
  * @param   {String}   align               对齐方式：left居左，right居右，center居中，justify两端对齐
  * @author zhanyi
  */
-(function () {
-    var block = domUtils.isBlockElm,
+UE.plugins['justify']=function(){
+    var me=this,
+        block = domUtils.isBlockElm,
         defaultValue = {
             left:1,
             right:1,
@@ -57,6 +58,7 @@
             }
             return range.moveToBookmark(bookmark2).moveToBookmark(bookmark);
         };
+
     UE.commands['justify'] = {
         execCommand:function (cmdName, align) {
 
@@ -92,6 +94,4 @@
         }
 
     };
-
-
-})();
+};
