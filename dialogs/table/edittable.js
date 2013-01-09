@@ -114,9 +114,11 @@
         },
 
         getColor:function () {
-            var start = editor.selection.getStart(),
+            var start = editor.selection.getStart(),color,
                 cell = domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
-            return domUtils.getComputedStyle(cell, "border-color");
+            color=domUtils.getComputedStyle(cell, "border-color");
+            if(!color)  color="#DDDDDD";
+            return color;
         },
         setColor:function (color) {
             var example = $G("J_example"),
