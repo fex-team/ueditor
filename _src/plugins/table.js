@@ -531,6 +531,11 @@ UE.plugins['table'] = function () {
 
         me.addListener("beforegetcontent", function () {
             switchBoderColor(false);
+            browser.ie && utils.each(me.document.getElementsByTagName('caption'),function(ci){
+                if(domUtils.isEmptyNode(ci)){
+                    ci.innerHTML = '&nbsp;'
+                }
+            });
         });
         me.addListener("aftergetcontent", function () {
             switchBoderColor(true);
@@ -584,7 +589,9 @@ UE.plugins['table'] = function () {
                     }
                     if (state != -1 && (firstState === undefined || firstState == state)) {
                         var isEmpty = domUtils.isEmptyNode(td);
-                        result = oldExecCommand.apply(me, arguments);
+                        me._ignoreContentChange = true;
+                        result = oldExecCommand.apply(me,arguments);
+                        me._ignoreContentChange = false;
                         var reg = new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
                         if (isEmpty != domUtils.isEmptyNode(td) && !td[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length) {
                             domUtils.fillNode(me.document, td)
@@ -1203,7 +1210,7 @@ UE.plugins['table'] = function () {
 
     UE.commands['inserttable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? -1 : 0;
+            return getTableItemsByRange(this).table ? -1 : 0;
         },
         execCommand:function (cmd, opt) {
             function createTable(opt, tableWidth, tdWidth) {
@@ -1733,7 +1740,7 @@ UE.plugins['table'] = function () {
     UE.commands["adaptbytext"] =
         UE.commands["adaptbywindow"] = {
             queryCommandState:function () {
-                return getTableItemsByRange(this).cell ? 0 : -1
+                return getTableItemsByRange(this).table ? 0 : -1
             },
             execCommand:function (cmd) {
                 var tableItems = getTableItemsByRange(this),
@@ -1890,7 +1897,7 @@ UE.plugins['table'] = function () {
     //单元格对齐方式
     UE.commands['cellalignment'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, data) {
             var me = this,
@@ -1898,10 +1905,14 @@ UE.plugins['table'] = function () {
 
             if (!ut) {
                 var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
-                if (cell) {
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
+                if (!/caption/ig.test(cell.tagName)) {
                     domUtils.setAttributes(cell, data);
+                }else{
+                    cell.style.textAlign=data.align;
+                    cell.style.verticalAlign=data.vAlign;
                 }
+                me.selection.getRange().setCursor(true);
             } else {
                 utils.each(ut.selectedTds, function (cell) {
                     domUtils.setAttributes(cell, data);
@@ -1912,7 +1923,7 @@ UE.plugins['table'] = function () {
     //表格对齐方式
     UE.commands['tablealignment']={
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, data) {
             var me = this,
@@ -1922,7 +1933,11 @@ UE.plugins['table'] = function () {
             if (table) {
                 table.style.margin="";
                 browser.ie?table.style.styleFloat="":table.style.cssFloat="";
-                table.style[data[0]]=data[1];
+                if(/float/.test(data[0])){
+                    browser.ie?table.style.styleFloat=data[1]:table.style.cssFloat=data[1];
+                }else{
+                    table.style[data[0]]=data[1];
+                }
             }
         }
     };
@@ -2047,7 +2062,7 @@ UE.plugins['table'] = function () {
         getTabNextCell : function(cell,preRowIndex){
             var cellInfo = this.getCellInfo(cell),
                 rowIndex = preRowIndex || cellInfo.rowIndex,
-                colIndex = cellInfo.colIndex + 1,
+                colIndex = cellInfo.colIndex + 1 + (cellInfo.colSpan - 1),
                 nextCell;
             try{
                 nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);

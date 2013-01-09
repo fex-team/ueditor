@@ -4,23 +4,13 @@
 UE.plugins['keystrokes'] = function() {
     var me = this;
 
-    function isBoundaryNode(node,dir){
-        var tmp;
-        while(!domUtils.isBody(node)){
-            tmp = node;
-            node = node.parentNode;
-            if(tmp !== node[dir]){
-                return false;
-            }
-        }
-        return true;
-    }
     me.addListener('keydown', function(type, evt) {
         var keyCode = evt.keyCode || evt.which,
             rng = me.selection.getRange();
 
         //处理全选的情况
         if(!rng.collapsed && !(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey || keyCode == 9 )){
+
             var tmpNode = rng.startContainer;
             if(domUtils.isFillChar(tmpNode)){
                 rng.setStartBefore(tmpNode)
@@ -32,12 +22,9 @@ UE.plugins['keystrokes'] = function() {
             rng.txtToElmBoundary();
             if(rng.startOffset == 0){
                 tmpNode = rng.startContainer;
-                if(isBoundaryNode(tmpNode,'firstChild')){
+                if(domUtils.isBoundaryNode(tmpNode,'firstChild') ){
                     tmpNode = rng.endContainer;
-                    var lastChild = rng.endContainer.childNodes[rng.endOffset];
-                    if(rng.endOffset == rng.endContainer.childNodes.length
-                        || ((domUtils.isBr(lastChild)||domUtils.isWhitespace(lastChild))&& lastChild === rng.endContainer.lastChild )
-                        && isBoundaryNode(tmpNode,'lastChild') ){
+                    if(rng.endOffset == (tmpNode.nodeType == 3 ? tmpNode.nodeValue.length : tmpNode.childNodes.length) && domUtils.isBoundaryNode(tmpNode,'lastChild')){
                         me.fireEvent('saveScene');
                         me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
                         rng.setStart(me.body.firstChild,0).setCursor(false,true);

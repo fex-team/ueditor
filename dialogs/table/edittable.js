@@ -155,10 +155,12 @@
     }
 
     dialog.onok = function () {
+        editor.__hasEnterExecCommand=true;
         title.checked ? editor.execCommand("inserttitle") : editor.execCommand("deletetitle");
         caption.checked ? editor.execCommand("insertcaption") : editor.execCommand("deletecaption");
         editor.execCommand("edittable", tone.value);
         autoSizeContent.checked ? adaptByTextTable() : "";
         autoSizePage.checked ? editor.execCommand("adaptbywindow") : "";
+        editor.__hasEnterExecCommand=false;
     };
 })();

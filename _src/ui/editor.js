@@ -33,6 +33,9 @@
                     baidu.editor.ui.Popup.postHide(evt);
                 });
 
+                //提供编辑器实时宽高(全屏时宽高不变化)
+                editor.ui._actualFrameWidth = editor.options.initialFrameWidth;
+
                 //display bottom-bar label based on config
                 if (editor.options.elementPathEnabled) {
                     editor.ui.getDom('elementpath').innerHTML = '<div class="edui-editor-breadcrumb">' + editor.getLang("elementPathTip") + ':</div>';
@@ -93,7 +96,7 @@
             editor.addListener("afterinserthtml", function () {
                 clearTimeout(timer);
                 timer = setTimeout(function () {
-                    if(pastePop&&(isPaste||editor.ui._isTransfer)){
+                    if (pastePop && (isPaste || editor.ui._isTransfer)) {
                         var span = domUtils.createElement(editor.document, 'span', {
                                 'style':"line-height:0px;",
                                 'innerHTML':'\ufeff'
@@ -549,7 +552,9 @@
             function up() {
                 if (isMouseMove) {
                     isMouseMove = false;
-                    editorHolder.style.width = scalelayer.offsetWidth - 2 + 'px';
+                    editor.ui._actualFrameWidth = scalelayer.offsetWidth - 2;
+                    editorHolder.style.width = editor.ui._actualFrameWidth + 'px';
+
                     editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2);
                 }
                 if (scalelayer) {
@@ -691,7 +696,9 @@
                     var iframeholder = editor.ui.getDom('iframeholder');
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + editor.options.initialFrameWidth + "px";
+                    var width = editor.options.initialFrameWidth;
+                    if (!/%/g.test(width))  width += "px";
+                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + width;
                     oldRender.call(editor, iframeholder);
 
                 }

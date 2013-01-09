@@ -22,21 +22,21 @@ UE.plugins['highlightcode'] = function() {
             }else{
                 var range = this.selection.getRange(),
                    start = domUtils.findParentByTagName(range.startContainer, 'table', true),
-                   end = domUtils.findParentByTagName(range.endContainer, 'table', true),
-                   codediv;
+                   end = domUtils.findParentByTagName(range.endContainer, 'table', true);
                 if(start && end && start === end && domUtils.hasClass(start,'syntaxhighlighter')){
-                    codediv = start.parentNode;
-                    //需要判断一下后边有没有节点，没有的化才添加新的标签
-                    if(domUtils.isBody(codediv.parentNode) && !codediv.nextSibling){
-                        var p = me.document.createElement('p');
-                        p.innerHTML = browser.ie ? '' : '<br/>';
-                        me.body.insertBefore(p,codediv);
-                        range.setStart(p,0);
+                    if(start.nextSibling){
+                        range.setStart(start.nextSibling,0)
                     }else{
-                        range.setStartBefore(codediv)
+                        if(start.previousSibling){
+                            range.setStartAtLast(start.previousSibling)
+                        }else{
+                            var p = me.document.createElement('p');
+                            domUtils.fillNode(me.document,p);
+                            range.setStart(p,0)
+                        }
                     }
-                    range.setCursor();
-                    domUtils.remove(codediv);
+                    range.setCursor(false,true);
+                    domUtils.remove(start);
                 }
             }
         },

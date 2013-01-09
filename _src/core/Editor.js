@@ -91,7 +91,7 @@
             iframeCssUrl:me.options.UEDITOR_HOME_URL + 'themes/iframe.css',
             textarea:'editorValue',
             focus:false,
-            initialFrameWidth:'100%',
+            initialFrameWidth:1000,
             initialFrameHeight:me.options.minFrameHeight||320,//兼容老版本配置项
             minFrameWidth:800,
             minFrameHeight:220,
@@ -480,8 +480,14 @@
                     headHtml = [],
                     html = '';
             me.fireEvent( 'getAllHtml', headHtml );
+            if(browser.ie && browser.version > 8){
+                var cssHtml= '';
+                utils.each(me.document.styleSheets,function(si){
+                    cssHtml += ( si.href ? '<link rel="stylesheet" type="text/css" href="'+si.href+'" />': '<style>'+si.cssText+'</style>');
+                })
+            }
             return '<html><head>' + (me.options.charset ? '<meta http-equiv="Content-Type" content="text/html; charset=' + me.options.charset + '"/>' : '')
-                + me.document.getElementsByTagName( 'head' )[0].innerHTML + headHtml.join('\n') + '</head>'
+                + (cssHtml || me.document.getElementsByTagName( 'head' )[0].innerHTML) + headHtml.join('\n') + '</head>'
                     + '<body ' + (ie && browser.version < 9 ? 'class="view"' : '') + '>' + me.getContent( null, null, true ) + '</body></html>';
         },
         /**
@@ -780,15 +786,15 @@
                 if ( me.queryCommandState( cmdName ) != -1 ) {
                     me.fireEvent( 'beforeexeccommand', cmdName );
                     result = this._callCmdFn( 'execCommand', arguments );
-                    me.fireEvent('contentchange');
+                    !me._ignoreContentChange && me.fireEvent('contentchange');
                     me.fireEvent( 'afterexeccommand', cmdName );
                 }
                 me.__hasEnterExecCommand = false;
             } else {
                 result = this._callCmdFn( 'execCommand', arguments );
-                me.fireEvent('contentchange')
+                !me._ignoreContentChange && me.fireEvent('contentchange')
             }
-            !me.__hasEnterExecCommand && me._selectionChange();
+            !me._ignoreContentChange && me._selectionChange();
             return result;
         },
         /**

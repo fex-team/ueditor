@@ -209,7 +209,8 @@
         var formatter = new SourceFormater(opt.source);
         var sourceMode = false;
         var sourceEditor;
-        opt.sourceEditor = browser.ie && browser.version < 8 ? 'textarea' : (opt.sourceEditor || 'codemirror');
+
+        opt.sourceEditor = browser.ie  ? 'textarea' : (opt.sourceEditor || 'codemirror');
 
         me.setOpt({
             sourceEditorFirst:false
