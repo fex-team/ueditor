@@ -34,7 +34,8 @@ UE.plugins['table'] = function () {
         'defaultCols':5,
         'defaultRows':5,
         'tdvalign':'top',
-        'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_"
+        'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_",
+        'tableDragable':false
     });
     var commands = {
         'deletetable':1,
@@ -382,11 +383,10 @@ UE.plugins['table'] = function () {
                     }
                 });
                 table.onmousemove = function(evt){
-                    toggleDragButton(true,this,me);
+                    me.options.tableDragable && toggleDragButton(true,this,me);
                 };
                 table.onmouseout = function () {
                     toggleDragableState(me, false, "", null);
-//                    toggleDragButton(false,this)
                     hideDragLine(me);
                 };
                 table.onclick = function (evt) {
