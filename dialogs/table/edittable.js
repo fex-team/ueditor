@@ -15,7 +15,7 @@
         preview = $G("J_preview");
 
     var editTable = function () {
-        me=this;
+        me = this;
         this.init();
     };
     editTable.prototype = {
@@ -52,7 +52,7 @@
             });
         },
 
-        createTable:function (hasTitle,hasCaption) {
+        createTable:function (hasTitle, hasCaption) {
             var arr = [];
             arr.push("<table id='J_example'>");
             if (hasCaption) {
@@ -78,7 +78,7 @@
 
         titleHanler:function () {
             var example = $G("J_example"),
-                color=domUtils.getComputedStyle(domUtils.getElementsByTagName(example,"td")[0],"border-color");
+                color = domUtils.getComputedStyle(domUtils.getElementsByTagName(example, "td")[0], "border-color");
 
             if (title.checked) {
                 var row = document.createElement("tr");
@@ -113,9 +113,9 @@
             example.setAttribute('width', '100%');
         },
 
-        getColor:function(){
-          var  start = editor.selection.getStart(),
-               color = domUtils.findParentByTagName(start, ["td","th","caption"], true);
+        getColor:function () {
+            var start = editor.selection.getStart(),
+                color = domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
             return domUtils.getComputedStyle(color, "border-color");
         },
         setColor:function (color) {
@@ -127,7 +127,7 @@
 
             tone.value = color;
             utils.each(arr, function (node) {
-                node.style.borderColor =  color ;
+                node.style.borderColor = color;
             });
 
         },
@@ -155,12 +155,23 @@
     }
 
     dialog.onok = function () {
-        editor.__hasEnterExecCommand=true;
-        title.checked ? editor.execCommand("inserttitle") : editor.execCommand("deletetitle");
-        caption.checked ? editor.execCommand("insertcaption") : editor.execCommand("deletecaption");
+        editor.__hasEnterExecCommand = true;
+
+        if (title.checked) {
+            editor.queryCommandState("inserttitle") != -1 && editor.execCommand("inserttitle")
+        } else {
+            editor.queryCommandState("deletetitle") != -1 && editor.execCommand("deletetitle");
+        }
+
+        if (caption.checked) {
+            editor.queryCommandState("insertcaption") != -1 && editor.execCommand("insertcaption")
+        } else {
+            editor.queryCommandState("deletecaption") != -1 && editor.execCommand("deletecaption");
+        }
         editor.execCommand("edittable", tone.value);
         autoSizeContent.checked ? adaptByTextTable() : "";
         autoSizePage.checked ? editor.execCommand("adaptbywindow") : "";
-        editor.__hasEnterExecCommand=false;
+
+        editor.__hasEnterExecCommand = false;
     };
 })();
