@@ -208,7 +208,7 @@
                 });
                 editor.addListener('selectionchange', function (t, causeByUi) {
                     if (!causeByUi) return;
-                    var html = '',
+                    var html = '', str = "",
                         img = editor.selection.getRange().getClosedNode(),
                         dialogs = editor.ui._dialogs;
                     if (img && img.tagName == 'IMG') {
@@ -242,12 +242,16 @@
                         if (!dialogs[dialogName]) {
                             return;
                         }
-                        !html && (html = popup.formatHtml(
-                            '<nobr>' + editor.getLang("property") + ': <span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
+                        str += '<nobr>' + editor.getLang("property") + ': ';
+                        if (editor.queryCommandState('imagefloat') != -1) {
+                            str += '<span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
                                 '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
                                 '<span onclick=$$._onImgSetFloat("right") class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>'))
+                                '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;';
+                        }
+                        str += '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>';
+
+                        !html && (html = popup.formatHtml(str))
 
                     }
                     if (editor.ui._dialogs.linkDialog) {
