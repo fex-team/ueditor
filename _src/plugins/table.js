@@ -316,7 +316,7 @@ UE.plugins['table'] = function () {
                                 domUtils.fillNode(me.document, td);
                             }
                             removeStyleSize(td, true);
-                            domUtils.removeAttributes(td, ['style'])
+//                            domUtils.removeAttributes(td, ['style'])
                         });
                     });
                 }
@@ -1089,7 +1089,7 @@ UE.plugins['table'] = function () {
             tar =evt.target || evt.srcElement ;
         currentTd = domUtils.findParentByTagName(tar,"td",true)||domUtils.findParentByTagName(tar,"th",true);
         //需要判断两个TD是否位于同一个表格内
-        if (startTd &&
+        if (startTd && currentTd &&
             ((startTd.tagName == "TD" && currentTd.tagName == "TD") || (startTd.tagName == "TH" && currentTd.tagName == "TH")) &&
             domUtils.findParentByTagName(startTd, 'table') == domUtils.findParentByTagName(currentTd, 'table')) {
             var ut = getUETable(currentTd);
@@ -1474,11 +1474,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length ? cellInfo.rowIndex:ut.cellsRange.beginRowIndex,'');
             if (!ut.selectedTds.length) {
-                ut.insertRow(cellInfo.rowIndex);
+                ut.insertRow(cellInfo.rowIndex,cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endRowIndex - range.beginRowIndex + 1; i < len; i++) {
-                    ut.insertRow(range.beginRowIndex);
+                    ut.insertRow(range.beginRowIndex,cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -1499,11 +1499,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length? cellInfo.rowIndex + cellInfo.rowSpan : ut.cellsRange.endRowIndex + 1,'');
             if (!ut.selectedTds.length) {
-                ut.insertRow(cellInfo.rowIndex + cellInfo.rowSpan);
+                ut.insertRow(cellInfo.rowIndex + cellInfo.rowSpan,cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endRowIndex - range.beginRowIndex + 1; i < len; i++) {
-                    ut.insertRow(range.endRowIndex + 1);
+                    ut.insertRow(range.endRowIndex + 1,cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -1563,11 +1563,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex:ut.cellsRange.beginColIndex);
             if (!ut.selectedTds.length) {
-                ut.insertCol(cellInfo.colIndex);
+                ut.insertCol(cellInfo.colIndex,cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endColIndex - range.beginColIndex + 1; i < len; i++) {
-                    ut.insertCol(range.beginColIndex);
+                    ut.insertCol(range.beginColIndex,cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -1587,11 +1587,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex + cellInfo.colSpan:ut.cellsRange.endColIndex +1);
             if (!ut.selectedTds.length) {
-                ut.insertCol(cellInfo.colIndex + cellInfo.colSpan);
+                ut.insertCol(cellInfo.colIndex + cellInfo.colSpan,cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endColIndex - range.beginColIndex + 1; i < len; i++) {
-                    ut.insertCol(range.endColIndex + 1);
+                    ut.insertCol(range.endColIndex + 1,cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -2132,6 +2132,7 @@ UE.plugins['table'] = function () {
         setCellContent:function (cell, content) {
             cell.innerHTML = content || (browser.ie ? domUtils.fillChar : "<br />");
         },
+        cloneCell:cloneCell,
         /**
          * 获取跟当前单元格的右边竖线为左边的所有未合并单元格
          */
@@ -2552,7 +2553,7 @@ UE.plugins['table'] = function () {
         /**
          * 插入一行单元格
          */
-        insertRow:function (rowIndex, tagName) {
+        insertRow:function (rowIndex, sourceCell) {
             var numCols = this.colsNum,
                 table = this.table,
                 row = table.insertRow(rowIndex), cell,
@@ -2560,11 +2561,10 @@ UE.plugins['table'] = function () {
             //首行直接插入,无需考虑部分单元格被rowspan的情况
             if (rowIndex == 0 || rowIndex == this.rowsNum) {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
-                    cell = tagName ? table.ownerDocument.createElement('th') : row.insertCell(colIndex);
-//                    cell.innerHTML = browser.ie ? domUtils.fillChar : "<br/>";
+                    cell = this.cloneCell(sourceCell);
                     this.setCellContent(cell);
                     cell.setAttribute('valign', me.options.tdvalign);
-                    tagName && row.appendChild(cell);
+                    row.appendChild(cell);
                 }
             } else {
                 var infoRow = this.indexTable[rowIndex],
@@ -2576,8 +2576,9 @@ UE.plugins['table'] = function () {
                         cell = this.getCell(cellInfo.rowIndex, cellInfo.cellIndex);
                         cell.rowSpan = cellInfo.rowSpan + 1;
                     } else {
-                        cell = row.insertCell(cellIndex++);
+                        cell = this.cloneCell(sourceCell);
                         this.setCellContent(cell);
+                        row.appendChild(cell);
                     }
                 }
             }
@@ -2646,7 +2647,7 @@ UE.plugins['table'] = function () {
             //this.table.deleteRow(rowIndex);
             this.update();
         },
-        insertCol:function (colIndex) {
+        insertCol:function (colIndex,sourceCell) {
             var rowsNum = this.rowsNum,
                 rowIndex = 0,
                 tableRow, cell,
@@ -2669,10 +2670,15 @@ UE.plugins['table'] = function () {
                 for (; rowIndex < rowsNum; rowIndex++) {
                     tableRow = this.table.rows[rowIndex];
                     preCell = tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
-                    cell = tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
+                    cell = this.cloneCell(sourceCell); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
                     this.setCellContent(cell);
                     cell.setAttribute('valign', me.options.tdvalign);
                     preCell && cell.setAttribute('width', preCell.getAttribute('width'));
+                    if(!colIndex){
+                        tableRow.insertBefore(cell,tableRow.cells[0]);
+                    }else{
+                        domUtils.insertAfter(tableRow.cells[tableRow.cells.length-1],cell);
+                    }
                     replaceTdToTh(rowIndex, cell, tableRow)
                 }
             } else {
@@ -2685,10 +2691,11 @@ UE.plugins['table'] = function () {
                         tableRow = this.table.rows[rowIndex];
                         preCell = tableRow.cells[cellInfo.cellIndex];
 
-                        cell = tableRow.insertCell(cellInfo.cellIndex);
+                        cell = this.cloneCell(sourceCell);//tableRow.insertCell(cellInfo.cellIndex);
                         this.setCellContent(cell);
                         cell.setAttribute('valign', me.options.tdvalign);
                         preCell && cell.setAttribute('width', preCell.getAttribute('width'))
+                        tableRow.insertBefore(cell,preCell);
                     }
                     replaceTdToTh(rowIndex, cell, tableRow);
                 }
@@ -2880,5 +2887,22 @@ UE.plugins['table'] = function () {
         var target = domUtils.findParentByTagName(evt.target || evt.srcElement, ["td", "th"], true);
         //排除了非td内部以及用于代码高亮部分的td
         return target && !(editor.fireEvent("excludetable", target) === true) ? target : null;
+    }
+    function cloneCell(cell){
+        var type = cell.nodeType;
+        if(!type) return this.table.ownerDocument.createElement(cell);
+        var flag = domUtils.hasClass(cell,"selectTdClass");
+        flag && domUtils.removeClasses(cell,"selectTdClass");
+        var tmpCell = cell.cloneNode(true);
+        tmpCell.rowSpan = 1;
+        tmpCell.colSpan = 1;
+        tmpCell.style.borderLeftStyle = "";
+        tmpCell.style.borderTopStyle = "";
+        tmpCell.style.borderLeftColor = cell.style.borderRightColor;
+        tmpCell.style.borderLeftWidth = cell.style.borderRightWidth;
+        tmpCell.style.borderTopColor = cell.style.borderBottomColor;
+        tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
+        flag && domUtils.addClass(cell,"selectTdClass");
+        return tmpCell;
     }
 };
