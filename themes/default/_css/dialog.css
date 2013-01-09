@@ -153,13 +153,6 @@
     overflow: hidden;
 }
 
-/*emoticon-dialog*/
-.edui-default .edui-for-emoticon .edui-dialog-content {
-    width: 515px;
-    *width: 506px;
-    height: 360px;
-}
-
 /*scrawl-dialog*/
 .edui-default .edui-for-scrawl .edui-dialog-content {
     width: 515px;
