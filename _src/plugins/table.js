@@ -1078,8 +1078,9 @@ UE.plugins['table'] = function () {
     }
 
     function mouseOverEvent(type, evt) {
-        var me = this;
-        currentTd = evt.target || evt.srcElement;
+        var me = this,
+            tar =evt.target || evt.srcElement ;
+        currentTd = domUtils.findParentByTagName(tar,"td",true)||domUtils.findParentByTagName(tar,"th",true);
         //需要判断两个TD是否位于同一个表格内
         if (startTd &&
             ((startTd.tagName == "TD" && currentTd.tagName == "TD") || (startTd.tagName == "TH" && currentTd.tagName == "TH")) &&
