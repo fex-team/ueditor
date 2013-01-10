@@ -4,7 +4,7 @@
 /**
  * 截屏插件
  */
-UE.plugins['autotypeset'] = function(){
+UE.plugins['snapscreen'] = function(){
     var me = this,
         doc,
         snapplugin;
