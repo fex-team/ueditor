@@ -50,6 +50,10 @@
                 me.setColor(arguments[1]);
                 colorPop.hide();
             });
+            colorPiker.addListener("picknocolor", function () {
+                me.setColor("");
+                colorPop.hide();
+            });
         },
 
         createTable:function (hasTitle, hasCaption) {

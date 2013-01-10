@@ -147,7 +147,7 @@ UE.plugins['highlightcode'] = function() {
 
     function changePre(){
         var me = this;
-        if(!me.window.SyntaxHighlighter)return;
+        if(!me.window||!me.window.SyntaxHighlighter)return;
         utils.each(domUtils.getElementsByTagName(me.document,"pre"),function(pi){
             if(domUtils.hasClass(pi,'brush')){
                 me.window.SyntaxHighlighter.highlight(pi);

@@ -490,25 +490,33 @@ UE.plugins['table'] = function () {
             var range = this.selection.getRange(),
                 obj = getTableItemsByRange(me);
             if(obj.table){
-                var cell = obj.cell,
-                    ua = getUETable(cell);
-                currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
-                var nextCell = ua.getTabNextCell(cell,currentRowIndex);
-                if(nextCell){
-                    if(isEmptyBlock(nextCell)){
-                        range.setStart(nextCell,0).setCursor(false,true)
-                    }else{
-                        range.selectNodeContents(nextCell).select()
+                if(obj.caption){
+                    var cell = domUtils.getElementsByTagName(obj.table,'th td');
+                    if(cell && cell.length){
+                        range.setStart(cell[0],0).setCursor(false,true)
                     }
                 }else{
-                    me.fireEvent('saveScene');
-                    me.__hasEnterExecCommand = true;
-                    this.execCommand('insertrownext');
-                    me.__hasEnterExecCommand = false;
-                    range = this.selection.getRange();
-                    range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
-                    me.fireEvent('saveScene');
+                    var cell = obj.cell,
+                        ua = getUETable(cell);
+                    currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
+                    var nextCell = ua.getTabNextCell(cell,currentRowIndex);
+                    if(nextCell){
+                        if(isEmptyBlock(nextCell)){
+                            range.setStart(nextCell,0).setCursor(false,true)
+                        }else{
+                            range.selectNodeContents(nextCell).select()
+                        }
+                    }else{
+                        me.fireEvent('saveScene');
+                        me.__hasEnterExecCommand = true;
+                        this.execCommand('insertrownext');
+                        me.__hasEnterExecCommand = false;
+                        range = this.selection.getRange();
+                        range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
+                        me.fireEvent('saveScene');
+                    }
                 }
+
                 return true;
             }
 
