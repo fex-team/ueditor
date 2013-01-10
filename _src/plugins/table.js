@@ -1,9 +1,3 @@
-///import core
-///import plugins\inserthtml.js
-///commands 表格
-///commandsName  InsertTable,DeleteTable,InsertParagraphBeforeTable,InsertRow,DeleteRow,InsertCol,DeleteCol,MergeCells,MergeRight,MergeDown,SplittoCells,SplittoRows,SplittoCols
-///commandsTitle  表格,删除表格,表格前插行,前插入行,删除行,前插入列,删除列,合并多个单元格,右合并单元格,下合并单元格,完全拆分单元格,拆分成行,拆分成列
-///commandsDialog  dialogs\table
 /**
  * Created with JetBrains PhpStorm.
  * User: taoqili
@@ -551,6 +545,9 @@ UE.plugins['table'] = function () {
         });
         me.addListener("aftergetcontent", function () {
             switchBoderColor(true);
+        });
+        me.addListener("getAllHtml",function(){
+            removeSelectedClass(me.document.getElementsByTagName("td"));
         });
         //修正全屏状态下插入的表格宽度在非全屏状态下撑开编辑器的情况
         me.addListener("fullscreenchanged", function (type, fullscreen) {
