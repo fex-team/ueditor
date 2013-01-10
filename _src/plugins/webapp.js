@@ -1,10 +1,9 @@
-/**
- * Created by JetBrains PhpStorm.
- * User: taoqili
- * Date: 12-5-7
- * Time: 下午2:37
- * To change this template use File | Settings | File Templates.
- */
+///import core
+///import plugins/inserthtml.js
+///commands 百度应用
+///commandsName webapp
+///commandsTitle  百度应用
+///commandsDialog  dialogs\webapp
 UE.plugins['webapp'] = function () {
     var me = this;
     function createInsertStr( obj, toIframe, addParagraph ) {

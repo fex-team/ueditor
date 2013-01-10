@@ -1,10 +1,9 @@
 ///import core
 ///import plugins\inserthtml.js
-///import plugins\catchremoteimage.js
 ///commands 插入图片，操作图片的对齐方式
 ///commandsName  InsertImage,ImageNone,ImageLeft,ImageRight,ImageCenter
 ///commandsTitle  图片,默认,居左,居右,居中
-///commandsDialog  dialogs\image\image.html
+///commandsDialog  dialogs\image
 /**
  * Created by .
  * User: zhanyi

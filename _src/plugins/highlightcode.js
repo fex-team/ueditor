@@ -3,7 +3,7 @@
 ///commands 插入代码
 ///commandsName  HighlightCode
 ///commandsTitle  插入代码
-///commandsDialog  dialogs\code\code.html
+///commandsDialog  dialogs\highlightcode
 UE.plugins['highlightcode'] = function() {
     var me = this;
     if(!/highlightcode/i.test(me.options.toolbars.join(''))){
