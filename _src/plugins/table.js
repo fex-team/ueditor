@@ -1,11 +1,9 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: taoqili
- * Date: 12-10-12
- * Time: 上午10:05
- * To change this template use File | Settings | File Templates.
-
- */
+ ///import core
+///import plugins\inserthtml.js
+ ///commands 表格
+ ///commandsName  InsertTable,DeleteTable,InsertParagraphBeforeTable,InsertRow,DeleteRow,InsertCol,DeleteCol,MergeCells,MergeRight,MergeDown,SplittoCells,SplittoRows,SplittoCols
+ ///commandsTitle  表格,删除表格,表格前插行,前插入行,删除行,前插入列,删除列,合并多个单元格,右合并单元格,下合并单元格,完全拆分单元格,拆分成行,拆分成列
+///commandsDialog  dialogs\table
 UE.plugins['table'] = function () {
     var me = this,
         debug = true;

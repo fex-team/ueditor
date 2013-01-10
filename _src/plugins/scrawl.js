@@ -1,10 +1,8 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: xuheng
- * Date: 12-7-2
- * Time: 下午5:22
- * To change this template use File | Settings | File Templates.
- */
+///import core
+///commands 涂鸦
+///commandsName  Scrawl
+///commandsTitle  涂鸦
+///commandsDialog  dialogs\scrawl
 UE.commands['scrawl'] = {
     queryCommandState : function(){
         return ( browser.ie && browser.version  <= 8 ) ? -1 :0;
