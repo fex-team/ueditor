@@ -82,13 +82,18 @@
 
         titleHanler:function () {
             var example = $G("J_example"),
+                 frg=document.createDocumentFragment(),
                 color = domUtils.getComputedStyle(domUtils.getElementsByTagName(example, "td")[0], "border-color");
 
             if (title.checked) {
-                var row = document.createElement("tr");
-                row.innerHTML = "<th>" + lang.titleName + "</th><th>" + lang.titleName + "</th><th>" + lang.titleName + "</th><th>"
-                    + lang.titleName + "</th><th>" + lang.titleName + "</th>";
-                example.insertBefore(row, example.firstChild);
+                example.insertRow(0);
+                for (var i = 0, node; i < 5; i++) {
+                    node = document.createElement("th");
+                    node.innerHTML = lang.titleName;
+                    frg.appendChild(node);
+                }
+                example.rows[0].appendChild(frg);
+
             } else {
                 domUtils.remove(example.rows[0]);
             }
@@ -118,10 +123,10 @@
         },
 
         getColor:function () {
-            var start = editor.selection.getStart(),color,
+            var start = editor.selection.getStart(), color,
                 cell = domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
-            color=domUtils.getComputedStyle(cell, "border-color");
-            if(!color)  color="#DDDDDD";
+            color = domUtils.getComputedStyle(cell, "border-color");
+            if (!color)  color = "#DDDDDD";
             return color;
         },
         setColor:function (color) {
