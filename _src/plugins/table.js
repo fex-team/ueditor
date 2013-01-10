@@ -2647,7 +2647,7 @@ UE.plugins['table'] = function () {
             //this.table.deleteRow(rowIndex);
             this.update();
         },
-        insertCol:function (colIndex,sourceCell) {
+        insertCol:function (colIndex,sourceCell,defaultValue) {
             var rowsNum = this.rowsNum,
                 rowIndex = 0,
                 tableRow, cell,
@@ -2702,9 +2702,15 @@ UE.plugins['table'] = function () {
             }
             //框选时插入不触发contentchange，需要手动更新索引
             this.update();
-            this.updateWidth(backWidth);
+            this.updateWidth(backWidth,defaultValue||{tdPadding:10,tdBorder:1});
         },
-        updateWidth:function (width) {
+        updateWidth:function (width,defaultValue) {
+            var table = this.table,
+                tmpWidth = getWidth(table) - defaultValue.tdPadding * 2 - defaultValue.tdBorder + width;
+            if( tmpWidth<table.ownerDocument.body.offsetWidth){
+                table.setAttribute("width",tmpWidth);
+                return;
+            }
             var tds = domUtils.getElementsByTagName(this.table, "td");
             utils.each(tds, function (td) {
                 td.setAttribute("width", width);
@@ -2760,6 +2766,7 @@ UE.plugins['table'] = function () {
                 tmpCell.colSpan = cellInfo.colSpan;
                 this.setCellContent(tmpCell);
                 tmpCell.setAttribute('valign', me.options.tdvalign);
+                tmpCell.setAttribute('align', cell.getAttribute('align'));
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
                 }
@@ -2795,6 +2802,7 @@ UE.plugins['table'] = function () {
                 tmpCell.rowSpan = cellInfo.rowSpan;
                 this.setCellContent(tmpCell);
                 tmpCell.setAttribute('valign', me.options.tdvalign);
+                tmpCell.setAttribute('align',cell.getAttribute('align'));
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
                 }
