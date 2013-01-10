@@ -1093,7 +1093,7 @@ UE.plugins['table'] = function () {
             startTd = null;
             me.removeListener('mouseover', mouseOverEvent);
         }
-        me._selectionChange();
+        me._selectionChange(250,evt);
     }
 
     function mouseOverEvent(type, evt) {
