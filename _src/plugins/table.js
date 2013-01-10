@@ -1,10 +1,15 @@
+///import core
+///import plugins\inserthtml.js
+///commands 表格
+///commandsName  InsertTable,DeleteTable,InsertParagraphBeforeTable,InsertRow,DeleteRow,InsertCol,DeleteCol,MergeCells,MergeRight,MergeDown,SplittoCells,SplittoRows,SplittoCols
+///commandsTitle  表格,删除表格,表格前插行,前插入行,删除行,前插入列,删除列,合并多个单元格,右合并单元格,下合并单元格,完全拆分单元格,拆分成行,拆分成列
+///commandsDialog  dialogs\table
 /**
  * Created with JetBrains PhpStorm.
  * User: taoqili
  * Date: 12-10-12
  * Time: 上午10:05
  * To change this template use File | Settings | File Templates.
-
  */
 UE.plugins['table'] = function () {
     var me = this,
@@ -360,7 +365,7 @@ UE.plugins['table'] = function () {
             if (getUETableBySelected(me))return;
             var rng = me.selection.getRange();
             var start = rng.startContainer;
-            start = domUtils.findParentByTagName(start,['td', 'th'],true);
+            start = domUtils.findParentByTagName(start, ['td', 'th'], true);
             utils.each(domUtils.getElementsByTagName(me.document, 'table'), function (table) {
                 if (me.fireEvent("excludetable", table) === true) return;
                 table.ueTable = new UETable(table);
@@ -369,21 +374,21 @@ UE.plugins['table'] = function () {
 
                     if (domUtils.isEmptyBlock(td) && td !== start) {
                         domUtils.fillNode(me.document, td)
-                        if(browser.ie && browser.version == 6){
+                        if (browser.ie && browser.version == 6) {
                             td.innerHTML = '&nbsp;'
                         }
                     }
                 });
                 utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
-                    if (domUtils.isEmptyBlock(th) && th !== start ) {
+                    if (domUtils.isEmptyBlock(th) && th !== start) {
                         domUtils.fillNode(me.document, th)
-                        if(browser.ie && browser.version == 6){
+                        if (browser.ie && browser.version == 6) {
                             th.innerHTML = '&nbsp;'
                         }
                     }
                 });
-                table.onmousemove = function(evt){
-                    me.options.tableDragable && toggleDragButton(true,this,me);
+                table.onmousemove = function (evt) {
+                    me.options.tableDragable && toggleDragButton(true, this, me);
                 };
                 table.onmouseout = function () {
                     toggleDragableState(me, false, "", null);
@@ -488,28 +493,35 @@ UE.plugins['table'] = function () {
         me.addListener("mouseup", mouseUpEvent);
 
         var currentRowIndex = 0;
-        me.addListener('tabkeydown',function(){
+        me.addListener('tabkeydown', function () {
             var range = this.selection.getRange(),
                 obj = getTableItemsByRange(me);
-            if(obj.table){
-                var cell = obj.cell,
-                    ua = getUETable(cell);
-                currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
-                var nextCell = ua.getTabNextCell(cell,currentRowIndex);
-                if(nextCell){
-                    if(isEmptyBlock(nextCell)){
-                        range.setStart(nextCell,0).setCursor(false,true)
-                    }else{
-                        range.selectNodeContents(nextCell).select()
+            if (obj.table) {
+                if (obj.caption) {
+                    var cell = domUtils.getElementsByTagName(obj.table, 'th td');
+                    if (cell && cell.length) {
+                        range.setStart(cell[0], 0).setCursor(false, true)
                     }
-                }else{
-                    me.fireEvent('saveScene');
-                    me.__hasEnterExecCommand = true;
-                    this.execCommand('insertrownext');
-                    me.__hasEnterExecCommand = false;
-                    range = this.selection.getRange();
-                    range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
-                    me.fireEvent('saveScene');
+                } else {
+                    var cell = obj.cell,
+                        ua = getUETable(cell);
+                    currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
+                    var nextCell = ua.getTabNextCell(cell, currentRowIndex);
+                    if (nextCell) {
+                        if (isEmptyBlock(nextCell)) {
+                            range.setStart(nextCell, 0).setCursor(false, true)
+                        } else {
+                            range.selectNodeContents(nextCell).select()
+                        }
+                    } else {
+                        me.fireEvent('saveScene');
+                        me.__hasEnterExecCommand = true;
+                        this.execCommand('insertrownext');
+                        me.__hasEnterExecCommand = false;
+                        range = this.selection.getRange();
+                        range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
+                        me.fireEvent('saveScene');
+                    }
                 }
                 return true;
             }
@@ -531,8 +543,8 @@ UE.plugins['table'] = function () {
 
         me.addListener("beforegetcontent", function () {
             switchBoderColor(false);
-            browser.ie && utils.each(me.document.getElementsByTagName('caption'),function(ci){
-                if(domUtils.isEmptyNode(ci)){
+            browser.ie && utils.each(me.document.getElementsByTagName('caption'), function (ci) {
+                if (domUtils.isEmptyNode(ci)) {
                     ci.innerHTML = '&nbsp;'
                 }
             });
@@ -541,21 +553,21 @@ UE.plugins['table'] = function () {
             switchBoderColor(true);
         });
         //修正全屏状态下插入的表格宽度在非全屏状态下撑开编辑器的情况
-        me.addListener("fullscreenchanged",function(type,fullscreen){
-            if(!fullscreen){
-                var ratio = this.body.offsetWidth/document.body.offsetWidth,
-                    tables = domUtils.getElementsByTagName(this.body,"table");
-                utils.each(tables,function(table){
-                    if(table.offsetWidth < me.body.offsetWidth) return false;
-                    var tds = domUtils.getElementsByTagName(table,"td"),
+        me.addListener("fullscreenchanged", function (type, fullscreen) {
+            if (!fullscreen) {
+                var ratio = this.body.offsetWidth / document.body.offsetWidth,
+                    tables = domUtils.getElementsByTagName(this.body, "table");
+                utils.each(tables, function (table) {
+                    if (table.offsetWidth < me.body.offsetWidth) return false;
+                    var tds = domUtils.getElementsByTagName(table, "td"),
                         backWidths = [];
-                    utils.each(tds,function(td){
+                    utils.each(tds, function (td) {
                         backWidths.push(td.offsetWidth);
                     });
-                    for(var i = 0,td;td=tds[i];i++){
-                        td.setAttribute("width",Math.floor(backWidths[i]*ratio));
+                    for (var i = 0, td; td = tds[i]; i++) {
+                        td.setAttribute("width", Math.floor(backWidths[i] * ratio));
                     }
-                    table.setAttribute("width",Math.floor(getTableWidth(me,needIEHack,getDefaultValue(me))))
+                    table.setAttribute("width", Math.floor(getTableWidth(me, needIEHack, getDefaultValue(me))))
                 });
             }
         });
@@ -590,7 +602,7 @@ UE.plugins['table'] = function () {
                     if (state != -1 && (firstState === undefined || firstState == state)) {
                         var isEmpty = domUtils.isEmptyNode(td);
                         me._ignoreContentChange = true;
-                        result = oldExecCommand.apply(me,arguments);
+                        result = oldExecCommand.apply(me, arguments);
                         me._ignoreContentChange = false;
                         var reg = new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
                         if (isEmpty != domUtils.isEmptyNode(td) && !td[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length) {
@@ -709,8 +721,8 @@ UE.plugins['table'] = function () {
                     toggleDragableState(me, target ? !!state : false, target ? state : '', pos, target);
                 }
 //                toggleDragButton(inTable(pos,table),table);
-            }else{
-                toggleDragButton(false,table,me);
+            } else {
+                toggleDragButton(false, table, me);
             }
 
         } catch (e) {
@@ -718,57 +730,62 @@ UE.plugins['table'] = function () {
         }
     }
     var dragButtomTimer;
-    function toggleDragButton(show,table,editor){
-        if(!show){
-            if(dragOver)return;
-            dragButtomTimer = setTimeout(function(){
+
+    function toggleDragButton(show, table, editor) {
+        if (!show) {
+            if (dragOver)return;
+            dragButtomTimer = setTimeout(function () {
                 !dragOver && dragButton && dragButton.parentNode && dragButton.parentNode.removeChild(dragButton);
-            },2000);
-        }else{
-            createDragButton(table,editor);
+            }, 2000);
+        } else {
+            createDragButton(table, editor);
         }
     }
-    function createDragButton(table,editor){
+
+    function createDragButton(table, editor) {
         var pos = domUtils.getXY(table),
-            doc= table.ownerDocument;
-        if(dragButton && dragButton.parentNode )return dragButton;
+            doc = table.ownerDocument;
+        if (dragButton && dragButton.parentNode)return dragButton;
         dragButton = doc.createElement("div");
         dragButton.contentEditable = false;
         dragButton.innerHTML = "";
-        dragButton.style.cssText = "width:15px;height:15px;background-image:url("+editor.options.UEDITOR_HOME_URL+"dialogs/table/dragicon.png);position: absolute;cursor:move;top:" + (pos.y - 15) + "px;left:"+(pos.x)+"px;";
+        dragButton.style.cssText = "width:15px;height:15px;background-image:url(" + editor.options.UEDITOR_HOME_URL + "dialogs/table/dragicon.png);position: absolute;cursor:move;top:" + (pos.y - 15) + "px;left:" + (pos.x) + "px;";
         domUtils.unSelectable(dragButton);
-        dragButton.onmouseover = function(evt){
+        dragButton.onmouseover = function (evt) {
             dragOver = true;
         };
-        dragButton.onmouseout = function(evt){
+        dragButton.onmouseout = function (evt) {
             dragOver = false;
         };
-        domUtils.on(dragButton,'click',function(type,evt){
-            doClick(evt,this);
+        domUtils.on(dragButton, 'click', function (type, evt) {
+            doClick(evt, this);
         });
-        domUtils.on(dragButton,'dblclick',function(type,evt){
+        domUtils.on(dragButton, 'dblclick', function (type, evt) {
             doDblClick(evt);
         });
-        domUtils.on( dragButton, 'dragstart', function (type,evt) {
+        domUtils.on(dragButton, 'dragstart', function (type, evt) {
             domUtils.preventDefault(evt);
-        } );
+        });
         var timer;
-        function doClick(evt,button) {
+
+        function doClick(evt, button) {
             // 部分浏览器下需要清理
             clearTimeout(timer);
-            timer = setTimeout(function() {
-                editor.fireEvent("startDragTable",table,button);
+            timer = setTimeout(function () {
+                editor.fireEvent("startDragTable", table, button);
             }, 300);
         }
+
         function doDblClick(evt) {
             clearTimeout(timer);
-            var ut  = getUETable(table),
+            var ut = getUETable(table),
                 start = table.rows[0].cells[0],
                 end = ut.getLastCell(),
-                range = ut.getCellsRange(start,end);
+                range = ut.getCellsRange(start, end);
             editor.selection.getRange().setStart(start, 0).setCursor(false, true);
             ut.setSelected(range);
         }
+
         doc.body.appendChild(dragButton);
     }
 
@@ -1012,17 +1029,17 @@ UE.plugins['table'] = function () {
         var me = this;
         //清除表格上原生跨选问题
         var range = me.selection.getRange(),
-            start = domUtils.findParentByTagName(range.startContainer,'table',true),
-            end = domUtils.findParentByTagName(range.endContainer,'table',true);
+            start = domUtils.findParentByTagName(range.startContainer, 'table', true),
+            end = domUtils.findParentByTagName(range.endContainer, 'table', true);
 
-        if(start || end ){
-            if(start === end){
-                start = domUtils.findParentByTagName(range.startContainer,['td','th','caption'],true);
-                end = domUtils.findParentByTagName(range.endContainer,['td','th','caption'],true);
-                if(start !== end){
+        if (start || end) {
+            if (start === end) {
+                start = domUtils.findParentByTagName(range.startContainer, ['td', 'th', 'caption'], true);
+                end = domUtils.findParentByTagName(range.endContainer, ['td', 'th', 'caption'], true);
+                if (start !== end) {
                     me.selection.clearRange()
                 }
-            }else{
+            } else {
                 me.selection.clearRange()
             }
         }
@@ -1081,13 +1098,13 @@ UE.plugins['table'] = function () {
             startTd = null;
             me.removeListener('mouseover', mouseOverEvent);
         }
-        me._selectionChange();
+        me._selectionChange(250,evt);
     }
 
     function mouseOverEvent(type, evt) {
         var me = this,
-            tar =evt.target || evt.srcElement ;
-        currentTd = domUtils.findParentByTagName(tar,"td",true)||domUtils.findParentByTagName(tar,"th",true);
+            tar = evt.target || evt.srcElement;
+        currentTd = domUtils.findParentByTagName(tar, "td", true) || domUtils.findParentByTagName(tar, "th", true);
         //需要判断两个TD是否位于同一个表格内
         if (startTd && currentTd &&
             ((startTd.tagName == "TD" && currentTd.tagName == "TD") || (startTd.tagName == "TH" && currentTd.tagName == "TH")) &&
@@ -1203,7 +1220,7 @@ UE.plugins['table'] = function () {
         }
     }
 
-    function getTableWidth(editor,needIEHack,defaultValue){
+    function getTableWidth(editor, needIEHack, defaultValue) {
         var body = editor.body;
         return body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (editor.options.offsetWidth || 0);
     }
@@ -1236,7 +1253,7 @@ UE.plugins['table'] = function () {
             }
             var me = this,
                 defaultValue = getDefaultValue(me),
-                tableWidth = getTableWidth(me,needIEHack,defaultValue),
+                tableWidth = getTableWidth(me, needIEHack, defaultValue),
                 tdWidth = Math.floor(tableWidth / opt.numCols - defaultValue.tdPadding * 2 - defaultValue.tdBorder);
             //todo其他属性
             !opt.tdvalign && (opt.tdvalign = me.options.tdvalign);
@@ -1284,7 +1301,7 @@ UE.plugins['table'] = function () {
                 }
                 rng.setCursor(false, true)
                 toggleDragableState(this, false, "", null);
-                if(dragButton)domUtils.remove(dragButton);
+                if (dragButton)domUtils.remove(dragButton);
             }
 
         }
@@ -1474,11 +1491,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length ? cellInfo.rowIndex:ut.cellsRange.beginRowIndex,'');
             if (!ut.selectedTds.length) {
-                ut.insertRow(cellInfo.rowIndex,cell);
+                ut.insertRow(cellInfo.rowIndex, cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endRowIndex - range.beginRowIndex + 1; i < len; i++) {
-                    ut.insertRow(range.beginRowIndex,cell);
+                    ut.insertRow(range.beginRowIndex, cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -1499,11 +1516,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length? cellInfo.rowIndex + cellInfo.rowSpan : ut.cellsRange.endRowIndex + 1,'');
             if (!ut.selectedTds.length) {
-                ut.insertRow(cellInfo.rowIndex + cellInfo.rowSpan,cell);
+                ut.insertRow(cellInfo.rowIndex + cellInfo.rowSpan, cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endRowIndex - range.beginRowIndex + 1; i < len; i++) {
-                    ut.insertRow(range.endRowIndex + 1,cell);
+                    ut.insertRow(range.endRowIndex + 1, cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -1563,11 +1580,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex:ut.cellsRange.beginColIndex);
             if (!ut.selectedTds.length) {
-                ut.insertCol(cellInfo.colIndex,cell);
+                ut.insertCol(cellInfo.colIndex, cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endColIndex - range.beginColIndex + 1; i < len; i++) {
-                    ut.insertCol(range.beginColIndex,cell);
+                    ut.insertCol(range.beginColIndex, cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -1587,11 +1604,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex + cellInfo.colSpan:ut.cellsRange.endColIndex +1);
             if (!ut.selectedTds.length) {
-                ut.insertCol(cellInfo.colIndex + cellInfo.colSpan,cell);
+                ut.insertCol(cellInfo.colIndex + cellInfo.colSpan, cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endColIndex - range.beginColIndex + 1; i < len; i++) {
-                    ut.insertCol(range.endColIndex + 1,cell);
+                    ut.insertCol(range.endColIndex + 1, cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -1767,7 +1784,7 @@ UE.plugins['table'] = function () {
                             var width = table.offsetWidth,
                                 bodyWidth = me.body.offsetWidth;
                             if (width > bodyWidth) {
-                                table.setAttribute('width',getTableWidth(me,needIEHack,defaultValue));
+                                table.setAttribute('width', getTableWidth(me, needIEHack, defaultValue));
                             }
 
                         }
@@ -1789,7 +1806,7 @@ UE.plugins['table'] = function () {
 
             function getAverageWidth() {
                 var tb = ut.table,
-                    averageWidth, sumWidth=0, colsNum=0,
+                    averageWidth, sumWidth = 0, colsNum = 0,
                     tbAttr = getDefaultValue(me, tb);
 
                 if (ut.isFullRow()) {
@@ -1905,12 +1922,12 @@ UE.plugins['table'] = function () {
 
             if (!ut) {
                 var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
                 if (!/caption/ig.test(cell.tagName)) {
                     domUtils.setAttributes(cell, data);
-                }else{
-                    cell.style.textAlign=data.align;
-                    cell.style.verticalAlign=data.vAlign;
+                } else {
+                    cell.style.textAlign = data.align;
+                    cell.style.verticalAlign = data.vAlign;
                 }
                 me.selection.getRange().setCursor(true);
             } else {
@@ -1921,7 +1938,7 @@ UE.plugins['table'] = function () {
         }
     };
     //表格对齐方式
-    UE.commands['tablealignment']={
+    UE.commands['tablealignment'] = {
         queryCommandState:function () {
             return getTableItemsByRange(this).table ? 0 : -1
         },
@@ -1931,13 +1948,13 @@ UE.plugins['table'] = function () {
                 table = start && domUtils.findParentByTagName(start, ["table"], true);
 
             if (table) {
-                table.style.margin="";
-                browser.ie?table.style.styleFloat="":table.style.cssFloat="";
-                if(/float/.test(data[0])){
-                    browser.ie?table.style.styleFloat=data[1]:table.style.cssFloat=data[1];
-                }else{
-                    table.style[data[0]]=data[1];
-                }
+                var obj = {};
+                obj[data[0]] = data[1];
+                domUtils.setStyles(table,{
+                    float:'',
+                    margin:''
+                });
+                domUtils.setStyles(table, obj);
             }
         }
     };
@@ -2059,19 +2076,19 @@ UE.plugins['table'] = function () {
                 showError(e);
             }
         },
-        getTabNextCell : function(cell,preRowIndex){
+        getTabNextCell:function (cell, preRowIndex) {
             var cellInfo = this.getCellInfo(cell),
                 rowIndex = preRowIndex || cellInfo.rowIndex,
                 colIndex = cellInfo.colIndex + 1 + (cellInfo.colSpan - 1),
                 nextCell;
-            try{
+            try {
                 nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
-            }catch(e){
-                try{
+            } catch (e) {
+                try {
                     rowIndex = rowIndex * 1 + 1;
                     colIndex = 0;
                     nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
-                }catch(e){
+                } catch (e) {
                 }
             }
             return nextCell;
@@ -2674,10 +2691,10 @@ UE.plugins['table'] = function () {
                     this.setCellContent(cell);
                     cell.setAttribute('valign', me.options.tdvalign);
                     preCell && cell.setAttribute('width', preCell.getAttribute('width'));
-                    if(!colIndex){
-                        tableRow.insertBefore(cell,tableRow.cells[0]);
-                    }else{
-                        domUtils.insertAfter(tableRow.cells[tableRow.cells.length-1],cell);
+                    if (!colIndex) {
+                        tableRow.insertBefore(cell, tableRow.cells[0]);
+                    } else {
+                        domUtils.insertAfter(tableRow.cells[tableRow.cells.length - 1], cell);
                     }
                     replaceTdToTh(rowIndex, cell, tableRow)
                 }
@@ -2695,7 +2712,7 @@ UE.plugins['table'] = function () {
                         this.setCellContent(cell);
                         cell.setAttribute('valign', me.options.tdvalign);
                         preCell && cell.setAttribute('width', preCell.getAttribute('width'))
-                        tableRow.insertBefore(cell,preCell);
+                        tableRow.insertBefore(cell, preCell);
                     }
                     replaceTdToTh(rowIndex, cell, tableRow);
                 }
@@ -2896,11 +2913,12 @@ UE.plugins['table'] = function () {
         //排除了非td内部以及用于代码高亮部分的td
         return target && !(editor.fireEvent("excludetable", target) === true) ? target : null;
     }
-    function cloneCell(cell){
+
+    function cloneCell(cell) {
         var type = cell.nodeType;
-        if(!type) return this.table.ownerDocument.createElement(cell);
-        var flag = domUtils.hasClass(cell,"selectTdClass");
-        flag && domUtils.removeClasses(cell,"selectTdClass");
+        if (!type) return this.table.ownerDocument.createElement(cell);
+        var flag = domUtils.hasClass(cell, "selectTdClass");
+        flag && domUtils.removeClasses(cell, "selectTdClass");
         var tmpCell = cell.cloneNode(true);
         tmpCell.rowSpan = 1;
         tmpCell.colSpan = 1;
@@ -2910,7 +2928,7 @@ UE.plugins['table'] = function () {
         tmpCell.style.borderLeftWidth = cell.style.borderRightWidth;
         tmpCell.style.borderTopColor = cell.style.borderBottomColor;
         tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
-        flag && domUtils.addClass(cell,"selectTdClass");
+        flag && domUtils.addClass(cell, "selectTdClass");
         return tmpCell;
     }
 };

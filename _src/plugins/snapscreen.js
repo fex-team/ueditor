@@ -4,52 +4,62 @@
 /**
  * 截屏插件
  */
-UE.commands['snapscreen'] = {
-    execCommand: function(){
-        var me = this,lang = me.getLang("snapScreen_plugin");
-        me.setOpt({
-               snapscreenServerPort: 80                                    //屏幕截图的server端端口
-              ,snapscreenImgAlign: 'left'                                //截图的图片默认的排版方式
-        });
-        var editorOptions = me.options;
+UE.plugins['snapscreen'] = function(){
+    var me = this,
+        doc,
+        snapplugin;
+    me.addListener("ready",function(){
+        var container = me.container;
+        doc = container.ownerDocument || container.document;
+        snapplugin = doc.createElement("object");
+        snapplugin.type = "application/x-pluginbaidusnap";
+        snapplugin.setAttribute("width","0");
+        snapplugin.setAttribute("height","0");
+        container.appendChild(snapplugin);
+    });
+    me.commands['snapscreen'] = {
+        execCommand: function(){
+            var me = this,lang = me.getLang("snapScreen_plugin");
+            me.setOpt({
+                  snapscreenServerPort: 80                                    //屏幕截图的server端端口
+                 ,snapscreenImgAlign: 'left'                                //截图的图片默认的排版方式
+           });
+           var editorOptions = me.options;
 
-        if(!browser.ie){
-            alert(lang.browserMsg);
-            return;
-        }
+            var onSuccess = function(rs){
+                try{
+                    rs = eval("("+ rs +")");
+                }catch(e){
+                    alert(lang.callBackErrorMsg);
+                    return;
+                }
 
-        var onSuccess = function(rs){
+                if(rs.state != 'SUCCESS'){
+                    alert(rs.state);
+                    return;
+                }
+                me.execCommand('insertimage', {
+                    src: editorOptions.snapscreenPath + rs.url,
+                    floatStyle: editorOptions.snapscreenImgAlign,
+                    data_ue_src:editorOptions.snapscreenPath + rs.url
+                });
+            };
+            var onStartUpload = function(){
+                //开始截图上传
+            };
+            var onError = function(){
+                alert(lang.uploadErrorMsg);
+            };
             try{
-                rs = eval("("+ rs +")");
+                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, editorOptions.snapscreenServerPort+"");
+                onSuccess(ret);
             }catch(e){
-                alert(lang.callBackErrorMsg);
-                return;
+                me.ui._dialogs['snapscreenDialog'].open();
             }
-
-            if(rs.state != 'SUCCESS'){
-                alert(rs.state);
-                return;
-            }
-            me.execCommand('insertimage', {
-                src: editorOptions.snapscreenPath + rs.url,
-                floatStyle: editorOptions.snapscreenImgAlign,
-                data_ue_src:editorOptions.snapscreenPath + rs.url
-            });
-        };
-        var onStartUpload = function(){
-            //开始截图上传
-        };
-        var onError = function(){
-            alert(lang.uploadErrorMsg);
-        };
-        try{
-            var nativeObj = new ActiveXObject('Snapsie.CoSnapsie');
-            nativeObj.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, editorOptions.snapscreenServerPort, onStartUpload,onSuccess,onError);
-        }catch(e){
-            me.ui._dialogs['snapscreenDialog'].open();
+        },
+        queryCommandState: function(){
+            return this.highlight ? -1 :0;
         }
-    },
-    queryCommandState: function(){
-        return !browser.ie ? -1 :0;
-    }
-};
+    };
+}
+

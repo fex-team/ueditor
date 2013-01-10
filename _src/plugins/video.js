@@ -3,7 +3,7 @@
 ///commands 视频
 ///commandsName InsertVideo
 ///commandsTitle  插入视频
-///commandsDialog  dialogs\video\video.html
+///commandsDialog  dialogs\video
 UE.plugins['video'] = function (){
     var me =this,
         div;

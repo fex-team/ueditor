@@ -376,7 +376,7 @@ var imageUploader = {},
         img.onload = function () {
             flagImg = this;
             showImageInfo(this);
-            showPreviewImage(this);
+            showPreviewImage(this,true);
             this.onload = null;
         };
         img.onerror = function () {
@@ -416,11 +416,14 @@ var imageUploader = {},
     function showPreviewImage(img, needClone) {
         var tmpWidth = img.width, tmpHeight = img.height;
         // byxuheng ie9下img.width=tmpWidth这样赋值不上
-        if (!(browser.ie && browser.version == 9) && needClone) {
+        if (needClone) {
             //针对编辑图片时
+            var ie9 = browser.ie && browser.version==9;
             img = img.cloneNode(true);
             img.width = tmpWidth;
+            ie9 && img.setAttribute("width",tmpWidth);
             img.height = tmpHeight;
+            ie9 && img.setAttribute("height",tmpHeight);
             flagImg = img;
         }
         var maxWidth = 262;
@@ -458,6 +461,11 @@ var imageUploader = {},
             }
         }
     }
+
+    function scaling(sizeOpt,ratio){
+
+    }
+
 
     /**
      * 创建flash实例
@@ -605,6 +613,7 @@ var imageUploader = {},
                                         var w = this.width, h = this.height;
                                         scale(this, 100, 120, 80);
                                         this.title = lang.toggleSelect + w + "X" + h;
+                                        this.onload = null;
                                     };
                                     img.setAttribute(k < 35 ? "src" : "lazy_src", editor.options.imageManagerPath + ci.replace(/\s+|\s+/ig, ""));
                                     img.setAttribute("data_ue_src", editor.options.imageManagerPath + ci.replace(/\s+|\s+/ig, ""));

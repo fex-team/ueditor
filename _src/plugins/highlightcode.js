@@ -3,7 +3,7 @@
 ///commands 插入代码
 ///commandsName  HighlightCode
 ///commandsTitle  插入代码
-///commandsDialog  dialogs\code\code.html
+///commandsDialog  dialogs\highlightcode
 UE.plugins['highlightcode'] = function() {
     var me = this;
     if(!/highlightcode/i.test(me.options.toolbars.join(''))){
@@ -147,7 +147,7 @@ UE.plugins['highlightcode'] = function() {
 
     function changePre(){
         var me = this;
-        if(!me.window.SyntaxHighlighter)return;
+        if(!me.window||!me.window.SyntaxHighlighter)return;
         utils.each(domUtils.getElementsByTagName(me.document,"pre"),function(pi){
             if(domUtils.hasClass(pi,'brush')){
                 me.window.SyntaxHighlighter.highlight(pi);
