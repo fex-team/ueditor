@@ -38,16 +38,16 @@
                 screenHt = uiUtils.getViewportRect().height,
                 subPop=uiUtils.getClientRect(node);
 
-            if(/hidden/ig.test(domUtils.getComputedStyle(node,"visibility"))){
+            if(/none/ig.test(domUtils.getComputedStyle(node,"display"))){
                 if((subPop.top+subPop.height)>screenHt)
                     node.style.top=(-subPop.height-cur.offsetHeight)+"px";
                 else
                     node.style.top="";
 
-                node.style.visibility="visible";
+                node.style.display="block";
                 domUtils.addClass(cur,"edui-state-opened");
             }else{
-                node.style.visibility="hidden";
+                node.style.display="none";
                 domUtils.removeClasses(cur,"edui-state-opened")
             }
         },
