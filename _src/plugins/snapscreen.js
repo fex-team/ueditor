@@ -13,6 +13,7 @@ UE.plugins['snapscreen'] = function(){
         doc = container.ownerDocument || container.document;
         snapplugin = doc.createElement("object");
         snapplugin.type = "application/x-pluginbaidusnap";
+        snapplugin.style = "display:none";
         snapplugin.setAttribute("width","0");
         snapplugin.setAttribute("height","0");
         container.appendChild(snapplugin);
