@@ -20,6 +20,14 @@ UE.plugins['keystrokes'] = function() {
                 rng.setEndAfter(tmpNode)
             }
             rng.txtToElmBoundary();
+            //结束边界可能放到了br的前边，要把br包含进来
+            // x[xxx]<br/>
+            if(rng.endContainer && rng.endContainer.nodeType == 1){
+                tmpNode = rng.endContainer.childNodes[rng.endOffset];
+                if(tmpNode && domUtils.isBr(tmpNode)){
+                    rng.setEndAfter(tmpNode);
+                }
+            }
             if(rng.startOffset == 0){
                 tmpNode = rng.startContainer;
                 if(domUtils.isBoundaryNode(tmpNode,'firstChild') ){
