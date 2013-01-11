@@ -29,6 +29,7 @@ UE.plugins['list'] = function () {
 
     var customStyle = {
         'chinese' : 'cn',
+        'chinese1' : 'cn1',
         'number' : 'num',
         'dash'  : 'dash'
     };
@@ -51,29 +52,57 @@ UE.plugins['list'] = function () {
         },
         listDefaultPaddingLeft : '30'
     } );
+    var liiconpath = me.options.UEDITOR_HOME_URL + 'themes/default/images/list/';
+
     me.ready(function () {
-        utils.cssRule('list', 'ol,ul{margin:0;pading:0;}ol.custom,ul.custom{list-style:none;}' +
-            '.custom li{background:no-repeat 0 3px;}' +
-//            '.custom li p{padding:0;margin:0;line-height:1;}' +
-            'li{clear:both;}', me.document);
+        var customCss = [];
+        for(var p in customStyle){
+            if(p == 'dash'){
+                customCss.push('li.list-' + customStyle[p] + '{background-image:url(' + liiconpath +customStyle[p]+'.gif)}');
+                customCss.push('ul.custom_'+p+'{list-style:none;}ul.custom_'+p+' li{background:no-repeat 0 3px;}');
+            }else{
+                for(var i= 0;i<99;i++){
+                    customCss.push('li.list-' + customStyle[p] + '-3-' + i + '{background-image:url(' + liiconpath + 'list-'+customStyle[p]+'-3-' + i + '.gif)}')
+                }
+                customCss.push('ol.custom_'+p+'{list-style:none;}ol.custom_'+p+' li{background-position:0 3px;background-repeat:no-repeat}');
+            }
+            switch(p){
+                case 'chinese':
+                    customCss.push('li.list-chinese-paddingleft-1{padding-left:40px}');
+                    customCss.push('li.list-chinese-paddingleft-2{padding-left:55px}');
+                    customCss.push('li.list-chinese-paddingleft-3{padding-left:65px}');
+                    break;
+                case 'number':
+                    customCss.push('li.list-number-paddingleft-1{padding-left:30px}');
+                    customCss.push('li.list-number-paddingleft-2{padding-left:37px}');
+                    customCss.push('li.list-number-paddingleft-3{padding-left:37px}');
+                    break;
+                case 'dash':
+                    customCss.push('li.list-dash-paddingleft{padding-left:35px}');
+            }
+        }
+        customCss.push('.list-paddingleft-1{padding-left:0}');
+        customCss.push('.list-paddingleft-2{padding-left:'+me.options.listDefaultPaddingLeft+'px}');
+        customCss.push('.list-paddingleft-3{padding-left'+me.options.listDefaultPaddingLeft*2+'px}');
+        utils.cssRule('list', 'ol,ul{margin:0;pading:0;}li{clear:both;}'+customCss.join('\n'), me.document);
     });
 
-    var liiconpath = me.options.UEDITOR_HOME_URL + 'themes/default/images/list/';
+
 
     //调整索引标签
     me.addListener('contentchange',function(){
         utils.each(domUtils.getElementsByTagName(me.document,'ol ul'),function(node){
-            var index = 0,paddingLeft = me.options.listDefaultPaddingLeft,parent = node.parentNode;
-            if( domUtils.hasClass(node,'custom')){
-                if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,'custom'))){
-                    paddingLeft = 0;
+            var index = 0,type = 2,parent = node.parentNode;
+            if( domUtils.hasClass(node,/custom_/)){
+                if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/))){
+                    type = 1;
                 }
             }else{
-                if(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,'custom')){
-                    paddingLeft *= 2;
+                if(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/)){
+                    type = 3;
                 }
             }
-            node.style.paddingLeft = paddingLeft + 'px';
+            node.className = utils.trim(node.className.replace(/list-paddingleft-\w+/,'')) + ' list-paddingleft-' + type;
             utils.each(domUtils.getElementsByTagName(node,'li'),function(li){
                 if(!li.firstChild){
                     domUtils.remove(li);
@@ -83,40 +112,34 @@ UE.plugins['list'] = function () {
                     return;
                 }
                 index++;
-                if(domUtils.hasClass(node,'custom') ){
-                    var paddingLeft = '40px',currentStyle = node.getAttribute('_custom_style');
+                if(domUtils.hasClass(node,/custom_/) ){
+                    var paddingLeft = 1,currentStyle = node.className.match(/custom_(\w+)/)[1];
                     if(node.tagName == 'OL'){
                         if(currentStyle){
                             switch(currentStyle){
                                 case 'chinese' :
                                     if(index > 10 && (index % 10 == 0 || index > 10 && index < 20)){
-                                        paddingLeft = '55px'
+                                        paddingLeft = 2
                                     }else if(index > 20){
-                                        paddingLeft = '65px'
+                                        paddingLeft = 3
                                     }
                                     break;
                                 case 'number' :
-                                    paddingLeft = '30px';
                                     if(index > 10){
-                                        paddingLeft = '37px'
+                                        paddingLeft = 2
                                     }
                             }
                         }
-                        li.style.backgroundImage = 'url(' + liiconpath + 'list-'+customStyle[currentStyle]+'-3-' + index + '.gif)';
-                        li.style.paddingLeft = paddingLeft;
+                        li.className = 'list-'+customStyle[currentStyle]+'-3-' + index + ' ' + 'list-'+currentStyle+'-paddingleft-' + paddingLeft;
                     }else{
-
-                        li.style.backgroundImage = 'url(' + liiconpath + customStyle[currentStyle] + '.gif)';
-                        li.style.paddingLeft = '35px';
+                        li.className = 'list-'+customStyle[currentStyle]  + ' ' + 'list-'+currentStyle+'-paddingleft';
                     }
 
                 }else{
-                    li.style.backgroundImage = '';
-                    li.style.paddingLeft = '';
-
+                    li.className = li.className.replace(/list-[\w\-]+/gi,'');
                 }
-                if(!li.getAttribute('style')){
-                    domUtils.removeAttributes(li,'style')
+                if(!li.getAttribute('class').replace(/\s/g,'')){
+                    domUtils.removeAttributes(li,'class')
                 }
             })
         })
@@ -124,14 +147,14 @@ UE.plugins['list'] = function () {
 
     function adjustList(list, tag, style) {
         var nextList = list.nextSibling;
-        if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (nextList.getAttribute('_custom_style') || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
+        if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (domUtils.hasClass(nextList,/custom_/) || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(nextList, list);
             if (nextList.childNodes.length == 0) {
                 domUtils.remove(nextList);
             }
         }
         var preList = list.previousSibling;
-        if (preList && preList.nodeType == 1 && preList.tagName.toLowerCase() == tag && (preList.getAttribute('_custom_style') || domUtils.getStyle(preList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
+        if (preList && preList.nodeType == 1 && preList.tagName.toLowerCase() == tag && (domUtils.hasClass(preList,/custom_/) || domUtils.getStyle(preList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(list, preList);
         }
         domUtils.isEmptyBlock(list) && domUtils.remove(list);
@@ -139,8 +162,7 @@ UE.plugins['list'] = function () {
 
     function setListStyle(list,style){
         if(customStyle[style]){
-            list.className = 'custom';
-            list.setAttribute('_custom_style',style);
+            list.className = 'custom_' + style;
         }
         try{
             domUtils.setStyle(list, 'list-style-type', style);
@@ -431,7 +453,7 @@ UE.plugins['list'] = function () {
         if(li){
             var bk,parentLi = li.parentNode,
                 list = me.document.createElement(parentLi.tagName),
-                index = utils.indexOf(listStyle[list.tagName], parentLi.getAttribute('_custom_style')||domUtils.getComputedStyle(parentLi, 'list-style-type'));
+                index = utils.indexOf(listStyle[list.tagName], domUtils.hasClass(parentLi,/custom_/)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
             index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
             var currentStyle = listStyle[list.tagName][index];
             var current = li;
@@ -529,7 +551,7 @@ UE.plugins['list'] = function () {
                         if (domUtils.isEmptyNode(tmp.nextSibling)) {
                             domUtils.remove(tmp.nextSibling)
                         }
-                        var nodeStyle = startParent.getAttribute('_custom_style') || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
+                        var nodeStyle = domUtils.hasClass(startParent,/custom_/) || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
                         if (startParent.tagName.toLowerCase() == tag && nodeStyle == style) {
                             for (var i = 0, ci, tmpFrag = me.document.createDocumentFragment(); ci = frag.childNodes[i++];) {
                                 while (ci.firstChild) {
@@ -718,7 +740,7 @@ UE.plugins['list'] = function () {
             },
             queryCommandValue:function (command) {
                 var node = domUtils.filterNodeList(this.selection.getStartElementPath(), command.toLowerCase() == 'insertorderedlist' ? 'ol' : 'ul');
-                return node ? node.getAttribute('_custom_style') || domUtils.getComputedStyle(node, 'list-style-type') : null;
+                return node ? domUtils.hasClass(node,/custom_/) || domUtils.getComputedStyle(node, 'list-style-type') : null;
             }
         };
 };

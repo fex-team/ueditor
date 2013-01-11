@@ -106,14 +106,17 @@ UE.plugins['undo'] = function () {
         };
 
         this.getScene = function () {
+            var rng = me.selection.getRange(),
+                restoreAddress = rng.createAddress(),
+                rngAddress = rng.createAddress(false,true);
+
             me.fireEvent('beforegetscene');
-            var range = me.selection.getRange(),
-                cont = me.body.innerHTML.replace(fillchar, '');
-            //有可能边界落到了<table>|<tbody>这样的位置，所以缩一下位置
-            range.shrinkBoundary();
+            var cont = me.body.innerHTML.replace(fillchar, '');
             browser.ie && (cont = cont.replace(/>&nbsp;</g, '><').replace(/\s*</g, '<').replace(/>\s*/g, '>'));
-            var rngAddress = range.createAddress(false, true);
             me.fireEvent('aftergetscene');
+            try{
+                rng.moveToAddress(restoreAddress).select();
+            }catch(e){}
             return {
                 address:rngAddress,
                 content:cont

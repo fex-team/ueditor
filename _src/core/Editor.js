@@ -448,7 +448,9 @@
             //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
                     html = me.body.innerHTML.replace( reg, '' ).replace( />[\t\r\n]*?</g, '><' );
             me.fireEvent( 'aftergetcontent', cmd );
-            range.moveToAddress(address).select(true);
+            try{
+                range.moveToAddress(address).select(true);
+            }catch(e){}
             if ( me.serialize ) {
                 var node = me.serialize.parseHTML( html );
                 node = me.serialize.transformOutput( node );
