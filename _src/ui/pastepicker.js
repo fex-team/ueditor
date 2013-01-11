@@ -20,9 +20,13 @@
                 '<div class="edui-pastecontainer">' +
                 '<div class="edui-title">'+this.editor.getLang("pasteOpt")+'</div>'+
                 '<div class="edui-button">' +
-                '<div class="edui-richtxticon edui-icon" title="'+this.editor.getLang("pasteSourceFormat")+'" onclick="$$.format(false)" stateful></div>'+
-                '<div class="edui-tagicon edui-icon" title="'+this.editor.getLang("tagFormat")+'" onclick="$$.format(2)" stateful></div>' +
-                '<div class="edui-plaintxticon edui-icon" title="'+this.editor.getLang("pasteTextFormat")+'" onclick="$$.format(true)" stateful></div>' +
+                    '<div title="'+this.editor.getLang("pasteSourceFormat")+'" onclick="$$.format(false)" stateful>' +
+                    '<div class="edui-richtxticon"></div></div>'+
+                    '<div title="'+this.editor.getLang("tagFormat")+'" onclick="$$.format(2)" stateful>' +
+                    '<div class="edui-tagicon"></div></div>'+
+                    '<div title="'+this.editor.getLang("pasteTextFormat")+'" onclick="$$.format(true)" stateful>' +
+                    '<div class="edui-plaintxticon"></div></div>'+
+                '</div>' +
                 '</div>' +
                 '</div>'
         },
