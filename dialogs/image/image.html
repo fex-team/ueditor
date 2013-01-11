@@ -179,7 +179,7 @@
                     //if(config.id==2){ //设置第三张图片的对应参数
                     //     config.data={"myParam":"value"}
                     // }
-                    flashObj.addCustomizedParams(config.id,config.data);
+                    //flashObj.addCustomizedParams(config.id,config.data);
                 }
             };
             imageUploader.init(flashOptions,callbacks);
@@ -192,7 +192,7 @@
                 var postParams = {
                     "dir":baidu.g("savePath").value
                 };
-                imageUploader.setPostParams(postParams);
+                //imageUploader.setPostParams(postParams);
                 flashObj.upload();
                 this.style.display = "none";
                 $G("savePath").parentNode.style.display = "none";

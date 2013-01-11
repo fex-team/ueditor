@@ -40,3 +40,4 @@ img.review{width:90px;height:76px;border:2px solid #9cb945;background:#FFFFFF;ba
 .wrapper .tabbody{position:relative;float:left;clear:both;padding:10px;width: 95%;}
 .tabbody table{width: 100%;}
 .tabbody td{border:1px solid #BAC498;}
+.tabbody td span{display: block;zoom:1;padding:0 4px;}
