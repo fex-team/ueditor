@@ -1177,6 +1177,16 @@
             getNode(addr.startAddress,true);
             !ignoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
+        },
+        equals : function(rng){
+            for(var p in this){
+                if(this.hasOwnProperty(p)){
+                    if(this[p] !== rng[p])
+                        return false
+                }
+            }
+            return true;
+
         }
     };
 })();

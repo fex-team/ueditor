@@ -317,13 +317,13 @@
             try {
                 me.document.execCommand( 'enableInlineTableEditing', false, options.tableNativeEditInFF );
             } catch ( e ) {}
-//            try {
-//                me.document.execCommand( 'enableObjectResizing', false, false );
-//            } catch ( e ) {
+            try {
+                me.document.execCommand( 'enableObjectResizing', false, false );
+            } catch ( e ) {
 //                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
 //                    domUtils.preventDefault(evt)
 //                });
-//            }
+            }
             me._bindshortcutKeys();
             me.isReady = 1;
             me.fireEvent( 'ready' );
@@ -441,11 +441,14 @@
             if ( fn ? !fn() : !this.hasContents() ) {
                 return '';
             }
+            var range = me.selection.getRange(),
+                address = range.createAddress();
             me.fireEvent( 'beforegetcontent', cmd );
             var reg = new RegExp( domUtils.fillChar, 'g' ),
             //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
                     html = me.body.innerHTML.replace( reg, '' ).replace( />[\t\r\n]*?</g, '><' );
             me.fireEvent( 'aftergetcontent', cmd );
+            range.moveToAddress(address).select();
             if ( me.serialize ) {
                 var node = me.serialize.parseHTML( html );
                 node = me.serialize.transformOutput( node );
