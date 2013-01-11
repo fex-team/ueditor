@@ -1584,7 +1584,7 @@ UE.plugins['table'] = function () {
                     ut.insertCol(range.beginColIndex, cell);
                 }
             }
-            rng.moveToBookmark(bk).select();
+            rng.moveToBookmark(bk).select(true);
         }
     };
     UE.commands["insertcolnext"] = {
