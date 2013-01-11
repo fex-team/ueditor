@@ -467,7 +467,7 @@ UE.plugins['table'] = function () {
                     }
                 }
             });
-
+            toggleDragableState(me, false, "", null);
             switchBoderColor(true);
         });
 
@@ -2801,12 +2801,15 @@ UE.plugins['table'] = function () {
             return num;
         },
         splitToCols:function (cell) {
-            var cellInfo = this.getCellInfo(cell),
+            var backWidth = (cell.offsetWidth/cell.colSpan-22).toFixed(0),
+
+                cellInfo = this.getCellInfo(cell),
                 rowIndex = cellInfo.rowIndex,
                 colIndex = cellInfo.colIndex,
                 results = [];
             // 修改Cell的rowSpan
             cell.colSpan = 1;
+            cell.setAttribute("width",backWidth);
             results.push(cell);
             // 补齐单元格
             for (var j = colIndex, endCol = colIndex + cellInfo.colSpan; j < endCol; j++) {
@@ -2817,6 +2820,7 @@ UE.plugins['table'] = function () {
                 this.setCellContent(tmpCell);
                 tmpCell.setAttribute('valign', me.options.tdvalign);
                 tmpCell.setAttribute('align',cell.getAttribute('align'));
+                tmpCell.setAttribute('width',backWidth);
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
                 }
