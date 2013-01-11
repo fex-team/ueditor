@@ -84,7 +84,8 @@ UE.plugins['list'] = function () {
         customCss.push('.list-paddingleft-1{padding-left:0}');
         customCss.push('.list-paddingleft-2{padding-left:'+me.options.listDefaultPaddingLeft+'px}');
         customCss.push('.list-paddingleft-3{padding-left:'+me.options.listDefaultPaddingLeft*2+'px}');
-        utils.cssRule('list', 'ol,ul{margin:0;pading:0;}li{clear:both;}'+customCss.join('\n'), me.document);
+        //给个width:95％防止出现滚动条
+        utils.cssRule('list', 'ol,ul{margin:0;pading:0;width:95%;}li{clear:both;}'+customCss.join('\n'), me.document);
     });
 
 
@@ -147,14 +148,14 @@ UE.plugins['list'] = function () {
 
     function adjustList(list, tag, style) {
         var nextList = list.nextSibling;
-        if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (domUtils.hasClass(nextList,/custom_/) || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
+        if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (nextList.className.match(/custom_(\w+)/)[1] || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(nextList, list);
             if (nextList.childNodes.length == 0) {
                 domUtils.remove(nextList);
             }
         }
         var preList = list.previousSibling;
-        if (preList && preList.nodeType == 1 && preList.tagName.toLowerCase() == tag && (domUtils.hasClass(preList,/custom_/) || domUtils.getStyle(preList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
+        if (preList && preList.nodeType == 1 && preList.tagName.toLowerCase() == tag && (preList.className.match(/custom_(\w+)/)[1] || domUtils.getStyle(preList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(list, preList);
         }
         domUtils.isEmptyBlock(list) && domUtils.remove(list);
@@ -740,7 +741,7 @@ UE.plugins['list'] = function () {
             },
             queryCommandValue:function (command) {
                 var node = domUtils.filterNodeList(this.selection.getStartElementPath(), command.toLowerCase() == 'insertorderedlist' ? 'ol' : 'ul');
-                return node ? domUtils.hasClass(node,/custom_/) || domUtils.getComputedStyle(node, 'list-style-type') : null;
+                return node ? node.className.match(/custom_(\w+)/)[1] || domUtils.getComputedStyle(node, 'list-style-type') : null;
             }
         };
 };

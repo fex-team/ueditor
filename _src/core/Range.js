@@ -1081,7 +1081,7 @@
         inFillChar : function(){
             var start = this.startContainer;
             if(this.collapsed && start.nodeType == 3
-                && !start.nodeValue.replace(new RegExp(domUtils.fillChar),'').length
+                && start.nodeValue.replace(new RegExp('^' + domUtils.fillChar),'').length + 1 == start.nodeValue.length
                 ){
                 return true;
             }

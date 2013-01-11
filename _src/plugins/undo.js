@@ -115,7 +115,7 @@ UE.plugins['undo'] = function () {
             browser.ie && (cont = cont.replace(/>&nbsp;</g, '><').replace(/\s*</g, '<').replace(/>\s*/g, '>'));
             me.fireEvent('aftergetscene');
             try{
-                rng.moveToAddress(restoreAddress).select();
+                rng.moveToAddress(restoreAddress).select(true);
             }catch(e){}
             return {
                 address:rngAddress,
@@ -143,8 +143,8 @@ UE.plugins['undo'] = function () {
             this.update();
         };
         this.update = function () {
-            this.hasRedo = this.list[this.index + 1] ? true : false;
-            this.hasUndo = this.list[this.index - 1] || this.list.length == 1 ? true : false;
+            this.hasRedo = !!this.list[this.index + 1];
+            this.hasUndo = !!this.list[this.index - 1];
         };
         this.reset = function () {
             this.list = [];

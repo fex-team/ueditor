@@ -228,7 +228,7 @@
 
                 sourceMode = !sourceMode;
                 if (sourceMode) {
-                    me.undoManger && me.undoManger.save();
+                    me.undoManger && me.undoManger.save(true);
                     if(browser.gecko){
                         me.body.contentEditable = false;
                     }

@@ -48,12 +48,14 @@ UE.plugins['keystrokes'] = function() {
         //处理backspace/del
         if (keyCode == 8) {//|| keyCode == 46
             var start,end;
-
             //避免按两次删除才能生效的问题
             if(rng.inFillChar()){
                 start = rng.startContainer;
                 rng.setStartBefore(start).shrinkBoundary(true).collapse(true);
-                domUtils.remove(start)
+                if(start.nodeValue.length == 1){
+                }else{
+                    start.nodeValue = start.nodeValue.replace(new RegExp('^' + domUtils.fillChar),'');
+                }
             }
 
             //解决选中control元素不能删除的问题

@@ -169,13 +169,13 @@ UE.plugins['table'] = function () {
                     isFullCol = table.isFullCol();
                     isFullRow = table.isFullRow();
                     tableCopyList = [
-                        [tds[0].cloneNode(true)]
+                        [cloneCell(tds[0])]
                     ];
                     for (var i = 1, ci; ci = tds[i]; i++) {
                         if (ci.parentNode !== tds[i - 1].parentNode) {
-                            tableCopyList.push([ci.cloneNode(true)])
+                            tableCopyList.push([cloneCell(ci)])
                         } else {
-                            tableCopyList[tableCopyList.length - 1].push(ci.cloneNode(true))
+                            tableCopyList[tableCopyList.length - 1].push(cloneCell(ci))
                         }
 
                     }
@@ -2915,8 +2915,9 @@ UE.plugins['table'] = function () {
     }
 
     function cloneCell(cell) {
-        var type = cell.nodeType;
-        if (!type) return this.table.ownerDocument.createElement(cell);
+        if(utils.isString(cell)){
+            return this.table.ownerDocument.createElement(cell);
+        }
         var flag = domUtils.hasClass(cell, "selectTdClass");
         flag && domUtils.removeClasses(cell, "selectTdClass");
         var tmpCell = cell.cloneNode(true);
