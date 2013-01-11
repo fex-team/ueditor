@@ -45,11 +45,12 @@
     cursor: pointer;
     width: 29px;
     height: 29px;
-    margin-right: 5px;
+    margin-left: 5px;
     background-image: url('../images/wordpaste.png');
     background-repeat: no-repeat;
 }
 .edui-default  .edui-pastecontainer .edui-button .edui-richtxticon {
+    margin-left: 0;
     background-position: -109px 0;
 }
 .edui-default  .edui-pastecontainer .edui-button .edui-tagicon {
@@ -57,7 +58,6 @@
 }
 
 .edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon {
-    margin-right: 0;
     background-position: -72px 0;
 }
 
