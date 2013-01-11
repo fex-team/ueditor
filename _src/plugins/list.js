@@ -79,6 +79,9 @@ UE.plugins['list'] = function () {
                     domUtils.remove(li);
                     return;
                 }
+                if(li.parentNode !== node){
+                    return;
+                }
                 index++;
                 if(domUtils.hasClass(node,'custom') ){
                     var paddingLeft = '40px',currentStyle = node.getAttribute('_custom_style');
@@ -319,6 +322,17 @@ UE.plugins['list'] = function () {
 
                 //要在li的最左边，才能处理
                 if (li && domUtils.isStartInblock(tmpRange)) {
+                    start = domUtils.findParentByTagName(range.startContainer, 'p', true);
+                    if (start && start !== li.firstChild) {
+                        var parentList = domUtils.findParentByTagName(start,['ol','ul']);
+                        domUtils.breakParent(start,parentList);
+                        clearEmptySibling(start);
+                        me.fireEvent('contentchange');
+                        range.setStart(start,0).setCursor(false,true);
+                        me.fireEvent('saveScene');
+                        domUtils.preventDefault(evt);
+                        return;
+                    }
 
                     if (li && (pre = li.previousSibling)) {
                         if (keyCode == 46 && li.childNodes.length) {
@@ -340,17 +354,7 @@ UE.plugins['list'] = function () {
                                     pre.appendChild(li.firstChild);
                                 }
                             } else {
-                                start = domUtils.findParentByTagName(range.startContainer, 'p', true);
-                                if (start && start !== first) {
-                                    var parentList = domUtils.findParentByTagName(start,['ol','ul']);
-                                    domUtils.breakParent(start,parentList);
-                                    clearEmptySibling(start);
-                                    me.fireEvent('contentchange');
-                                    range.setStart(start,0).setCursor(false,true);
-                                    me.fireEvent('saveScene');
-                                    domUtils.preventDefault(evt);
-                                    return;
-                                }
+
                                 span = me.document.createElement('span');
                                 range.insertNode(span);
                                 //判断pre是否是空的节点,如果是<p><br/></p>类型的空节点，干掉p标签防止它占位
@@ -402,7 +406,6 @@ UE.plugins['list'] = function () {
                             domUtils.preventDefault(evt);
                             return;
                         }
-
 
                     }
 
