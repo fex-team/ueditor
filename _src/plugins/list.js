@@ -88,7 +88,13 @@ UE.plugins['list'] = function () {
         utils.cssRule('list', 'ol,ul{margin:0;pading:0;width:95%;}li{clear:both;}'+customCss.join('\n'), me.document);
     });
 
-
+    function getStyle(node){
+        var cls = node.className;
+        if(domUtils.hasClass(cls,/custom_/)){
+            return cls.match(/custom_(\w+)/)[1]
+        }
+        return ''
+    }
 
     //调整索引标签
     me.addListener('contentchange',function(){
@@ -114,7 +120,7 @@ UE.plugins['list'] = function () {
                 }
                 index++;
                 if(domUtils.hasClass(node,/custom_/) ){
-                    var paddingLeft = 1,currentStyle = node.className.match(/custom_(\w+)/)[1];
+                    var paddingLeft = 1,currentStyle = getStyle(node);
                     if(node.tagName == 'OL'){
                         if(currentStyle){
                             switch(currentStyle){
@@ -146,16 +152,17 @@ UE.plugins['list'] = function () {
         })
     });
 
+
     function adjustList(list, tag, style) {
         var nextList = list.nextSibling;
-        if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (nextList.className.match(/custom_(\w+)/)[1] || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
+        if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (getStyle(nextList) || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(nextList, list);
             if (nextList.childNodes.length == 0) {
                 domUtils.remove(nextList);
             }
         }
         var preList = list.previousSibling;
-        if (preList && preList.nodeType == 1 && preList.tagName.toLowerCase() == tag && (preList.className.match(/custom_(\w+)/)[1] || domUtils.getStyle(preList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
+        if (preList && preList.nodeType == 1 && preList.tagName.toLowerCase() == tag && (getStyle(preList) || domUtils.getStyle(preList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(list, preList);
         }
         domUtils.isEmptyBlock(list) && domUtils.remove(list);
@@ -186,16 +193,28 @@ UE.plugins['list'] = function () {
             me.fireEvent('contentchange');
             me.undoManger && me.undoManger.save();
         }
-
+        function findList(node,filterFn){
+            while(node && !domUtils.isBody(node)){
+                if(filterFn(node)){
+                    return null
+                }
+                if(node.nodeType == 1 && /[ou]l/i.test(node.tagName)){
+                    return node;
+                }
+                node = node.parentNode;
+            }
+            return null;
+        }
         var keyCode = evt.keyCode || evt.which;
         if (keyCode == 13) {//回车
             var range = me.selection.getRange(),
-                start = domUtils.findParentByTagName(range.startContainer, ['ol', 'ul'], true, function (node) {
+                start = findList(range.startContainer,function (node) {
                     return node.tagName == 'TABLE';
                 }),
-                end = domUtils.findParentByTagName(range.endContainer, ['ol', 'ul'], true, function (node) {
+                end = range.collapsed ? start : findList(range.endContainer,function (node) {
                     return node.tagName == 'TABLE';
                 });
+
             if (start && end && start === end) {
 
                 if (!range.collapsed) {
@@ -741,7 +760,7 @@ UE.plugins['list'] = function () {
             },
             queryCommandValue:function (command) {
                 var node = domUtils.filterNodeList(this.selection.getStartElementPath(), command.toLowerCase() == 'insertorderedlist' ? 'ol' : 'ul');
-                return node ? node.className.match(/custom_(\w+)/)[1] || domUtils.getComputedStyle(node, 'list-style-type') : null;
+                return node ? getStyle(node) || domUtils.getComputedStyle(node, 'list-style-type') : null;
             }
         };
 };
