@@ -405,19 +405,23 @@
             me.addListener('keydown',function(type,e){
                 var keyCode = e.keyCode || e.which;
                 for ( var i in shortcutkeys ) {
-                    var tmp = shortcutkeys[i].split(':'),
-                        key = tmp[0],param = tmp[1];
-                    if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( key.toLowerCase() ) || /^(\d+)$/.test( key ) ) {
-                        if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey) : 0)
-                            && (RegExp.$2 != "" ? e[RegExp.$2.slice(1) + "Key"] : 1)
-                            && keyCode == RegExp.$3
-                            ) ||
-                            keyCode == RegExp.$1
-                            ){
-                            me.execCommand(i,param);
-                            domUtils.preventDefault(e);
+                    var tmp = shortcutkeys[i].split(',');
+                    for(var t= 0,ti;ti=tmp[t++];){
+                        ti = ti.split(':');
+                        var key = ti[0],param = ti[1];
+                        if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( key.toLowerCase() ) || /^(\d+)$/.test( key ) ) {
+                            if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey) : 0)
+                                && (RegExp.$2 != "" ? e[RegExp.$2.slice(1) + "Key"] : 1)
+                                && keyCode == RegExp.$3
+                                ) ||
+                                keyCode == RegExp.$1
+                                ){
+                                me.execCommand(i,param);
+                                domUtils.preventDefault(e);
+                            }
                         }
                     }
+
                 }
             });
         },
