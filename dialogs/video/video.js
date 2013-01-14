@@ -275,6 +275,8 @@ var video = {};
                 $G("preview").innerHTML = lang.urlError;
                 return;
             }
+        }else{
+            url = url.replace(/\?f=.*/,"");
         }
         $G("preview").innerHTML = '<embed type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
         ' src="' + url + '"' +
