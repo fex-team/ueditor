@@ -1,20 +1,4 @@
 module( "plugins.selectall" );
-
-test( '全选后删除', function () {
-        var editor = te.obj[0];
-        var range = te.obj[1];
-        var body = editor.body;
-        editor.setContent( '<p>hello</p><table><tbody><tr><td></td><td></td></tr></tbody></table><p>hello2</p>' );
-
-        editor.execCommand( 'selectall' );
-        editor.execCommand( 'delete' );
-        if ( baidu.editor.browser.ie )
-                equal( ua.getChildHTML( body ), '<p>&nbsp;</p>', '所有内容被删除' );
-        else
-                equal( ua.getChildHTML( body ), '<p><br></p>', '所有内容被删除' );
-} );
-
-
 test( 'normal', function () {
         var editor = te.obj[0], db = editor.body;
         editor.setContent( '<p><em>xxxx</em></p>ssss' );
