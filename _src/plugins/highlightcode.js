@@ -12,6 +12,24 @@ UE.plugins['highlightcode'] = function() {
 
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
+            var range = this.selection.getRange(),
+                start = domUtils.findParentByTagName(range.startContainer, 'table', true),
+                end = domUtils.findParentByTagName(range.endContainer, 'table', true);
+            if(start && end && start === end && domUtils.hasClass(start,'syntaxhighlighter')){
+                if(start.nextSibling){
+                    range.setStart(start.nextSibling,0)
+                }else{
+                    if(start.previousSibling){
+                        range.setStartAtLast(start.previousSibling)
+                    }else{
+                        var p = me.document.createElement('p');
+                        domUtils.fillNode(me.document,p);
+                        range.setStart(p,0)
+                    }
+                }
+                range.setCursor(false,true);
+                domUtils.remove(start);
+            }
             if(code && syntax){
                 me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+code+'</pre>',true);
                 var pre = me.document.getElementById('highlightcode_id');
@@ -19,26 +37,8 @@ UE.plugins['highlightcode'] = function() {
                     domUtils.removeAttributes(pre,'id');
                     me.window.SyntaxHighlighter.highlight(pre);
                 }
-            }else{
-                var range = this.selection.getRange(),
-                   start = domUtils.findParentByTagName(range.startContainer, 'table', true),
-                   end = domUtils.findParentByTagName(range.endContainer, 'table', true);
-                if(start && end && start === end && domUtils.hasClass(start,'syntaxhighlighter')){
-                    if(start.nextSibling){
-                        range.setStart(start.nextSibling,0)
-                    }else{
-                        if(start.previousSibling){
-                            range.setStartAtLast(start.previousSibling)
-                        }else{
-                            var p = me.document.createElement('p');
-                            domUtils.fillNode(me.document,p);
-                            range.setStart(p,0)
-                        }
-                    }
-                    range.setCursor(false,true);
-                    domUtils.remove(start);
-                }
             }
+
         },
         queryCommandState: function(){
             return queryHighlight.call(this);
@@ -115,7 +115,7 @@ UE.plugins['highlightcode'] = function() {
         }
 
     });
-    me.addListener("beforegetcontent",function(){
+    me.addListener("beforegetcontent beforegetscene",function(){
         utils.each(domUtils.getElementsByTagName(me.body,'table','syntaxhighlighter'),function(di){
             var str = [],parentCode = '';
             utils.each(di.getElementsByTagName('code'),function(ci){
@@ -130,10 +130,9 @@ UE.plugins['highlightcode'] = function() {
             });
             pre.appendChild(me.document.createTextNode(str.join('\n')));
             di.parentNode.replaceChild(pre,di);
-
         });
     });
-    me.addListener("aftergetcontent aftersetcontent",changePre);
+    me.addListener("aftergetcontent aftersetcontent aftergetscene",changePre);
 
 
     //避免table插件对于代码高亮的影响

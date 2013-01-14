@@ -20,9 +20,13 @@
                 '<div class="edui-pastecontainer">' +
                 '<div class="edui-title">'+this.editor.getLang("pasteOpt")+'</div>'+
                 '<div class="edui-button">' +
-                '<div class="edui-richtxticon edui-icon" title="'+this.editor.getLang("pasteSourceFormat")+'" onclick="$$.format(false)" stateful></div>'+
-                '<div class="edui-tagicon edui-icon" title="'+this.editor.getLang("tagFormat")+'" onclick="$$.format(2)" stateful></div>' +
-                '<div class="edui-plaintxticon edui-icon" title="'+this.editor.getLang("pasteTextFormat")+'" onclick="$$.format(true)" stateful></div>' +
+                    '<div title="'+this.editor.getLang("pasteSourceFormat")+'" onclick="$$.format(false)" stateful>' +
+                    '<div class="edui-richtxticon"></div></div>'+
+                    '<div title="'+this.editor.getLang("tagFormat")+'" onclick="$$.format(2)" stateful>' +
+                    '<div class="edui-tagicon"></div></div>'+
+                    '<div title="'+this.editor.getLang("pasteTextFormat")+'" onclick="$$.format(true)" stateful>' +
+                    '<div class="edui-plaintxticon"></div></div>'+
+                '</div>' +
                 '</div>' +
                 '</div>'
         },
@@ -38,16 +42,16 @@
                 screenHt = uiUtils.getViewportRect().height,
                 subPop=uiUtils.getClientRect(node);
 
-            if(/hidden/ig.test(domUtils.getComputedStyle(node,"visibility"))){
+            if(/none/ig.test(domUtils.getComputedStyle(node,"display"))){
                 if((subPop.top+subPop.height)>screenHt)
                     node.style.top=(-subPop.height-cur.offsetHeight)+"px";
                 else
                     node.style.top="";
 
-                node.style.visibility="visible";
+                node.style.display="block";
                 domUtils.addClass(cur,"edui-state-opened");
             }else{
-                node.style.visibility="hidden";
+                node.style.display="none";
                 domUtils.removeClasses(cur,"edui-state-opened")
             }
         },

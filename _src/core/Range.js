@@ -1081,7 +1081,7 @@
         inFillChar : function(){
             var start = this.startContainer;
             if(this.collapsed && start.nodeType == 3
-                && !start.nodeValue.replace(new RegExp(domUtils.fillChar),'').length
+                && start.nodeValue.replace(new RegExp('^' + domUtils.fillChar),'').length + 1 == start.nodeValue.length
                 ){
                 return true;
             }
@@ -1109,7 +1109,7 @@
                                 break;
                             }
                         }
-                        firstIndex += domUtils.isFillChar(node) ? 0 : (isStart ? me.startOffset : me.endOffset)
+                        firstIndex +=  (isStart ? me.startOffset : me.endOffset) - (fillCharReg.test(node.nodeValue) ? 1 : 0 )
                     }else{
                         node =  node.childNodes[ isStart ? me.startOffset : me.endOffset];
                         if(node){
@@ -1142,7 +1142,7 @@
             }
             addr.startAddress = getAddress(true);
             if(!ignoreEnd){
-                addr.endAddress = getAddress();
+                addr.endAddress = me.collapsed ? [].concat(addr.startAddress) : getAddress();
             }
             return addr;
         },
@@ -1177,6 +1177,16 @@
             getNode(addr.startAddress,true);
             !ignoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
+        },
+        equals : function(rng){
+            for(var p in this){
+                if(this.hasOwnProperty(p)){
+                    if(this[p] !== rng[p])
+                        return false
+                }
+            }
+            return true;
+
         }
     };
 })();

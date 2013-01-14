@@ -17,7 +17,7 @@
             var pop = allPopups[i];
             if (!pop.isHidden()) {
                 if (pop.queryAutoHide(el) !== false) {
-                    if(/scroll/ig.test(evt.type)&&pop.className=="edui-wordpastepop")   return;
+                    if(evt&&/scroll/ig.test(evt.type)&&pop.className=="edui-wordpastepop")   return;
                     pop.hide();
                 }
             }
