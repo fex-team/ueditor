@@ -13,7 +13,7 @@ UE.plugins['snapscreen'] = function(){
         doc = container.ownerDocument || container.document;
         snapplugin = doc.createElement("object");
         snapplugin.type = "application/x-pluginbaidusnap";
-        snapplugin.style.cssText = "display:none";
+        snapplugin.style.cssText = "position:absolute;left:-9999px;";
         snapplugin.setAttribute("width","0");
         snapplugin.setAttribute("height","0");
         container.appendChild(snapplugin);
@@ -52,7 +52,7 @@ UE.plugins['snapscreen'] = function(){
                 alert(lang.uploadErrorMsg);
             };
             try{
-                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, editorOptions.snapscreenServerPort+"");
+                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, "80");
                 onSuccess(ret);
             }catch(e){
                 me.ui._dialogs['snapscreenDialog'].open();
