@@ -568,7 +568,6 @@ var utils = UE.utils = {
  * @name isNumber
  * @grammar UE.utils.isNumber(obj)  => true|false
  */
-
 utils.each(['String','Function','Array','Number','RegExp'],function(v){
     UE.utils['is' + v] = function(obj){
         return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
