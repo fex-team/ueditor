@@ -249,6 +249,7 @@
 /*edittable-dialog*/
 .edui-default .edui-for-edittable .edui-dialog-content {
     width: 540px;
+    _width:590px;
     height: 265px;
 }
 

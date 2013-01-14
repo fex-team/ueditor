@@ -945,6 +945,9 @@ var domUtils = dom.domUtils = {
      * @grammar UE.dom.domUtils.hasClass(element,className)  =>true|false
      */
     hasClass:function (element, className) {
+        if(utils.isRegExp(className)){
+            return className.test(element.className)
+        }
         className = utils.trim(className).replace(/[ ]{2,}/g,' ').split(' ');
         for(var i = 0,ci,cls = element.className;ci=className[i++];){
             if(!new RegExp('\\b' + ci + '\\b','i').test(cls)){

@@ -96,13 +96,13 @@ UE.plugins['table'] = function () {
                     domUtils.preventDefault(evt);
                 }
 
-                var caption = domUtils.findParentByTagName(me.selection.getStart(), 'caption', true);
-                if (caption && isEmptyBlock(caption)) {
+                var caption = domUtils.findParentByTagName(me.selection.getStart(), 'caption', true),
+                    range =  me.selection.getRange();
+                if (range.collapsed && caption && isEmptyBlock(caption)) {
                     me.fireEvent('saveScene');
                     var table = caption.parentNode;
                     domUtils.remove(caption);
                     if (table) {
-                        var range = me.selection.getRange();
                         range.setStart(table.rows[0].cells[0], 0).setCursor(false, true);
                     }
                 }
@@ -163,13 +163,13 @@ UE.plugins['table'] = function () {
                     isFullCol = table.isFullCol();
                     isFullRow = table.isFullRow();
                     tableCopyList = [
-                        [tds[0].cloneNode(true)]
+                        [cloneCell(tds[0])]
                     ];
                     for (var i = 1, ci; ci = tds[i]; i++) {
                         if (ci.parentNode !== tds[i - 1].parentNode) {
-                            tableCopyList.push([ci.cloneNode(true)])
+                            tableCopyList.push([cloneCell(ci)])
                         } else {
-                            tableCopyList[tableCopyList.length - 1].push(ci.cloneNode(true))
+                            tableCopyList[tableCopyList.length - 1].push(cloneCell(ci))
                         }
 
                     }
@@ -247,7 +247,7 @@ UE.plugins['table'] = function () {
                                     cj.getAttribute('width') && td.setAttribute('width', cj.getAttribute('width'));
                                     cj.getAttribute('valign') && td.setAttribute('valign', cj.getAttribute('valign'));
                                     cj.getAttribute('align') && td.setAttribute('align', cj.getAttribute('align'));
-                                    cj.style.cssText && (td.style.cssText = cj.style.cssText)
+                                    cj.style.cssText && (td.style.cssText = cj.style.cssText);
                                     preNode = td;
                                     td = td.nextSibling;
                                 } else {
@@ -270,12 +270,11 @@ UE.plugins['table'] = function () {
                     }
                     ut.update();
                 } else {
-
                     table = me.document.createElement('table');
                     for (var i = 0, ci; ci = tableCopyList[i++];) {
                         var tr = table.insertRow(table.rows.length);
                         for (var j = 0, cj; cj = ci[j++];) {
-                            cloneTd = cj.cloneNode(true);
+                            cloneTd = cloneCell(cj);
                             domUtils.removeAttributes(cloneTd, ['class']);
                             tr.appendChild(cloneTd)
                         }
@@ -309,9 +308,8 @@ UE.plugins['table'] = function () {
                     utils.each(tables, function (table) {
                         removeStyleSize(table, true);
                         domUtils.removeAttributes(table, ['style', 'border']);
-                        var tds = domUtils.getElementsByTagName(table, "td");
-                        utils.each(tds, function (td) {
-                            if (domUtils.isEmptyNode(td)) {
+                        utils.each(domUtils.getElementsByTagName(table, "td"), function (td) {
+                            if (isEmptyBlock(td)) {
                                 domUtils.fillNode(me.document, td);
                             }
                             removeStyleSize(td, true);
@@ -363,11 +361,10 @@ UE.plugins['table'] = function () {
             utils.each(domUtils.getElementsByTagName(me.document, 'table'), function (table) {
                 if (me.fireEvent("excludetable", table) === true) return;
                 table.ueTable = new UETable(table);
-
                 utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
 
                     if (domUtils.isEmptyBlock(td) && td !== start) {
-                        domUtils.fillNode(me.document, td)
+                        domUtils.fillNode(me.document, td);
                         if (browser.ie && browser.version == 6) {
                             td.innerHTML = '&nbsp;'
                         }
@@ -375,13 +372,13 @@ UE.plugins['table'] = function () {
                 });
                 utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
                     if (domUtils.isEmptyBlock(th) && th !== start) {
-                        domUtils.fillNode(me.document, th)
+                        domUtils.fillNode(me.document, th);
                         if (browser.ie && browser.version == 6) {
                             th.innerHTML = '&nbsp;'
                         }
                     }
                 });
-                table.onmousemove = function (evt) {
+                table.onmousemove = function () {
                     me.options.tableDragable && toggleDragButton(true, this, me);
                 };
                 table.onmouseout = function () {
@@ -923,6 +920,11 @@ UE.plugins['table'] = function () {
 
         removeSelectedClass(domUtils.getElementsByTagName(me.body, "td"));
         removeSelectedClass(domUtils.getElementsByTagName(me.body, "th"));
+        //trace:3113
+        //选中单元格，点击table外部，不会清掉table上挂的ueTable,会引起getUETableBySelected方法返回值
+        utils.each(me.document.getElementsByTagName('table'),function(t){
+            t.ueTable = null;
+        });
         startTd = getTargetTd(me, evt);
         if (!startTd) return;
         var table = domUtils.findParentByTagName(startTd, "table", true);
@@ -1207,13 +1209,17 @@ UE.plugins['table'] = function () {
     function switchBoderColor(flag) {
         var tableArr = domUtils.getElementsByTagName(me.body, "table"), color;
         for (var i = 0, node; node = tableArr[i++];) {
-            if (flag) {
-                color = (domUtils.getElementsByTagName(node, "td")[0].style.borderColor).replace(/\s/g, "");
-                if (/(#ffffff)|(rgb\(255,f55,255\))/ig.test(color))
-                    domUtils.addClass(node, "noBorderTable")
-            } else {
-                domUtils.removeClasses(node, "noBorderTable")
+            var td = domUtils.getElementsByTagName(node, "td");
+            if(td[0] ){
+                if (flag) {
+                    color = (td[0].style.borderColor).replace(/\s/g, "");
+                    if (/(#ffffff)|(rgb\(255,f55,255\))/ig.test(color))
+                        domUtils.addClass(node, "noBorderTable")
+                } else {
+                    domUtils.removeClasses(node, "noBorderTable")
+                }
             }
+
         }
     }
 
@@ -2575,7 +2581,7 @@ UE.plugins['table'] = function () {
             //首行直接插入,无需考虑部分单元格被rowspan的情况
             if (rowIndex == 0 || rowIndex == this.rowsNum) {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
-                    cell = this.cloneCell(sourceCell);
+                    cell = this.cloneCell(sourceCell,true);
                     this.setCellContent(cell);
                     cell.setAttribute('valign', me.options.tdvalign);
                     row.appendChild(cell);
@@ -2590,7 +2596,7 @@ UE.plugins['table'] = function () {
                         cell = this.getCell(cellInfo.rowIndex, cellInfo.cellIndex);
                         cell.rowSpan = cellInfo.rowSpan + 1;
                     } else {
-                        cell = this.cloneCell(sourceCell);
+                        cell = this.cloneCell(sourceCell,true);
                         this.setCellContent(cell);
                         row.appendChild(cell);
                     }
@@ -2684,7 +2690,7 @@ UE.plugins['table'] = function () {
                 for (; rowIndex < rowsNum; rowIndex++) {
                     tableRow = this.table.rows[rowIndex];
                     preCell = tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
-                    cell = this.cloneCell(sourceCell); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
+                    cell = this.cloneCell(sourceCell,true); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
                     this.setCellContent(cell);
                     cell.setAttribute('valign', me.options.tdvalign);
                     preCell && cell.setAttribute('width', preCell.getAttribute('width'));
@@ -2705,7 +2711,7 @@ UE.plugins['table'] = function () {
                         tableRow = this.table.rows[rowIndex];
                         preCell = tableRow.cells[cellInfo.cellIndex];
 
-                        cell = this.cloneCell(sourceCell);//tableRow.insertCell(cellInfo.cellIndex);
+                        cell = this.cloneCell(sourceCell,true);//tableRow.insertCell(cellInfo.cellIndex);
                         this.setCellContent(cell);
                         cell.setAttribute('valign', me.options.tdvalign);
                         preCell && cell.setAttribute('width', preCell.getAttribute('width'))
@@ -2915,14 +2921,16 @@ UE.plugins['table'] = function () {
         return target && !(editor.fireEvent("excludetable", target) === true) ? target : null;
     }
 
-    function cloneCell(cell) {
-        var type = cell.nodeType;
-        if (!type) return this.table.ownerDocument.createElement(cell);
+    function cloneCell(cell,ingoreMerge) {
+        if(!cell || utils.isString(cell)){
+            return this.table.ownerDocument.createElement(cell || 'td');
+        }
         var flag = domUtils.hasClass(cell, "selectTdClass");
         flag && domUtils.removeClasses(cell, "selectTdClass");
         var tmpCell = cell.cloneNode(true);
-        tmpCell.rowSpan = 1;
-        tmpCell.colSpan = 1;
+        if(ingoreMerge){
+            tmpCell.rowSpan = tmpCell.colSpan = 1;
+        }
         tmpCell.style.borderLeftStyle = "";
         tmpCell.style.borderTopStyle = "";
         tmpCell.style.borderLeftColor = cell.style.borderRightColor;

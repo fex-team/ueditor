@@ -241,7 +241,13 @@
             if ( ie ) {
                 var nativeRange = me.getIERange();
                 if ( nativeRange ) {
-                    transformIERangeToRange( nativeRange, range );
+                    //备份的_bakIERange可能已经实效了，dom树发生了变化比如从源码模式切回来，所以try一下，实效就放到body开始位置
+                    try{
+                        transformIERangeToRange( nativeRange, range );
+                    }catch(e){
+                        optimze( range );
+                    }
+
                 } else {
                     optimze( range );
                 }

@@ -1,6 +1,11 @@
 .wrapper {
     margin: 10px auto 0;
     font-size: 12px;
+    overflow: hidden;
+}
+
+.clear {
+    clear: both;
 }
 
 .wrapper .left {
@@ -17,6 +22,7 @@
 
 .section {
     margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .section h3 {
@@ -36,7 +42,7 @@
     float: left;
 }
 
-.section .tone{
+.section .tone {
     width: 80px;;
 }
 

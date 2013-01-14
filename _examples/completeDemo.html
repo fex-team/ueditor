@@ -34,6 +34,7 @@
         <button  onclick="getAllHtml()">获得整个html的内容</button>
         <button  onclick="getContent()">获得内容</button>
         <button onclick="setContent()">写入内容</button>
+        <button onclick="setContent(true)">追加内容</button>
         <button onclick="getContentTxt()">获得纯文本</button>
         <button  onclick="getPlainTxt()">获得带格式的纯文本</button>
         <button  onclick="hasContent()">判断是否有内容</button>
@@ -70,6 +71,10 @@
             document.getElementById('txtcount').innerHTML = me.getContentLength(true);
         },200)
     });
+
+    ue.addListener('ready',function(){
+        this.focus()
+    })
     function createEditor(){
         enableBtn();
         UE.getEditor('editor')
@@ -91,10 +96,10 @@
         arr.push(  UE.getEditor('editor').getPlainTxt() );
         alert( arr.join( '\n' ) )
     }
-    function setContent() {
+    function setContent(isAppendTo) {
         var arr = [];
         arr.push( "使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容" );
-        UE.getEditor('editor').setContent( '欢迎使用ueditor' );
+        UE.getEditor('editor').setContent( '欢迎使用ueditor',isAppendTo );
         alert( arr.join( "\n" ) );
     }
     function setDisabled() {

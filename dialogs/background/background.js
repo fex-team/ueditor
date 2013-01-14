@@ -90,6 +90,7 @@ var bindClick = function () {
                 for (var i = 0, r; r = radios[i++];) {
                     if (r.checked && r.value != "none") {
                         $G("repeatType").style.display = "";
+                        net(r);
                     }
                 }
             }
