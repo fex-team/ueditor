@@ -90,7 +90,7 @@ UE.plugins['list'] = function () {
 
     function getStyle(node){
         var cls = node.className;
-        if(domUtils.hasClass(cls,/custom_/)){
+        if(domUtils.hasClass(node,/custom_/)){
             return cls.match(/custom_(\w+)/)[1]
         }
         return ''
