@@ -304,7 +304,11 @@
 
                             });
                         }else{
-                            range.setCursor(false,true);
+                            //ie下有可能报错，比如在代码顶头的情况
+                            try{
+                                range.setCursor(false,true);
+                            }catch(e){}
+
                         }
                     });
                 }
