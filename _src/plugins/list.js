@@ -59,7 +59,7 @@ UE.plugins['list'] = function () {
         for(var p in customStyle){
             if(p == 'dash'){
                 customCss.push('li.list-' + customStyle[p] + '{background-image:url(' + liiconpath +customStyle[p]+'.gif)}');
-                customCss.push('ul.custom_'+p+'{list-style:none;}ul.custom_'+p+' li{background:no-repeat 0 3px;}');
+                customCss.push('ul.custom_'+p+'{list-style:none;}ul.custom_'+p+' li{background-position:0 3px;background-repeat:no-repeat}');
             }else{
                 for(var i= 0;i<99;i++){
                     customCss.push('li.list-' + customStyle[p] + '-3-' + i + '{background-image:url(' + liiconpath + 'list-'+customStyle[p]+'-3-' + i + '.gif)}')
@@ -85,7 +85,7 @@ UE.plugins['list'] = function () {
         customCss.push('.list-paddingleft-2{padding-left:'+me.options.listDefaultPaddingLeft+'px}');
         customCss.push('.list-paddingleft-3{padding-left:'+me.options.listDefaultPaddingLeft*2+'px}');
         //给个width:95％防止出现滚动条
-        utils.cssRule('list', 'ol,ul{margin:0;pading:0;width:95%;}li{clear:both;}'+customCss.join('\n'), me.document);
+        utils.cssRule('list', 'ol,ul{margin:0;pading:0;}li{clear:both;}'+customCss.join('\n'), me.document);
     });
 
     function getStyle(node){
