@@ -2921,8 +2921,8 @@ UE.plugins['table'] = function () {
     }
 
     function cloneCell(cell,ingoreMerge) {
-        if(utils.isString(cell)){
-            return this.table.ownerDocument.createElement(cell);
+        if(!cell || utils.isString(cell)){
+            return this.table.ownerDocument.createElement(cell || 'td');
         }
         var flag = domUtils.hasClass(cell, "selectTdClass");
         flag && domUtils.removeClasses(cell, "selectTdClass");
