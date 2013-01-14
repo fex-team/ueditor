@@ -1109,7 +1109,7 @@
                                 break;
                             }
                         }
-                        firstIndex += domUtils.isFillChar(node) ? 0 : (isStart ? me.startOffset : me.endOffset)
+                        firstIndex +=  (isStart ? me.startOffset : me.endOffset) - (fillCharReg.test(node.nodeValue) ? 1 : 0 )
                     }else{
                         node =  node.childNodes[ isStart ? me.startOffset : me.endOffset];
                         if(node){
@@ -1142,7 +1142,7 @@
             }
             addr.startAddress = getAddress(true);
             if(!ignoreEnd){
-                addr.endAddress = getAddress();
+                addr.endAddress = me.collapsed ? [].concat(addr.startAddress) : getAddress();
             }
             return addr;
         },

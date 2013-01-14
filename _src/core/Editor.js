@@ -281,7 +281,7 @@
                     };
                     this._setDefaultContent( options.initialContent );
                 } else
-                    this.setContent( options.initialContent, true );
+                    this.setContent( options.initialContent, false,true );
             }
             //为form提交提供一个隐藏的textarea
             for ( var form = this.iframe.parentNode; !domUtils.isBody( form ); form = form.parentNode ) {
@@ -535,7 +535,7 @@
          *     editor.setContent("欢迎使用UEditor！");
          * })
          */
-        setContent:function ( html, notFireSelectionchange ) {
+        setContent:function ( html, isAppendTo,notFireSelectionchange ) {
             var me = this,
                     inline = utils.extend( {a:1, A:1}, dtd.$inline, true ),
                     lastTagName;
@@ -566,7 +566,7 @@
             //去掉了\t\n\r 如果有插入的代码，在源码切换所见即所得模式时，换行都丢掉了
             //\r在ie下的不可见字符，在源码切换时会变成多个&nbsp;
             //trace:1559
-            this.body.innerHTML = html.replace( new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), '' );
+            this.body.innerHTML = (isAppendTo ? this.getContent() : '') + html.replace( new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), '' );
             //处理ie6下innerHTML自动将相对路径转化成绝对路径的问题
             if ( browser.ie && browser.version < 7 ) {
                 replaceSrc( this.document.body );
