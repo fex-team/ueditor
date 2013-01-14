@@ -25,7 +25,6 @@ public class getContent : IHttpHandler {
         context.Response.Write(context.Server.HtmlDecode(content));
         context.Response.Write("<br/>第2个编辑器的值<br/>");
         context.Response.Write(context.Server.HtmlDecode("<textarea style='width:500px;height:300px;'>"+content1+"</textarea><br/>"));
-        context.Response.Write("<input type='button' value='点击返回' onclick='javascript:location.href = \"../_examples/submitFormDemo.html\"' />");
     }
  
     public bool IsReusable {

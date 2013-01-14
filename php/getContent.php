@@ -13,4 +13,3 @@
     echo "<br/>第2个编辑器的值<br/>";
 
     echo "<textarea style='width:500px;height:300px;'>".htmlspecialchars_decode($content1)."</textarea><br/>";
-    echo "<input type='button' value='点击返回' onclick='javascript:location.href = \"../_examples/submitFormDemo.html\" ' /></script>";
