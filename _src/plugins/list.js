@@ -50,9 +50,10 @@ UE.plugins['list'] = function () {
             'square':'',
             'dash' : ''
         },
-        listDefaultPaddingLeft : '30'
+        listDefaultPaddingLeft : '30',
+        listiconpath : me.options.UEDITOR_HOME_URL + 'themes/default/images/list/'
     } );
-    var liiconpath = me.options.UEDITOR_HOME_URL + 'themes/default/images/list/';
+    var liiconpath = me.options.listiconpath;
 
     me.ready(function () {
         var customCss = [];
@@ -84,7 +85,6 @@ UE.plugins['list'] = function () {
         customCss.push('.list-paddingleft-1{padding-left:0}');
         customCss.push('.list-paddingleft-2{padding-left:'+me.options.listDefaultPaddingLeft+'px}');
         customCss.push('.list-paddingleft-3{padding-left:'+me.options.listDefaultPaddingLeft*2+'px}');
-        //给个width:95％防止出现滚动条
         utils.cssRule('list', 'ol,ul{margin:0;pading:0;}li{clear:both;}'+customCss.join('\n'), me.document);
     });
 

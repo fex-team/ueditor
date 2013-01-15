@@ -1,7 +1,7 @@
 ///import core
 ///import plugins/inserthtml.js
 ///commands 音乐
-///commandsName InsertMusic
+///commandsName Music
 ///commandsTitle  插入音乐
 ///commandsDialog  dialogs\music
 UE.plugins['music'] = function () {
@@ -39,8 +39,9 @@ UE.plugins['music'] = function () {
             }
             tmpdiv = me.document.createElement("div");
             //先看float在看align,浮动有的是时候是在float上定义的
-            var align = node.style.cssFloat;
-            tmpdiv.innerHTML = creatInsertStr(img2embed ? node.getAttribute("_url") : node.getAttribute("src"), node.width, node.height, node.getAttribute("align"), img2embed);
+            var align = domUtils.getComputedStyle(node,'float');
+            align = align == 'none' ? (node.getAttribute('align') || '') : align;
+            tmpdiv.innerHTML = creatInsertStr(img2embed ? node.getAttribute("_url") : node.getAttribute("src"), node.width, node.height, align, img2embed);
             node.parentNode.replaceChild(tmpdiv.firstChild, node);
         }
     }

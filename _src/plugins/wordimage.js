@@ -2,6 +2,7 @@
 ///commands 本地图片引导上传
 ///commandsName  WordImage
 ///commandsTitle  本地图片引导上传
+///commandsDialog  dialogs\wordimage
 
 
 UE.plugins["wordimage"] = function(){
