@@ -1,4 +1,6 @@
 ///import core
+///import plugins\inserthtml.js
+///import plugins\image.js
 ///commandsName  snapscreen
 ///commandsTitle  截屏
 /**
