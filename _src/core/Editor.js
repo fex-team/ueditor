@@ -402,7 +402,7 @@
         },
         _bindshortcutKeys : function(){
             var me = this,shortcutkeys = this.shortcutkeys;
-            me.addListener('keypress',function(type,e){
+            me.addListener('keydown',function(type,e){
                 var keyCode = e.keyCode || e.which;
                 for ( var i in shortcutkeys ) {
                     var tmp = shortcutkeys[i].split(',');
