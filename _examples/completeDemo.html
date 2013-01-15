@@ -58,23 +58,15 @@
 <script type="text/javascript">
    //实例化编辑器
     var ue = UE.getEditor('editor');
-    ue.addListener('contentchange',function(){
+
+    ue.addListener('wordcount',function(){
         document.getElementById('htmlcount').innerHTML = this.getContentLength();
         document.getElementById('txtcount').innerHTML = this.getContentLength(true);
-    });
-    var timer;
-    ue.addListener('keyup',function(){
-        clearTimeout(timer);
-        var me = this;
-        timer = setTimeout(function(){
-            document.getElementById('htmlcount').innerHTML = me.getContentLength();
-            document.getElementById('txtcount').innerHTML = me.getContentLength(true);
-        },200)
     });
 
     ue.addListener('ready',function(){
         this.focus()
-    })
+    });
     function createEditor(){
         enableBtn();
         UE.getEditor('editor')

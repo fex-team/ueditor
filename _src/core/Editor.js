@@ -1042,7 +1042,6 @@
                 for(var i= 0,ci;ci=tagNames[i++];){
                     count += this.document.getElementsByTagName(ci).length;
                 }
-                this.fireEvent('wordCount',count);
             }
             return count;
         }
