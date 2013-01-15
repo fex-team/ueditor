@@ -68,7 +68,7 @@
         ,snapscreenServerUrl: URL +"php/imageUp.php" //屏幕截图的server端保存程序，UEditor的范例代码为“URL +"server/upload/php/snapImgUp.php"”
         ,snapscreenPath: URL + "php/"
         //,snapscreenServerPort: 80                                    //屏幕截图的server端端口
-        //,snapscreenImgAlign: 'center'                                //截图的图片默认的排版方式
+        //,snapscreenImgAlign: ''                                //截图的图片默认的排版方式
 
         //word转存配置区
         ,wordImageUrl:URL + "php/imageUp.php"             //word转存提交地址
