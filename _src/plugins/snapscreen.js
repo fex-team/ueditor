@@ -25,7 +25,7 @@ UE.plugins['snapscreen'] = function(){
             var me = this,lang = me.getLang("snapScreen_plugin");
             me.setOpt({
                   snapscreenServerPort: 80                                    //屏幕截图的server端端口
-                 ,snapscreenImgAlign: 'left'                                //截图的图片默认的排版方式
+                 ,snapscreenImgAlign: ''                                //截图的图片默认的排版方式
            });
            var editorOptions = me.options;
 
