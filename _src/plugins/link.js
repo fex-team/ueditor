@@ -141,6 +141,13 @@
                 return node;
             }
 
+        },
+        queryCommandState : function() {
+            //判断如果是视频的话连接不可用
+            //fix 853
+            var img = this.selection.getRange().getClosedNode(),
+                flag = img && (img.className == "edui-faked-video");
+            return flag ? -1 : 0;
         }
     };
 })();

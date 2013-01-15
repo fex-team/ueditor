@@ -1,9 +1,3 @@
-///import core
-///import plugins\inserthtml.js
-///commands 表格
-///commandsName  InsertTable,DeleteTable,InsertParagraphBeforeTable,InsertRow,DeleteRow,InsertCol,DeleteCol,MergeCells,MergeRight,MergeDown,SplittoCells,SplittoRows,SplittoCols
-///commandsTitle  表格,删除表格,表格前插行,前插入行,删除行,前插入列,删除列,合并多个单元格,右合并单元格,下合并单元格,完全拆分单元格,拆分成行,拆分成列
-///commandsDialog  dialogs\table
 /**
  * Created with JetBrains PhpStorm.
  * User: taoqili
@@ -470,7 +464,7 @@ UE.plugins['table'] = function () {
                     }
                 }
             });
-
+            toggleDragableState(me, false, "", null);
             switchBoderColor(true);
         });
 
@@ -548,6 +542,9 @@ UE.plugins['table'] = function () {
         });
         me.addListener("aftergetcontent", function () {
             switchBoderColor(true);
+        });
+        me.addListener("getAllHtml",function(){
+            removeSelectedClass(me.document.getElementsByTagName("td"));
         });
         //修正全屏状态下插入的表格宽度在非全屏状态下撑开编辑器的情况
         me.addListener("fullscreenchanged", function (type, fullscreen) {
@@ -769,7 +766,7 @@ UE.plugins['table'] = function () {
             // 部分浏览器下需要清理
             clearTimeout(timer);
             timer = setTimeout(function () {
-                editor.fireEvent("startDragTable", table, button);
+                editor.fireEvent("tableClicked", table, button);
             }, 300);
         }
 
@@ -1593,7 +1590,7 @@ UE.plugins['table'] = function () {
                     ut.insertCol(range.beginColIndex, cell);
                 }
             }
-            rng.moveToBookmark(bk).select();
+            rng.moveToBookmark(bk).select(true);
         }
     };
     UE.commands["insertcolnext"] = {
@@ -2810,12 +2807,15 @@ UE.plugins['table'] = function () {
             return num;
         },
         splitToCols:function (cell) {
-            var cellInfo = this.getCellInfo(cell),
+            var backWidth = (cell.offsetWidth/cell.colSpan-22).toFixed(0),
+
+                cellInfo = this.getCellInfo(cell),
                 rowIndex = cellInfo.rowIndex,
                 colIndex = cellInfo.colIndex,
                 results = [];
             // 修改Cell的rowSpan
             cell.colSpan = 1;
+            cell.setAttribute("width",backWidth);
             results.push(cell);
             // 补齐单元格
             for (var j = colIndex, endCol = colIndex + cellInfo.colSpan; j < endCol; j++) {
@@ -2826,6 +2826,7 @@ UE.plugins['table'] = function () {
                 this.setCellContent(tmpCell);
                 tmpCell.setAttribute('valign', me.options.tdvalign);
                 tmpCell.setAttribute('align',cell.getAttribute('align'));
+                tmpCell.setAttribute('width',backWidth);
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
                 }

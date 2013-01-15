@@ -41,14 +41,12 @@
                     editor.ui.getDom('elementpath').innerHTML = '<div class="edui-editor-breadcrumb">' + editor.getLang("elementPathTip") + ':</div>';
                 }
                 if (editor.options.wordCount) {
+                    function countFn() {
+                        setCount(editor,me);
+                        domUtils.un(editor.document, "click", arguments.callee);
+                    }
+                    domUtils.on(editor.document, "click", countFn);
                     editor.ui.getDom('wordcount').innerHTML = editor.getLang("wordCountTip");
-                    //为wordcount捕获中文输入法的空格
-                    editor.addListener('keyup', function (type, evt) {
-                        var keyCode = evt.keyCode || evt.which;
-                        if (keyCode == 32) {
-                            me._wordCount();
-                        }
-                    });
                 }
                 editor.ui._scale();
                 if (editor.options.scaleEnabled) {
@@ -116,13 +114,35 @@
             editor.addListener('keydown', function (t, evt) {
                 if (pastePop)    pastePop.dispose(evt);
             });
+            editor.addListener('wordcount', function (type) {
+                setCount(this,me);
+            });
+            function setCount(editor,ui) {
+                editor.setOpt({
+                    wordCount:true,
+                    maximumWords:10000,
+                    wordCountMsg:editor.options.wordCountMsg || editor.getLang("wordCountMsg"),
+                    wordOverFlowMsg:editor.options.wordOverFlowMsg || editor.getLang("wordOverFlowMsg")
+                });
+                var opt = editor.options,
+                    max = opt.maximumWords,
+                    msg = opt.wordCountMsg ,
+                    errMsg = opt.wordOverFlowMsg,
+                    countDom = ui.getDom('wordcount');
+                if (!opt.wordCount) {
+                    return;
+                }
+                var count = editor.getContentLength(true);
+                if (count > max) {
+                    countDom.innerHTML = errMsg;
+                } else {
+                    countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
+                }
+            }
 
             editor.addListener('selectionchange', function () {
                 if (editor.options.elementPathEnabled) {
                     me[(editor.queryCommandState('elementpath') == -1 ? 'dis' : 'en') + 'ableElementPath']()
-                }
-                if (editor.options.wordCount) {
-                    me[(editor.queryCommandState('wordcount') == -1 ? 'dis' : 'en') + 'ableWordCount']()
                 }
                 if (editor.options.scaleEnabled) {
                     me[(editor.queryCommandState('scale') == -1 ? 'dis' : 'en') + 'ableScale']();
@@ -427,27 +447,6 @@
                 this.editor.fireEvent('fullscreenchanged', fullscreen);
                 this.triggerLayout();
             }
-        },
-        _wordCount:function () {
-            var wdcount = this.getDom('wordcount');
-            if (!this.editor.options.wordCount) {
-                wdcount.style.display = "none";
-                return;
-            }
-            wdcount.innerHTML = this.editor.queryCommandValue("wordcount");
-        },
-        disableWordCount:function () {
-            var w = this.getDom('wordcount');
-            w.innerHTML = '';
-            w.style.display = 'none';
-            this.wordcount = false;
-
-        },
-        enableWordCount:function () {
-            var w = this.getDom('wordcount');
-            w.style.display = '';
-            this.wordcount = true;
-            this._wordCount();
         },
         _updateFullScreen:function () {
             if (this._fullscreen) {
