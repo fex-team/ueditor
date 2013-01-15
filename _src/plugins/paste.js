@@ -230,7 +230,7 @@
                 }
 
                 //自定义的处理
-                html = {'html':html};
+                html = {'html':html,'txtContent':txtContent};
 
                 me.fireEvent('beforepaste',html);
                 //不用在走过滤了

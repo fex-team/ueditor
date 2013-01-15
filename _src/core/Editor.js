@@ -315,7 +315,7 @@
                 me.document.execCommand( '2D-position', false, false );
             } catch ( e ) {}
             try {
-                me.document.execCommand( 'enableInlineTableEditing', false, options.tableNativeEditInFF );
+                me.document.execCommand( 'enableInlineTableEditing', false, false );
             } catch ( e ) {}
             try {
                 me.document.execCommand( 'enableObjectResizing', false, false );
@@ -394,7 +394,7 @@
         addshortcutkey : function(cmd,keys){
             var obj = {};
             if(keys){
-                obj[keys] = cmd
+                obj[cmd] = keys
             }else{
                 obj = cmd;
             }
@@ -403,20 +403,25 @@
         _bindshortcutKeys : function(){
             var me = this,shortcutkeys = this.shortcutkeys;
             me.addListener('keydown',function(type,e){
-                var keyCode = e.keyCode || e.which,value;
+                var keyCode = e.keyCode || e.which;
                 for ( var i in shortcutkeys ) {
-                    var key = shortcutkeys[i];
-                    if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( key.toLowerCase() ) || /^(\d+)$/.test( key ) ) {
-                        if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey) : 0)
-                            && (RegExp.$2 != "" ? e[RegExp.$2.slice(1) + "Key"] : 1)
-                            && keyCode == RegExp.$3
-                            ) ||
-                            keyCode == RegExp.$1
-                            ){
-                            me.execCommand(i);
-                            domUtils.preventDefault(e);
+                    var tmp = shortcutkeys[i].split(',');
+                    for(var t= 0,ti;ti=tmp[t++];){
+                        ti = ti.split(':');
+                        var key = ti[0],param = ti[1];
+                        if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( key.toLowerCase() ) || /^(\d+)$/.test( key ) ) {
+                            if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey) : 0)
+                                && (RegExp.$2 != "" ? e[RegExp.$2.slice(1) + "Key"] : 1)
+                                && keyCode == RegExp.$3
+                                ) ||
+                                keyCode == RegExp.$1
+                                ){
+                                me.execCommand(i,param);
+                                domUtils.preventDefault(e);
+                            }
                         }
                     }
+
                 }
             });
         },
@@ -1037,7 +1042,6 @@
                 for(var i= 0,ci;ci=tagNames[i++];){
                     count += this.document.getElementsByTagName(ci).length;
                 }
-                this.fireEvent('wordCount',count);
             }
             return count;
         }
