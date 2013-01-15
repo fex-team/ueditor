@@ -28,21 +28,26 @@ UE.plugins['list'] = function () {
         };
 
     var customStyle = {
-        'chinese' : 'cn',
-        'chinese1' : 'cn1',
-        'number' : 'num',
+        'cn' : 'cn-1-',
+        'cn1' : 'cn-2-',
+        'cn2' : 'cn-3-',
+        'num2' : 'num-2-',
+        'num3' : 'num-3-',
         'dash'  : 'dash'
     };
 
     me.setOpt( {
         'insertorderedlist':{
-            'decimal':'1,2,3...',
-            'lower-alpha':'a,b,c...',
-            'lower-roman':'i,ii,iii...',
-            'upper-alpha':'A,B,C...',
-            'upper-roman':'I,II,III...',
-            'chinese':'(一),(二),(三)...',
-            'number':'(1),(2),(3)...'
+            'decimal':'',
+            'num2':'',
+            'num3':'',
+            'cn':'',
+            'cn1':'',
+            'cn2':'',
+            'lower-alpha':'',
+            'lower-roman':'',
+            'upper-alpha':'',
+            'upper-roman':''
         },
         'insertunorderedlist':{
             'circle':'',
@@ -51,9 +56,17 @@ UE.plugins['list'] = function () {
             'dash' : ''
         },
         listDefaultPaddingLeft : '30',
-        listiconpath : me.options.UEDITOR_HOME_URL + 'themes/default/images/list/'
+        listiconpath : me.options.UEDITOR_HOME_URL + 'themes/default/images/list/',
+        maxListLevel : -1//不限制
     } );
     var liiconpath = me.options.listiconpath;
+
+    //根据用户配置，调整customStyle
+    for(var s in customStyle){
+        if(!me.options.insertorderedlist.hasOwnProperty(s) && !me.options.insertunorderedlist.hasOwnProperty(s)){
+            delete customStyle[s];
+        }
+    }
 
     me.ready(function () {
         var customCss = [];
@@ -63,20 +76,31 @@ UE.plugins['list'] = function () {
                 customCss.push('ul.custom_'+p+'{list-style:none;}ul.custom_'+p+' li{background-position:0 3px;background-repeat:no-repeat}');
             }else{
                 for(var i= 0;i<99;i++){
-                    customCss.push('li.list-' + customStyle[p] + '-3-' + i + '{background-image:url(' + liiconpath + 'list-'+customStyle[p]+'-3-' + i + '.gif)}')
+                    customCss.push('li.list-' + customStyle[p] + i + '{background-image:url(' + liiconpath + 'list-'+customStyle[p] + i + '.gif)}')
                 }
                 customCss.push('ol.custom_'+p+'{list-style:none;}ol.custom_'+p+' li{background-position:0 3px;background-repeat:no-repeat}');
             }
             switch(p){
-                case 'chinese':
-                    customCss.push('li.list-chinese-paddingleft-1{padding-left:40px}');
-                    customCss.push('li.list-chinese-paddingleft-2{padding-left:55px}');
-                    customCss.push('li.list-chinese-paddingleft-3{padding-left:65px}');
+                case 'cn':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:30px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:45px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:55px}');
                     break;
-                case 'number':
-                    customCss.push('li.list-number-paddingleft-1{padding-left:30px}');
-                    customCss.push('li.list-number-paddingleft-2{padding-left:37px}');
-                    customCss.push('li.list-number-paddingleft-3{padding-left:37px}');
+                case 'cn1':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:35px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:40px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:50px}');
+                    break;
+                case 'cn2':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:40px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:55px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:65px}');
+                    break;
+                case 'num1':
+                case 'num2':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:30px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:37px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:37px}');
                     break;
                 case 'dash':
                     customCss.push('li.list-dash-paddingleft{padding-left:35px}');
@@ -137,7 +161,7 @@ UE.plugins['list'] = function () {
                                     }
                             }
                         }
-                        li.className = 'list-'+customStyle[currentStyle]+'-3-' + index + ' ' + 'list-'+currentStyle+'-paddingleft-' + paddingLeft;
+                        li.className = 'list-'+customStyle[currentStyle]+ index + ' ' + 'list-'+currentStyle+'-paddingleft-' + paddingLeft;
                     }else{
                         li.className = 'list-'+customStyle[currentStyle]  + ' ' + 'list-'+currentStyle+'-paddingleft';
                     }
@@ -438,13 +462,20 @@ UE.plugins['list'] = function () {
                         first = li.firstChild;
                         //trace:1648 要判断li下只有一个节点
                         if (!first || li.lastChild === first && domUtils.isEmptyNode(domUtils.isBlockElm(first) ? first : li)) {
-                            var p = me.document.createElement('p');
-
-                            li.parentNode.parentNode.insertBefore(p, li.parentNode);
-                            domUtils.fillNode(me.document, p);
-                            range.setStart(p, 0).setCursor();
-                            domUtils.remove(!li.nextSibling ? li.parentNode : li);
-                            me.undoManger && me.undoManger.save();
+                            var parent = li.parentNode;
+                            var parentParent = parent.parentNode;
+                            if(/[ou]l/i.test(parentParent.tagName)){
+                                parentParent.insertBefore(li,parent);
+                                domUtils.remove(parent);
+                                range.setStart(li, 0).setCursor(false,true);
+                            }else{
+                                var p = me.document.createElement('p');
+                                li.parentNode.parentNode.insertBefore(p, li.parentNode);
+                                domUtils.fillNode(me.document, p);
+                                range.setStart(p, 0).setCursor();
+                                domUtils.remove(!li.nextSibling ? li.parentNode : li);
+                            }
+                            me.fireEvent('saveScene');
                             domUtils.preventDefault(evt);
                             return;
                         }
@@ -462,18 +493,36 @@ UE.plugins['list'] = function () {
 
     //处理tab键
     me.addListener('tabkeydown',function(){
+        function listToArray(list){
+            var arr = [];
+            for(var p in list){
+                arr.push(p)
+            }
+            return arr;
+        }
         var range = me.selection.getRange(),
             listStyle = {
-                'OL':['decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','chinese','number'],
-                'UL':[ 'circle','disc','square','dash']
+                'OL':listToArray(me.options.insertorderedlist),
+                'UL':listToArray(me.options.insertunorderedlist)
             };
         //只以开始为准
         //todo 后续改进
         var li = domUtils.findParentByTagName(range.startContainer, 'li', true);
         if(li){
+            //控制级数
+            if(me.options.maxListLevel != -1){
+                var level = li.parentNode,levelNum = 0;
+                while(/[ou]l/i.test(level.tagName)){
+                    levelNum++;
+                    level = level.parentNode;
+                }
+                if(levelNum >= me.options.maxListLevel){
+                    return true;
+                }
+            }
             var bk,parentLi = li.parentNode,
                 list = me.document.createElement(parentLi.tagName),
-                index = utils.indexOf(listStyle[list.tagName], domUtils.hasClass(parentLi,/custom_/)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
+                index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
             index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
             var currentStyle = listStyle[list.tagName][index];
             var current = li;
@@ -571,7 +620,7 @@ UE.plugins['list'] = function () {
                         if (domUtils.isEmptyNode(tmp.nextSibling)) {
                             domUtils.remove(tmp.nextSibling)
                         }
-                        var nodeStyle = domUtils.hasClass(startParent,/custom_/) || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
+                        var nodeStyle = getStyle(startParent) || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
                         if (startParent.tagName.toLowerCase() == tag && nodeStyle == style) {
                             for (var i = 0, ci, tmpFrag = me.document.createDocumentFragment(); ci = frag.childNodes[i++];) {
                                 while (ci.firstChild) {

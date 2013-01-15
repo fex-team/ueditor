@@ -29,12 +29,15 @@ UE.I18N['en'] = {
     },
     'insertorderedlist':{
         'decimal':'1,2,3...',
+        'num2':'1),2),3)...',
+        'num3':'(1),(2),(3)...',
+        'cn':'一,二,三....',
+        'cn1':'一),二),三)....',
+        'cn2':'(一),(二),(三)....',
         'lower-alpha':'a,b,c...',
         'lower-roman':'i,ii,iii...',
         'upper-alpha':'A,B,C...',
-        'upper-roman':'I,II,III...',
-        'chinese':'(一)(二)(三)....',
-        'number':'(1)(2)(3)...'
+        'upper-roman':'I,II,III...'
     },
     'insertunorderedlist':{
         'circle':'○ Circle',
