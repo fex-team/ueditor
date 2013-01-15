@@ -28,12 +28,13 @@ UE.I18N['en'] = {
         'music':'Music'
     },
     'insertorderedlist':{
-        'decimal':'1,2,3...',
-        'num2':'1),2),3)...',
-        'num3':'(1),(2),(3)...',
+        'num':'1,2,3...',
+        'num1':'1),2),3)...',
+        'num2':'(1),(2),(3)...',
         'cn':'一,二,三....',
         'cn1':'一),二),三)....',
         'cn2':'(一),(二),(三)....',
+        'decimal':'1,2,3...',
         'lower-alpha':'a,b,c...',
         'lower-roman':'i,ii,iii...',
         'upper-alpha':'A,B,C...',
@@ -43,7 +44,8 @@ UE.I18N['en'] = {
         'circle':'○ Circle',
         'disc':'● Circle dot',
         'square':'■ Rectangle ',
-        'dash' :'－ Dash'
+        'dash' :'－ Dash',
+        'dot' : '。dot'
     },
     'paragraph':{'p':'Paragraph', 'h1':'Title 1', 'h2':'Title 2', 'h3':'Title 3', 'h4':'Title 4', 'h5':'Title 5', 'h6':'Title 6'},
     'fontfamily':{

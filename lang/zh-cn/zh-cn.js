@@ -25,12 +25,13 @@ UE.I18N['zh-cn'] = {
         'touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦','music':'音乐'
     },
     'insertorderedlist':{
-        'decimal':'1,2,3...',
-        'num2':'1),2),3)...',
-        'num3':'(1),(2),(3)...',
+        'num':'1,2,3...',
+        'num1':'1),2),3)...',
+        'num2':'(1),(2),(3)...',
         'cn':'一,二,三....',
         'cn1':'一),二),三)....',
         'cn2':'(一),(二),(三)....',
+        'decimal':'1,2,3...',
         'lower-alpha':'a,b,c...',
         'lower-roman':'i,ii,iii...',
         'upper-alpha':'A,B,C...',
@@ -40,7 +41,8 @@ UE.I18N['zh-cn'] = {
         'circle':'○ 小圆圈',
         'disc':'● 小圆点',
         'square':'■ 小方块 ',
-        'dash' :'— 破折号'
+        'dash' :'— 破折号',
+        'dot':'。小圆点'
     },
     'paragraph':{'p':'段落', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
     'fontfamily':{
