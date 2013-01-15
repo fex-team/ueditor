@@ -125,7 +125,10 @@ UE.plugins['pagebreak'] = function () {
 
         },
         queryCommandState:function () {
-            return this.highlight ? -1 : 0;
+            var start = this.selection.getStart(),
+                cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
+
+            return cell? -1:0;
         }
     };
 };
