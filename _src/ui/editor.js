@@ -135,6 +135,7 @@
                 var count = editor.getContentLength(true);
                 if (count > max) {
                     countDom.innerHTML = errMsg;
+                    editor.fireEvent("wordcountoverflow");
                 } else {
                     countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
                 }
