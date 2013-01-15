@@ -31,19 +31,22 @@ UE.plugins['list'] = function () {
         'cn' : 'cn-1-',
         'cn1' : 'cn-2-',
         'cn2' : 'cn-3-',
-        'num2' : 'num-2-',
-        'num3' : 'num-3-',
-        'dash'  : 'dash'
+        'num':  'num-1-',
+        'num1' : 'num-2-',
+        'num2' : 'num-3-',
+        'dash'  : 'dash',
+        'dot':'dot'
     };
 
     me.setOpt( {
         'insertorderedlist':{
-            'decimal':'',
+            'num':'',
+            'num1':'',
             'num2':'',
-            'num3':'',
             'cn':'',
             'cn1':'',
             'cn2':'',
+            'decimal':'',
             'lower-alpha':'',
             'lower-roman':'',
             'upper-alpha':'',
@@ -53,10 +56,11 @@ UE.plugins['list'] = function () {
             'circle':'',
             'disc':'',
             'square':'',
-            'dash' : ''
+            'dash' : '',
+            'dot':''
         },
         listDefaultPaddingLeft : '30',
-        listiconpath : me.options.UEDITOR_HOME_URL + 'themes/default/images/list/',
+        listiconpath : 'http://ueditorbbs.com/list-icon-all/',
         maxListLevel : -1//不限制
     } );
     var liiconpath = me.options.listiconpath;
@@ -71,7 +75,7 @@ UE.plugins['list'] = function () {
     me.ready(function () {
         var customCss = [];
         for(var p in customStyle){
-            if(p == 'dash'){
+            if(p == 'dash' || p == 'dot'){
                 customCss.push('li.list-' + customStyle[p] + '{background-image:url(' + liiconpath +customStyle[p]+'.gif)}');
                 customCss.push('ul.custom_'+p+'{list-style:none;}ul.custom_'+p+' li{background-position:0 3px;background-repeat:no-repeat}');
             }else{
@@ -82,28 +86,34 @@ UE.plugins['list'] = function () {
             }
             switch(p){
                 case 'cn':
-                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:30px}');
-                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:45px}');
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:25px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:40px}');
                     customCss.push('li.list-'+p+'-paddingleft-3{padding-left:55px}');
                     break;
                 case 'cn1':
-                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:35px}');
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:30px}');
                     customCss.push('li.list-'+p+'-paddingleft-2{padding-left:40px}');
-                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:50px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:55px}');
                     break;
                 case 'cn2':
                     customCss.push('li.list-'+p+'-paddingleft-1{padding-left:40px}');
                     customCss.push('li.list-'+p+'-paddingleft-2{padding-left:55px}');
-                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:65px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:68px}');
                     break;
+                case 'num':
                 case 'num1':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:25px}');
+                    break;
                 case 'num2':
-                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:30px}');
-                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:37px}');
-                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:37px}');
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:35px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:40px}');
                     break;
                 case 'dash':
-                    customCss.push('li.list-dash-paddingleft{padding-left:35px}');
+
+                    customCss.push('li.list-'+p+'-paddingleft{padding-left:35px}');
+                    break;
+                case 'dot':
+                    customCss.push('li.list-'+p+'-paddingleft{padding-left:20px}');
             }
         }
         customCss.push('.list-paddingleft-1{padding-left:0}');
@@ -148,15 +158,17 @@ UE.plugins['list'] = function () {
                     if(node.tagName == 'OL'){
                         if(currentStyle){
                             switch(currentStyle){
-                                case 'chinese' :
+                                case 'cn' :
+                                case 'cn1':
+                                case 'cn2':
                                     if(index > 10 && (index % 10 == 0 || index > 10 && index < 20)){
                                         paddingLeft = 2
                                     }else if(index > 20){
                                         paddingLeft = 3
                                     }
                                     break;
-                                case 'number' :
-                                    if(index > 10){
+                                case 'num2' :
+                                    if(index > 9){
                                         paddingLeft = 2
                                     }
                             }
