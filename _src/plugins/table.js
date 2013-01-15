@@ -1953,10 +1953,9 @@ UE.plugins['table'] = function () {
             if (table) {
                 var obj = {};
                 obj[data[0]] = data[1];
-                domUtils.setStyles(table,{
-                    float:'',
-                    margin:''
-                });
+
+                table.style[utils.cssStyleToDomStyle("float")]="";
+                table.style.margin="";
                 domUtils.setStyles(table, obj);
             }
         }
