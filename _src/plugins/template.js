@@ -1,5 +1,6 @@
 ///import core
 ///import plugins\inserthtml.js
+///import plugins\cleardoc.js
 ///commands 模板
 ///commandsName  template
 ///commandsTitle  模板
