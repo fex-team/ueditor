@@ -1775,7 +1775,7 @@ UE.plugins['table'] = function () {
                         table.setAttribute('width', '100%');
                     } else {
                         var ut = getUETable(table),
-                            preTds = ut.getSameEndPosCells(cell, "x");
+                            preTds = cell?ut.getSameEndPosCells(cell, "x"):table.getElementsByTagName("td");
                         if (preTds.length) {
                             table.style.width = "";
                             table.removeAttribute("width");
