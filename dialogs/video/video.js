@@ -22,7 +22,18 @@ var video = {};
                 $G("videoUrl").value = url = img.getAttribute("_url");
                 $G("videoWidth").value = img.width;
                 $G("videoHeight").value = img.height;
-                updateAlignButton(img.getAttribute("align"));
+                var align = domUtils.getComputedStyle(img,"float"),
+                    parentAlign = domUtils.getComputedStyle(img.parentNode,"text-align");
+                if(parentAlign!=="center" && align ==="none" ){
+                    img.parentNode.style.textAlign = align;
+                    updateAlignButton(align);
+                }else{
+                    img.parentNode.style.textAlign = align =="center"?"center":"none";
+                    updateAlignButton(align);
+
+                }
+
+
             }
             createPreviewVideo(url);
         })();
