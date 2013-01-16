@@ -11,7 +11,9 @@ UE.commands['inserthtml'] = {
         var me = this,
             range,
             div;
-
+        if(!html){
+            return;
+        }
         range = me.selection.getRange();
 
         div = range.document.createElement( 'div' );

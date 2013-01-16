@@ -491,13 +491,17 @@
                     html = '';
             me.fireEvent( 'getAllHtml', headHtml );
             if(browser.ie && browser.version > 8){
-                var cssHtml= '';
+                var headHtmlForIE9= '';
                 utils.each(me.document.styleSheets,function(si){
-                    cssHtml += ( si.href ? '<link rel="stylesheet" type="text/css" href="'+si.href+'" />': '<style>'+si.cssText+'</style>');
-                })
+                    headHtmlForIE9 += ( si.href ? '<link rel="stylesheet" type="text/css" href="'+si.href+'" />': '<style>'+si.cssText+'</style>');
+                });
+                utils.each(me.document.getElementsByTagName('script'),function(si){
+                    headHtmlForIE9 += si.outerHTML;
+                });
+
             }
             return '<html><head>' + (me.options.charset ? '<meta http-equiv="Content-Type" content="text/html; charset=' + me.options.charset + '"/>' : '')
-                + (cssHtml || me.document.getElementsByTagName( 'head' )[0].innerHTML) + headHtml.join('\n') + '</head>'
+                + (headHtmlForIE9 || me.document.getElementsByTagName( 'head' )[0].innerHTML) + headHtml.join('\n') + '</head>'
                     + '<body ' + (ie && browser.version < 9 ? 'class="view"' : '') + '>' + me.getContent( null, null, true ) + '</body></html>';
         },
         /**

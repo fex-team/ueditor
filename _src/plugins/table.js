@@ -347,6 +347,10 @@ UE.plugins['table'] = function () {
 
             }, 100);
         });
+        me.addListener("selectionchange",function(){
+            toggleDragableState(me, false, "", null);
+        });
+
 
         //内容变化时触发索引更新
         //todo 可否考虑标记检测，如果不涉及表格的变化就不进行索引重建和更新
@@ -464,7 +468,7 @@ UE.plugins['table'] = function () {
                     }
                 }
             });
-            toggleDragableState(me, false, "", null);
+
             switchBoderColor(true);
         });
 
@@ -486,15 +490,16 @@ UE.plugins['table'] = function () {
         var currentRowIndex = 0;
         me.addListener('tabkeydown', function () {
             var range = this.selection.getRange(),
-                obj = getTableItemsByRange(me);
-            if (obj.table) {
-                if (obj.caption) {
-                    var cell = domUtils.getElementsByTagName(obj.table, 'th td');
+                common = range.getCommonAncestor(true,true),
+                table = domUtils.findParentByTagName(common,'table');
+            if (table) {
+                if (domUtils.findParentByTagName(common,'caption')) {
+                    var cell = domUtils.getElementsByTagName(table, 'th td');
                     if (cell && cell.length) {
                         range.setStart(cell[0], 0).setCursor(false, true)
                     }
                 } else {
-                    var cell = obj.cell,
+                    var cell = domUtils.findParentByTagName(common,['td', 'th'],true),
                         ua = getUETable(cell);
                     currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
                     var nextCell = ua.getTabNextCell(cell, currentRowIndex);
@@ -510,13 +515,16 @@ UE.plugins['table'] = function () {
                         this.execCommand('insertrownext');
                         me.__hasEnterExecCommand = false;
                         range = this.selection.getRange();
-                        range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
+                        range.setStart(table.rows[table.rows.length - 1].cells[0], 0).setCursor();
                         me.fireEvent('saveScene');
                     }
                 }
                 return true;
             }
 
+        });
+        browser.ie && me.addListener('selectionchange',function(){
+            toggleDragableState(this, false, "", null);
         });
         me.addListener("keydown", function (type, evt) {
             var me = this;
@@ -580,29 +588,26 @@ UE.plugins['table'] = function () {
                 me.__hasEnterExecCommand = true;
                 me.fireEvent("beforeexeccommand", cmd);
                 tds = ut.selectedTds;
-                var firstState, state, firstTd;
+                var lastState = -2, lastValue = -2,value,state;
                 for (var i = 0, td; td = tds[i]; i++) {
                     if (isEmptyBlock(td)) {
                         range.setStart(td, 0).setCursor(false, true)
                     } else {
                         range.selectNodeContents(td).select();
                     }
-
                     state = me.queryCommandState(cmd);
-                    if (firstState === undefined && !isEmptyBlock(td)) {
-                        firstTd = td;
-                        firstState = state;
-                    }
-                    if (state != -1 && (firstState === undefined || firstState == state)) {
-                        var isEmpty = domUtils.isEmptyNode(td);
-                        me._ignoreContentChange = true;
-                        result = oldExecCommand.apply(me, arguments);
-                        me._ignoreContentChange = false;
-                        var reg = new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
-                        if (isEmpty != domUtils.isEmptyNode(td) && !td[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length) {
-                            domUtils.fillNode(me.document, td)
+                    value = me.queryCommandValue(cmd);
+                    if (state != -1 ) {
+                        if(lastState !== state || lastValue !== value){
+                            me._ignoreContentChange = true;
+                            result = oldExecCommand.apply(me, arguments);
+                            me._ignoreContentChange = false;
+                            if (domUtils.isEmptyBlock(td)) {
+                                domUtils.fillNode(me.document, td)
+                            }
                         }
-
+                        lastState = me.queryCommandState(cmd);
+                        lastValue = me.queryCommandValue(cmd);
                     }
                 }
                 range.setStart(tds[0], 0).shrinkBoundary(true).setCursor(false, true);
@@ -1775,7 +1780,7 @@ UE.plugins['table'] = function () {
                         table.setAttribute('width', '100%');
                     } else {
                         var ut = getUETable(table),
-                            preTds = ut.getSameEndPosCells(cell, "x");
+                            preTds = cell?ut.getSameEndPosCells(cell, "x"):table.getElementsByTagName("td");
                         if (preTds.length) {
                             table.style.width = "";
                             table.removeAttribute("width");
