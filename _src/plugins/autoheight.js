@@ -53,6 +53,7 @@ UE.plugins['autoheight'] = function () {
 
     me.addListener('destroy', function () {
         me.removeListener('contentchange', adjustHeight);
+        me.removeListener('afterinserthtml',adjustHeight);
         me.removeListener('keyup', adjustHeight);
         me.removeListener('mouseup', adjustHeight);
     });
@@ -65,6 +66,7 @@ UE.plugins['autoheight'] = function () {
         bakOverflow = doc.body.style.overflowY;
         doc.body.style.overflowY = 'hidden';
         me.addListener('contentchange', adjustHeight);
+        me.addListener('afterinserthtml',adjustHeight)
         me.addListener('keyup', adjustHeight);
         me.addListener('mouseup', adjustHeight);
         //ff不给事件算得不对
