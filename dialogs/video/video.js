@@ -24,16 +24,7 @@ var video = {};
                 $G("videoHeight").value = img.height;
                 var align = domUtils.getComputedStyle(img,"float"),
                     parentAlign = domUtils.getComputedStyle(img.parentNode,"text-align");
-                if(parentAlign!=="center" && align ==="none" ){
-                    img.parentNode.style.textAlign = align;
-                    updateAlignButton(align);
-                }else{
-                    img.parentNode.style.textAlign = align =="center"?"center":"none";
-                    updateAlignButton(align);
-
-                }
-
-
+                updateAlignButton(parentAlign==="center"?"center":align);
             }
             createPreviewVideo(url);
         })();
