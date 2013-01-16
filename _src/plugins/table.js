@@ -347,6 +347,10 @@ UE.plugins['table'] = function () {
 
             }, 100);
         });
+        me.addListener("selectionchange",function(){
+            toggleDragableState(me, false, "", null);
+        });
+
 
         //内容变化时触发索引更新
         //todo 可否考虑标记检测，如果不涉及表格的变化就不进行索引重建和更新
