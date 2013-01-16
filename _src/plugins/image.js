@@ -111,11 +111,9 @@ UE.commands['imagefloat'] = {
     },
     queryCommandState:function () {
         var range = this.selection.getRange(),
-            start = this.selection.getStart(),
-            cell = start && domUtils.findParentByTagName(start, ["td", "th", "caption"], true),
             startNode;
 
-        if (range.collapsed || cell)  return -1;
+        if (range.collapsed)  return -1;
 
         startNode = range.getClosedNode();
         if (startNode && startNode.nodeType == 1 && startNode.tagName == 'IMG') {
