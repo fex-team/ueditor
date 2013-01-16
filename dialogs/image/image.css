@@ -22,9 +22,9 @@ td input {
     height: 40px;
     top: 68px;
     left: 260px;
-    background: url("../../themes/default/images/lock.gif") -2px -3px no-repeat;
+    background: url("../../themes/default/images/lock.gif") 3px -4px no-repeat;
     line-height: 40px;
-    padding-top:13px;
+    padding-top:10px;
 }
 .saveDir{
     /*width: 132px;*/
