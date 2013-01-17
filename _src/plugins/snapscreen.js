@@ -54,7 +54,7 @@ UE.plugins['snapscreen'] = function(){
                 alert(lang.uploadErrorMsg);
             };
             try{
-                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, "80");
+                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, editorOptions.snapscreenServerPort.toString());
                 onSuccess(ret);
             }catch(e){
                 me.ui._dialogs['snapscreenDialog'].open();

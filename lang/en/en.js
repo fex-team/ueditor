@@ -24,7 +24,7 @@ UE.I18N['en'] = {
         'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'highlightcode':'Code', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
         'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
-        'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',
+        'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
         'music':'Music'
     },
     'insertorderedlist':{
