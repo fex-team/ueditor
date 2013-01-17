@@ -38,11 +38,11 @@ UE.I18N['zh-cn'] = {
         'upper-roman':'I,II,III...'
     },
     'insertunorderedlist':{
-        'circle':'○ 小圆圈',
-        'disc':'● 小圆点',
+        'circle':'○ 大圆圈',
+        'disc':'● 小黑点',
         'square':'■ 小方块 ',
         'dash' :'— 破折号',
-        'dot':'。小圆点'
+        'dot':'。小圆圈'
     },
     'paragraph':{'p':'段落', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
     'fontfamily':{
