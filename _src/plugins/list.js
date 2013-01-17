@@ -181,10 +181,11 @@ UE.plugins['list'] = function () {
                 }else{
                     li.className = li.className.replace(/list-[\w\-]+/gi,'');
                 }
-                if(!li.getAttribute('class').replace(/\s/g,'')){
+                if(!(li.getAttribute('class')||'a').replace(/\s/g,'')){
                     domUtils.removeAttributes(li,'class')
                 }
             })
+
         })
     });
 
@@ -383,7 +384,7 @@ UE.plugins['list'] = function () {
 
                         range.setStart(first, 0).collapse(true).shrinkBoundary().select();
                         domUtils.remove(span);
-                        pre = nextLi.previousSibling;
+                        var pre = nextLi.previousSibling;
                         if (pre && domUtils.isEmptyBlock(pre)) {
                             pre.innerHTML = '<p></p>';
                             domUtils.fillNode(me.document, pre.firstChild);
