@@ -199,7 +199,7 @@ UE.plugins['table'] = function () {
                             rowIndex++;
                         }
                         for (var i = 0, ci; ci = tableCopyList[i++];) {
-                            var tr = ut.insertRow(rowIndex++);
+                            var tr = ut.insertRow(rowIndex++,"td");
                             for (var j = 0, cj; cj = ci[j]; j++) {
                                 var cell = tr.cells[j];
                                 if (!cell) {
@@ -2587,7 +2587,7 @@ UE.plugins['table'] = function () {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
                     cell = this.cloneCell(sourceCell,true);
                     this.setCellContent(cell);
-                    cell.setAttribute('valign', me.options.tdvalign);
+                    cell.setAttribute('valign', cell.getAttribute('valign'));
                     row.appendChild(cell);
                 }
             } else {
@@ -2696,7 +2696,7 @@ UE.plugins['table'] = function () {
                     preCell = tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
                     cell = this.cloneCell(sourceCell,true); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
                     this.setCellContent(cell);
-                    cell.setAttribute('valign', me.options.tdvalign);
+                    cell.setAttribute('valign', cell.getAttribute('valign'));
                     preCell && cell.setAttribute('width', preCell.getAttribute('width'));
                     if (!colIndex) {
                         tableRow.insertBefore(cell, tableRow.cells[0]);
@@ -2717,7 +2717,7 @@ UE.plugins['table'] = function () {
 
                         cell = this.cloneCell(sourceCell,true);//tableRow.insertCell(cellInfo.cellIndex);
                         this.setCellContent(cell);
-                        cell.setAttribute('valign', me.options.tdvalign);
+                        cell.setAttribute('valign', cell.getAttribute('valign'));
                         preCell && cell.setAttribute('width', preCell.getAttribute('width'))
                         tableRow.insertBefore(cell, preCell);
                     }
@@ -2789,7 +2789,7 @@ UE.plugins['table'] = function () {
                     tmpCell = tableRow.insertCell(colIndex - this.getPreviewMergedCellsNum(i, colIndex));
                 tmpCell.colSpan = cellInfo.colSpan;
                 this.setCellContent(tmpCell);
-                tmpCell.setAttribute('valign', me.options.tdvalign);
+                tmpCell.setAttribute('valign', cell.getAttribute('valign'));
                 tmpCell.setAttribute('align', cell.getAttribute('align'));
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
@@ -2828,7 +2828,7 @@ UE.plugins['table'] = function () {
                     tmpCell = tableRow.insertCell(this.indexTable[rowIndex][j].cellIndex + 1);
                 tmpCell.rowSpan = cellInfo.rowSpan;
                 this.setCellContent(tmpCell);
-                tmpCell.setAttribute('valign', me.options.tdvalign);
+                tmpCell.setAttribute('valign',cell.getAttribute('valign'));
                 tmpCell.setAttribute('align',cell.getAttribute('align'));
                 tmpCell.setAttribute('width',backWidth);
                 if (cell.style.cssText) {
@@ -2838,7 +2838,7 @@ UE.plugins['table'] = function () {
                 if (cell.tagName == 'TH') {
                     var th = cell.ownerDocument.createElement('th');
                     th.appendChild(tmpCell.firstChild);
-                    th.setAttribute('valign', me.options.tdvalign);
+                    th.setAttribute('valign', cell.getAttribute('valign'));
                     th.rowSpan = tmpCell.rowSpan;
                     tableRow.insertBefore(th, tmpCell);
                     domUtils.remove(tmpCell)
