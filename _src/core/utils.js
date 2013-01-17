@@ -258,14 +258,18 @@ var utils = UE.utils = {
     loadFile:function () {
         var tmpList = [];
         function getItem(doc,obj){
-            for(var i= 0,ci;ci=tmpList[i++];){
-                if(ci.doc === doc && ci.url == (obj.src || obj.href)){
-                    return ci;
+            try{
+                for(var i= 0,ci;ci=tmpList[i++];){
+                    if(ci.doc === doc && ci.url == (obj.src || obj.href)){
+                        return ci;
+                    }
                 }
+            }catch(e){
+                return null;
             }
+
         }
         return function (doc, obj, fn) {
-
             var item = getItem(doc,obj);
             if (item) {
                 if(item.ready){
@@ -299,7 +303,7 @@ var utils = UE.utils = {
             }
             element.onload = element.onreadystatechange = function () {
                 if (!this.readyState || /loaded|complete/.test(this.readyState)) {
-                    item = getItem(doc,obj)
+                    item = getItem(doc,obj);
                     if (item.funs.length > 0) {
                         item.ready = 1;
                         for (var fi; fi = item.funs.pop();) {
