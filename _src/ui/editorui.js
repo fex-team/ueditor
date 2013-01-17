@@ -5,6 +5,7 @@
     var utils = baidu.editor.utils;
     var editorui = baidu.editor.ui;
     var _Dialog = editorui.Dialog;
+
     editorui.Dialog = function (options) {
         var dialog = new _Dialog(options);
         dialog.addListener('hide', function () {
@@ -698,6 +699,8 @@
                 this.setChecked(editor.ui.isFullScreen());
             }
         });
+        editor.ui.buttons={};
+        editor.ui.buttons['fullscreen']=ui;
         editor.addListener('selectionchange', function () {
             var state = editor.queryCommandState('fullscreen');
             ui.setDisabled(state == -1);
