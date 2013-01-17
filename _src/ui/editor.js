@@ -113,6 +113,13 @@
             });
             editor.addListener('keydown', function (t, evt) {
                 if (pastePop)    pastePop.dispose(evt);
+                var keyCode = evt.keyCode || evt.which;
+                if(evt.altKey&&keyCode==90){
+                    if (editor.ui) {
+                        editor.ui.setFullScreen(!editor.ui.isFullScreen());
+                    }
+                    this.setChecked(editor.ui.isFullScreen());
+                }
             });
             editor.addListener('wordcount', function (type) {
                 setCount(this,me);

@@ -38,11 +38,11 @@ UE.I18N['zh-cn'] = {
         'upper-roman':'I,II,III...'
     },
     'insertunorderedlist':{
-        'circle':'○ 小圆圈',
-        'disc':'● 小圆点',
+        'circle':'○ 大圆圈',
+        'disc':'● 小黑点',
         'square':'■ 小方块 ',
         'dash' :'— 破折号',
-        'dot':'。小圆点'
+        'dot':' 。 小圆圈'
     },
     'paragraph':{'p':'段落', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
     'fontfamily':{
@@ -352,7 +352,8 @@ UE.I18N['zh-cn'] = {
             'lang_Txt_removeFormat':'清除页面文字格式',
             'lang_Txt_leftJustification':'页面文字居左显示',
             'lang_Txt_rightJustification':'页面文字居右显示',
-            'lang_Txt_visualEnter':'软回车'
+            'lang_Txt_visualEnter':'软回车',
+             'lang_Txt_fullscreen':'全屏'
         }
     },
     'insertframe':{

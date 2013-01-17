@@ -692,9 +692,7 @@
             title:title,
             theme:editor.options.theme,
             onclick:function () {
-                var scale=editor.ui.getDom("scale");
                 if (editor.ui) {
-
                     editor.ui.setFullScreen(!editor.ui.isFullScreen());
                 }
                 this.setChecked(editor.ui.isFullScreen());

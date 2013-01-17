@@ -370,7 +370,8 @@ UE.I18N['en'] = {
             'lang_Txt_removeFormat':'Remove Format',
             'lang_Txt_leftJustification':'Justify Left',
             'lang_Txt_rightJustification':'Justify Right',
-            'lang_Txt_visualEnter':'Submit'
+            'lang_Txt_visualEnter':'Submit',
+            'lang_Txt_fullscreen':'Fullscreen'
         }
     },
     insertframe:{
