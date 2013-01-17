@@ -32,7 +32,6 @@
                 domUtils.on(editor.window, 'scroll', function (evt) {
                     baidu.editor.ui.Popup.postHide(evt);
                 });
-
                 //提供编辑器实时宽高(全屏时宽高不变化)
                 editor.ui._actualFrameWidth = editor.options.initialFrameWidth;
 
@@ -115,10 +114,7 @@
                 if (pastePop)    pastePop.dispose(evt);
                 var keyCode = evt.keyCode || evt.which;
                 if(evt.altKey&&keyCode==90){
-                    if (editor.ui) {
-                        editor.ui.setFullScreen(!editor.ui.isFullScreen());
-                    }
-                    this.setChecked(editor.ui.isFullScreen());
+                    UE.ui.buttons['fullscreen'].onclick();
                 }
             });
             editor.addListener('wordcount', function (type) {

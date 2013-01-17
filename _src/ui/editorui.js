@@ -5,6 +5,8 @@
     var utils = baidu.editor.utils;
     var editorui = baidu.editor.ui;
     var _Dialog = editorui.Dialog;
+    editorui.buttons={};
+
     editorui.Dialog = function (options) {
         var dialog = new _Dialog(options);
         dialog.addListener('hide', function () {
@@ -76,6 +78,7 @@
                     theme:editor.options.theme,
                     showText:false
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
                     var state = editor.queryCommandState(cmd);
                     if (state == -1) {
@@ -105,6 +108,7 @@
                 }
             }
         });
+        editorui.buttons["cleardoc"]=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('cleardoc') == -1);
         });
@@ -132,6 +136,7 @@
                                 editor.execCommand(cmd, cmd2);
                             }
                         });
+                        editorui.buttons[cmd]=ui;
                         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
                             ui.setDisabled(editor.queryCommandState(cmd) == -1);
                             ui.setChecked(editor.queryCommandValue(cmd) == cmd2 && !uiReady);
@@ -164,6 +169,7 @@
                         editor.execCommand(cmd, this.color);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     ui.setDisabled(editor.queryCommandState(cmd) == -1);
                 });
@@ -254,6 +260,7 @@
                             theme:editor.options.theme,
                             disabled:cmd == 'scrawl' && editor.queryCommandState("scrawl") == -1
                         });
+                        editorui.buttons[cmd]=ui;
                         editor.addListener('selectionchange', function () {
                             //只存在于右键菜单而无工具栏按钮的ui不需要检测状态
                             var unNeedCheckState = {'edittable':1};
@@ -285,6 +292,7 @@
             theme:editor.options.theme
 
         });
+        editorui.buttons['snapscreen']=ui;
         iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})["snapscreen"] || iframeUrlMap["snapscreen"];
         if (iframeUrl) {
             var dialog = new editorui.Dialog({
@@ -363,6 +371,7 @@
                 return -1;
             }
         });
+        editorui.buttons['fontfamily']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('FontFamily');
@@ -412,6 +421,7 @@
             },
             className:'edui-for-fontsize'
         });
+        editorui.buttons['fontsize']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('FontSize');
@@ -455,6 +465,7 @@
                 this.showPopup();
             }
         });
+        editorui.buttons['paragraph']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('Paragraph');
@@ -524,6 +535,7 @@
                 return -1;
             }
         });
+        editorui.buttons['customstyle']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('customstyle');
@@ -557,6 +569,7 @@
                 this.showPopup();
             }
         });
+        editorui.buttons['inserttable']=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('inserttable') == -1);
         });
@@ -587,6 +600,7 @@
                 editor.execCommand("LineHeight", value);
             }
         });
+        editorui.buttons['lineheight']=ui;
         editor.addListener('selectionchange', function () {
             var state = editor.queryCommandState('LineHeight');
             if (state == -1) {
@@ -627,6 +641,7 @@
                         editor.execCommand("rowspacing", value, cmd);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     var state = editor.queryCommandState('rowspacing', cmd);
                     if (state == -1) {
@@ -669,6 +684,7 @@
                         editor.execCommand(cmd, value);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     var state = editor.queryCommandState(cmd);
                     if (state == -1) {
@@ -698,6 +714,7 @@
                 this.setChecked(editor.ui.isFullScreen());
             }
         });
+        editorui.buttons['fullscreen']=ui;
         editor.addListener('selectionchange', function () {
             var state = editor.queryCommandState('fullscreen');
             ui.setDisabled(state == -1);
@@ -714,6 +731,8 @@
             className:'edui-for-emotion',
             iframeUrl:editor.ui.mapUrl(iframeUrl || (editor.options.iframeUrlMap || {})['emotion'] || iframeUrlMap['emotion'])
         });
+        editorui.buttons['emotion']=ui;
+
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('emotion') == -1)
         });
@@ -729,6 +748,7 @@
                 editor.execCommand('autotypeset')
             }
         });
+        editorui.buttons['autotypeset']=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('autotypeset') == -1);
         });
