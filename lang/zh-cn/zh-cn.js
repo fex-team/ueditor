@@ -352,7 +352,8 @@ UE.I18N['zh-cn'] = {
             'lang_Txt_removeFormat':'清除页面文字格式',
             'lang_Txt_leftJustification':'页面文字居左显示',
             'lang_Txt_rightJustification':'页面文字居右显示',
-            'lang_Txt_visualEnter':'软回车'
+            'lang_Txt_visualEnter':'软回车',
+             'lang_Txt_fullscreen':'全屏'
         }
     },
     'insertframe':{
