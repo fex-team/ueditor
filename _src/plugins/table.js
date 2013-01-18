@@ -493,7 +493,7 @@ UE.plugins['table'] = function () {
                 common = range.getCommonAncestor(true,true),
                 table = domUtils.findParentByTagName(common,'table');
             if (table) {
-                if (domUtils.findParentByTagName(common,'caption')) {
+                if (domUtils.findParentByTagName(common,'caption',true)) {
                     var cell = domUtils.getElementsByTagName(table, 'th td');
                     if (cell && cell.length) {
                         range.setStart(cell[0], 0).setCursor(false, true)
@@ -1134,7 +1134,7 @@ UE.plugins['table'] = function () {
      */
     function getUETable(tdOrTable) {
         var tag = tdOrTable.tagName.toLowerCase();
-        tdOrTable = (tag == "td" || tag == "th") ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
+        tdOrTable = (tag == "td" || tag == "th" || tag == 'caption') ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
         if (!tdOrTable.ueTable) {
             tdOrTable.ueTable = new UETable(tdOrTable);
         }
