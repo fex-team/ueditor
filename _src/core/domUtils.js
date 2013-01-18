@@ -969,11 +969,16 @@ var domUtils = dom.domUtils = {
      * @grammar UE.dom.domUtils.removeStyle(element,name)        删除的样式名称
      */
     removeStyle:function (element, name) {
-        if (element.style.removeProperty) {
-            element.style.removeProperty (name);
-        }else {
-            element.style.removeAttribute (utils.cssStyleToDomStyle(name));
+        if(browser.ie && browser.version > 8){
+            element.style.cssText = element.style.cssText.replace(new RegExp(name + '\s*:\s*[^;]+;?'),'')
+        }else{
+            if (element.style.removeProperty) {
+                element.style.removeProperty (name);
+            }else {
+                element.style.removeAttribute (utils.cssStyleToDomStyle(name));
+            }
         }
+
 
         if (!element.style.cssText) {
             domUtils.removeAttributes(element, ['style']);
