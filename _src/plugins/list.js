@@ -181,8 +181,9 @@ UE.plugins['list'] = function () {
                 }else{
                     li.className = li.className.replace(/list-[\w\-]+/gi,'');
                 }
-                if(!(li.getAttribute('class')||'a').replace(/\s/g,'')){
-                    domUtils.removeAttributes(li,'class')
+                var className = li.getAttribute('class');
+                if(className !== null && !className.replace(/\s/g,'')){
+                    domUtils.removeAttributes(li,'className')
                 }
             })
 
@@ -478,26 +479,25 @@ UE.plugins['list'] = function () {
                     //trace:980
 
                     if (li && !li.previousSibling) {
-                        first = li.firstChild;
-                        //trace:1648 要判断li下只有一个节点
-                        if (!first || li.lastChild === first && domUtils.isEmptyNode(domUtils.isBlockElm(first) ? first : li)) {
-                            var parent = li.parentNode;
-                            var parentParent = parent.parentNode;
-                            if(/[ou]l/i.test(parentParent.tagName)){
-                                parentParent.insertBefore(li,parent);
-                                domUtils.remove(parent);
-                                range.setStart(li, 0).setCursor(false,true);
-                            }else{
-                                var p = me.document.createElement('p');
-                                li.parentNode.parentNode.insertBefore(p, li.parentNode);
-                                domUtils.fillNode(me.document, p);
-                                range.setStart(p, 0).setCursor();
-                                domUtils.remove(!li.nextSibling ? li.parentNode : li);
+                        var parentList = li.parentNode;
+                        var bk = range.createBookmark();
+                        if(domUtils.isTagNode(parentList.parentNode,'ol ul')){
+                            parentList.parentNode.insertBefore(li,parentList);
+                            if(domUtils.isEmptyNode(parentList)){
+                                domUtils.remove(parentList)
                             }
-                            me.fireEvent('saveScene');
-                            domUtils.preventDefault(evt);
-                            return;
+                        }else{
+
+                            while(li.firstChild){
+                                parentList.parentNode.insertBefore(li.firstChild,parentList);
+                            }
+                            domUtils.remove(li)
+
                         }
+                        range.moveToBookmark(bk).setCursor(false,true)
+                        me.fireEvent('saveScene');
+                        domUtils.preventDefault(evt);
+                        return;
 
                     }
 
@@ -539,14 +539,15 @@ UE.plugins['list'] = function () {
                     return true;
                 }
             }
-            var bk,parentLi = li.parentNode,
-                list = me.document.createElement(parentLi.tagName),
-                index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
-            index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
-            var currentStyle = listStyle[list.tagName][index];
-            var current = li;
-            setListStyle(list,currentStyle);
+            var bk;
             if(range.collapsed){
+                var parentLi = li.parentNode,
+                    list = me.document.createElement(parentLi.tagName),
+                    index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
+                index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
+                var currentStyle = listStyle[list.tagName][index];
+                var current = li;
+                setListStyle(list,currentStyle);
                 if(domUtils.isStartInblock(range)){
                     me.fireEvent('saveScene');
                     bk = range.createBookmark();
@@ -560,15 +561,36 @@ UE.plugins['list'] = function () {
             }else{
                 me.fireEvent('saveScene');
                 bk = range.createBookmark();
-                parentLi.insertBefore(list, li);
+                for(var i= 0,closeList,parents = domUtils.findParents(li),ci;ci=parents[i++];){
+                    if(domUtils.isTagNode(ci,'ol ul')){
+                        closeList = ci;
+                        break;
+                    }
+                }
+                var current = li;
                 if(bk.end){
                     while(current && !(domUtils.getPosition(current, bk.end) & domUtils.POSITION_FOLLOWING)){
-                        li = current.nextSibling;
-                        list.appendChild(current);
+                        var parentLi = li.parentNode,
+                            list = me.document.createElement(parentLi.tagName),
+                            index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
+                        index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
+                        var currentStyle = listStyle[list.tagName][index];
+                        setListStyle(list,currentStyle);
+                        parentLi.insertBefore(list, li);
+                        while(current){
+                            li = current.nextSibling;
+                            if(!li){
+                                li = domUtils.getNextDomNode(current,false,null,function(node){return node !== closeList});
+                                list.appendChild(current);
+                                break;
+                            }
+                            list.appendChild(current);
+                            current = li;
+                        }
+                        adjustList(list,list.tagName.toLowerCase(),currentStyle);
                         current = li;
                     }
                 }
-                adjustList(list,list.tagName.toLowerCase(),currentStyle);
                 me.fireEvent('contentchange');
                 range.moveToBookmark(bk).select();
                 return true;
@@ -583,7 +605,6 @@ UE.plugins['list'] = function () {
                 if (!style) {
                     style = command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc';
                 }
-
                 var me = this,
                     range = this.selection.getRange(),
                     filterFn = function (node) {
@@ -620,7 +641,15 @@ UE.plugins['list'] = function () {
                                 }
                                 tmp.appendChild(p);
                             }
-                            frag.appendChild(tmp);
+                            if(domUtils.isTagNode(tmp,'ol ul')){
+                                utils.each(domUtils.getElementsByTagName(tmp,'li'),function(li){
+                                    frag.appendChild(li)
+                                });
+                                domUtils.remove(tmp)
+                            }else{
+                                frag.appendChild(tmp);
+                            }
+
                         }
                         tmp = me.document.createElement('span');
                         startParent.insertBefore(tmp, end);
