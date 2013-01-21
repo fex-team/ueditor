@@ -31,7 +31,7 @@ UE.plugins['highlightcode'] = function() {
                 domUtils.remove(start);
             }
             if(code && syntax){
-                me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+code+'</pre>',true);
+                me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+utils.unhtml(code)+'</pre>',true);
                 var pre = me.document.getElementById('highlightcode_id');
                 if(pre){
                     domUtils.removeAttributes(pre,'id');
