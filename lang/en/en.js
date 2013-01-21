@@ -367,9 +367,6 @@ UE.I18N['en'] = {
             'lang_Txt_italic':'Italic',
             'lang_Txt_underline':'Underline',
             'lang_Txt_selectAll':'Select All',
-            'lang_Txt_removeFormat':'Remove Format',
-            'lang_Txt_leftJustification':'Justify Left',
-            'lang_Txt_rightJustification':'Justify Right',
             'lang_Txt_visualEnter':'Submit',
             'lang_Txt_fullscreen':'Fullscreen'
         }
