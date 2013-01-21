@@ -135,7 +135,7 @@
     }
     function disableBtn( str ) {
         var div = document.getElementById( 'btns' );
-        var btns = domUtils.getElementsByTagName( div, "input" );
+        var btns = domUtils.getElementsByTagName( div, "button" );
         for ( var i = 0, btn; btn = btns[i++]; ) {
             if ( btn.id == str ) {
                 domUtils.removeAttributes( btn, ["disabled"] );
@@ -146,7 +146,7 @@
     }
     function enableBtn() {
         var div = document.getElementById( 'btns' );
-        var btns = domUtils.getElementsByTagName( div, "input" );
+        var btns = domUtils.getElementsByTagName( div, "button" );
         for ( var i = 0, btn; btn = btns[i++]; ) {
             domUtils.removeAttributes( btn, ["disabled"] );
         }
