@@ -17,7 +17,6 @@ UE.plugins['searchreplace'] = function(){
         first = null;
     });
     me.commands['searchreplace'] = {
-
             execCommand : function(cmdName,opt){
                	var me = this,
                     sel = me.selection,
@@ -30,7 +29,6 @@ UE.plugins['searchreplace'] = function(){
                     dir : 1
                 },true);
 
-
                 if(browser.ie){
                     while(1){
                         var tmpRange;
@@ -40,10 +38,10 @@ UE.plugins['searchreplace'] = function(){
                         if(opt.all){
                             first = 0;
                             opt.dir = 1;
-                            
                             if(currentRange){
                                 tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',currentRange);
                             }
+                            tmpRange.moveToElementText(me.document.body);
                         }else{
                             tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',nativeRange);
                             if(opt.hasOwnProperty("replaceStr")){
@@ -80,12 +78,11 @@ UE.plugins['searchreplace'] = function(){
                             if(currentRange){
                                 currentRange.collapse(false);
                                 nativeRange = currentRange;
-
                             }else{
                                 nativeRange  = me.document.createRange();
-                                nativeRange.setStart(me.document.body,0);
-
                             }
+                            nativeRange.setStart(me.document.body,0);
+                            nativeRange.collapse(true);
                             nativeSel.removeAllRanges();
                             nativeSel.addRange( nativeRange );
                             first = 0;
@@ -116,10 +113,9 @@ UE.plugins['searchreplace'] = function(){
                         }
 
                         if(!w.find(opt.searchStr,opt.casesensitive,opt.dir < 0 ? true : false) ) {
-                            currentRange = null;
-                            nativeSel.removeAllRanges();
-
-                            return num;
+                                currentRange = null;
+                                nativeSel.removeAllRanges();
+                                return num;
                         }
                         first = 0;
                         range = w.getSelection().getRangeAt(0);
