@@ -183,7 +183,7 @@ UE.plugins['list'] = function () {
                 }
                 var className = li.getAttribute('class');
                 if(className !== null && !className.replace(/\s/g,'')){
-                    domUtils.removeAttributes(li,'className')
+                    domUtils.removeAttributes(li,'class')
                 }
             })
 
