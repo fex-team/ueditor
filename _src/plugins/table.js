@@ -1974,7 +1974,7 @@ UE.plugins['table'] = function () {
         execCommand:function (cmd, color) {
             var rng = this.selection.getRange(),
                 table = domUtils.findParentByTagName(rng.startContainer, 'table');
-            if (table && color) {
+            if (table) {
                 var arr = domUtils.getElementsByTagName(table, "td").concat(
                     domUtils.getElementsByTagName(table, "th"),
                     domUtils.getElementsByTagName(table, "caption")
@@ -1996,7 +1996,7 @@ UE.plugins['table'] = function () {
 
             if (!ut) {
                 var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
                 if (cell) {
                     cell.style.backgroundColor = bkColor;
                 }
