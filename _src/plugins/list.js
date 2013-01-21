@@ -577,7 +577,7 @@ UE.plugins['list'] = function () {
                         var currentStyle = listStyle[list.tagName][index];
                         setListStyle(list,currentStyle);
                         parentLi.insertBefore(list, li);
-                        while(current){
+                        while(current && !(domUtils.getPosition(current, bk.end) & domUtils.POSITION_FOLLOWING)){
                             li = current.nextSibling;
                             if(!li){
                                 li = domUtils.getNextDomNode(current,false,null,function(node){return node !== closeList});
@@ -641,15 +641,7 @@ UE.plugins['list'] = function () {
                                 }
                                 tmp.appendChild(p);
                             }
-                            if(domUtils.isTagNode(tmp,'ol ul')){
-                                utils.each(domUtils.getElementsByTagName(tmp,'li'),function(li){
-                                    frag.appendChild(li)
-                                });
-                                domUtils.remove(tmp)
-                            }else{
-                                frag.appendChild(tmp);
-                            }
-
+                            frag.appendChild(tmp);
                         }
                         tmp = me.document.createElement('span');
                         startParent.insertBefore(tmp, end);
@@ -671,9 +663,19 @@ UE.plugins['list'] = function () {
                         var nodeStyle = getStyle(startParent) || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
                         if (startParent.tagName.toLowerCase() == tag && nodeStyle == style) {
                             for (var i = 0, ci, tmpFrag = me.document.createDocumentFragment(); ci = frag.childNodes[i++];) {
-                                while (ci.firstChild) {
-                                    tmpFrag.appendChild(ci.firstChild);
+                                if(domUtils.isTagNode(ci,'ol ul')){
+                                    utils.each(domUtils.getElementsByTagName(ci,'li'),function(li){
+                                        while(li.firstChild){
+                                            tmpFrag.appendChild(li.firstChild);
+                                        }
+
+                                    });
+                                }else{
+                                    while (ci.firstChild) {
+                                        tmpFrag.appendChild(ci.firstChild);
+                                    }
                                 }
+
                             }
                             tmp.parentNode.insertBefore(tmpFrag, tmp);
                         } else {

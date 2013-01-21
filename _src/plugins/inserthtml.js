@@ -15,7 +15,6 @@ UE.commands['inserthtml'] = {
             return;
         }
         range = me.selection.getRange();
-
         div = range.document.createElement( 'div' );
         div.style.display = 'inline';
         var serialize = me.serialize;
@@ -28,15 +27,41 @@ UE.commands['inserthtml'] = {
         div.innerHTML = utils.trim( html );
 
         if ( !range.collapsed ) {
+            var tmpNode = range.startContainer;
+            if(domUtils.isFillChar(tmpNode)){
+                range.setStartBefore(tmpNode)
+            }
+            tmpNode = range.endContainer;
+            if(domUtils.isFillChar(tmpNode)){
+                range.setEndAfter(tmpNode)
+            }
+            range.txtToElmBoundary();
+            //结束边界可能放到了br的前边，要把br包含进来
+            // x[xxx]<br/>
+            if(range.endContainer && range.endContainer.nodeType == 1){
+                tmpNode = range.endContainer.childNodes[range.endOffset];
+                if(tmpNode && domUtils.isBr(tmpNode)){
+                    range.setEndAfter(tmpNode);
+                }
+            }
+            if(range.startOffset == 0){
+                tmpNode = range.startContainer;
+                if(domUtils.isBoundaryNode(tmpNode,'firstChild') ){
+                    tmpNode = range.endContainer;
+                    if(range.endOffset == (tmpNode.nodeType == 3 ? tmpNode.nodeValue.length : tmpNode.childNodes.length) && domUtils.isBoundaryNode(tmpNode,'lastChild')){
+                        me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
+                        range.setStart(me.body.firstChild,0).collapse(true)
 
-            range.deleteContents();
+                    }
+                }
+            }
+            !range.collapsed && range.deleteContents();
             if(range.startContainer.nodeType == 1){
                 var child = range.startContainer.childNodes[range.startOffset],pre;
                 if(child && domUtils.isBlockElm(child) && (pre = child.previousSibling) && domUtils.isBlockElm(pre)){
                     range.setEnd(pre,pre.childNodes.length).collapse();
                     while(child.firstChild){
                         pre.appendChild(child.firstChild);
-
                     }
                     domUtils.remove(child);
                 }
