@@ -25,7 +25,7 @@ UE.plugins['table'] = function () {
 
     var mousedown = false,
     //todo 判断混乱模式
-        needIEHack = true;
+        needIEHack = browser.ie;
 
     me.setOpt({
         'maxColNum':20,
@@ -69,8 +69,8 @@ UE.plugins['table'] = function () {
             '.selectTdClass{background-color:#edf5fa !important}' +
                 'table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}' +
                 //插入的表格的默认样式
-                'table{line-height:22px; margin-bottom:10px;border-collapse:collapse;display:table;}' +
-                'td,th{ background:white; padding: 0 10px;border: 1px solid #DDD;line-height: 22px;}' +
+                'table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
+                'td,th{ background:white; padding: 5px 10px;border: 1px solid #DDD;}' +
                 'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
                 'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
                 'td p{margin:0;padding:0;}', me.document);
