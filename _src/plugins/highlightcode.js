@@ -70,7 +70,6 @@ UE.plugins['highlightcode'] = function() {
         print:1,
         searchreplace:1,
         fullscreen:1,
-        autotypeset:1,
         pasteplain:1,
         preview:1,
         insertparagraph:1,
