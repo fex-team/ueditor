@@ -92,11 +92,11 @@ UE.plugins['undo'] = function () {
             me.document.body.innerHTML = scene.content.replace(fillchar, '');
             //处理undo后空格不展位的问题
             if (browser.ie) {
-                for (var i = 0, pi, ps = me.document.getElementsByTagName('p'); pi = ps[i++];) {
-                    if (pi.innerHTML == '') {
-                        domUtils.fillNode(me.document, pi);
+                utils.each(domUtils.getElementsByTagName(me.document,'td th caption p'),function(node){
+                    if(domUtils.isEmptyNode(node)){
+                        domUtils.fillNode(me.document, node);
                     }
-                }
+                })
             }
             new dom.Range(me.document).moveToAddress(scene.address).select();
             this.update();
