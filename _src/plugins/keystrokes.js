@@ -52,9 +52,10 @@ UE.plugins['keystrokes'] = function() {
             if(rng.inFillChar()){
                 start = rng.startContainer;
                 rng.setStartBefore(start).shrinkBoundary(true).collapse(true);
-                if(start.nodeValue.length == 1){
+                if(domUtils.isFillChar(start)){
+                    domUtils.remove(start)
                 }else{
-                    start.nodeValue = start.nodeValue.replace(new RegExp('^' + domUtils.fillChar),'');
+                    start.nodeValue = start.nodeValue.replace(new RegExp('^' + domUtils.fillChar ),'');
                 }
             }
 
