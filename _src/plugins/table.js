@@ -1259,9 +1259,13 @@ UE.plugins['table'] = function () {
                     tdvalign:this.options.tdvalign
                 })
             }
+
+            var range = this.selection.getRange(),
+                start = range.startContainer,
+                li = domUtils.findParentByTagName(start,"li",true)
             var me = this,
                 defaultValue = getDefaultValue(me),
-                tableWidth = getTableWidth(me, needIEHack, defaultValue),
+                tableWidth = getTableWidth(me, needIEHack, defaultValue) - (li ? parseInt(domUtils.getXY(li).x,10):0),
                 tdWidth = Math.floor(tableWidth / opt.numCols - defaultValue.tdPadding * 2 - defaultValue.tdBorder);
             //todo其他属性
             !opt.tdvalign && (opt.tdvalign = me.options.tdvalign);
