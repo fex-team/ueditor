@@ -288,7 +288,7 @@ UE.plugins['table'] = function () {
                             (needIEHack ? parseInt(domUtils.getComputedStyle(me.body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (me.options.offsetWidth || 0);
                     me.execCommand('insertHTML', '<table  ' +
                         ( isFullCol && isFullRow ? 'width="' + width + '"' : '') +
-                        '>' + table.innerHTML.replace(/>\s*</g, '><') + '</table>')
+                        '>' + table.innerHTML.replace(/>\s*</g, '><').replace(/th/gi,"td") + '</table>')
                 }
                 me.fireEvent('contentchange');
                 me.fireEvent('saveScene');
@@ -1781,7 +1781,12 @@ UE.plugins['table'] = function () {
                         utils.each(tds, function (td) {
                             td.removeAttribute("width");
                         });
-                        table.setAttribute('width', '100%');
+                        table.setAttribute('width', getTableWidth(this,needIEHack,getDefaultValue(this,table)));
+                        setTimeout(function(){
+                            utils.each(tds,function(td){
+                                td.setAttribute("width",td.offsetWidth+"");
+                            })
+                        },0)
                     } else {
                         var ut = getUETable(table),
                             preTds = cell?ut.getSameEndPosCells(cell, "x"):table.getElementsByTagName("td");
