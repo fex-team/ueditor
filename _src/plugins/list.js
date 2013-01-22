@@ -491,7 +491,11 @@ UE.plugins['list'] = function () {
                             while(li.firstChild){
                                 parentList.parentNode.insertBefore(li.firstChild,parentList);
                             }
-                            domUtils.remove(li)
+
+                            domUtils.remove(li);
+                            if(domUtils.isEmptyNode(parentList)){
+                                domUtils.remove(parentList)
+                            }
 
                         }
                         range.moveToBookmark(bk).setCursor(false,true)
