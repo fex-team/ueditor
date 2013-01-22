@@ -464,8 +464,6 @@ UE.plugins['list'] = function () {
                                 while (li.firstChild) {
                                     pre.appendChild(li.firstChild);
                                 }
-
-
                             }
                         }
 
@@ -542,6 +540,19 @@ UE.plugins['list'] = function () {
                 if(levelNum >= me.options.maxListLevel){
                     return true;
                 }
+                if(utils.each(domUtils.getElementsByTagName(li.parentNode,'ol ul'),function(list){
+                    var currentLevel = levelNum;
+                    while(li.parentNode !== list){
+                        currentLevel++;
+                        list = list.parentNode;
+                    }
+                    if(currentLevel >= me.options.maxListLevel){
+                        return false;
+                    }
+                }) === false){
+                    return true;
+                }
+
             }
             var bk;
             if(range.collapsed){
@@ -550,7 +561,6 @@ UE.plugins['list'] = function () {
                     index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
                 index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
                 var currentStyle = listStyle[list.tagName][index];
-                var current = li;
                 setListStyle(list,currentStyle);
                 if(domUtils.isStartInblock(range)){
                     me.fireEvent('saveScene');
