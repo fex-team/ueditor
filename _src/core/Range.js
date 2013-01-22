@@ -1137,6 +1137,9 @@
                 }else{
                     firstIndex = isStart ? me.startOffset : me.endOffset
                 }
+                if(firstIndex < 0){
+                    firstIndex = 0;
+                }
                 addrs.push(firstIndex);
                 return addrs;
             }
