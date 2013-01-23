@@ -21,10 +21,52 @@
         <p>这里我可以写一些输入提示</p>
     </script>
     <script type="text/javascript">
+        var editorui = baidu.editor.ui;
+        editorui['test'] = function(editor,iframeUrl, title){
+            var dialog,cmd = "help";
+            title = editor.options.labelMap[cmd] || editor.getLang("labelMap." + cmd) || '';
+            dialog = new editorui.Dialog(utils.extend({
+                iframeUrl:editor.ui.mapUrl(iframeUrl),
+                editor:editor,
+                className:'edui-for-' + cmd,
+                title:title,
+                closeDialog:editor.getLang("closeDialog")
+            }, {
+                buttons:[
+                    {
+                        className:'edui-okbutton',
+                        label:editor.getLang("ok"),
+                        editor:editor,
+                        onclick:function () {
+                            dialog.close(true);
+                        }
+                    },
+                    {
+                        className:'edui-cancelbutton',
+                        label:editor.getLang("cancel"),
+                        editor:editor,
+                        onclick:function () {
+                            dialog.close(false);
+                        }
+                    }
+                ]
+            } ));
+            editor.ui._dialogs[cmd + "Dialog"] = dialog;
+            var ui = new baidu.editor.ui.Button({
+                className:'edui-for-test',
+                //需要写test的对应的中文
+                title:editor.options.labelMap.cleardoc || editor.getLang("labelMap.cleardoc") || '',
+                theme:editor.options.theme,
+                onclick:function () {
+                    dialog.open();
+                }
+            });
+            return ui;
+        }
         // 自定义的编辑器配置项,此处定义的配置项将覆盖editor_config.js中的同名配置
         var editorOption = {
             //这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
-            toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold']],
+            toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold','test']],
             //focus时自动清空初始化时的内容
             autoClearinitialContent:true,
             //关闭字数统计
