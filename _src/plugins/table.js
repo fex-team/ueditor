@@ -1723,39 +1723,54 @@ UE.plugins['table'] = function () {
                 return getTableItemsByRange(this).table ? 0 : -1
             },
             execCommand:function (cmd) {
+                var me = this;
+                function resetTdWidth(table){
+
+                    var tds = table.getElementsByTagName("td");
+                    utils.each(tds, function (td) {
+                        td.removeAttribute("width");
+                    });
+                    table.setAttribute('width', getTableWidth(me,needIEHack,getDefaultValue(me,table)));
+                    setTimeout(function(){
+                        utils.each(tds,function(td){
+                            (td.colSpan ==1) && td.setAttribute("width",td.offsetWidth+"");
+                        })
+                    },0)
+                }
+
                 var tableItems = getTableItemsByRange(this),
                     table = tableItems.table,
                     cell = tableItems.cell;
                 if (table) {
                     if (cmd == 'adaptbywindow') {
-                        var tds = table.getElementsByTagName("td");
-                        utils.each(tds, function (td) {
-                            td.removeAttribute("width");
-                        });
-                        table.setAttribute('width', getTableWidth(this,needIEHack,getDefaultValue(this,table)));
-                        setTimeout(function(){
-                            utils.each(tds,function(td){
-                                td.setAttribute("width",td.offsetWidth+"");
-                            })
-                        },0)
-
+                        resetTdWidth(table);
                     } else {
-                        var ut = getUETable(table),
-                            preTds = cell?ut.getSameEndPosCells(cell, "x"):table.getElementsByTagName("td");
-                        if (preTds.length) {
-                            table.style.width = "";
-                            table.removeAttribute("width");
-                            utils.each(preTds, function (td) {
-                                td.removeAttribute("width");
-                            });
-
-                            var defaultValue = getDefaultValue(me, table);
-                            var width = table.offsetWidth,
-                                bodyWidth = me.body.offsetWidth;
-                            if (width > bodyWidth) {
-                                table.setAttribute('width', getTableWidth(me, needIEHack, defaultValue));
+                        if(cell){
+                            var ut = getUETable(table),
+                                preTds = ut.getSameEndPosCells(cell, "x");
+                            if (preTds.length) {
+                                var flag = false;
+                                utils.each(preTds,function(td){
+                                    if(!isEmptyBlock(td)){
+                                        flag = true;
+                                        return false;
+                                    }
+                                });
+                                if(!flag)return;
+                                utils.each(preTds, function (td) {
+                                    (td.colSpan==1) && td.removeAttribute("width");
+                                });
+                                table.style.width = "";
+                                table.removeAttribute("width");
+                                var defaultValue = getDefaultValue(me, table);
+                                var width = table.offsetWidth,
+                                    bodyWidth = me.body.offsetWidth;
+                                if (width > bodyWidth) {
+                                    table.setAttribute('width', getTableWidth(me, needIEHack, defaultValue));
+                                }
                             }
-
+                        }else{
+                            resetTdWidth(table);
                         }
                     }
                 }
@@ -2698,7 +2713,7 @@ UE.plugins['table'] = function () {
             }
             var tds = domUtils.getElementsByTagName(this.table, "td");
             utils.each(tds, function (td) {
-                td.setAttribute("width", width);
+                (td.colSpan==1) && td.setAttribute("width", width);
             })
         },
         deleteCol:function (colIndex) {
