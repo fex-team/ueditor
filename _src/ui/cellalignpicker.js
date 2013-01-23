@@ -6,18 +6,18 @@
         Stateful = baidu.editor.ui.Stateful,
         UIBase = baidu.editor.ui.UIBase;
 
-    var AlignCellPicker = baidu.editor.ui.AlignCellPicker = function (options) {
+    var CellAlignPicker = baidu.editor.ui.CellAlignPicker = function (options) {
         this.initOptions(options);
-        this.initAlignCellPicker();
+        this.initCellAlignPicker();
     };
-    AlignCellPicker.prototype = {
-        initAlignCellPicker:function () {
+    CellAlignPicker.prototype = {
+        initCellAlignPicker:function () {
             this.initUIBase();
             this.Stateful_init();
         },
         getHtmlTpl:function () {
-            return '<div id="##" class="edui-aligncellpicker %%">' +
-                '<div class="edui-aligncellpicker-body">' +
+            return '<div id="##" class="edui-cellalignpicker %%">' +
+                '<div class="edui-cellalignpicker-body">' +
                 '<table onclick="$$._onClick(event);">' +
                 '<tr><td index="0" stateful><div class="edui-icon edui-left"></div></td>' +
                 '<td index="1" stateful><div class="edui-icon edui-center"></div></td>' +
@@ -47,8 +47,8 @@
         },
         _UIBase_render:UIBase.prototype.render
     };
-    utils.inherits(AlignCellPicker, UIBase);
-    utils.extend(AlignCellPicker.prototype, Stateful,true);
+    utils.inherits(CellAlignPicker, UIBase);
+    utils.extend(CellAlignPicker.prototype, Stateful,true);
 })();
 
 

@@ -212,16 +212,16 @@ var utils = UE.utils = {
      */
     each : function(obj, iterator, context) {
         if (obj == null) return;
-        if (Array.prototype.forEach && obj.forEach === Array.prototype.forEach) {
-            obj.forEach(iterator, context);
-        } else if (obj.length === +obj.length) {
+        if (obj.length === +obj.length) {
             for (var i = 0, l = obj.length; i < l; i++) {
-                if(iterator.call(context, obj[i], i, obj) === false)return;
+                if(iterator.call(context, obj[i], i, obj) === false)
+                    return false;
             }
         } else {
             for (var key in obj) {
                 if (obj.hasOwnProperty(key)) {
-                    if(iterator.call(context, obj[key], key, obj) === false)return
+                    if(iterator.call(context, obj[key], key, obj) === false)
+                        return false;
                 }
             }
         }
@@ -444,14 +444,18 @@ var utils = UE.utils = {
     loadFile:function () {
         var tmpList = [];
         function getItem(doc,obj){
-            for(var i= 0,ci;ci=tmpList[i++];){
-                if(ci.doc === doc && ci.url == (obj.src || obj.href)){
-                    return ci;
+            try{
+                for(var i= 0,ci;ci=tmpList[i++];){
+                    if(ci.doc === doc && ci.url == (obj.src || obj.href)){
+                        return ci;
+                    }
                 }
+            }catch(e){
+                return null;
             }
+
         }
         return function (doc, obj, fn) {
-
             var item = getItem(doc,obj);
             if (item) {
                 if(item.ready){
@@ -485,7 +489,7 @@ var utils = UE.utils = {
             }
             element.onload = element.onreadystatechange = function () {
                 if (!this.readyState || /loaded|complete/.test(this.readyState)) {
-                    item = getItem(doc,obj)
+                    item = getItem(doc,obj);
                     if (item.funs.length > 0) {
                         item.ready = 1;
                         for (var fi; fi = item.funs.pop();) {
@@ -754,8 +758,7 @@ var utils = UE.utils = {
  * @name isNumber
  * @grammar UE.utils.isNumber(obj)  => true|false
  */
-
-utils.each(['String','Function','Array','Number'],function(v){
+utils.each(['String','Function','Array','Number','RegExp'],function(v){
     UE.utils['is' + v] = function(obj){
         return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
     }
@@ -937,7 +940,7 @@ var dtd = dom.dtd = (function() {
         $list: _({ul:1,ol:1,dl:1}),
 
         //不能认为是空的元素
-        $isNotEmpty : _({table:1,ul:1,ol:1,dl:1,iframe:1,area:1,base:1,col:1,hr:1,img:1,embed:1,input:1,link:1,meta:1,param:1}),
+        $isNotEmpty : _({table:1,ul:1,ol:1,dl:1,iframe:1,area:1,base:1,col:1,hr:1,img:1,embed:1,input:1,link:1,meta:1,param:1,h1:1,h2:1,h3:1,h4:1,h5:1,h6:1}),
 
         //如果没有子节点就可以删除的元素列表，像span,a
         $removeEmpty : _({a:1,abbr:1,acronym:1,address:1,b:1,bdo:1,big:1,cite:1,code:1,del:1,dfn:1,em:1,font:1,i:1,ins:1,label:1,kbd:1,q:1,s:1,samp:1,small:1,span:1,strike:1,strong:1,sub:1,sup:1,tt:1,u:1,'var':1}),
@@ -1988,6 +1991,9 @@ var domUtils = dom.domUtils = {
      * @grammar UE.dom.domUtils.hasClass(element,className)  =>true|false
      */
     hasClass:function (element, className) {
+        if(utils.isRegExp(className)){
+            return className.test(element.className)
+        }
         className = utils.trim(className).replace(/[ ]{2,}/g,' ').split(' ');
         for(var i = 0,ci,cls = element.className;ci=className[i++];){
             if(!new RegExp('\\b' + ci + '\\b','i').test(cls)){
@@ -2009,11 +2015,16 @@ var domUtils = dom.domUtils = {
      * @grammar UE.dom.domUtils.removeStyle(element,name)        删除的样式名称
      */
     removeStyle:function (element, name) {
-        if (element.style.removeProperty) {
-            element.style.removeProperty (name);
-        }else {
-            element.style.removeAttribute (utils.cssStyleToDomStyle(name));
+        if(browser.ie && browser.version > 8){
+            element.style.cssText = element.style.cssText.replace(new RegExp(name + '\s*:\s*[^;]+;?'),'')
+        }else{
+            if (element.style.removeProperty) {
+                element.style.removeProperty (name);
+            }else {
+                element.style.removeAttribute (utils.cssStyleToDomStyle(name));
+            }
         }
+
 
         if (!element.style.cssText) {
             domUtils.removeAttributes(element, ['style']);
@@ -2284,6 +2295,17 @@ var domUtils = dom.domUtils = {
             start = start.parentNode;
         }
         return 1;
+    },
+    isBoundaryNode : function (node,dir){
+        var tmp;
+        while(!domUtils.isBody(node)){
+            tmp = node;
+            node = node.parentNode;
+            if(tmp !== node[dir]){
+                return false;
+            }
+        }
+        return true;
     }
 };
 var fillCharReg = new RegExp(domUtils.fillChar, 'g');
@@ -3346,6 +3368,10 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 }
                 var nativeRange = this.document.createRange();
                 nativeRange.setStart(this.startContainer, this.startOffset);
+                //是createAddress最后一位算的不准，现在这里进行微调
+                if(this.endContainer.nodeType == 3 && this.endContainer.nodeValue.length < this.endOffset){
+                    this.endOffset = this.endContainer.nodeValue.length;
+                }
                 nativeRange.setEnd(this.endContainer, this.endOffset);
                 sel.addRange(nativeRange);
             }
@@ -3370,13 +3396,13 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
         inFillChar : function(){
             var start = this.startContainer;
             if(this.collapsed && start.nodeType == 3
-                && !start.nodeValue.replace(new RegExp(domUtils.fillChar),'').length
+                && start.nodeValue.replace(new RegExp('^' + domUtils.fillChar),'').length + 1 == start.nodeValue.length
                 ){
                 return true;
             }
             return false;
         },
-        createAddress : function(ingoreEnd,ingoreTxt){
+        createAddress : function(ignoreEnd,ignoreTxt){
             var addr = {},me = this;
 
             function getAddress(isStart){
@@ -3384,11 +3410,11 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 var parents = domUtils.findParents(node,true,function(node){return !domUtils.isBody(node)}),
                     addrs = [];
                 for(var i = 0,ci;ci = parents[i++];){
-                    addrs.push(domUtils.getNodeIndex(ci,ingoreTxt));
+                    addrs.push(domUtils.getNodeIndex(ci,ignoreTxt));
                 }
                 var firstIndex = 0;
 
-                if(ingoreTxt){
+                if(ignoreTxt){
                     if(node.nodeType == 3){
                         var tmpNode = node;
                         while(tmpNode = tmpNode.previousSibling){
@@ -3398,11 +3424,11 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                                 break;
                             }
                         }
-                        firstIndex += domUtils.isFillChar(node) ? 0 : (isStart ? me.startOffset : me.endOffset)
+                        firstIndex +=  (isStart ? me.startOffset : me.endOffset) - (fillCharReg.test(node.nodeValue) ? 1 : 0 )
                     }else{
                         node =  node.childNodes[ isStart ? me.startOffset : me.endOffset];
                         if(node){
-                            firstIndex = domUtils.getNodeIndex(node,ingoreTxt);
+                            firstIndex = domUtils.getNodeIndex(node,ignoreTxt);
                         }else{
                             node = isStart ? me.startContainer : me.endContainer;
                             var first = node.firstChild;
@@ -3421,22 +3447,24 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                                 }
                             }
                         }
-
                     }
 
                 }else{
                     firstIndex = isStart ? me.startOffset : me.endOffset
                 }
+                if(firstIndex < 0){
+                    firstIndex = 0;
+                }
                 addrs.push(firstIndex);
                 return addrs;
             }
             addr.startAddress = getAddress(true);
-            if(!ingoreEnd){
-                addr.endAddress = getAddress();
+            if(!ignoreEnd){
+                addr.endAddress = me.collapsed ? [].concat(addr.startAddress) : getAddress();
             }
             return addr;
         },
-        moveToAddress : function(addr){
+        moveToAddress : function(addr,ignoreEnd){
             var me = this;
             function getNode(address,isStart){
                 var tmpNode = me.document.body,
@@ -3465,8 +3493,18 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 }
             }
             getNode(addr.startAddress,true);
-            addr.endAddress &&  getNode(addr.endAddress);
+            !ignoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
+        },
+        equals : function(rng){
+            for(var p in this){
+                if(this.hasOwnProperty(p)){
+                    if(this[p] !== rng[p])
+                        return false
+                }
+            }
+            return true;
+
         }
     };
 })();
@@ -3713,7 +3751,13 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             if ( ie ) {
                 var nativeRange = me.getIERange();
                 if ( nativeRange ) {
-                    transformIERangeToRange( nativeRange, range );
+                    //备份的_bakIERange可能已经实效了，dom树发生了变化比如从源码模式切回来，所以try一下，实效就放到body开始位置
+                    try{
+                        transformIERangeToRange( nativeRange, range );
+                    }catch(e){
+                        optimze( range );
+                    }
+
                 } else {
                     optimze( range );
                 }
@@ -3897,7 +3941,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             iframeCssUrl:me.options.UEDITOR_HOME_URL + 'themes/iframe.css',
             textarea:'editorValue',
             focus:false,
-            initialFrameWidth:'100%',
+            initialFrameWidth:1000,
             initialFrameHeight:me.options.minFrameHeight||320,//兼容老版本配置项
             minFrameWidth:800,
             minFrameHeight:220,
@@ -4087,7 +4131,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                     };
                     this._setDefaultContent( options.initialContent );
                 } else
-                    this.setContent( options.initialContent, true );
+                    this.setContent( options.initialContent, false,true );
             }
             //为form提交提供一个隐藏的textarea
             for ( var form = this.iframe.parentNode; !domUtils.isBody( form ); form = form.parentNode ) {
@@ -4121,15 +4165,15 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 me.document.execCommand( '2D-position', false, false );
             } catch ( e ) {}
             try {
-                me.document.execCommand( 'enableInlineTableEditing', false, options.tableNativeEditInFF );
+                me.document.execCommand( 'enableInlineTableEditing', false, false );
             } catch ( e ) {}
-//            try {
-//                me.document.execCommand( 'enableObjectResizing', false, false );
-//            } catch ( e ) {
+            try {
+                me.document.execCommand( 'enableObjectResizing', false, false );
+            } catch ( e ) {
 //                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
 //                    domUtils.preventDefault(evt)
 //                });
-//            }
+            }
             me._bindshortcutKeys();
             me.isReady = 1;
             me.fireEvent( 'ready' );
@@ -4200,7 +4244,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
         addshortcutkey : function(cmd,keys){
             var obj = {};
             if(keys){
-                obj[keys] = cmd
+                obj[cmd] = keys
             }else{
                 obj = cmd;
             }
@@ -4209,20 +4253,25 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
         _bindshortcutKeys : function(){
             var me = this,shortcutkeys = this.shortcutkeys;
             me.addListener('keydown',function(type,e){
-                var keyCode = e.keyCode || e.which,value;
+                var keyCode = e.keyCode || e.which;
                 for ( var i in shortcutkeys ) {
-                    var key = shortcutkeys[i];
-                    if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( key.toLowerCase() ) || /^(\d+)$/.test( key ) ) {
-                        if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey) : 0)
-                            && (RegExp.$2 != "" ? e[RegExp.$2.slice(1) + "Key"] : 1)
-                            && keyCode == RegExp.$3
-                            ) ||
-                            keyCode == RegExp.$1
-                            ){
-                            me.execCommand(i);
-                            domUtils.preventDefault(e);
+                    var tmp = shortcutkeys[i].split(',');
+                    for(var t= 0,ti;ti=tmp[t++];){
+                        ti = ti.split(':');
+                        var key = ti[0],param = ti[1];
+                        if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( key.toLowerCase() ) || /^(\d+)$/.test( key ) ) {
+                            if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey) : 0)
+                                && (RegExp.$2 != "" ? e[RegExp.$2.slice(1) + "Key"] : 1)
+                                && keyCode == RegExp.$3
+                                ) ||
+                                keyCode == RegExp.$1
+                                ){
+                                me.execCommand(i,param);
+                                domUtils.preventDefault(e);
+                            }
                         }
                     }
+
                 }
             });
         },
@@ -4247,11 +4296,16 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             if ( fn ? !fn() : !this.hasContents() ) {
                 return '';
             }
+            var range = me.selection.getRange(),
+                address = range.createAddress();
             me.fireEvent( 'beforegetcontent', cmd );
             var reg = new RegExp( domUtils.fillChar, 'g' ),
             //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
                     html = me.body.innerHTML.replace( reg, '' ).replace( />[\t\r\n]*?</g, '><' );
             me.fireEvent( 'aftergetcontent', cmd );
+            try{
+                range.moveToAddress(address).select(true);
+            }catch(e){}
             if ( me.serialize ) {
                 var node = me.serialize.parseHTML( html );
                 node = me.serialize.transformOutput( node );
@@ -4286,8 +4340,18 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                     headHtml = [],
                     html = '';
             me.fireEvent( 'getAllHtml', headHtml );
+            if(browser.ie && browser.version > 8){
+                var headHtmlForIE9= '';
+                utils.each(me.document.styleSheets,function(si){
+                    headHtmlForIE9 += ( si.href ? '<link rel="stylesheet" type="text/css" href="'+si.href+'" />': '<style>'+si.cssText+'</style>');
+                });
+                utils.each(me.document.getElementsByTagName('script'),function(si){
+                    headHtmlForIE9 += si.outerHTML;
+                });
+
+            }
             return '<html><head>' + (me.options.charset ? '<meta http-equiv="Content-Type" content="text/html; charset=' + me.options.charset + '"/>' : '')
-                + me.document.getElementsByTagName( 'head' )[0].innerHTML + headHtml.join('\n') + '</head>'
+                + (headHtmlForIE9 || me.document.getElementsByTagName( 'head' )[0].innerHTML) + headHtml.join('\n') + '</head>'
                     + '<body ' + (ie && browser.version < 9 ? 'class="view"' : '') + '>' + me.getContent( null, null, true ) + '</body></html>';
         },
         /**
@@ -4330,7 +4394,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *     editor.setContent("欢迎使用UEditor！");
          * })
          */
-        setContent:function ( html, notFireSelectionchange ) {
+        setContent:function ( html, isAppendTo,notFireSelectionchange ) {
             var me = this,
                     inline = utils.extend( {a:1, A:1}, dtd.$inline, true ),
                     lastTagName;
@@ -4361,7 +4425,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             //去掉了\t\n\r 如果有插入的代码，在源码切换所见即所得模式时，换行都丢掉了
             //\r在ie下的不可见字符，在源码切换时会变成多个&nbsp;
             //trace:1559
-            this.body.innerHTML = html.replace( new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), '' );
+            this.body.innerHTML = (isAppendTo ? this.getContent() : '') + html.replace( new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), '' );
             //处理ie6下innerHTML自动将相对路径转化成绝对路径的问题
             if ( browser.ie && browser.version < 7 ) {
                 replaceSrc( this.document.body );
@@ -4586,15 +4650,15 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 if ( me.queryCommandState( cmdName ) != -1 ) {
                     me.fireEvent( 'beforeexeccommand', cmdName );
                     result = this._callCmdFn( 'execCommand', arguments );
-                    me.fireEvent('contentchange');
+                    !me._ignoreContentChange && me.fireEvent('contentchange');
                     me.fireEvent( 'afterexeccommand', cmdName );
                 }
                 me.__hasEnterExecCommand = false;
             } else {
                 result = this._callCmdFn( 'execCommand', arguments );
-                me.fireEvent('contentchange')
+                !me._ignoreContentChange && me.fireEvent('contentchange')
             }
-            !me.__hasEnterExecCommand && me._selectionChange();
+            !me._ignoreContentChange && me._selectionChange();
             return result;
         },
         /**
@@ -4832,7 +4896,6 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 for(var i= 0,ci;ci=tagNames[i++];){
                     count += this.document.getElementsByTagName(ci).length;
                 }
-                this.fireEvent('wordCount',count);
             }
             return count;
         }
@@ -5163,9 +5226,10 @@ UE.commands['inserthtml'] = {
         var me = this,
             range,
             div;
-
+        if(!html){
+            return;
+        }
         range = me.selection.getRange();
-
         div = range.document.createElement( 'div' );
         div.style.display = 'inline';
         var serialize = me.serialize;
@@ -5178,15 +5242,41 @@ UE.commands['inserthtml'] = {
         div.innerHTML = utils.trim( html );
 
         if ( !range.collapsed ) {
+            var tmpNode = range.startContainer;
+            if(domUtils.isFillChar(tmpNode)){
+                range.setStartBefore(tmpNode)
+            }
+            tmpNode = range.endContainer;
+            if(domUtils.isFillChar(tmpNode)){
+                range.setEndAfter(tmpNode)
+            }
+            range.txtToElmBoundary();
+            //结束边界可能放到了br的前边，要把br包含进来
+            // x[xxx]<br/>
+            if(range.endContainer && range.endContainer.nodeType == 1){
+                tmpNode = range.endContainer.childNodes[range.endOffset];
+                if(tmpNode && domUtils.isBr(tmpNode)){
+                    range.setEndAfter(tmpNode);
+                }
+            }
+            if(range.startOffset == 0){
+                tmpNode = range.startContainer;
+                if(domUtils.isBoundaryNode(tmpNode,'firstChild') ){
+                    tmpNode = range.endContainer;
+                    if(range.endOffset == (tmpNode.nodeType == 3 ? tmpNode.nodeValue.length : tmpNode.childNodes.length) && domUtils.isBoundaryNode(tmpNode,'lastChild')){
+                        me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
+                        range.setStart(me.body.firstChild,0).collapse(true)
 
-            range.deleteContents();
+                    }
+                }
+            }
+            !range.collapsed && range.deleteContents();
             if(range.startContainer.nodeType == 1){
                 var child = range.startContainer.childNodes[range.startOffset],pre;
                 if(child && domUtils.isBlockElm(child) && (pre = child.previousSibling) && domUtils.isBlockElm(pre)){
                     range.setEnd(pre,pre.childNodes.length).collapse();
                     while(child.firstChild){
                         pre.appendChild(child.firstChild);
-
                     }
                     domUtils.remove(child);
                 }
@@ -5533,6 +5623,10 @@ UE.plugins['autotypeset'] = function(){
 };
 
 
+///import core
+///commands 自动提交
+///commandsName  autosubmit
+///commandsTitle  自动提交
 UE.plugins['autosubmit'] = function(){
     var me = this;
     me.commands['autosubmit'] = {
@@ -5554,6 +5648,11 @@ UE.plugins['autosubmit'] = function(){
     });
 };
 
+///import core
+///commands 插入背景
+///commandsName  background
+///commandsTitle  插入背景
+///commandsDialog  dialogs\background
 UE.plugins['background'] = function(){
     var me = this;
     me.addListener("getAllHtml",function(type,headHtml){
@@ -5584,11 +5683,10 @@ UE.plugins['background'] = function(){
 }
 ///import core
 ///import plugins\inserthtml.js
-///import plugins\catchremoteimage.js
 ///commands 插入图片，操作图片的对齐方式
 ///commandsName  InsertImage,ImageNone,ImageLeft,ImageRight,ImageCenter
 ///commandsTitle  图片,默认,居左,居右,居中
-///commandsDialog  dialogs\image\image.html
+///commandsDialog  dialogs\image
 /**
  * Created by .
  * User: zhanyi
@@ -5596,72 +5694,72 @@ UE.plugins['background'] = function(){
  */
 
 UE.commands['imagefloat'] = {
-    execCommand:function ( cmd, align ) {
+    execCommand:function (cmd, align) {
         var me = this,
-                range = me.selection.getRange();
-        if ( !range.collapsed ) {
+            range = me.selection.getRange();
+        if (!range.collapsed) {
             var img = range.getClosedNode();
-            if ( img && img.tagName == 'IMG' ) {
-                switch ( align ) {
+            if (img && img.tagName == 'IMG') {
+                switch (align) {
                     case 'left':
                     case 'right':
                     case 'none':
                         var pN = img.parentNode, tmpNode, pre, next;
-                        while ( dtd.$inline[pN.tagName] || pN.tagName == 'A' ) {
+                        while (dtd.$inline[pN.tagName] || pN.tagName == 'A') {
                             pN = pN.parentNode;
                         }
                         tmpNode = pN;
-                        if ( tmpNode.tagName == 'P' && domUtils.getStyle( tmpNode, 'text-align' ) == 'center' ) {
-                            if ( !domUtils.isBody( tmpNode ) && domUtils.getChildCount( tmpNode, function ( node ) {
-                                return !domUtils.isBr( node ) && !domUtils.isWhitespace( node );
-                            } ) == 1 ) {
+                        if (tmpNode.tagName == 'P' && domUtils.getStyle(tmpNode, 'text-align') == 'center') {
+                            if (!domUtils.isBody(tmpNode) && domUtils.getChildCount(tmpNode, function (node) {
+                                return !domUtils.isBr(node) && !domUtils.isWhitespace(node);
+                            }) == 1) {
                                 pre = tmpNode.previousSibling;
                                 next = tmpNode.nextSibling;
-                                if ( pre && next && pre.nodeType == 1 && next.nodeType == 1 && pre.tagName == next.tagName && domUtils.isBlockElm( pre ) ) {
-                                    pre.appendChild( tmpNode.firstChild );
-                                    while ( next.firstChild ) {
-                                        pre.appendChild( next.firstChild );
+                                if (pre && next && pre.nodeType == 1 && next.nodeType == 1 && pre.tagName == next.tagName && domUtils.isBlockElm(pre)) {
+                                    pre.appendChild(tmpNode.firstChild);
+                                    while (next.firstChild) {
+                                        pre.appendChild(next.firstChild);
                                     }
-                                    domUtils.remove( tmpNode );
-                                    domUtils.remove( next );
+                                    domUtils.remove(tmpNode);
+                                    domUtils.remove(next);
                                 } else {
-                                    domUtils.setStyle( tmpNode, 'text-align', '' );
+                                    domUtils.setStyle(tmpNode, 'text-align', '');
                                 }
 
 
                             }
 
-                            range.selectNode( img ).select();
+                            range.selectNode(img).select();
                         }
-                        domUtils.setStyle( img, 'float', align );
+                        domUtils.setStyle(img, 'float', align);
                         break;
                     case 'center':
-                        if ( me.queryCommandValue( 'imagefloat' ) != 'center' ) {
+                        if (me.queryCommandValue('imagefloat') != 'center') {
                             pN = img.parentNode;
-                            domUtils.setStyle( img, 'float', 'none' );
+                            domUtils.setStyle(img, 'float', 'none');
                             tmpNode = img;
-                            while ( pN && domUtils.getChildCount( pN, function ( node ) {
-                                return !domUtils.isBr( node ) && !domUtils.isWhitespace( node );
-                            } ) == 1
-                                    && (dtd.$inline[pN.tagName] || pN.tagName == 'A') ) {
+                            while (pN && domUtils.getChildCount(pN, function (node) {
+                                return !domUtils.isBr(node) && !domUtils.isWhitespace(node);
+                            }) == 1
+                                && (dtd.$inline[pN.tagName] || pN.tagName == 'A')) {
                                 tmpNode = pN;
                                 pN = pN.parentNode;
                             }
-                            range.setStartBefore( tmpNode ).setCursor( false );
-                            pN = me.document.createElement( 'div' );
-                            pN.appendChild( tmpNode );
-                            domUtils.setStyle( tmpNode, 'float', '' );
+                            range.setStartBefore(tmpNode).setCursor(false);
+                            pN = me.document.createElement('div');
+                            pN.appendChild(tmpNode);
+                            domUtils.setStyle(tmpNode, 'float', '');
 
-                            me.execCommand( 'insertHtml', '<p id="_img_parent_tmp" style="text-align:center">' + pN.innerHTML + '</p>' );
+                            me.execCommand('insertHtml', '<p id="_img_parent_tmp" style="text-align:center">' + pN.innerHTML + '</p>');
 
-                            tmpNode = me.document.getElementById( '_img_parent_tmp' );
-                            tmpNode.removeAttribute( 'id' );
+                            tmpNode = me.document.getElementById('_img_parent_tmp');
+                            tmpNode.removeAttribute('id');
                             tmpNode = tmpNode.firstChild;
-                            range.selectNode( tmpNode ).select();
+                            range.selectNode(tmpNode).select();
                             //去掉后边多余的元素
                             next = tmpNode.parentNode.nextSibling;
-                            if ( next && domUtils.isEmptyNode( next ) ) {
-                                domUtils.remove( next );
+                            if (next && domUtils.isEmptyNode(next)) {
+                                domUtils.remove(next);
                             }
 
                         }
@@ -5674,15 +5772,15 @@ UE.commands['imagefloat'] = {
     },
     queryCommandValue:function () {
         var range = this.selection.getRange(),
-                startNode, floatStyle;
-        if ( range.collapsed ) {
+            startNode, floatStyle;
+        if (range.collapsed) {
             return 'none';
         }
         startNode = range.getClosedNode();
-        if ( startNode && startNode.nodeType == 1 && startNode.tagName == 'IMG' ) {
-            floatStyle = domUtils.getComputedStyle( startNode, 'float' );
-            if ( floatStyle == 'none' ) {
-                floatStyle = domUtils.getComputedStyle( startNode.parentNode, 'text-align' ) == 'center' ? 'center' : floatStyle;
+        if (startNode && startNode.nodeType == 1 && startNode.tagName == 'IMG') {
+            floatStyle = domUtils.getComputedStyle(startNode, 'float');
+            if (floatStyle == 'none') {
+                floatStyle = domUtils.getComputedStyle(startNode.parentNode, 'text-align') == 'center' ? 'center' : floatStyle;
             }
             return {
                 left:1,
@@ -5695,16 +5793,13 @@ UE.commands['imagefloat'] = {
 
     },
     queryCommandState:function () {
-        if ( this.highlight ) {
-            return -1;
-        }
         var range = this.selection.getRange(),
-                startNode;
-        if ( range.collapsed ) {
-            return -1;
-        }
+            startNode;
+
+        if (range.collapsed)  return -1;
+
         startNode = range.getClosedNode();
-        if ( startNode && startNode.nodeType == 1 && startNode.tagName == 'IMG' ) {
+        if (startNode && startNode.nodeType == 1 && startNode.tagName == 'IMG') {
             return 0;
         }
         return -1;
@@ -5712,60 +5807,60 @@ UE.commands['imagefloat'] = {
 };
 
 UE.commands['insertimage'] = {
-    execCommand:function ( cmd, opt ) {
+    execCommand:function (cmd, opt) {
 
-        opt = utils.isArray( opt ) ? opt : [opt];
-        if ( !opt.length ) {
+        opt = utils.isArray(opt) ? opt : [opt];
+        if (!opt.length) {
             return;
         }
         var me = this,
-                range = me.selection.getRange(),
-                img = range.getClosedNode();
-        if ( img && /img/i.test( img.tagName ) && img.className != "edui-faked-video" && !img.getAttribute( "word_img" ) ) {
+            range = me.selection.getRange(),
+            img = range.getClosedNode();
+        if (img && /img/i.test(img.tagName) && img.className != "edui-faked-video" && !img.getAttribute("word_img")) {
             var first = opt.shift();
             var floatStyle = first['floatStyle'];
             delete first['floatStyle'];
 ////                img.style.border = (first.border||0) +"px solid #000";
 ////                img.style.margin = (first.margin||0) +"px";
 //                img.style.cssText += ';margin:' + (first.margin||0) +"px;" + 'border:' + (first.border||0) +"px solid #000";
-            domUtils.setAttributes( img, first );
-            me.execCommand( 'imagefloat', floatStyle );
-            if ( opt.length > 0 ) {
-                range.setStartAfter( img ).setCursor( false, true );
-                me.execCommand( 'insertimage', opt );
+            domUtils.setAttributes(img, first);
+            me.execCommand('imagefloat', floatStyle);
+            if (opt.length > 0) {
+                range.setStartAfter(img).setCursor(false, true);
+                me.execCommand('insertimage', opt);
             }
 
         } else {
             var html = [], str = '', ci;
             ci = opt[0];
-            if ( opt.length == 1 ) {
+            if (opt.length == 1) {
                 str = '<img src="' + ci.src + '" ' + (ci.data_ue_src ? ' data_ue_src="' + ci.data_ue_src + '" ' : '') +
-                        (ci.width ? 'width="' + ci.width + '" ' : '') +
-                        (ci.height ? ' height="' + ci.height + '" ' : '') +
-                        (ci['floatStyle'] == 'left' || ci['floatStyle'] == 'right' ? ' style="float:' + ci['floatStyle'] + ';"' : '') +
-                        (ci.title && ci.title != "" ? ' title="' + ci.title + '"' : '') +
-                        (ci.border && ci.border != "0" ? ' border="' + ci.border + '"' : '') +
-                        (ci.alt && ci.alt != "" ? ' alt="' + ci.alt + '"' : '') +
-                        (ci.hspace && ci.hspace != "0" ? ' hspace = "' + ci.hspace + '"' : '') +
-                        (ci.vspace && ci.vspace != "0" ? ' vspace = "' + ci.vspace + '"' : '') + '/>';
-                if ( ci['floatStyle'] == 'center' ) {
+                    (ci.width ? 'width="' + ci.width + '" ' : '') +
+                    (ci.height ? ' height="' + ci.height + '" ' : '') +
+                    (ci['floatStyle'] == 'left' || ci['floatStyle'] == 'right' ? ' style="float:' + ci['floatStyle'] + ';"' : '') +
+                    (ci.title && ci.title != "" ? ' title="' + ci.title + '"' : '') +
+                    (ci.border && ci.border != "0" ? ' border="' + ci.border + '"' : '') +
+                    (ci.alt && ci.alt != "" ? ' alt="' + ci.alt + '"' : '') +
+                    (ci.hspace && ci.hspace != "0" ? ' hspace = "' + ci.hspace + '"' : '') +
+                    (ci.vspace && ci.vspace != "0" ? ' vspace = "' + ci.vspace + '"' : '') + '/>';
+                if (ci['floatStyle'] == 'center') {
                     str = '<p style="text-align: center">' + str + '</p>';
                 }
-                html.push( str );
+                html.push(str);
 
             } else {
-                for ( var i = 0; ci = opt[i++]; ) {
+                for (var i = 0; ci = opt[i++];) {
                     str = '<p ' + (ci['floatStyle'] == 'center' ? 'style="text-align: center" ' : '') + '><img src="' + ci.src + '" ' +
-                            (ci.width ? 'width="' + ci.width + '" ' : '') + (ci.data_ue_src ? ' data_ue_src="' + ci.data_ue_src + '" ' : '') +
-                            (ci.height ? ' height="' + ci.height + '" ' : '') +
-                            ' style="' + (ci['floatStyle'] && ci['floatStyle'] != 'center' ? 'float:' + ci['floatStyle'] + ';' : '') +
-                            (ci.border || '') + '" ' +
-                            (ci.title ? ' title="' + ci.title + '"' : '') + ' /></p>';
-                    html.push( str );
+                        (ci.width ? 'width="' + ci.width + '" ' : '') + (ci.data_ue_src ? ' data_ue_src="' + ci.data_ue_src + '" ' : '') +
+                        (ci.height ? ' height="' + ci.height + '" ' : '') +
+                        ' style="' + (ci['floatStyle'] && ci['floatStyle'] != 'center' ? 'float:' + ci['floatStyle'] + ';' : '') +
+                        (ci.border || '') + '" ' +
+                        (ci.title ? ' title="' + ci.title + '"' : '') + ' /></p>';
+                    html.push(str);
                 }
             }
 
-            me.execCommand( 'insertHtml', html.join( '' ) );
+            me.execCommand('insertHtml', html.join(''));
         }
     }
 };
@@ -5780,8 +5875,9 @@ UE.commands['insertimage'] = {
  * @param   {String}   align               对齐方式：left居左，right居右，center居中，justify两端对齐
  * @author zhanyi
  */
-(function () {
-    var block = domUtils.isBlockElm,
+UE.plugins['justify']=function(){
+    var me=this,
+        block = domUtils.isBlockElm,
         defaultValue = {
             left:1,
             right:1,
@@ -5828,9 +5924,9 @@ UE.commands['insertimage'] = {
             }
             return range.moveToBookmark(bookmark2).moveToBookmark(bookmark);
         };
+
     UE.commands['justify'] = {
         execCommand:function (cmdName, align) {
-
             var range = this.selection.getRange(),
                 txt;
 
@@ -5857,15 +5953,13 @@ UE.commands['insertimage'] = {
         },
         queryCommandState:function () {
             var start = this.selection.getStart(),
-                cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
+                cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
 
             return cell? -1:0;
         }
 
     };
-
-
-})();
+};
 
 ///import core
 ///import plugins\removeformat.js
@@ -6045,7 +6139,7 @@ UE.plugins['font'] = function() {
 ///commands 超链接,取消链接
 ///commandsName  Link,Unlink
 ///commandsTitle  超链接,取消链接
-///commandsDialog  dialogs\link\link.html
+///commandsDialog  dialogs\link
 /**
  * 超链接
  * @function
@@ -6184,6 +6278,13 @@ UE.plugins['font'] = function() {
                 return node;
             }
 
+        },
+        queryCommandState : function() {
+            //判断如果是视频的话连接不可用
+            //fix 853
+            var img = this.selection.getRange().getClosedNode(),
+                flag = img && (img.className == "edui-faked-video");
+            return flag ? -1 : 0;
         }
     };
 })();
@@ -6193,7 +6294,7 @@ UE.plugins['font'] = function() {
 ///commands 插入框架
 ///commandsName  InsertFrame
 ///commandsTitle  插入Iframe
-///commandsDialog  dialogs\insertframe\insertframe.html
+///commandsDialog  dialogs\insertframe
 
 UE.plugins['insertframe'] = function() {
    var me =this;
@@ -6208,13 +6309,11 @@ UE.plugins['insertframe'] = function() {
 };
 
 
-/**
- * Created with JetBrains PhpStorm.
- * User: xuheng
- * Date: 12-7-2
- * Time: 下午5:22
- * To change this template use File | Settings | File Templates.
- */
+///import core
+///commands 涂鸦
+///commandsName  Scrawl
+///commandsTitle  涂鸦
+///commandsDialog  dialogs\scrawl
 UE.commands['scrawl'] = {
     queryCommandState : function(){
         return ( browser.ie && browser.version  <= 8 ) ? -1 :0;
@@ -6555,9 +6654,8 @@ UE.plugins['blockquote'] = function(){
 
 ///import core
 ///commands 大小写转换
-///commandsName touppercase
-///commandsName tolowercase
-///commandsTitle  大小写转换
+///commandsName touppercase,tolowercase
+///commandsTitle  大写,小写
 /**
  * 大小写转换
  * @function
@@ -7162,6 +7260,7 @@ UE.commands['cleardoc'] = {
             me.body.innerHTML = "<p>"+(ie ? "" : "<br/>")+"</p>";
             range.setStart(me.body.firstChild,0).setCursor(false,true);
         }
+        me.fireEvent("clearDoc");
     }
 };
 
@@ -7170,7 +7269,7 @@ UE.commands['cleardoc'] = {
 ///commands 锚点
 ///commandsName  Anchor
 ///commandsTitle  锚点
-///commandsDialog  dialogs\anchor\anchor.html
+///commandsDialog  dialogs\anchor
 /**
  * 锚点
  * @function
@@ -7228,34 +7327,17 @@ UE.plugins['anchor'] = function (){
 
 UE.plugins['wordcount'] = function(){
     var me = this;
-    me.setOpt({
-        wordCount:true,
-        wordCountIngoreHtml:true,
-        maximumWords:10000,
-        wordCountMsg: me.options.wordCountMsg||me.getLang("wordCountMsg"),
-        wordOverFlowMsg:me.options.wordOverFlowMsg||me.getLang("wordOverFlowMsg")
+    me.addListener('contentchange',function(){
+        me.fireEvent('wordcount')
     });
-    var opt = me.options,
-        max = opt.maximumWords,
-        msg = opt.wordCountMsg ,
-        errMsg = opt.wordOverFlowMsg;
-    if(!opt.wordCount){
-        return;
-    }
-    me.commands["wordcount"]={
-        queryCommandValue:function(cmd,onlyCount){
-            var length;
-            if(onlyCount){
-                return this.getContentLength(this.options.wordCountIngoreHtml);
-            }
-            length = this.getContentLength(this.options.wordCountIngoreHtml);
-            if(max-length<0){
-                me.fireEvent('wordcountoverflow',length);
-                return errMsg;
-            }
-            return msg.replace("{#leave}",max-length >= 0 ? max-length:0).replace("{#count}",length);
-        }
-    };
+    var timer;
+    me.addListener('keyup',function(){
+        clearTimeout(timer);
+        var me = this;
+        timer = setTimeout(function(){
+            me.fireEvent('wordcount')
+        },200)
+    });
 };
 
 ///import core
@@ -7383,9 +7465,6 @@ UE.plugins['pagebreak'] = function () {
 
             }
 
-        },
-        queryCommandState:function () {
-            return this.highlight ? -1 : 0;
         }
     };
 };
@@ -7393,6 +7472,7 @@ UE.plugins['pagebreak'] = function () {
 ///commands 本地图片引导上传
 ///commandsName  WordImage
 ///commandsTitle  本地图片引导上传
+///commandsDialog  dialogs\wordimage
 
 
 UE.plugins["wordimage"] = function(){
@@ -7430,129 +7510,134 @@ UE.plugins["wordimage"] = function(){
  * @author zhanyi
  */
 
-UE.plugins['undo'] = function() {
+UE.plugins['undo'] = function () {
     var me = this,
         maxUndoCount = me.options.maxUndoCount || 20,
         maxInputCount = me.options.maxInputCount || 20,
-        fillchar = new RegExp(domUtils.fillChar + '|<\/hr>','gi');// ie会产生多余的</hr>
+        fillchar = new RegExp(domUtils.fillChar + '|<\/hr>', 'gi');// ie会产生多余的</hr>
 
 
-
-    function compareAddr(indexA,indexB){
-        if(indexA.length != indexB.length)
+    function compareAddr(indexA, indexB) {
+        if (indexA.length != indexB.length)
             return 0;
-        for(var i= 0,l=indexA.length;i<l;i++){
-            if(indexA[i]!=indexB[i])
+        for (var i = 0, l = indexA.length; i < l; i++) {
+            if (indexA[i] != indexB[i])
                 return 0
         }
         return 1;
     }
-    function compareRangeAddress(rngAddrA,rngAddrB){
-        if(rngAddrA.collapsed != rngAddrB.collapsed){
+
+    function compareRangeAddress(rngAddrA, rngAddrB) {
+        if (rngAddrA.collapsed != rngAddrB.collapsed) {
             return 0;
         }
-        if(!compareAddr(rngAddrA.startAddress,rngAddrB.startAddress) || !compareAddr(rngAddrA.endAddress,rngAddrB.endAddress)){
+        if (!compareAddr(rngAddrA.startAddress, rngAddrB.startAddress) || !compareAddr(rngAddrA.endAddress, rngAddrB.endAddress)) {
             return 0;
         }
         return 1;
     }
 
-    function adjustContent(cont){
-        var  specialAttr = /\b(?:href|src|name)="[^"]*?"/gi;
-        return cont.replace(specialAttr,'')
-            .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(a,b,c){
-                return b.toLowerCase() + '=' + c.replace(/['"]/g,'').toLowerCase()})
-            .replace(/(<[\w\-]+)|([\w\-]+>)/gi,function(a,b,c){
-                return (b||c).toLowerCase()
+    function adjustContent(cont) {
+        var specialAttr = /\b(?:href|src|name)="[^"]*?"/gi;
+        return cont.replace(specialAttr, '')
+            .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi, function (a, b, c) {
+                return b.toLowerCase() + '=' + c.replace(/['"]/g, '').toLowerCase()
+            })
+            .replace(/(<[\w\-]+)|([\w\-]+>)/gi, function (a, b, c) {
+                return (b || c).toLowerCase()
             });
     }
+
     function UndoManager() {
         this.list = [];
         this.index = 0;
         this.hasUndo = false;
         this.hasRedo = false;
-        this.undo = function() {
-            if ( this.hasUndo ) {
+        this.undo = function () {
+            if (this.hasUndo) {
                 var currentScene = this.getScene(),
                     lastScene = this.list[this.index],
                     lastContent = adjustContent(lastScene.content),
                     currentContent = adjustContent(currentScene.content);
 
-                if ( lastContent != currentContent ) {
+                if (lastContent != currentContent) {
                     this.save();
                 }
-                if(!this.list[this.index - 1] && this.list.length == 1){
+                if (!this.list[this.index - 1] && this.list.length == 1) {
                     this.reset();
                     return;
                 }
-                while ( this.list[this.index].content == this.list[this.index - 1].content ) {
+                while (this.list[this.index].content == this.list[this.index - 1].content) {
                     this.index--;
-                    if ( this.index == 0 ) {
-                        return this.restore( 0 );
+                    if (this.index == 0) {
+                        return this.restore(0);
                     }
                 }
-                this.restore( --this.index );
+                this.restore(--this.index);
             }
         };
-        this.redo = function() {
-            if ( this.hasRedo ) {
-                while ( this.list[this.index].content == this.list[this.index + 1].content ) {
+        this.redo = function () {
+            if (this.hasRedo) {
+                while (this.list[this.index].content == this.list[this.index + 1].content) {
                     this.index++;
-                    if ( this.index == this.list.length - 1 ) {
-                        return this.restore( this.index );
+                    if (this.index == this.list.length - 1) {
+                        return this.restore(this.index);
                     }
                 }
-                this.restore( ++this.index );
+                this.restore(++this.index);
             }
         };
 
-        this.restore = function() {
+        this.restore = function () {
             var scene = this.list[this.index];
             //trace:873
             //去掉展位符
-            me.document.body.innerHTML = scene.content.replace(fillchar,'');
+            me.document.body.innerHTML = scene.content.replace(fillchar, '');
             //处理undo后空格不展位的问题
-            if(browser.ie){
-                for(var i=0,pi,ps = me.document.getElementsByTagName('p');pi = ps[i++];){
-                    if(pi.innerHTML == ''){
-                        domUtils.fillNode(me.document,pi);
+            if (browser.ie) {
+                utils.each(domUtils.getElementsByTagName(me.document,'td th caption p'),function(node){
+                    if(domUtils.isEmptyNode(node)){
+                        domUtils.fillNode(me.document, node);
                     }
-                }
+                })
             }
-            new dom.Range( me.document).moveToAddress(scene.address).select();
+            new dom.Range(me.document).moveToAddress(scene.address).select();
             this.update();
             this.clearKey();
             //不能把自己reset了
-            me.fireEvent('reset',true);
+            me.fireEvent('reset', true);
         };
 
-        this.getScene = function() {
+        this.getScene = function () {
+            var rng = me.selection.getRange(),
+                restoreAddress = rng.createAddress(),
+                rngAddress = rng.createAddress(false,true);
+
             me.fireEvent('beforegetscene');
-            var range = me.selection.getRange(),
-                cont = me.body.innerHTML.replace(fillchar,'');
-            //有可能边界落到了<table>|<tbody>这样的位置，所以缩一下位置
-            range.shrinkBoundary();
-            browser.ie && (cont = cont.replace(/>&nbsp;</g,'><').replace(/\s*</g,'<').replace(/>\s*/g,'>'));
-            var rngAddress = range.createAddress(false,true);
+            var cont = me.body.innerHTML.replace(fillchar, '');
+            browser.ie && (cont = cont.replace(/>&nbsp;</g, '><').replace(/\s*</g, '<').replace(/>\s*/g, '>'));
             me.fireEvent('aftergetscene');
+            try{
+                rng.moveToAddress(restoreAddress).select(true);
+            }catch(e){}
             return {
-                address : rngAddress,
-                content : cont
+                address:rngAddress,
+                content:cont
             }
         };
-        this.save = function(notCompareRange) {
+        this.save = function (notCompareRange) {
             var currentScene = this.getScene(),
                 lastScene = this.list[this.index];
             //内容相同位置相同不存
-            if ( lastScene && lastScene.content == currentScene.content &&
-                ( notCompareRange ? 1 : compareRangeAddress(lastScene.address,currentScene.address) )
+            if (lastScene && lastScene.content == currentScene.content &&
+                ( notCompareRange ? 1 : compareRangeAddress(lastScene.address, currentScene.address) )
                 ) {
                 return;
             }
-            this.list = this.list.slice( 0, this.index + 1 );
-            this.list.push( currentScene );
+            this.list = this.list.slice(0, this.index + 1);
+            this.list.push(currentScene);
             //如果大于最大数量了，就把最前的剔除
-            if ( this.list.length > maxUndoCount ) {
+            if (this.list.length > maxUndoCount) {
                 this.list.shift();
             }
             this.index = this.list.length - 1;
@@ -7560,18 +7645,18 @@ UE.plugins['undo'] = function() {
             //跟新undo/redo状态
             this.update();
         };
-        this.update = function() {
-            this.hasRedo = this.list[this.index + 1] ? true : false;
-            this.hasUndo = this.list[this.index - 1] || this.list.length == 1 ? true : false;
+        this.update = function () {
+            this.hasRedo = !!this.list[this.index + 1];
+            this.hasUndo = !!this.list[this.index - 1];
         };
-        this.reset = function() {
+        this.reset = function () {
             this.list = [];
             this.index = 0;
             this.hasUndo = false;
             this.hasRedo = false;
             this.clearKey();
         };
-        this.clearKey = function(){
+        this.clearKey = function () {
             keycont = 0;
             lastKeyCode = null;
         };
@@ -7582,26 +7667,26 @@ UE.plugins['undo'] = function() {
         this.undoManger.save();
     }
 
-    me.addListener('saveScene',function(){
+    me.addListener('saveScene', function () {
         me.undoManger.save();
     });
 
-    me.addListener( 'beforeexeccommand', saveScene );
-    me.addListener( 'afterexeccommand', saveScene );
+    me.addListener('beforeexeccommand', saveScene);
+    me.addListener('afterexeccommand', saveScene);
 
-    me.addListener('reset',function(type,exclude){
-        if(!exclude){
+    me.addListener('reset', function (type, exclude) {
+        if (!exclude) {
             me.undoManger.reset();
         }
     });
     me.commands['redo'] = me.commands['undo'] = {
-        execCommand : function( cmdName ) {
+        execCommand:function (cmdName) {
             me.undoManger[cmdName]();
         },
-        queryCommandState : function( cmdName ) {
+        queryCommandState:function (cmdName) {
             return me.undoManger['has' + (cmdName.toLowerCase() == 'undo' ? 'Undo' : 'Redo')] ? 0 : -1;
         },
-        notNeedUndo : 1
+        notNeedUndo:1
     };
 
     var keys = {
@@ -7614,26 +7699,26 @@ UE.plugins['undo'] = function() {
         lastKeyCode;
     //输入法状态下不计算字符数
     var inputType = false;
-    me.addListener('ready',function(){
-        domUtils.on(me.body,'compositionstart',function(){
+    me.addListener('ready', function () {
+        domUtils.on(me.body, 'compositionstart', function () {
             inputType = true;
         });
-        domUtils.on(me.body,'compositionend',function(){
+        domUtils.on(me.body, 'compositionend', function () {
             inputType = false;
         })
     });
     //快捷键
     me.addshortcutkey({
-        "Undo" :  "ctrl+90",//undo
-        "Redo" : "ctrl+89" //redo
+        "Undo":"ctrl+90", //undo
+        "Redo":"ctrl+89" //redo
 
     });
-    me.addListener( 'keydown', function( type, evt ) {
+    me.addListener('keydown', function (type, evt) {
         var keyCode = evt.keyCode || evt.which;
-        if ( !keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey ) {
-            if(inputType)
+        if (!keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey) {
+            if (inputType)
                 return;
-            if ( me.undoManger.list.length == 0 || ((keyCode == 8 ||keyCode == 46) && lastKeyCode != keyCode) ) {
+            if (me.undoManger.list.length == 0 || ((keyCode == 8 || keyCode == 46) && lastKeyCode != keyCode)) {
 
                 me.fireEvent('contentchange');
 
@@ -7643,20 +7728,23 @@ UE.plugins['undo'] = function() {
             }
             //trace:856
             //修正第一次输入后，回退，再输入要到keycont>maxInputCount才能在回退的问题
-            if(me.undoManger.list.length == 2 && me.undoManger.index == 0 && keycont == 0){
-                me.undoManger.list.splice(1,1);
+            if (me.undoManger.list.length == 2 && me.undoManger.index == 0 && keycont == 0) {
+                me.undoManger.list.splice(1, 1);
                 me.undoManger.update();
             }
             lastKeyCode = keyCode;
             keycont++;
-            if ( keycont >= maxInputCount ) {
-                if(me.selection.getRange().collapsed)
+            if (keycont >= maxInputCount || me.undoManger.mousedown) {
+                if (me.selection.getRange().collapsed)
                     me.fireEvent('contentchange');
                 me.undoManger.save();
-
+                me.undoManger.mousedown = false;
             }
         }
-    } );
+    });
+    me.addListener('mousedown',function(){
+        me.undoManger.mousedown = true;
+    })
 };
 
 ///import core
@@ -7825,10 +7913,12 @@ UE.plugins['undo'] = function() {
                 if(f){
                     //如果过滤出现问题，捕获它，直接插入内容，避免出现错误导致粘贴整个失败
                     try{
+                        onlyHtml = html = UE.filterWord(html);
+
                         var node =  f.transformInput(
                             f.parseHTML(
                                 //todo: 暂时不走dtd的过滤
-                                f.word(html)//, true
+                                html//, true
                             ),word_img_flag
                         );
                         //trace:924
@@ -7860,7 +7950,7 @@ UE.plugins['undo'] = function() {
                         }
 
                         html = f.toHTML(node,pasteplain);
-                        onlyHtml = html.replace(/<(\/?)([\w\-]+)[^>]+>/gi,function(a,b){return '<' + a + b + '>'});
+
                         txtContent = f.filter(node,{
                             whiteList: {
                                 'p': {'br':1,'BR':1,$:{}},
@@ -7889,7 +7979,7 @@ UE.plugins['undo'] = function() {
                 }
 
                 //自定义的处理
-                html = {'html':html};
+                html = {'html':html,'txtContent':txtContent};
 
                 me.fireEvent('beforepaste',html);
                 //不用在走过滤了
@@ -7904,15 +7994,36 @@ UE.plugins['undo'] = function() {
         }
 
         me.addListener('pasteTransfer',function(cmd,plainType){
-            if(address && txtContent && onlyHtml && htmlContent && txtContent != htmlContent){
+            if(address && txtContent && htmlContent && txtContent != htmlContent){
                 var range = me.selection.getRange();
-                range.moveToAddress(address).deleteContents().select(true);
+                range.moveToAddress(address,true).deleteContents();
+                range.select();
                 me.__hasEnterExecCommand = true;
                 var html = htmlContent;
                 if(plainType === 2){
-                    html = onlyHtml;
-                }
-                if(plainType){
+                    html = onlyHtml.replace(/<(\/?)([\w\-]+)([^>]*)>/gi,function(a,b,c,d){
+                        d = d.replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(str,atr,val){
+                            if({
+                                'src':1,
+                                'href':1,
+                                'name':1
+                            }[atr.toLowerCase()]){
+                                return atr + '=' + val + ' '
+                            }
+                            return ''
+                        });
+                        if({
+                            'span':1,
+                            'script':1,
+                            'style':1
+                        }[c.toLowerCase()]){
+                            return ''
+                        }else{
+                            return '<' + b + c + ' ' + utils.trim(d) + '>'
+                        }
+
+                    });
+                }else if(plainType){
                     html = txtContent;
                 }
                 me.execCommand('inserthtml',html,true);
@@ -7923,7 +8034,6 @@ UE.plugins['undo'] = function() {
         });
         me.addListener('ready',function(){
             domUtils.on(me.body,'cut',function(){
-
                 var range = me.selection.getRange();
                 if(!range.collapsed && me.undoManger){
                     me.undoManger.save();
@@ -7977,113 +8087,193 @@ UE.plugins['list'] = function () {
         };
 
     var customStyle = {
-        'chinese' : 'cn',
-        'number' : 'num',
-        'dash'  : 'dash'
+        'cn' : 'cn-1-',
+        'cn1' : 'cn-2-',
+        'cn2' : 'cn-3-',
+        'num':  'num-1-',
+        'num1' : 'num-2-',
+        'num2' : 'num-3-',
+        'dash'  : 'dash',
+        'dot':'dot'
     };
 
     me.setOpt( {
         'insertorderedlist':{
-            'decimal':'1,2,3...',
-            'lower-alpha':'a,b,c...',
-            'lower-roman':'i,ii,iii...',
-            'upper-alpha':'A,B,C...',
-            'upper-roman':'I,II,III...',
-            'chinese':'(一),(二),(三)...',
-            'number':'(1),(2),(3)...'
+            'num':'',
+            'num1':'',
+            'num2':'',
+            'cn':'',
+            'cn1':'',
+            'cn2':'',
+            'decimal':'',
+            'lower-alpha':'',
+            'lower-roman':'',
+            'upper-alpha':'',
+            'upper-roman':''
         },
         'insertunorderedlist':{
             'circle':'',
             'disc':'',
             'square':'',
-            'dash' : ''
+            'dash' : '',
+            'dot':''
         },
-        listDefaultPaddingLeft : '30'
+        listDefaultPaddingLeft : '30',
+        listiconpath : 'http://bs.baidu.com/listicon/',
+        maxListLevel : -1//不限制
     } );
+    var liiconpath = me.options.listiconpath;
+
+    //根据用户配置，调整customStyle
+    for(var s in customStyle){
+        if(!me.options.insertorderedlist.hasOwnProperty(s) && !me.options.insertunorderedlist.hasOwnProperty(s)){
+            delete customStyle[s];
+        }
+    }
+
     me.ready(function () {
-        utils.cssRule('list', 'ol,ul{margin:0;pading:0;}ol.custom,ul.custom{list-style:none;}' +
-            '.custom li{background:no-repeat 0 3px;}' +
-//            '.custom li p{padding:0;margin:0;line-height:1;}' +
-            'li{clear:both;}', me.document);
+        var customCss = [];
+        for(var p in customStyle){
+            if(p == 'dash' || p == 'dot'){
+                customCss.push('li.list-' + customStyle[p] + '{background-image:url(' + liiconpath +customStyle[p]+'.gif)}');
+                customCss.push('ul.custom_'+p+'{list-style:none;}ul.custom_'+p+' li{background-position:0 3px;background-repeat:no-repeat}');
+            }else{
+                for(var i= 0;i<99;i++){
+                    customCss.push('li.list-' + customStyle[p] + i + '{background-image:url(' + liiconpath + 'list-'+customStyle[p] + i + '.gif)}')
+                }
+                customCss.push('ol.custom_'+p+'{list-style:none;}ol.custom_'+p+' li{background-position:0 3px;background-repeat:no-repeat}');
+            }
+            switch(p){
+                case 'cn':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:25px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:40px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:55px}');
+                    break;
+                case 'cn1':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:30px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:40px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:55px}');
+                    break;
+                case 'cn2':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:40px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:55px}');
+                    customCss.push('li.list-'+p+'-paddingleft-3{padding-left:68px}');
+                    break;
+                case 'num':
+                case 'num1':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:25px}');
+                    break;
+                case 'num2':
+                    customCss.push('li.list-'+p+'-paddingleft-1{padding-left:35px}');
+                    customCss.push('li.list-'+p+'-paddingleft-2{padding-left:40px}');
+                    break;
+                case 'dash':
+
+                    customCss.push('li.list-'+p+'-paddingleft{padding-left:35px}');
+                    break;
+                case 'dot':
+                    customCss.push('li.list-'+p+'-paddingleft{padding-left:20px}');
+            }
+        }
+        customCss.push('.list-paddingleft-1{padding-left:0}');
+        customCss.push('.list-paddingleft-2{padding-left:'+me.options.listDefaultPaddingLeft+'px}');
+        customCss.push('.list-paddingleft-3{padding-left:'+me.options.listDefaultPaddingLeft*2+'px}');
+        utils.cssRule('list', 'ol,ul{margin:0;pading:0;}li{clear:both;}'+customCss.join('\n'), me.document);
     });
 
-    var liiconpath = me.options.UEDITOR_HOME_URL + 'themes/default/images/list/';
+    function getStyle(node){
+        var cls = node.className;
+        if(domUtils.hasClass(node,/custom_/)){
+            return cls.match(/custom_(\w+)/)[1]
+        }
+        return ''
+    }
 
     //调整索引标签
     me.addListener('contentchange',function(){
         utils.each(domUtils.getElementsByTagName(me.document,'ol ul'),function(node){
-            var index = 0,paddingLeft = me.options.listDefaultPaddingLeft,parent = node.parentNode;
-            if( domUtils.hasClass(node,'custom')){
-                if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,'custom'))){
-                    paddingLeft = 0;
+            var index = 0,type = 2,parent = node.parentNode;
+            if( domUtils.hasClass(node,/custom_/)){
+                if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/))){
+                    type = 1;
                 }
             }else{
-                if(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,'custom')){
-                    paddingLeft *= 2;
+                if(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/)){
+                    type = 3;
                 }
             }
-            node.style.paddingLeft = paddingLeft + 'px';
-            utils.each(node.children,function(li){
-                if(li.tagName != 'LI')return;
+            node.className = utils.trim(node.className.replace(/list-paddingleft-\w+/,'')) + ' list-paddingleft-' + type;
+            utils.each(domUtils.getElementsByTagName(node,'li'),function(li){
+                if(!li.firstChild){
+                    domUtils.remove(li);
+                    return;
+                }
+                if(li.parentNode !== node){
+                    return;
+                }
                 index++;
-                if(domUtils.hasClass(node,'custom') ){
-                    var paddingLeft = '40px',currentStyle = node.getAttribute('_custom_style');
+                if(domUtils.hasClass(node,/custom_/) ){
+                    var paddingLeft = 1,currentStyle = getStyle(node);
                     if(node.tagName == 'OL'){
                         if(currentStyle){
                             switch(currentStyle){
-                                case 'chinese' :
+                                case 'cn' :
+                                case 'cn1':
+                                case 'cn2':
                                     if(index > 10 && (index % 10 == 0 || index > 10 && index < 20)){
-                                        paddingLeft = '55px'
+                                        paddingLeft = 2
                                     }else if(index > 20){
-                                        paddingLeft = '65px'
+                                        paddingLeft = 3
                                     }
                                     break;
-                                case 'number' :
-                                    paddingLeft = '30px';
-                                    if(index > 10){
-                                        paddingLeft = '37px'
+                                case 'num2' :
+                                    if(index > 9){
+                                        paddingLeft = 2
                                     }
                             }
                         }
-                        li.style.backgroundImage = 'url(' + liiconpath + 'list-'+customStyle[currentStyle]+'-3-' + index + '.gif)';
-                        li.style.paddingLeft = paddingLeft;
+                        li.className = 'list-'+customStyle[currentStyle]+ index + ' ' + 'list-'+currentStyle+'-paddingleft-' + paddingLeft;
                     }else{
-
-                        li.style.backgroundImage = 'url(' + liiconpath + customStyle[currentStyle] + '.gif)';
-                        li.style.paddingLeft = '35px';
+                        li.className = 'list-'+customStyle[currentStyle]  + ' ' + 'list-'+currentStyle+'-paddingleft';
                     }
 
                 }else{
-                    li.style.backgroundImage = '';
-                    li.style.paddingLeft = '';
-
+                    li.className = li.className.replace(/list-[\w\-]+/gi,'');
                 }
-                if(!li.getAttribute('style')){
-                    domUtils.removeAttributes(li,'style')
+                var className = li.getAttribute('class');
+                if(className !== null && !className.replace(/\s/g,'')){
+                    domUtils.removeAttributes(li,'class')
                 }
             })
+
         })
     });
 
+
     function adjustList(list, tag, style) {
         var nextList = list.nextSibling;
-        if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (nextList.getAttribute('_custom_style') || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
+        if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (getStyle(nextList) || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(nextList, list);
             if (nextList.childNodes.length == 0) {
                 domUtils.remove(nextList);
             }
         }
+        if(nextList && domUtils.isFillChar(nextList)){
+            domUtils.remove(nextList);
+        }
         var preList = list.previousSibling;
-        if (preList && preList.nodeType == 1 && preList.tagName.toLowerCase() == tag && (preList.getAttribute('_custom_style') || domUtils.getStyle(preList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
+        if (preList && preList.nodeType == 1 && preList.tagName.toLowerCase() == tag && (getStyle(preList) || domUtils.getStyle(preList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(list, preList);
+        }
+        if(preList && domUtils.isFillChar(preList)){
+            domUtils.remove(preList);
         }
         domUtils.isEmptyBlock(list) && domUtils.remove(list);
     }
 
     function setListStyle(list,style){
         if(customStyle[style]){
-            list.className = 'custom';
-            list.setAttribute('_custom_style',style);
+            list.className = 'custom_' + style;
         }
         try{
             domUtils.setStyle(list, 'list-style-type', style);
@@ -8106,16 +8296,28 @@ UE.plugins['list'] = function () {
             me.fireEvent('contentchange');
             me.undoManger && me.undoManger.save();
         }
-
+        function findList(node,filterFn){
+            while(node && !domUtils.isBody(node)){
+                if(filterFn(node)){
+                    return null
+                }
+                if(node.nodeType == 1 && /[ou]l/i.test(node.tagName)){
+                    return node;
+                }
+                node = node.parentNode;
+            }
+            return null;
+        }
         var keyCode = evt.keyCode || evt.which;
         if (keyCode == 13) {//回车
             var range = me.selection.getRange(),
-                start = domUtils.findParentByTagName(range.startContainer, ['ol', 'ul'], true, function (node) {
+                start = findList(range.startContainer,function (node) {
                     return node.tagName == 'TABLE';
                 }),
-                end = domUtils.findParentByTagName(range.endContainer, ['ol', 'ul'], true, function (node) {
+                end = range.collapsed ? start : findList(range.endContainer,function (node) {
                     return node.tagName == 'TABLE';
                 });
+
             if (start && end && start === end) {
 
                 if (!range.collapsed) {
@@ -8242,7 +8444,7 @@ UE.plugins['list'] = function () {
 
                         range.setStart(first, 0).collapse(true).shrinkBoundary().select();
                         domUtils.remove(span);
-                        pre = nextLi.previousSibling;
+                        var pre = nextLi.previousSibling;
                         if (pre && domUtils.isEmptyBlock(pre)) {
                             pre.innerHTML = '<p></p>';
                             domUtils.fillNode(me.document, pre.firstChild);
@@ -8265,6 +8467,17 @@ UE.plugins['list'] = function () {
 
                 //要在li的最左边，才能处理
                 if (li && domUtils.isStartInblock(tmpRange)) {
+                    start = domUtils.findParentByTagName(range.startContainer, 'p', true);
+                    if (start && start !== li.firstChild) {
+                        var parentList = domUtils.findParentByTagName(start,['ol','ul']);
+                        domUtils.breakParent(start,parentList);
+                        clearEmptySibling(start);
+                        me.fireEvent('contentchange');
+                        range.setStart(start,0).setCursor(false,true);
+                        me.fireEvent('saveScene');
+                        domUtils.preventDefault(evt);
+                        return;
+                    }
 
                     if (li && (pre = li.previousSibling)) {
                         if (keyCode == 46 && li.childNodes.length) {
@@ -8286,10 +8499,7 @@ UE.plugins['list'] = function () {
                                     pre.appendChild(li.firstChild);
                                 }
                             } else {
-                                start = domUtils.findParentByTagName(range.startContainer, 'p', true);
-                                if (start && start !== first) {
-                                    return;
-                                }
+
                                 span = me.document.createElement('span');
                                 range.insertNode(span);
                                 //判断pre是否是空的节点,如果是<p><br/></p>类型的空节点，干掉p标签防止它占位
@@ -8313,8 +8523,6 @@ UE.plugins['list'] = function () {
                                 while (li.firstChild) {
                                     pre.appendChild(li.firstChild);
                                 }
-
-
                             }
                         }
 
@@ -8328,20 +8536,29 @@ UE.plugins['list'] = function () {
                     //trace:980
 
                     if (li && !li.previousSibling) {
-                        first = li.firstChild;
-                        //trace:1648 要判断li下只有一个节点
-                        if (!first || li.lastChild === first && domUtils.isEmptyNode(domUtils.isBlockElm(first) ? first : li)) {
-                            var p = me.document.createElement('p');
+                        var parentList = li.parentNode;
+                        var bk = range.createBookmark();
+                        if(domUtils.isTagNode(parentList.parentNode,'ol ul')){
+                            parentList.parentNode.insertBefore(li,parentList);
+                            if(domUtils.isEmptyNode(parentList)){
+                                domUtils.remove(parentList)
+                            }
+                        }else{
 
-                            li.parentNode.parentNode.insertBefore(p, li.parentNode);
-                            domUtils.fillNode(me.document, p);
-                            range.setStart(p, 0).setCursor();
-                            domUtils.remove(!li.nextSibling ? li.parentNode : li);
-                            me.undoManger && me.undoManger.save();
-                            domUtils.preventDefault(evt);
-                            return;
+                            while(li.firstChild){
+                                parentList.parentNode.insertBefore(li.firstChild,parentList);
+                            }
+
+                            domUtils.remove(li);
+                            if(domUtils.isEmptyNode(parentList)){
+                                domUtils.remove(parentList)
+                            }
+
                         }
-
+                        range.moveToBookmark(bk).setCursor(false,true)
+                        me.fireEvent('saveScene');
+                        domUtils.preventDefault(evt);
+                        return;
 
                     }
 
@@ -8356,23 +8573,54 @@ UE.plugins['list'] = function () {
 
     //处理tab键
     me.addListener('tabkeydown',function(){
+        function listToArray(list){
+            var arr = [];
+            for(var p in list){
+                arr.push(p)
+            }
+            return arr;
+        }
         var range = me.selection.getRange(),
             listStyle = {
-                'OL':['decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','chinese','number'],
-                'UL':[ 'circle','disc','square','dash']
+                'OL':listToArray(me.options.insertorderedlist),
+                'UL':listToArray(me.options.insertunorderedlist)
             };
         //只以开始为准
         //todo 后续改进
         var li = domUtils.findParentByTagName(range.startContainer, 'li', true);
         if(li){
-            var bk,parentLi = li.parentNode,
-                list = me.document.createElement(parentLi.tagName),
-                index = utils.indexOf(listStyle[list.tagName], parentLi.getAttribute('_custom_style')||domUtils.getComputedStyle(parentLi, 'list-style-type'));
-            index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
-            var currentStyle = listStyle[list.tagName][index];
-            var current = li;
-            setListStyle(list,currentStyle);
+            //控制级数
+            if(me.options.maxListLevel != -1){
+                var level = li.parentNode,levelNum = 0;
+                while(/[ou]l/i.test(level.tagName)){
+                    levelNum++;
+                    level = level.parentNode;
+                }
+                if(levelNum >= me.options.maxListLevel){
+                    return true;
+                }
+                if(utils.each(domUtils.getElementsByTagName(li.parentNode,'ol ul'),function(list){
+                    var currentLevel = levelNum;
+                    while(li.parentNode !== list){
+                        currentLevel++;
+                        list = list.parentNode;
+                    }
+                    if(currentLevel >= me.options.maxListLevel){
+                        return false;
+                    }
+                }) === false){
+                    return true;
+                }
+
+            }
+            var bk;
             if(range.collapsed){
+                var parentLi = li.parentNode,
+                    list = me.document.createElement(parentLi.tagName),
+                    index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
+                index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
+                var currentStyle = listStyle[list.tagName][index];
+                setListStyle(list,currentStyle);
                 if(domUtils.isStartInblock(range)){
                     me.fireEvent('saveScene');
                     bk = range.createBookmark();
@@ -8386,15 +8634,36 @@ UE.plugins['list'] = function () {
             }else{
                 me.fireEvent('saveScene');
                 bk = range.createBookmark();
-                parentLi.insertBefore(list, li);
+                for(var i= 0,closeList,parents = domUtils.findParents(li),ci;ci=parents[i++];){
+                    if(domUtils.isTagNode(ci,'ol ul')){
+                        closeList = ci;
+                        break;
+                    }
+                }
+                var current = li;
                 if(bk.end){
                     while(current && !(domUtils.getPosition(current, bk.end) & domUtils.POSITION_FOLLOWING)){
-                        li = current.nextSibling;
-                        list.appendChild(current);
+                        var parentLi = li.parentNode,
+                            list = me.document.createElement(parentLi.tagName),
+                            index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
+                        index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
+                        var currentStyle = listStyle[list.tagName][index];
+                        setListStyle(list,currentStyle);
+                        parentLi.insertBefore(list, li);
+                        while(current && !(domUtils.getPosition(current, bk.end) & domUtils.POSITION_FOLLOWING)){
+                            li = current.nextSibling;
+                            if(!li){
+                                li = domUtils.getNextDomNode(current,false,null,function(node){return node !== closeList});
+                                list.appendChild(current);
+                                break;
+                            }
+                            list.appendChild(current);
+                            current = li;
+                        }
+                        adjustList(list,list.tagName.toLowerCase(),currentStyle);
                         current = li;
                     }
                 }
-                adjustList(list,list.tagName.toLowerCase(),currentStyle);
                 me.fireEvent('contentchange');
                 range.moveToBookmark(bk).select();
                 return true;
@@ -8409,7 +8678,6 @@ UE.plugins['list'] = function () {
                 if (!style) {
                     style = command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc';
                 }
-
                 var me = this,
                     range = this.selection.getRange(),
                     filterFn = function (node) {
@@ -8465,12 +8733,22 @@ UE.plugins['list'] = function () {
                         if (domUtils.isEmptyNode(tmp.nextSibling)) {
                             domUtils.remove(tmp.nextSibling)
                         }
-                        var nodeStyle = startParent.getAttribute('_custom_style') || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
+                        var nodeStyle = getStyle(startParent) || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
                         if (startParent.tagName.toLowerCase() == tag && nodeStyle == style) {
                             for (var i = 0, ci, tmpFrag = me.document.createDocumentFragment(); ci = frag.childNodes[i++];) {
-                                while (ci.firstChild) {
-                                    tmpFrag.appendChild(ci.firstChild);
+                                if(domUtils.isTagNode(ci,'ol ul')){
+                                    utils.each(domUtils.getElementsByTagName(ci,'li'),function(li){
+                                        while(li.firstChild){
+                                            tmpFrag.appendChild(li.firstChild);
+                                        }
+
+                                    });
+                                }else{
+                                    while (ci.firstChild) {
+                                        tmpFrag.appendChild(ci.firstChild);
+                                    }
                                 }
+
                             }
                             tmp.parentNode.insertBefore(tmpFrag, tmp);
                         } else {
@@ -8519,8 +8797,6 @@ UE.plugins['list'] = function () {
                         } else {
                             range.setStartAfter(startParent);
                         }
-
-
                         modifyStart = 1;
                     }
 
@@ -8625,11 +8901,15 @@ UE.plugins['list'] = function () {
                         var li = range.document.createElement('li');
 
                         li.appendChild(tmpRange.extractContents());
+                        if(domUtils.isEmptyNode(li)){
+                            var tmpNode = range.document.createElement('p');
+                            while(li.firstChild){
+                                tmpNode.appendChild(li.firstChild)
+                            }
+                            li.appendChild(tmpNode);
+                        }
                         frag.appendChild(li);
-
-
                     } else {
-
                         current = domUtils.getNextDomNode(current, true, filterFn);
                     }
                 }
@@ -8654,7 +8934,7 @@ UE.plugins['list'] = function () {
             },
             queryCommandValue:function (command) {
                 var node = domUtils.filterNodeList(this.selection.getStartElementPath(), command.toLowerCase() == 'insertorderedlist' ? 'ol' : 'ul');
-                return node ? node.getAttribute('_custom_style') || domUtils.getComputedStyle(node, 'list-style-type') : null;
+                return node ? getStyle(node) || domUtils.getComputedStyle(node, 'list-style-type') : null;
             }
         };
 };
@@ -8871,7 +9151,8 @@ UE.plugins['list'] = function () {
         var formatter = new SourceFormater(opt.source);
         var sourceMode = false;
         var sourceEditor;
-        opt.sourceEditor = browser.ie && browser.version < 8 ? 'textarea' : (opt.sourceEditor || 'codemirror');
+
+        opt.sourceEditor = browser.ie  ? 'textarea' : (opt.sourceEditor || 'codemirror');
 
         me.setOpt({
             sourceEditorFirst:false
@@ -8882,14 +9163,16 @@ UE.plugins['list'] = function () {
 
         var bakCssText;
         //解决在源码模式下getContent不能得到最新的内容问题
-        var oldGetContent = me.getContent;
+        var oldGetContent = me.getContent,
+            bakAddress;
 
         me.commands['source'] = {
             execCommand: function (){
 
                 sourceMode = !sourceMode;
                 if (sourceMode) {
-                    me.undoManger && me.undoManger.save();
+                    bakAddress = me.selection.getRange().createAddress(false,true);
+                    me.undoManger && me.undoManger.save(true);
                     if(browser.gecko){
                         me.body.contentEditable = false;
                     }
@@ -8924,50 +9207,41 @@ UE.plugins['list'] = function () {
                     sourceEditor = null;
                     //还原getContent方法
                     me.getContent = oldGetContent;
-                    setTimeout(function(){
-                        var first = me.body.firstChild;
-                        //trace:1106 都删除空了，下边会报错，所以补充一个p占位
-                        if(!first){
-                            me.body.innerHTML = '<p>'+(browser.ie?'':'<br/>')+'</p>';
-                            first = me.body.firstChild;
-                        }
-                        //要在ifm为显示时ff才能取到selection,否则报错
-                        //这里不能比较位置了
-                        me.undoManger && me.undoManger.save(true);
+                    var first = me.body.firstChild;
+                    //trace:1106 都删除空了，下边会报错，所以补充一个p占位
+                    if(!first){
+                        me.body.innerHTML = '<p>'+(browser.ie?'':'<br/>')+'</p>';
+                        first = me.body.firstChild;
+                    }
+                    //要在ifm为显示时ff才能取到selection,否则报错
+                    //这里不能比较位置了
+                    me.undoManger && me.undoManger.save(true);
 
-                        while(first && first.firstChild){
+                    if(browser.gecko){
 
-                            first = first.firstChild;
-                        }
-                        var range = me.selection.getRange();
-                        if(first.nodeType == 3 || dtd.$empty[first.tagName]){
-                            range.setStartBefore(first);
-                        }else{
-                            range.setStart(first,0);
-                        }
+                        var input = document.createElement('input');
+                        input.style.cssText = 'position:absolute;left:0;top:-32768px';
 
-                        if(browser.gecko){
+                        document.body.appendChild(input);
 
-                            var input = document.createElement('input');
-                            input.style.cssText = 'position:absolute;left:0;top:-32768px';
-
-                            document.body.appendChild(input);
-
-                            me.body.contentEditable = false;
+                        me.body.contentEditable = false;
+                        setTimeout(function(){
+                            domUtils.setViewportOffset(input, { left: -32768, top: 0 });
+                            input.focus();
                             setTimeout(function(){
-                                domUtils.setViewportOffset(input, { left: -32768, top: 0 });
-                                input.focus();
-                                setTimeout(function(){
-                                    me.body.contentEditable = true;
-                                    range.setCursor(false,true);
-                                    domUtils.remove(input);
-                                });
-
+                                me.body.contentEditable = true;
+                                range.setCursor(false,true);
+                                domUtils.remove(input);
                             });
-                        }else{
-                            range.setCursor(false,true);
-                        }
-                    });
+
+                        });
+                    }else{
+                        //ie下有可能报错，比如在代码顶头的情况
+                        try{
+                            me.selection.getRange().moveToAddress(bakAddress).select();
+                        }catch(e){}
+
+                    }
                 }
                 this.fireEvent('sourcemodechanged', sourceMode);
             },
@@ -9217,23 +9491,13 @@ UE.plugins['enterkey'] = function() {
 UE.plugins['keystrokes'] = function() {
     var me = this;
 
-    function isBoundaryNode(node,dir){
-        var tmp;
-        while(!domUtils.isBody(node)){
-            tmp = node;
-            node = node.parentNode;
-            if(tmp !== node[dir]){
-                return false;
-            }
-        }
-        return true;
-    }
     me.addListener('keydown', function(type, evt) {
         var keyCode = evt.keyCode || evt.which,
             rng = me.selection.getRange();
 
         //处理全选的情况
         if(!rng.collapsed && !(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey || keyCode == 9 )){
+
             var tmpNode = rng.startContainer;
             if(domUtils.isFillChar(tmpNode)){
                 rng.setStartBefore(tmpNode)
@@ -9243,14 +9507,19 @@ UE.plugins['keystrokes'] = function() {
                 rng.setEndAfter(tmpNode)
             }
             rng.txtToElmBoundary();
+            //结束边界可能放到了br的前边，要把br包含进来
+            // x[xxx]<br/>
+            if(rng.endContainer && rng.endContainer.nodeType == 1){
+                tmpNode = rng.endContainer.childNodes[rng.endOffset];
+                if(tmpNode && domUtils.isBr(tmpNode)){
+                    rng.setEndAfter(tmpNode);
+                }
+            }
             if(rng.startOffset == 0){
                 tmpNode = rng.startContainer;
-                if(isBoundaryNode(tmpNode,'firstChild')){
+                if(domUtils.isBoundaryNode(tmpNode,'firstChild') ){
                     tmpNode = rng.endContainer;
-                    var lastChild = rng.endContainer.childNodes[rng.endOffset];
-                    if(rng.endOffset == rng.endContainer.childNodes.length
-                        || ((domUtils.isBr(lastChild)||domUtils.isWhitespace(lastChild))&& lastChild === rng.endContainer.lastChild )
-                        && isBoundaryNode(tmpNode,'lastChild') ){
+                    if(rng.endOffset == (tmpNode.nodeType == 3 ? tmpNode.nodeValue.length : tmpNode.childNodes.length) && domUtils.isBoundaryNode(tmpNode,'lastChild')){
                         me.fireEvent('saveScene');
                         me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
                         rng.setStart(me.body.firstChild,0).setCursor(false,true);
@@ -9266,12 +9535,15 @@ UE.plugins['keystrokes'] = function() {
         //处理backspace/del
         if (keyCode == 8) {//|| keyCode == 46
             var start,end;
-
             //避免按两次删除才能生效的问题
             if(rng.inFillChar()){
                 start = rng.startContainer;
                 rng.setStartBefore(start).shrinkBoundary(true).collapse(true);
-                domUtils.remove(start)
+                if(domUtils.isFillChar(start)){
+                    domUtils.remove(start)
+                }else{
+                    start.nodeValue = start.nodeValue.replace(new RegExp('^' + domUtils.fillChar ),'');
+                }
             }
 
             //解决选中control元素不能删除的问题
@@ -9372,9 +9644,9 @@ UE.plugins['keystrokes'] = function() {
                 });
                 rng.insertNode(tmpNode).setStart(tmpNode,0).setCursor(false,true);
             }
-            //chrome下如果删除了inline标签，浏览器会有记忆，在输入文字还是会套上刚才删除的标签，所以这里再选一次就不会了
+//            //chrome下如果删除了inline标签，浏览器会有记忆，在输入文字还是会套上刚才删除的标签，所以这里再选一次就不会了
             if(browser.chrome && rng.collapsed && rng.startContainer.nodeType == 1 && domUtils.isEmptyBlock(rng.startContainer)){
-                rng.select();
+                rng.select(true);
             }
         }
     })
@@ -9528,6 +9800,7 @@ UE.plugins['autoheight'] = function () {
     function adjustHeight() {
         var me = this;
         clearTimeout(timer);
+        if(isFullscreen)return;
         timer = setTimeout(function () {
 
             if (me.queryCommandState && me.queryCommandState('source') != 1) {
@@ -9554,9 +9827,13 @@ UE.plugins['autoheight'] = function () {
             }
         }, 50);
     }
-
+    var isFullscreen;
+    me.addListener('fullscreenchanged',function(cmd,f){
+        isFullscreen = f
+    });
     me.addListener('destroy', function () {
         me.removeListener('contentchange', adjustHeight);
+        me.removeListener('afterinserthtml',adjustHeight);
         me.removeListener('keyup', adjustHeight);
         me.removeListener('mouseup', adjustHeight);
     });
@@ -9569,6 +9846,7 @@ UE.plugins['autoheight'] = function () {
         bakOverflow = doc.body.style.overflowY;
         doc.body.style.overflowY = 'hidden';
         me.addListener('contentchange', adjustHeight);
+        me.addListener('afterinserthtml',adjustHeight)
         me.addListener('keyup', adjustHeight);
         me.addListener('mouseup', adjustHeight);
         //ff不给事件算得不对
@@ -9696,6 +9974,7 @@ UE.plugins['autoheight'] = function () {
             domUtils.un(window, ['scroll','resize'], updateFloating);
             me.removeListener('keydown', defer_updateFloating);
         });
+
         me.addListener('ready', function(){
             if(checkHasUI(me)){
 
@@ -9732,6 +10011,12 @@ UE.plugins['autoheight'] = function () {
                         updateFloating();
                     },0);
                 });
+                me.addListener("clearDoc",function(){
+                    setTimeout(function(){
+                        updateFloating();
+                    },0);
+
+                })
             }
         });
 	};
@@ -9741,7 +10026,7 @@ UE.plugins['autoheight'] = function () {
 ///commands 插入代码
 ///commandsName  HighlightCode
 ///commandsTitle  插入代码
-///commandsDialog  dialogs\code\code.html
+///commandsDialog  dialogs\highlightcode
 UE.plugins['highlightcode'] = function() {
     var me = this;
     if(!/highlightcode/i.test(me.options.toolbars.join(''))){
@@ -9750,33 +10035,34 @@ UE.plugins['highlightcode'] = function() {
 
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
+            var range = this.selection.getRange(),
+                start = domUtils.findParentByTagName(range.startContainer, 'table', true),
+                end = domUtils.findParentByTagName(range.endContainer, 'table', true);
+            if(start && end && start === end && domUtils.hasClass(start,'syntaxhighlighter')){
+                if(start.nextSibling){
+                    range.setStart(start.nextSibling,0)
+                }else{
+                    if(start.previousSibling){
+                        range.setStartAtLast(start.previousSibling)
+                    }else{
+                        var p = me.document.createElement('p');
+                        domUtils.fillNode(me.document,p);
+                        start.parentNode.insertBefore(p,start);
+                        range.setStart(p,0)
+                    }
+                }
+                range.setCursor(false,true);
+                domUtils.remove(start);
+            }
             if(code && syntax){
-                me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+code+'</pre>',true);
+                me.execCommand('inserthtml','<pre id="highlightcode_id" class="brush: '+syntax+';toolbar:false;">'+utils.unhtml(code)+'</pre>',true);
                 var pre = me.document.getElementById('highlightcode_id');
                 if(pre){
                     domUtils.removeAttributes(pre,'id');
                     me.window.SyntaxHighlighter.highlight(pre);
                 }
-            }else{
-                var range = this.selection.getRange(),
-                   start = domUtils.findParentByTagName(range.startContainer, 'table', true),
-                   end = domUtils.findParentByTagName(range.endContainer, 'table', true),
-                   codediv;
-                if(start && end && start === end && domUtils.hasClass(start,'syntaxhighlighter')){
-                    codediv = start.parentNode;
-                    //需要判断一下后边有没有节点，没有的化才添加新的标签
-                    if(domUtils.isBody(codediv.parentNode) && !codediv.nextSibling){
-                        var p = me.document.createElement('p');
-                        p.innerHTML = browser.ie ? '' : '<br/>';
-                        me.body.insertBefore(p,codediv);
-                        range.setStart(p,0);
-                    }else{
-                        range.setStartBefore(codediv)
-                    }
-                    range.setCursor();
-                    domUtils.remove(codediv);
-                }
             }
+
         },
         queryCommandState: function(){
             return queryHighlight.call(this);
@@ -9808,8 +10094,6 @@ UE.plugins['highlightcode'] = function() {
         print:1,
         searchreplace:1,
         fullscreen:1,
-        autotypeset:1,
-        pasteplain:1,
         preview:1,
         insertparagraph:1,
         elementpath:1,
@@ -9853,7 +10137,7 @@ UE.plugins['highlightcode'] = function() {
         }
 
     });
-    me.addListener("beforegetcontent",function(){
+    me.addListener("beforegetcontent beforegetscene",function(){
         utils.each(domUtils.getElementsByTagName(me.body,'table','syntaxhighlighter'),function(di){
             var str = [],parentCode = '';
             utils.each(di.getElementsByTagName('code'),function(ci){
@@ -9868,10 +10152,9 @@ UE.plugins['highlightcode'] = function() {
             });
             pre.appendChild(me.document.createTextNode(str.join('\n')));
             di.parentNode.replaceChild(pre,di);
-
         });
     });
-    me.addListener("aftergetcontent aftersetcontent",changePre);
+    me.addListener("aftergetcontent aftersetcontent aftergetscene",changePre);
 
 
     //避免table插件对于代码高亮的影响
@@ -9885,7 +10168,7 @@ UE.plugins['highlightcode'] = function() {
 
     function changePre(){
         var me = this;
-        if(!me.window.SyntaxHighlighter)return;
+        if(!me.window||!me.window.SyntaxHighlighter)return;
         utils.each(domUtils.getElementsByTagName(me.document,"pre"),function(pi){
             if(domUtils.hasClass(pi,'brush')){
                 me.window.SyntaxHighlighter.highlight(pi);
@@ -10747,7 +11030,7 @@ UE.plugins['serialize'] = function () {
 ///commands 视频
 ///commandsName InsertVideo
 ///commandsTitle  插入视频
-///commandsDialog  dialogs\video\video.html
+///commandsDialog  dialogs\video
 UE.plugins['video'] = function (){
     var me =this,
         div;
@@ -10763,14 +11046,14 @@ UE.plugins['video'] = function (){
      */
     function creatInsertStr(url,width,height,align,toEmbed,addParagraph){
         return  !toEmbed ?
-                (addParagraph? ('<p '+ (align !="none" ? ( align == "center"? ' style="text-align:center;" ':' style="float:"'+ align ) : '') + '>'): '') +
+                (addParagraph? ('<p '+ (align && align !="none" ? ( align == "center"? ' style="text-align:center;" ':' style="float:"'+ align ) : '') + '>'): '') +
                 '<img align="'+align+'" width="'+ width +'" height="' + height + '" _url="'+url+'" class="edui-faked-video"' +
-                ' src="'+me.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" style="background:url('+me.options.UEDITOR_HOME_URL+'themes/default/images/videologo.gif) no-repeat center center; border:1px solid gray;" />' +
+                ' src="' + me.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" style="background:url('+me.options.UEDITOR_HOME_URL+'themes/default/images/videologo.gif) no-repeat center center; border:1px solid gray;" />' +
                 (addParagraph?'</p>':'')
                 :
                 '<embed type="application/x-shockwave-flash" class="edui-faked-video" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
                 ' src="' + url + '" width="' + width  + '" height="' + height  + '" align="' + align + '"' +
-                ( align !="none" ? ' style= "'+ ( align == "center"? "display:block;":" float: "+ align )  + '"' :'' ) +
+                ( align && align !="none" ? ' style= "'+ ( align == "center"? "display:block;":" float: "+ align )  + '"' :'' ) +
                 ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" >';
     }
 
@@ -10783,8 +11066,9 @@ UE.plugins['video'] = function (){
             }
             tmpdiv = me.document.createElement("div");
             //先看float在看align,浮动有的是时候是在float上定义的
-            var align = node.style.cssFloat;
-            tmpdiv.innerHTML = creatInsertStr(img2embed ? node.getAttribute("_url"):node.getAttribute("src"),node.width,node.height,align || node.getAttribute("align"),img2embed);
+            var align = domUtils.getComputedStyle(node,'float');
+            align = align == 'none' ? (node.getAttribute('align') || '') : align;
+            tmpdiv.innerHTML = creatInsertStr(img2embed ? node.getAttribute("_url"):node.getAttribute("src"),node.width,node.height,align,img2embed);
             node.parentNode.replaceChild(tmpdiv.firstChild,node);
         }
     }
@@ -10824,7 +11108,6 @@ UE.plugins['video'] = function (){
  * Date: 12-10-12
  * Time: 上午10:05
  * To change this template use File | Settings | File Templates.
-
  */
 UE.plugins['table'] = function () {
     var me = this,
@@ -10839,6 +11122,8 @@ UE.plugins['table'] = function () {
         currentTd = null, //当前鼠标经过时的td
         onDrag = "", //指示当前拖动状态，其值可为"","h","v" ,分别表示未拖动状态，横向拖动状态，纵向拖动状态，用于鼠标移动过程中的判断
         onBorder = false, //检测鼠标按下时是否处在单元格边缘位置
+        dragButton = null,
+        dragOver = false,
         dragLine = null, //模拟的拖动线
         dragTd = null;    //发生拖动的目标td
 
@@ -10852,7 +11137,8 @@ UE.plugins['table'] = function () {
         'defaultCols':5,
         'defaultRows':5,
         'tdvalign':'top',
-        'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_"
+        'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_",
+        'tableDragable':false
     });
     var commands = {
         'deletetable':1,
@@ -10887,8 +11173,8 @@ UE.plugins['table'] = function () {
             '.selectTdClass{background-color:#edf5fa !important}' +
                 'table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}' +
                 //插入的表格的默认样式
-                'table{line-height:22px; margin-bottom:10px;border-collapse:collapse;display:table;}' +
-                'td,th{ background:white; padding: 0 10px;border: 1px solid #DDD;line-height: 22px;}' +
+                'table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
+                'td,th{ background:white; padding: 5px 10px;border: 1px solid #DDD;}' +
                 'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
                 'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
                 'td p{margin:0;padding:0;}', me.document);
@@ -10914,13 +11200,13 @@ UE.plugins['table'] = function () {
                     domUtils.preventDefault(evt);
                 }
 
-                var caption = domUtils.findParentByTagName(me.selection.getStart(), 'caption', true);
-                if (caption && isEmptyBlock(caption)) {
+                var caption = domUtils.findParentByTagName(me.selection.getStart(), 'caption', true),
+                    range =  me.selection.getRange();
+                if (range.collapsed && caption && isEmptyBlock(caption)) {
                     me.fireEvent('saveScene');
                     var table = caption.parentNode;
                     domUtils.remove(caption);
                     if (table) {
-                        var range = me.selection.getRange();
                         range.setStart(table.rows[0].cells[0], 0).setCursor(false, true);
                     }
                 }
@@ -10944,7 +11230,7 @@ UE.plugins['table'] = function () {
             if (keyCode == 13) {
 
                 var rng = me.selection.getRange(),
-                    caption = domUtils.findParentByTagName(rng.startContainer, 'caption');
+                    caption = domUtils.findParentByTagName(rng.startContainer, 'caption',true);
                 if (caption) {
                     var table = domUtils.findParentByTagName(caption, 'table');
                     if (!rng.collapsed) {
@@ -10981,19 +11267,20 @@ UE.plugins['table'] = function () {
                     isFullCol = table.isFullCol();
                     isFullRow = table.isFullRow();
                     tableCopyList = [
-                        [tds[0].cloneNode(true)]
+                        [cloneCell(tds[0])]
                     ];
                     for (var i = 1, ci; ci = tds[i]; i++) {
                         if (ci.parentNode !== tds[i - 1].parentNode) {
-                            tableCopyList.push([ci.cloneNode(true)])
+                            tableCopyList.push([cloneCell(ci)])
                         } else {
-                            tableCopyList[tableCopyList.length - 1].push(ci.cloneNode(true))
+                            tableCopyList[tableCopyList.length - 1].push(cloneCell(ci))
                         }
 
                     }
                 }
             }
         });
+
         me.addListener('beforepaste', function (cmd, html) {
             var me = this;
             var rng = me.selection.getRange();
@@ -11016,7 +11303,7 @@ UE.plugins['table'] = function () {
                             rowIndex++;
                         }
                         for (var i = 0, ci; ci = tableCopyList[i++];) {
-                            var tr = ut.insertRow(rowIndex++);
+                            var tr = ut.insertRow(rowIndex++,"td");
                             for (var j = 0, cj; cj = ci[j]; j++) {
                                 var cell = tr.cells[j];
                                 if (!cell) {
@@ -11064,7 +11351,7 @@ UE.plugins['table'] = function () {
                                     cj.getAttribute('width') && td.setAttribute('width', cj.getAttribute('width'));
                                     cj.getAttribute('valign') && td.setAttribute('valign', cj.getAttribute('valign'));
                                     cj.getAttribute('align') && td.setAttribute('align', cj.getAttribute('align'));
-                                    cj.style.cssText && (td.style.cssText = cj.style.cssText)
+                                    cj.style.cssText && (td.style.cssText = cj.style.cssText);
                                     preNode = td;
                                     td = td.nextSibling;
                                 } else {
@@ -11087,12 +11374,11 @@ UE.plugins['table'] = function () {
                     }
                     ut.update();
                 } else {
-
                     table = me.document.createElement('table');
                     for (var i = 0, ci; ci = tableCopyList[i++];) {
                         var tr = table.insertRow(table.rows.length);
                         for (var j = 0, cj; cj = ci[j++];) {
-                            cloneTd = cj.cloneNode(true);
+                            cloneTd = cloneCell(cj);
                             domUtils.removeAttributes(cloneTd, ['class']);
                             tr.appendChild(cloneTd)
                         }
@@ -11106,7 +11392,7 @@ UE.plugins['table'] = function () {
                             (needIEHack ? parseInt(domUtils.getComputedStyle(me.body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (me.options.offsetWidth || 0);
                     me.execCommand('insertHTML', '<table  ' +
                         ( isFullCol && isFullRow ? 'width="' + width + '"' : '') +
-                        '>' + table.innerHTML.replace(/>\s*</g, '><') + '</table>')
+                        '>' + table.innerHTML.replace(/>\s*</g, '><').replace(/th/gi,"td") + '</table>')
                 }
                 me.fireEvent('contentchange');
                 me.fireEvent('saveScene');
@@ -11126,13 +11412,12 @@ UE.plugins['table'] = function () {
                     utils.each(tables, function (table) {
                         removeStyleSize(table, true);
                         domUtils.removeAttributes(table, ['style', 'border']);
-                        var tds = domUtils.getElementsByTagName(table, "td");
-                        utils.each(tds, function (td) {
-                            if (domUtils.isEmptyNode(td)) {
+                        utils.each(domUtils.getElementsByTagName(table, "td"), function (td) {
+                            if (isEmptyBlock(td)) {
                                 domUtils.fillNode(me.document, td);
                             }
                             removeStyleSize(td, true);
-                            domUtils.removeAttributes(td, ['style'])
+//                            domUtils.removeAttributes(td, ['style'])
                         });
                     });
                 }
@@ -11166,6 +11451,10 @@ UE.plugins['table'] = function () {
 
             }, 100);
         });
+        me.addListener("selectionchange",function(){
+            toggleDragableState(me, false, "", null);
+        });
+
 
         //内容变化时触发索引更新
         //todo 可否考虑标记检测，如果不涉及表格的变化就不进行索引重建和更新
@@ -11176,28 +11465,30 @@ UE.plugins['table'] = function () {
             if (getUETableBySelected(me))return;
             var rng = me.selection.getRange();
             var start = rng.startContainer;
-            start = domUtils.findParentByTagName(start,['td', 'th'],true);
+            start = domUtils.findParentByTagName(start, ['td', 'th'], true);
             utils.each(domUtils.getElementsByTagName(me.document, 'table'), function (table) {
                 if (me.fireEvent("excludetable", table) === true) return;
                 table.ueTable = new UETable(table);
-
                 utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
 
                     if (domUtils.isEmptyBlock(td) && td !== start) {
-                        domUtils.fillNode(me.document, td)
-                        if(browser.ie && browser.version == 6){
+                        domUtils.fillNode(me.document, td);
+                        if (browser.ie && browser.version == 6) {
                             td.innerHTML = '&nbsp;'
                         }
                     }
                 });
                 utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
-                    if (domUtils.isEmptyBlock(th) && th !== start ) {
-                        domUtils.fillNode(me.document, th)
-                        if(browser.ie && browser.version == 6){
+                    if (domUtils.isEmptyBlock(th) && th !== start) {
+                        domUtils.fillNode(me.document, th);
+                        if (browser.ie && browser.version == 6) {
                             th.innerHTML = '&nbsp;'
                         }
                     }
                 });
+                table.onmousemove = function () {
+                    me.options.tableDragable && toggleDragButton(true, this, me);
+                };
                 table.onmouseout = function () {
                     toggleDragableState(me, false, "", null);
                     hideDragLine(me);
@@ -11211,7 +11502,15 @@ UE.plugins['table'] = function () {
                         cellInfo = ut.getCellInfo(target),
                         cellsRange,
                         rng = me.selection.getRange();
-
+//                    if ("topLeft" == inPosition(table, mouseCoords(evt))) {
+//                        cellsRange = ut.getCellsRange(ut.table.rows[0].cells[0], ut.getLastCell());
+//                        ut.setSelected(cellsRange);
+//                        return;
+//                    }
+//                    if ("bottomRight" == inPosition(table, mouseCoords(evt))) {
+//
+//                        return;
+//                    }
                     if (inTableSide(table, target, evt, true)) {
                         var endTdCol = ut.getCell(ut.indexTable[ut.rowsNum - 1][cellInfo.colIndex].rowIndex, ut.indexTable[ut.rowsNum - 1][cellInfo.colIndex].cellIndex);
                         if (evt.shiftKey && ut.selectedTds.length) {
@@ -11229,6 +11528,7 @@ UE.plugins['table'] = function () {
                                 rng && rng.selectNodeContents(endTdCol).select();
                             }
                         }
+                        return;
                     }
                     if (inTableSide(table, target, evt)) {
                         var endTdRow = ut.getCell(ut.indexTable[cellInfo.rowIndex][ut.colsNum - 1].rowIndex, ut.indexTable[cellInfo.rowIndex][ut.colsNum - 1].cellIndex);
@@ -11292,32 +11592,46 @@ UE.plugins['table'] = function () {
         me.addListener("mouseup", mouseUpEvent);
 
         var currentRowIndex = 0;
-        me.addListener('tabkeydown',function(){
+        me.addListener("mousedown", function(){
+            currentRowIndex = 0;
+        });
+        me.addListener('tabkeydown', function () {
             var range = this.selection.getRange(),
-                obj = getTableItemsByRange(me);
-            if(obj.table){
-                var cell = obj.cell,
-                    ua = getUETable(cell);
-                currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
-                var nextCell = ua.getTabNextCell(cell,currentRowIndex);
-                if(nextCell){
-                    if(isEmptyBlock(nextCell)){
-                        range.setStart(nextCell,0).setCursor(false,true)
-                    }else{
-                        range.selectNodeContents(nextCell).select()
+                common = range.getCommonAncestor(true,true),
+                table = domUtils.findParentByTagName(common,'table');
+            if (table) {
+                if (domUtils.findParentByTagName(common,'caption',true)) {
+                    var cell = domUtils.getElementsByTagName(table, 'th td');
+                    if (cell && cell.length) {
+                        range.setStart(cell[0], 0).setCursor(false, true)
                     }
-                }else{
-                    me.fireEvent('saveScene');
-                    me.__hasEnterExecCommand = true;
-                    this.execCommand('insertrownext');
-                    me.__hasEnterExecCommand = false;
-                    range = this.selection.getRange();
-                    range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
-                    me.fireEvent('saveScene');
+                } else {
+                    var cell = domUtils.findParentByTagName(common,['td', 'th'],true),
+                        ua = getUETable(cell);
+                    currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
+                    var nextCell = ua.getTabNextCell(cell, currentRowIndex);
+                    if (nextCell) {
+                        if (isEmptyBlock(nextCell)) {
+                            range.setStart(nextCell, 0).setCursor(false, true)
+                        } else {
+                            range.selectNodeContents(nextCell).select()
+                        }
+                    } else {
+                        me.fireEvent('saveScene');
+                        me.__hasEnterExecCommand = true;
+                        this.execCommand('insertrownext');
+                        me.__hasEnterExecCommand = false;
+                        range = this.selection.getRange();
+                        range.setStart(table.rows[table.rows.length - 1].cells[0], 0).setCursor();
+                        me.fireEvent('saveScene');
+                    }
                 }
                 return true;
             }
 
+        });
+        browser.ie && me.addListener('selectionchange',function(){
+            toggleDragableState(this, false, "", null);
         });
         me.addListener("keydown", function (type, evt) {
             var me = this;
@@ -11335,9 +11649,36 @@ UE.plugins['table'] = function () {
 
         me.addListener("beforegetcontent", function () {
             switchBoderColor(false);
+            browser.ie && utils.each(me.document.getElementsByTagName('caption'), function (ci) {
+                if (domUtils.isEmptyNode(ci)) {
+                    ci.innerHTML = '&nbsp;'
+                }
+            });
         });
         me.addListener("aftergetcontent", function () {
             switchBoderColor(true);
+        });
+        me.addListener("getAllHtml",function(){
+            removeSelectedClass(me.document.getElementsByTagName("td"));
+        });
+        //修正全屏状态下插入的表格宽度在非全屏状态下撑开编辑器的情况
+        me.addListener("fullscreenchanged", function (type, fullscreen) {
+            if (!fullscreen) {
+                var ratio = this.body.offsetWidth / document.body.offsetWidth,
+                    tables = domUtils.getElementsByTagName(this.body, "table");
+                utils.each(tables, function (table) {
+                    if (table.offsetWidth < me.body.offsetWidth) return false;
+                    var tds = domUtils.getElementsByTagName(table, "td"),
+                        backWidths = [];
+                    utils.each(tds, function (td) {
+                        backWidths.push(td.offsetWidth);
+                    });
+                    for (var i = 0, td; td = tds[i]; i++) {
+                        td.setAttribute("width", Math.floor(backWidths[i] * ratio));
+                    }
+                    table.setAttribute("width", Math.floor(getTableWidth(me, needIEHack, getDefaultValue(me))))
+                });
+            }
         });
 
         //重写execCommand命令，用于处理框选时的处理
@@ -11354,27 +11695,26 @@ UE.plugins['table'] = function () {
                 me.__hasEnterExecCommand = true;
                 me.fireEvent("beforeexeccommand", cmd);
                 tds = ut.selectedTds;
-                var firstState, state, firstTd;
+                var lastState = -2, lastValue = -2,value,state;
                 for (var i = 0, td; td = tds[i]; i++) {
                     if (isEmptyBlock(td)) {
                         range.setStart(td, 0).setCursor(false, true)
                     } else {
-                        range.selectNodeContents(td).select();
+                        range.selectNodeContents(td).select(true);
                     }
-
                     state = me.queryCommandState(cmd);
-                    if (firstState === undefined && !isEmptyBlock(td)) {
-                        firstTd = td;
-                        firstState = state;
-                    }
-                    if (state != -1 && (firstState === undefined || firstState == state)) {
-                        var isEmpty = domUtils.isEmptyNode(td);
-                        result = oldExecCommand.apply(me, arguments);
-                        var reg = new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
-                        if (isEmpty != domUtils.isEmptyNode(td) && !td[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length) {
-                            domUtils.fillNode(me.document, td)
+                    value = me.queryCommandValue(cmd);
+                    if (state != -1 ) {
+                        if(lastState !== state || lastValue !== value){
+                            me._ignoreContentChange = true;
+                            result = oldExecCommand.apply(me, arguments);
+                            me._ignoreContentChange = false;
+                            if (domUtils.isEmptyBlock(td)) {
+                                domUtils.fillNode(me.document, td)
+                            }
                         }
-
+                        lastState = me.queryCommandState(cmd);
+                        lastValue = me.queryCommandValue(cmd);
                     }
                 }
                 range.setStart(tds[0], 0).shrinkBoundary(true).setCursor(false, true);
@@ -11461,6 +11801,13 @@ UE.plugins['table'] = function () {
                 pos = mouseCoords(evt);
                 var state = getRelation(target, pos),
                     table = domUtils.findParentByTagName(target, "table", true);
+//                if ("topLeft" == inPosition(table, pos)) {
+//                    onBorder = false;
+//                    me.body.style.cursor = "move";
+//                } else if ("bottomRight" == inPosition(table, pos)) {
+//                    onBorder = false;
+//                    me.body.style.cursor = "se-resize";
+//               } else
                 if (inTableSide(table, target, evt, true)) {
                     //toggleCursor(pos,true,"_h");
                     if (me.fireEvent("excludetable", table) === true) return;
@@ -11479,11 +11826,86 @@ UE.plugins['table'] = function () {
                     //位于第一行的顶部或者第一列的左边时不可拖动
                     toggleDragableState(me, target ? !!state : false, target ? state : '', pos, target);
                 }
+//                toggleDragButton(inTable(pos,table),table);
+            } else {
+                toggleDragButton(false, table, me);
             }
+
         } catch (e) {
             showError(e);
         }
     }
+    var dragButtomTimer;
+
+    function toggleDragButton(show, table, editor) {
+        if (!show) {
+            if (dragOver)return;
+            dragButtomTimer = setTimeout(function () {
+                !dragOver && dragButton && dragButton.parentNode && dragButton.parentNode.removeChild(dragButton);
+            }, 2000);
+        } else {
+            createDragButton(table, editor);
+        }
+    }
+
+    function createDragButton(table, editor) {
+        var pos = domUtils.getXY(table),
+            doc = table.ownerDocument;
+        if (dragButton && dragButton.parentNode)return dragButton;
+        dragButton = doc.createElement("div");
+        dragButton.contentEditable = false;
+        dragButton.innerHTML = "";
+        dragButton.style.cssText = "width:15px;height:15px;background-image:url(" + editor.options.UEDITOR_HOME_URL + "dialogs/table/dragicon.png);position: absolute;cursor:move;top:" + (pos.y - 15) + "px;left:" + (pos.x) + "px;";
+        domUtils.unSelectable(dragButton);
+        dragButton.onmouseover = function (evt) {
+            dragOver = true;
+        };
+        dragButton.onmouseout = function (evt) {
+            dragOver = false;
+        };
+        domUtils.on(dragButton, 'click', function (type, evt) {
+            doClick(evt, this);
+        });
+        domUtils.on(dragButton, 'dblclick', function (type, evt) {
+            doDblClick(evt);
+        });
+        domUtils.on(dragButton, 'dragstart', function (type, evt) {
+            domUtils.preventDefault(evt);
+        });
+        var timer;
+
+        function doClick(evt, button) {
+            // 部分浏览器下需要清理
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                editor.fireEvent("tableClicked", table, button);
+            }, 300);
+        }
+
+        function doDblClick(evt) {
+            clearTimeout(timer);
+            var ut = getUETable(table),
+                start = table.rows[0].cells[0],
+                end = ut.getLastCell(),
+                range = ut.getCellsRange(start, end);
+            editor.selection.getRange().setStart(start, 0).setCursor(false, true);
+            ut.setSelected(range);
+        }
+
+        doc.body.appendChild(dragButton);
+    }
+
+
+//    function inPosition(table, pos) {
+//        var tablePos = domUtils.getXY(table),
+//            width = table.offsetWidth,
+//            height = table.offsetHeight;
+//        if (pos.x - tablePos.x < 5 && pos.y - tablePos.y < 5) {
+//            return "topLeft";
+//        } else if (tablePos.x + width - pos.x < 5 && tablePos.y + height - pos.y < 5) {
+//            return "bottomRight";
+//        }
+//    }
 
     function inTableSide(table, cell, evt, top) {
         var pos = mouseCoords(evt),
@@ -11610,6 +12032,11 @@ UE.plugins['table'] = function () {
 
         removeSelectedClass(domUtils.getElementsByTagName(me.body, "td"));
         removeSelectedClass(domUtils.getElementsByTagName(me.body, "th"));
+        //trace:3113
+        //选中单元格，点击table外部，不会清掉table上挂的ueTable,会引起getUETableBySelected方法返回值
+        utils.each(me.document.getElementsByTagName('table'),function(t){
+            t.ueTable = null;
+        });
         startTd = getTargetTd(me, evt);
         if (!startTd) return;
         var table = domUtils.findParentByTagName(startTd, "table", true);
@@ -11713,17 +12140,17 @@ UE.plugins['table'] = function () {
         var me = this;
         //清除表格上原生跨选问题
         var range = me.selection.getRange(),
-            start = domUtils.findParentByTagName(range.startContainer,'table',true),
-            end = domUtils.findParentByTagName(range.endContainer,'table',true);
+            start = domUtils.findParentByTagName(range.startContainer, 'table', true),
+            end = domUtils.findParentByTagName(range.endContainer, 'table', true);
 
-        if(start || end ){
-            if(start === end){
-                start = domUtils.findParentByTagName(range.startContainer,['td','th','caption'],true);
-                end = domUtils.findParentByTagName(range.endContainer,['td','th','caption'],true);
-                if(start !== end){
+        if (start || end) {
+            if (start === end) {
+                start = domUtils.findParentByTagName(range.startContainer, ['td', 'th', 'caption'], true);
+                end = domUtils.findParentByTagName(range.endContainer, ['td', 'th', 'caption'], true);
+                if (start !== end) {
                     me.selection.clearRange()
                 }
-            }else{
+            } else {
                 me.selection.clearRange()
             }
         }
@@ -11782,14 +12209,15 @@ UE.plugins['table'] = function () {
             startTd = null;
             me.removeListener('mouseover', mouseOverEvent);
         }
-        me._selectionChange();
+        me._selectionChange(250,evt);
     }
 
     function mouseOverEvent(type, evt) {
-        var me = this;
-        currentTd = evt.target || evt.srcElement;
+        var me = this,
+            tar = evt.target || evt.srcElement;
+        currentTd = domUtils.findParentByTagName(tar, "td", true) || domUtils.findParentByTagName(tar, "th", true);
         //需要判断两个TD是否位于同一个表格内
-        if (startTd &&
+        if (startTd && currentTd &&
             ((startTd.tagName == "TD" && currentTd.tagName == "TD") || (startTd.tagName == "TH" && currentTd.tagName == "TH")) &&
             domUtils.findParentByTagName(startTd, 'table') == domUtils.findParentByTagName(currentTd, 'table')) {
             var ut = getUETable(currentTd);
@@ -11813,7 +12241,7 @@ UE.plugins['table'] = function () {
      */
     function getUETable(tdOrTable) {
         var tag = tdOrTable.tagName.toLowerCase();
-        tdOrTable = (tag == "td" || tag == "th") ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
+        tdOrTable = (tag == "td" || tag == "th" || tag == 'caption') ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
         if (!tdOrTable.ueTable) {
             tdOrTable.ueTable = new UETable(tdOrTable);
         }
@@ -11893,19 +12321,28 @@ UE.plugins['table'] = function () {
     function switchBoderColor(flag) {
         var tableArr = domUtils.getElementsByTagName(me.body, "table"), color;
         for (var i = 0, node; node = tableArr[i++];) {
-            if (flag) {
-                color = (domUtils.getElementsByTagName(node, "td")[0].style.borderColor).replace(/\s/g, "");
-                if (/(#ffffff)|(rgb\(255,f55,255\))/ig.test(color))
-                    domUtils.addClass(node, "noBorderTable")
-            } else {
-                domUtils.removeClasses(node, "noBorderTable")
+            var td = domUtils.getElementsByTagName(node, "td");
+            if(td[0] ){
+                if (flag) {
+                    color = (td[0].style.borderColor).replace(/\s/g, "");
+                    if (/(#ffffff)|(rgb\(255,f55,255\))/ig.test(color))
+                        domUtils.addClass(node, "noBorderTable")
+                } else {
+                    domUtils.removeClasses(node, "noBorderTable")
+                }
             }
+
         }
+    }
+
+    function getTableWidth(editor, needIEHack, defaultValue) {
+        var body = editor.body;
+        return body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (editor.options.offsetWidth || 0);
     }
 
     UE.commands['inserttable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? -1 : 0;
+            return getTableItemsByRange(this).table ? -1 : 0;
         },
         execCommand:function (cmd, opt) {
             function createTable(opt, tableWidth, tdWidth) {
@@ -11929,9 +12366,13 @@ UE.plugins['table'] = function () {
                     tdvalign:this.options.tdvalign
                 })
             }
+
+            var range = this.selection.getRange(),
+                start = range.startContainer,
+                li = domUtils.findParentByTagName(start,"li",true)
             var me = this,
                 defaultValue = getDefaultValue(me),
-                tableWidth = me.body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(me.body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (me.options.offsetWidth || 0),
+                tableWidth = getTableWidth(me, needIEHack, defaultValue) - (li ? parseInt(domUtils.getXY(li).x,10):0),
                 tdWidth = Math.floor(tableWidth / opt.numCols - defaultValue.tdPadding * 2 - defaultValue.tdBorder);
             //todo其他属性
             !opt.tdvalign && (opt.tdvalign = me.options.tdvalign);
@@ -11979,6 +12420,7 @@ UE.plugins['table'] = function () {
                 }
                 rng.setCursor(false, true)
                 toggleDragableState(this, false, "", null);
+                if (dragButton)domUtils.remove(dragButton);
             }
 
         }
@@ -12168,11 +12610,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length ? cellInfo.rowIndex:ut.cellsRange.beginRowIndex,'');
             if (!ut.selectedTds.length) {
-                ut.insertRow(cellInfo.rowIndex);
+                ut.insertRow(cellInfo.rowIndex, cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endRowIndex - range.beginRowIndex + 1; i < len; i++) {
-                    ut.insertRow(range.beginRowIndex);
+                    ut.insertRow(range.beginRowIndex, cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -12193,11 +12635,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length? cellInfo.rowIndex + cellInfo.rowSpan : ut.cellsRange.endRowIndex + 1,'');
             if (!ut.selectedTds.length) {
-                ut.insertRow(cellInfo.rowIndex + cellInfo.rowSpan);
+                ut.insertRow(cellInfo.rowIndex + cellInfo.rowSpan, cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endRowIndex - range.beginRowIndex + 1; i < len; i++) {
-                    ut.insertRow(range.endRowIndex + 1);
+                    ut.insertRow(range.endRowIndex + 1, cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -12257,14 +12699,14 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex:ut.cellsRange.beginColIndex);
             if (!ut.selectedTds.length) {
-                ut.insertCol(cellInfo.colIndex);
+                ut.insertCol(cellInfo.colIndex, cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endColIndex - range.beginColIndex + 1; i < len; i++) {
-                    ut.insertCol(range.beginColIndex);
+                    ut.insertCol(range.beginColIndex, cell);
                 }
             }
-            rng.moveToBookmark(bk).select();
+            rng.moveToBookmark(bk).select(true);
         }
     };
     UE.commands["insertcolnext"] = {
@@ -12281,11 +12723,11 @@ UE.plugins['table'] = function () {
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex + cellInfo.colSpan:ut.cellsRange.endColIndex +1);
             if (!ut.selectedTds.length) {
-                ut.insertCol(cellInfo.colIndex + cellInfo.colSpan);
+                ut.insertCol(cellInfo.colIndex + cellInfo.colSpan, cell);
             } else {
                 var range = ut.cellsRange;
                 for (var i = 0, len = range.endColIndex - range.beginColIndex + 1; i < len; i++) {
-                    ut.insertCol(range.endColIndex + 1);
+                    ut.insertCol(range.endColIndex + 1, cell);
                 }
             }
             rng.moveToBookmark(bk).select();
@@ -12434,7 +12876,7 @@ UE.plugins['table'] = function () {
     UE.commands["adaptbytext"] =
         UE.commands["adaptbywindow"] = {
             queryCommandState:function () {
-                return getTableItemsByRange(this).cell ? 0 : -1
+                return getTableItemsByRange(this).table ? 0 : -1
             },
             execCommand:function (cmd) {
                 var tableItems = getTableItemsByRange(this),
@@ -12446,10 +12888,15 @@ UE.plugins['table'] = function () {
                         utils.each(tds, function (td) {
                             td.removeAttribute("width");
                         });
-                        table.setAttribute('width', '100%');
+                        table.setAttribute('width', getTableWidth(this,needIEHack,getDefaultValue(this,table)));
+                        setTimeout(function(){
+                            utils.each(tds,function(td){
+                                td.setAttribute("width",td.offsetWidth+"");
+                            })
+                        },0)
                     } else {
                         var ut = getUETable(table),
-                            preTds = ut.getSameEndPosCells(cell, "x");
+                            preTds = cell?ut.getSameEndPosCells(cell, "x"):table.getElementsByTagName("td");
                         if (preTds.length) {
                             table.style.width = "";
                             table.removeAttribute("width");
@@ -12461,7 +12908,7 @@ UE.plugins['table'] = function () {
                             var width = table.offsetWidth,
                                 bodyWidth = me.body.offsetWidth;
                             if (width > bodyWidth) {
-                                table.setAttribute('width', me.body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(me.body, 'margin-left'), 10) * 2 : 0 ) - defaultValue.tableBorder * 2)
+                                table.setAttribute('width', getTableWidth(me, needIEHack, defaultValue));
                             }
 
                         }
@@ -12483,7 +12930,7 @@ UE.plugins['table'] = function () {
 
             function getAverageWidth() {
                 var tb = ut.table,
-                    averageWidth, sumWidth=0, colsNum=0,
+                    averageWidth, sumWidth = 0, colsNum = 0,
                     tbAttr = getDefaultValue(me, tb);
 
                 if (ut.isFullRow()) {
@@ -12591,7 +13038,7 @@ UE.plugins['table'] = function () {
     //单元格对齐方式
     UE.commands['cellalignment'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, data) {
             var me = this,
@@ -12599,10 +13046,14 @@ UE.plugins['table'] = function () {
 
             if (!ut) {
                 var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
-                if (cell) {
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
+                if (!/caption/ig.test(cell.tagName)) {
                     domUtils.setAttributes(cell, data);
+                } else {
+                    cell.style.textAlign = data.align;
+                    cell.style.verticalAlign = data.vAlign;
                 }
+                me.selection.getRange().setCursor(true);
             } else {
                 utils.each(ut.selectedTds, function (cell) {
                     domUtils.setAttributes(cell, data);
@@ -12611,9 +13062,9 @@ UE.plugins['table'] = function () {
         }
     };
     //表格对齐方式
-    UE.commands['tablealignment']={
+    UE.commands['tablealignment'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).cell ? 0 : -1
+            return getTableItemsByRange(this).table ? 0 : -1
         },
         execCommand:function (cmd, data) {
             var me = this,
@@ -12621,9 +13072,12 @@ UE.plugins['table'] = function () {
                 table = start && domUtils.findParentByTagName(start, ["table"], true);
 
             if (table) {
+                var obj = {};
+                obj[data[0]] = data[1];
+
+                table.style[utils.cssStyleToDomStyle("float")]="";
                 table.style.margin="";
-                browser.ie?table.style.styleFloat="":table.style.cssFloat="";
-                table.style[data[0]]=data[1];
+                domUtils.setStyles(table, obj);
             }
         }
     };
@@ -12636,7 +13090,7 @@ UE.plugins['table'] = function () {
         execCommand:function (cmd, color) {
             var rng = this.selection.getRange(),
                 table = domUtils.findParentByTagName(rng.startContainer, 'table');
-            if (table && color) {
+            if (table) {
                 var arr = domUtils.getElementsByTagName(table, "td").concat(
                     domUtils.getElementsByTagName(table, "th"),
                     domUtils.getElementsByTagName(table, "caption")
@@ -12658,7 +13112,7 @@ UE.plugins['table'] = function () {
 
             if (!ut) {
                 var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
                 if (cell) {
                     cell.style.backgroundColor = bkColor;
                 }
@@ -12745,19 +13199,19 @@ UE.plugins['table'] = function () {
                 showError(e);
             }
         },
-        getTabNextCell : function(cell,preRowIndex){
+        getTabNextCell:function (cell, preRowIndex) {
             var cellInfo = this.getCellInfo(cell),
                 rowIndex = preRowIndex || cellInfo.rowIndex,
-                colIndex = cellInfo.colIndex + 1,
+                colIndex = cellInfo.colIndex + 1 + (cellInfo.colSpan - 1),
                 nextCell;
-            try{
+            try {
                 nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
-            }catch(e){
-                try{
+            } catch (e) {
+                try {
                     rowIndex = rowIndex * 1 + 1;
                     colIndex = 0;
                     nextCell = this.getCell(this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
-                }catch(e){
+                } catch (e) {
                 }
             }
             return nextCell;
@@ -12818,6 +13272,7 @@ UE.plugins['table'] = function () {
         setCellContent:function (cell, content) {
             cell.innerHTML = content || (browser.ie ? domUtils.fillChar : "<br />");
         },
+        cloneCell:cloneCell,
         /**
          * 获取跟当前单元格的右边竖线为左边的所有未合并单元格
          */
@@ -12928,25 +13383,13 @@ UE.plugins['table'] = function () {
             }
 
         },
-        //获取单元格行号
-        getCellRowIndex:function (cell) {
-            var cellIndex = cell.cellIndex,
-                rows = this.table.rows,
-                rowLen = rows.length;
-            if (rowLen) while (rowLen--) {
-                if (rows[rowLen].cells[cellIndex] === cell) {
-                    return rowLen;
-                }
-            }
-            return -1;
-        },
         /**
          * 获取单元格的索引信息
          */
         getCellInfo:function (cell) {
             if (!cell) return;
             var cellIndex = cell.cellIndex,
-                rowIndex = this.getCellRowIndex(cell),
+                rowIndex = cell.parentNode.rowIndex,
                 rowInfo = this.indexTable[rowIndex],
                 numCols = this.colsNum;
             for (var colIndex = cellIndex; colIndex < numCols; colIndex++) {
@@ -12966,7 +13409,7 @@ UE.plugins['table'] = function () {
          * 删除单元格
          */
         deleteCell:function (cell, rowIndex) {
-            rowIndex = typeof rowIndex == 'number' ? rowIndex : this.getCellRowIndex(cell);
+            rowIndex = typeof rowIndex == 'number' ? rowIndex : cell.parentNode.rowIndex;
             var row = this.table.rows[rowIndex];
             row.deleteCell(cell.cellIndex);
         },
@@ -13250,7 +13693,7 @@ UE.plugins['table'] = function () {
         /**
          * 插入一行单元格
          */
-        insertRow:function (rowIndex, tagName) {
+        insertRow:function (rowIndex, sourceCell) {
             var numCols = this.colsNum,
                 table = this.table,
                 row = table.insertRow(rowIndex), cell,
@@ -13258,11 +13701,10 @@ UE.plugins['table'] = function () {
             //首行直接插入,无需考虑部分单元格被rowspan的情况
             if (rowIndex == 0 || rowIndex == this.rowsNum) {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
-                    cell = tagName ? table.ownerDocument.createElement('th') : row.insertCell(colIndex);
-//                    cell.innerHTML = browser.ie ? domUtils.fillChar : "<br/>";
+                    cell = this.cloneCell(sourceCell,true);
                     this.setCellContent(cell);
-                    cell.setAttribute('valign', me.options.tdvalign);
-                    tagName && row.appendChild(cell);
+                    cell.setAttribute('valign', cell.getAttribute('valign'));
+                    row.appendChild(cell);
                 }
             } else {
                 var infoRow = this.indexTable[rowIndex],
@@ -13274,8 +13716,9 @@ UE.plugins['table'] = function () {
                         cell = this.getCell(cellInfo.rowIndex, cellInfo.cellIndex);
                         cell.rowSpan = cellInfo.rowSpan + 1;
                     } else {
-                        cell = row.insertCell(cellIndex++);
+                        cell = this.cloneCell(sourceCell,true);
                         this.setCellContent(cell);
+                        row.appendChild(cell);
                     }
                 }
             }
@@ -13344,7 +13787,7 @@ UE.plugins['table'] = function () {
             //this.table.deleteRow(rowIndex);
             this.update();
         },
-        insertCol:function (colIndex) {
+        insertCol:function (colIndex,sourceCell,defaultValue) {
             var rowsNum = this.rowsNum,
                 rowIndex = 0,
                 tableRow, cell,
@@ -13367,10 +13810,15 @@ UE.plugins['table'] = function () {
                 for (; rowIndex < rowsNum; rowIndex++) {
                     tableRow = this.table.rows[rowIndex];
                     preCell = tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
-                    cell = tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
+                    cell = this.cloneCell(sourceCell,true); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
                     this.setCellContent(cell);
-                    cell.setAttribute('valign', me.options.tdvalign);
+                    cell.setAttribute('valign', cell.getAttribute('valign'));
                     preCell && cell.setAttribute('width', preCell.getAttribute('width'));
+                    if (!colIndex) {
+                        tableRow.insertBefore(cell, tableRow.cells[0]);
+                    } else {
+                        domUtils.insertAfter(tableRow.cells[tableRow.cells.length - 1], cell);
+                    }
                     replaceTdToTh(rowIndex, cell, tableRow)
                 }
             } else {
@@ -13383,19 +13831,26 @@ UE.plugins['table'] = function () {
                         tableRow = this.table.rows[rowIndex];
                         preCell = tableRow.cells[cellInfo.cellIndex];
 
-                        cell = tableRow.insertCell(cellInfo.cellIndex);
+                        cell = this.cloneCell(sourceCell,true);//tableRow.insertCell(cellInfo.cellIndex);
                         this.setCellContent(cell);
-                        cell.setAttribute('valign', me.options.tdvalign);
+                        cell.setAttribute('valign', cell.getAttribute('valign'));
                         preCell && cell.setAttribute('width', preCell.getAttribute('width'))
+                        tableRow.insertBefore(cell, preCell);
                     }
                     replaceTdToTh(rowIndex, cell, tableRow);
                 }
             }
             //框选时插入不触发contentchange，需要手动更新索引
             this.update();
-            this.updateWidth(backWidth);
+            this.updateWidth(backWidth,defaultValue||{tdPadding:10,tdBorder:1});
         },
-        updateWidth:function (width) {
+        updateWidth:function (width,defaultValue) {
+            var table = this.table,
+                tmpWidth = getWidth(table) - defaultValue.tdPadding * 2 - defaultValue.tdBorder + width;
+            if( tmpWidth<table.ownerDocument.body.offsetWidth){
+                table.setAttribute("width",tmpWidth);
+                return;
+            }
             var tds = domUtils.getElementsByTagName(this.table, "td");
             utils.each(tds, function (td) {
                 td.setAttribute("width", width);
@@ -13450,7 +13905,8 @@ UE.plugins['table'] = function () {
                     tmpCell = tableRow.insertCell(colIndex - this.getPreviewMergedCellsNum(i, colIndex));
                 tmpCell.colSpan = cellInfo.colSpan;
                 this.setCellContent(tmpCell);
-                tmpCell.setAttribute('valign', me.options.tdvalign);
+                tmpCell.setAttribute('valign', cell.getAttribute('valign'));
+                tmpCell.setAttribute('align', cell.getAttribute('align'));
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
                 }
@@ -13471,12 +13927,15 @@ UE.plugins['table'] = function () {
             return num;
         },
         splitToCols:function (cell) {
-            var cellInfo = this.getCellInfo(cell),
+            var backWidth = (cell.offsetWidth/cell.colSpan-22).toFixed(0),
+
+                cellInfo = this.getCellInfo(cell),
                 rowIndex = cellInfo.rowIndex,
                 colIndex = cellInfo.colIndex,
                 results = [];
             // 修改Cell的rowSpan
             cell.colSpan = 1;
+            cell.setAttribute("width",backWidth);
             results.push(cell);
             // 补齐单元格
             for (var j = colIndex, endCol = colIndex + cellInfo.colSpan; j < endCol; j++) {
@@ -13485,7 +13944,9 @@ UE.plugins['table'] = function () {
                     tmpCell = tableRow.insertCell(this.indexTable[rowIndex][j].cellIndex + 1);
                 tmpCell.rowSpan = cellInfo.rowSpan;
                 this.setCellContent(tmpCell);
-                tmpCell.setAttribute('valign', me.options.tdvalign);
+                tmpCell.setAttribute('valign',cell.getAttribute('valign'));
+                tmpCell.setAttribute('align',cell.getAttribute('align'));
+                tmpCell.setAttribute('width',backWidth);
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
                 }
@@ -13493,7 +13954,7 @@ UE.plugins['table'] = function () {
                 if (cell.tagName == 'TH') {
                     var th = cell.ownerDocument.createElement('th');
                     th.appendChild(tmpCell.firstChild);
-                    th.setAttribute('valign', me.options.tdvalign);
+                    th.setAttribute('valign', cell.getAttribute('valign'));
                     th.rowSpan = tmpCell.rowSpan;
                     tableRow.insertBefore(th, tmpCell);
                     domUtils.remove(tmpCell)
@@ -13503,13 +13964,31 @@ UE.plugins['table'] = function () {
             this.update();
             return results;
         },
-        isLastCell:function (cell) {
+        isLastCell:function (cell, rowsNum, colsNum) {
+            rowsNum = rowsNum || this.rowsNum;
+            colsNum = colsNum || this.colsNum;
             var cellInfo = this.getCellInfo(cell);
-            return ((cellInfo.rowIndex + cellInfo.rowSpan) == this.rowsNum) &&
-                ((cellInfo.colIndex + cellInfo.colSpan) == this.colsNum);
+            return ((cellInfo.rowIndex + cellInfo.rowSpan) == rowsNum) &&
+                ((cellInfo.colIndex + cellInfo.colSpan) == colsNum);
         },
         getLastCell:function (cells) {
             cells = cells || this.table.getElementsByTagName("td");
+            var firstInfo = this.getCellInfo(cells[0]);
+            var me = this, last = cells[0],
+                tr = last.parentNode,
+                cellsNum = 0, cols = 0, rows;
+            utils.each(cells, function (cell) {
+                if (cell.parentNode == tr)cols += cell.colSpan || 1;
+                cellsNum += cell.rowSpan * cell.colSpan || 1;
+            });
+            rows = cellsNum / cols;
+            utils.each(cells, function (cell) {
+                if (me.isLastCell(cell, rows, cols)) {
+                    last = cell;
+                    return false;
+                }
+            });
+            return last;
 
         },
         selectRow:function (rowIndex) {
@@ -13560,6 +14039,26 @@ UE.plugins['table'] = function () {
         var target = domUtils.findParentByTagName(evt.target || evt.srcElement, ["td", "th"], true);
         //排除了非td内部以及用于代码高亮部分的td
         return target && !(editor.fireEvent("excludetable", target) === true) ? target : null;
+    }
+
+    function cloneCell(cell,ingoreMerge) {
+        if(!cell || utils.isString(cell)){
+            return this.table.ownerDocument.createElement(cell || 'td');
+        }
+        var flag = domUtils.hasClass(cell, "selectTdClass");
+        flag && domUtils.removeClasses(cell, "selectTdClass");
+        var tmpCell = cell.cloneNode(true);
+        if(ingoreMerge){
+            tmpCell.rowSpan = tmpCell.colSpan = 1;
+        }
+        tmpCell.style.borderLeftStyle = "";
+        tmpCell.style.borderTopStyle = "";
+        tmpCell.style.borderLeftColor = cell.style.borderRightColor;
+        tmpCell.style.borderLeftWidth = cell.style.borderRightWidth;
+        tmpCell.style.borderTopColor = cell.style.borderBottomColor;
+        tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
+        flag && domUtils.addClass(cell, "selectTdClass");
+        return tmpCell;
     }
 };
 
@@ -14219,7 +14718,7 @@ UE.plugins['formatmatch'] = function(){
 ///commands 查找替换
 ///commandsName  SearchReplace
 ///commandsTitle  查询替换
-///commandsDialog  dialogs\searchreplace\searchreplace.html
+///commandsDialog  dialogs\searchreplace
 /**
  * @description 查找替换
  * @author zhanyi
@@ -14234,132 +14733,128 @@ UE.plugins['searchreplace'] = function(){
         first = null;
     });
     me.commands['searchreplace'] = {
-
-            execCommand : function(cmdName,opt){
-               	var me = this,
-                    sel = me.selection,
-                    range,
-                    nativeRange,
-                    num = 0,
+        execCommand : function(cmdName,opt){
+            var me = this,
+                sel = me.selection,
+                range,
+                nativeRange,
+                num = 0,
                 opt = utils.extend(opt,{
                     all : false,
                     casesensitive : false,
                     dir : 1
                 },true);
 
-
-                if(browser.ie){
-                    while(1){
-                        var tmpRange;
-                        nativeRange = me.document.selection.createRange();
-                        tmpRange = nativeRange.duplicate();
-                        tmpRange.moveToElementText(me.document.body);
-                        if(opt.all){
-                            first = 0;
-                            opt.dir = 1;
-                            
-                            if(currentRange){
-                                tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',currentRange);
-                            }
-                        }else{
-                            tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',nativeRange);
-                            if(opt.hasOwnProperty("replaceStr")){
-                                tmpRange.setEndPoint(opt.dir == -1 ? 'StartToEnd' : 'EndToStart',nativeRange);
-                            }
-                        }
-                        nativeRange = tmpRange.duplicate();
-
-
-
-                        if(!tmpRange.findText(opt.searchStr,opt.dir,opt.casesensitive ? 4 : 0)){
-                            currentRange = null;
-                            tmpRange = me.document.selection.createRange();
-                            tmpRange.scrollIntoView();
-                            return num;
-                        }
-                        tmpRange.select();
-                        //替换
-                        if(opt.hasOwnProperty("replaceStr")){
-                            range = sel.getRange();
-                            range.deleteContents().insertNode(range.document.createTextNode(opt.replaceStr)).select();
-                            currentRange = sel.getNative().createRange();
-
-                        }
-                        num++;
-                        if(!opt.all){
-                            break;
-                        }
-                    }
-                }else{
-                    var w = me.window,nativeSel = sel.getNative(),tmpRange;
-                    while(1){
-                        if(opt.all){
-                            if(currentRange){
-                                currentRange.collapse(false);
-                                nativeRange = currentRange;
-
-                            }else{
-                                nativeRange  = me.document.createRange();
-                                nativeRange.setStart(me.document.body,0);
-
-                            }
-                            nativeSel.removeAllRanges();
-                            nativeSel.addRange( nativeRange );
-                            first = 0;
-                            opt.dir = 1;
-                        }else{
-                            //safari弹出层，原生已经找不到range了，所以需要先选回来，再取原生
-                            if(browser.safari){
-                                me.selection.getRange().select();
-
-                            }
-                            nativeRange = w.getSelection().getRangeAt(0);
-
-
-                           
-                            if(opt.hasOwnProperty("replaceStr")){
-                                nativeRange.collapse(opt.dir == 1 ? true : false);
-                            }
-                        }
-
-                        //如果是第一次并且海选中了内容那就要清除，为find做准备
-                       
-                        if(!first){
-                            nativeRange.collapse( opt.dir <0 ? true : false);
-                            nativeSel.removeAllRanges();
-                            nativeSel.addRange( nativeRange );
-                        }else{
-                            nativeSel.removeAllRanges();
-                        }
-
-                        if(!w.find(opt.searchStr,opt.casesensitive,opt.dir < 0 ? true : false) ) {
-                            currentRange = null;
-                            nativeSel.removeAllRanges();
-
-                            return num;
-                        }
+            if(browser.ie){
+                while(1){
+                    var tmpRange;
+                    nativeRange = me.document.selection.createRange();
+                    tmpRange = nativeRange.duplicate();
+                    tmpRange.moveToElementText(me.document.body);
+                    if(opt.all){
                         first = 0;
-                        range = w.getSelection().getRangeAt(0);
-                        if(!range.collapsed){
-
-                            if(opt.hasOwnProperty("replaceStr")){
-                                range.deleteContents();
-                                var text = w.document.createTextNode(opt.replaceStr);
-                                range.insertNode(text);
-                                range.selectNode(text);
-                                nativeSel.addRange(range);
-                                currentRange = range.cloneRange();
-                            }
+                        opt.dir = 1;
+                        if(currentRange){
+                            tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',currentRange);
                         }
-                        num++;
-                        if(!opt.all){
-                            break;
+                        tmpRange.moveToElementText(me.document.body);
+                    }else{
+                        tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',nativeRange);
+                        if(opt.hasOwnProperty("replaceStr")){
+                            tmpRange.setEndPoint(opt.dir == -1 ? 'StartToEnd' : 'EndToStart',nativeRange);
+                        }
+                    }
+                    nativeRange = tmpRange.duplicate();
+
+
+
+                    if(!tmpRange.findText(opt.searchStr,opt.dir,opt.casesensitive ? 4 : 0)){
+                        currentRange = null;
+                        tmpRange = me.document.selection.createRange();
+                        tmpRange.scrollIntoView();
+                        return num;
+                    }
+                    tmpRange.select();
+                    //替换
+                    if(opt.hasOwnProperty("replaceStr")){
+                        range = sel.getRange();
+                        range.deleteContents().insertNode(range.document.createTextNode(opt.replaceStr)).select();
+                        currentRange = sel.getNative().createRange();
+
+                    }
+                    num++;
+                    if(!opt.all){
+                        break;
+                    }
+                }
+            }else{
+                var w = me.window,nativeSel = sel.getNative(),tmpRange;
+                while(1){
+                    if(opt.all){
+                        if(currentRange){
+                            currentRange.collapse(false);
+                            nativeRange = currentRange;
+                        }else{
+                            nativeRange  = me.document.createRange();
+                        }
+                        nativeRange.setStart(me.document.body,0);
+                        nativeRange.collapse(true);
+                        nativeSel.removeAllRanges();
+                        nativeSel.addRange( nativeRange );
+                        first = 0;
+                        opt.dir = 1;
+                    }else{
+                        //safari弹出层，原生已经找不到range了，所以需要先选回来，再取原生
+                        if(browser.safari){
+                            me.selection.getRange().select();
+
+                        }
+                        nativeRange = w.getSelection().getRangeAt(0);
+
+
+
+                        if(opt.hasOwnProperty("replaceStr")){
+                            nativeRange.collapse(opt.dir == 1 ? true : false);
                         }
                     }
 
+                    //如果是第一次并且海选中了内容那就要清除，为find做准备
+
+                    if(!first){
+                        nativeRange.collapse( opt.dir <0 ? true : false);
+                        nativeSel.removeAllRanges();
+                        nativeSel.addRange( nativeRange );
+                    }else{
+                        nativeSel.removeAllRanges();
+                    }
+
+                    if(!w.find(opt.searchStr,opt.casesensitive,opt.dir < 0 ? true : false) ) {
+                        currentRange = null;
+                        nativeSel.removeAllRanges();
+                        return num;
+                    }
+                    first = 0;
+                    range = w.getSelection().getRangeAt(0);
+                    if(!range.collapsed){
+
+                        if(opt.hasOwnProperty("replaceStr")){
+                            range.deleteContents();
+                            var text = w.document.createTextNode(opt.replaceStr);
+                            range.insertNode(text);
+                            range.selectNode(text);
+                            nativeSel.addRange(range);
+                            currentRange = range.cloneRange();
+                        }
+                    }
+                    num++;
+                    if(!opt.all){
+                        break;
+                    }
                 }
-                return true;
+
             }
+            return true;
+        }
     };
 
 };
@@ -14498,7 +14993,9 @@ UE.plugins['customstyle'] = function() {
     });
 };
 ///import core
-///commandsName  catchRemoteImage
+///commands 远程图片抓取
+///commandsName  catchRemoteImage,catchremoteimageenable
+///commandsTitle  远程图片抓取
 /**
  * 远程图片抓取,当开启本插件时所有不符合本地域名的图片都将被抓取成为本地服务器上的图片
  *
@@ -14591,60 +15088,73 @@ UE.plugins['catchremoteimage'] = function () {
     });
 };
 ///import core
+///import plugins\inserthtml.js
+///import plugins\image.js
 ///commandsName  snapscreen
 ///commandsTitle  截屏
 /**
  * 截屏插件
  */
-UE.commands['snapscreen'] = {
-    execCommand: function(){
-        var me = this,lang = me.getLang("snapScreen_plugin");
-        me.setOpt({
-               snapscreenServerPort: 80                                    //屏幕截图的server端端口
-              ,snapscreenImgAlign: 'left'                                //截图的图片默认的排版方式
-        });
-        var editorOptions = me.options;
+UE.plugins['snapscreen'] = function(){
+    var me = this,
+        doc,
+        snapplugin;
+    me.addListener("ready",function(){
+        var container = me.container;
+        doc = container.ownerDocument || container.document;
+        snapplugin = doc.createElement("object");
+        snapplugin.type = "application/x-pluginbaidusnap";
+        snapplugin.style.cssText = "position:absolute;left:-9999px;";
+        snapplugin.setAttribute("width","0");
+        snapplugin.setAttribute("height","0");
+        container.appendChild(snapplugin);
+    });
+    me.commands['snapscreen'] = {
+        execCommand: function(){
+            var me = this,lang = me.getLang("snapScreen_plugin");
+            me.setOpt({
+                  snapscreenServerPort: 80                                    //屏幕截图的server端端口
+                 ,snapscreenImgAlign: ''                                //截图的图片默认的排版方式
+           });
+           var editorOptions = me.options;
 
-        if(!browser.ie){
-            alert(lang.browserMsg);
-            return;
-        }
+            var onSuccess = function(rs){
+                try{
+                    rs = eval("("+ rs +")");
+                }catch(e){
+                    alert(lang.callBackErrorMsg);
+                    return;
+                }
 
-        var onSuccess = function(rs){
+                if(rs.state != 'SUCCESS'){
+                    alert(rs.state);
+                    return;
+                }
+                me.execCommand('insertimage', {
+                    src: editorOptions.snapscreenPath + rs.url,
+                    floatStyle: editorOptions.snapscreenImgAlign,
+                    data_ue_src:editorOptions.snapscreenPath + rs.url
+                });
+            };
+            var onStartUpload = function(){
+                //开始截图上传
+            };
+            var onError = function(){
+                alert(lang.uploadErrorMsg);
+            };
             try{
-                rs = eval("("+ rs +")");
+                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, editorOptions.snapscreenServerPort.toString());
+                onSuccess(ret);
             }catch(e){
-                alert(lang.callBackErrorMsg);
-                return;
+                me.ui._dialogs['snapscreenDialog'].open();
             }
-
-            if(rs.state != 'SUCCESS'){
-                alert(rs.state);
-                return;
-            }
-            me.execCommand('insertimage', {
-                src: editorOptions.snapscreenPath + rs.url,
-                floatStyle: editorOptions.snapscreenImgAlign,
-                data_ue_src:editorOptions.snapscreenPath + rs.url
-            });
-        };
-        var onStartUpload = function(){
-            //开始截图上传
-        };
-        var onError = function(){
-            alert(lang.uploadErrorMsg);
-        };
-        try{
-            var nativeObj = new ActiveXObject('Snapsie.CoSnapsie');
-            nativeObj.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, editorOptions.snapscreenServerPort, onStartUpload,onSuccess,onError);
-        }catch(e){
-            me.ui._dialogs['snapscreenDialog'].open();
+        },
+        queryCommandState: function(){
+            return this.highlight ? -1 :0;
         }
-    },
-    queryCommandState: function(){
-        return !browser.ie ? -1 :0;
-    }
-};
+    };
+}
+
 
 ///import core
 ///commands 插入空行
@@ -14683,13 +15193,12 @@ UE.commands['insertparagraph'] = {
 };
 
 
-/**
- * Created by JetBrains PhpStorm.
- * User: taoqili
- * Date: 12-5-7
- * Time: 下午2:37
- * To change this template use File | Settings | File Templates.
- */
+///import core
+///import plugins/inserthtml.js
+///commands 百度应用
+///commandsName webapp
+///commandsTitle  百度应用
+///commandsDialog  dialogs\webapp
 UE.plugins['webapp'] = function () {
     var me = this;
     function createInsertStr( obj, toIframe, addParagraph ) {
@@ -14735,10 +15244,12 @@ UE.plugins['webapp'] = function () {
 };
 
 ///import core
+///import plugins\inserthtml.js
+///import plugins\cleardoc.js
 ///commands 模板
 ///commandsName  template
 ///commandsTitle  模板
-///commandsDialog  dialogs\template\template.html
+///commandsDialog  dialogs\template
 UE.plugins['template'] = function () {
     UE.commands['template'] = {
         execCommand:function (cmd, obj) {
@@ -14775,9 +15286,9 @@ UE.plugins['template'] = function () {
 ///import core
 ///import plugins/inserthtml.js
 ///commands 音乐
-///commandsName InsertMusic
+///commandsName Music
 ///commandsTitle  插入音乐
-///commandsDialog  dialogs\music\music.html
+///commandsDialog  dialogs\music
 UE.plugins['music'] = function () {
     var me = this,
         div;
@@ -14813,8 +15324,9 @@ UE.plugins['music'] = function () {
             }
             tmpdiv = me.document.createElement("div");
             //先看float在看align,浮动有的是时候是在float上定义的
-            var align = node.style.cssFloat;
-            tmpdiv.innerHTML = creatInsertStr(img2embed ? node.getAttribute("_url") : node.getAttribute("src"), node.width, node.height, node.getAttribute("align"), img2embed);
+            var align = domUtils.getComputedStyle(node,'float');
+            align = align == 'none' ? (node.getAttribute('align') || '') : align;
+            tmpdiv.innerHTML = creatInsertStr(img2embed ? node.getAttribute("_url") : node.getAttribute("src"), node.width, node.height, align, img2embed);
             node.parentNode.replaceChild(tmpdiv.firstChild, node);
         }
     }
@@ -15281,7 +15793,7 @@ baidu.editor.ui = {};
             var pop = allPopups[i];
             if (!pop.isHidden()) {
                 if (pop.queryAutoHide(el) !== false) {
-                    if(/scroll/ig.test(evt.type)&&pop.className=="edui-wordpastepop")   return;
+                    if(evt&&/scroll/ig.test(evt.type)&&pop.className=="edui-wordpastepop")   return;
                     pop.hide();
                 }
             }
@@ -16095,18 +16607,18 @@ baidu.editor.ui = {};
         Stateful = baidu.editor.ui.Stateful,
         UIBase = baidu.editor.ui.UIBase;
 
-    var AlignCellPicker = baidu.editor.ui.AlignCellPicker = function (options) {
+    var CellAlignPicker = baidu.editor.ui.CellAlignPicker = function (options) {
         this.initOptions(options);
-        this.initAlignCellPicker();
+        this.initCellAlignPicker();
     };
-    AlignCellPicker.prototype = {
-        initAlignCellPicker:function () {
+    CellAlignPicker.prototype = {
+        initCellAlignPicker:function () {
             this.initUIBase();
             this.Stateful_init();
         },
         getHtmlTpl:function () {
-            return '<div id="##" class="edui-aligncellpicker %%">' +
-                '<div class="edui-aligncellpicker-body">' +
+            return '<div id="##" class="edui-cellalignpicker %%">' +
+                '<div class="edui-cellalignpicker-body">' +
                 '<table onclick="$$._onClick(event);">' +
                 '<tr><td index="0" stateful><div class="edui-icon edui-left"></div></td>' +
                 '<td index="1" stateful><div class="edui-icon edui-center"></div></td>' +
@@ -16136,8 +16648,8 @@ baidu.editor.ui = {};
         },
         _UIBase_render:UIBase.prototype.render
     };
-    utils.inherits(AlignCellPicker, UIBase);
-    utils.extend(AlignCellPicker.prototype, Stateful,true);
+    utils.inherits(CellAlignPicker, UIBase);
+    utils.extend(CellAlignPicker.prototype, Stateful,true);
 })();
 
 
@@ -16148,7 +16660,7 @@ baidu.editor.ui = {};
 (function () {
     var utils = baidu.editor.utils,
         Stateful = baidu.editor.ui.Stateful,
-        uiUtils= baidu.editor.ui.uiUtils,
+        uiUtils = baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase;
 
     var PastePicker = baidu.editor.ui.PastePicker = function (options) {
@@ -16163,43 +16675,47 @@ baidu.editor.ui = {};
         getHtmlTpl:function () {
             return '<div class="edui-pasteicon" onclick="$$._onClick(this)"></div>' +
                 '<div class="edui-pastecontainer">' +
-                '<div class="edui-title">'+this.editor.getLang("pasteOpt")+'</div>'+
+                '<div class="edui-title">' + this.editor.getLang("pasteOpt") + '</div>' +
                 '<div class="edui-button">' +
-                '<div class="edui-richtxticon edui-icon" title="'+this.editor.getLang("pasteSourceFormat")+'" onclick="$$.format(false)" stateful></div>'+
-                '<div class="edui-tagicon edui-icon" title="'+this.editor.getLang("tagFormat")+'" onclick="$$.format(2)" stateful></div>' +
-                '<div class="edui-plaintxticon edui-icon" title="'+this.editor.getLang("pasteTextFormat")+'" onclick="$$.format(true)" stateful></div>' +
+                '<div title="' + this.editor.getLang("pasteSourceFormat") + '" onclick="$$.format(false)" stateful>' +
+                '<div class="edui-richtxticon"></div></div>' +
+                '<div title="' + this.editor.getLang("tagFormat") + '" onclick="$$.format(2)" stateful>' +
+                '<div class="edui-tagicon"></div></div>' +
+                '<div title="' + this.editor.getLang("pasteTextFormat") + '" onclick="$$.format(true)" stateful>' +
+                '<div class="edui-plaintxticon"></div></div>' +
+                '</div>' +
                 '</div>' +
                 '</div>'
         },
-        getStateDom: function (){
+        getStateDom:function () {
             return this.target;
         },
-        format:function(param){
-            this.editor.ui._isTransfer=true;
-            this.editor.fireEvent('pasteTransfer',param);
+        format:function (param) {
+            this.editor.ui._isTransfer = true;
+            this.editor.fireEvent('pasteTransfer', param);
         },
-        _onClick: function (cur){
-            var node=domUtils.getNextDomNode(cur),
+        _onClick:function (cur) {
+            var node = domUtils.getNextDomNode(cur),
                 screenHt = uiUtils.getViewportRect().height,
-                subPop=uiUtils.getClientRect(node);
+                subPop = uiUtils.getClientRect(node);
 
-            if(/hidden/ig.test(domUtils.getComputedStyle(node,"visibility"))){
-                if((subPop.top+subPop.height)>screenHt)
-                    node.style.top=(-subPop.height-cur.offsetHeight)+"px";
-                else
-                    node.style.top="";
+            if ((subPop.top + subPop.height) > screenHt)
+                node.style.top = (-subPop.height - cur.offsetHeight) + "px";
+            else
+                node.style.top = "";
 
-                node.style.visibility="visible";
-                domUtils.addClass(cur,"edui-state-opened");
-            }else{
-                node.style.visibility="hidden";
-                domUtils.removeClasses(cur,"edui-state-opened")
+            if (/hidden/ig.test(domUtils.getComputedStyle(node, "visibility"))) {
+                node.style.visibility = "visible";
+                domUtils.addClass(cur, "edui-state-opened");
+            } else {
+                node.style.visibility = "hidden";
+                domUtils.removeClasses(cur, "edui-state-opened")
             }
         },
         _UIBase_render:UIBase.prototype.render
     };
     utils.inherits(PastePicker, UIBase);
-    utils.extend(PastePicker.prototype, Stateful,true);
+    utils.extend(PastePicker.prototype, Stateful, true);
 })();
 
 
@@ -16258,7 +16774,7 @@ baidu.editor.ui = {};
         UIBase = baidu.editor.ui.UIBase,
         Popup = baidu.editor.ui.Popup,
         Stateful = baidu.editor.ui.Stateful,
-        AlignCellPicker = baidu.editor.ui.AlignCellPicker,
+        CellAlignPicker = baidu.editor.ui.CellAlignPicker,
         Menu = baidu.editor.ui.Menu = function (options) {
             this.initOptions(options);
             this.initMenu();
@@ -16374,7 +16890,7 @@ baidu.editor.ui = {};
             if (options.className && options.className.indexOf("aligntd") != -1) {
                 var me = this;
                 this.subMenu = new Popup({
-                    content:new AlignCellPicker(this.subMenu),
+                    content:new CellAlignPicker(this.subMenu),
                     parentMenu:me,
                     editor:me.editor,
                     destroy:function () {
@@ -16904,6 +17420,8 @@ baidu.editor.ui = {};
     var utils = baidu.editor.utils;
     var editorui = baidu.editor.ui;
     var _Dialog = editorui.Dialog;
+    editorui.buttons={};
+
     editorui.Dialog = function (options) {
         var dialog = new _Dialog(options);
         dialog.addListener('hide', function () {
@@ -16975,6 +17493,7 @@ baidu.editor.ui = {};
                     theme:editor.options.theme,
                     showText:false
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
                     var state = editor.queryCommandState(cmd);
                     if (state == -1) {
@@ -17004,6 +17523,7 @@ baidu.editor.ui = {};
                 }
             }
         });
+        editorui.buttons["cleardoc"]=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('cleardoc') == -1);
         });
@@ -17031,6 +17551,7 @@ baidu.editor.ui = {};
                                 editor.execCommand(cmd, cmd2);
                             }
                         });
+                        editorui.buttons[cmd]=ui;
                         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
                             ui.setDisabled(editor.queryCommandState(cmd) == -1);
                             ui.setChecked(editor.queryCommandValue(cmd) == cmd2 && !uiReady);
@@ -17063,6 +17584,7 @@ baidu.editor.ui = {};
                         editor.execCommand(cmd, this.color);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     ui.setDisabled(editor.queryCommandState(cmd) == -1);
                 });
@@ -17153,6 +17675,7 @@ baidu.editor.ui = {};
                             theme:editor.options.theme,
                             disabled:cmd == 'scrawl' && editor.queryCommandState("scrawl") == -1
                         });
+                        editorui.buttons[cmd]=ui;
                         editor.addListener('selectionchange', function () {
                             //只存在于右键菜单而无工具栏按钮的ui不需要检测状态
                             var unNeedCheckState = {'edittable':1};
@@ -17181,43 +17704,39 @@ baidu.editor.ui = {};
             onclick:function () {
                 editor.execCommand("snapscreen");
             },
-            theme:editor.options.theme,
-            disabled:!browser.ie
+            theme:editor.options.theme
 
         });
-
-        if (browser.ie) {
-            iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})["snapscreen"] || iframeUrlMap["snapscreen"];
-            if (iframeUrl) {
-                var dialog = new editorui.Dialog({
-                    iframeUrl:editor.ui.mapUrl(iframeUrl),
-                    editor:editor,
-                    className:'edui-for-snapscreen',
-                    title:title,
-                    buttons:[
-                        {
-                            className:'edui-okbutton',
-                            label:editor.getLang("ok"),
-                            editor:editor,
-                            onclick:function () {
-                                dialog.close(true);
-                            }
-                        },
-                        {
-                            className:'edui-cancelbutton',
-                            label:editor.getLang("cancel"),
-                            editor:editor,
-                            onclick:function () {
-                                dialog.close(false);
-                            }
+        editorui.buttons['snapscreen']=ui;
+        iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})["snapscreen"] || iframeUrlMap["snapscreen"];
+        if (iframeUrl) {
+            var dialog = new editorui.Dialog({
+                iframeUrl:editor.ui.mapUrl(iframeUrl),
+                editor:editor,
+                className:'edui-for-snapscreen',
+                title:title,
+                buttons:[
+                    {
+                        className:'edui-okbutton',
+                        label:editor.getLang("ok"),
+                        editor:editor,
+                        onclick:function () {
+                            dialog.close(true);
                         }
-                    ]
+                    },
+                    {
+                        className:'edui-cancelbutton',
+                        label:editor.getLang("cancel"),
+                        editor:editor,
+                        onclick:function () {
+                            dialog.close(false);
+                        }
+                    }
+                ]
 
-                });
-                dialog.render();
-                editor.ui._dialogs["snapscreenDialog"] = dialog;
-            }
-
+            });
+            dialog.render();
+            editor.ui._dialogs["snapscreenDialog"] = dialog;
         }
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('snapscreen') == -1);
@@ -17267,6 +17786,7 @@ baidu.editor.ui = {};
                 return -1;
             }
         });
+        editorui.buttons['fontfamily']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('FontFamily');
@@ -17316,6 +17836,7 @@ baidu.editor.ui = {};
             },
             className:'edui-for-fontsize'
         });
+        editorui.buttons['fontsize']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('FontSize');
@@ -17359,6 +17880,7 @@ baidu.editor.ui = {};
                 this.showPopup();
             }
         });
+        editorui.buttons['paragraph']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('Paragraph');
@@ -17428,6 +17950,7 @@ baidu.editor.ui = {};
                 return -1;
             }
         });
+        editorui.buttons['customstyle']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('customstyle');
@@ -17461,6 +17984,7 @@ baidu.editor.ui = {};
                 this.showPopup();
             }
         });
+        editorui.buttons['inserttable']=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('inserttable') == -1);
         });
@@ -17491,6 +18015,7 @@ baidu.editor.ui = {};
                 editor.execCommand("LineHeight", value);
             }
         });
+        editorui.buttons['lineheight']=ui;
         editor.addListener('selectionchange', function () {
             var state = editor.queryCommandState('LineHeight');
             if (state == -1) {
@@ -17531,6 +18056,7 @@ baidu.editor.ui = {};
                         editor.execCommand("rowspacing", value, cmd);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     var state = editor.queryCommandState('rowspacing', cmd);
                     if (state == -1) {
@@ -17573,6 +18099,7 @@ baidu.editor.ui = {};
                         editor.execCommand(cmd, value);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     var state = editor.queryCommandState(cmd);
                     if (state == -1) {
@@ -17596,14 +18123,13 @@ baidu.editor.ui = {};
             title:title,
             theme:editor.options.theme,
             onclick:function () {
-                var scale=editor.ui.getDom("scale");
                 if (editor.ui) {
-
                     editor.ui.setFullScreen(!editor.ui.isFullScreen());
                 }
                 this.setChecked(editor.ui.isFullScreen());
             }
         });
+        editorui.buttons['fullscreen']=ui;
         editor.addListener('selectionchange', function () {
             var state = editor.queryCommandState('fullscreen');
             ui.setDisabled(state == -1);
@@ -17620,6 +18146,8 @@ baidu.editor.ui = {};
             className:'edui-for-emotion',
             iframeUrl:editor.ui.mapUrl(iframeUrl || (editor.options.iframeUrlMap || {})['emotion'] || iframeUrlMap['emotion'])
         });
+        editorui.buttons['emotion']=ui;
+
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('emotion') == -1)
         });
@@ -17635,6 +18163,7 @@ baidu.editor.ui = {};
                 editor.execCommand('autotypeset')
             }
         });
+        editorui.buttons['autotypeset']=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('autotypeset') == -1);
         });
@@ -17677,20 +18206,20 @@ baidu.editor.ui = {};
                 domUtils.on(editor.window, 'scroll', function (evt) {
                     baidu.editor.ui.Popup.postHide(evt);
                 });
+                //提供编辑器实时宽高(全屏时宽高不变化)
+                editor.ui._actualFrameWidth = editor.options.initialFrameWidth;
 
                 //display bottom-bar label based on config
                 if (editor.options.elementPathEnabled) {
                     editor.ui.getDom('elementpath').innerHTML = '<div class="edui-editor-breadcrumb">' + editor.getLang("elementPathTip") + ':</div>';
                 }
                 if (editor.options.wordCount) {
+                    function countFn() {
+                        setCount(editor,me);
+                        domUtils.un(editor.document, "click", arguments.callee);
+                    }
+                    domUtils.on(editor.document, "click", countFn);
                     editor.ui.getDom('wordcount').innerHTML = editor.getLang("wordCountTip");
-                    //为wordcount捕获中文输入法的空格
-                    editor.addListener('keyup', function (type, evt) {
-                        var keyCode = evt.keyCode || evt.which;
-                        if (keyCode == 32) {
-                            me._wordCount();
-                        }
-                    });
                 }
                 editor.ui._scale();
                 if (editor.options.scaleEnabled) {
@@ -17738,7 +18267,7 @@ baidu.editor.ui = {};
             editor.addListener("afterinserthtml", function () {
                 clearTimeout(timer);
                 timer = setTimeout(function () {
-                    if(pastePop&&(isPaste||editor.ui._isTransfer)){
+                    if (pastePop && (isPaste || editor.ui._isTransfer)) {
                         var span = domUtils.createElement(editor.document, 'span', {
                                 'style':"line-height:0px;",
                                 'innerHTML':'\ufeff'
@@ -17757,14 +18286,41 @@ baidu.editor.ui = {};
             });
             editor.addListener('keydown', function (t, evt) {
                 if (pastePop)    pastePop.dispose(evt);
+                var keyCode = evt.keyCode || evt.which;
+                if(evt.altKey&&keyCode==90){
+                    UE.ui.buttons['fullscreen'].onclick();
+                }
             });
+            editor.addListener('wordcount', function (type) {
+                setCount(this,me);
+            });
+            function setCount(editor,ui) {
+                editor.setOpt({
+                    wordCount:true,
+                    maximumWords:10000,
+                    wordCountMsg:editor.options.wordCountMsg || editor.getLang("wordCountMsg"),
+                    wordOverFlowMsg:editor.options.wordOverFlowMsg || editor.getLang("wordOverFlowMsg")
+                });
+                var opt = editor.options,
+                    max = opt.maximumWords,
+                    msg = opt.wordCountMsg ,
+                    errMsg = opt.wordOverFlowMsg,
+                    countDom = ui.getDom('wordcount');
+                if (!opt.wordCount) {
+                    return;
+                }
+                var count = editor.getContentLength(true);
+                if (count > max) {
+                    countDom.innerHTML = errMsg;
+                    editor.fireEvent("wordcountoverflow");
+                } else {
+                    countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
+                }
+            }
 
             editor.addListener('selectionchange', function () {
                 if (editor.options.elementPathEnabled) {
                     me[(editor.queryCommandState('elementpath') == -1 ? 'dis' : 'en') + 'ableElementPath']()
-                }
-                if (editor.options.wordCount) {
-                    me[(editor.queryCommandState('wordcount') == -1 ? 'dis' : 'en') + 'ableWordCount']()
                 }
                 if (editor.options.scaleEnabled) {
                     me[(editor.queryCommandState('scale') == -1 ? 'dis' : 'en') + 'ableScale']();
@@ -17850,7 +18406,7 @@ baidu.editor.ui = {};
                 });
                 editor.addListener('selectionchange', function (t, causeByUi) {
                     if (!causeByUi) return;
-                    var html = '',
+                    var html = '', str = "",
                         img = editor.selection.getRange().getClosedNode(),
                         dialogs = editor.ui._dialogs;
                     if (img && img.tagName == 'IMG') {
@@ -17884,12 +18440,14 @@ baidu.editor.ui = {};
                         if (!dialogs[dialogName]) {
                             return;
                         }
-                        !html && (html = popup.formatHtml(
-                            '<nobr>' + editor.getLang("property") + ': <span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("right") class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>'))
+                        str = '<nobr>' + editor.getLang("property") + ': '+
+                            '<span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("right") class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;'+
+                            '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>';
+
+                        !html && (html = popup.formatHtml(str))
 
                     }
                     if (editor.ui._dialogs.linkDialog) {
@@ -18066,27 +18624,6 @@ baidu.editor.ui = {};
                 this.triggerLayout();
             }
         },
-        _wordCount:function () {
-            var wdcount = this.getDom('wordcount');
-            if (!this.editor.options.wordCount) {
-                wdcount.style.display = "none";
-                return;
-            }
-            wdcount.innerHTML = this.editor.queryCommandValue("wordcount");
-        },
-        disableWordCount:function () {
-            var w = this.getDom('wordcount');
-            w.innerHTML = '';
-            w.style.display = 'none';
-            this.wordcount = false;
-
-        },
-        enableWordCount:function () {
-            var w = this.getDom('wordcount');
-            w.style.display = '';
-            this.wordcount = true;
-            this._wordCount();
-        },
         _updateFullScreen:function () {
             if (this._fullscreen) {
                 var vpRect = uiUtils.getViewportRect();
@@ -18194,7 +18731,9 @@ baidu.editor.ui = {};
             function up() {
                 if (isMouseMove) {
                     isMouseMove = false;
-                    editorHolder.style.width = scalelayer.offsetWidth - 2 + 'px';
+                    editor.ui._actualFrameWidth = scalelayer.offsetWidth - 2;
+                    editorHolder.style.width = editor.ui._actualFrameWidth + 'px';
+
                     editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2);
                 }
                 if (scalelayer) {
@@ -18336,7 +18875,9 @@ baidu.editor.ui = {};
                     var iframeholder = editor.ui.getDom('iframeholder');
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + editor.options.initialFrameWidth + "px";
+                    var width = editor.options.initialFrameWidth;
+                    if (!/%/g.test(width))  width += "px";
+                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + width;
                     oldRender.call(editor, iframeholder);
 
                 }
