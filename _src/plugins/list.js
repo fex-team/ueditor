@@ -401,12 +401,12 @@ UE.plugins['list'] = function () {
             }
         }
         if (keyCode == 8) {
+
             //修中ie中li下的问题
             range = me.selection.getRange();
             if (range.collapsed && domUtils.isStartInblock(range)) {
                 tmpRange = range.cloneRange().trimBoundary();
                 li = domUtils.findParentByTagName(range.startContainer, 'li', true);
-
                 //要在li的最左边，才能处理
                 if (li && domUtils.isStartInblock(tmpRange)) {
                     start = domUtils.findParentByTagName(range.startContainer, 'p', true);
@@ -467,10 +467,9 @@ UE.plugins['list'] = function () {
                                 }
                             }
                         }
-
                         domUtils.remove(li);
-
-                        me.undoManger && me.undoManger.save();
+                        me.fireEvent('contentchange');
+                        me.fireEvent('saveScene');
                         domUtils.preventDefault(evt);
                         return;
 
@@ -497,7 +496,8 @@ UE.plugins['list'] = function () {
                             }
 
                         }
-                        range.moveToBookmark(bk).setCursor(false,true)
+                        range.moveToBookmark(bk).setCursor(false,true);
+                        me.fireEvent('contentchange');
                         me.fireEvent('saveScene');
                         domUtils.preventDefault(evt);
                         return;
