@@ -26,7 +26,6 @@ UE.plugins['list'] = function () {
             'PRE':1,
             'BLOCKQUOTE':1
         };
-
     var customStyle = {
         'cn' : 'cn-1-',
         'cn1' : 'cn-2-',
