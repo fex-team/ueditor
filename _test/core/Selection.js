@@ -93,12 +93,12 @@ test( 'getRange--闭合选区的边界情况', function () {
     var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
     stop();
     setTimeout(function(){
+
          editor.render( div_new );
         setTimeout(function(){
     var range = new baidu.editor.dom.Range( editor.document );
 
     editor.setContent( '<p><strong>xxx</strong></p>' );
-
 
     range.setStart( editor.body.firstChild.firstChild, 0 ).collapse( true ).select();
 
@@ -115,7 +115,8 @@ test( 'getRange--闭合选区的边界情况', function () {
     /*去掉占位符*/
     range = editor.selection.getRange();
     /*可能为(strong，1)或者(xxx，3)*/
-    ok( ( range.startContainer === strong.lastChild) && strong.lastChild.length == 1 || (range.startContainer.nodeValue.length == 3 && range.startContainer === strong.firstChild), 'startContainer是xxx或者xxx右边的占位符' );
+
+    ok( ( range.startContainer === strong)||( range.startContainer === strong.lastChild) && strong.lastChild.length == 1 || (range.startContainer.nodeValue.length == 3 && range.startContainer === strong.firstChild), 'startContainer是xxx或者xxx右边的占位符' );
 //    ok( range.startContainer.nodeType == 1 ? range.startContainer.tagName.toLowerCase() == 'strong' && range.startOffset == 1 : range.startContainer.data == 'xxx' && range.startOffset == 3, 'strong,1或xxx,3' );
 
     ua.manualDeleteFillData( editor.body );

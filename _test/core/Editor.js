@@ -1,4 +1,5 @@
 module("core.Editor");
+
 test( "hide,show", function() {
     var editor = te.obj[1];
     editor.hide();
@@ -510,6 +511,10 @@ test('绑定事件',function(){
         ua.mouseover(document.body);
         ua.keydown(document.body,{'keyCode':13});
         ua.keyup(document.body,{'keyCode':13});
-        expect(5);
+
+        setTimeout(function(){
+            expect(5);
+            start();
+        },100);
     });
 });

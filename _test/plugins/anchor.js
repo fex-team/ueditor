@@ -100,7 +100,10 @@ test( '在源码模式设置超链接没有name属性，切换到编辑器模式
             var ta = editor.iframe.parentNode.getElementsByTagName( 'textarea' )[0];
             ta.value = '<p><a name="source">你好</a></p>';
             setTimeout( function() {
+
                 editor.execCommand( 'source' );
+                ua.manualDeleteFillData(editor.body);
+
                 equal( body.firstChild.firstChild.tagName.toLowerCase(), 'a', 'a标签不会转化' );
                 start();
                 }, 50 );

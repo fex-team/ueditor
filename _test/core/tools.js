@@ -5,7 +5,7 @@
                 window.UEDITOR_CONFIG[config] = window.UEDITOR_CONFIG[config].replace('_test/tools/br/', '');
         }
         var div = document.body.appendChild( document.createElement( 'div' ) );
-//        div.id = 'test';
+        div.id = 'test1';
         var utils = baidu.editor.utils;
         var editor = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':false});
         editor.render( div );
