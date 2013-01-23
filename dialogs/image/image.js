@@ -419,6 +419,7 @@ var imageUploader = {},
             target = scaling(tmpWidth,tmpHeight,maxWidth,maxHeight);
         target.border = img.border||0;
         target.src = img.src;
+        flagImg = true;
         if ((target.width + 2 * target.border) > maxWidth) {
             target.width = maxWidth - 2 * target.border;
         }

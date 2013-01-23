@@ -90,6 +90,7 @@
             domUtils.un(window, ['scroll','resize'], updateFloating);
             me.removeListener('keydown', defer_updateFloating);
         });
+
         me.addListener('ready', function(){
             if(checkHasUI(me)){
 
@@ -126,6 +127,12 @@
                         updateFloating();
                     },0);
                 });
+                me.addListener("clearDoc",function(){
+                    setTimeout(function(){
+                        updateFloating();
+                    },0);
+
+                })
             }
         });
 	};

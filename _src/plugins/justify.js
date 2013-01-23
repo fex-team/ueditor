@@ -58,10 +58,7 @@ UE.plugins['justify']=function(){
             }
             return range.moveToBookmark(bookmark2).moveToBookmark(bookmark);
         };
-    //添加快捷键
-    me.addshortcutkey({
-        "justify" : "CTRL+76:left,CTRL+82:right"
-    });
+
     UE.commands['justify'] = {
         execCommand:function (cmdName, align) {
             var range = this.selection.getRange(),

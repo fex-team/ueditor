@@ -1057,6 +1057,10 @@
                 }
                 var nativeRange = this.document.createRange();
                 nativeRange.setStart(this.startContainer, this.startOffset);
+                //是createAddress最后一位算的不准，现在这里进行微调
+                if(this.endContainer.nodeType == 3 && this.endContainer.nodeValue.length < this.endOffset){
+                    this.endOffset = this.endContainer.nodeValue.length;
+                }
                 nativeRange.setEnd(this.endContainer, this.endOffset);
                 sel.addRange(nativeRange);
             }
@@ -1136,6 +1140,9 @@
 
                 }else{
                     firstIndex = isStart ? me.startOffset : me.endOffset
+                }
+                if(firstIndex < 0){
+                    firstIndex = 0;
                 }
                 addrs.push(firstIndex);
                 return addrs;

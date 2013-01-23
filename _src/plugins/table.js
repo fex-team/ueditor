@@ -69,8 +69,8 @@ UE.plugins['table'] = function () {
             '.selectTdClass{background-color:#edf5fa !important}' +
                 'table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}' +
                 //插入的表格的默认样式
-                'table{line-height:22px; margin-bottom:10px;border-collapse:collapse;display:table;}' +
-                'td,th{ background:white; padding: 0 10px;border: 1px solid #DDD;line-height: 22px;}' +
+                'table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
+                'td,th{ background:white; padding: 5px 10px;border: 1px solid #DDD;}' +
                 'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
                 'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
                 'td p{margin:0;padding:0;}', me.document);
@@ -126,7 +126,7 @@ UE.plugins['table'] = function () {
             if (keyCode == 13) {
 
                 var rng = me.selection.getRange(),
-                    caption = domUtils.findParentByTagName(rng.startContainer, 'caption');
+                    caption = domUtils.findParentByTagName(rng.startContainer, 'caption',true);
                 if (caption) {
                     var table = domUtils.findParentByTagName(caption, 'table');
                     if (!rng.collapsed) {
@@ -199,7 +199,7 @@ UE.plugins['table'] = function () {
                             rowIndex++;
                         }
                         for (var i = 0, ci; ci = tableCopyList[i++];) {
-                            var tr = ut.insertRow(rowIndex++);
+                            var tr = ut.insertRow(rowIndex++,"td");
                             for (var j = 0, cj; cj = ci[j]; j++) {
                                 var cell = tr.cells[j];
                                 if (!cell) {
@@ -207,7 +207,7 @@ UE.plugins['table'] = function () {
                                 }
                                 cell.innerHTML = cj.innerHTML;
                                 cj.getAttribute('width') && cell.setAttribute('width', cj.getAttribute('width'));
-                                cj.getAttribute('valign') && cell.setAttribute('valign', cj.getAttribute('valign'));
+                                cj.getAttribute('vAlign') && cell.setAttribute('vAlign', cj.getAttribute('vAlign'));
                                 cj.getAttribute('align') && cell.setAttribute('align', cj.getAttribute('align'));
                                 cj.style.cssText && (cell.style.cssText = cj.style.cssText)
                             }
@@ -216,7 +216,7 @@ UE.plugins['table'] = function () {
                                     break;
                                 cj.innerHTML = ci[j].innerHTML;
                                 ci[j].getAttribute('width') && cj.setAttribute('width', ci[j].getAttribute('width'));
-                                ci[j].getAttribute('valign') && cj.setAttribute('valign', ci[j].getAttribute('valign'));
+                                ci[j].getAttribute('vAlign') && cj.setAttribute('vAlign', ci[j].getAttribute('vAlign'));
                                 ci[j].getAttribute('align') && cj.setAttribute('align', ci[j].getAttribute('align'));
                                 ci[j].style.cssText && (cj.style.cssText = ci[j].style.cssText)
                             }
@@ -245,7 +245,7 @@ UE.plugins['table'] = function () {
                                     td.innerHTML = cj.innerHTML;
                                     //todo 定制处理
                                     cj.getAttribute('width') && td.setAttribute('width', cj.getAttribute('width'));
-                                    cj.getAttribute('valign') && td.setAttribute('valign', cj.getAttribute('valign'));
+                                    cj.getAttribute('vAlign') && td.setAttribute('vAlign', cj.getAttribute('vAlign'));
                                     cj.getAttribute('align') && td.setAttribute('align', cj.getAttribute('align'));
                                     cj.style.cssText && (td.style.cssText = cj.style.cssText);
                                     preNode = td;
@@ -288,7 +288,7 @@ UE.plugins['table'] = function () {
                             (needIEHack ? parseInt(domUtils.getComputedStyle(me.body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (me.options.offsetWidth || 0);
                     me.execCommand('insertHTML', '<table  ' +
                         ( isFullCol && isFullRow ? 'width="' + width + '"' : '') +
-                        '>' + table.innerHTML.replace(/>\s*</g, '><') + '</table>')
+                        '>' + table.innerHTML.replace(/>\s*</g, '><').replace(/th/gi,"td") + '</table>')
                 }
                 me.fireEvent('contentchange');
                 me.fireEvent('saveScene');
@@ -347,6 +347,10 @@ UE.plugins['table'] = function () {
 
             }, 100);
         });
+        me.addListener("selectionchange",function(){
+            toggleDragableState(me, false, "", null);
+        });
+
 
         //内容变化时触发索引更新
         //todo 可否考虑标记检测，如果不涉及表格的变化就不进行索引重建和更新
@@ -464,7 +468,7 @@ UE.plugins['table'] = function () {
                     }
                 }
             });
-            toggleDragableState(me, false, "", null);
+
             switchBoderColor(true);
         });
 
@@ -484,17 +488,21 @@ UE.plugins['table'] = function () {
         me.addListener("mouseup", mouseUpEvent);
 
         var currentRowIndex = 0;
+        me.addListener("mousedown", function(){
+            currentRowIndex = 0;
+        });
         me.addListener('tabkeydown', function () {
             var range = this.selection.getRange(),
-                obj = getTableItemsByRange(me);
-            if (obj.table) {
-                if (obj.caption) {
-                    var cell = domUtils.getElementsByTagName(obj.table, 'th td');
+                common = range.getCommonAncestor(true,true),
+                table = domUtils.findParentByTagName(common,'table');
+            if (table) {
+                if (domUtils.findParentByTagName(common,'caption',true)) {
+                    var cell = domUtils.getElementsByTagName(table, 'th td');
                     if (cell && cell.length) {
                         range.setStart(cell[0], 0).setCursor(false, true)
                     }
                 } else {
-                    var cell = obj.cell,
+                    var cell = domUtils.findParentByTagName(common,['td', 'th'],true),
                         ua = getUETable(cell);
                     currentRowIndex = cell.rowSpan > 1 ? currentRowIndex : ua.getCellInfo(cell).rowIndex;
                     var nextCell = ua.getTabNextCell(cell, currentRowIndex);
@@ -510,13 +518,16 @@ UE.plugins['table'] = function () {
                         this.execCommand('insertrownext');
                         me.__hasEnterExecCommand = false;
                         range = this.selection.getRange();
-                        range.setStart(obj.table.rows[obj.table.rows.length - 1].cells[0], 0).setCursor();
+                        range.setStart(table.rows[table.rows.length - 1].cells[0], 0).setCursor();
                         me.fireEvent('saveScene');
                     }
                 }
                 return true;
             }
 
+        });
+        browser.ie && me.addListener('selectionchange',function(){
+            toggleDragableState(this, false, "", null);
         });
         me.addListener("keydown", function (type, evt) {
             var me = this;
@@ -580,29 +591,26 @@ UE.plugins['table'] = function () {
                 me.__hasEnterExecCommand = true;
                 me.fireEvent("beforeexeccommand", cmd);
                 tds = ut.selectedTds;
-                var firstState, state, firstTd;
+                var lastState = -2, lastValue = -2,value,state;
                 for (var i = 0, td; td = tds[i]; i++) {
                     if (isEmptyBlock(td)) {
                         range.setStart(td, 0).setCursor(false, true)
                     } else {
-                        range.selectNodeContents(td).select();
+                        range.selectNodeContents(td).select(true);
                     }
-
                     state = me.queryCommandState(cmd);
-                    if (firstState === undefined && !isEmptyBlock(td)) {
-                        firstTd = td;
-                        firstState = state;
-                    }
-                    if (state != -1 && (firstState === undefined || firstState == state)) {
-                        var isEmpty = domUtils.isEmptyNode(td);
-                        me._ignoreContentChange = true;
-                        result = oldExecCommand.apply(me, arguments);
-                        me._ignoreContentChange = false;
-                        var reg = new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
-                        if (isEmpty != domUtils.isEmptyNode(td) && !td[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length) {
-                            domUtils.fillNode(me.document, td)
+                    value = me.queryCommandValue(cmd);
+                    if (state != -1 ) {
+                        if(lastState !== state || lastValue !== value){
+                            me._ignoreContentChange = true;
+                            result = oldExecCommand.apply(me, arguments);
+                            me._ignoreContentChange = false;
+                            if (domUtils.isEmptyBlock(td)) {
+                                domUtils.fillNode(me.document, td)
+                            }
                         }
-
+                        lastState = me.queryCommandState(cmd);
+                        lastValue = me.queryCommandValue(cmd);
                     }
                 }
                 range.setStart(tds[0], 0).shrinkBoundary(true).setCursor(false, true);
@@ -1129,7 +1137,7 @@ UE.plugins['table'] = function () {
      */
     function getUETable(tdOrTable) {
         var tag = tdOrTable.tagName.toLowerCase();
-        tdOrTable = (tag == "td" || tag == "th") ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
+        tdOrTable = (tag == "td" || tag == "th" || tag == 'caption') ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
         if (!tdOrTable.ueTable) {
             tdOrTable.ueTable = new UETable(tdOrTable);
         }
@@ -1240,7 +1248,7 @@ UE.plugins['table'] = function () {
                 for (var r = 0; r < rowsNum; r++) {
                     html.push('<tr>');
                     for (var c = 0; c < colsNum; c++) {
-                        html.push('<td width="' + tdWidth + '"  valign="' + opt.tdvalign + '" >' + (browser.ie ? domUtils.fillChar : '<br/>') + '</td>')
+                        html.push('<td width="' + tdWidth + '"  vAlign="' + opt.tdvalign + '" >' + (browser.ie ? domUtils.fillChar : '<br/>') + '</td>')
                     }
                     html.push('</tr>')
                 }
@@ -1254,9 +1262,15 @@ UE.plugins['table'] = function () {
                     tdvalign:this.options.tdvalign
                 })
             }
+
+            var range = this.selection.getRange(),
+                start = range.startContainer,
+                firstParentBlock = domUtils.findParent(start,function(node){
+                    return domUtils.isBlockElm(node);
+                },true);
             var me = this,
                 defaultValue = getDefaultValue(me),
-                tableWidth = getTableWidth(me, needIEHack, defaultValue),
+                tableWidth = getTableWidth(me, needIEHack, defaultValue) - (firstParentBlock ? parseInt(domUtils.getXY(firstParentBlock).x,10):0),
                 tdWidth = Math.floor(tableWidth / opt.numCols - defaultValue.tdPadding * 2 - defaultValue.tdBorder);
             //todo其他属性
             !opt.tdvalign && (opt.tdvalign = me.options.tdvalign);
@@ -1509,7 +1523,7 @@ UE.plugins['table'] = function () {
         queryCommandState:function () {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
-            return cell && (cell.tagName == "TD" || cell.tagName == 'TH') && getUETable(tableItems.table).rowsNum < this.options.maxRowNum ? 0 : -1;
+            return cell && (cell.tagName == "TD") && getUETable(tableItems.table).rowsNum < this.options.maxRowNum ? 0 : -1;
         },
         execCommand:function () {
             var rng = this.selection.getRange(),
@@ -1772,10 +1786,15 @@ UE.plugins['table'] = function () {
                         utils.each(tds, function (td) {
                             td.removeAttribute("width");
                         });
-                        table.setAttribute('width', '100%');
+                        table.setAttribute('width', getTableWidth(this,needIEHack,getDefaultValue(this,table)));
+                        setTimeout(function(){
+                            utils.each(tds,function(td){
+                                td.setAttribute("width",td.offsetWidth+"");
+                            })
+                        },0)
                     } else {
                         var ut = getUETable(table),
-                            preTds = ut.getSameEndPosCells(cell, "x");
+                            preTds = cell?ut.getSameEndPosCells(cell, "x"):table.getElementsByTagName("td");
                         if (preTds.length) {
                             table.style.width = "";
                             table.removeAttribute("width");
@@ -1953,10 +1972,9 @@ UE.plugins['table'] = function () {
             if (table) {
                 var obj = {};
                 obj[data[0]] = data[1];
-                domUtils.setStyles(table,{
-                    float:'',
-                    margin:''
-                });
+
+                table.style[utils.cssStyleToDomStyle("float")]="";
+                table.style.margin="";
                 domUtils.setStyles(table, obj);
             }
         }
@@ -1970,7 +1988,7 @@ UE.plugins['table'] = function () {
         execCommand:function (cmd, color) {
             var rng = this.selection.getRange(),
                 table = domUtils.findParentByTagName(rng.startContainer, 'table');
-            if (table && color) {
+            if (table) {
                 var arr = domUtils.getElementsByTagName(table, "td").concat(
                     domUtils.getElementsByTagName(table, "th"),
                     domUtils.getElementsByTagName(table, "caption")
@@ -1992,7 +2010,7 @@ UE.plugins['table'] = function () {
 
             if (!ut) {
                 var start = me.selection.getStart(),
-                    cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
+                    cell = start && domUtils.findParentByTagName(start, ["td", "th","caption"], true);
                 if (cell) {
                     cell.style.backgroundColor = bkColor;
                 }
@@ -2583,7 +2601,7 @@ UE.plugins['table'] = function () {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
                     cell = this.cloneCell(sourceCell,true);
                     this.setCellContent(cell);
-                    cell.setAttribute('valign', me.options.tdvalign);
+                    cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     row.appendChild(cell);
                 }
             } else {
@@ -2692,7 +2710,7 @@ UE.plugins['table'] = function () {
                     preCell = tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
                     cell = this.cloneCell(sourceCell,true); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
                     this.setCellContent(cell);
-                    cell.setAttribute('valign', me.options.tdvalign);
+                    cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     preCell && cell.setAttribute('width', preCell.getAttribute('width'));
                     if (!colIndex) {
                         tableRow.insertBefore(cell, tableRow.cells[0]);
@@ -2713,7 +2731,7 @@ UE.plugins['table'] = function () {
 
                         cell = this.cloneCell(sourceCell,true);//tableRow.insertCell(cellInfo.cellIndex);
                         this.setCellContent(cell);
-                        cell.setAttribute('valign', me.options.tdvalign);
+                        cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                         preCell && cell.setAttribute('width', preCell.getAttribute('width'))
                         tableRow.insertBefore(cell, preCell);
                     }
@@ -2785,7 +2803,7 @@ UE.plugins['table'] = function () {
                     tmpCell = tableRow.insertCell(colIndex - this.getPreviewMergedCellsNum(i, colIndex));
                 tmpCell.colSpan = cellInfo.colSpan;
                 this.setCellContent(tmpCell);
-                tmpCell.setAttribute('valign', me.options.tdvalign);
+                tmpCell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                 tmpCell.setAttribute('align', cell.getAttribute('align'));
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
@@ -2824,7 +2842,7 @@ UE.plugins['table'] = function () {
                     tmpCell = tableRow.insertCell(this.indexTable[rowIndex][j].cellIndex + 1);
                 tmpCell.rowSpan = cellInfo.rowSpan;
                 this.setCellContent(tmpCell);
-                tmpCell.setAttribute('valign', me.options.tdvalign);
+                tmpCell.setAttribute('vAlign',cell.getAttribute('vAlign'));
                 tmpCell.setAttribute('align',cell.getAttribute('align'));
                 tmpCell.setAttribute('width',backWidth);
                 if (cell.style.cssText) {
@@ -2834,10 +2852,10 @@ UE.plugins['table'] = function () {
                 if (cell.tagName == 'TH') {
                     var th = cell.ownerDocument.createElement('th');
                     th.appendChild(tmpCell.firstChild);
-                    th.setAttribute('valign', me.options.tdvalign);
+                    th.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     th.rowSpan = tmpCell.rowSpan;
                     tableRow.insertBefore(th, tmpCell);
-                    domUtils.remove(tmpCell)
+                    domUtils.remove(tmpCell);
                 }
                 results.push(tmpCell);
             }

@@ -32,7 +32,6 @@
                 domUtils.on(editor.window, 'scroll', function (evt) {
                     baidu.editor.ui.Popup.postHide(evt);
                 });
-
                 //提供编辑器实时宽高(全屏时宽高不变化)
                 editor.ui._actualFrameWidth = editor.options.initialFrameWidth;
 
@@ -113,6 +112,10 @@
             });
             editor.addListener('keydown', function (t, evt) {
                 if (pastePop)    pastePop.dispose(evt);
+                var keyCode = evt.keyCode || evt.which;
+                if(evt.altKey&&keyCode==90){
+                    UE.ui.buttons['fullscreen'].onclick();
+                }
             });
             editor.addListener('wordcount', function (type) {
                 setCount(this,me);
@@ -135,6 +138,7 @@
                 var count = editor.getContentLength(true);
                 if (count > max) {
                     countDom.innerHTML = errMsg;
+                    editor.fireEvent("wordcountoverflow");
                 } else {
                     countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
                 }
@@ -262,14 +266,12 @@
                         if (!dialogs[dialogName]) {
                             return;
                         }
-                        str += '<nobr>' + editor.getLang("property") + ': ';
-                        if (editor.queryCommandState('imagefloat') != -1) {
-                            str += '<span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("right") class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;';
-                        }
-                        str += '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>';
+                        str = '<nobr>' + editor.getLang("property") + ': '+
+                            '<span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("right") class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;'+
+                            '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>';
 
                         !html && (html = popup.formatHtml(str))
 

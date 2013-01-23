@@ -1128,13 +1128,6 @@ div.edui-box {
     overflow: hidden;
 }
 
-/*emoticon-dialog*/
-.edui-default .edui-for-emoticon .edui-dialog-content {
-    width: 515px;
-    *width: 506px;
-    height: 360px;
-}
-
 /*scrawl-dialog*/
 .edui-default .edui-for-scrawl .edui-dialog-content {
     width: 515px;
@@ -1231,6 +1224,7 @@ div.edui-box {
 /*edittable-dialog*/
 .edui-default .edui-for-edittable .edui-dialog-content {
     width: 540px;
+    _width:590px;
     height: 265px;
 }
 
@@ -1302,6 +1296,15 @@ div.edui-box {
     line-height: 14px;
 }
 /* 表格弹出菜单 */
+.edui-default .edui-for-inserttable .edui-splitborder {
+    display: none
+}
+.edui-default .edui-for-inserttable  .edui-splitbutton-body .edui-arrow {
+    width: 0
+}
+.edui-default .edui-toolbar .edui-for-inserttable  .edui-state-active .edui-splitborder{
+    border-left: 1px solid transparent;
+}
 .edui-default .edui-tablepicker .edui-infoarea {
     height: 14px;
     line-height: 14px;
@@ -1474,6 +1477,9 @@ div.edui-box {
 .edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow {
     width: 0
 }
+.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder{
+    border-left: 1px solid transparent;
+}
 /*contextmenu*/
 .edui-default .edui-hassubmenu .edui-arrow {
     height: 20px;
@@ -1543,15 +1549,19 @@ div.edui-box {
     margin: 3px 0;
 }
 
-.edui-default  .edui-pastecontainer .edui-button .edui-icon{
+.edui-default  .edui-pastecontainer .edui-button .edui-richtxticon,
+.edui-default  .edui-pastecontainer .edui-button .edui-tagicon,
+.edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon{
     float: left;
     cursor: pointer;
     width: 29px;
     height: 29px;
-    margin-right: 5px;
+    margin-left: 5px;
     background-image: url('../images/wordpaste.png');
+    background-repeat: no-repeat;
 }
 .edui-default  .edui-pastecontainer .edui-button .edui-richtxticon {
+    margin-left: 0;
     background-position: -109px 0;
 }
 .edui-default  .edui-pastecontainer .edui-button .edui-tagicon {
@@ -1559,18 +1569,15 @@ div.edui-box {
 }
 
 .edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon {
-    margin-right: 0;
     background-position: -72px 0;
 }
 
-.edui-default  .edui-pastecontainer .edui-button .edui-richtxticon.edui-state-hover {
+.edui-default  .edui-pastecontainer .edui-button .edui-state-hover .edui-richtxticon {
     background-position: -109px -34px;
-
 }
-.edui-default  .edui-pastecontainer .edui-button .edui-tagicon.edui-state-hover {
+.edui-default  .edui-pastecontainer .edui-button .edui-state-hover .edui-tagicon{
     background-position: -148px -34px;
 }
-.edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon.edui-state-hover {
+.edui-default  .edui-pastecontainer .edui-button  .edui-state-hover .edui-plaintxticon{
     background-position: -72px -34px;
 }
-
