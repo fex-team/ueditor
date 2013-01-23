@@ -250,7 +250,7 @@ UE.plugins['list'] = function () {
             return null;
         }
         var keyCode = evt.keyCode || evt.which;
-        if (keyCode == 13) {//回车
+        if (keyCode == 13 && !evt.shiftKey) {//回车
             var range = me.selection.getRange(),
                 start = findList(range.startContainer,function (node) {
                     return node.tagName == 'TABLE';
