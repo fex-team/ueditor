@@ -339,10 +339,17 @@ test( 'margin，border，padding属性混杂', function () {
 
 test( 'each 遍历方法', function () {
    var div =  te.dom[0];
-   div.innerHTML = '<span></span><span></span>';
+   div.innerHTML = '<span></span><span></span><span id="a"></span><span></span>';
    UE.utils.each(div.getElementsByTagName('span'),function(node,i){
         equal(node.tagName,'SPAN','遍历nodelist');
    });
+    var count = 0;
+    UE.utils.each(div.getElementsByTagName('span'),function(node,i){
+        count++;
+       if(node.id =='a')
+            return false
+    });
+    equal(count,3);
     UE.utils.each(['a','b'],function(v,i){
         equal(v,['a','b'][i],'遍历数组');
     });

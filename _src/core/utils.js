@@ -26,16 +26,16 @@ var utils = UE.utils = {
      */
     each : function(obj, iterator, context) {
         if (obj == null) return;
-        if (Array.prototype.forEach && obj.forEach === Array.prototype.forEach) {
-            obj.forEach(iterator, context);
-        } else if (obj.length === +obj.length) {
+        if (obj.length === +obj.length) {
             for (var i = 0, l = obj.length; i < l; i++) {
-                if(iterator.call(context, obj[i], i, obj) === false)return;
+                if(iterator.call(context, obj[i], i, obj) === false)
+                    return false;
             }
         } else {
             for (var key in obj) {
                 if (obj.hasOwnProperty(key)) {
-                    if(iterator.call(context, obj[key], key, obj) === false)return
+                    if(iterator.call(context, obj[key], key, obj) === false)
+                        return false;
                 }
             }
         }

@@ -25,7 +25,7 @@ UE.plugins['table'] = function () {
 
     var mousedown = false,
     //todo 判断混乱模式
-        needIEHack = browser.ie;
+        needIEHack = true;
 
     me.setOpt({
         'maxColNum':20,
@@ -126,7 +126,7 @@ UE.plugins['table'] = function () {
             if (keyCode == 13) {
 
                 var rng = me.selection.getRange(),
-                    caption = domUtils.findParentByTagName(rng.startContainer, 'caption');
+                    caption = domUtils.findParentByTagName(rng.startContainer, 'caption',true);
                 if (caption) {
                     var table = domUtils.findParentByTagName(caption, 'table');
                     if (!rng.collapsed) {
@@ -488,6 +488,9 @@ UE.plugins['table'] = function () {
         me.addListener("mouseup", mouseUpEvent);
 
         var currentRowIndex = 0;
+        me.addListener("mousedown", function(){
+            currentRowIndex = 0;
+        });
         me.addListener('tabkeydown', function () {
             var range = this.selection.getRange(),
                 common = range.getCommonAncestor(true,true),
@@ -593,7 +596,7 @@ UE.plugins['table'] = function () {
                     if (isEmptyBlock(td)) {
                         range.setStart(td, 0).setCursor(false, true)
                     } else {
-                        range.selectNodeContents(td).select();
+                        range.selectNodeContents(td).select(true);
                     }
                     state = me.queryCommandState(cmd);
                     value = me.queryCommandValue(cmd);

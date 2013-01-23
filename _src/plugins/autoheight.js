@@ -24,6 +24,7 @@ UE.plugins['autoheight'] = function () {
     function adjustHeight() {
         var me = this;
         clearTimeout(timer);
+        if(isFullscreen)return;
         timer = setTimeout(function () {
 
             if (me.queryCommandState && me.queryCommandState('source') != 1) {
@@ -50,7 +51,10 @@ UE.plugins['autoheight'] = function () {
             }
         }, 50);
     }
-
+    var isFullscreen;
+    me.addListener('fullscreenchanged',function(cmd,f){
+        isFullscreen = f
+    });
     me.addListener('destroy', function () {
         me.removeListener('contentchange', adjustHeight);
         me.removeListener('afterinserthtml',adjustHeight);
