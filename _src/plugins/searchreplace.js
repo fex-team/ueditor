@@ -17,47 +17,18 @@ UE.plugins['searchreplace'] = function(){
         first = null;
     });
     me.commands['searchreplace'] = {
-<<<<<<< HEAD
-            execCommand : function(cmdName,opt){
-               	var me = this,
-                    sel = me.selection,
-                    range,
-                    nativeRange,
-                    num = 0,
-=======
         execCommand : function(cmdName,opt){
             var me = this,
                 sel = me.selection,
                 range,
                 nativeRange,
                 num = 0,
->>>>>>> 97a109b3b9e86689e17fad3397301ece8eb5582d
                 opt = utils.extend(opt,{
                     all : false,
                     casesensitive : false,
                     dir : 1
                 },true);
 
-<<<<<<< HEAD
-                if(browser.ie){
-                    while(1){
-                        var tmpRange;
-                        nativeRange = me.document.selection.createRange();
-                        tmpRange = nativeRange.duplicate();
-                        tmpRange.moveToElementText(me.document.body);
-                        if(opt.all){
-                            first = 0;
-                            opt.dir = 1;
-                            if(currentRange){
-                                tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',currentRange);
-                            }
-                            tmpRange.moveToElementText(me.document.body);
-                        }else{
-                            tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',nativeRange);
-                            if(opt.hasOwnProperty("replaceStr")){
-                                tmpRange.setEndPoint(opt.dir == -1 ? 'StartToEnd' : 'EndToStart',nativeRange);
-                            }
-=======
             if(browser.ie){
                 while(1){
                     var tmpRange;
@@ -75,7 +46,6 @@ UE.plugins['searchreplace'] = function(){
                         tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',nativeRange);
                         if(opt.hasOwnProperty("replaceStr")){
                             tmpRange.setEndPoint(opt.dir == -1 ? 'StartToEnd' : 'EndToStart',nativeRange);
->>>>>>> 97a109b3b9e86689e17fad3397301ece8eb5582d
                         }
                     }
                     nativeRange = tmpRange.duplicate();
@@ -96,24 +66,6 @@ UE.plugins['searchreplace'] = function(){
                         currentRange = sel.getNative().createRange();
 
                     }
-<<<<<<< HEAD
-                }else{
-                    var w = me.window,nativeSel = sel.getNative(),tmpRange;
-                    while(1){
-                        if(opt.all){
-                            if(currentRange){
-                                currentRange.collapse(false);
-                                nativeRange = currentRange;
-                            }else{
-                                nativeRange  = me.document.createRange();
-                            }
-                            nativeRange.setStart(me.document.body,0);
-                            nativeRange.collapse(true);
-                            nativeSel.removeAllRanges();
-                            nativeSel.addRange( nativeRange );
-                            first = 0;
-                            opt.dir = 1;
-=======
                     num++;
                     if(!opt.all){
                         break;
@@ -126,7 +78,6 @@ UE.plugins['searchreplace'] = function(){
                         if(currentRange){
                             currentRange.collapse(false);
                             nativeRange = currentRange;
->>>>>>> 97a109b3b9e86689e17fad3397301ece8eb5582d
                         }else{
                             nativeRange  = me.document.createRange();
                         }
@@ -151,30 +102,6 @@ UE.plugins['searchreplace'] = function(){
                         }
                     }
 
-<<<<<<< HEAD
-                        if(!w.find(opt.searchStr,opt.casesensitive,opt.dir < 0 ? true : false) ) {
-                                currentRange = null;
-                                nativeSel.removeAllRanges();
-                                return num;
-                        }
-                        first = 0;
-                        range = w.getSelection().getRangeAt(0);
-                        if(!range.collapsed){
-
-                            if(opt.hasOwnProperty("replaceStr")){
-                                range.deleteContents();
-                                var text = w.document.createTextNode(opt.replaceStr);
-                                range.insertNode(text);
-                                range.selectNode(text);
-                                nativeSel.addRange(range);
-                                currentRange = range.cloneRange();
-                            }
-                        }
-                        num++;
-                        if(!opt.all){
-                            break;
-                        }
-=======
                     //如果是第一次并且海选中了内容那就要清除，为find做准备
 
                     if(!first){
@@ -189,7 +116,6 @@ UE.plugins['searchreplace'] = function(){
                         currentRange = null;
                         nativeSel.removeAllRanges();
                         return num;
->>>>>>> 97a109b3b9e86689e17fad3397301ece8eb5582d
                     }
                     first = 0;
                     range = w.getSelection().getRangeAt(0);
