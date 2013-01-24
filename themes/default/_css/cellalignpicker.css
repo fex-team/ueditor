@@ -1,34 +1,34 @@
 /*自动排版弹出菜单*/
-.edui-default .edui-CellAlignPicker .edui-CellAlignPicker-body {
+.edui-default .edui-cellalignpicker .edui-cellalignpicker-body {
     width: 70px;
     font-size: 12px;
     cursor: default;
 }
 
-.edui-default .edui-CellAlignPicker-body table {
+.edui-default .edui-cellalignpicker-body table {
     border-collapse: separate;
     border-spacing: 0;
 }
-.edui-default .edui-CellAlignPicker-body td{
+.edui-default .edui-cellalignpicker-body td{
     padding: 1px;
 }
-.edui-default .edui-CellAlignPicker-body .edui-icon{
+.edui-default .edui-cellalignpicker-body .edui-icon{
     height: 20px;
     width: 20px;
     padding: 1px;
     background-image: url(../images/icons.png);
     background-image: url(../images/icons.gif) \9;
 }
-.edui-default .edui-CellAlignPicker-body .edui-left{
+.edui-default .edui-cellalignpicker-body .edui-left{
     background-position: -460px 0;
 }
-.edui-default .edui-CellAlignPicker-body .edui-center{
+.edui-default .edui-cellalignpicker-body .edui-center{
     background-position: -420px 0;
 }
-.edui-default .edui-CellAlignPicker-body .edui-right{
+.edui-default .edui-cellalignpicker-body .edui-right{
     background-position: -480px 0;
 }
-.edui-default .edui-CellAlignPicker-body td.edui-state-hover {
+.edui-default .edui-cellalignpicker-body td.edui-state-hover {
     background-color: #fff5d4;
     padding: 0;
     border: 1px solid #dcac6c;
