@@ -9,7 +9,7 @@
         UIBase = baidu.editor.ui.UIBase,
         Popup = baidu.editor.ui.Popup,
         Stateful = baidu.editor.ui.Stateful,
-        AlignCellPicker = baidu.editor.ui.AlignCellPicker,
+        CellAlignPicker = baidu.editor.ui.CellAlignPicker,
         Menu = baidu.editor.ui.Menu = function (options) {
             this.initOptions(options);
             this.initMenu();
@@ -125,7 +125,7 @@
             if (options.className && options.className.indexOf("aligntd") != -1) {
                 var me = this;
                 this.subMenu = new Popup({
-                    content:new AlignCellPicker(this.subMenu),
+                    content:new CellAlignPicker(this.subMenu),
                     parentMenu:me,
                     editor:me.editor,
                     destroy:function () {

@@ -36,6 +36,7 @@ UE.plugins['table'] = function () {
         'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_",
         'tableDragable':false
     });
+    me.getUETable = getUETable;
     var commands = {
         'deletetable':1,
         'inserttable':1,
@@ -1778,37 +1779,26 @@ UE.plugins['table'] = function () {
             },
             execCommand:function (cmd) {
                 var tableItems = getTableItemsByRange(this),
-                    table = tableItems.table,
-                    cell = tableItems.cell;
+                    table = tableItems.table;
                 if (table) {
+                    var tds = table.getElementsByTagName("td");
+                    utils.each(tds, function (td) {
+                        td.removeAttribute("width");
+                    });
                     if (cmd == 'adaptbywindow') {
-                        var tds = table.getElementsByTagName("td");
-                        utils.each(tds, function (td) {
-                            td.removeAttribute("width");
-                        });
                         table.setAttribute('width', getTableWidth(this,needIEHack,getDefaultValue(this,table)));
-                        setTimeout(function(){
-                            utils.each(tds,function(td){
-                                td.setAttribute("width",td.offsetWidth+"");
-                            })
-                        },0)
+                        utils.each(tds,function(td){
+                            td.setAttribute("width",td.offsetWidth+"");
+                        });
                     } else {
-                        var ut = getUETable(table),
-                            preTds = cell?ut.getSameEndPosCells(cell, "x"):table.getElementsByTagName("td");
-                        if (preTds.length) {
-                            table.style.width = "";
-                            table.removeAttribute("width");
-                            utils.each(preTds, function (td) {
-                                td.removeAttribute("width");
-                            });
+                        table.style.width = "";
+                        table.removeAttribute("width");
 
-                            var defaultValue = getDefaultValue(me, table);
-                            var width = table.offsetWidth,
-                                bodyWidth = me.body.offsetWidth;
-                            if (width > bodyWidth) {
-                                table.setAttribute('width', getTableWidth(me, needIEHack, defaultValue));
-                            }
-
+                        var defaultValue = getDefaultValue(me, table);
+                        var width = table.offsetWidth,
+                            bodyWidth = me.body.offsetWidth;
+                        if (width > bodyWidth) {
+                            table.setAttribute('width', getTableWidth(me, needIEHack, defaultValue));
                         }
                     }
                 }
