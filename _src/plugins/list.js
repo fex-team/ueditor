@@ -129,8 +129,7 @@ UE.plugins['list'] = function () {
     }
 
     //调整索引标签
-    me.addListener('contentchange',function(){
-
+    me.addListener('contentchange',function(cmd,evt){
         utils.each(domUtils.getElementsByTagName(me.document,'ol ul'),function(node){
             if(!domUtils.inDoc(node,me.document))
                 return;
