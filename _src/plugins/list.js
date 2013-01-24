@@ -59,7 +59,7 @@ UE.plugins['list'] = function () {
         },
         listDefaultPaddingLeft : '30',
         listiconpath : 'http://bs.baidu.com/listicon/',
-        maxListLevel : -1//不限制
+        maxListLevel : 3//-1不限制
     } );
     var liiconpath = me.options.listiconpath;
 
