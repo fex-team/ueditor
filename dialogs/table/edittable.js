@@ -147,7 +147,6 @@
                 start = editor.selection.getStart(),
                 wt = domUtils.findParentByTagName(start, "table", true).width,
                 flag = !wt;
-            if (wt && !(/%/.test(wt)))   return;
             if (flag) {
                 autoSizeContent.checked = flag;
                 me.autoSizeContentHanler();
@@ -159,11 +158,6 @@
     };
 
     new editTable;
-
-    function adaptByTextTable() {
-        editor.execCommand("adaptbywindow");
-        editor.execCommand('adaptbytext');
-    }
 
     dialog.onok = function () {
         editor.__hasEnterExecCommand = true;
@@ -180,7 +174,7 @@
             editor.queryCommandState("deletecaption") != -1 && editor.execCommand("deletecaption");
         }
         editor.execCommand("edittable", tone.value);
-        autoSizeContent.checked ? adaptByTextTable() : "";
+        autoSizeContent.checked ?editor.execCommand('adaptbytext') : "";
         autoSizePage.checked ? editor.execCommand("adaptbywindow") : "";
 
         editor.__hasEnterExecCommand = false;
