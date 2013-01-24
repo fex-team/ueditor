@@ -128,11 +128,32 @@ UE.plugins['list'] = function () {
         return ''
     }
 
+    function checkCustomStyle(list){
+        if(domUtils.hasClass(list,/custom_/)){
+            return ''
+        }
+        var style;
+        utils.each(list.childNodes,function(li){
+            if(li.tagName == 'LI'){
+                if(domUtils.hasClass(li,/list-/)){
+                    var tmpStyle = li.className.match(/list-(\w+)-(\d+)?/);
+                    style = tmpStyle[1]+(tmpStyle[2]||'');
+                    return false
+                }
+            }
+        })
+        return style;
+    }
     //调整索引标签
-    me.addListener('contentchange',function(cmd,evt){
+    me.addListener('contentchange',function(){
         utils.each(domUtils.getElementsByTagName(me.document,'ol ul'),function(node){
+
             if(!domUtils.inDoc(node,me.document))
                 return;
+            var style;
+            if(style = checkCustomStyle(node)){
+                node.className = 'custom_' + style;
+            }
             var index = 0,type = 2,parent = node.parentNode;
             if( domUtils.hasClass(node,/custom_/)){
                 if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/))){
@@ -143,8 +164,11 @@ UE.plugins['list'] = function () {
                     type = 3;
                 }
             }
+            style = domUtils.getStyle(node, 'list-style-type');
+            node.style.cssText = style ? 'list-style-type:' + style : '';
             node.className = utils.trim(node.className.replace(/list-paddingleft-\w+/,'')) + ' list-paddingleft-' + type;
             utils.each(domUtils.getElementsByTagName(node,'li'),function(li){
+                li.style.cssText && (li.style.cssText = '');
                 if(!li.firstChild){
                     domUtils.remove(li);
                     return;
@@ -185,12 +209,12 @@ UE.plugins['list'] = function () {
                     domUtils.removeAttributes(li,'class')
                 }
             });
-            adjustList(node,node.tagName.toLowerCase(),getStyle(node)||domUtils.getStyle(node, 'list-style-type'))
+            adjustList(node,node.tagName.toLowerCase(),getStyle(node)||domUtils.getStyle(node, 'list-style-type'),true)
         })
     });
 
 
-    function adjustList(list, tag, style) {
+    function adjustList(list, tag, style,ignoreEmpty) {
         var nextList = list.nextSibling;
         if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (getStyle(nextList) || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(nextList, list);
@@ -208,7 +232,7 @@ UE.plugins['list'] = function () {
         if(preList && domUtils.isFillChar(preList)){
             domUtils.remove(preList);
         }
-        domUtils.isEmptyBlock(list) && domUtils.remove(list);
+        !ignoreEmpty && domUtils.isEmptyBlock(list) && domUtils.remove(list);
     }
 
     function setListStyle(list,style){
