@@ -1068,14 +1068,24 @@
                 var nativeRange = this.document.createRange();
                 if(this.collapsed && browser.opera && this.startContainer.nodeType == 1){
                     var child = this.startContainer.childNodes[this.startOffset];
-                    while(child && domUtils.isBlockElm(child)){
-                        if(child.nodeType == 1 && child.childNodes[0]){
-                            child = child.childNodes[0]
-                        }else{
-                            break;
+                    if(!child){
+                        //往前靠拢
+                        child = this.startContainer.lastChild;
+                        if( child && domUtils.isBr(child)){
+                            this.setStartBefore(child).collapse(true);
                         }
+                    }else{
+                        //向后靠拢
+                        while(child && domUtils.isBlockElm(child)){
+                            if(child.nodeType == 1 && child.childNodes[0]){
+                                child = child.childNodes[0]
+                            }else{
+                                break;
+                            }
+                        }
+                        child && this.setStartBefore(child).collapse(true)
                     }
-                    this.setStartBefore(child).collapse(true)
+
                 }
                 //是createAddress最后一位算的不准，现在这里进行微调
                 checkOffset(this);
