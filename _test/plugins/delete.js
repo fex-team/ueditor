@@ -253,7 +253,7 @@ stop();
 test('删除SelectedArr',function(){
     var editor = te.obj[0];
     editor.setContent('<p>hello</p><p>hello1</p>')
-    editor.currentSelectedArr=[editor.body.firstChild];
+    editor.selectNode(editor.body.firstChild).select();
     editor.execCommand('delete');
     var br = ua.browser.ie?'':'<br>';
     equal(ua.getChildHTML(editor.body),'<p>'+br+'</p><p>hello1</p>','');
