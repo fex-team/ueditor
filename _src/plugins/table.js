@@ -1400,6 +1400,7 @@ UE.plugins['table'] = function () {
             return -1;
         },
         execCommand:function () {
+            debugger
             var table = getTableItemsByRange(this).table;
             if (table) {
                 getUETable(table).insertRow(0, 'th');
@@ -2591,7 +2592,7 @@ UE.plugins['table'] = function () {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
                     cell = this.cloneCell(sourceCell,true);
                     this.setCellContent(cell);
-                    cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
+                    cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     row.appendChild(cell);
                 }
             } else {
