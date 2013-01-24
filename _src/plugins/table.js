@@ -606,12 +606,13 @@ UE.plugins['table'] = function () {
                             me._ignoreContentChange = true;
                             result = oldExecCommand.apply(me, arguments);
                             me._ignoreContentChange = false;
-                            if (domUtils.isEmptyBlock(td)) {
-                                domUtils.fillNode(me.document, td)
-                            }
+
                         }
                         lastState = me.queryCommandState(cmd);
                         lastValue = me.queryCommandValue(cmd);
+                        if (domUtils.isEmptyBlock(td)) {
+                            domUtils.fillNode(me.document, td)
+                        }
                     }
                 }
                 range.setStart(tds[0], 0).shrinkBoundary(true).setCursor(false, true);
