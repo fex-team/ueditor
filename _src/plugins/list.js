@@ -590,7 +590,11 @@ UE.plugins['list'] = function () {
                             list.appendChild(current);
                             if(!li || domUtils.isTagNode(li,'ol ul')){
                                 if(li){
-                                    li = li.firstChild;
+                                    while(li = li.firstChild){
+                                        if(li.tagName == 'LI'){
+                                            break;
+                                        }
+                                    }
                                 }else{
                                     li = domUtils.getNextDomNode(current,false,null,function(node){return node !== closeList});
                                 }
