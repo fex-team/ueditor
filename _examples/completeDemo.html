@@ -42,6 +42,7 @@
     </div>
     <div >
         <button  onclick="getText()">获得当前选中的文本</button>
+        <button  onclick="insertHtml()">插入给定的内容</button>
         <button onclick="setEnabled()">可以编辑</button>
         <button onclick="setDisabled()">不可编辑</button>
         <button onclick=" UE.getEditor('editor').setHide()">隐藏编辑器</button>
@@ -67,6 +68,11 @@
     ue.addListener('ready',function(){
         this.focus()
     });
+
+    function insertHtml(){
+        var value = prompt('插入html代码');
+        ue.execCommand('insertHtml',value)
+    }
     function createEditor(){
         enableBtn();
         UE.getEditor('editor')
