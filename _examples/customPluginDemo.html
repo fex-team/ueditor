@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 
@@ -27,7 +26,6 @@
     //创建一个在选中的图片单击时添加边框的插件，其实质就是在baidu.editor.plugins塞进一个闭包
     UE.plugins["addborder"] = function () {
         var me = this;
-
         //创建一个改变图片边框的命令
         me.commands["addborder"] = {
             execCommand:function () {
@@ -38,11 +36,8 @@
                     //图片判断
                     var img = range.getClosedNode();
                     if ( img && img.tagName == "IMG" ) {
-                        if(img.style.borderWidth == "5px" ){
-                            img.style.borderWidth = "1px";
-                        }else{
-                            img.style.border = "5px solid red";
-                        }
+                        //点击切换图片边框
+                        img.style.border = img.style.borderWidth == "5px"?"1px":"5px solid red";
                     }
                 }
             }
@@ -52,8 +47,7 @@
             me.execCommand( "addborder" );
         } );
     };
-    var editor_a = new UE.ui.Editor();
-    editor_a.render( 'myEditor' );
+    var editor_a = UE.getEditor('myEditor' );
 </script>
 
 </body>
