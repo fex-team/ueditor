@@ -1011,6 +1011,16 @@
             }
             return this;
         } : function (notInsertFillData) {
+            function checkOffset(rng){
+
+                function check(node,offset,dir){
+                    if(node.nodeType == 3 && node.nodeValue.length < offset){
+                        rng[dir + 'Offset'] = node.nodeValue.length
+                    }
+                }
+                check(rng.startContainer,rng.startOffset,'start');
+                check(rng.endContainer,rng.endOffset,'end');
+            }
             var win = domUtils.getWindow(this.document),
                 sel = win.getSelection(),
                 txtNode;
@@ -1067,11 +1077,9 @@
                     }
                     this.setStartBefore(child).collapse(true)
                 }
-                nativeRange.setStart(this.startContainer, this.startOffset);
                 //是createAddress最后一位算的不准，现在这里进行微调
-                if(this.endContainer.nodeType == 3 && this.endContainer.nodeValue.length < this.endOffset){
-                    this.endOffset = this.endContainer.nodeValue.length;
-                }
+                checkOffset(this);
+                nativeRange.setStart(this.startContainer, this.startOffset);
                 nativeRange.setEnd(this.endContainer, this.endOffset);
                 sel.addRange(nativeRange);
             }
