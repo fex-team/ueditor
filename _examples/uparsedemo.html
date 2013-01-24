@@ -6,16 +6,19 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script src="../uparse.js" type="text/javascript"></script>
     <script>
-        //uParse(selector,[option])
+        // 语法
+        // uParse(selector,[option])
         /*
             selector支持
             id,class,tagName
          */
         /*
+            目前支持的参数
             option:
-            highlightJsUrl
-            highlightCssUrl
-
+            highlightJsUrl 代码高亮相关js的路径 如果展示有代码高亮，必须给定该属性
+            highlightCssUrl 代码高亮相关css的路径 如果展示有代码高亮，必须给定该属性
+            liiconpath 自定义列表样式的图标路径，可以不给定，默认'http://bs.baidu.com/listicon/',
+            listDefaultPaddingLeft : 自定义列表样式的左边宽度 默认'20',
          */
 
         uParse('.content',{
