@@ -1115,14 +1115,27 @@ var domUtils = dom.domUtils = {
     isBr:function (node) {
         return node.nodeType == 1 && node.tagName == 'BR';
     },
-    isFillChar:function (node) {
-        return node.nodeType == 3 && !node.nodeValue.replace(new RegExp(domUtils.fillChar), '').length
+    isFillChar:function (node,isInStart) {
+        return node.nodeType == 3 && !node.nodeValue.replace(new RegExp((isInStart ? '^' : '' ) + domUtils.fillChar), '').length
     },
     isStartInblock:function (range) {
         var tmpRange = range.cloneRange(),
             flag = 0,
             start = tmpRange.startContainer,
             tmp;
+        if(start.nodeType == 1 && start.childNodes[tmpRange.startOffset]){
+            start = start.childNodes[tmpRange.startOffset];
+            var pre = start.previousSibling;
+            while(pre && domUtils.isFillChar(pre)){
+                start = pre;
+                pre = pre.previousSibling;
+            }
+        }
+        if(this.isFillChar(start,true) && tmpRange.startOffset == 1){
+            tmpRange.setStartBefore(start);
+            start = tmpRange.startContainer;
+        }
+
         while (start && domUtils.isFillChar(start)) {
             tmp = start;
             start = start.previousSibling

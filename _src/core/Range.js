@@ -1011,6 +1011,16 @@
             }
             return this;
         } : function (notInsertFillData) {
+            function checkOffset(rng){
+
+                function check(node,offset,dir){
+                    if(node.nodeType == 3 && node.nodeValue.length < offset){
+                        rng[dir + 'Offset'] = node.nodeValue.length
+                    }
+                }
+                check(rng.startContainer,rng.startOffset,'start');
+                check(rng.endContainer,rng.endOffset,'end');
+            }
             var win = domUtils.getWindow(this.document),
                 sel = win.getSelection(),
                 txtNode;
@@ -1056,11 +1066,20 @@
                     }
                 }
                 var nativeRange = this.document.createRange();
-                nativeRange.setStart(this.startContainer, this.startOffset);
-                //是createAddress最后一位算的不准，现在这里进行微调
-                if(this.endContainer.nodeType == 3 && this.endContainer.nodeValue.length < this.endOffset){
-                    this.endOffset = this.endContainer.nodeValue.length;
+                if(this.collapsed && browser.opera && this.startContainer.nodeType == 1){
+                    var child = this.startContainer.childNodes[this.startOffset];
+                    while(child && domUtils.isBlockElm(child)){
+                        if(child.nodeType == 1 && child.childNodes[0]){
+                            child = child.childNodes[0]
+                        }else{
+                            break;
+                        }
+                    }
+                    this.setStartBefore(child).collapse(true)
                 }
+                //是createAddress最后一位算的不准，现在这里进行微调
+                checkOffset(this);
+                nativeRange.setStart(this.startContainer, this.startOffset);
                 nativeRange.setEnd(this.endContainer, this.endOffset);
                 sel.addRange(nativeRange);
             }

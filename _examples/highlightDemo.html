@@ -19,57 +19,23 @@
 </head>
 <body>
 <h1>代码高亮演示</h1>
-<h2>页面上已经有的代码</h2>
+<h2>获得编辑器实例</h2>
 <div style="width:200px">
     <pre class="brush:js;toolbar:false;">
-        var editor_a = new baidu.editor.ui.Editor();
-        editor_a.render( 'myEditor' );
+        UE.getEditor('myEditor');
     </pre>
-     <pre class="brush:js;toolbar:false;">
-     function adjustList(list,tag,style){
-        var nextList = list.nextSibling;
-        if(nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (domUtils.getStyle(nextList,'list-style-type')||(tag == 'ol'?'decimal' : 'disc')) == style){
-            domUtils.moveChild(nextList,list);
-            if(nextList.childNodes.length == 0){
-                domUtils.remove(nextList);
-            }
-        }
-        var preList = list.previousSibling;
-    }
-</pre>
 </div>
 
 <!--style给定宽度可以影响编辑器的最终宽度-->
 <script type="text/plain" id="myEditor" style="width:500px">
+    <h3>实例化编辑器</h3>
      <pre class="brush:js;toolbar:false;">
-    function adjustList(list,tag,style){
-        var nextList = list.nextSibling;
-        if(nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (domUtils.getStyle(nextList,'list-style-type')||(tag == 'ol'?'decimal' : 'disc')) == style){
-            domUtils.moveChild(nextList,list);
-            if(nextList.childNodes.length == 0){
-                domUtils.remove(nextList);
-            }
-        }
-    }
+         UE.getEditor('myEditor');
 </pre>
 </script>
 <script type="text/javascript">
     //为了在编辑器之外能展示高亮代码
     SyntaxHighlighter.highlight();
-    //调整左右对齐
-    var tables = document.getElementsByTagName('table');
-    for(var t= 0,ti;ti=tables[t++];){
-        if(/SyntaxHighlighter/i.test(ti.className)){
-            var tds = ti.getElementsByTagName('td');
-            for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
-                ri = tds[1].firstChild.childNodes[i];
-                //trace:1949
-                if(ri){
-                    ri.style.height = li.style.height = ri.offsetHeight + 'px';
-                }
-            }
-        }
-    }
    UE.getEditor('myEditor');
 </script>
 

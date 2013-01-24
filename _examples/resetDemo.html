@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=8">
@@ -25,8 +24,7 @@
     <p><input type="button" onclick="simple()" value="重置编辑器内部参数"><span id="txt"></span></p>
     <p><input id="destroy" type="button" onclick="destroy()" value="销毁编辑器"></p>
     <script type="text/javascript" charset="utf-8">
-        var editor = new baidu.editor.ui.Editor();
-        editor.render( "simple" );
+        var editor = UE.getEditor('simple');
         function simple() {
             if(editor){
                 editor.setContent("编辑器内部变量已经被重置!");
@@ -41,8 +39,7 @@
 
             button.value = "重新渲染";
             button.onclick = function(){
-                editor = new baidu.editor.ui.Editor();
-                editor.render( "simple" );
+                editor = UE.getEditor('simple');
                 this.value="销毁编辑器";
                 this.onclick = destroy;
             }

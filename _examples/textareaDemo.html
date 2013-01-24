@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 
@@ -28,11 +27,9 @@
     <br/>
     <input type="button" onclick="render()" value="渲染编辑器">
     <script type="text/javascript">
-        var editor_a = new baidu.editor.ui.Editor();
-
         //渲染编辑器
         function render(){
-            editor_a.render('myEditor');
+            UE.getEditor('myEditor')
         }
     </script>
 

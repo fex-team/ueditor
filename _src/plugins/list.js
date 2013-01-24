@@ -26,7 +26,6 @@ UE.plugins['list'] = function () {
             'PRE':1,
             'BLOCKQUOTE':1
         };
-
     var customStyle = {
         'cn' : 'cn-1-',
         'cn1' : 'cn-2-',
@@ -40,7 +39,6 @@ UE.plugins['list'] = function () {
 
     me.setOpt( {
         'insertorderedlist':{
-            'num':'',
             'num1':'',
             'num2':'',
             'cn':'',
@@ -61,7 +59,7 @@ UE.plugins['list'] = function () {
         },
         listDefaultPaddingLeft : '30',
         listiconpath : 'http://bs.baidu.com/listicon/',
-        maxListLevel : -1//不限制
+        maxListLevel : 3//不限制
     } );
     var liiconpath = me.options.listiconpath;
 
@@ -109,7 +107,6 @@ UE.plugins['list'] = function () {
                     customCss.push('li.list-'+p+'-paddingleft-2{padding-left:40px}');
                     break;
                 case 'dash':
-
                     customCss.push('li.list-'+p+'-paddingleft{padding-left:35px}');
                     break;
                 case 'dot':
@@ -119,7 +116,8 @@ UE.plugins['list'] = function () {
         customCss.push('.list-paddingleft-1{padding-left:0}');
         customCss.push('.list-paddingleft-2{padding-left:'+me.options.listDefaultPaddingLeft+'px}');
         customCss.push('.list-paddingleft-3{padding-left:'+me.options.listDefaultPaddingLeft*2+'px}');
-        utils.cssRule('list', 'ol,ul{margin:0;pading:0;}li{clear:both;}'+customCss.join('\n'), me.document);
+        //如果不给宽度会在自定应样式里出现滚动条
+        utils.cssRule('list', 'ol,ul{margin:0;pading:0;'+(browser.ie ? '' : 'width:95%')+'}li{clear:both;}'+customCss.join('\n'), me.document);
     });
 
     function getStyle(node){
@@ -250,7 +248,7 @@ UE.plugins['list'] = function () {
             return null;
         }
         var keyCode = evt.keyCode || evt.which;
-        if (keyCode == 13) {//回车
+        if (keyCode == 13 && !evt.shiftKey) {//回车
             var range = me.selection.getRange(),
                 start = findList(range.startContainer,function (node) {
                     return node.tagName == 'TABLE';
@@ -400,12 +398,12 @@ UE.plugins['list'] = function () {
             }
         }
         if (keyCode == 8) {
+
             //修中ie中li下的问题
             range = me.selection.getRange();
             if (range.collapsed && domUtils.isStartInblock(range)) {
                 tmpRange = range.cloneRange().trimBoundary();
                 li = domUtils.findParentByTagName(range.startContainer, 'li', true);
-
                 //要在li的最左边，才能处理
                 if (li && domUtils.isStartInblock(tmpRange)) {
                     start = domUtils.findParentByTagName(range.startContainer, 'p', true);
@@ -466,10 +464,9 @@ UE.plugins['list'] = function () {
                                 }
                             }
                         }
-
                         domUtils.remove(li);
-
-                        me.undoManger && me.undoManger.save();
+                        me.fireEvent('contentchange');
+                        me.fireEvent('saveScene');
                         domUtils.preventDefault(evt);
                         return;
 
@@ -496,7 +493,8 @@ UE.plugins['list'] = function () {
                             }
 
                         }
-                        range.moveToBookmark(bk).setCursor(false,true)
+                        range.moveToBookmark(bk).setCursor(false,true);
+                        me.fireEvent('contentchange');
                         me.fireEvent('saveScene');
                         domUtils.preventDefault(evt);
                         return;
@@ -526,11 +524,8 @@ UE.plugins['list'] = function () {
                 'OL':listToArray(me.options.insertorderedlist),
                 'UL':listToArray(me.options.insertunorderedlist)
             };
-        //只以开始为准
-        //todo 后续改进
-        var li = domUtils.findParentByTagName(range.startContainer, 'li', true);
-        if(li){
-            //控制级数
+        //控制级数
+        function checkLevel(li){
             if(me.options.maxListLevel != -1){
                 var level = li.parentNode,levelNum = 0;
                 while(/[ou]l/i.test(level.tagName)){
@@ -540,22 +535,17 @@ UE.plugins['list'] = function () {
                 if(levelNum >= me.options.maxListLevel){
                     return true;
                 }
-                if(utils.each(domUtils.getElementsByTagName(li.parentNode,'ol ul'),function(list){
-                    var currentLevel = levelNum;
-                    while(li.parentNode !== list){
-                        currentLevel++;
-                        list = list.parentNode;
-                    }
-                    if(currentLevel >= me.options.maxListLevel){
-                        return false;
-                    }
-                }) === false){
-                    return true;
-                }
-
             }
+        }
+        //只以开始为准
+        //todo 后续改进
+        var li = domUtils.findParentByTagName(range.startContainer, 'li', true);
+        if(li){
+
             var bk;
             if(range.collapsed){
+                if(checkLevel(li))
+                    return true;
                 var parentLi = li.parentNode,
                     list = me.document.createElement(parentLi.tagName),
                     index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
@@ -584,21 +574,32 @@ UE.plugins['list'] = function () {
                 var current = li;
                 if(bk.end){
                     while(current && !(domUtils.getPosition(current, bk.end) & domUtils.POSITION_FOLLOWING)){
-                        var parentLi = li.parentNode,
+                        if(checkLevel(current)){
+                            current = domUtils.getNextDomNode(current,false,null,function(node){return node !== closeList});
+                            continue;
+                        }
+                        var parentLi = current.parentNode,
                             list = me.document.createElement(parentLi.tagName),
                             index = utils.indexOf(listStyle[list.tagName], getStyle(parentLi)||domUtils.getComputedStyle(parentLi, 'list-style-type'));
-                        index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
-                        var currentStyle = listStyle[list.tagName][index];
+                        var currentIndex = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
+                        var currentStyle = listStyle[list.tagName][currentIndex];
                         setListStyle(list,currentStyle);
-                        parentLi.insertBefore(list, li);
+                        parentLi.insertBefore(list, current);
                         while(current && !(domUtils.getPosition(current, bk.end) & domUtils.POSITION_FOLLOWING)){
                             li = current.nextSibling;
-                            if(!li){
-                                li = domUtils.getNextDomNode(current,false,null,function(node){return node !== closeList});
-                                list.appendChild(current);
+                            list.appendChild(current);
+                            if(!li || domUtils.isTagNode(li,'ol ul')){
+                                if(li){
+                                    while(li = li.firstChild){
+                                        if(li.tagName == 'LI'){
+                                            break;
+                                        }
+                                    }
+                                }else{
+                                    li = domUtils.getNextDomNode(current,false,null,function(node){return node !== closeList});
+                                }
                                 break;
                             }
-                            list.appendChild(current);
                             current = li;
                         }
                         adjustList(list,list.tagName.toLowerCase(),currentStyle);
