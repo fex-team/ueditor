@@ -36,6 +36,7 @@ UE.plugins['table'] = function () {
         'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_",
         'tableDragable':false
     });
+    me.getUETable = getUETable;
     var commands = {
         'deletetable':1,
         'inserttable':1,
