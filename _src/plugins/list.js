@@ -39,6 +39,7 @@ UE.plugins['list'] = function () {
 
     me.setOpt( {
         'insertorderedlist':{
+            'num':'',
             'num1':'',
             'num2':'',
             'cn':'',
@@ -137,7 +138,7 @@ UE.plugins['list'] = function () {
             if(li.tagName == 'LI'){
                 if(domUtils.hasClass(li,/list-/)){
                     var tmpStyle = li.className.match(/list-(\w+)-(\d+)?/);
-                    style = tmpStyle[1]+(tmpStyle[2]||'');
+                    style = tmpStyle[1]+(tmpStyle[2] && tmpStyle[2] != '1'?  tmpStyle[2]:'');
                     return false
                 }
             }
