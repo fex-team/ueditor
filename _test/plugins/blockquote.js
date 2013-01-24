@@ -138,8 +138,8 @@ test( 'startContainer为body添加引用', function () {
         /*不闭合选取*/
         range.setStart( body, 0 ).setEnd( body, 2 ).select();
         editor.execCommand( 'blockquote' );
-        var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':(ua.browser.webkit?' style=\"padding-left: 30px;\"':' style=\"padding-left: 30px;\"');
-
+//        var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\" list-paddingleft-2\"':(ua.browser.webkit?' class=\" list-paddingleft-2\"':' style=\" list-paddingleft-2\"');
+        var padding  = ' class=\" list-paddingleft-2\"';
         equal( ua.getChildHTML( body ), '<blockquote><p>hello</p><ol'+padding+'><li><p>hello1</p></li><li><p>hello2</p></li></ol></blockquote>', '选中body加引用' );
         equal( editor.queryCommandState( 'blockquote' ), 1, '引用高亮' );
         /*闭合选取*/
@@ -166,10 +166,10 @@ test('aa标签',function(){
 test('列表内引用',function(){
     var editor = te.obj[0];
     var range = te.obj[1];
-    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':(ua.browser.webkit?' style=\"padding-left: 30px;\"':' style=\"padding-left: 30px;\"');
-
+//    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':(ua.browser.webkit?' style=\"padding-left: 30px;\"':' style=\"padding-left: 30px;\"');
+    var padding  = ' class=\" list-paddingleft-2\"';
     editor.setContent('<ol><li><blockquote><p>hello1</p></blockquote></li><blockquote><li><p>hello2</p></li></blockquote></ol>');
-    range.selectNode(editor.body).select();
+    range.selectNode(editor.body.firstChild).select();
     editor.execCommand('blockquote');
     equal(ua.getChildHTML(editor.body ),'<ol'+padding+'><li><p>hello1</p></li><ul'+padding+'><li><p>hello2</p></li></ul></ol>','引用删除');
 });

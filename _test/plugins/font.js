@@ -341,13 +341,17 @@ test( '对表格中的文本添加颜色和下划线', function() {
     var range = te.obj[1];
     editor.setContent( '<table><tbody><tr><td>hello1</td><td>hello2</td></tr><tr><td colspan="2">hello3</td></tr></tbody></table>' );
     setTimeout(function(){
-    range.selectNode( editor.body.firstChild );
     var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
-    editor.currentSelectedArr = [trs[0].firstChild,trs[0].lastChild,trs[1].firstChild,trs[1].lastChild];
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(trs[0].firstChild,trs[1].lastChild);
+    ut.setSelected(cellsRange);
+ 
     editor.execCommand( 'forecolor', 'rgb(255,100,100)' );
-    editor.currentSelectedArr = [trs[0].firstChild];
-    range.selectNode( editor.body.firstChild.firstChild );
+    ut.clearSelected();
+    range.selectNode(trs[0].firstChild).select();
+        setTimeout(function(){
     editor.execCommand( 'underline' );
+
     ua.checkHTMLSameStyle( '<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色' );
     ua.checkHTMLSameStyle( '<span style="color: rgb(255, 100, 100); ">hello2</span>', editor.document, trs[0].lastChild, '第2个单元格有前景色' );
     ua.checkHTMLSameStyle( '<span style="color: rgb(255, 100, 100); ">hello3</span>', editor.document, trs[1].firstChild, '第3个单元格有前景色' );
@@ -355,6 +359,7 @@ test( '对表格中的文本添加颜色和下划线', function() {
     equal( editor.queryCommandState( 'underline' ), true, '状态是underline' );
     equal( editor.queryCommandState( 'forecolor' ), 0, '非underline和line-through返回0' )
         start();
+        },50);
     },50);
     stop();
 } );
