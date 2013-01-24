@@ -130,7 +130,10 @@ UE.plugins['list'] = function () {
 
     //调整索引标签
     me.addListener('contentchange',function(){
+
         utils.each(domUtils.getElementsByTagName(me.document,'ol ul'),function(node){
+            if(!domUtils.inDoc(node,me.document))
+                return;
             var index = 0,type = 2,parent = node.parentNode;
             if( domUtils.hasClass(node,/custom_/)){
                 if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/))){
@@ -175,7 +178,6 @@ UE.plugins['list'] = function () {
                     }else{
                         li.className = 'list-'+customStyle[currentStyle]  + ' ' + 'list-'+currentStyle+'-paddingleft';
                     }
-
                 }else{
                     li.className = li.className.replace(/list-[\w\-]+/gi,'');
                 }
@@ -183,8 +185,8 @@ UE.plugins['list'] = function () {
                 if(className !== null && !className.replace(/\s/g,'')){
                     domUtils.removeAttributes(li,'class')
                 }
-            })
-
+            });
+            adjustList(node,node.tagName.toLowerCase(),getStyle(node)||domUtils.getStyle(node, 'list-style-type'))
         })
     });
 
