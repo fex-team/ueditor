@@ -157,8 +157,8 @@ w
                     }
                 }
 
-                //ie下使用innerHTML会产生多余的\r\n字符，这里过滤掉
-                html = div.innerHTML.replace(/>[\t\r\n]*?</g,'><');
+                //ie下使用innerHTML会产生多余的\r\n字符，也会产生&nbsp;这里过滤掉
+                html = div.innerHTML.replace(/>(?:(\s|&nbsp;)*?)</g,'><');
 
                 var f = me.serialize;
                 if(f){
@@ -169,7 +169,7 @@ w
                         var node =  f.transformInput(
                             f.parseHTML(
                                 //todo: 暂时不走dtd的过滤
-                                html, true
+                                html//, true
                             ),word_img_flag
                         );
                         //trace:924
