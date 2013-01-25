@@ -129,32 +129,32 @@ UE.plugins['list'] = function () {
         return ''
     }
 
-    function checkCustomStyle(list){
-        if(domUtils.hasClass(list,/custom_/)){
-            return ''
-        }
-        var style;
-        utils.each(list.childNodes,function(li){
-            if(li.tagName == 'LI'){
-                if(domUtils.hasClass(li,/list-/)){
-                    var tmpStyle = li.className.match(/list-(\w+)-(\d+)?/);
-                    style = tmpStyle[1]+(tmpStyle[2] && tmpStyle[2] != '1'?  tmpStyle[2]:'');
-                    return false
-                }
-            }
-        })
-        return style;
-    }
+//    function checkCustomStyle(list){
+//        if(domUtils.hasClass(list,/custom_/)){
+//            return ''
+//        }
+//        var style;
+//        utils.each(list.childNodes,function(li){
+//            if(li.tagName == 'LI'){
+//                if(domUtils.hasClass(li,/list-/)){
+//                    var tmpStyle = li.className.match(/list-(\w+)-(\d+)?/);
+//                    style = tmpStyle[1]+(tmpStyle[2] && tmpStyle[2] != '1'?  tmpStyle[2]:'');
+//                    return false
+//                }
+//            }
+//        })
+//        return style;
+//    }
     //调整索引标签
     me.addListener('contentchange',function(){
         utils.each(domUtils.getElementsByTagName(me.document,'ol ul'),function(node){
 
             if(!domUtils.inDoc(node,me.document))
                 return;
-            var style;
-            if(style = checkCustomStyle(node)){
-                node.className = 'custom_' + style;
-            }
+//            var style;
+//            if(style = checkCustomStyle(node)){
+//                node.className = 'custom_' + style;
+//            }
             var index = 0,type = 2,parent = node.parentNode;
             if( domUtils.hasClass(node,/custom_/)){
                 if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/))){
