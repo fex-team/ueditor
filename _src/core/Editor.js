@@ -552,7 +552,8 @@
             html = html
                     .replace( /^[ \t\r\n]*?</, '<' )
                     .replace( />[ \t\r\n]*?$/, '>' )
-                    .replace( />[\t\r\n]*?</g, '><' )//代码高量的\n不能去除
+                    //ie有时的源码会有>&nbsp;<的情况
+                    .replace(/>(?:(\s|&nbsp;)*?)</g,'><' )//代码高量的\n不能去除
                     .replace( /[\s\/]?(\w+)?>[ \t\r\n]*?<\/?(\w+)/gi, function ( a, b, c ) {
                         if ( b ) {
                             lastTagName = c;
