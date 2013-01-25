@@ -101,7 +101,7 @@
                         var pN = bi.parentNode;
                         if(pN.tagName == 'DIV' && pN.childNodes.length ==1){
                             pN.innerHTML = '<p><br/></p>';
-
+w
                             domUtils.remove(pN);
                         }
                     }
@@ -157,8 +157,8 @@
                     }
                 }
 
-
-                html = div.innerHTML;
+                //ie下使用innerHTML会产生多余的\r\n字符，这里过滤掉
+                html = div.innerHTML.replace(/>[\t\r\n]*?</g,'><');
 
                 var f = me.serialize;
                 if(f){
@@ -169,7 +169,7 @@
                         var node =  f.transformInput(
                             f.parseHTML(
                                 //todo: 暂时不走dtd的过滤
-                                html//, true
+                                html, true
                             ),word_img_flag
                         );
                         //trace:924
