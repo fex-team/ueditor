@@ -2702,13 +2702,15 @@ UE.plugins['table'] = function () {
                     replaceTdToTh(rowIndex, cell, tableRow);
                 }
             }
+
             //框选时插入不触发contentchange，需要手动更新索引
             this.update();
-            this.updateWidth(backWidth,defaultValue||{tdPadding:10,tdBorder:1});
+            this.updateWidth(backWidth);
         },
-        updateWidth:function (width,defaultValue) {
+        updateWidth:function (width) {
+            this.table.setAttribute("width","");
             var table = this.table,
-                tmpWidth = getWidth(table) - defaultValue.tdPadding * 2 - defaultValue.tdBorder + width;
+                tmpWidth = getWidth(table);
             if( tmpWidth<table.ownerDocument.body.offsetWidth){
                 table.setAttribute("width",tmpWidth);
                 return;
