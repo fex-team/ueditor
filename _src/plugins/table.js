@@ -1783,7 +1783,7 @@ UE.plugins['table'] = function () {
         queryCommandState:function () {
             var ut = getUETableBySelected(this);
             if (!ut) return -1;
-            return ut.isFullRow() || ut.isFullCol() ? 0 : -1;
+            return ut.isFullCol()&&ut.cellsRange.beginColIndex!=ut.cellsRange.endColIndex? 0 : -1;
         },
         execCommand:function (cmd) {
             var me = this,
@@ -1836,7 +1836,7 @@ UE.plugins['table'] = function () {
             var ut = getUETableBySelected(this);
             if (!ut) return -1;
             if (ut.selectedTds && /th/ig.test(ut.selectedTds[0].tagName)) return -1;
-            return ut.isFullRow() || ut.isFullCol() ? 0 : -1;
+            return ut.isFullRow()&&ut.cellsRange.beginRowIndex!=ut.cellsRange.endRowIndex? 0 : -1;
         },
         execCommand:function (cmd) {
             var me = this,
