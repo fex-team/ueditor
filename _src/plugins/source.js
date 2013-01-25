@@ -288,7 +288,7 @@
                             input.focus();
                             setTimeout(function(){
                                 me.body.contentEditable = true;
-                                range.setCursor(false,true);
+                                me.selection.getRange().moveToAddress(bakAddress).select();
                                 domUtils.remove(input);
                             });
 
