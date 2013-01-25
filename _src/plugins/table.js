@@ -387,7 +387,7 @@ UE.plugins['table'] = function () {
                 table.onmouseover = function () {
                     if (!overFlag) {
                         overFlag = true;
-                        me.options.tableDragable && me.fireEvent("showDragPopup");
+                        me.options.tableDragable && me.fireEvent("showDragPopup",table);
                     }
                 };
                 table.onmouseout = function (evt) {
@@ -397,7 +397,7 @@ UE.plugins['table'] = function () {
                         y = mousePos.y,
                         p = domUtils.getXY(table);
                     if (x <= p.x || x >= (p.x + table.offsetWidth) || y <= p.y || y >= (p.y + table.offsetHeight)) {
-                        me.options.tableDragable && me.fireEvent("hideDragPopup");
+                        me.options.tableDragable && me.fireEvent("hideDragPopup",table);
                         overFlag = false;
                     }
                     toggleDragableState(me, false, "", null);
@@ -2652,7 +2652,8 @@ UE.plugins['table'] = function () {
             var rowsNum = this.rowsNum,
                 rowIndex = 0,
                 tableRow, cell,
-                backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10);
+                overflow = (this.table.offsetWidth + sourceCell.offsetWidth) > this.table.ownerDocument.body.offsetWidth,
+                backWidth = overflow ? parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10):(sourceCell.offsetWidth-22);
 
             function replaceTdToTh(rowIndex, cell, tableRow) {
                 if (rowIndex == 0) {
