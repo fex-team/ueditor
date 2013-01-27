@@ -81,6 +81,8 @@
 
             var pastePop, isPaste = false, timer;
             editor.addListener("afterpaste", function () {
+                if(editor.queryCommandState('pasteplain'))
+                    return;
                 pastePop = new baidu.editor.ui.Popup({
                     content:new baidu.editor.ui.PastePicker({editor:editor}),
                     editor:editor,
