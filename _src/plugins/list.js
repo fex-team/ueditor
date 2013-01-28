@@ -643,6 +643,7 @@ UE.plugins['list'] = function () {
     me.commands['insertorderedlist'] =
     me.commands['insertunorderedlist'] = {
             execCommand:function (command, style) {
+
                 if (!style) {
                     style = command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc';
                 }
@@ -887,7 +888,7 @@ UE.plugins['list'] = function () {
                 list.appendChild(frag);
                 range.insertNode(list);
                 //当前list上下看能否合并
-                adjustList(list, tag, style);
+                adjustList(list, tag, style,true);
                 //去掉冗余的tmpDiv
                 for (var i = 0, ci, tmpDivs = domUtils.getElementsByTagName(list, 'div'); ci = tmpDivs[i++];) {
                     if (ci.getAttribute('tmpDiv')) {
