@@ -80,7 +80,7 @@
             },
             notNeedUndo : 1
         };
-        var txtContent,htmlContent,address,onlyHtml;
+        var txtContent,htmlContent,address;
 
         function filter(div){
 
@@ -88,7 +88,7 @@
             if ( div.firstChild ) {
                 //去掉cut中添加的边界值
                 var nodes = domUtils.getElementsByTagName(div,'span');
-                for(var i=0,ni;ni=nodes[i++];){
+                  for(var i=0,ni;ni=nodes[i++];){
                     if(ni.id == '_baidu_cut_start' || ni.id == '_baidu_cut_end'){
                         domUtils.remove(ni);
                     }
@@ -114,8 +114,6 @@ w
                         }
                         domUtils.remove(di);
                     }
-
-
 
                     var metas = div.querySelectorAll('meta');
                     for(var i=0,ci;ci=metas[i++];){
@@ -164,7 +162,7 @@ w
                 if(f){
                     //如果过滤出现问题，捕获它，直接插入内容，避免出现错误导致粘贴整个失败
                     try{
-                        onlyHtml = html = UE.filterWord(html);
+                        html = UE.filterWord(html);
 
                         var node =  f.transformInput(
                             f.parseHTML(
@@ -248,12 +246,16 @@ w
             if(address && txtContent && htmlContent && txtContent != htmlContent){
                 var range = me.selection.getRange();
                 range.moveToAddress(address,true).deleteContents();
-                range.select();
+                range.select(true);
                 me.__hasEnterExecCommand = true;
                 var html = htmlContent;
                 if(plainType === 2){
-                    html = onlyHtml.replace(/<(\/?)([\w\-]+)([^>]*)>/gi,function(a,b,c,d){
-                        d = d.replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(str,atr,val){
+                    html = html.replace(/<(\/?)([\w\-]+)([^>]*)>/gi,function(a,b,tagName,attrs){
+                        tagName = tagName.toLowerCase();
+                        if({img:1}[tagName]){
+                            return a;
+                        }
+                        attrs = attrs.replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi,function(str,atr,val){
                             if({
                                 'src':1,
                                 'href':1,
@@ -265,12 +267,12 @@ w
                         });
                         if({
                             'span':1,
-                            'script':1,
-                            'style':1
-                        }[c.toLowerCase()]){
+                            'div':1
+                        }[tagName]){
                             return ''
                         }else{
-                            return '<' + b + c + ' ' + utils.trim(d) + '>'
+
+                            return '<' + b + tagName + ' ' + utils.trim(attrs) + '>'
                         }
 
                     });
