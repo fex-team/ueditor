@@ -2653,7 +2653,7 @@ UE.plugins['table'] = function () {
                 rowIndex = 0,
                 tableRow, cell,
                 overflow = (this.table.offsetWidth + sourceCell.offsetWidth) > this.table.ownerDocument.body.offsetWidth,
-                backWidth = overflow ? parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10):(sourceCell.offsetWidth-22);
+                backWidth = overflow ? parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20) / (this.colsNum + 1), 10):(sourceCell.offsetWidth-22);
 
             function replaceTdToTh(rowIndex, cell, tableRow) {
                 if (rowIndex == 0) {
@@ -2779,12 +2779,12 @@ UE.plugins['table'] = function () {
             this.update();
             return results;
         },
-        split:function(cell,rowsNum,colsNum){
+        split2Rows:function(cell,rowsNum){
             var cellInfo = this.getCellInfo(cell),
                 rowSpan = cellInfo.rowSpan,
-                colSpan = cellInfo.colSpan,
                 rowIndex = cellInfo.rowIndex;
-            if(rowSpan>1 && rowsNum%rowSpan!==0 || colSpan>1 && colsNum%colSpan!==0 ) return false;
+            if( rowSpan>1 && rowsNum % rowSpan!==0 && rowSpan%rowsNum!==0 ) return false;
+            var cols = this.getSameStartPosXCells(cell);
 
         },
         getPreviewMergedCellsNum:function (rowIndex, colIndex) {
