@@ -651,7 +651,7 @@
             var endNode,
                 startNode = this.document.createElement('span');
             startNode.style.cssText = 'display:none;line-height:0px;';
-            startNode.appendChild(this.document.createTextNode('\uFEFF'));
+            startNode.appendChild(this.document.createTextNode('\u200D'));
             startNode.id = '_baidu_bookmark_start_' + (same ? '' : guid++);
 
             if (!this.collapsed) {
