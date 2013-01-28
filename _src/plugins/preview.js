@@ -13,7 +13,12 @@ UE.commands['preview'] = {
         var w = window.open('', '_blank', ''),
             d = w.document;
         d.open();
-        d.write(this.getAllHtml());
+        d.write('<html><head><script src="'+this.options.UEDITOR_HOME_URL+'uparse.js"></script><script>' +
+            "setTimeout(function(){uParse('div',{" +
+            "    'highlightJsUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCore.js'," +
+                "    'highlightCssUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCoreDefault.css'" +
+                "})},300)" +
+            '</script></head><body><div>'+this.getContent()+'</div></body></html>');
         d.close();
     },
     notNeedUndo : 1
