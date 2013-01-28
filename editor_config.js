@@ -158,6 +158,14 @@
         //insertorderedlist
         //有序列表的下拉配置,值留空时支持多语言自动识别，若配置值，则以此值为准
 //        ,'insertorderedlist':{
+//              //自定的样式
+//                'num':'1,2,3...',
+//                'num1':'1),2),3)...',
+//                'num2':'(1),(2),(3)...',
+//                'cn':'一,二,三....',
+//                'cn1':'一),二),三)....',
+//                'cn2':'(一),(二),(三)....',
+//             //系统自带
 //             'decimal' : '' ,         //'1,2,3...'
 //             'lower-alpha' : '' ,    // 'a,b,c...'
 //             'lower-roman' : '' ,    //'i,ii,iii...'
@@ -168,11 +176,17 @@
         //insertunorderedlist
         //无序列表的下拉配置，值留空时支持多语言自动识别，若配置值，则以此值为准
         //,insertunorderedlist : {
+        //              //自定的样式
+//        'dash' :'— 破折号',
+//        'dot':' 。 小圆圈'
+//             //系统自带
         //    'circle' : '',  // '○ 小圆圈'
         //    'disc' : '',    // '● 小圆点'
         //    'square' : ''   //'■ 小方块'
         //}
-
+//        ,listDefaultPaddingLeft : '30'//默认的左边缩进的基数倍
+//        ,listiconpath : 'http://bs.baidu.com/listicon/'//自定义标号的路径
+//        ,maxListLevel : 3 //限制可以tab的级数-1不限制
         //fontfamily
         //字体设置 label留空支持多语言自动切换，若配置，则以配置值为准
 //        ,'fontfamily':[
