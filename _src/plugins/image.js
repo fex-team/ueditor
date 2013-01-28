@@ -54,6 +54,7 @@ UE.commands['imagefloat'] = {
                         if (me.queryCommandValue('imagefloat') != 'center') {
                             pN = img.parentNode;
                             domUtils.setStyle(img, 'float', 'none');
+                            domUtils.removeAttributes(img,'align');
                             tmpNode = img;
                             while (pN && domUtils.getChildCount(pN, function (node) {
                                 return !domUtils.isBr(node) && !domUtils.isWhitespace(node);

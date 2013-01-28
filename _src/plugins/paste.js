@@ -101,7 +101,7 @@
                         var pN = bi.parentNode;
                         if(pN.tagName == 'DIV' && pN.childNodes.length ==1){
                             pN.innerHTML = '<p><br/></p>';
-
+w
                             domUtils.remove(pN);
                         }
                     }
@@ -157,8 +157,8 @@
                     }
                 }
 
-
-                html = div.innerHTML;
+                //ie下使用innerHTML会产生多余的\r\n字符，也会产生&nbsp;这里过滤掉
+                html = div.innerHTML.replace(/>(?:(\s|&nbsp;)*?)</g,'><');
 
                 var f = me.serialize;
                 if(f){

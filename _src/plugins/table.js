@@ -696,16 +696,13 @@ UE.plugins['table'] = function () {
             }
             //当鼠标处于table上时，修改移动过程中的光标状态
             if (target) {
+                //针对使用table作为容器的组件不触发拖拽效果
+                if(me.fireEvent('excludetable',target) === true)
+                    return;
                 pos = mouseCoords(evt);
                 var state = getRelation(target, pos),
                     table = domUtils.findParentByTagName(target, "table", true);
-//                if ("topLeft" == inPosition(table, pos)) {
-//                    onBorder = false;
-//                    me.body.style.cursor = "move";
-//                } else if ("bottomRight" == inPosition(table, pos)) {
-//                    onBorder = false;
-//                    me.body.style.cursor = "se-resize";
-//               } else
+
                 if (inTableSide(table, target, evt, true)) {
                     //toggleCursor(pos,true,"_h");
                     if (me.fireEvent("excludetable", table) === true) return;
