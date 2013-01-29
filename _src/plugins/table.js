@@ -2887,7 +2887,7 @@ UE.plugins['table'] = function () {
         },
         selectTable:function () {
             var tds = this.table.getElementsByTagName("td"),
-                range = this.getCellsRange(tds[0], tds[tds.length - 1]);
+                range = this.getCellsRange(tds[0], this.getLastCell(tds));
             this.setSelected(range);
         }
     };
