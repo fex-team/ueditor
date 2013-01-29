@@ -1,4 +1,4 @@
-Ueditor Change List
+UEditor Change List
 
 Version 1.2.5
 新增功能
