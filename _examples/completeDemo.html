@@ -25,12 +25,6 @@
 <div class="clear"></div>
 <div id="btns">
     <div >
-       当前输入的字数(包括html标签)共 : <span id="htmlcount"></span>
-    </div>
-    <div >
-       当前输入的字数共 : <span id="txtcount"></span>
-    </div>
-    <div >
         <button  onclick="getAllHtml()">获得整个html的内容</button>
         <button  onclick="getContent()">获得内容</button>
         <button onclick="setContent()">写入内容</button>
@@ -59,11 +53,6 @@
 <script type="text/javascript">
    //实例化编辑器
     var ue = UE.getEditor('editor');
-
-    ue.addListener('wordcount',function(){
-        document.getElementById('htmlcount').innerHTML = this.getContentLength();
-        document.getElementById('txtcount').innerHTML = this.getContentLength(true);
-    });
 
     ue.addListener('ready',function(){
         this.focus()
