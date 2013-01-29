@@ -1398,7 +1398,6 @@ UE.plugins['table'] = function () {
             return -1;
         },
         execCommand:function () {
-            debugger
             var table = getTableItemsByRange(this).table;
             if (table) {
                 getUETable(table).insertRow(0, 'th');
