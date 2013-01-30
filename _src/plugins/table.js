@@ -1947,6 +1947,15 @@ UE.plugins['table'] = function () {
                     domUtils.setAttributes(cell, data);
                 });
             }
+        },
+        queryCommandValue:function(cmd){
+            var selectedTds = getSelectedArr(this);
+            if(selectedTds.length){
+                return {
+                    vAlign:selectedTds[0].getAttribute('vAlign'),
+                    align:selectedTds[0].getAttribute('align')
+                }
+            }
         }
     };
     //表格对齐方式
