@@ -62,7 +62,8 @@ UE.plugins['table'] = function () {
         "adaptbycustomer":1,
         "insertparagraph":1,
         "averagedistributecol":1,
-        "averagedistributerow":1
+        "averagedistributerow":1,
+        "fixedwidth":1
     };
     me.ready(function () {
         utils.cssRule('table',
@@ -314,7 +315,6 @@ UE.plugins['table'] = function () {
                                 domUtils.fillNode(me.document, td);
                             }
                             removeStyleSize(td, true);
-//                            domUtils.removeAttributes(td, ['style'])
                         });
                     });
                 }
@@ -1751,19 +1751,7 @@ UE.plugins['table'] = function () {
             },
             execCommand:function (cmd) {
                 var me = this;
-                function resetTdWidth(table){
 
-                    var tds = table.getElementsByTagName("td");
-                    utils.each(tds, function (td) {
-                        td.removeAttribute("width");
-                    });
-                    table.setAttribute('width', getTableWidth(me,needIEHack,getDefaultValue(me,table)));
-                    setTimeout(function(){
-                        utils.each(tds,function(td){
-                            (td.colSpan ==1) && td.setAttribute("width",td.offsetWidth+"");
-                        })
-                    },0)
-                }
 
                 var tableItems = getTableItemsByRange(this),
                     table = tableItems.table,
@@ -1772,33 +1760,11 @@ UE.plugins['table'] = function () {
                     if (cmd == 'adaptbywindow') {
                         resetTdWidth(table);
                     } else {
-                        if(cell){
-                            var ut = getUETable(table),
-                                preTds = ut.getSameEndPosCells(cell, "x");
-                            if (preTds.length) {
-                                var flag = false;
-                                utils.each(preTds,function(td){
-                                    if(!isEmptyBlock(td)){
-                                        flag = true;
-                                        return false;
-                                    }
-                                });
-                                if(!flag)return;
-                                utils.each(preTds, function (td) {
-                                    (td.colSpan==1) && td.removeAttribute("width");
-                                });
-                                table.style.width = "";
-                                table.removeAttribute("width");
-                                var defaultValue = getDefaultValue(me, table);
-                                var width = table.offsetWidth,
-                                    bodyWidth = me.body.offsetWidth;
-                                if (width > bodyWidth) {
-                                    table.setAttribute('width', getTableWidth(me, needIEHack, defaultValue));
-                                }
-                            }
-                        }else{
-                            resetTdWidth(table);
-                        }
+                        var cells = domUtils.getElementsByTagName(table,"td th");
+                        utils.each(cells,function(cell){
+                             cell.removeAttribute("width");
+                        });
+                        table.removeAttribute("width");
                     }
                 }
             }
@@ -2010,6 +1976,39 @@ UE.plugins['table'] = function () {
             }
         }
     };
+    UE.commands['fixedwidth'] = {
+        queryCommandState:function(){
+            return 0;
+        },
+        execCommand:function(cmd){
+            var rng = this.selection.getRange(),
+                table = domUtils.findParentByTagName(rng.startContainer, 'table'),
+                cells = domUtils.getElementsByTagName(table,"td th");
+
+            var tmpWidth =[];
+            utils.each(cells,function(cell){
+                if(cell.colSpan==1 && !cell.getAttribute("width") ) tmpWidth.push(cell.offsetWidth-20);
+            });
+            utils.each(cells,function(cell){
+                var width = tmpWidth.shift();
+                if(cell.colSpan==1 && !cell.getAttribute("width") ) cell.setAttribute("width",(width < 22 ? 0: width));
+            })
+            table.setAttribute("width",table.offsetWidth);
+        }
+
+    };
+    function resetTdWidth(table){
+        var tds = table.getElementsByTagName("td");
+        utils.each(tds, function (td) {
+            td.removeAttribute("width");
+        });
+        table.setAttribute('width', getTableWidth(me,needIEHack,getDefaultValue(me,table)));
+        setTimeout(function(){
+            utils.each(tds,function(td){
+                (td.colSpan ==1) && td.setAttribute("width",td.offsetWidth+"");
+            })
+        },0)
+    }
 
     /**
      * UE表格操作类
