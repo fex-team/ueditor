@@ -48,12 +48,16 @@ UE.commands['imagefloat'] = {
 
                             range.selectNode(img).select();
                         }
-                        domUtils.setStyle(img, 'float', align);
+                        domUtils.setStyle(img, 'float', align == 'none' ? '' : align);
+                        if(align == 'none'){
+                            domUtils.removeAttributes(img,'align');
+                        }
+
                         break;
                     case 'center':
                         if (me.queryCommandValue('imagefloat') != 'center') {
                             pN = img.parentNode;
-                            domUtils.setStyle(img, 'float', 'none');
+                            domUtils.setStyle(img, 'float', '');
                             domUtils.removeAttributes(img,'align');
                             tmpNode = img;
                             while (pN && domUtils.getChildCount(pN, function (node) {
@@ -96,7 +100,7 @@ UE.commands['imagefloat'] = {
         }
         startNode = range.getClosedNode();
         if (startNode && startNode.nodeType == 1 && startNode.tagName == 'IMG') {
-            floatStyle = domUtils.getComputedStyle(startNode, 'float');
+            floatStyle = startNode.getAttribute('align')||domUtils.getComputedStyle(startNode, 'float');
             if (floatStyle == 'none') {
                 floatStyle = domUtils.getComputedStyle(startNode.parentNode, 'text-align') == 'center' ? 'center' : floatStyle;
             }

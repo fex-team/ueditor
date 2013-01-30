@@ -16,7 +16,7 @@
 
     var editTable = function () {
         me = this;
-        this.init();
+        me.init();
     };
     editTable.prototype = {
         init:function () {

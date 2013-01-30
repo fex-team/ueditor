@@ -38,6 +38,10 @@
         tone.value = arguments[1];
         colorPop.hide();
     });
+    colorPiker.addListener("picknocolor", function () {
+        tone.value="";
+        colorPop.hide();
+    });
     dialog.onok=function(){
         editor.execCommand("edittd",tone.value);
     };
