@@ -42,6 +42,7 @@
                 editor = UE.getEditor('simple');
                 this.value="销毁编辑器";
                 this.onclick = destroy;
+                timer = setInterval( setMsg, 100 );
             }
         }
         function setMsg() {
