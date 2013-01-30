@@ -1851,7 +1851,8 @@ UE.plugins['table'] = function () {
             function getAverageHeight() {
                 var averageHeight, rowNum, sumHeight = 0,
                     tb = ut.table,
-                    tbAttr = getDefaultValue(me, tb);
+                    tbAttr = getDefaultValue(me, tb),
+                    tdpadding = parseInt(domUtils.getComputedStyle(tb.getElementsByTagName('td')[0], "padding-top"));
 
                 if (ut.isFullCol()) {
                     var captionArr = domUtils.getElementsByTagName(tb, "caption"),
@@ -1882,7 +1883,7 @@ UE.plugins['table'] = function () {
                 if (browser.ie && browser.version < 9) {
                     averageHeight = Math.ceil(sumHeight / rowNum);
                 } else {
-                    averageHeight = Math.ceil(sumHeight / rowNum) - tbAttr.tdBorder * 2;
+                    averageHeight = Math.ceil(sumHeight / rowNum) - tbAttr.tdBorder * 2-tdpadding*2;
                 }
                 return averageHeight;
             }
@@ -1925,6 +1926,15 @@ UE.plugins['table'] = function () {
                 utils.each(ut.selectedTds, function (cell) {
                     domUtils.setAttributes(cell, data);
                 });
+            }
+        },
+        queryCommandValue:function(cmd){
+            var selectedTds = getSelectedArr(this);
+            if(selectedTds.length){
+                return {
+                    vAlign:selectedTds[0].getAttribute('vAlign'),
+                    align:selectedTds[0].getAttribute('align')
+                }
             }
         }
     };
