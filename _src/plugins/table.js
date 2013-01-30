@@ -1239,6 +1239,20 @@ UE.plugins['table'] = function () {
             }
         }
     };
+    UE.commands['insertparagraphaftertable'] = {
+        queryCommandState:function () {
+            return getTableItemsByRange(this).cell ? 0 : -1;
+        },
+        execCommand:function () {
+            var table = getTableItemsByRange(this).table;
+            if (table) {
+                var p = this.document.createElement("p");
+                p.innerHTML = browser.ie ? '&nbsp;' : '<br />';
+                domUtils.insertAfter(table,p);
+                this.selection.getRange().setStart(p, 0).setCursor();
+            }
+        }
+    };
 
     UE.commands['deletetable'] = {
         queryCommandState:function () {
@@ -1281,6 +1295,12 @@ UE.plugins['table'] = function () {
                     ci.setAttribute('align', align);
                 }
             }
+        },
+        queryCommandValue:function(cmd){
+            var selectedTds = getSelectedArr(this);
+            if(selectedTds.length){
+                return selectedTds[0].getAttribute('align');
+            }
         }
     };
     UE.commands['cellvalign'] = {
@@ -1293,6 +1313,12 @@ UE.plugins['table'] = function () {
                 for (var i = 0, ci; ci = selectedTds[i++];) {
                     ci.setAttribute('vAlign', vAlign);
                 }
+            }
+        },
+        queryCommandValue:function(cmd){
+            var selectedTds = getSelectedArr(this);
+            if(selectedTds.length){
+                return selectedTds[0].getAttribute('vAlign');
             }
         }
     };
