@@ -191,9 +191,15 @@ function uParse(selector,opt){
             contents = document.querySelectorAll(selector)
         }else{
             if(/^#/.test(selector)){
-                contents = [document.getElementById(selector)]
+                contents = [document.getElementById(selector.replace(/^#/,''))]
             }else if(/^\./.test(selector)){
-                contents = document.getElementsByClassName(selector)
+                var contents = [];
+                _each(document.getElementsByTagName('*'),function(node){
+                    selector = selector.replace(/^\./,'');
+                    if(node.className && new RegExp('\\b' + selector + '\\b','i').test(node.className)){
+                        contents.push(node)
+                    }
+                })
             }else{
                 contents = document.getElementsByTagName(selector)
             }
