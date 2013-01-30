@@ -477,7 +477,7 @@ UE.plugins['table'] = function () {
                                     }
                                 }
                             }
-                            h == 'h' && me.execCommand('adaptbytext');
+                            h == 'h' && me.execCommand('adaptcolbytext');
                         }
                     }
                 }
@@ -1743,6 +1743,9 @@ UE.plugins['table'] = function () {
             };
         }
     }
+    UE.commands["adaptcolbytext"] = {
+
+    };
 
     UE.commands["adaptbytext"] =
         UE.commands["adaptbywindow"] = {
@@ -1751,8 +1754,6 @@ UE.plugins['table'] = function () {
             },
             execCommand:function (cmd) {
                 var me = this;
-
-
                 var tableItems = getTableItemsByRange(this),
                     table = tableItems.table,
                     cell = tableItems.cell;
