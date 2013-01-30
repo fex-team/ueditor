@@ -1,5 +1,4 @@
 ///import core
-///import plugins\autoheight.js
 ///commands 悬浮工具栏
 ///commandsName  AutoFloat,autoFloatEnabled
 ///commandsTitle  悬浮工具栏
