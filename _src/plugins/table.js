@@ -1008,10 +1008,10 @@ UE.plugins['table'] = function () {
                 start = domUtils.findParentByTagName(range.startContainer, ['td', 'th', 'caption'], true);
                 end = domUtils.findParentByTagName(range.endContainer, ['td', 'th', 'caption'], true);
                 if (start !== end) {
-                    me.selection.clearRange()
+                    me.selection && me.selection.clearRange()
                 }
             } else {
-                me.selection.clearRange()
+                me.selection && me.selection.clearRange()
             }
         }
         mousedown = false;
