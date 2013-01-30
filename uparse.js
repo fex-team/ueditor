@@ -1,7 +1,7 @@
-//±à¼­Æ÷Õ¹Ê¾Ò³ÃæÄÚÈİ½âÎö£¬¼ÓÔØ×ÊÔ´¹¤¾ß
+//ç¼–è¾‘å™¨å±•ç¤ºé¡µé¢å†…å®¹è§£æï¼ŒåŠ è½½èµ„æºå·¥å…·
 //by zhanyi
 function uParse(selector,opt){
-    //ĞèÒªµÄ¹¤¾ß·½·¨
+    //éœ€è¦çš„å·¥å…·æ–¹æ³•
     var ie = !!window.ActiveXObject,
         cssRule = ie ? function(key,style,doc){
             var indexList,index;
@@ -171,7 +171,7 @@ function uParse(selector,opt){
         }();
 
 
-    //Ä¬ÈÏµÄÅäÖÃÏîÄ¿
+    //é»˜è®¤çš„é…ç½®é¡¹ç›®
     var defaultOption ={
         liiconpath : 'http://bs.baidu.com/listicon/',
         listDefaultPaddingLeft : '20',
@@ -185,7 +185,7 @@ function uParse(selector,opt){
         }
     }
     domReady(function(){
-        //´¦ÀíÈİÆ÷
+        //å¤„ç†å®¹å™¨
         var contents;
         if(document.querySelectorAll){
             contents = document.querySelectorAll(selector)
@@ -283,15 +283,15 @@ function uParse(selector,opt){
                 customCss.push(selector +' .list-paddingleft-1{padding-left:0}');
                 customCss.push(selector +' .list-paddingleft-2{padding-left:'+defaultOption.listDefaultPaddingLeft+'px}');
                 customCss.push(selector +' .list-paddingleft-3{padding-left:'+defaultOption.listDefaultPaddingLeft*2+'px}');
-                //Èç¹û²»¸ø¿í¶È»áÔÚ×Ô¶¨Ó¦ÑùÊ½Àï³öÏÖ¹ö¶¯Ìõ
+                //å¦‚æœä¸ç»™å®½åº¦ä¼šåœ¨è‡ªå®šåº”æ ·å¼é‡Œå‡ºç°æ»šåŠ¨æ¡
                 cssRule('list', selector +' ol,'+selector +' ul{margin:0;pading:0;}li{clear:both;}'+customCss.join('\n'), document);
             }
-            //½âÎöÄÚÈİ
+            //è§£æå†…å®¹
             var needParseTagName = {
                 'table' : function(){
                     cssRule('table',
                         selector +' table.noBorderTable td,'+selector+' table.noBorderTable th,'+selector+' table.noBorderTable caption{border:1px dashed #ddd !important}' +
-                            //²åÈëµÄ±í¸ñµÄÄ¬ÈÏÑùÊ½
+                            //æ’å…¥çš„è¡¨æ ¼çš„é»˜è®¤æ ·å¼
                             selector +' table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
                             selector +' td,'+selector+' th{ background:white; padding: 5px 10px;border: 1px solid #DDD;}' +
                             selector +' caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
@@ -302,7 +302,7 @@ function uParse(selector,opt){
                 'ol' : checkList,
                 'ul' : checkList,
                 'pre': function(nodes){
-                    //±ÜÃâÖØ¸´¼ÓÔØ¸ßÁÁÎÄ¼ş
+                    //é¿å…é‡å¤åŠ è½½é«˜äº®æ–‡ä»¶
                     if(typeof XRegExp == "undefined"){
                         loadFile(document,{
                             id : "syntaxhighlighter_js",
@@ -342,7 +342,7 @@ function uParse(selector,opt){
 
                 }
             };
-            //ÏÈ²åÈëÄ¬ÈÏµÄÊôĞÔ
+            //å…ˆæ’å…¥é»˜è®¤çš„å±æ€§
 
             for(var tag in needParseTagName){
                 var nodes = content.getElementsByTagName(tag);
