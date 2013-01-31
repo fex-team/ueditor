@@ -489,7 +489,7 @@ UE.plugins['table'] = function () {
                                     var width = cells[0].offsetWidth -20;
                                     utils.each(cells,function(cell){
                                         cell.setAttribute("width",width);
-                                    })
+                                    });
                                     table.setAttribute("width",table.offsetWidth)
                                 })
 
@@ -1766,7 +1766,6 @@ UE.plugins['table'] = function () {
                 return getTableItemsByRange(this).table ? 0 : -1
             },
             execCommand:function (cmd) {
-                var me = this;
                 var tableItems = getTableItemsByRange(this),
                     table = tableItems.table,
                     cell = tableItems.cell;
