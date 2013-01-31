@@ -2015,6 +2015,18 @@ UE.plugins['table'] = function () {
             }
         }
     };
+    function resetTdWidth(table){
+        var tds = table.getElementsByTagName("td");
+        utils.each(tds, function (td) {
+            td.removeAttribute("width");
+        });
+        table.setAttribute('width', getTableWidth(me,needIEHack,getDefaultValue(me,table)));
+        setTimeout(function(){
+            utils.each(tds,function(td){
+                (td.colSpan ==1) && td.setAttribute("width",td.offsetWidth + "");
+            })
+        },0)
+    }
 
     /**
      * UE表格操作类
