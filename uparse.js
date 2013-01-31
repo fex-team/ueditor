@@ -344,7 +344,6 @@ function uParse(selector,opt){
             //先插入默认的属性
 
             for(var tag in needParseTagName){
-                debugger
                 var nodes = content.getElementsByTagName(tag);
                 if(nodes.length){
                     needParseTagName[tag](nodes)
