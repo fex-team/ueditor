@@ -464,7 +464,23 @@ UE.plugins['table'] = function () {
                                     }
                                 }
                             }
-                            h == 'h' && me.execCommand('adaptbytext');
+                            if(h == 'h') {
+                                var ut = getUETable(target),
+                                    cells = ut.getSameEndPosCells(target,"x"),
+                                    table = ut.table;
+                                table.removeAttribute("width");
+                                utils.each(cells,function(cell){
+                                    cell.removeAttribute("width");
+                                });
+                                setTimeout(function(){
+                                    var width = cells[0].offsetWidth -20;
+                                    utils.each(cells,function(cell){
+                                        cell.setAttribute("width",width);
+                                    })
+                                    table.setAttribute("width",table.offsetWidth);
+                                })
+
+                            }
                         }
                     }
                 }
