@@ -1796,25 +1796,14 @@ UE.plugins['table'] = function () {
                 var tableItems = getTableItemsByRange(this),
                     table = tableItems.table;
                 if (table) {
-                    var tds = table.getElementsByTagName("td");
-                    utils.each(tds, function (td) {
-                        td.removeAttribute("width");
-                    });
                     if (cmd == 'adaptbywindow') {
-                        table.setAttribute('width', getTableWidth(this,needIEHack,getDefaultValue(this,table)));
-                        utils.each(tds,function(td){
-                            td.setAttribute("width",td.offsetWidth+"");
-                        });
+                        resetTdWidth(table);
                     } else {
-                        table.style.width = "";
+                        var cells = domUtils.getElementsByTagName(table,"td th");
+                        utils.each(cells,function(cell){
+                            cell.removeAttribute("width");
+                        });
                         table.removeAttribute("width");
-
-                        var defaultValue = getDefaultValue(me, table);
-                        var width = table.offsetWidth,
-                            bodyWidth = me.body.offsetWidth;
-                        if (width > bodyWidth) {
-                            table.setAttribute('width', getTableWidth(me, needIEHack, defaultValue));
-                        }
                     }
                 }
             }
