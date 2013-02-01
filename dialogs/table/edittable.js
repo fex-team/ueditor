@@ -179,7 +179,7 @@
         } else {
             editor.queryCommandState("deletecaption") != -1 && editor.execCommand("deletecaption");
         }
-        editor.execCommand("edittable", tone.value);
+        editor.execCommand("edittable", {color:tone.value,width:$G("J_width").value,"style":$G("J_style").value});
         autoSizeContent.checked ? adaptByTextTable() : "";
         autoSizePage.checked ? editor.execCommand("adaptbywindow") : "";
 

@@ -1963,17 +1963,22 @@ UE.plugins['table'] = function () {
         queryCommandState:function () {
             return getTableItemsByRange(this).table ? 0 : -1
         },
-        execCommand:function (cmd, color) {
+        execCommand:function (cmd, opt) {
             var rng = this.selection.getRange(),
                 table = domUtils.findParentByTagName(rng.startContainer, 'table');
+
             if (table) {
                 var arr = domUtils.getElementsByTagName(table, "td").concat(
                     domUtils.getElementsByTagName(table, "th"),
                     domUtils.getElementsByTagName(table, "caption")
                 );
-                utils.each(arr, function (node) {
-                    node.style.borderColor = color;
+
+                domUtils.setAttributes(table,{
+                    border:opt.width,
+                    borderColor:opt.color||"#ddd"
                 });
+                if(opt["style"]) table.style.borderStyle = opt["style"];
+
             }
         }
     };
