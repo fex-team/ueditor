@@ -71,10 +71,10 @@ UE.plugins['table'] = function () {
             '.selectTdClass{background-color:#edf5fa !important}' +
                 'table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}' +
                 //插入的表格的默认样式
-                'table{line-height:22px; margin-bottom:10px;border-collapse:collapse;display:table;}' +
-                'td,th{ background:white; padding: 0 10px;border: 1px solid #DDD;line-height: 22px;}' +
-                'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
-                'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
+                'table{ line-height:22px; margin-bottom:10px;border-collapse:collapse;display:table;}' +
+                'td,th{ background:white; padding: 0 10px;line-height: 22px;}' +
+                'caption{ border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
+                'th{ border-top:2px solid #BBB;background:#F7F7F7;}' +
                 'td p{margin:0;padding:0;}', me.document);
 
         var tableCopyList, isFullCol, isFullRow;
@@ -623,7 +623,7 @@ UE.plugins['table'] = function () {
                     if (isEmptyBlock(td)) {
                         range.setStart(td, 0).setCursor(false, true)
                     } else {
-                        range.selectNodeContents(td).select();
+                        range.selectNodeContents(td).select(true);
                     }
                     state = me.queryCommandState(cmd);
                     value = me.queryCommandValue(cmd);
@@ -1202,7 +1202,7 @@ UE.plugins['table'] = function () {
 
     UE.commands['inserttable'] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).table ? -1 : 0;
+            return 0;
         },
         execCommand:function (cmd, opt) {
             function createTable(opt, tableWidth, tdWidth) {
@@ -1216,14 +1216,14 @@ UE.plugins['table'] = function () {
                     }
                     html.push('</tr>')
                 }
-                return '<table width="' + tableWidth + '"   ><tbody>' + html.join('') + '</tbody></table>'
+                return '<table border="1" width="' + tableWidth + '"   ><tbody>' + html.join('') + '</tbody></table>'
             }
 
             if (!opt) {
                 opt = utils.extend({}, {
                     numCols:this.options.defaultCols,
                     numRows:this.options.defaultRows,
-                    tdvalign:this.options.tdvalign
+                    9898:this.options.tdvalign
                 })
             }
             var range = this.selection.getRange(),
