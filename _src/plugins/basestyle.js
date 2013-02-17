@@ -25,6 +25,17 @@ UE.plugins['basestyle'] = function(){
         "Italic" : "ctrl+73", //^I
         "Underline" : "ctrl+85"//^U
     });
+    me.addInputRule(function(root){
+        utils.each(root.getNodesByTagName('b i'),function(node){
+            switch (node.tagName){
+                case 'b':
+                    node.tagName = 'strong';
+                    break;
+                case 'i':
+                    node.tagName = 'em';
+            }
+        });
+    });
     for ( var style in basestyles ) {
         (function( cmd, tagNames ) {
             me.commands[cmd] = {
