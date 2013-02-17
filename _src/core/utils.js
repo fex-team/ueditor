@@ -198,13 +198,18 @@ var utils = UE.utils = {
      * UE.utils.unhtml(html,/[<>]/g)  ==>  &lt;body&gt;You say:"你好！Baidu & UEditor!"&lt;/body&gt;
      */
     unhtml:function (str, reg) {
-        return str ? str.replace(reg || /[&<">]/g, function (m) {
-            return {
-                '<':'&lt;',
-                '&':'&amp;',
-                '"':'&quot;',
-                '>':'&gt;'
-            }[m]
+        return str ? str.replace(reg || /[&<">](?:(amp|lt|quot|gt);)?/g, function (a,b) {
+            if(b){
+                return a;
+            }else{
+                return {
+                    '<':'&lt;',
+                    '&':'&amp;',
+                    '"':'&quot;',
+                    '>':'&gt;'
+                }[a]
+            }
+
         }) : '';
     },
     /**
