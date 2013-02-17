@@ -13,6 +13,8 @@
 ///import core.Editor;
 ///import core.ajax;
 ///import core.filterword;
+///import core.node;
+///import core.htmlparser;
 
 ///import plugins.emotion;
 ///import plugins.map;
