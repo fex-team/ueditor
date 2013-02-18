@@ -1,4 +1,4 @@
-module( 'core.htmlparser' );
+module( 'core.node' );
 
 test( '', function() {
     var uNode = UE.uNode;
@@ -61,6 +61,16 @@ test( '', function() {
         'border':'',
         'color':''
     });
+    equals(node.getAttr('style'),undefined);
+    node.setStyle('border','<script>alert("")</script>');
 
-    equals(node.getAttr('style'),undefined)
+    equals(node.getAttr('style'),"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;");
+
+    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\" ><div></div></div>')
+    node.innerHTML('<div>asdfasdf<b>sdf</b></div>')
+    node.removeChild(node.firstChild(),true);
+    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\" >asdfasdf<b>sdf</b></div>')
+    var tmp = new UE.uNode.createElement('div');
+    node.appendChild(tmp);
+    equals(tmp.getIndex(),2)
 });
