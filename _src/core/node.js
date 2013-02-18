@@ -16,7 +16,7 @@
     };
     var indentChar = '    ',
         breakChar = '\n',
-        needWrap = utils.extend(utils.extend({},dtd.$block),dtd.$cdata);
+        needWrap = utils.extend(utils.extend({}, dtd.$block), dtd.$cdata);
 
     function insertLine(arr, current, begin) {
         arr.push(breakChar);
@@ -84,7 +84,7 @@
             attrhtml = [];
             var attrs = node.attrs;
             for (var a in attrs) {
-                attrhtml.push(a + (attrs[a] !== undefined ? '="' + attrs[a] + '"' : ''))
+                attrhtml.push(a + (attrs[a] !== undefined ? '="' + utils.unhtml(attrs[a]) + '"' : ''))
             }
             attrhtml = attrhtml.join(' ');
         }
@@ -93,13 +93,13 @@
             (dtd.$empty[node.tagName] ? '\/' : '' ) + '>'
         );
         //插入新行
-        if (formatter &&  needWrap[node.tagName]) {
+        if (formatter && needWrap[node.tagName]) {
             current = insertLine(arr, current, true);
             insertIndent(arr, current)
         }
         if (node.children && node.children.length) {
             for (var i = 0, ci; ci = node.children[i++];) {
-                if (formatter && ci.type == 'element' && needWrap[ci.tagName] && i>1) {
+                if (formatter && ci.type == 'element' && needWrap[ci.tagName] && i > 1) {
                     insertLine(arr, current);
                     insertIndent(arr, current)
                 }
@@ -217,7 +217,7 @@
                 }
                 for (var i = 0, ci; ci = this.children[i]; i++) {
                     if (ci === node) {
-                        this.children.splice(i, 1)
+                        this.children.splice(i, 1);
                         break;
                     }
                 }
@@ -260,12 +260,19 @@
                 }
             }
         },
-        removeChild:function (node) {
+        removeChild:function (node,keepChildren) {
             if (this.children) {
                 for (var i = 0, ci; ci = this.children[i]; i++) {
                     if (ci === node) {
                         this.children.splice(i, 1);
                         ci.parentNode = null;
+                        if(keepChildren && ci.children && ci.children.length){
+                            for(var j= 0,cj;cj=ci.children[j];j++){
+                                this.children.splice(i+j,0,cj);
+                                cj.parentNode = this;
+
+                            }
+                        }
                         return ci;
                     }
                 }
@@ -275,7 +282,7 @@
             return this.attrs[attrName.toLowerCase()]
         },
         setAttr:function (attrName, attrVal) {
-            if(!attrName){
+            if (!attrName) {
                 delete this.attrs;
                 return;
             }
@@ -295,6 +302,15 @@
                 }
 
             }
+        },
+        getIndex:function(){
+            var parent = this.parentNode;
+            for(var i= 0,ci;ci=parent.children[i];i++){
+                if(ci === this){
+                    return i;
+                }
+            }
+            return -1;
         },
         getNodeById:function (id) {
             var node;
@@ -318,39 +334,43 @@
             });
             return arr;
         },
-        getStyle : function(name){
+        getStyle:function (name) {
             var cssStyle = this.getAttr('style');
-            if(!cssStyle){
+            if (!cssStyle) {
                 return ''
             }
             var reg = new RegExp(name + ':([^;]+)');
             var match = cssStyle.match(reg);
-            if(match[0]){
+            if (match[0]) {
                 return match[1]
             }
             return '';
         },
-        setStyle : function(name,val){
-            function exec(name,val){
-                var reg = new RegExp(name + ':([^;]+);?','gi');
-                cssStyle = cssStyle.replace(reg,'');
-                if(val){
-                    cssStyle = name + ':' + val + ';' + cssStyle
+        setStyle:function (name, val) {
+            function exec(name, val) {
+                var reg = new RegExp(name + ':([^;]+);?', 'gi');
+                cssStyle = cssStyle.replace(reg, '');
+                if (val) {
+                    cssStyle = name + ':' + utils.unhtml(val) + ';' + cssStyle
                 }
 
             }
+
             var cssStyle = this.getAttr('style');
-            if(!cssStyle){
+            if (!cssStyle) {
                 cssStyle = '';
             }
             if (utils.isObject(name)) {
-                for(var a in name){
-                    exec(a,name[a])
+                for (var a in name) {
+                    exec(a, name[a])
                 }
             } else {
-                exec(name,val)
+                exec(name, val)
             }
-            this.setAttr('style',cssStyle)
+            this.setAttr('style', cssStyle)
+        },
+        cloneNode:function () {
+
         }
     }
 })();
