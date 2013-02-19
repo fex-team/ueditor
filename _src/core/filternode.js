@@ -44,7 +44,10 @@ var filterNode = UE.filterNode = function () {
                                    });
                                    tmpVal = tmpCssStyle.join(';')
                                }
-                               tmpAttrs[a] = tmpVal;
+                               if(tmpVal !== ""){
+                                   tmpAttrs[a] = tmpVal;
+                               }
+
                            }
                            node.attrs = tmpAttrs;
                        }
@@ -80,6 +83,15 @@ var filterNode = UE.filterNode = function () {
 
     }
     return function(root,rules){
+        if(utils.isEmptyObject(rules)){
+            return root;
+        }
+        var val;
+        if(val = rules['-']){
+            utils.each(val.split(' '),function(k){
+                rules[k] = '-'
+            })
+        }
         for(var i= 0,ci;ci=root.children[i];){
             filterNode(ci,rules);
             if(ci.parentNode){

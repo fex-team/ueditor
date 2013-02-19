@@ -229,34 +229,31 @@
         },
         insertBefore:function (target, source) {
             if (this.children) {
+                if(target.parentNode){
+                    target.parentNode.removeChild(target);
+                }
                 for (var i = 0, ci; ci = this.children[i]; i++) {
-                    if (ci === target) {
-                        this.children.splice(i, 1);
-                        i--;
-                    }
                     if (ci === source) {
                         this.children.splice(i, 0, target);
                         target.parentNode = this;
-                        i++;
+                        return target;
                     }
                 }
-                return target;
+
             }
         },
         insertAfter:function (target, source) {
             if (this.children) {
+                if(target.parentNode){
+                    target.parentNode.removeChild(target);
+                }
                 for (var i = 0, ci; ci = this.children[i]; i++) {
-                    if (ci === target) {
-                        this.children.splice(i, 1);
-                        i--;
-                    }
                     if (ci === source) {
-                        this.children.splice(i + 1, 1, target);
+                        this.children.splice(i + 1, 0, target);
                         target.parentNode = this;
-                        i = i + 2;
-
+                        return target;
                     }
-                    return target;
+
                 }
             }
         },
@@ -341,7 +338,7 @@
             }
             var reg = new RegExp(name + ':([^;]+)');
             var match = cssStyle.match(reg);
-            if (match[0]) {
+            if (match && match[0]) {
                 return match[1]
             }
             return '';
