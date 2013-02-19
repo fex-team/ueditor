@@ -245,7 +245,6 @@
          * @param {Element} doc 编辑器Iframe中的文档对象
          */
         _setup:function (doc) {
-            var uNode = UE.uNode;
 
             var me = this,
                 options = me.options;
@@ -490,24 +489,23 @@
             if (fn ? !fn() : !this.hasContents()) {
                 return '';
             }
-//            var range = me.selection.getRange(),
-//                address = range.createAddress();
-//
-//            me.fireEvent( 'beforegetcontent');
+            var range = me.selection.getRange(),
+                address = range.createAddress();
+
+            me.fireEvent( 'beforegetcontent');
             var root = UE.htmlparser(me.body.innerHTML);
             me.filterOutputRule(root);
-//            me.fireEvent( 'aftergetcontent', cmd );
-//
-//            try{
-//                range.moveToAddress(address).select(true);
-//            }catch(e){}
+            me.fireEvent( 'aftergetcontent', cmd );
+
+            try{
+                range.moveToAddress(address).select(true);
+            }catch(e){}
 
             var html = root.toHtml();
             if (ie && isPreview) {
                 //trace:2471
                 //两个br会导致空行，所以这里先注视掉
-                html = html//.replace(/<\s*br\s*\/?\s*>/gi,'<br/><br/>')
-                    .replace(/<p>\s*?<\/p>/g, '<p>&nbsp;</p>');
+                html = html.replace(/<p>\s*?<\/p>/g, '<p>&nbsp;</p>');
             } else {
                 //多个&nbsp;要转换成空格加&nbsp;的形式，要不预览时会所成一个
                 html = html.replace(/(&nbsp;)+/g, function (s) {
@@ -603,8 +601,6 @@
 //                        return !inline[b] && !inline[c] ? a.replace( />[ \t\r\n]*?</, '><' ) : a;
 //                    } );
 //            html = {'html':html};
-//            var root = UE.htmlparser(html.html);
-//            me.filterInputRule(root);
 //            me.fireEvent( 'beforesetcontent',html,root);
 //            html = html.html;
 //            var serialize = this.serialize;
@@ -684,6 +680,7 @@
                     return !inline[b] && !inline[c] ? a.replace(/>[ \t\r\n]*?</, '><') : a;
                 });
 
+            me.fireEvent( 'beforesetcontent',html);
             var root = UE.htmlparser(html);
             me.filterInputRule(root);
             html = root.toHtml();
@@ -729,7 +726,7 @@
                     }
                 }
             }
-//            me.fireEvent( 'aftersetcontent' );
+            me.fireEvent( 'aftersetcontent' );
             me.fireEvent('contentchange');
 
             !notFireSelectionchange && me._selectionChange();

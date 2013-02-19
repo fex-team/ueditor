@@ -1,5 +1,6 @@
 ///import editor.js
 ///import core/dom/dom.js
+///import core/utils.js
 /**
  * dtd html语义化的体现类
  * @constructor
@@ -12,18 +13,7 @@ var dtd = dom.dtd = (function() {
         }
         return s;
     }
-    function X( t ) {
-        var a = arguments;
-        for ( var i=1; i<a.length; i++ ) {
-            var x = a[i];
-            for ( var k in x ) {
-                if (!t.hasOwnProperty(k)) {
-                    t[k] = x[k];
-                }
-            }
-        }
-        return t;
-    }
+    var X = utils.extend2;
     var A = _({isindex:1,fieldset:1}),
         B = _({input:1,button:1,select:1,textarea:1,label:1}),
         C = X( _({a:1}), B ),

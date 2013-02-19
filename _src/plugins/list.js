@@ -128,33 +128,35 @@ UE.plugins['list'] = function () {
         }
         return ''
     }
+    //进入编辑器的li要套p标签
+    me.addInputRule(function(root){
+        utils.each(root.getNodesByTagName('li'),function(li){
+            var tmpP = UE.uNode.createElement('p');
+            for(var i= 0,ci;ci=li.children[i];){
+                if(ci.type == 'text' || dtd.$inline[ci.tagName]){
+                    tmpP.appendChild(ci);
+                }else{
+                    if(tmpP.firstChild()){
+                        li.insertBefore(tmpP,ci);
+                        tmpP = UE.uNode.createElement('p');
+                        i = i + 2;
+                    }else{
+                        i++;
+                    }
 
-//    function checkCustomStyle(list){
-//        if(domUtils.hasClass(list,/custom_/)){
-//            return ''
-//        }
-//        var style;
-//        utils.each(list.childNodes,function(li){
-//            if(li.tagName == 'LI'){
-//                if(domUtils.hasClass(li,/list-/)){
-//                    var tmpStyle = li.className.match(/list-(\w+)-(\d+)?/);
-//                    style = tmpStyle[1]+(tmpStyle[2] && tmpStyle[2] != '1'?  tmpStyle[2]:'');
-//                    return false
-//                }
-//            }
-//        })
-//        return style;
-//    }
+                }
+            }
+            if(tmpP.firstChild() && !tmpP.parentNode){
+                li.appendChild(tmpP);
+            }
+        })
+    });
     //调整索引标签
     me.addListener('contentchange',function(){
         utils.each(domUtils.getElementsByTagName(me.document,'ol ul'),function(node){
 
             if(!domUtils.inDoc(node,me.document))
                 return;
-//            var style;
-//            if(style = checkCustomStyle(node)){
-//                node.className = 'custom_' + style;
-//            }
             var index = 0,type = 2,parent = node.parentNode;
             if( domUtils.hasClass(node,/custom_/)){
                 if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/))){

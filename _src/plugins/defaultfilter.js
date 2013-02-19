@@ -13,7 +13,7 @@ UE.plugins['defaultfilter'] = function (){
     //默认的过滤处理
     //进入编辑器的内容处理
     me.addInputRule(function (root) {
-        utils.each(root.getNodesByTagName('script style a img span'), function (node) {
+        utils.each(root.getNodesByTagName('script style a img span p'), function (node) {
             var val;
             switch (node.tagName){
                 case 'style':
@@ -45,6 +45,12 @@ UE.plugins['defaultfilter'] = function (){
                         if(val == 'nowrap'){
                             node.setStyle('white-space','')
                         }
+                    }
+                    break;
+                case 'p':
+                    if(val = node.getAttr('align')){
+                        node.setAttr('align');
+                        node.setStyle('text-align',val)
                     }
             }
 

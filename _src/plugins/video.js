@@ -30,32 +30,22 @@ UE.plugins['video'] = function (){
                 ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" >';
     }
 
-    function switchImgAndEmbed(img2embed){
-        var tmpdiv,
-            nodes =domUtils.getElementsByTagName(me.document, !img2embed ? "embed" : "img");
-        for(var i=0,node;node = nodes[i++];){
-            if(node.className!="edui-faked-video"){
-                continue;
+    function switchImgAndEmbed(root,img2embed){
+        utils.each(root.getNodesByTagName(img2embed ? 'img' : 'embed'),function(node){
+            if(node.getAttr('class') == 'edui-faked-video'){
+                var align = node.getStyle('float');
+                align = align == 'none' ? (node.getAttr('align')||'') : align;
+                var html = creatInsertStr( img2embed ? node.getAttr('_url') : node.getAttr('src'),node.getAttr('width'),node.getAttr('height'),align,img2embed);
+                node.parentNode.replaceChild(UE.uNode.createElement(html),node)
             }
-            tmpdiv = me.document.createElement("div");
-            //先看float在看align,浮动有的是时候是在float上定义的
-            var align = domUtils.getComputedStyle(node,'float');
-            align = align == 'none' ? (node.getAttribute('align') || '') : align;
-            tmpdiv.innerHTML = creatInsertStr(img2embed ? node.getAttribute("_url"):node.getAttribute("src"),node.width,node.height,align,img2embed);
-            node.parentNode.replaceChild(tmpdiv.firstChild,node);
-        }
+        })
     }
-    me.addListener("beforegetcontent",function(){
-        switchImgAndEmbed(true);
+
+    me.addOutputRule(function(root){
+        switchImgAndEmbed(root,true)
     });
-    me.addListener('aftersetcontent',function(){
-        switchImgAndEmbed(false);
-    });
-    me.addListener('aftergetcontent',function(cmdName){
-        if(cmdName == 'aftergetcontent' && me.queryCommandState('source')){
-            return;
-        }
-        switchImgAndEmbed(false);
+    me.addInputRule(function(root){
+        switchImgAndEmbed(root)
     });
 
     me.commands["insertvideo"] = {
@@ -66,7 +56,7 @@ UE.plugins['video'] = function (){
                  vi = videoObjs[i];
                  html.push(creatInsertStr( vi.url, vi.width || 420,  vi.height || 280, vi.align||"none",false,true));
             }
-            me.execCommand("inserthtml",html.join(""));
+            me.execCommand("inserthtml",html.join(""),true);
         },
         queryCommandState : function(){
             var img = me.selection.getRange().getClosedNode(),

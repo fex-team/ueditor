@@ -15,8 +15,7 @@
         this.children = obj.children;
     };
     var indentChar = '    ',
-        breakChar = '\n',
-        needWrap = utils.extend(utils.extend({}, dtd.$block), dtd.$cdata);
+        breakChar = '\n';
 
     function insertLine(arr, current, begin) {
         arr.push(breakChar);
@@ -29,7 +28,6 @@
             arr.push(indentChar);
         }
     }
-
 
     //创建uNode的静态方法
     //支持标签和html
@@ -55,7 +53,7 @@
             case 'root':
                 for (var i = 0, ci; ci = node.children[i++];) {
                     //插入新行
-                    if (formatter && ci.type == 'element' && needWrap[ci.tagName] && i > 1) {
+                    if (formatter && ci.type == 'element' && !dtd.$inline[ci.tagName] && i > 1) {
                         insertLine(arr, current, true);
                         insertIndent(arr, current)
                     }
@@ -93,13 +91,13 @@
             (dtd.$empty[node.tagName] ? '\/' : '' ) + '>'
         );
         //插入新行
-        if (formatter && needWrap[node.tagName]) {
+        if (formatter &&  !dtd.$inline[node.tagName]) {
             current = insertLine(arr, current, true);
             insertIndent(arr, current)
         }
         if (node.children && node.children.length) {
             for (var i = 0, ci; ci = node.children[i++];) {
-                if (formatter && ci.type == 'element' && needWrap[ci.tagName] && i > 1) {
+                if (formatter && ci.type == 'element' &&  !dtd.$inline[ci.tagName] && i > 1) {
                     insertLine(arr, current);
                     insertIndent(arr, current)
                 }
@@ -107,7 +105,7 @@
             }
         }
         if (!dtd.$empty[node.tagName]) {
-            if (formatter && needWrap[node.tagName]) {
+            if (formatter && !dtd.$inline[node.tagName]) {
                 current = insertLine(arr, current);
                 insertIndent(arr, current)
             }
@@ -200,6 +198,9 @@
         },
         replaceChild:function (target, source) {
             if (this.children) {
+                if(target.parentNode){
+                    target.parentNode.removeChild(target);
+                }
                 for (var i = 0, ci; ci = this.children[i]; i++) {
                     if (ci === source) {
                         this.children.splice(i, 1, target);
@@ -214,6 +215,9 @@
             if (this.type == 'element' && !dtd.$empty[this.tagName]) {
                 if (!this.children) {
                     this.children = []
+                }
+                if(node.parentNode){
+                    node.parentNode.removeChild(node);
                 }
                 for (var i = 0, ci; ci = this.children[i]; i++) {
                     if (ci === node) {
@@ -365,9 +369,6 @@
                 exec(name, val)
             }
             this.setAttr('style', cssStyle)
-        },
-        cloneNode:function () {
-
         }
     }
 })();

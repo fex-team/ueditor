@@ -30,4 +30,11 @@ test( '', function() {
         }
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p style="color:#ccc"><p>sdfssdfs</p></p>sdfasdf</div>');
+
+    UE.filterNode(node,{
+        'p':{$:{}}
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p><p>sdfssdfs</p></p>sdfasdf</div>');
+
+
 });

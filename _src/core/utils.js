@@ -64,7 +64,18 @@ var utils = UE.utils = {
         }
         return t;
     },
-
+    extend2 : function(t){
+        var a = arguments;
+        for ( var i=1; i<a.length; i++ ) {
+            var x = a[i];
+            for ( var k in x ) {
+                if (!t.hasOwnProperty(k)) {
+                    t[k] = x[k];
+                }
+            }
+        }
+        return t;
+    },
     /**
      * 模拟继承机制，subClass继承superClass
      * @name inherits
