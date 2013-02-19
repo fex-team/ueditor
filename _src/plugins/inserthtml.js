@@ -17,12 +17,16 @@ UE.commands['inserthtml'] = {
         range = me.selection.getRange();
         div = range.document.createElement( 'div' );
         div.style.display = 'inline';
-        var serialize = me.serialize;
-        if (!notSerialize && serialize) {
-            var node = serialize.parseHTML(html);
-            node = serialize.transformInput(node);
-            node = serialize.filter(node);
-            html = serialize.toHTML(node);
+
+        if (!notSerialize) {
+            var root = UE.htmlparser(html);
+            //如果给了过滤规则就先进行过滤
+            if(me.options.filterRules){
+                UE.filterNode(root,me.options.filterRules);
+            }
+            //执行默认的处理
+            me.filterInputRule(root);
+            html = root.toHtml()
         }
         div.innerHTML = utils.trim( html );
 

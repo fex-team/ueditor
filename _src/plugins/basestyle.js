@@ -9,6 +9,7 @@
  * @param    {String}    cmdName    bold加粗。italic斜体。subscript上标。superscript下标。
 */
 UE.plugins['basestyle'] = function(){
+
     var basestyles = {
             'bold':['strong','b'],
             'italic':['em','i'],
