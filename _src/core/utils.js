@@ -64,7 +64,18 @@ var utils = UE.utils = {
         }
         return t;
     },
-
+    extend2 : function(t){
+        var a = arguments;
+        for ( var i=1; i<a.length; i++ ) {
+            var x = a[i];
+            for ( var k in x ) {
+                if (!t.hasOwnProperty(k)) {
+                    t[k] = x[k];
+                }
+            }
+        }
+        return t;
+    },
     /**
      * 模拟继承机制，subClass继承superClass
      * @name inherits
@@ -198,13 +209,18 @@ var utils = UE.utils = {
      * UE.utils.unhtml(html,/[<>]/g)  ==>  &lt;body&gt;You say:"你好！Baidu & UEditor!"&lt;/body&gt;
      */
     unhtml:function (str, reg) {
-        return str ? str.replace(reg || /[&<">]/g, function (m) {
-            return {
-                '<':'&lt;',
-                '&':'&amp;',
-                '"':'&quot;',
-                '>':'&gt;'
-            }[m]
+        return str ? str.replace(reg || /[&<">](?:(amp|lt|quot|gt);)?/g, function (a,b) {
+            if(b){
+                return a;
+            }else{
+                return {
+                    '<':'&lt;',
+                    '&':'&amp;',
+                    '"':'&quot;',
+                    '>':'&gt;'
+                }[a]
+            }
+
         }) : '';
     },
     /**
@@ -572,7 +588,7 @@ var utils = UE.utils = {
  * @name isNumber
  * @grammar UE.utils.isNumber(obj)  => true|false
  */
-utils.each(['String','Function','Array','Number','RegExp'],function(v){
+utils.each(['String','Function','Array','Number','RegExp','Object'],function(v){
     UE.utils['is' + v] = function(obj){
         return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
     }

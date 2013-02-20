@@ -35,7 +35,37 @@ UE.plugins['font'] = function() {
           ],
         'fontsize':[10, 11, 12, 14, 16, 18, 20, 24, 36]
     });
-
+    me.addInputRule(function(root){
+        utils.each(root.getNodesByTagName('u s del font'),function(node){
+            if(node.tagName == 'font'){
+                var cssStyle = [];
+                for(var p in node.attrs){
+                    switch (p){
+                        case 'size':
+                            cssStyle.push('font-size:' + node.attrs[p] + 'px');
+                            break;
+                        case 'color':
+                            cssStyle.push('color:'+ node.attrs[p]);
+                            break;
+                        case 'face':
+                            cssStyle.push('font-family:'+ node.attrs[p]);
+                            break;
+                        case 'style':
+                            cssStyle.push(node.attrs[p]);
+                    }
+                }
+                node.attrs = {
+                    'style' : cssStyle.join(';')
+                };
+            }else{
+                var val = node.tagName == 'u' ? 'underline' : 'line-through';
+                node.attrs = {
+                    'style' : (node.getAttr('style') || '') + 'text-decoration:'+val+';'
+                }
+            }
+            node.tagName = 'span';
+        });
+    });
     for ( var p in fonts ) {
         (function( cmd, style ) {
             UE.commands[cmd] = {

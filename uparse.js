@@ -176,7 +176,8 @@ function uParse(selector,opt){
         liiconpath : 'http://bs.baidu.com/listicon/',
         listDefaultPaddingLeft : '20',
         'highlightJsUrl':'',
-        'highlightCssUrl':''
+        'highlightCssUrl':'',
+        customRule:function(){}
     };
     if(opt){
         for(var p in opt){
@@ -190,9 +191,14 @@ function uParse(selector,opt){
             contents = document.querySelectorAll(selector)
         }else{
             if(/^#/.test(selector)){
-                contents = [document.getElementById(selector)]
+                contents = [document.getElementById(selector.replace(/^#/,''))]
             }else if(/^\./.test(selector)){
-                contents = document.getElementsByClassName(selector)
+                var contents = [];
+                _each(document.getElementsByTagName('*'),function(node){
+                    if(node.className && new RegExp('\\b' + selector.replace(/^\./,'') + '\\b','i').test(node.className)){
+                        contents.push(node)
+                    }
+                })
             }else{
                 contents = document.getElementsByTagName(selector)
             }
@@ -277,7 +283,7 @@ function uParse(selector,opt){
                 customCss.push(selector +' .list-paddingleft-2{padding-left:'+defaultOption.listDefaultPaddingLeft+'px}');
                 customCss.push(selector +' .list-paddingleft-3{padding-left:'+defaultOption.listDefaultPaddingLeft*2+'px}');
                 //如果不给宽度会在自定应样式里出现滚动条
-                cssRule('list', selector +' ol,'+selector +' ul{margin:0;pading:0;}li{clear:both;}'+customCss.join('\n'), document);
+                cssRule('list', selector +' ol,'+selector +' ul{margin:0;padding:0;}li{clear:both;}'+customCss.join('\n'), document);
             }
             //解析内容
             var needParseTagName = {
@@ -307,6 +313,18 @@ function uParse(selector,opt){
                             _each(nodes,function(pi){
                                 if(/brush/i.test(pi.className)){
                                     SyntaxHighlighter.highlight(pi);
+                                    var tables = document.getElementsByTagName('table');
+                                       for(var t= 0,ti;ti=tables[t++];){
+                                           if(/SyntaxHighlighter/i.test(ti.className)){
+                                               var tds = ti.getElementsByTagName('td');
+                                               for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
+                                                   ri = tds[1].firstChild.childNodes[i];
+                                                   if(ri){
+                                                      ri.style.height = li.style.height = ri.offsetHeight + 'px';
+                                                   }
+                                               }
+                                           }
+                                       }
                                 }
                             });
                         });
@@ -331,7 +349,9 @@ function uParse(selector,opt){
                     needParseTagName[tag](nodes)
                 }
             }
-        })
+            defaultOption.customRule(content);
+        });
+
 
 
     })

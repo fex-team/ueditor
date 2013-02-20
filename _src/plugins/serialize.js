@@ -418,30 +418,30 @@ UE.plugins['serialize'] = function () {
             attr,
             indexOf = utils.indexOf;
         switch ( node.tag ) {
-            case 'script':
-                node.tag = 'div';
-                node.attributes._ue_org_tagName = 'script';
-                node.attributes._ue_div_script = 1;
-                node.attributes._ue_script_data = node.children[0] ? encodeURIComponent(node.children[0].data)  : '';
-                node.attributes._ue_custom_node_ = 1;
-                node.children = [];
-                break;
-            case 'style':
-                node.tag = 'div';
-                node.attributes._ue_div_style = 1;
-                node.attributes._ue_org_tagName = 'style';
-                node.attributes._ue_style_data = node.children[0] ? encodeURIComponent(node.children[0].data)  : '';
-                node.attributes._ue_custom_node_ = 1;
-                node.children = [];
-                break;
+//            case 'script':
+//                node.tag = 'div';
+//                node.attributes._ue_org_tagName = 'script';
+//                node.attributes._ue_div_script = 1;
+//                node.attributes._ue_script_data = node.children[0] ? encodeURIComponent(node.children[0].data)  : '';
+//                node.attributes._ue_custom_node_ = 1;
+//                node.children = [];
+//                break;
+//            case 'style':
+//                node.tag = 'div';
+//                node.attributes._ue_div_style = 1;
+//                node.attributes._ue_org_tagName = 'style';
+//                node.attributes._ue_style_data = node.children[0] ? encodeURIComponent(node.children[0].data)  : '';
+//                node.attributes._ue_custom_node_ = 1;
+//                node.children = [];
+//                break;
             case 'img':
-                //todo base64暂时去掉，后边做远程图片上传后，干掉这个
-                if(node.attributes.src && /^data:/.test(node.attributes.src)){
-                    return {
-                        type : 'fragment',
-                        children:[]
-                    }
-                }
+//                //todo base64暂时去掉，后边做远程图片上传后，干掉这个
+//                if(node.attributes.src && /^data:/.test(node.attributes.src)){
+//                    return {
+//                        type : 'fragment',
+//                        children:[]
+//                    }
+//                }
                 if ( node.attributes.src && /^(?:file)/.test( node.attributes.src ) ) {
                     if ( !/(gif|bmp|png|jpg|jpeg)$/.test( node.attributes.src ) ) {
                         return {
@@ -456,122 +456,122 @@ UE.plugins['serialize'] = function () {
                     //node.attributes.style = 'width:395px;height:173px;';
                     word_img_flag && (word_img_flag.flag = 1);
                 }
-                if(browser.ie && browser.version < 7 )
-                    node.attributes.orgSrc = node.attributes.src;
-                node.attributes.data_ue_src = node.attributes.data_ue_src || node.attributes.src;
+//                if(browser.ie && browser.version < 7 )
+//                    node.attributes.orgSrc = node.attributes.src;
+//                node.attributes.data_ue_src = node.attributes.data_ue_src || node.attributes.src;
                 break;
-            case 'li':
-                var child = node.children[0];
-
-                if ( !child || child.type != 'element' || child.tag != 'p' && dtd.p[child.tag] ) {
-                    var tmpPNode = {
-                        type: 'element',
-                        tag: 'p',
-                        attributes: {},
-
-                        parent : node
-                    };
-                    tmpPNode.children = child ? node.children :[
-                        browser.ie ? {
-                            type:'text',
-                            data:domUtils.fillChar,
-                            parent : tmpPNode
-
-                        }:
-                        {
-                            type : 'element',
-                            tag : 'br',
-                            attributes:{},
-                            closed: true,
-                            children: [],
-                            parent : tmpPNode
-                        }
-                    ];
-                    node.children =   [tmpPNode];
-                }
-                break;
-            case 'table':
-            case 'td':
-                optStyle( node );
-                break;
-            case 'a'://锚点，a==>img
-                if ( node.attributes['anchorname'] ) {
-                    node.tag = 'img';
-                    node.attributes = {
-                        'class' : 'anchorclass',
-                        'anchorname':node.attributes['name']
-                    };
-                    node.closed = 1;
-                }
-                node.attributes.href && (node.attributes.data_ue_src = node.attributes.href);
-                break;
-            case 'b':
-                node.tag = node.name = 'strong';
-                break;
-            case 'i':
-                node.tag = node.name = 'em';
-                break;
-            case 'u':
-                node.tag = node.name = 'span';
-                node.attributes.style = (node.attributes.style || '') + ';text-decoration:underline;';
-                break;
-            case 's':
-            case 'del':
-                node.tag = node.name = 'span';
-                node.attributes.style = (node.attributes.style || '') + ';text-decoration:line-through;';
-                if ( node.children.length == 1 ) {
-                    child = node.children[0];
-                    if ( child.tag == node.tag ) {
-                        node.attributes.style += ";" + child.attributes.style;
-                        node.children = child.children;
-
-                    }
-                }
-                break;
+//            case 'li':
+//                var child = node.children[0];
+//
+//                if ( !child || child.type != 'element' || child.tag != 'p' && dtd.p[child.tag] ) {
+//                    var tmpPNode = {
+//                        type: 'element',
+//                        tag: 'p',
+//                        attributes: {},
+//
+//                        parent : node
+//                    };
+//                    tmpPNode.children = child ? node.children :[
+//                        browser.ie ? {
+//                            type:'text',
+//                            data:domUtils.fillChar,
+//                            parent : tmpPNode
+//
+//                        }:
+//                        {
+//                            type : 'element',
+//                            tag : 'br',
+//                            attributes:{},
+//                            closed: true,
+//                            children: [],
+//                            parent : tmpPNode
+//                        }
+//                    ];
+//                    node.children =   [tmpPNode];
+//                }
+//                break;
+//            case 'table':
+//            case 'td':
+//                optStyle( node );
+//                break;
+//            case 'a'://锚点，a==>img
+////                if ( node.attributes['anchorname'] ) {
+////                    node.tag = 'img';
+////                    node.attributes = {
+////                        'class' : 'anchorclass',
+////                        'anchorname':node.attributes['name']
+////                    };
+////                    node.closed = 1;
+////                }
+//                node.attributes.href && (node.attributes.data_ue_src = node.attributes.href);
+//                break;
+//            case 'b':
+//                node.tag = node.name = 'strong';
+//                break;
+//            case 'i':
+//                node.tag = node.name = 'em';
+//                break;
+//            case 'u':
+//                node.tag = node.name = 'span';
+//                node.attributes.style = (node.attributes.style || '') + ';text-decoration:underline;';
+//                break;
+//            case 's':
+//            case 'del':
+//                node.tag = node.name = 'span';
+//                node.attributes.style = (node.attributes.style || '') + ';text-decoration:line-through;';
+//                if ( node.children.length == 1 ) {
+//                    child = node.children[0];
+//                    if ( child.tag == node.tag ) {
+//                        node.attributes.style += ";" + child.attributes.style;
+//                        node.children = child.children;
+//
+//                    }
+//                }
+//                break;
             case 'span':
 
-                var style = node.attributes.style;
-                if ( style ) {
-                    if ( !node.attributes.style  || browser.webkit && style == "white-space:nowrap;") {
-                        delete node.attributes.style;
-                    }
-                }
-
-                //针对ff3.6span的样式不能正确继承的修复
-
-                if(browser.gecko && browser.version <= 10902 && node.parent){
-                    var parent = node.parent;
-                    if(parent.tag == 'span' && parent.attributes && parent.attributes.style){
-                        node.attributes.style = parent.attributes.style + ';' + node.attributes.style;
-                    }
-                }
-                if ( utils.isEmptyObject( node.attributes ) && autoClearEmptyNode) {
-                    node.type = 'fragment'
-                }
-                break;
-            case 'font':
-                node.tag = node.name = 'span';
-                attr = node.attributes;
-                node.attributes = {
-                    'style': (attr.size ? 'font-size:' + (sizeMap[attr.size] || 12) + 'px' : '')
-                        + ';' + (attr.color ? 'color:'+ attr.color : '')
-                        + ';' + (attr.face ? 'font-family:'+ attr.face : '')
-                        + ';' + (attr.style||'')
-                };
-
-                while(node.parent.tag == node.tag && node.parent.children.length == 1){
-                    node.attributes.style && (node.parent.attributes.style ? (node.parent.attributes.style += ";" + node.attributes.style) : (node.parent.attributes.style = node.attributes.style));
-                    node.parent.children = node.children;
-                    node = node.parent;
-
-                }
-                break;
-            case 'p':
-                if ( node.attributes.align ) {
-                    node.attributes.style = (node.attributes.style || '') + ';text-align:' +
-                        node.attributes.align + ';';
-                    delete node.attributes.align;
-                }
+//                var style = node.attributes.style;
+//                if ( style ) {
+//                    if ( !node.attributes.style  || browser.webkit && style == "white-space:nowrap;") {
+//                        delete node.attributes.style;
+//                    }
+//                }
+//
+//                //针对ff3.6span的样式不能正确继承的修复
+//
+//                if(browser.gecko && browser.version <= 10902 && node.parent){
+//                    var parent = node.parent;
+//                    if(parent.tag == 'span' && parent.attributes && parent.attributes.style){
+//                        node.attributes.style = parent.attributes.style + ';' + node.attributes.style;
+//                    }
+//                }
+//                if ( utils.isEmptyObject( node.attributes ) && autoClearEmptyNode) {
+//                    node.type = 'fragment'
+//                }
+//                break;
+//            case 'font':
+//                node.tag = node.name = 'span';
+//                attr = node.attributes;
+//                node.attributes = {
+//                    'style': (attr.size ? 'font-size:' + (sizeMap[attr.size] || 12) + 'px' : '')
+//                        + ';' + (attr.color ? 'color:'+ attr.color : '')
+//                        + ';' + (attr.face ? 'font-family:'+ attr.face : '')
+//                        + ';' + (attr.style||'')
+//                };
+//
+//                while(node.parent.tag == node.tag && node.parent.children.length == 1){
+//                    node.attributes.style && (node.parent.attributes.style ? (node.parent.attributes.style += ";" + node.attributes.style) : (node.parent.attributes.style = node.attributes.style));
+//                    node.parent.children = node.children;
+//                    node = node.parent;
+//
+//                }
+//                break;
+//            case 'p':
+//                if ( node.attributes.align ) {
+//                    node.attributes.style = (node.attributes.style || '') + ';text-align:' +
+//                        node.attributes.align + ';';
+//                    delete node.attributes.align;
+//                }
 
         }
         return node;
@@ -588,74 +588,74 @@ UE.plugins['serialize'] = function () {
     function transOutNode( node ) {
 
         switch ( node.tag ) {
-            case 'div' :
-                if(node.attributes._ue_div_script){
-                    node.tag = 'script';
-                    node.children = [{type:'cdata',data:node.attributes._ue_script_data?decodeURIComponent(node.attributes._ue_script_data):'',parent:node}];
-                    delete node.attributes._ue_div_script;
-                    delete node.attributes._ue_script_data;
-                    delete node.attributes._ue_custom_node_;
-                    delete node.attributes._ue_org_tagName;
-
-                }
-                if(node.attributes._ue_div_style){
-                    node.tag = 'style';
-                    node.children = [{type:'cdata',data:node.attributes._ue_style_data?decodeURIComponent(node.attributes._ue_style_data):'',parent:node}];
-                    delete node.attributes._ue_div_style;
-                    delete node.attributes._ue_style_data;
-                    delete node.attributes._ue_custom_node_;
-                    delete node.attributes._ue_org_tagName;
-
-                }
-                break;
-            case 'table':
-                !node.attributes.style && delete node.attributes.style;
-                if ( ie && node.attributes.style ) {
-
-                    optStyle( node );
-                }
-                break;
-            case 'td':
-            case 'th':
-                if ( /display\s*:\s*none/i.test( node.attributes.style ) ) {
-                    return {
-                        type: 'fragment',
-                        children: []
-                    };
-                }
-                if ( ie && !node.children.length ) {
-                    var txtNode = {
-                        type: 'text',
-                        data:domUtils.fillChar,
-                        parent : node
-                    };
-                    node.children[0] = txtNode;
-                }
-                if ( ie && node.attributes.style ) {
-                    optStyle( node );
-                }
-                break;
-            case 'img'://锚点，img==>a
-                if ( node.attributes.anchorname ) {
-                    node.tag = 'a';
-                    node.attributes = {
-                        name : node.attributes.anchorname,
-                        anchorname : 1
-                    };
-                    node.closed = null;
-                }else{
-                    if(node.attributes.data_ue_src){
-                        node.attributes.src = node.attributes.data_ue_src;
-                        delete node.attributes.data_ue_src;
-                    }
-                }
-                break;
-
-            case 'a':
-                if(node.attributes.data_ue_src){
-                    node.attributes.href = node.attributes.data_ue_src;
-                    delete node.attributes.data_ue_src;
-                }
+//            case 'div' :
+//                if(node.attributes._ue_div_script){
+//                    node.tag = 'script';
+//                    node.children = [{type:'cdata',data:node.attributes._ue_script_data?decodeURIComponent(node.attributes._ue_script_data):'',parent:node}];
+//                    delete node.attributes._ue_div_script;
+//                    delete node.attributes._ue_script_data;
+//                    delete node.attributes._ue_custom_node_;
+//                    delete node.attributes._ue_org_tagName;
+//
+//                }
+//                if(node.attributes._ue_div_style){
+//                    node.tag = 'style';
+//                    node.children = [{type:'cdata',data:node.attributes._ue_style_data?decodeURIComponent(node.attributes._ue_style_data):'',parent:node}];
+//                    delete node.attributes._ue_div_style;
+//                    delete node.attributes._ue_style_data;
+//                    delete node.attributes._ue_custom_node_;
+//                    delete node.attributes._ue_org_tagName;
+//
+//                }
+//                break;
+//            case 'table':
+//                !node.attributes.style && delete node.attributes.style;
+//                if ( ie && node.attributes.style ) {
+//
+//                    optStyle( node );
+//                }
+//                break;
+//            case 'td':
+//            case 'th':
+//                if ( /display\s*:\s*none/i.test( node.attributes.style ) ) {
+//                    return {
+//                        type: 'fragment',
+//                        children: []
+//                    };
+//                }
+//                if ( ie && !node.children.length ) {
+//                    var txtNode = {
+//                        type: 'text',
+//                        data:domUtils.fillChar,
+//                        parent : node
+//                    };
+//                    node.children[0] = txtNode;
+//                }
+//                if ( ie && node.attributes.style ) {
+//                    optStyle( node );
+//                }
+//                break;
+//            case 'img'://锚点，img==>a
+//                if ( node.attributes.anchorname ) {
+////                    node.tag = 'a';
+////                    node.attributes = {
+////                        name : node.attributes.anchorname,
+////                        anchorname : 1
+////                    };
+////                    node.closed = null;
+//                }else{
+////                    if(node.attributes.data_ue_src){
+////                        node.attributes.src = node.attributes.data_ue_src;
+////                        delete node.attributes.data_ue_src;
+////                    }
+//                }
+//                break;
+//
+//            case 'a':
+//                if(node.attributes.data_ue_src){
+//                    node.attributes.href = node.attributes.data_ue_src;
+//                    delete node.attributes.data_ue_src;
+//                }
         }
 
         return node;
@@ -758,7 +758,7 @@ UE.plugins['serialize'] = function () {
 
                 node = childrenAccept( node, visitNode, node );
 
-                if ( me.options.pageBreakTag && node.type == 'text' && node.data.replace( /\s/g, '' ) == me.options.pageBreakTag ) {
+                if ( node.tag == 'section'  ) {
 
                     node.type = 'element';
                     node.name = node.tag = 'hr';
@@ -788,10 +788,11 @@ UE.plugins['serialize'] = function () {
             function visitNode( node ) {
 
                 if ( node.tag == 'hr' && node.attributes['class'] == 'pagebreak' ) {
-                    delete node.tag;
-                    node.type = 'text';
-                    node.data = me.options.pageBreakTag;
-                    delete node.children;
+                    node.tag = 'section'
+
+                    node.attributes ={'class':'CTRL-PAGE-SEPARATOR'}
+                    //node.data = me.options.pageBreakTag;
+                    //delete node.children;
 
                 }
                 node = transOutNode( node );

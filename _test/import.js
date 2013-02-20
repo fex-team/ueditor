@@ -13,7 +13,9 @@
 ///import core.Editor;
 ///import core.ajax;
 ///import core.filterword;
-
+///import core.node;
+///import core.htmlparser;
+///import core.filternode;
 ///import plugins.emotion;
 ///import plugins.map;
 ///import plugins.scrawl;

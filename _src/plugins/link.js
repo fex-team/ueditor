@@ -18,7 +18,8 @@
  * @param   {String}   cmdName     unlink取消链接
  * @author zhanyi
  */
-(function() {
+
+UE.plugins['link'] = function(){
     function optimize( range ) {
         var start = range.startContainer,end = range.endContainer;
 
@@ -91,7 +92,7 @@
     UE.commands['link'] = {
         execCommand : function( cmdName, opt ) {
             var range;
-            opt.data_ue_src && (opt.data_ue_src = utils.unhtml(opt.data_ue_src,/[<">]/g));
+            opt._href && (opt._href = utils.unhtml(opt._href,/[<">]/g));
             opt.href && (opt.href = utils.unhtml(opt.href,/[<">]/g));
             opt.textValue && (opt.textValue = utils.unhtml(opt.textValue,/[<">]/g));
             doLink(range=this.selection.getRange(),opt,this);
@@ -102,9 +103,6 @@
         queryCommandValue : function() {
             var range = this.selection.getRange(),
                 node;
-
-
-
             if ( range.collapsed ) {
 //                    node = this.selection.getStart();
                 //在ie下getstart()取值偏上了
@@ -150,4 +148,4 @@
             return flag ? -1 : 0;
         }
     };
-})();
+};

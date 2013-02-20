@@ -120,7 +120,8 @@ UE.plugins['highlightcode'] = function() {
             utils.each(di.getElementsByTagName('code'),function(ci){
                 if(parentCode !== ci.parentNode){
                     parentCode = ci.parentNode;
-                    str.push(parentCode[browser.ie?'innerText':'textContent'])
+                    //去掉左右空格，针对ie的不能回退的问题
+                    str.push(utils.trim(parentCode[browser.ie?'innerText':'textContent']))
                 }
 
             });

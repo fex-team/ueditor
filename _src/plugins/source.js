@@ -5,128 +5,6 @@
 ///commandsName  Source
 ///commandsTitle  查看源码
 (function (){
-    function SourceFormater(config){
-        config = config || {};
-        this.indentChar = config.indentChar || '    ';
-        this.breakChar = config.breakChar || '\n';
-        this.selfClosingEnd = config.selfClosingEnd || ' />';
-    }
-    var unhtml1 = function (){
-        var map = { '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-        function rep( m ){ return map[m]; }
-        return function ( str ) {
-            str = str + '';
-            return str ? str.replace( /[<>"']/g, rep ) : '';
-        };
-    }();
-    var inline = utils.extend({a:1,A:1},dtd.$inline,true);
-
-
-    function printAttrs(attrs){
-        var buff = [];
-        for (var k in attrs) {
-            buff.push(k + '="' + unhtml1(attrs[k]) + '"');
-        }
-        return buff.join(' ');
-    }
-    SourceFormater.prototype = {
-        format: function (html){
-            var node = UE.serialize.parseHTML(html);
-            this.buff = [];
-            this.indents = '';
-            this.indenting = 1;
-            this.visitNode(node);
-            return this.buff.join('');
-        },
-        visitNode: function (node){
-            if (node.type == 'fragment') {
-                this.visitChildren(node.children);
-            } else if (node.type == 'element') {
-                var selfClosing = dtd.$empty[node.tag];
-                this.visitTag(node.tag, node.attributes, selfClosing);
-
-                this.visitChildren(node.children);
-
-                if (!selfClosing) {
-                    this.visitEndTag(node.tag);
-                }
-            } else if (node.type == 'comment') {
-                this.visitComment(node.data);
-            } else {
-                this.visitText(node.data,dtd.$notTransContent[node.parent.tag]);
-            }
-        },
-        visitChildren: function (children){
-            for (var i=0; i<children.length; i++) {
-                this.visitNode(children[i]);
-            }
-        },
-        visitTag: function (tag, attrs, selfClosing){
-            if (this.indenting) {
-                this.indent();
-            } else if (!inline[tag]) { // todo: 去掉a, 因为dtd的inline里面没有a
-                this.newline();
-                this.indent();
-            }
-            this.buff.push('<', tag);
-            var attrPart = printAttrs(attrs);
-            if (attrPart) {
-                this.buff.push(' ', attrPart);
-            }
-            if (selfClosing) {
-                this.buff.push(this.selfClosingEnd);
-                if (tag == 'br') {
-                    this.newline();
-                }
-            } else {
-                this.buff.push('>');
-                this.indents += this.indentChar;
-            }
-            if (!inline[tag]) {
-                this.newline();
-            }
-        },
-        indent: function (){
-            this.buff.push(this.indents);
-            this.indenting = 0;
-        },
-        newline: function (){
-            this.buff.push(this.breakChar);
-            this.indenting = 1;
-        },
-        visitEndTag: function (tag){
-            
-            this.indents = this.indents.slice(0, -this.indentChar.length);
-            if (this.indenting) {
-                this.indent();
-            } else if (!inline[tag]) {
-                this.newline();
-                this.indent();
-            }
-            this.buff.push('</', tag, '>');
-        },
-        visitText: function (text,notTrans){
-            if (this.indenting) {
-                this.indent();
-            }
-      
-//            if(!notTrans){
-//                 text = text.replace(/&nbsp;/g, ' ').replace(/[ ][ ]+/g, function (m){
-//                    return new Array(m.length + 1).join('&nbsp;');
-//                }).replace(/(?:^ )|(?: $)/g, '&nbsp;');
-//            }
-            text = text.replace(/&nbsp;/g, ' ');
-            this.buff.push(text);
-
-        },
-        visitComment: function (text){
-            if (this.indenting) {
-                this.indent();
-            }
-            this.buff.push('<!--', text, '-->');
-        }
-    };
-
     var sourceEditors = {
         textarea: function (editor, holder){
             var textarea = holder.ownerDocument.createElement('textarea');
@@ -206,7 +84,6 @@
     UE.plugins['source'] = function (){
         var me = this;
         var opt = this.options;
-        var formatter = new SourceFormater(opt.source);
         var sourceMode = false;
         var sourceEditor;
 
@@ -237,8 +114,9 @@
 
                     bakCssText = me.iframe.style.cssText;
                     me.iframe.style.cssText += 'position:absolute;left:-32768px;top:-32768px;';
+                    var root = UE.htmlparser(me.getContent());
 
-                    var content = formatter.format(me.hasContents() ? me.getContent() : '');
+                    var content = me.hasContents() ? root.toHtml(true) : '';
 
                     sourceEditor = createSourceEditor(me.iframe.parentNode);
 
@@ -254,12 +132,12 @@
                     //重置getContent，源码模式下取值也能是最新的数据
                     me.getContent = function (){
                         var cont = sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
-                        return cont.replace(/>[\n\r\t]+([ ]{4})+/g,'>').replace(/[\n\r\t]+([ ]{4})+</g,'<').replace(/>[\n\r\t]+</g,'><');
+                        return cont.replace(/>[ \n\r\t]+/g,'>').replace(/[ \n\r\t]+</g,'<').replace(/>[\n\r\t]+</g,'><');
                     };
                 } else {
                     me.iframe.style.cssText = bakCssText;
                     var cont = sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
-                    cont = cont.replace(/>[\n\r\t]+([ ]{4})+/g,'>').replace(/[\n\r\t]+([ ]{4})+</g,'<').replace(/>[\n\r\t]+</g,'><');
+                    cont = cont.replace(/>[ \n\r\t]+/g,'>').replace(/[ \n\r\t]+</g,'<').replace(/>[\n\r\t]+</g,'><');
                     me.setContent(cont);
                     sourceEditor.dispose();
                     sourceEditor = null;

@@ -253,7 +253,25 @@ test("setContent", function() {
     ua.haveSameAllChildAttribs(div2, div_new, 'check contents');
 });
 
-
+test("setContent 追加", function() {
+    var editor = te.obj[1];
+    var div = te.dom[0];
+    editor.focus();
+    expect(2);
+    editor.addListener("beforesetcontent", function() {
+        ok(true, "beforesetcontent");
+    });
+    editor.addListener("aftersetcontent", function() {
+        ok(true, "aftersetcontent");
+    });
+    var html = '<span><span></span><strong>xx</strong><em>em</em><em></em><u></u></span><div>xxxx</div>';
+    editor.setContent(html);
+    var div_new = document.createElement('div');
+    div_new.innerHTML = '<p><span><span></span><strong>xx</strong><em>em</em><em></em><span style="text-decoration: underline"></span></span></p><div>xxxx</div>';
+    var div2 = document.createElement('div');
+    div2.innerHTML = editor.body.innerHTML;
+    ua.haveSameAllChildAttribs(div2, div_new, 'check contents');
+});
 //test( "focus", function() {
 //    var editor = te.obj[1];
 //    expect( 1 );

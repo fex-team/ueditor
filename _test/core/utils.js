@@ -235,6 +235,8 @@ test('unhtml 字符转义', function(){
     var str='<p>"as&cd"</p>';
     var str_html=utils.unhtml(str);
     equal(str_html,'&lt;p&gt;&quot;as&amp;cd&quot;&lt;/p&gt;','转义字符成功');
+    str = 'border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;"'
+    equal(utils.unhtml(str),'border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;&quot;','转义字符成功');
 });
 test('html 反转义', function(){
     var utils=te.obj[0];

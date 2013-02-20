@@ -51,9 +51,9 @@ test( 'setStart/setEnd--nodeType为1', function() {
     ua.checkResult( range, div, div, 0, 1, false, "startContainer is not null" );
 } );
 /*
-* 测的内容比较多，updateCollapse，setEndPoint，setStart，setEnd，collapse
-* 因为updateCollapse和setEndPoint无法通过Range对象获取， 必须间接调用验证
-*/
+ * 测的内容比较多，updateCollapse，setEndPoint，setStart，setEnd，collapse
+ * 因为updateCollapse和setEndPoint无法通过Range对象获取， 必须间接调用验证
+ */
 test( 'setStartAfter,setStartBefore', function() {
     var div = te.dom[2];
     div.innerHTML = '<span></span><a></a>';
@@ -1458,10 +1458,10 @@ test('b节点取range',function(){
                 ua.checkResult(range, editor.body.firstChild.lastChild.previousSibling, editor.body.firstChild.lastChild.previousSibling, 0, 0, true, '节点后--check range');
 
             range.setStart(editor.body.firstChild.firstChild.nextSibling,0).collapse(1)
-            debugger
-                range.select();
+//            debugger
+            range.select();
             range = editor.selection.getRange();
-            debugger
+//            debugger
             if(ua.browser.webkit )
                 ua.checkResult(range, editor.body.firstChild.firstChild.nextSibling.firstChild, editor.body.firstChild.firstChild.nextSibling.firstChild, 1, 1, true, '节点内文本节点前--check range');
             else if(ua.browser.ie)
@@ -1497,7 +1497,7 @@ test('文本节点中间取range',function(){
                 ua.checkResult(range, editor.body.firstChild.lastChild, editor.body.firstChild.lastChild, 0, 0, true, 'check range');
             else
                 ua.checkResult(range, editor.body.firstChild.lastChild, editor.body.firstChild.lastChild, 2, 2, true, 'check range');
-        start();
+            start();
         },50);
     },50);
 });
@@ -1571,4 +1571,15 @@ test('range.createAddress,range.moveAddress',function(){
     rng1.moveToAddress(addr);
     rng.setStart(div.firstChild,3).collapse(true);
     ok(equalRange(rng,rng1));
+});
+
+test('equals',function(){
+    var div = te.dom[2];
+    var rng = new UE.dom.Range(document);
+    div.innerHTML = '<b>xxxx</b>';
+    rng.setStart(div.firstChild,0).collapse(true);
+    var rng2 = rng.cloneRange();
+
+    ok(rng.equals(rng2))
+
 });
