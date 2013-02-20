@@ -625,7 +625,7 @@
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
                     cell = this.cloneCell(sourceCell, true);
                     this.setCellContent(cell);
-                    cell.setAttribute('valign', cell.getAttribute('valign'));
+                    cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     row.appendChild(cell);
                 }
             } else {
@@ -734,7 +734,7 @@
                     preCell = tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
                     cell = this.cloneCell(sourceCell, true); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
                     this.setCellContent(cell);
-                    cell.setAttribute('valign', cell.getAttribute('valign'));
+                    cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     preCell && cell.setAttribute('width', preCell.getAttribute('width'));
                     if (!colIndex) {
                         tableRow.insertBefore(cell, tableRow.cells[0]);
@@ -755,7 +755,7 @@
 
                         cell = this.cloneCell(sourceCell, true);//tableRow.insertCell(cellInfo.cellIndex);
                         this.setCellContent(cell);
-                        cell.setAttribute('valign', cell.getAttribute('valign'));
+                        cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                         preCell && cell.setAttribute('width', preCell.getAttribute('width'))
                         tableRow.insertBefore(cell, preCell);
                     }
@@ -827,7 +827,7 @@
                     tmpCell = tableRow.insertCell(colIndex - this.getPreviewMergedCellsNum(i, colIndex));
                 tmpCell.colSpan = cellInfo.colSpan;
                 this.setCellContent(tmpCell);
-                tmpCell.setAttribute('valign', cell.getAttribute('valign'));
+                tmpCell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                 tmpCell.setAttribute('align', cell.getAttribute('align'));
                 if (cell.style.cssText) {
                     tmpCell.style.cssText = cell.style.cssText;
@@ -866,7 +866,7 @@
                     tmpCell = tableRow.insertCell(this.indexTable[rowIndex][j].cellIndex + 1);
                 tmpCell.rowSpan = cellInfo.rowSpan;
                 this.setCellContent(tmpCell);
-                tmpCell.setAttribute('valign', cell.getAttribute('valign'));
+                tmpCell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                 tmpCell.setAttribute('align', cell.getAttribute('align'));
                 tmpCell.setAttribute('width', backWidth);
                 if (cell.style.cssText) {
@@ -876,10 +876,10 @@
                 if (cell.tagName == 'TH') {
                     var th = cell.ownerDocument.createElement('th');
                     th.appendChild(tmpCell.firstChild);
-                    th.setAttribute('valign', cell.getAttribute('valign'));
+                    th.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     th.rowSpan = tmpCell.rowSpan;
                     tableRow.insertBefore(th, tmpCell);
-                    domUtils.remove(tmpCell)
+                    domUtils.remove(tmpCell);
                 }
                 results.push(tmpCell);
             }
