@@ -36,5 +36,16 @@ test( '', function() {
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p><p>sdfssdfs</p></p>sdfasdf</div>');
 
+    node.innerHTML('<b>sdfsd<i id="sdf" class="sdf" style="color:#ccc;font:12px">sdfsdf</i><u>sdfsf</u></b>');
+    UE.filterNode(node,{
+       'i':{$:{style:['color']}},
+        'u':{}
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa">sdfsd<i style="color:#ccc">sdfsdf</i><u>sdfsf</u></div>');
+    UE.filterNode(node,{
+        'u':'-',
+        'i':{$:{style:['color']}}
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa">sdfsd<i style="color:#ccc">sdfsdf</i></div>');
 
 });
