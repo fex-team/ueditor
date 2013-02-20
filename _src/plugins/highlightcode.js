@@ -114,7 +114,7 @@ UE.plugins['highlightcode'] = function() {
         }
 
     });
-    me.addListener("beforegetcontent beforegetscene",function(){
+    me.addListener("beforegetscene",function(){
         utils.each(domUtils.getElementsByTagName(me.body,'table','syntaxhighlighter'),function(di){
             var str = [],parentCode = '';
             utils.each(di.getElementsByTagName('code'),function(ci){
@@ -132,7 +132,47 @@ UE.plugins['highlightcode'] = function() {
             di.parentNode.replaceChild(pre,di);
         });
     });
-    me.addListener("aftergetcontent aftersetcontent aftergetscene",changePre);
+    me.addOutputRule(function(root){
+        utils.each(root.getNodesByTagName('table'),function(node){
+            var val;
+            if((val = node.getAttr('class')) && /syntaxhighlighter/.test(val)){
+                var str = [],parentCode = '';
+                utils.each(node.getNodesByTagName('code'),function(ci){
+                    if(parentCode !== ci.parentNode){
+                        parentCode = ci.parentNode;
+                        //去掉左右空格，针对ie的不能回退的问题
+                        str.push(utils.trim(parentCode.innerText()))
+                    }
+                });
+                node.tagName = 'pre';
+                val = node.getAttr('class');
+                node.setAttr();
+                node.setAttr('class', 'brush: '+val.replace(/\s+/g,' ').split(' ')[1]+';toolbar:false;');
+                node.children = [];
+                node.appendChild(UE.uNode.createText(str.join('\n')))
+            }
+        })
+    });
+    me.addInputRule(function(root){
+        var me = this;
+        if(!me.window||!me.window.SyntaxHighlighter)return;
+        utils.each(root.getNodesByTagName('pre'),function(pi){
+            var val;
+            if(val = pi.getAttr('class')){
+                if(/brush/.test(val)){
+                    var tmpDiv = me.document.createElement('div');
+                    tmpDiv.innerHTML = pi.toHtml();
+                    me.window.SyntaxHighlighter.highlight(null,tmpDiv.firstChild);
+                    var node = UE.uNode.createElement(tmpDiv.innerHTML);
+                    pi.parentNode.replaceChild(node,pi)
+                }
+            }
+            if(domUtils.hasClass(pi,'brush')){
+                me.window.SyntaxHighlighter.highlight(pi);
+            }
+        });
+    });
+    me.addListener("aftergetscene",changePre);
 
 
     //避免table插件对于代码高亮的影响
