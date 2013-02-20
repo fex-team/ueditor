@@ -18,6 +18,8 @@
         this.cellsRange = {};
         this.update(table);
     };
+
+    //================================utils=========================
     UETable.cloneCell = function(cell,ingoreMerge) {
         if(!cell || utils.isString(cell)){
             return this.table.ownerDocument.createElement(cell || 'td');
@@ -57,6 +59,85 @@
     UETable.getWidth = function(cell) {
         if (!cell)return 0;
         return parseInt(domUtils.getComputedStyle(cell, "width"), 10);
+    };
+
+    /**
+     * 根据当前选区获取相关的table信息
+     * @return {Object}
+     */
+    UETable.getTableItemsByRange = function(editor) {
+        var start = editor.selection.getStart(),
+        //在table或者td边缘有可能存在选中tr的情况
+            cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
+            tr = cell && cell.parentNode,
+            caption = start && domUtils.findParentByTagName(start, 'caption', true),
+            table = caption ? caption.parentNode : tr && tr.parentNode.parentNode;
+
+        return {
+            cell:cell,
+            tr:tr,
+            table:table,
+            caption:caption
+        }
+    };
+    UETable.getUETableBySelected = function(editor){
+        var table = UETable.getTableItemsByRange(editor).table;
+        if (table && table.ueTable && table.ueTable.selectedTds.length) {
+            return table.ueTable;
+        }
+        return null;
+    };
+
+    UETable.getDefaultValue = function(editor,table){
+        var borderMap = {
+                thin:'0px',
+                medium:'1px',
+                thick:'2px'
+            },
+            tableBorder, tdPadding, tdBorder, tmpValue;
+        if (!table) {
+            table = editor.document.createElement('table');
+            table.insertRow(0).insertCell(0).innerHTML = 'xxx';
+            editor.body.appendChild(table);
+            var td = table.getElementsByTagName('td')[0];
+            tmpValue = domUtils.getComputedStyle(table, 'border-left-width');
+            tableBorder = parseInt(borderMap[tmpValue] || tmpValue, 10);
+            tmpValue = domUtils.getComputedStyle(td, 'padding-left');
+            tdPadding = parseInt(borderMap[tmpValue] || tmpValue, 10);
+            tmpValue = domUtils.getComputedStyle(td, 'border-left-width');
+            tdBorder = parseInt(borderMap[tmpValue] || tmpValue, 10);
+            domUtils.remove(table);
+            return {
+                tableBorder:tableBorder,
+                tdPadding:tdPadding,
+                tdBorder:tdBorder
+            };
+        } else {
+            td = table.getElementsByTagName('td')[0];
+            tmpValue = domUtils.getComputedStyle(table, 'border-left-width');
+            tableBorder = parseInt(borderMap[tmpValue] || tmpValue, 10);
+            tmpValue = domUtils.getComputedStyle(td, 'padding-left');
+            tdPadding = parseInt(borderMap[tmpValue] || tmpValue, 10);
+            tmpValue = domUtils.getComputedStyle(td, 'border-left-width');
+            tdBorder = parseInt(borderMap[tmpValue] || tmpValue, 10);
+            return {
+                tableBorder:tableBorder,
+                tdPadding:tdPadding,
+                tdBorder:tdBorder
+            };
+        }
+    };
+    /**
+     * 根据当前点击的td或者table获取索引对象
+     * @param tdOrTable
+     */
+    UETable.getUETable = function(tdOrTable) {
+        var tag = tdOrTable.tagName.toLowerCase();
+        tdOrTable = (tag == "td" || tag == "th" || tag == 'caption') ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
+        if (!tdOrTable.ueTable) {
+            tdOrTable.ueTable = new UETable(tdOrTable);
+        }
+        return tdOrTable.ueTable;
     };
 
     UETable.prototype = {
