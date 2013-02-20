@@ -44,7 +44,7 @@ UE.plugins['snapscreen'] = function(){
                 me.execCommand('insertimage', {
                     src: editorOptions.snapscreenPath + rs.url,
                     floatStyle: editorOptions.snapscreenImgAlign,
-                    data_ue_src:editorOptions.snapscreenPath + rs.url
+                    _src:editorOptions.snapscreenPath + rs.url
                 });
             };
             var onStartUpload = function(){

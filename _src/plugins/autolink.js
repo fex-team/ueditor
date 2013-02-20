@@ -88,7 +88,7 @@
                     a.href = a.innerHTML = a.innerHTML.replace(/<[^>]+>/g,'');
                     href = a.getAttribute("href").replace(new RegExp(domUtils.fillChar,'g'),'');
                     href = /^(?:https?:\/\/)/ig.test(href) ? href : "http://"+ href;
-                    a.setAttribute('data_ue_src',utils.html(href));
+                    a.setAttribute('_src',utils.html(href));
                     a.href = utils.html(href);
 
                     range.insertNode(a);

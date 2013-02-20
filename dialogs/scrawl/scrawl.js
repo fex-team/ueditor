@@ -633,7 +633,7 @@ function exec(scrawlObj) {
                             var imgObj = {},
                                 url = editor.options.scrawlPath + responseObj.url;
                             imgObj.src = url;
-                            imgObj.data_ue_src = url;
+                            imgObj._src = url;
                             editor.execCommand("insertImage", imgObj);
                             dialog.close();
                         } else {

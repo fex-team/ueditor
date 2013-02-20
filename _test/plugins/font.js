@@ -33,7 +33,7 @@ test( 'underline and linethrough', function() {
         equal( editor.queryCommandValue( 'strikethrough' ), 'underline', 'query command value is not strike' );
         ok( editor.queryCommandState( 'underline' ), 'query underline state' );
         editor.execCommand( 'strikethrough' );
-        var html = 'hello<a href="http://www.baidu.com/" data_ue_src = "http://www.baidu.com/" style="text-decoration: line-through">baidu</a>test';
+        var html = 'hello<a href="http://www.baidu.com/" _src = "http://www.baidu.com/" style="text-decoration: line-through">baidu</a>test';
         ua.checkHTMLSameStyle( html, editor.document, body.firstChild, 'check results' );
         start();
     },50);
@@ -328,7 +328,7 @@ test( '设置超链接前景色再清除颜色', function() {
     editor.execCommand( 'forecolor', 'rgb(255,0,0)' );
     editor.execCommand( 'backcolor', 'rgb(0,255,0)' );
     editor.execCommand( 'forecolor', 'default' );
-    var html = '<span style="background-color: rgb(0,255,0)">hello</span><a href="www.baidu.com" data_ue_src = "www.baidu.com" style="text-decoration: underline; "><span style="background-color: rgb(0, 255, 0); ">baidu</span></a>';
+    var html = '<span style="background-color: rgb(0,255,0)">hello</span><a href="www.baidu.com" _src = "www.baidu.com" style="text-decoration: underline; "><span style="background-color: rgb(0, 255, 0); ">baidu</span></a>';
     ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '清除前景色' );
     start();
 },50);
