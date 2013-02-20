@@ -14,13 +14,14 @@ UE.plugins["wordimage"] = function () {
                 flag = parseInt(attrs.width) < 128 || parseInt(attrs.height) < 43,
                 opt = me.options,
                 src = opt.UEDITOR_HOME_URL + 'themes/default/images/spacer.gif';
-            if (attrs['_src']) {
+            if (attrs['_src'].indexOf("file:///")!==-1) {
                 img.setAttr({
                     width:attrs.width,
                     height:attrs.height,
                     alt:attrs.alt,
                     word_img:attrs._src,
                     src:src,
+                    _src:src,
                     'style':'background:url(' + ( flag ? opt.themePath + opt.theme + '/images/word.gif' : opt.langPath + opt.lang + '/images/localimage.png') + ') no-repeat center center;border:1px solid #ddd'
                 })
             }
