@@ -9,7 +9,7 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
         re_attr = /([\w\-:.]+)(?:(?:\s*=\s*(?:(?:"([^"]*)")|(?:'([^']*)')|([^\s>]+)))|(?=\s|$))/g;
 
     var uNode = UE.uNode,
-        needparentNode = {
+        needParentNode = {
             'td':'tr',
             'tr':'tbody',
             'tbody':'table',
@@ -33,7 +33,7 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
 
     function element(parent, tagName, htmlattr) {
         var needParentTag;
-        if (needParentTag = needparentNode[tagName]) {
+        if (needParentTag = needParentNode[tagName]) {
             if (tagName == parent.tagName) {
                 parent = parent.parentNode;
             } else if (utils.isArray(needParentTag) ? utils.indexOf(needParentTag, parent.tagName) == -1 : needParentTag != parent.tagName) {
