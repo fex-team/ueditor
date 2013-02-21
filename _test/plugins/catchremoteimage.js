@@ -24,8 +24,8 @@ test( '成功远程图片抓取', function () {
                 if ( /upload/.test( src ) ) {
                         clearInterval( handler );
                         ok( /upload/.test( imgs[0].getAttribute( 'src' ) ), '图片已经被转存到本地' );
-//                        equal( imgs[0].getAttribute( 'src' ), imgs[0].getAttribute( 'data_ue_src' ), '查看data_ue_src' );
-//                        equal( imgs[1].getAttribute( 'src' ), imgs[1].getAttribute( 'data_ue_src' ), '查看data_ue_src' );
+//                        equal( imgs[0].getAttribute( 'src' ), imgs[0].getAttribute( '_src' ), '查看_src' );
+//                        equal( imgs[1].getAttribute( 'src' ), imgs[1].getAttribute( '_src' ), '查看_src' );
                         equal( imgs.length, 2, '2个图片' );
                         start();
                 } else if ( count > 100 ) {

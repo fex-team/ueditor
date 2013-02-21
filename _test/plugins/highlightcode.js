@@ -16,11 +16,11 @@ test('插入代码',function(){
     editor.ready(function(){
         var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
         editor.setContent('<p>' + br + '</p>');
-        debugger
+//        debugger
         range.setStart(editor.body.firstChild,0).collapse(1).select();
-        debugger
+//        debugger
         setTimeout(function(){
-            debugger
+//            debugger
             editor.execCommand('highlightcode','<?php echo "Hello World"; ?>','php');
             ua.manualDeleteFillData(editor.body);
             equal( editor.getContent().substring(0, 78),'<pre class=\"brush:php;toolbar:false;\">&lt;?php echo "Hello World"; ?&gt;</pre>','代码高亮');

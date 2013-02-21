@@ -700,7 +700,7 @@
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
                     var options=editor.options;
-                    var width = Math.max(options.initialFrameWidth,options.minFrameWidth) ;
+                    var width =Math.max(options.initialFrameWidth,options.minFrameWidth) ;
                     editor.container.style.cssText = "z-index:" + options.zIndex + ";width:" + width+"px";
                     oldRender.call(editor, iframeholder);
 

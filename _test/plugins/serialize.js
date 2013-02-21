@@ -16,7 +16,7 @@ test( '转换img标签', function () {
     var node = serialize.parseHTML( html );
     node = serialize.transformInput( node );
     var spa=ua.browser.ie==6?' orgSrc="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif"':'';
-    equal( serialize.toHTML( node ).replace( new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), '' ), '<img src="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" width="553" height="275" word_img="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" style="background:url('+editor.options.UEDITOR_HOME_URL+'lang/'+editor.options.lang+'/images/localimage.png) no-repeat center center;border:1px solid #ddd"'+spa+' data_ue_src="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" />' , '转换img标签');
+    equal( serialize.toHTML( node ).replace( new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), '' ), '<img src="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" width="553" height="275" word_img="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" style="background:url('+editor.options.UEDITOR_HOME_URL+'lang/'+editor.options.lang+'/images/localimage.png) no-repeat center center;border:1px solid #ddd"'+spa+' _src="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" />' , '转换img标签');
 } );
 test( '转换script标签', function () {
     var serialize = te.obj[0].serialize;

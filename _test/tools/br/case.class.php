@@ -57,7 +57,8 @@ class Kiss
             array_push( $ns , $ext , $n );
             $path = implode( '/' , $ns );
         } else {
-            $path = implode( '/' , explode( '.' , $name ) );
+            //$path = implode( '/' , explode( '.' , $name ) );
+            $path = $name;  //为了支持xx.xx.js类型的文件名而修改 田丽丽
         }
 //        $dir = explode('/',$path);
 //        if($dir[0]=='dialogs')
@@ -93,7 +94,8 @@ class Kiss
         print "<script type='text/javascript' src='".$importurl."' ></script>\n";
 
         /* load case and case dependents*/
-        $ps = explode( '.' , $this->name );
+        //$ps = explode( '.' , $this->name );
+        $ps = explode( '/' , $this->name ); //为了支持xx.xx.js类型的文件名而修改 田丽丽
         array_pop( $ps );
         array_push( $ps , 'tools' );
         
@@ -148,7 +150,8 @@ class Kiss
         sort($caselist,SORT_STRING);
         foreach ( $caselist as $caseitem ) {
             /*将文件名替换为域名方式，替换/为.，移除.js*/
-            $name = str_replace( '/' , '.' , substr( $caseitem , 0 , -3 ) );
+            //$name = str_replace( '/' , '.' , substr( $caseitem , 0 , -3 ) );
+            $name = substr( $caseitem , 0 , -3 );  //为了支持xx.xx.js类型的文件名而修改 田丽丽
             $c = new Kiss( $projroot , $name );
             if ( $c->empty )
                 continue;

@@ -39,7 +39,7 @@ test( '给图片添加超链接', function () {
         editor.setContent( '<p><img  style="width: 200px;height: 200px" src="http://ueditor.baidu.com/img/logo.png">hello</p>' );
         range.selectNode( editor.body.firstChild.firstChild ).select();
         editor.execCommand( 'link', {href:'http://www.baidu.com/'} );
-        var html = '<a  href="http://www.baidu.com/" ><img  src="http://ueditor.baidu.com/img/logo.png" style="width: 200px;height: 200px" data_ue_src="http://ueditor.baidu.com/img/logo.png"></a>hello';
+        var html = '<a  href="http://www.baidu.com/" ><img  src="http://ueditor.baidu.com/img/logo.png" style="width: 200px;height: 200px" _src="http://ueditor.baidu.com/img/logo.png"></a>hello';
         ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '给图片添加超链接' );
 } );
 

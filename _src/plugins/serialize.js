@@ -458,7 +458,7 @@ UE.plugins['serialize'] = function () {
                 }
 //                if(browser.ie && browser.version < 7 )
 //                    node.attributes.orgSrc = node.attributes.src;
-//                node.attributes.data_ue_src = node.attributes.data_ue_src || node.attributes.src;
+//                node.attributes._src = node.attributes._src || node.attributes.src;
                 break;
 //            case 'li':
 //                var child = node.children[0];
@@ -503,7 +503,7 @@ UE.plugins['serialize'] = function () {
 ////                    };
 ////                    node.closed = 1;
 ////                }
-//                node.attributes.href && (node.attributes.data_ue_src = node.attributes.href);
+//                node.attributes.href && (node.attributes._src = node.attributes.href);
 //                break;
 //            case 'b':
 //                node.tag = node.name = 'strong';
@@ -644,17 +644,17 @@ UE.plugins['serialize'] = function () {
 ////                    };
 ////                    node.closed = null;
 //                }else{
-////                    if(node.attributes.data_ue_src){
-////                        node.attributes.src = node.attributes.data_ue_src;
-////                        delete node.attributes.data_ue_src;
+////                    if(node.attributes._src){
+////                        node.attributes.src = node.attributes._src;
+////                        delete node.attributes._src;
 ////                    }
 //                }
 //                break;
 //
 //            case 'a':
-//                if(node.attributes.data_ue_src){
-//                    node.attributes.href = node.attributes.data_ue_src;
-//                    delete node.attributes.data_ue_src;
+//                if(node.attributes._src){
+//                    node.attributes.href = node.attributes._src;
+//                    delete node.attributes._src;
 //                }
         }
 

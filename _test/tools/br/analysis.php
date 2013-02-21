@@ -67,7 +67,7 @@ class Analysis{
 		new Analysis();
 		if(!array_key_exists($domain, self::$_cache)){
 			$cnt =''; $covcnt = '';
-			$path = join('/', explode('.', $domain)).'.js';
+			//$path = join('/', explode('.', $domain)).'.js';  //为了支持xx.xx.js类型的文件名而修改 田丽丽
 			//文件在当前项目存在则取当前项目，否则取tangram项目
 			require_once 'config.php';
 			foreach(Config::$SOURCE_PATH as $i=>$d){

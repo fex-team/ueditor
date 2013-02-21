@@ -35,7 +35,7 @@ function addOkListener() {
 			for (var j = 0,url; url = imageUrls[j++];) {
 				if (src.indexOf(url.original.replace(" ","")) != -1) {
 					img.src = editor.options.wordImagePath + url.url;
-					img.setAttribute("data_ue_src", editor.options.wordImagePath + url.url);  //同时修改"data_ue_src"属性
+					img.setAttribute("_src", editor.options.wordImagePath + url.url);  //同时修改"_src"属性
 					img.setAttribute("title",url.title);
                     parent.baidu.editor.dom.domUtils.removeAttributes(img, ["word_img","style","width","height"]);
 					editor.fireEvent("selectionchange");
