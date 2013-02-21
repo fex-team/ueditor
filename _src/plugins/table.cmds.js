@@ -6,22 +6,20 @@
  * To change this template use File | Settings | File Templates.
  */
 ;(function(){
-    var getTableItemsByRange = function(editor){
-            return UE.UETable.getTableItemsByRange(editor);
+    var UT = UE.UETable,
+        getTableItemsByRange = function(editor){
+            return UT.getTableItemsByRange(editor);
         },
         getUETableBySelected = function(editor){
-            return UE.UETable.getUETableBySelected(editor)
+            return UT.getUETableBySelected(editor)
         },
         getDefaultValue = function(editor,table){
-            return UE.UETable.getDefaultValue(editor,table);
+            return UT.getDefaultValue(editor,table);
         },
         getUETable = function(tdOrTable){
-            return UE.UETable.getUETable(tdOrTable);
+            return UT.getUETable(tdOrTable);
         };
-    function getSelectedArr(editor) {
-        var ut = getTableItemsByRange(editor).cell || getUETableBySelected(editor);
-        return ut ? (ut.nodeType ? [ut] : ut.selectedTds) : [];
-    }
+
 
     UE.commands['inserttable'] = {
         queryCommandState:function () {
@@ -528,7 +526,7 @@
                     table = tableItems.table;
                 if (table) {
                     if (cmd == 'adaptbywindow') {
-                        resetTdWidth(table);
+                        resetTdWidth(table,this);
                     } else {
                         var cells = domUtils.getElementsByTagName(table,"td th");
                         utils.each(cells,function(cell){
@@ -748,20 +746,24 @@
         }
     };
 
-    function resetTdWidth(table){
+    function resetTdWidth(table,editor){
         var tds = table.getElementsByTagName("td");
         utils.each(tds, function (td) {
             td.removeAttribute("width");
         });
-        table.setAttribute('width', getTableWidth(me,true,getDefaultValue(me,table)));
+        table.setAttribute('width', getTableWidth(editor,true,getDefaultValue(editor,table)));
         setTimeout(function(){
             utils.each(tds,function(td){
                 (td.colSpan ==1) && td.setAttribute("width",td.offsetWidth + "");
             })
-        },0)
+        },0);
     }
     function getTableWidth(editor, needIEHack, defaultValue) {
         var body = editor.body;
         return body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (editor.options.offsetWidth || 0);
+    }
+    function getSelectedArr(editor) {
+        var ut = getTableItemsByRange(editor).cell || getUETableBySelected(editor);
+        return ut ? (ut.nodeType ? [ut] : ut.selectedTds) : [];
     }
 })();

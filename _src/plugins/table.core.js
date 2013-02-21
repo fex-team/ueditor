@@ -19,29 +19,15 @@
         this.update(table);
     };
 
-    //================================utils=========================
-    UETable.cloneCell = function(cell,ingoreMerge) {
-        if(!cell || utils.isString(cell)){
-            return this.table.ownerDocument.createElement(cell || 'td');
-        }
-        var flag = domUtils.hasClass(cell, "selectTdClass");
-        flag && domUtils.removeClasses(cell, "selectTdClass");
-        var tmpCell = cell.cloneNode(true);
-        if(ingoreMerge){
-            tmpCell.rowSpan = tmpCell.colSpan = 1;
-        }
-        tmpCell.style.borderLeftStyle = "";
-        tmpCell.style.borderTopStyle = "";
-        tmpCell.style.borderLeftColor = cell.style.borderRightColor;
-        tmpCell.style.borderLeftWidth = cell.style.borderRightWidth;
-        tmpCell.style.borderTopColor = cell.style.borderBottomColor;
-        tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
-        flag && domUtils.addClass(cell, "selectTdClass");
-        return tmpCell;
-    };
+    //===以下为静态工具方法===
     UETable.removeSelectedClass = function(cells) {
         utils.each(cells, function (cell) {
             domUtils.removeClasses(cell, "selectTdClass");
+        })
+    };
+    UETable.addSelectedClass = function(cells){
+        utils.each(cells, function (cell) {
+            domUtils.addClass(cell, "selectTdClass");
         })
     };
     UETable.isEmptyBlock = function(node) {
@@ -49,8 +35,8 @@
         if (node[browser.ie ? 'innerText' : 'textContent'].replace(/^\s*$/, '').replace(reg, '').length > 0) {
             return 0;
         }
-        for (var n in dtd.$isNotEmpty) {
-            if (node.getElementsByTagName(n).length) {
+        for (var i in dtd.$isNotEmpty) if(dtd.$isNotEmpty.hasOwnProperty(i)) {
+            if (node.getElementsByTagName(i).length) {
                 return 0;
             }
         }
@@ -275,7 +261,25 @@
         setCellContent:function (cell, content) {
             cell.innerHTML = content || (browser.ie ? domUtils.fillChar : "<br />");
         },
-        cloneCell:UETable.cloneCell,
+        cloneCell:function(cell,ignoreMerge){
+            if(!cell || utils.isString(cell)){
+                return this.table.ownerDocument.createElement(cell || 'td');
+            }
+            var flag = domUtils.hasClass(cell, "selectTdClass");
+            flag && domUtils.removeClasses(cell, "selectTdClass");
+            var tmpCell = cell.cloneNode(true);
+            if(ignoreMerge){
+                tmpCell.rowSpan = tmpCell.colSpan = 1;
+            }
+            tmpCell.style.borderLeftStyle = "";
+            tmpCell.style.borderTopStyle = "";
+            tmpCell.style.borderLeftColor = cell.style.borderRightColor;
+            tmpCell.style.borderLeftWidth = cell.style.borderRightWidth;
+            tmpCell.style.borderTopColor = cell.style.borderBottomColor;
+            tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
+            flag && domUtils.addClass(cell, "selectTdClass");
+            return tmpCell;
+        },
         /**
          * 获取跟当前单元格的右边竖线为左边的所有未合并单元格
          */
@@ -546,7 +550,7 @@
          */
         setSelected:function (range) {
             var cells = this.getCells(range);
-            addSelectedClass(cells);
+            UETable.addSelectedClass(cells);
             this.selectedTds = cells;
             this.cellsRange = range;
         },
@@ -1007,10 +1011,5 @@
             this.setSelected(range);
         }
     };
-    function addSelectedClass(cells) {
-        utils.each(cells, function (cell) {
-            domUtils.addClass(cell, "selectTdClass");
-        })
-    }
     function showError(e) {}
 })();

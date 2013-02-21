@@ -8,19 +8,24 @@
 UE.plugins['table'] = function () {
     var me = this,
         debug = true,
-        UETable = UE.UETable,
-        getUETable = function(tdOrTable){
-            return UE.UETable.getUETable(tdOrTable);
+        UT = UE.UETable,
+        getUETable = function (tdOrTable) {
+            return UT.getUETable(tdOrTable);
         },
-        getUETableBySelected = function(editor){
-            return UETable.getUETableBySelected(editor);
+        getUETableBySelected = function (editor) {
+            return UT.getUETableBySelected(editor);
         },
-        getDefaultValue = function(editor,table){
-            return UE.UETable.getDefaultValue(editor,table);
+        getDefaultValue = function (editor, table) {
+            return UT.getDefaultValue(editor, table);
+        },
+        removeSelectedClass = function (cells) {
+            return UT.removeSelectedClass(cells);
         };
+
     function showError(e) {
         if (debug) throw e;
     }
+
     //处理拖动及框选相关方法
     var startTd = null, //鼠标按下时的锚点td
         currentTd = null, //当前鼠标经过时的td
@@ -168,17 +173,18 @@ UE.plugins['table'] = function () {
                 tableCopyList = null;
                 table = getUETableBySelected(me);
                 if (table) {
-                    var tds = table.selectedTds;
+                    var tds = table.selectedTds,
+                        ut = getUETable(table);
                     isFullCol = table.isFullCol();
                     isFullRow = table.isFullRow();
                     tableCopyList = [
-                        [cloneCell(tds[0])]
+                        [ut.cloneCell(tds[0])]
                     ];
                     for (var i = 1, ci; ci = tds[i]; i++) {
                         if (ci.parentNode !== tds[i - 1].parentNode) {
-                            tableCopyList.push([cloneCell(ci)])
+                            tableCopyList.push([ut.cloneCell(ci)]);
                         } else {
-                            tableCopyList[tableCopyList.length - 1].push(cloneCell(ci))
+                            tableCopyList[tableCopyList.length - 1].push(ut.cloneCell(ci));
                         }
 
                     }
@@ -283,7 +289,7 @@ UE.plugins['table'] = function () {
                     for (var i = 0, ci; ci = tableCopyList[i++];) {
                         var tr = table.insertRow(table.rows.length);
                         for (var j = 0, cj; cj = ci[j++];) {
-                            cloneTd = cloneCell(cj);
+                            cloneTd = ut.cloneCell(cj);
                             domUtils.removeAttributes(cloneTd, ['class']);
                             tr.appendChild(cloneTd)
                         }
@@ -357,7 +363,7 @@ UE.plugins['table'] = function () {
             }, 100);
         });
         me.addListener("selectionchange", function () {
-            toggleDragableState(me, false, "", null);
+            toggleDraggableState(me, false, "", null);
         });
 
 
@@ -373,7 +379,7 @@ UE.plugins['table'] = function () {
             start = domUtils.findParentByTagName(start, ['td', 'th'], true);
             utils.each(domUtils.getElementsByTagName(me.document, 'table'), function (table) {
                 if (me.fireEvent("excludetable", table) === true) return;
-                table.ueTable = new UETable(table);
+                table.ueTable = new UT(table);
                 utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
 
                     if (domUtils.isEmptyBlock(td) && td !== start) {
@@ -395,7 +401,7 @@ UE.plugins['table'] = function () {
                     me.options.tableDragable && toggleDragButton(true, this, me);
                 };
                 table.onmouseout = function () {
-                    toggleDragableState(me, false, "", null);
+                    toggleDraggableState(me, false, "", null);
                     hideDragLine(me);
                 };
                 table.onclick = function (evt) {
@@ -472,20 +478,20 @@ UE.plugins['table'] = function () {
                                     }
                                 }
                             }
-                            if(h == 'h') {
+                            if (h == 'h') {
                                 var ut = getUETable(target),
-                                    cells = ut.getSameEndPosCells(target,"x"),
+                                    cells = ut.getSameEndPosCells(target, "x"),
                                     table = ut.table;
                                 table.removeAttribute("width");
-                                utils.each(cells,function(cell){
+                                utils.each(cells, function (cell) {
                                     cell.removeAttribute("width");
                                 });
-                                setTimeout(function(){
-                                    var width = cells[0].offsetWidth -20;
-                                    utils.each(cells,function(cell){
-                                        cell.setAttribute("width",width);
+                                setTimeout(function () {
+                                    var width = cells[0].offsetWidth - 20;
+                                    utils.each(cells, function (cell) {
+                                        cell.setAttribute("width", width);
                                     })
-                                    table.setAttribute("width",table.offsetWidth);
+                                    table.setAttribute("width", table.offsetWidth);
                                 })
 
                             }
@@ -494,7 +500,7 @@ UE.plugins['table'] = function () {
                 }
             });
 
-            switchBoderColor(true);
+            switchBorderColor(me, true);
         });
 
         //仅IE8以上支持
@@ -504,7 +510,7 @@ UE.plugins['table'] = function () {
         domUtils.on(me.document, "mouseout", function (evt) {
             var target = evt.target || evt.srcElement;
             if (target.tagName == "TABLE") {
-                toggleDragableState(me, false, "", null);
+                toggleDraggableState(me, false, "", null);
             }
         });
 
@@ -552,7 +558,7 @@ UE.plugins['table'] = function () {
 
         });
         browser.ie && me.addListener('selectionchange', function () {
-            toggleDragableState(this, false, "", null);
+            toggleDraggableState(this, false, "", null);
         });
         me.addListener("keydown", function (type, evt) {
             var me = this;
@@ -569,15 +575,15 @@ UE.plugins['table'] = function () {
         });
 
         me.addListener("beforegetcontent", function () {
-            switchBoderColor(false);
-            browser.ie && utils.each(me.document.getElementsByTagName('caption'), function (ci) {
+            switchBorderColor(this, false);
+            browser.ie && utils.each(this.document.getElementsByTagName('caption'), function (ci) {
                 if (domUtils.isEmptyNode(ci)) {
                     ci.innerHTML = '&nbsp;'
                 }
             });
         });
         me.addListener("aftergetcontent", function () {
-            switchBoderColor(true);
+            switchBorderColor(this, true);
         });
         me.addListener("getAllHtml", function () {
             removeSelectedClass(me.document.getElementsByTagName("td"));
@@ -710,7 +716,7 @@ UE.plugins['table'] = function () {
                 me.document.body.style.webkitUserSelect = 'none';
                 me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
                 pos = mouseCoords(evt);
-                toggleDragableState(me, true, "", pos, target);
+                toggleDraggableState(me, true, "", pos, target);
                 if (onDrag == "h") {
                     dragLine.style.left = getPermissionX(dragTd, evt) + "px";
                 } else if (onDrag == "v") {
@@ -743,7 +749,7 @@ UE.plugins['table'] = function () {
                         target = getUETable(target).getPreviewCell(target, state == "v");
                     }
                     //位于第一行的顶部或者第一列的左边时不可拖动
-                    toggleDragableState(me, target ? !!state : false, target ? state : '', pos, target);
+                    toggleDraggableState(me, target ? !!state : false, target ? state : '', pos, target);
                 }
 //                toggleDragButton(inTable(pos,table),table);
             } else {
@@ -754,12 +760,13 @@ UE.plugins['table'] = function () {
             showError(e);
         }
     }
-    var dragButtomTimer;
+
+    var dragButtonTimer;
 
     function toggleDragButton(show, table, editor) {
         if (!show) {
             if (dragOver)return;
-            dragButtomTimer = setTimeout(function () {
+            dragButtonTimer = setTimeout(function () {
                 !dragOver && dragButton && dragButton.parentNode && dragButton.parentNode.removeChild(dragButton);
             }, 2000);
         } else {
@@ -838,7 +845,6 @@ UE.plugins['table'] = function () {
         }
     }
 
-
     /**
      * 获取拖动时允许的X轴坐标
      * @param dragTd
@@ -858,8 +864,6 @@ UE.plugins['table'] = function () {
 
     /**
      * 获取拖动时允许的Y轴坐标
-     * @param dragTd
-     * @param evt
      */
     function getPermissionY(dragTd, evt) {
         try {
@@ -869,15 +873,12 @@ UE.plugins['table'] = function () {
         } catch (e) {
             showError(e);
         }
-
     }
 
     /**
      * 移动状态切换
-     * @param dragable
-     * @param dir
      */
-    function toggleDragableState(editor, dragable, dir, mousePos, cell) {
+    function toggleDraggableState(editor, draggable, dir, mousePos, cell) {
         try {
             editor.body.style.cursor = dir == "h" ? "col-resize" : dir == "v" ? "row-resize" : "text";
             if (browser.ie) {
@@ -888,12 +889,11 @@ UE.plugins['table'] = function () {
                     hideDragLine(editor)
                 }
             }
-            onBorder = dragable;
+            onBorder = draggable;
         } catch (e) {
             showError(e);
         }
     }
-
 
     /**
      * 获取鼠标与当前单元格的相对位置
@@ -918,7 +918,6 @@ UE.plugins['table'] = function () {
     }
 
     function mouseDownEvent(type, evt) {
-
         //右键菜单单独处理
         if (evt.button == 2) {
             var ut = getUETableBySelected(me),
@@ -981,77 +980,6 @@ UE.plugins['table'] = function () {
             onDrag = state;
             dragTd = startTd;
         }
-    }
-
-    function removeSelectedClass(cells) {
-        utils.each(cells, function (cell) {
-            domUtils.removeClasses(cell, "selectTdClass");
-        })
-    }
-
-    function addSelectedClass(cells) {
-        utils.each(cells, function (cell) {
-            domUtils.addClass(cell, "selectTdClass");
-        })
-    }
-
-    function getWidth(cell) {
-        if (!cell)return 0;
-        return parseInt(domUtils.getComputedStyle(cell, "width"), 10);
-    }
-
-    function changeColWidth(cell, changeValue) {
-        if (Math.abs(changeValue) < 10) return;
-        var ut = getUETable(cell);
-        if (ut) {
-            var table = ut.table,
-                backTableWidth = getWidth(table),
-                defaultValue = getDefaultValue(me, table),
-            //这里不考虑一个都没有情况，如果一个都没有，可以认为该表格的结构可以精简
-                leftCells = ut.getSameEndPosCells(cell, "x"),
-                backLeftWidth = getWidth(leftCells[0]) - defaultValue.tdPadding * 2 - defaultValue.tdBorder,
-                rightCells = ut.getSameStartPosXCells(cell),
-                backRightWidth = getWidth(rightCells[0]) - defaultValue.tdPadding * 2 - defaultValue.tdBorder;
-            //整列被rowspan时存在
-            utils.each(leftCells, function (cell) {
-                if (cell.style.width) cell.style.width = "";
-                if (changeValue < 0)cell.style.wordBreak = "break-all";
-                cell.setAttribute("width", backLeftWidth + changeValue);
-            });
-            utils.each(rightCells, function (cell) {
-                if (cell.style.width) cell.style.width = "";
-                if (changeValue > 0)cell.style.wordBreak = "break-all";
-                cell.setAttribute("width", backRightWidth - changeValue);
-            });
-            //如果是在表格最右边拖动，则还需要调整表格宽度，否则在合并过的单元格中输入文字，表格会被撑开
-            if (!cell.nextSibling) {
-                if (table.style.width) table.style.width = "";
-                table.setAttribute("width", backTableWidth + changeValue);
-            }
-        }
-
-    }
-
-    function changeRowHeight(td, changeValue) {
-        if (Math.abs(changeValue) < 10) return;
-        var ut = getUETable(td);
-        if (ut) {
-            var cells = ut.getSameEndPosCells(td, "y"),
-            //备份需要连带变化的td的原始高度，否则后期无法获取正确的值
-                backHeight = cells[0] ? cells[0].offsetHeight : 0;
-            for (var i = 0, cell; cell = cells[i++];) {
-                setCellHeight(cell, changeValue, backHeight);
-            }
-        }
-
-    }
-
-    function setCellHeight(cell, height, backHeight) {
-        var lineHight = parseInt(domUtils.getComputedStyle(cell, "line-height"), 10),
-            tmpHeight = backHeight + height;
-        height = tmpHeight < lineHight ? lineHight : tmpHeight;
-        if (cell.style.height) cell.style.height = "";
-        cell.rowSpan == 1 ? cell.setAttribute("height", height) : (cell.removeAttribute && cell.removeAttribute("height"));
     }
 
     function mouseUpEvent(type, evt) {
@@ -1154,6 +1082,64 @@ UE.plugins['table'] = function () {
         evt.preventDefault ? evt.preventDefault() : (evt.returnValue = false);
     }
 
+    function setCellHeight(cell, height, backHeight) {
+        var lineHight = parseInt(domUtils.getComputedStyle(cell, "line-height"), 10),
+            tmpHeight = backHeight + height;
+        height = tmpHeight < lineHight ? lineHight : tmpHeight;
+        if (cell.style.height) cell.style.height = "";
+        cell.rowSpan == 1 ? cell.setAttribute("height", height) : (cell.removeAttribute && cell.removeAttribute("height"));
+    }
+
+    function getWidth(cell) {
+        if (!cell)return 0;
+        return parseInt(domUtils.getComputedStyle(cell, "width"), 10);
+    }
+
+    function changeColWidth(cell, changeValue) {
+        if (Math.abs(changeValue) < 10) return;
+        var ut = getUETable(cell);
+        if (ut) {
+            var table = ut.table,
+                backTableWidth = getWidth(table),
+                defaultValue = getDefaultValue(me, table),
+            //这里不考虑一个都没有情况，如果一个都没有，可以认为该表格的结构可以精简
+                leftCells = ut.getSameEndPosCells(cell, "x"),
+                backLeftWidth = getWidth(leftCells[0]) - defaultValue.tdPadding * 2 - defaultValue.tdBorder,
+                rightCells = ut.getSameStartPosXCells(cell),
+                backRightWidth = getWidth(rightCells[0]) - defaultValue.tdPadding * 2 - defaultValue.tdBorder;
+            //整列被rowspan时存在
+            utils.each(leftCells, function (cell) {
+                if (cell.style.width) cell.style.width = "";
+                if (changeValue < 0)cell.style.wordBreak = "break-all";
+                cell.setAttribute("width", backLeftWidth + changeValue);
+            });
+            utils.each(rightCells, function (cell) {
+                if (cell.style.width) cell.style.width = "";
+                if (changeValue > 0)cell.style.wordBreak = "break-all";
+                cell.setAttribute("width", backRightWidth - changeValue);
+            });
+            //如果是在表格最右边拖动，则还需要调整表格宽度，否则在合并过的单元格中输入文字，表格会被撑开
+            if (!cell.nextSibling) {
+                if (table.style.width) table.style.width = "";
+                table.setAttribute("width", backTableWidth + changeValue);
+            }
+        }
+
+    }
+
+    function changeRowHeight(td, changeValue) {
+        if (Math.abs(changeValue) < 10) return;
+        var ut = getUETable(td);
+        if (ut) {
+            var cells = ut.getSameEndPosCells(td, "y"),
+            //备份需要连带变化的td的原始高度，否则后期无法获取正确的值
+                backHeight = cells[0] ? cells[0].offsetHeight : 0;
+            for (var i = 0, cell; cell = cells[i++];) {
+                setCellHeight(cell, changeValue, backHeight);
+            }
+        }
+
+    }
 
     function getDragLine(editor, doc) {
         if (mousedown)return;
@@ -1167,9 +1153,6 @@ UE.plugins['table'] = function () {
             'onselectstart':'return false',
             style:"background-color:blue;position:absolute;padding:0;margin:0;background-image:none;border:0px none;opacity:0;filter:alpha(opacity=0)"
         });
-//            domUtils.on(dragLine,['resizestart','dragstart','selectstart'],function(evt){
-//                domUtils.preventDefault(evt);
-//            });
         editor.body.appendChild(dragLine);
     }
 
@@ -1210,10 +1193,11 @@ UE.plugins['table'] = function () {
 
     /**
      * 当表格边框颜色为白色时设置为虚线,true为添加虚线
+     * @param editor
      * @param flag
      */
-    function switchBoderColor(flag) {
-        var tableArr = domUtils.getElementsByTagName(me.body, "table"), color;
+    function switchBorderColor(editor, flag) {
+        var tableArr = domUtils.getElementsByTagName(editor.body, "table"), color;
         for (var i = 0, node; node = tableArr[i++];) {
             var td = domUtils.getElementsByTagName(node, "td");
             if (td[0]) {
@@ -1238,25 +1222,5 @@ UE.plugins['table'] = function () {
         var target = domUtils.findParentByTagName(evt.target || evt.srcElement, ["td", "th"], true);
         //排除了非td内部以及用于代码高亮部分的td
         return target && !(editor.fireEvent("excludetable", target) === true) ? target : null;
-    }
-
-    function cloneCell(cell, ingoreMerge) {
-        if (!cell || utils.isString(cell)) {
-            return this.table.ownerDocument.createElement(cell || 'td');
-        }
-        var flag = domUtils.hasClass(cell, "selectTdClass");
-        flag && domUtils.removeClasses(cell, "selectTdClass");
-        var tmpCell = cell.cloneNode(true);
-        if (ingoreMerge) {
-            tmpCell.rowSpan = tmpCell.colSpan = 1;
-        }
-        tmpCell.style.borderLeftStyle = "";
-        tmpCell.style.borderTopStyle = "";
-        tmpCell.style.borderLeftColor = cell.style.borderRightColor;
-        tmpCell.style.borderLeftWidth = cell.style.borderRightWidth;
-        tmpCell.style.borderTopColor = cell.style.borderBottomColor;
-        tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
-        flag && domUtils.addClass(cell, "selectTdClass");
-        return tmpCell;
     }
 };
