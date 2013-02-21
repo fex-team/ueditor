@@ -34,12 +34,24 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
     function element(parent, tagName, htmlattr) {
         var needParentTag;
         if (needParentTag = needParentNode[tagName]) {
-            if (tagName == parent.tagName) {
-                parent = parent.parentNode;
-            } else if (utils.isArray(needParentTag) ? utils.indexOf(needParentTag, parent.tagName) == -1 : needParentTag != parent.tagName) {
+            var tmpParent = parent,hasParent;
+            while(tmpParent.type != 'root'){
+                if(utils.isArray(needParentTag) ? utils.indexOf(needParentTag, tmpParent.tagName) != -1 : needParentTag == tmpParent.tagName){
+                    parent = tmpParent;
+                    hasParent = true;
+                    break;
+                }
+                tmpParent = tmpParent.parentNode;
+            }
+            if(!hasParent){
                 parent = element(parent, utils.isArray(needParentTag) ? needParentTag[0] : needParentTag)
             }
         }
+//        //根据dtd判断是否当前节点可以放入新的节点
+//        while(dtd[parent.tagName] && !dtd[parent.tagName][tagName]){
+//            parent = parent.parentNode;
+//        }
+
         var elm = new uNode({
             parentNode:parent,
             type:'element',
@@ -87,6 +99,9 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
             currentParent = element(currentParent, match[3], match[4]);
 
         } else if (match[1]) {
+            while(currentParent.type == 'element' && currentParent.tagName != match[1]){
+                currentParent = currentParent.parentNode;
+            }
             //end tag
             currentParent = currentParent.parentNode;
         } else if (match[2]) {
