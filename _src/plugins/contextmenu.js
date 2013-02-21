@@ -175,6 +175,54 @@ UE.plugins['contextmenu'] = function () {
                     ]
                 },
                 {
+                    group:"表格排序",
+                    icon:'tablesort',
+                    subMenu:[
+                        {
+                            label:"逆序当前",
+                            cmdName:'sorttable',
+                            value:1
+                        },
+                        {
+                            label:"按ASCII字符升序",
+                            cmdName:'sorttable'
+                        },
+                        {
+                            label:"按ASCII字符降序",
+                            cmdName:'sorttable',
+                            exec:function(){
+                                this.execCommand("sorttable",function(td1,td2){
+                                    var value1 = td1.innerHTML,
+                                        value2 = td2.innerHTML;
+                                    return value2.localeCompare(value1);
+                                });
+                            }
+                        },
+                        {
+                            label:"按数值大小升序",
+                            cmdName:'sorttable',
+                            exec:function(){
+                                this.execCommand("sorttable",function(td1,td2){
+                                    var value1 = parseInt(td1.innerHTML,10),
+                                        value2 = parseInt(td2.innerHTML,10);
+                                    return (value1||0) - (value2||0);
+                                });
+                            }
+                        },
+                        {
+                            label:"按数值大小降序",
+                            cmdName:'sorttable',
+                            exec:function(){
+                                this.execCommand("sorttable",function(td1,td2){
+                                    var value1 = parseInt(td1.innerHTML,10),
+                                        value2 = parseInt(td2.innerHTML,10);
+                                    return (value2||0) - (value1||0);
+                                });
+                            }
+                        }
+                    ]
+                },
+                {
                     group:lang.aligntd,
                     icon:'aligntd',
                     subMenu:[
@@ -330,6 +378,8 @@ UE.plugins['contextmenu'] = function () {
                                     return me.getLang("contextMenu.aligntd");
                                 case "aligntable":
                                     return me.getLang("contextMenu.aligntable");
+                                case "tablesort":
+                                    return "表格排序";
                                 default :
                                     return '';
                             }

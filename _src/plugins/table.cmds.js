@@ -5,18 +5,19 @@
  * Time: 下午6:25
  * To change this template use File | Settings | File Templates.
  */
-;(function(){
+;
+(function () {
     var UT = UE.UETable,
-        getTableItemsByRange = function(editor){
+        getTableItemsByRange = function (editor) {
             return UT.getTableItemsByRange(editor);
         },
-        getUETableBySelected = function(editor){
+        getUETableBySelected = function (editor) {
             return UT.getUETableBySelected(editor)
         },
-        getDefaultValue = function(editor,table){
-            return UT.getDefaultValue(editor,table);
+        getDefaultValue = function (editor, table) {
+            return UT.getDefaultValue(editor, table);
         },
-        getUETable = function(tdOrTable){
+        getUETable = function (tdOrTable) {
             return UT.getUETable(tdOrTable);
         };
 
@@ -526,10 +527,10 @@
                     table = tableItems.table;
                 if (table) {
                     if (cmd == 'adaptbywindow') {
-                        resetTdWidth(table,this);
+                        resetTdWidth(table, this);
                     } else {
-                        var cells = domUtils.getElementsByTagName(table,"td th");
-                        utils.each(cells,function(cell){
+                        var cells = domUtils.getElementsByTagName(table, "td th");
+                        utils.each(cells, function (cell) {
                             cell.removeAttribute("width");
                         });
                         table.removeAttribute("width");
@@ -745,23 +746,45 @@
             }
         }
     };
+    UE.commands['sorttable'] = {
+        queryCommandState:function () {
+            var me = this,
+                tableItems = getTableItemsByRange(me);
+            if(!tableItems.cell) return -1;
+            return 0;
+        },
+        execCommand:function (cmd, fn) {
+            var tableItems = getTableItemsByRange(this),
+                cell = tableItems.cell,
+                ut = getUETable(tableItems.table),
+                cellIndex = ut.getCellInfo(cell).cellIndex,
+                cells = ut.getSameEndPosCells(cell, "x");
+            if (cells.length < ut.rowsNum) {
+                this.fireEvent("tableForbidSort");
+                return;
+            }
+            ut.sortTable(cellIndex,fn);
+        }
+    };
 
-    function resetTdWidth(table,editor){
+    function resetTdWidth(table, editor) {
         var tds = table.getElementsByTagName("td");
         utils.each(tds, function (td) {
             td.removeAttribute("width");
         });
-        table.setAttribute('width', getTableWidth(editor,true,getDefaultValue(editor,table)));
-        setTimeout(function(){
-            utils.each(tds,function(td){
-                (td.colSpan ==1) && td.setAttribute("width",td.offsetWidth + "");
+        table.setAttribute('width', getTableWidth(editor, true, getDefaultValue(editor, table)));
+        setTimeout(function () {
+            utils.each(tds, function (td) {
+                (td.colSpan == 1) && td.setAttribute("width", td.offsetWidth + "");
             })
-        },0);
+        }, 0);
     }
+
     function getTableWidth(editor, needIEHack, defaultValue) {
         var body = editor.body;
         return body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (editor.options.offsetWidth || 0);
     }
+
     function getSelectedArr(editor) {
         var ut = getTableItemsByRange(editor).cell || getUETableBySelected(editor);
         return ut ? (ut.nodeType ? [ut] : ut.selectedTds) : [];

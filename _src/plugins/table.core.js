@@ -1011,6 +1011,26 @@
             var tds = this.table.getElementsByTagName("td"),
                 range = this.getCellsRange(tds[0], tds[tds.length - 1]);
             this.setSelected(range);
+        },
+        sortTable:function(cellIndex,fn){
+            var table = this.table,
+                rows = table.rows,
+                trArray = [];
+            for (var i = 0, len = rows.length; i < len; i++) {
+                trArray[i] = rows[i];
+            }
+            trArray.sort(function (tr1, tr2) {
+                return fn ? (typeof fn === "number" ? fn : fn.call(this,tr1.cells[cellIndex], tr2.cells[cellIndex])) : function () {
+                    var value1 = tr1.cells[cellIndex].innerHTML,
+                        value2 = tr2.cells[cellIndex].innerHTML;
+                    return value1.localeCompare(value2);
+                }();
+            });
+            var fragment = table.ownerDocument.createDocumentFragment();
+            for (var j = 0, len = trArray.length; j < len; j++) {
+                fragment.appendChild(trArray[j]);
+            }
+            table.getElementsByTagName("tbody")[0].appendChild(fragment);
         }
     };
     function showError(e) {
