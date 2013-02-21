@@ -277,7 +277,7 @@
                     if (editor.ui._dialogs.linkDialog) {
                         var link = editor.queryCommandValue('link');
                         var url;
-                        if (link && (url = (link.getAttribute('data_ue_src') || link.getAttribute('href', 2)))) {
+                        if (link && (url = (link.getAttribute('_href') || link.getAttribute('href', 2)))) {
                             var txt = url;
                             if (url.length > 30) {
                                 txt = url.substring(0, 20) + "...";
@@ -700,7 +700,7 @@
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
                     var options=editor.options;
-                    var width =Math.max(options.initialFrameWidth,options.minFrameWidth) ;
+                    var width = Math.max(options.initialFrameWidth,options.minFrameWidth) ;
                     editor.container.style.cssText = "z-index:" + options.zIndex + ";width:" + width+"px";
                     oldRender.call(editor, iframeholder);
 
