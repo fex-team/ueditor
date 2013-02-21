@@ -15,9 +15,10 @@ function getTable(str) {
     div.innerHTML = "<table>" + str + "</table>";
     return div.firstChild;
 }
+UT = UE.UETable;
 test("create UETable",function(){
     var table = getTable("<tr><td>ddd</td></tr>"),
-        ut = new UE.UETable(table);
+        ut = new UT(table);
     ok(ut.table === table,"UT对象创建成功");
     equal(ut.colsNum,1,"单元格列数为1");
     equal(ut.rowsNum,1,"单元格行数为1");
@@ -26,12 +27,14 @@ test("create UETable",function(){
 test("getMaxRows",function(){
     var table = getTable("<tr><td>1</td><td>2</td><td>3</td></tr>" +
                          "<tr><td>1</td><td>2</td><td>3</td></tr>"),
-        ut = new UE.UETable(table);
+        ut = new UT(table);
     var maxRows = ut.getMaxRows();
     equal(maxRows,2,"最大行数为2");
 
     table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td rowspan='2'>3</td></tr>" +
                      "<tr><td>2</td></tr>");
-
+    ut = new UT(table);
+    maxRows = ut.getMaxRows();
+    equal(maxRows,2,"最大行数为3")
 
 });
