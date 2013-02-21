@@ -8,6 +8,7 @@ test( '', function() {
         'b':'-'
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p>sdf</p>sdf</div>');
+
     node.innerHTML('<p style="color:#ccc;border:1px solid #ccc;"><table><tbody><tr><td></td></tr></tbody></table></p><div>sdfasdf</div>');
     UE.filterNode(node,{
         'p':{$:{
@@ -16,6 +17,7 @@ test( '', function() {
         'td':{}
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p style="color:#ccc"><td></td></p>sdfasdf</div>');
+
     node.innerHTML('<p style="color:#ccc;border:1px solid #ccc;"><table><tbody><tr><td>sdfs</td><td>sdfs</td></tr></tbody></table></p><div>sdfasdf</div>');
     UE.filterNode(node,{
         'p':{$:{
@@ -64,12 +66,16 @@ test( '', function() {
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p><u class="ad">sdfs<sub>sdfs</sub></u></p></div>');
 
-    node.innerHTML('<img src="http://img.baidu.com/hi/jx2/j_0020.gif" height="10px"/><script></script>');
+    node.innerHTML('<img src="http://img.baidu.com/hi/jx2/j_0020.gif" height="10px"/><table><caption>aldkfj</caption><tbody><tr style="background-color: #ccc;"><th>adf</th></tr><tr><td>lkj</td></tbody></table>');
     UE.filterNode(node,{
         'img':{$:{
             src:['']
         }},
-        'script':function(node){
+        'table':{},
+        'tbody':{},
+        'tr':{$:{}},
+        'td':{$:{}},
+        'th':function(node){
             var txt = !!node.innerText();
             if(txt){
                 node.parentNode.insertAfter(UE.uNode.createText(' &nbsp; &nbsp;'),node);
@@ -77,10 +83,9 @@ test( '', function() {
             node.parentNode.removeChild(node,node.innerText())
         }
     });
-    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><img src="http://img.baidu.com/hi/jx2/j_0020.gif" /></div>');
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><img src="http://img.baidu.com/hi/jx2/j_0020.gif" /><table>aldkfj<tbody><tr>adf &nbsp; &nbsp;</tr><tr><td>lkj</td></tr></tbody></table></div>');
 
     node.innerHTML('<ol><li><em>sdf</em></li><ul class=" list-paddingleft-2"><li>a</li><li>b</li><li>c</ul><li>jkl</ol>');
-
     UE.filterNode(node,{
         'ol':{},
         'ul':{$:{}},
@@ -88,4 +93,31 @@ test( '', function() {
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><ol><li>sdf</li><ul><li>a</li><li>b</li><li>c</li></ul><li>jkl</li></ol></div>');
 
+    //过滤规则为空
+    node.innerHTML('<p style="color:#ccc;border:1px solid #ccc;"><table><tbody><tr><td><h1>asd</h1></td></tr></tbody></table></p><div>sdfasdf</div>');
+    UE.filterNode(node,{});
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p style="color:#ccc;border:1px solid #ccc;"><table><tbody><tr><td><h1>asd</h1></td></tr></tbody></table></p><div>sdfasdf</div></div>');
+
+    node.innerHTML('<script></script>');
+    UE.filterNode(node,{
+        'b':'-'
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"></div>');
+
+    node.innerHTML('<p><!--asdfjasldkfjasldkfj--></p>');
+    UE.filterNode(node,{
+        'p':{}
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p></p></div>');
+
+    node.innerHTML('<h6>asd<b>lk</b><i>fj</i></h6>');
+    UE.filterNode(node,{
+        'h6':function(node){
+            node.tagName = 'p';
+            node.setAttr();
+        },
+        '-':'b i',
+        'p':{}
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p>asd</p></div>');
 });
