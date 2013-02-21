@@ -54,7 +54,6 @@ test( '', function() {
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p style="line-height:200%"><span>sdfs</span></p></div>');
 
     node.innerHTML('<p><a></a><u class="ad" id="underline">sdfs<sub class="ab">sdfs</sub><i>sdfs</i></u><i>sdfs</i></p>');
-
     UE.filterNode(node,{
         'p':{},
         'u':{$:{
@@ -79,4 +78,12 @@ test( '', function() {
         }
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><img src="http://img.baidu.com/hi/jx2/j_0020.gif" /></div>');
+
+    node.innerHTML('<ol><li><em>sdf</em></li><ul class=" list-paddingleft-2"><li>a</li><li>b</li><li>c</ul><li>jkl</ol>');
+    UE.filterNode(node,{
+        'ol':{},
+        'ul':{$:{}},
+        'li':{}
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><ol><li>sdf</li><ul><li>a</li><li>b</li><li>c</li></ul><li>jkl</li></ol></div>');
 });
