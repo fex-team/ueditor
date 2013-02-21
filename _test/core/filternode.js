@@ -36,5 +36,54 @@ test( '', function() {
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p><p>sdfssdfs</p></p>sdfasdf</div>');
 
+    node.innerHTML('<p><p>sdfs</p><br/><br/><br/><br/></p>');
+    UE.filterNode(node,{
+        'p':{},
+        'br':'-'
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p><p>sdfs</p></p></div>');
 
+    node.innerHTML('<p style="text-indent:28px;line-height:200%;margin-top:62px;"><strong>sdfs</strong><span style="font-family:宋体">sdfs</span></p>');
+    UE.filterNode(node,{
+        'p':{$:{
+            style:['line-height']
+        }},
+        'span':{$:{}},
+        'strong':'-'
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p style="line-height:200%"><span>sdfs</span></p></div>');
+
+    node.innerHTML('<p><a></a><u class="ad" id="underline">sdfs<sub class="ab">sdfs</sub><i>sdfs</i></u><i>sdfs</i></p>');
+    UE.filterNode(node,{
+        'p':{},
+        'u':{$:{
+            'class':['ad']
+        }},
+        'sub':{$:{}},
+        'i':'-'
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p><u class="ad">sdfs<sub>sdfs</sub></u></p></div>');
+
+    node.innerHTML('<img src="http://img.baidu.com/hi/jx2/j_0020.gif" height="10px"/><script></script>');
+    UE.filterNode(node,{
+        'img':{$:{
+            src:['']
+        }},
+        'script':function(node){
+            var txt = !!node.innerText();
+            if(txt){
+                node.parentNode.insertAfter(UE.uNode.createText(' &nbsp; &nbsp;'),node);
+            }
+            node.parentNode.removeChild(node,node.innerText())
+        }
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><img src="http://img.baidu.com/hi/jx2/j_0020.gif" /></div>');
+
+    node.innerHTML('<ol><li><em>sdf</em></li><ul class=" list-paddingleft-2"><li>a</li><li>b</li><li>c</ul><li>jkl</ol>');
+    UE.filterNode(node,{
+        'ol':{},
+        'ul':{$:{}},
+        'li':{}
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><ol><li>sdf</li><ul><li>a</li><li>b</li><li>c</li></ul><li>jkl</li></ol></div>');
 });
