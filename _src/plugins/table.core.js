@@ -11,7 +11,7 @@
  * @constructor
  */
 (function () {
-    var UETable = UE.UETable = function(table) {
+    var UETable = UE.UETable = function (table) {
         this.table = table;
         this.indexTable = [];
         this.selectedTds = [];
@@ -20,29 +20,29 @@
     };
 
     //===以下为静态工具方法===
-    UETable.removeSelectedClass = function(cells) {
+    UETable.removeSelectedClass = function (cells) {
         utils.each(cells, function (cell) {
             domUtils.removeClasses(cell, "selectTdClass");
         })
     };
-    UETable.addSelectedClass = function(cells){
+    UETable.addSelectedClass = function (cells) {
         utils.each(cells, function (cell) {
             domUtils.addClass(cell, "selectTdClass");
         })
     };
-    UETable.isEmptyBlock = function(node) {
+    UETable.isEmptyBlock = function (node) {
         var reg = new RegExp(domUtils.fillChar, 'g');
         if (node[browser.ie ? 'innerText' : 'textContent'].replace(/^\s*$/, '').replace(reg, '').length > 0) {
             return 0;
         }
-        for (var i in dtd.$isNotEmpty) if(dtd.$isNotEmpty.hasOwnProperty(i)) {
+        for (var i in dtd.$isNotEmpty) if (dtd.$isNotEmpty.hasOwnProperty(i)) {
             if (node.getElementsByTagName(i).length) {
                 return 0;
             }
         }
         return 1;
     };
-    UETable.getWidth = function(cell) {
+    UETable.getWidth = function (cell) {
         if (!cell)return 0;
         return parseInt(domUtils.getComputedStyle(cell, "width"), 10);
     };
@@ -51,7 +51,7 @@
      * 根据当前选区获取相关的table信息
      * @return {Object}
      */
-    UETable.getTableItemsByRange = function(editor) {
+    UETable.getTableItemsByRange = function (editor) {
         var start = editor.selection.getStart(),
         //在table或者td边缘有可能存在选中tr的情况
             cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
@@ -66,7 +66,7 @@
             caption:caption
         }
     };
-    UETable.getUETableBySelected = function(editor){
+    UETable.getUETableBySelected = function (editor) {
         var table = UETable.getTableItemsByRange(editor).table;
         if (table && table.ueTable && table.ueTable.selectedTds.length) {
             return table.ueTable;
@@ -74,7 +74,7 @@
         return null;
     };
 
-    UETable.getDefaultValue = function(editor,table){
+    UETable.getDefaultValue = function (editor, table) {
         var borderMap = {
                 thin:'0px',
                 medium:'1px',
@@ -117,7 +117,7 @@
      * 根据当前点击的td或者table获取索引对象
      * @param tdOrTable
      */
-    UETable.getUETable = function(tdOrTable) {
+    UETable.getUETable = function (tdOrTable) {
         var tag = tdOrTable.tagName.toLowerCase();
         tdOrTable = (tag == "td" || tag == "th" || tag == 'caption') ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
         if (!tdOrTable.ueTable) {
@@ -261,14 +261,14 @@
         setCellContent:function (cell, content) {
             cell.innerHTML = content || (browser.ie ? domUtils.fillChar : "<br />");
         },
-        cloneCell:function(cell,ignoreMerge){
-            if(!cell || utils.isString(cell)){
+        cloneCell:function (cell, ignoreMerge) {
+            if (!cell || utils.isString(cell)) {
                 return this.table.ownerDocument.createElement(cell || 'td');
             }
             var flag = domUtils.hasClass(cell, "selectTdClass");
             flag && domUtils.removeClasses(cell, "selectTdClass");
             var tmpCell = cell.cloneNode(true);
-            if(ignoreMerge){
+            if (ignoreMerge) {
                 tmpCell.rowSpan = tmpCell.colSpan = 1;
             }
             tmpCell.style.borderLeftStyle = "";
@@ -312,10 +312,12 @@
             this.cellsRange = {};
             this.indexTable = [];
             var rows = this.table.rows,
-            //暂时采用rows Length,对残缺表格可能存在问题，
-            //todo 可以考虑取最大值
-                rowsNum = rows.length,
+                rowsNum = this.getMaxRows(),
+                dNum = rowsNum - rows.length,
                 colsNum = this.getMaxCols();
+            while (dNum--) {
+                this.table.insertRow(rows.length);
+            }
             this.rowsNum = rowsNum;
             this.colsNum = colsNum;
             for (var i = 0, len = rows.length; i < len; i++) {
@@ -1011,5 +1013,6 @@
             this.setSelected(range);
         }
     };
-    function showError(e) {}
+    function showError(e) {
+    }
 })();
