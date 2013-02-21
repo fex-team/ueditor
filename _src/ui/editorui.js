@@ -58,7 +58,7 @@
     };
     //为工具栏添加按钮，以下都是统一的按钮触发命令，所以写在一起
     var btnCmds = ['undo', 'redo', 'formatmatch',
-        'bold', 'italic', 'underline', 'touppercase', 'tolowercase',
+        'bold', 'italic', 'underline', 'fontborder','touppercase', 'tolowercase',
         'strikethrough', 'subscript', 'superscript', 'source', 'indent', 'outdent',
         'blockquote', 'pasteplain', 'pagebreak',
         'selectall', 'print', 'preview', 'horizontal', 'removeformat', 'time', 'date', 'unlink',
