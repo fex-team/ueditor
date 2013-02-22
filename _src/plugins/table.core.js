@@ -1012,17 +1012,20 @@
                 range = this.getCellsRange(tds[0], tds[tds.length - 1]);
             this.setSelected(range);
         },
-        sortTable:function(cellIndex,fn){
+        sortTable:function(sortByCellIndex,compareFn){
             var table = this.table,
                 rows = table.rows,
-                trArray = [];
+                trArray = [],
+                flag = rows[0].cells[0].tagName === "TH";
             for (var i = 0, len = rows.length; i < len; i++) {
                 trArray[i] = rows[i];
             }
+            //th不参与排序
+            flag && trArray.splice(0,1);
             trArray.sort(function (tr1, tr2) {
-                return fn ? (typeof fn === "number" ? fn : fn.call(this,tr1.cells[cellIndex], tr2.cells[cellIndex])) : function () {
-                    var value1 = tr1.cells[cellIndex].innerHTML,
-                        value2 = tr2.cells[cellIndex].innerHTML;
+                return compareFn ? (typeof compareFn === "number" ? compareFn : compareFn.call(this,tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex])) : function () {
+                    var value1 = tr1.cells[sortByCellIndex].innerHTML,
+                        value2 = tr2.cells[sortByCellIndex].innerHTML;
                     return value1.localeCompare(value2);
                 }();
             });

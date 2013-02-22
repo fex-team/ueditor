@@ -697,7 +697,6 @@
             if (table) {
                 var obj = {};
                 obj[data[0]] = data[1];
-
                 table.style[utils.cssStyleToDomStyle("float")] = "";
                 table.style.margin = "";
                 domUtils.setStyles(table, obj);
@@ -751,10 +750,18 @@
             var me = this,
                 tableItems = getTableItemsByRange(me);
             if(!tableItems.cell) return -1;
+            var table = tableItems.table,
+                cells = table.getElementsByTagName("td");
+            for(var i = 0,cell;cell = cells[i++];){
+                if(cell.rowSpan!=1 || cell.colSpan!=1) return -1;
+            }
             return 0;
         },
         execCommand:function (cmd, fn) {
-            var tableItems = getTableItemsByRange(this),
+            var me = this,
+                range = me.selection.getRange(),
+                bk = range.createBookmark(true),
+                tableItems = getTableItemsByRange(me),
                 cell = tableItems.cell,
                 ut = getUETable(tableItems.table),
                 cellIndex = ut.getCellInfo(cell).cellIndex,
@@ -764,6 +771,17 @@
                 return;
             }
             ut.sortTable(cellIndex,fn);
+            range.moveToBookmark(bk).select();
+        }
+    };
+
+    UE.commands["enablesort"] = UE.commands["disablesort"] = {
+        queryCommandState:function(){
+            return 0;
+        },
+        execCommand:function(cmd){
+            var table = getTableItemsByRange(this).table;
+            table.setAttribute("data-sort",cmd == "enablesort" ? "sortEnabled":"sortDisabled");
         }
     };
 
