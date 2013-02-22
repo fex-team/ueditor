@@ -112,7 +112,7 @@
                 str="";
             for(var i=0,ci;ci=filesList[i++];){
                 var src = editor.options.UEDITOR_HOME_URL + "dialogs/attachment/fileTypeImages/"+(map[ci.type]||"icon_default.png");
-                str += "<p style='line-height: 16px;'><img src='"+ src + "' data_ue_src='"+src+"' />" +
+                str += "<p style='line-height: 16px;'><img src='"+ src + "' _src='"+src+"' />" +
                        "<a href='"+editor.options.filePath + ci.url+"'>" + ci.original + "</a></p>";
             }
             editor.execCommand("insertHTML",str);

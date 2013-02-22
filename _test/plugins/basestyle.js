@@ -73,7 +73,7 @@ test( '不闭合插入上下标', function () {
                 range.setStart( body.firstChild.firstChild, 0 ).setEnd( body.firstChild.lastChild, 3 ).select();
                 editor.execCommand( 'superscript' );
                 ua.manualDeleteFillData( body );
-                equal( ua.getChildHTML( body.firstChild ), '<sup><strong>hello1<em>hello2</em></strong></sup><a href="http://www.baid.com/" data_ue_src="http://www.baid.com/"><sup><strong>baidu_link</strong></sup></a><sup>hel</sup>lo3', '普通文本添加上标' );
+                equal( ua.getChildHTML( body.firstChild ), '<sup><strong>hello1<em>hello2</em></strong></sup><a href="http://www.baid.com/" _src="http://www.baid.com/"><sup><strong>baidu_link</strong></sup></a><sup>hel</sup>lo3', '普通文本添加上标' );
                 start();
         }, 100 )
 } );

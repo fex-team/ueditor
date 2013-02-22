@@ -44,7 +44,7 @@
         orgText;
     link = domUtils.findParentByTagName( link, "a", true );
     if(link){
-        url = utils.html(link.getAttribute( 'data_ue_src' ) || link.getAttribute( 'href', 2 ));
+        url = utils.html(link.getAttribute( '_src' ) || link.getAttribute( 'href', 2 ));
 
         if(rangeLink === link && !link.getElementsByTagName('img').length){
             text.removeAttribute('disabled');
@@ -79,7 +79,7 @@
                 'href' : href,
                 'target' : $G("target").checked ? "_blank" : '_self',
                 'title' : $G("title").value.replace(/^\s+|\s+$/g, ''),
-                'data_ue_src':href
+                '_src':href
             };
             //修改链接内容的情况太特殊了，所以先做到这里了
             //todo:情况多的时候，做到command里

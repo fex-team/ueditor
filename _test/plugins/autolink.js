@@ -15,7 +15,7 @@ test( '输入超链接后回车', function() {
                 var a = body.firstChild.getElementsByTagName( 'a' )[0];
                 equal( ua.getChildHTML( a ), 'http://www.baidu.com', '检查a的内容' );
                 ok( a&&$( a ).attr( 'href' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的href' );
-                ok( a&&$( a ).attr( 'data_ue_src' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的data_ue_src' );
+                ok( a&&$( a ).attr( '_src' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的_src' );
                 start();
             }, 20);
         } ,20);
@@ -35,7 +35,7 @@ test( '输入超链接后按空格', function() {
                 var a = body.firstChild.getElementsByTagName( 'a' )[0];
                 equal( ua.getChildHTML( a ), 'http://www.baidu.com', '检查a的内容' );
                 ok( a&&$( a ).attr( 'href' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的href' );
-                ok( a&&$( a ).attr( 'data_ue_src' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的data_ue_src' );
+                ok( a&&$( a ).attr( '_src' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的_src' );
                 start();
             }, 20);
         },20 );
@@ -140,7 +140,7 @@ test( 'trace 2121', function() {
                 var a = body.firstChild.getElementsByTagName( 'a' )[0];
                 equal( ua.getChildHTML( a ), 'www.baidu.com', '检查a的内容' );
                 ok( a&&$( a ).attr( 'href' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的href' );
-                ok( a&&$( a ).attr( 'data_ue_src' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的data_ue_src' );
+                ok( a&&$( a ).attr( '_src' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的_src' );
                 start();
             }, 20);
         } ,20);

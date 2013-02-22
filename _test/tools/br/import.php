@@ -40,7 +40,8 @@ function importSrc($cov){
 	preg_match_all('/\/\/\/import\s+([^;]+);?/ies', $cnt, $is, PREG_PATTERN_ORDER);
 	foreach($is[1] as $i) {
 //        $dd = $i;
-		$path = join('/', explode('.', $i)).'.js';
+		//$path = join('/', explode('.', $i)).'.js';
+		$path = $i.'.js'; //为了支持xx.xx.js类型的文件名而修改 田丽丽
 		if($cov){
 			$covpath = Config::$COVERAGE_PATH.$path;
 			if(file_exists($covpath)){

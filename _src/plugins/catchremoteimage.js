@@ -51,7 +51,7 @@ UE.plugins['catchremoteimage'] = function () {
             if (ci.getAttribute("word_img")){
                 continue;
             }
-            var src = ci.getAttribute("data_ue_src") || ci.src || "";
+            var src = ci.getAttribute("_src") || ci.src || "";
             if (/^(https?|ftp):/i.test(src) && !test(src,localDomain)) {
                 remoteImages.push(src);
             }
@@ -68,7 +68,7 @@ UE.plugins['catchremoteimage'] = function () {
                     var srcUrls = info.srcUrl.split(separater),
                         urls = info.url.split(separater);
                     for (var i = 0, ci; ci = imgs[i++];) {
-                        var src = ci.getAttribute("data_ue_src") || ci.src || "";
+                        var src = ci.getAttribute("_src") || ci.src || "";
                         for (var j = 0, cj; cj = srcUrls[j++];) {
                             var url = urls[j - 1];
                             if (src == cj && url != "error") {  //抓取失败时不做替换处理
@@ -76,7 +76,7 @@ UE.plugins['catchremoteimage'] = function () {
                                 var newSrc = me.options.catcherPath + url;
                                 domUtils.setAttributes(ci, {
                                     "src":newSrc,
-                                    "data_ue_src":newSrc
+                                    "_src":newSrc
                                 });
                                 break;
                             }

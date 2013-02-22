@@ -120,7 +120,7 @@ test( '已存在锚点', function() {
     range.selectNode(body.firstChild).select();
     editor.execCommand( 'anchor', 'hello' );
     var name=body.firstChild.firstChild.getAttribute('anchorname');
-//    equal(ua.getChildHTML(editor.body),'<p><img anchorname=\"hello\" class=\"anchorclass\" data_ue_src=\"undefined\"></p>','更改name');
+//    equal(ua.getChildHTML(editor.body),'<p><img anchorname=\"hello\" class=\"anchorclass\" _src=\"undefined\"></p>','更改name');
     equal(name, 'hello', '更改name');
     editor.setContent( '<p><img anchorname="1" class="anchorclass"/></p>' );
     range.selectNode(body.firstChild).select();

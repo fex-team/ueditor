@@ -234,7 +234,7 @@ test( 'trace 1727:插入超链接后再插入空格，空格不能被删除', fu
                 editor.execCommand( 'source' );
                 setTimeout( function () {
                         editor.execCommand( 'source' );
-                        equal( editor.body.innerHTML.toLowerCase(), '<p>&nbsp;<a href="http://www.baidu.com/" data_ue_src=\"http://www.baidu.com/\">绝对路径网址</a>&nbsp;&nbsp;ddd</p>', '查看空格是否被删除' );
+                        equal( editor.body.innerHTML.toLowerCase(), '<p>&nbsp;<a href="http://www.baidu.com/" _src=\"http://www.baidu.com/\">绝对路径网址</a>&nbsp;&nbsp;ddd</p>', '查看空格是否被删除' );
                         start();
                 }, 100 );
         }, 100 );
@@ -251,7 +251,7 @@ test( '关于空格的问题', function () {
                 editor.execCommand( 'source' );
                 setTimeout( function () {
                         ua.manualDeleteFillData( editor.body );
-                        equal( editor.body.innerHTML.toLowerCase().replace(/[\r\n\t]/g,''), '<ol><li><p>&nbsp;dd&nbsp;jj&nbsp;</p></li><li><p>&nbsp;ll&nbsp;kdkd&nbsp;<a href="http://www.baidu.com/" data_ue_src="http://www.baidu.com/">&nbsp;baidu&nbsp;</a>&nbsp;</p></li></ol>' );
+                        equal( editor.body.innerHTML.toLowerCase().replace(/[\r\n\t]/g,''), '<ol><li><p>&nbsp;dd&nbsp;jj&nbsp;</p></li><li><p>&nbsp;ll&nbsp;kdkd&nbsp;<a href="http://www.baidu.com/" _src="http://www.baidu.com/">&nbsp;baidu&nbsp;</a>&nbsp;</p></li></ol>' );
                         start();
                 }, 150 );
             }, 100 );

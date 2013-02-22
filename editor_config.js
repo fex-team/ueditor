@@ -81,7 +81,7 @@
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         ,toolbars:[
             ['fullscreen', 'source', '|', 'undo', 'redo', '|',
-                'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch','autotypeset','blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','selectall', 'cleardoc', '|',
+                'bold', 'italic', 'underline', 'fontborder','strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch','autotypeset','blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','selectall', 'cleardoc', '|',
                 'rowspacingtop', 'rowspacingbottom','lineheight','|',
                 'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
                 'directionalityltr', 'directionalityrtl', 'indent', '|',
@@ -136,7 +136,7 @@
 
         //,fullscreen : false //是否开启初始化时即全屏，默认关闭
 
-        //,readonly : false /编辑器初始化结束后,编辑区域是否是只读的，默认是false
+        //,readonly : false //编辑器初始化结束后,编辑区域是否是只读的，默认是false
 
         //,zIndex : 900     //编辑器层级的基数,默认是900
 
@@ -146,8 +146,34 @@
 
         //,emotionLocalization:false //是否开启表情本地化，默认关闭。若要开启请确保emotion文件夹下包含官网提供的images表情文件夹
 
-        //,pasteplain:false  //是否纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
-
+        //,pasteplain:false  //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
+        //纯文本粘贴模式下的过滤规则
+//        'filterTxtRules' : function(){
+//            function transP(node){
+//                node.tagName = 'p';
+//                node.setStyle();
+//            }
+//            return {
+//                //直接删除及其字节点内容
+//                '-' : 'script style object iframe embed input select',
+//                'p': {$:{}},
+//                'br':{$:{}},
+//                'div':{'$':{}},
+//                'li':{'$':{}},
+//                'caption':transP,
+//                'th':transP,
+//                'tr':transP,
+//                'h1':transP,'h2':transP,'h3':transP,'h4':transP,'h5':transP,'h6':transP,
+//                'td':function(node){
+//                    //没有内容的td直接删掉
+//                    var txt = !!node.innerText();
+//                    if(txt){
+//                        node.parentNode.insertAfter(UE.uNode.createText(' &nbsp; &nbsp;'),node);
+//                    }
+//                    node.parentNode.removeChild(node,node.innerText())
+//                }
+//            }
+//        }()
         //,allHtmlEnabled:false //提交到后台的数据是否包含整个html字符串
         //iframeUrlMap
         //dialog内容的路径 ～会被替换成URL,垓属性一旦打开，将覆盖所有的dialog的默认路径
@@ -323,16 +349,6 @@
         //编辑器初始化完成后是否进入源码模式，默认为否。
         //,sourceEditorFirst:false
 
-        //serialize
-        // 配置编辑器的过滤规则
-        // serialize是个object,可以有属性blackList，whiteList属性，默认是{}
-        // 例子:
-//        , serialize : {
-//              //黑名单，编辑器会过滤掉一下标签
-//              blackList:{object:1, applet:1, input:1, meta:1, base:1, button:1, select:1, textarea:1, '#comment':1, 'map':1, 'area':1}
-//        }
-
-
         //autotypeset
         //  //自动排版参数
         //  ,autotypeset:{
@@ -349,6 +365,8 @@
         //      removeTagNames : {标签名字:1},
         //      indent : false,                 // 行首缩进
         //      indentValue : '2em'             //行首缩进的大小
-        //  }
+        //  },
+        //填写过滤规则
+        //filterRules : {}
     };
 })();

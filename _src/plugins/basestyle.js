@@ -9,6 +9,7 @@
  * @param    {String}    cmdName    bold加粗。italic斜体。subscript上标。superscript下标。
 */
 UE.plugins['basestyle'] = function(){
+
     var basestyles = {
             'bold':['strong','b'],
             'italic':['em','i'],
@@ -24,6 +25,17 @@ UE.plugins['basestyle'] = function(){
         "Bold" : "ctrl+66",//^B
         "Italic" : "ctrl+73", //^I
         "Underline" : "ctrl+85"//^U
+    });
+    me.addInputRule(function(root){
+        utils.each(root.getNodesByTagName('b i'),function(node){
+            switch (node.tagName){
+                case 'b':
+                    node.tagName = 'strong';
+                    break;
+                case 'i':
+                    node.tagName = 'em';
+            }
+        });
     });
     for ( var style in basestyles ) {
         (function( cmd, tagNames ) {

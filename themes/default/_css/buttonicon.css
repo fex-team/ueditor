@@ -15,6 +15,9 @@
     background-position: -60px 0;
 }
 
+.edui-default  .edui-for-fontborder .edui-icon {
+    background-position:-160px -40px;
+}
 .edui-default  .edui-for-underline .edui-icon {
     background-position: -140px 0;
 }

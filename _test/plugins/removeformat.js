@@ -18,12 +18,12 @@ test( 'trace 800:清除 超链接的颜色', function () {
         editor.setContent( '<a href="http://www.baidu.com/">baidu</a>' );
         range.selectNode( editor.body.firstChild ).select();
         editor.execCommand( 'forecolor', 'rgb(255,0,0)' );
-        var html = '<a href="http://www.baidu.com/" data_ue_src = "http://www.baidu.com/" style="color: rgb(255, 0, 0); text-decoration: underline; "><span style="color: rgb(255, 0, 0); ">baidu</span></a>';
+        var html = '<a href="http://www.baidu.com/" _src = "http://www.baidu.com/" style="color: rgb(255, 0, 0); text-decoration: underline; "><span style="color: rgb(255, 0, 0); ">baidu</span></a>';
         ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '查看加了颜色后超链接的样式' )
 //    ok( ua.haveSameAllChildAttribs( editor.body.firstChild, p1 ), '查看加了颜色后超链接的样式' );
         editor.execCommand( 'removeformat' );
         var cl = ua.browser.ie && ua.browser.ie == 8 ? 'class=\"\"' : "";
-        html = '<a href="http://www.baidu.com/" ' + cl + ' data_ue_src = "http://www.baidu.com/">baidu</a>';
+        html = '<a href="http://www.baidu.com/" ' + cl + ' _src = "http://www.baidu.com/">baidu</a>';
 
         ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '查看清除样式后超链接的样式' );
 } );
