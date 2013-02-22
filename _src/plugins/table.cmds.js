@@ -777,12 +777,25 @@
 
     UE.commands["enablesort"] = UE.commands["disablesort"] = {
         queryCommandState:function(){
-            return 0;
+            return getTableItemsByRange(this).table ? 0:-1;
         },
         execCommand:function(cmd){
             var table = getTableItemsByRange(this).table;
             table.setAttribute("data-sort",cmd == "enablesort" ? "sortEnabled":"sortDisabled");
         }
+    };
+    UE.commands["settablebackground"] = {
+        queryCommandState:function(){
+            return getTableItemsByRange(this).table ? 0: -1;
+        },
+        execCommand:function(cmd,value,cells){
+            cells = cells|| getSelectedArr(this);
+            var ut = getUETable(cells[0]);
+            ut.setBackground(cells,value);
+        }
+    };
+    UE.commands[""] = {
+
     };
 
     function resetTdWidth(table, editor) {
@@ -804,7 +817,8 @@
     }
 
     function getSelectedArr(editor) {
-        var ut = getTableItemsByRange(editor).cell || getUETableBySelected(editor);
-        return ut ? (ut.nodeType ? [ut] : ut.selectedTds) : [];
+        var cell = getTableItemsByRange(editor).cell,
+            ut = getUETable(cell);
+        return ut.selectedTds.length ? ut.selectedTds:[cell];
     }
 })();

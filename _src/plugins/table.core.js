@@ -1034,6 +1034,11 @@
                 fragment.appendChild(trArray[j]);
             }
             table.getElementsByTagName("tbody")[0].appendChild(fragment);
+        },
+        setBackground:function(cells,value){
+            utils.each(cells,function(cell){
+                cell.style.backgroundColor = value;
+            })
         }
     };
     function showError(e) {
