@@ -17,7 +17,7 @@ test( '', function() {
     root = UE.htmlparser('<img src="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" width="553" height="275" />');
     equals(root.toHtml(),'<img src="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" width="553" height="275" />');
     root = UE.htmlparser('<td></td>' + '\n\r' + '<td></td>');
-    equals(root.toHtml(),'<table><tbody><tr><td></td><td></td></tr></tbody></table>');
+    equals(root.toHtml(),'<table><tbody><tr><td></td>' + '\n\r' + '<td></td></tr></tbody></table>');
     root = UE.htmlparser('<li>sdfsdfsdf<li>sdfsdfsdfsdf');
     equals(root.toHtml(),'<ul><li>sdfsdfsdf</li><li>sdfsdfsdfsdf</li></ul>');
     root = UE.htmlparser('<script type="text/javascript" charset="utf-8" src="editor_api.js"></script>');
@@ -28,4 +28,6 @@ test( '', function() {
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em><u>sdf</u></em></li><li>sdfsdf</li></ol>');
     root = UE.htmlparser('<ol><li><em>sdf</em></li><ul><li>a</li><li>b</li><li>c</ul><li>jkl</ol>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em>sdf</em></li><ul><li>a</li><li>b</li><li>c</li></ul><li>jkl</li></ol>');
+    root = UE.htmlparser('<ol><li>asdfas</li>dfasdfa</ol>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li>asdfas</li><li>dfasdfa</li></ol>');
 });

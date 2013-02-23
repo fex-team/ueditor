@@ -73,4 +73,6 @@ test( '', function() {
     var tmp = new UE.uNode.createElement('div');
     node.appendChild(tmp);
     equals(tmp.getIndex(),2)
+
+
 });
