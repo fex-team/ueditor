@@ -749,11 +749,11 @@
         queryCommandState:function () {
             var me = this,
                 tableItems = getTableItemsByRange(me);
-            if(!tableItems.cell) return -1;
+            if (!tableItems.cell) return -1;
             var table = tableItems.table,
                 cells = table.getElementsByTagName("td");
-            for(var i = 0,cell;cell = cells[i++];){
-                if(cell.rowSpan!=1 || cell.colSpan!=1) return -1;
+            for (var i = 0, cell; cell = cells[i++];) {
+                if (cell.rowSpan != 1 || cell.colSpan != 1) return -1;
             }
             return 0;
         },
@@ -770,32 +770,51 @@
                 this.fireEvent("tableForbidSort");
                 return;
             }
-            ut.sortTable(cellIndex,fn);
+            ut.sortTable(cellIndex, fn);
             range.moveToBookmark(bk).select();
         }
     };
 
     UE.commands["enablesort"] = UE.commands["disablesort"] = {
-        queryCommandState:function(){
-            return getTableItemsByRange(this).table ? 0:-1;
+        queryCommandState:function () {
+            return getTableItemsByRange(this).table ? 0 : -1;
         },
-        execCommand:function(cmd){
+        execCommand:function (cmd) {
             var table = getTableItemsByRange(this).table;
-            table.setAttribute("data-sort",cmd == "enablesort" ? "sortEnabled":"sortDisabled");
+            table.setAttribute("data-sort", cmd == "enablesort" ? "sortEnabled" : "sortDisabled");
         }
     };
     UE.commands["settablebackground"] = {
-        queryCommandState:function(){
-            return getTableItemsByRange(this).table ? 0: -1;
+        queryCommandState:function () {
+            return getTableItemsByRange(this).table ? 0 : -1;
         },
-        execCommand:function(cmd,value,cells){
-            cells = cells|| getSelectedArr(this);
-            var ut = getUETable(cells[0]);
-            ut.setBackground(cells,value);
+        execCommand:function (cmd, value, allCells) {
+            var table, cells, ut;
+            if (allCells) {
+                table = getTableItemsByRange(this).table;
+                cells = table.getElementsByTagName("td");
+            } else {
+                cells = getSelectedArr(this);
+            }
+            ut = getUETable(cells[0]);
+            ut.setBackground(cells, value);
         }
     };
-    UE.commands[""] = {
 
+    UE.commands["cleartablebackground"] = {
+        execCommand:function () {
+            var cells = getSelectedArr(this),
+                ut = getUETable(cells[0]);
+            ut.removeBackground(cells);
+        }
+    };
+
+    UE.commands["interlacedtable"] = UE.commands["uninterlacedtable"] = {
+        execCommand:function (cmd) {
+            var table = getTableItemsByRange(this).table;
+            table.setAttribute("interlaced", cmd == "interlacedtable" ? "enabled" : "disabled");
+            this.fireEvent("interlacetable",table);
+        }
     };
 
     function resetTdWidth(table, editor) {
@@ -819,6 +838,6 @@
     function getSelectedArr(editor) {
         var cell = getTableItemsByRange(editor).cell,
             ut = getUETable(cell);
-        return ut.selectedTds.length ? ut.selectedTds:[cell];
+        return ut.selectedTds.length ? ut.selectedTds : [cell];
     }
 })();

@@ -1036,8 +1036,30 @@
             table.getElementsByTagName("tbody")[0].appendChild(fragment);
         },
         setBackground:function(cells,value){
+            if(typeof value ==="string"){
+                utils.each(cells,function(cell){
+                    cell.style.backgroundColor = value;
+                })
+            }else if(typeof value === "object"){
+                value = utils.extend({
+                    repeat:true,
+                    colorList:["#ddd","#fff"]
+                },value);
+                var rowIndex = this.getCellInfo(cells[0]).rowIndex,
+                    count = 0,
+                    colors = value.colorList,
+                    getColor = function(list,index,repeat){
+                        return list[index] ? list[index] : repeat ? list[index % list.length]: "";
+                    };
+                for(var i = 0,cell;cell= cells[i++];){
+                    var cellInfo = this.getCellInfo(cell);
+                    cell.style.backgroundColor = getColor(colors,((rowIndex + count) == cellInfo.rowIndex) ? count : ++count, value.repeat);
+                }
+            }
+        },
+        removeBackground:function(cells){
             utils.each(cells,function(cell){
-                cell.style.backgroundColor = value;
+                cell.style.backgroundColor = "";
             })
         }
     };
