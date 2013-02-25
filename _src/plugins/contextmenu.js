@@ -71,6 +71,41 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'inserttable'
                         },
                         {
+                            label:"清除表格背景",
+                            cmdName:"cleartablebackground",
+                            exec:function(){
+                                this.execCommand("cleartablebackground");
+                            }
+                        },
+                        {
+                            label:"整个表格隔行变色",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]},true);
+                            }
+                        },
+                        {
+                            label:"三色渐变",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["#aaa","#bbb","#ccc"]});
+                            }
+                        },
+                        {
+                            label:"隔行变色",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]});
+                            }
+                        },
+                        {
+                            label:"红蓝相间",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["red","blue"]});
+                            }
+                        },
+                        {
                             label:lang.deletetable,
                             cmdName:'deletetable'
                         },
