@@ -45,7 +45,13 @@
     display: block;
     text-align: center;
     cursor: pointer;
-    height:18px;
+    height:20px;
+}
+.arrow_down{
+    background: white url('../images/arrow_down.png') no-repeat center;
+}
+.arrow_up{
+    background: white url('../images/arrow_up.png') no-repeat center;
 }
 /*高级的样式*/
 .edui-colorpicker-adv{
