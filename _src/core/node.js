@@ -287,6 +287,9 @@
                 delete this.attrs;
                 return;
             }
+            if(!this.attrs){
+                this.attrs = {};
+            }
             if (utils.isObject(attrName)) {
                 for (var a in attrName) {
                     if (!attrName[a]) {
