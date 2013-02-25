@@ -12,26 +12,39 @@ function getTable(str) {
         div.id = "testTable";
         document.body.appendChild(div);
     }
-    div.innerHTML = "<table>" + str + "</table>";
+    div.innerHTML = "<table border='1'>" + str + "</table>";
     return div.firstChild;
 }
+UT = UE.UETable;
 test("create UETable",function(){
     var table = getTable("<tr><td>ddd</td></tr>"),
-        ut = new UE.UETable(table);
+        ut = new UT(table);
     ok(ut.table === table,"UT对象创建成功");
-    equal(ut.colsNum,1,"单元格列数为1");
-    equal(ut.rowsNum,1,"单元格行数为1");
+    ok(ut.colsNum == 1 && ut.rowsNum == 1,"单元格行、列数为1");
 });
 
 test("getMaxRows",function(){
     var table = getTable("<tr><td>1</td><td>2</td><td>3</td></tr>" +
                          "<tr><td>1</td><td>2</td><td>3</td></tr>"),
-        ut = new UE.UETable(table);
+        ut = new UT(table);
     var maxRows = ut.getMaxRows();
     equal(maxRows,2,"最大行数为2");
-
-    table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td rowspan='2'>3</td></tr>" +
+    table = getTable("<tr><td rowspan='3'>1</td><td>2</td><td rowspan='2'>3</td></tr>" +
                      "<tr><td>2</td></tr>");
+    ut = new UT(table);
+    maxRows = ut.getMaxRows();
+    equal(maxRows,3,"最大行数为3");
+});
+test("getMaxCols",function(){
+    var table = getTable("<tr><td>1</td><td>2</td><td>3</td></tr>" +
+                         "<tr><td>1</td><td>2</td><td>3</td></tr>"),
+        ut = new UT(table);
+    var maxCols = ut.getMaxCols();
+    equal(maxCols,3,"最大列数为3");
 
-
+    table = getTable("<tr><td rowspan='3'>1</td><td>2</td><td rowspan='2'>3</td></tr>" +
+        "<tr><td>2</td><td colspan='3'></td></tr>");
+    ut = new UT(table);
+    maxCols = ut.getMaxCols();
+    equal(maxCols,6,"最大列数为6");
 });

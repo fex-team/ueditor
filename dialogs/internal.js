@@ -42,11 +42,11 @@
 
         var langImgPath = editor.options.langPath + editor.options.lang + "/images/";
         //针对静态资源
-        for ( var i in lang.static ) {
+        for ( var i in lang["static"] ) {
             var dom = $G( i );
             if(!dom) continue;
             var tagName = dom.tagName,
-                    content = lang.static[i];
+                    content = lang["static"][i];
             if(content.src){
                 //clone
                 content = utils.extend({},content,false);

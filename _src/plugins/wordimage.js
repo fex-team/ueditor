@@ -14,7 +14,7 @@ UE.plugins["wordimage"] = function () {
                 flag = parseInt(attrs.width) < 128 || parseInt(attrs.height) < 43,
                 opt = me.options,
                 src = opt.UEDITOR_HOME_URL + 'themes/default/images/spacer.gif';
-            if (attrs['_src'].indexOf("file:///")!==-1) {
+            if (attrs['_src'] && attrs['_src'].indexOf("file:///")!==-1) {
                 img.setAttr({
                     width:attrs.width,
                     height:attrs.height,
