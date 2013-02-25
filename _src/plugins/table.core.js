@@ -1012,7 +1012,7 @@
                 range = this.getCellsRange(tds[0], tds[tds.length - 1]);
             this.setSelected(range);
         },
-        sortTable:function(sortByCellIndex,compareFn){
+        sortTable:function (sortByCellIndex, compareFn) {
             var table = this.table,
                 rows = table.rows,
                 trArray = [],
@@ -1021,9 +1021,9 @@
                 trArray[i] = rows[i];
             }
             //th不参与排序
-            flag && trArray.splice(0,1);
+            flag && trArray.splice(0, 1);
             trArray.sort(function (tr1, tr2) {
-                return compareFn ? (typeof compareFn === "number" ? compareFn : compareFn.call(this,tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex])) : function () {
+                return compareFn ? (typeof compareFn === "number" ? compareFn : compareFn.call(this, tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex])) : function () {
                     var value1 = tr1.cells[sortByCellIndex].innerHTML,
                         value2 = tr2.cells[sortByCellIndex].innerHTML;
                     return value1.localeCompare(value2);
@@ -1035,30 +1035,30 @@
             }
             table.getElementsByTagName("tbody")[0].appendChild(fragment);
         },
-        setBackground:function(cells,value){
-            if(typeof value ==="string"){
-                utils.each(cells,function(cell){
+        setBackground:function (cells, value) {
+            if (typeof value === "string") {
+                utils.each(cells, function (cell) {
                     cell.style.backgroundColor = value;
                 })
-            }else if(typeof value === "object"){
+            } else if (typeof value === "object") {
                 value = utils.extend({
                     repeat:true,
-                    colorList:["#ddd","#fff"]
-                },value);
+                    colorList:["#ddd", "#fff"]
+                }, value);
                 var rowIndex = this.getCellInfo(cells[0]).rowIndex,
                     count = 0,
                     colors = value.colorList,
-                    getColor = function(list,index,repeat){
-                        return list[index] ? list[index] : repeat ? list[index % list.length]: "";
+                    getColor = function (list, index, repeat) {
+                        return list[index] ? list[index] : repeat ? list[index % list.length] : "";
                     };
-                for(var i = 0,cell;cell= cells[i++];){
+                for (var i = 0, cell; cell = cells[i++];) {
                     var cellInfo = this.getCellInfo(cell);
-                    cell.style.backgroundColor = getColor(colors,((rowIndex + count) == cellInfo.rowIndex) ? count : ++count, value.repeat);
+                    cell.style.backgroundColor = getColor(colors, ((rowIndex + count) == cellInfo.rowIndex) ? count : ++count, value.repeat);
                 }
             }
         },
-        removeBackground:function(cells){
-            utils.each(cells,function(cell){
+        removeBackground:function (cells) {
+            utils.each(cells, function (cell) {
                 cell.style.backgroundColor = "";
             })
         }
