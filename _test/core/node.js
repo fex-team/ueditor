@@ -1,134 +1,162 @@
 module( 'core.node' );
 
-test( '', function() {
+test( 'createElement', function() {
     var uNode = UE.uNode;
-
-    //createElement
     var node = uNode.createElement('div');
-    equals(node.tagName,'div');
-    equals(node.type,'element');
+    equals(node.tagName,'div','空div ——tagname');
+    equals(node.type,'element','空div ——节点类型');
     node = uNode.createElement('<div id="aa">sdfadf</div>');
-    equals(node.tagName,'div');
-    equals(node.children[0].data,'sdfadf');
+    equals(node.tagName,'div','非空div——tagname');
+    equals(node.children[0].data,'sdfadf','非空div——数据内容');
+});
 
-    //getNodeById
-    node = uNode.createElement('<div id="aa"><div id="bb"></div>sdfadf</div>');
+test( 'getNodeById', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa"><div id="bb"></div>sdfadf</div>');
     node = node.getNodeById('bb');
-    equals(node.getAttr('id'),'bb');
+    equals(node.getAttr('id'),'bb','获取标签id');
     node = uNode.createElement('<div id="aa"><div id="bb"><div id="cc"></div> </div>sdfadf</div>');
     node = node.getNodeById('cc');
-    equals(node.getAttr('id'),'cc');
+    equals(node.getAttr('id'),'cc','获取标签id');
+});
 
-    //getNodesByTagName
-    node = uNode.createElement('<div id="aa"><div id="bb"><div id="cc"></div> </div>sdfadf</div>');
+test( 'getNodesByTagName', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa"><div id="bb"><div id="cc"></div> </div>sdfadf</div>');
     var nodelist = node.getNodesByTagName('div');
-    equals(nodelist.length,2);
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<div id="bb"><div id="cc"></div> </div>sdfadf');
+    equals(nodelist.length,2,'div节点列表长度');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<div id="bb"><div id="cc"></div> </div>sdfadf','innerHTML内容');
+});
 
-    //innerHTML
+test( 'innerHTML', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa">sdfadf</div>');
     node.innerHTML('<div><div><div></div></div></div>');
-    nodelist =node.getNodesByTagName('div');
-    equals(nodelist.length,3);
+    var nodelist =node.getNodesByTagName('div');
+    equals(nodelist.length,3,'div节点列表长度');
     for(var i= 0,ci;ci=nodelist[i++];){
         ci.tagName = 'p';
     }
-    equals(node.innerHTML(),'<p><p><p></p></p></p>');
+    equals(node.innerHTML(),'<p><p><p></p></p></p>','innerHTML内容');
+});
 
-    //innerText
+test( 'innerText', function() {
     var tmp = new UE.uNode.createElement('area');
-    tmp.innerHTML('');
-    equals(tmp.innerText(),tmp);
+    tmp.innerHTML('<p></p>');
+    equals(tmp.innerText(),tmp,'标签类型特殊');
     var tmp = new UE.uNode.createText('');
-    tmp.innerHTML('');
-    equals(tmp.innerText(),tmp);
+    tmp.innerHTML('<p></p>');
+    equals(tmp.innerText(),tmp,'对象类型不为element');
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa">sdfadf</div>');
     node.innerHTML('<p>dfsdfsdf<b>eee</b>sdf</p>');
-    equals(node.innerText(),'dfsdfsdfeeesdf');
+    equals(node.innerText(),'dfsdfsdfeeesdf','获取标签中纯文本');
+});
 
-    //getData
+test( 'getData', function() {
     var tmp = new UE.uNode.createElement('div');
-    equals(tmp.getData(),'');
+    equals(tmp.getData(),'','element元素');
     var tmp = new UE.uNode.createText('askdj');
-    equals(tmp.getData(),"askdj");
+    equals(tmp.getData(),"askdj",'其他类型');
+});
 
-    //appendChild && insertBefore
+test( 'appendChild && insertBefore', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa">sdfadf</div>');
     node.innerHTML('<p><td></td></p>');
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p>');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p>','补全html标签');
     var tmp = uNode.createElement('div');
     node.appendChild(tmp);
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div>');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div>','appendChild');
     node.insertBefore(tmp,node.firstChild());
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<div></div><p><table><tbody><tr><td></td></tr></tbody></table></p>');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<div></div><p><table><tbody><tr><td></td></tr></tbody></table></p>','insertBefore');
     node.appendChild(tmp);
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div>');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div>','appendChild');
+});
 
-    //replaceChild && setAttr
-    tmp = uNode.createElement('p');
+test( 'replaceChild && setAttr', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa">sdfadf</div>');
+    node.innerHTML('<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div>');
+    var tmp = uNode.createElement('p');
     tmp.setAttr({'class':'test','id':'aa'});
     node.insertBefore(tmp,node.lastChild());
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><p class="test" id="aa"></p><div></div>');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><p class="test" id="aa"></p><div></div>','setAttr不为空');
     node.replaceChild(uNode.createElement('div'),tmp);
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div><div></div>');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div><div></div>','replaceChild');
 
-    //insertAfter
-    node.innerHTML('<p><td></td></p>');
-    var tmp = uNode.createElement('div');
-    node.appendChild(tmp);
-    node.insertAfter(tmp,node.firstChild());
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div>');
-    node.appendChild(tmp);
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div>');
-
-    //setAttr
+    node.removeChild(node.lastChild(),true);
     tmp = uNode.createElement('p');
     tmp.setAttr();
     node.insertAfter(tmp,node.lastChild());
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div><p></p>');
-
-    //replaceChild
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div><p></p>','setAttr为空');
     node.innerHTML('<p><td></td></p>');
     var tmp = uNode.createElement('div');
     node.appendChild(tmp);
     node.replaceChild(node.firstChild(),tmp);
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p>');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p>','replaceChild');
+});
 
-    //getStyle
+test( 'insertAfter', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa">sdfadf</div>');
+    node.innerHTML('<p><td></td></p>');
+    var tmp = uNode.createElement('div');
+    node.appendChild(tmp);
+    node.insertAfter(tmp,node.firstChild());
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div>','在第一个子节点后插入');
+});
+
+test( 'getStyle', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('div');
     node.innerHTML('<div style=""><div>');
     node = node.firstChild();
-    equals(node.getStyle(''),'');
+    equals(node.getStyle(''),'','空cssStyle');
     node.innerHTML('<div style="border:1px solid #ccc"><div>');
     node = node.firstChild();
-    equals(node.getStyle('border'),'1px solid #ccc');
+    equals(node.getStyle('border'),'1px solid #ccc','有border，取border样式');
     node.innerHTML('<div style="border:1px solid #ccc"><div>');
     node = node.firstChild();
-    equals(node.getStyle('color'),'');
+    equals(node.getStyle('color'),'','无color样式，取color样式');
     node.innerHTML('<div style="border:1px solid #ccc;color:#ccc"><div>');
     node = node.firstChild();
-    equals(node.getStyle('border'),'1px solid #ccc');
+    equals(node.getStyle('border'),'1px solid #ccc','有2个样式，取其一');
+});
 
-    //setStyle
+test( 'setStyle', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('div');
+    node.innerHTML('<div style="border:1px solid #ccc;color:#ccc"><div>');
+    node = node.firstChild();
     node.setStyle('border','2px solid #ccc');
-    equals(node.getAttr('style'),'border:2px solid #ccc;color:#ccc');
+    equals(node.getAttr('style'),'border:2px solid #ccc;color:#ccc','修改样式中的一个');
     node.setStyle({
         'font':'12px',
         'background':'#ccc'
     });
-    equals(node.getAttr('style'),'background:#ccc;font:12px;border:2px solid #ccc;color:#ccc');
+    equals(node.getAttr('style'),'background:#ccc;font:12px;border:2px solid #ccc;color:#ccc','添加新样式');
     node.setStyle({
         'font':'',
         'background':'',
         'border':'',
         'color':''
     });
-    equals(node.getAttr('style'),undefined);
+    equals(node.getAttr('style'),undefined,'清空样式');
     node.setStyle('border','<script>alert("")</script>');
-    equals(node.getAttr('style'),"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;");
-    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\" ><div></div></div>')
+    equals(node.getAttr('style'),"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;",'脚本');
+    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\" ><div></div></div>','脚本转html');
+    node.innerHTML('<div>asdfasdf<b>sdf</b></div>');
+    node.removeChild(node.firstChild(),true);
+    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\" >asdfasdf<b>sdf</b></div>','移除子节点');
+});
+
+test( 'getIndex', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('div');
     node.innerHTML('<div>asdfasdf<b>sdf</b></div>')
     node.removeChild(node.firstChild(),true);
-    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\" >asdfasdf<b>sdf</b></div>')
-
-    //getIndex
     var tmp = new UE.uNode.createElement('div');
     node.appendChild(tmp);
-    equals(tmp.getIndex(),2);
+    equals(tmp.getIndex(),2,'节点索引');
 });
