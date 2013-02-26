@@ -103,6 +103,6 @@ dialog.onok = function () {
         node.setAttribute("data", encodeURIComponent("$$" + textValue + "$$"));
 
         domUtils.removeAttributes(mathjaxDom.children[0],['style']);//删除多余属性
-        editor.execCommand('formula', mathjaxDom.innerHTML, getStyle());
+        editor.execCommand('formula','<p style="text-align: center;">'+ mathjaxDom.innerHTML+'</P>', getStyle());
     }
 };
