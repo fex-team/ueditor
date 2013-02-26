@@ -48,7 +48,7 @@ UE.plugins['table'] = function () {
         'tdvalign':'top',
         'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_",
         'tableDragable':false,
-        'classList':[".back1",".back2"]
+        'classList':["back1","back2"]
     });
     me.getUETable = getUETable;
     var commands = {
@@ -172,12 +172,11 @@ UE.plugins['table'] = function () {
 
             if ((evt.ctrlKey || evt.metaKey) && evt.keyCode == '67') {
                 tableCopyList = null;
-                table = getUETableBySelected(me);
-                if (table) {
-                    var tds = table.selectedTds,
-                        ut = getUETable(table);
-                    isFullCol = table.isFullCol();
-                    isFullRow = table.isFullRow();
+                var ut = getUETableBySelected(me);
+                if (ut) {
+                    var tds = ut.selectedTds;
+                    isFullCol = ut.isFullCol();
+                    isFullRow = ut.isFullRow();
                     tableCopyList = [
                         [ut.cloneCell(tds[0])]
                     ];
@@ -290,7 +289,7 @@ UE.plugins['table'] = function () {
                     for (var i = 0, ci; ci = tableCopyList[i++];) {
                         var tr = table.insertRow(table.rows.length);
                         for (var j = 0, cj; cj = ci[j++];) {
-                            cloneTd = ut.cloneCell(cj);
+                            cloneTd = UT.cloneCell(cj);
                             domUtils.removeAttributes(cloneTd, ['class']);
                             tr.appendChild(cloneTd)
                         }
@@ -515,9 +514,25 @@ UE.plugins['table'] = function () {
             }
         });
         me.addListener("interlacetable",function(type,table){
-            var rows = table.rows,
-                len;
-
+            if(!table) return;
+            var me = this,
+                rows = table.rows,
+                len = rows.length,
+                getClass = function(list,index,repeat){
+                    return list[index] ? list[index] : repeat ? list[index % list.length]: "";
+                };
+            for(var i = 0;i<len;i++){
+                rows[i].className = getClass(me.options.classList,i,true);
+            }
+        });
+        me.addListener("uninterlacetable",function(type,table){
+            if(!table) return;
+            var me = this,
+                rows = table.rows,
+                len = rows.length;
+            for(var i = 0;i<len;i++){
+                rows[i].className = "";
+            }
         });
 
 
