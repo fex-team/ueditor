@@ -509,8 +509,6 @@
                     endColIndex = Math.max(cellAInfo.colIndex + cellAInfo.colSpan - 1, cellBInfo.colIndex + cellBInfo.colSpan - 1);
 
                 return checkRange(beginRowIndex, beginColIndex, endRowIndex, endColIndex);
-
-
             } catch (e) {
                 if (debug) throw e;
             }
