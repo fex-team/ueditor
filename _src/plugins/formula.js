@@ -124,31 +124,4 @@ UE.plugins['formula'] = function () {
             });
         }
     });
-    me.addListener("beforegetscene", function () {
-        me._MathJaxList = [];
-        var list = getEleByClsName(this.document, 'MathJax');
-        utils.each(list, function (di) {
-            me._MathJaxList.push(di.cloneNode(true));
-        });
-
-        if (list.length) {
-            utils.each(list, function (di) {
-                var span = di.cloneNode(false);
-                span.appendChild(me.document.createTextNode(decodeURIComponent(di.getAttribute('data'))));
-                di.parentNode.replaceChild(span, di);
-                span.removeAttribute('data');
-            });
-        }
-    });
-
-
-    me.addListener("aftergetscene", function () {
-        var list = getEleByClsName(me.document, 'MathJax');
-        if (list.length) {
-            var i = 0;
-            utils.each(list, function (di) {
-                di.parentNode.replaceChild(me._MathJaxList[i++], di);
-            });
-        }
-    });
 };
