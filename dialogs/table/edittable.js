@@ -8,6 +8,7 @@
 (function () {
     var title = $G("J_title"),
         caption = $G("J_caption"),
+        sorttable = $G("J_sorttable"),
         autoSizeContent = $G("J_autoSizeContent"),
         autoSizePage = $G("J_autoSizePage"),
         tone = $G("J_tone"),
@@ -37,6 +38,7 @@
 
             domUtils.on(title, "click", me.titleHanler);
             domUtils.on(caption, "click", me.captionHanler);
+            domUtils.on(sorttable, "click", me.sorttableHanler);
             domUtils.on(autoSizeContent, "click", me.autoSizeContentHanler);
             domUtils.on(autoSizePage, "click", me.autoSizePageHanler);
 
@@ -109,6 +111,22 @@
                 domUtils.remove(domUtils.getElementsByTagName(example, 'caption')[0]);
             }
         },
+        sorttableHanler:function(){
+            var example = $G("J_example"),
+                row = example.rows[0];
+            if (sorttable.checked) {
+                for(var i = 0,cell;cell = row.cells[i++];){
+                    var span = document.createElement("span");
+                    span.innerHTML = "^";
+                    cell.appendChild(span);
+                }
+            } else {
+                var spans = domUtils.getElementsByTagName(example,"span");
+                utils.each(spans,function(span){
+                    span.parentNode.removeChild(span);
+                })
+            }
+        },
         autoSizeContentHanler:function () {
             var example = $G("J_example");
             example.removeAttribute("width");
@@ -162,16 +180,19 @@
     dialog.onok = function () {
         editor.__hasEnterExecCommand = true;
 
-        if (title.checked) {
-            editor.queryCommandState("inserttitle") != -1 && editor.execCommand("inserttitle")
-        } else {
-            editor.queryCommandState("deletetitle") != -1 && editor.execCommand("deletetitle");
-        }
-
-        if (caption.checked) {
-            editor.queryCommandState("insertcaption") != -1 && editor.execCommand("insertcaption")
-        } else {
-            editor.queryCommandState("deletecaption") != -1 && editor.execCommand("deletecaption");
+        var checks = {
+            title:"inserttitle deletetitle",
+            caption:"insertcaption deletecaption",
+            sorttable:"enablesort disablesort"
+        };
+        for(var i in checks){
+            var cmds = checks[i].split(" "),
+                input = $G("J_" + i);
+            if(input["checked"]){
+                editor.queryCommandState(cmds[0])!=-1 &&editor.execCommand(cmds[0]);
+            }else{
+                editor.queryCommandState(cmds[1])!=-1 &&editor.execCommand(cmds[1]);
+            }
         }
         editor.execCommand("edittable", tone.value);
         autoSizeContent.checked ?editor.execCommand('adaptbytext') : "";
