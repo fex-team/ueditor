@@ -118,10 +118,8 @@ UE.plugins['formula'] = function () {
         if (me._MathJaxList && me._MathJaxList.length) {
             utils.each(root.getNodesByTagName('span'), function (pi) {
                 var val, i = 0;
-                if (val = pi.getAttr('class')) {
-                    if (/MathJax/.test(val)) {
-                        pi.parentNode.replaceChild(me._MathJaxList[i++], pi);
-                    }
+                if ((val = pi.getAttr('class'))&&/MathJax/.test(val)) {
+                    pi.parentNode.replaceChild(me._MathJaxList[i++], pi);
                 }
             });
         }
