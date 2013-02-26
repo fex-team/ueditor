@@ -100,6 +100,8 @@ dialog.onok = function () {
         var node = mathjaxDom.firstChild;
         node.removeAttribute("id");
         node.setAttribute("data", encodeURIComponent("$$" + textValue + "$$"));
+
+        domUtils.removeAttributes(mathjaxDom.children[0],['style']);//删除多余属性
         editor.execCommand('formula', mathjaxDom.innerHTML, getStyle());
     }
 };

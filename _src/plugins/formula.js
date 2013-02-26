@@ -11,13 +11,13 @@ UE.plugins['formula'] = function () {
     me.addListener('ready', function () {
         domUtils.on(me.body, "mousedown", function () {
             var rng = me.selection.getRange();
-            var start=domUtils.findParent(rng.startContainer, function (node) {
+            var start = domUtils.findParent(rng.startContainer, function (node) {
                 return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
             }, true);
 
-            if(start&&rng.startContainer.nodeValue==""){
-                rng.startContainer=start;
-                rng.endContainer=start;
+            if (start && rng.startContainer.nodeValue == "") {
+                rng.startContainer = start;
+                rng.endContainer = start;
                 rng.setCursor(true);
             }
         });
@@ -116,7 +116,32 @@ UE.plugins['formula'] = function () {
         }
     }
 
-    me.addListener("beforegetcontent beforegetscene", function () {
+    me.addOutputRule(function (root) {
+        me._MathJaxList = [];
+        utils.each(root.getNodesByTagName('span'), function (pi) {
+            var val;
+            if ((val = pi.getAttr('class')) && /MathJax/.test(val)) {
+                var tmpNode = UE.uNode.createElement(pi.toHtml());
+                me._MathJaxList.push(tmpNode);
+                pi.children = [];
+                pi.appendChild(UE.uNode.createText(decodeURIComponent(pi.getAttr('data'))));
+                delete pi.attrs.data;
+            }
+        });
+    });
+    me.addInputRule(function (root) {
+        if (me._MathJaxList && me._MathJaxList.length) {
+            utils.each(root.getNodesByTagName('span'), function (pi) {
+                var val, i = 0;
+                if (val = pi.getAttr('class')) {
+                    if (/MathJax/.test(val)) {
+                        pi.parentNode.replaceChild(me._MathJaxList[i++], pi);
+                    }
+                }
+            });
+        }
+    });
+    me.addListener("beforegetscene", function () {
         me._MathJaxList = [];
         var list = getEleByClsName(this.document, 'MathJax');
         utils.each(list, function (di) {
@@ -134,7 +159,7 @@ UE.plugins['formula'] = function () {
     });
 
 
-    me.addListener("aftergetcontent aftersetcontent aftergetscene", function () {
+    me.addListener("aftergetscene", function () {
         var list = getEleByClsName(me.document, 'MathJax');
         if (list.length) {
             var i = 0;
