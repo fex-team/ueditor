@@ -67,7 +67,7 @@ function Music() {
             }
             if (is_play_action) {
                 elem.className = 'm-trying';
-                view.innerHTML = me._buildMusicHtml(me._getUrl());
+                view.innerHTML = me._buildMusicHtml(me._getUrl(true));
             }
         },
         _sent:function (param) {
@@ -85,12 +85,12 @@ function Music() {
             var reg = /<\s*\/?\s*[^>]*\s*>/gi;
             return str.replace(reg, "");
         },
-        _getUrl:function () {
+        _getUrl:function (isTryListen) {
             var me = this;
             var param = 'from=tiebasongwidget&url=&name=' + encodeURIComponent(me._removeHtml(selectedItem.title)) + '&artist='
                 + encodeURIComponent(me._removeHtml(selectedItem.author)) + '&extra='
                 + encodeURIComponent(me._removeHtml(selectedItem.album_title))
-                + '&autoPlay=true' + '&loop=true';
+                + '&autoPlay='+isTryListen+'' + '&loop=true';
             return  me.playerUrl + "?" + param;
         },
         _getTryingElem:function () {
@@ -180,7 +180,7 @@ function Music() {
             if (selectedItem == null)   return;
             $G('J_preview').innerHTML = "";
             editor.execCommand('music', {
-                url:me._getUrl(),
+                url:me._getUrl(false),
                 width:400,
                 height:95
             });

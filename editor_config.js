@@ -68,7 +68,7 @@
         ,snapscreenServerUrl: URL +"php/imageUp.php" //屏幕截图的server端保存程序，UEditor的范例代码为“URL +"server/upload/php/snapImgUp.php"”
         ,snapscreenPath: URL + "php/"
         //,snapscreenServerPort: 80                                    //屏幕截图的server端端口
-        //,snapscreenImgAlign: 'center'                                //截图的图片默认的排版方式
+        //,snapscreenImgAlign: ''                                //截图的图片默认的排版方式
 
         //word转存配置区
         ,wordImageUrl:URL + "php/imageUp.php"             //word转存提交地址
@@ -81,7 +81,7 @@
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         ,toolbars:[
             ['fullscreen', 'source', '|', 'undo', 'redo', '|',
-                'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch','autotypeset','blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','selectall', 'cleardoc', '|',
+                'bold', 'italic', 'underline', 'fontborder','strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch','autotypeset','blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','selectall', 'cleardoc', '|',
                 'rowspacingtop', 'rowspacingbottom','lineheight','|',
                 'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
                 'directionalityltr', 'directionalityrtl', 'indent', '|',
@@ -106,7 +106,7 @@
         //,langPath:URL +"lang/"
 
         //主题配置项,默认是default。有需要的话也可以使用如下这样的方式来自动多主题切换，当然，前提条件是themes文件夹下存在对应的主题文件：
-        //现有如下皮肤:default,modern,gorgeous
+        //现有如下皮肤:default
         //,theme:'default'
         //,themePath:URL +"themes/"
 
@@ -136,7 +136,7 @@
 
         //,fullscreen : false //是否开启初始化时即全屏，默认关闭
 
-        //,readonly : false /编辑器初始化结束后,编辑区域是否是只读的，默认是false
+        //,readonly : false //编辑器初始化结束后,编辑区域是否是只读的，默认是false
 
         //,zIndex : 900     //编辑器层级的基数,默认是900
 
@@ -146,8 +146,34 @@
 
         //,emotionLocalization:false //是否开启表情本地化，默认关闭。若要开启请确保emotion文件夹下包含官网提供的images表情文件夹
 
-        //,pasteplain:false  //是否纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
-
+        //,pasteplain:false  //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
+        //纯文本粘贴模式下的过滤规则
+//        'filterTxtRules' : function(){
+//            function transP(node){
+//                node.tagName = 'p';
+//                node.setStyle();
+//            }
+//            return {
+//                //直接删除及其字节点内容
+//                '-' : 'script style object iframe embed input select',
+//                'p': {$:{}},
+//                'br':{$:{}},
+//                'div':{'$':{}},
+//                'li':{'$':{}},
+//                'caption':transP,
+//                'th':transP,
+//                'tr':transP,
+//                'h1':transP,'h2':transP,'h3':transP,'h4':transP,'h5':transP,'h6':transP,
+//                'td':function(node){
+//                    //没有内容的td直接删掉
+//                    var txt = !!node.innerText();
+//                    if(txt){
+//                        node.parentNode.insertAfter(UE.uNode.createText(' &nbsp; &nbsp;'),node);
+//                    }
+//                    node.parentNode.removeChild(node,node.innerText())
+//                }
+//            }
+//        }()
         //,allHtmlEnabled:false //提交到后台的数据是否包含整个html字符串
         //iframeUrlMap
         //dialog内容的路径 ～会被替换成URL,垓属性一旦打开，将覆盖所有的dialog的默认路径
@@ -158,6 +184,14 @@
         //insertorderedlist
         //有序列表的下拉配置,值留空时支持多语言自动识别，若配置值，则以此值为准
 //        ,'insertorderedlist':{
+//              //自定的样式
+//                'num':'1,2,3...',
+//                'num1':'1),2),3)...',
+//                'num2':'(1),(2),(3)...',
+//                'cn':'一,二,三....',
+//                'cn1':'一),二),三)....',
+//                'cn2':'(一),(二),(三)....',
+//             //系统自带
 //             'decimal' : '' ,         //'1,2,3...'
 //             'lower-alpha' : '' ,    // 'a,b,c...'
 //             'lower-roman' : '' ,    //'i,ii,iii...'
@@ -168,11 +202,17 @@
         //insertunorderedlist
         //无序列表的下拉配置，值留空时支持多语言自动识别，若配置值，则以此值为准
         //,insertunorderedlist : {
+        //              //自定的样式
+//        'dash' :'— 破折号',
+//        'dot':' 。 小圆圈'
+//             //系统自带
         //    'circle' : '',  // '○ 小圆圈'
         //    'disc' : '',    // '● 小圆点'
         //    'square' : ''   //'■ 小方块'
         //}
-
+//        ,listDefaultPaddingLeft : '30'//默认的左边缩进的基数倍
+//        ,listiconpath : 'http://bs.baidu.com/listicon/'//自定义标号的路径
+//        ,maxListLevel : 3 //限制可以tab的级数-1不限制
         //fontfamily
         //字体设置 label留空支持多语言自动切换，若配置，则以配置值为准
 //        ,'fontfamily':[
@@ -309,16 +349,6 @@
         //编辑器初始化完成后是否进入源码模式，默认为否。
         //,sourceEditorFirst:false
 
-        //serialize
-        // 配置编辑器的过滤规则
-        // serialize是个object,可以有属性blackList，whiteList属性，默认是{}
-        // 例子:
-//        , serialize : {
-//              //黑名单，编辑器会过滤掉一下标签
-//              blackList:{object:1, applet:1, input:1, meta:1, base:1, button:1, select:1, textarea:1, '#comment':1, 'map':1, 'area':1}
-//        }
-
-
         //autotypeset
         //  //自动排版参数
         //  ,autotypeset:{
@@ -335,6 +365,8 @@
         //      removeTagNames : {标签名字:1},
         //      indent : false,                 // 行首缩进
         //      indentValue : '2em'             //行首缩进的大小
-        //  }
+        //  },
+        //填写过滤规则
+        //filterRules : {}
     };
 })();

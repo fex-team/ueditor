@@ -22,7 +22,9 @@ var video = {};
                 $G("videoUrl").value = url = img.getAttribute("_url");
                 $G("videoWidth").value = img.width;
                 $G("videoHeight").value = img.height;
-                updateAlignButton(img.getAttribute("align"));
+                var align = domUtils.getComputedStyle(img,"float"),
+                    parentAlign = domUtils.getComputedStyle(img.parentNode,"text-align");
+                updateAlignButton(parentAlign==="center"?"center":align);
             }
             createPreviewVideo(url);
         })();
@@ -264,14 +266,19 @@ var video = {};
 
         if ( !url )return;
 		var matches = url.match(/youtu.be\/(\w+)$/) || url.match(/youtube\.com\/watch\?v=(\w+)/) || url.match(/youtube.com\/v\/(\w+)/),
-            youku = url.match(/youku\.com\/v_show\/id_(\w+)/);
-		if (matches){
-			url = "https://www.youtube.com/v/" + matches[1] + "?version=3&feature=player_embedded";
-		}else if(youku){
-            url = "http://player.youku.com/player.php/sid/"+youku[1]+"/v.swf"
-        }else if(!endWith(url,[".swf",".flv",".wmv"])){
-            $G("preview").innerHTML = lang.urlError;
-            return;
+            youku = url.match(/youku\.com\/v_show\/id_(\w+)/),
+            youkuPlay = /player\.youku\.com/ig.test(url);
+        if(!youkuPlay){
+            if (matches){
+                url = "https://www.youtube.com/v/" + matches[1] + "?version=3&feature=player_embedded";
+            }else if(youku){
+                url = "http://player.youku.com/player.php/sid/"+youku[1]+"/v.swf"
+            }else if(!endWith(url,[".swf",".flv",".wmv"])){
+                $G("preview").innerHTML = lang.urlError;
+                return;
+            }
+        }else{
+            url = url.replace(/\?f=.*/,"");
         }
         $G("preview").innerHTML = '<embed type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
         ' src="' + url + '"' +

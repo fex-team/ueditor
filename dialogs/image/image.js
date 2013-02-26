@@ -5,12 +5,14 @@
  * Time: 下午2:52
  * To change this template use File | Settings | File Templates.
  */
-var imageUploader = {};
+var imageUploader = {},
+    flashObj = null,
+    postConfig=[];
 (function () {
     var g = $G,
         ajax = parent.baidu.editor.ajax,
-        maskIframe = g("maskIframe"), //tab遮罩层,用来解决flash和其他dom元素的z-index层级不一致问题
-        flashObj;               //flash上传对象
+        maskIframe = g("maskIframe"); //tab遮罩层,用来解决flash和其他dom元素的z-index层级不一致问题
+       // flashObj;                   //flash上传对象
 
     var flagImg = null, flashContainer;
     imageUploader.init = function (opt, callbacks) {
@@ -32,11 +34,19 @@ var imageUploader = {};
 
         }
         addUrlChangeListener();
-        addUploadListener();
         addOKListener();
         addScrollListener();
         addSearchListener();
         $focus(g("url"));
+    };
+    imageUploader.setPostParams = function(obj,index){
+        if(index===undefined){
+            utils.each(postConfig,function(config){
+                config.data = obj;
+            })
+        }else{
+            postConfig[index].data = obj;
+        }
     };
 
     function insertImage(imgObjs) {
@@ -194,7 +204,7 @@ var imageUploader = {};
             if (ci.getAttribute("selected")) {
                 var url = ci.getAttribute("src", 2).replace(/(\s*$)/g, ""), img = {};
                 img.src = url;
-                img.data_ue_src = url;
+                img._src = url;
                 imgObjs.push(img);
             }
         }
@@ -219,7 +229,7 @@ var imageUploader = {};
         if (!flagImg) return;   //粘贴地址后如果没有生成对应的预览图，可以认为本次粘贴地址失败
         if (!checkNum([width, height, border, vhSpace])) return false;
         imgObj.src = url.value;
-        imgObj.data_ue_src = url.value;
+        imgObj._src = url.value;
         imgObj.width = width.value;
         imgObj.height = height.value;
         imgObj.border = border.value;
@@ -269,7 +279,7 @@ var imageUploader = {};
             tmpObj.title = ci.title;
             tmpObj.floatStyle = align;
             //修正显示时候的地址数据,如果后台返回的是图片的绝对地址，那么此处无需修正
-            tmpObj.data_ue_src = tmpObj.src = editor.options.imagePath + ci.url;
+            tmpObj._src = tmpObj.src = editor.options.imagePath + ci.url;
             imgObjs.push(tmpObj);
         }
         insertImage(imgObjs);
@@ -291,16 +301,6 @@ var imageUploader = {};
             }
         }
         return property;
-    }
-
-    /**
-     * 绑定开始上传事件
-     */
-    function addUploadListener() {
-        g("upload").onclick = function () {
-            flashObj.upload();
-            this.style.display = "none";
-        };
     }
 
     /**
@@ -376,7 +376,7 @@ var imageUploader = {};
         img.onload = function () {
             flagImg = this;
             showImageInfo(this);
-            showPreviewImage(this);
+            showPreviewImage(this,true);
             this.onload = null;
         };
         img.onerror = function () {
@@ -394,7 +394,7 @@ var imageUploader = {};
     function showImageInfo(img) {
         if (!img.getAttribute("src") || !img.src) return;
         var wordImgFlag = img.getAttribute("word_img");
-        g("url").value = wordImgFlag ? wordImgFlag.replace("&amp;", "&") : (img.getAttribute('data_ue_src') || img.getAttribute("src", 2).replace("&amp;", "&"));
+        g("url").value = wordImgFlag ? wordImgFlag.replace("&amp;", "&") : (img.getAttribute('_src') || img.getAttribute("src", 2).replace("&amp;", "&"));
         g("width").value = img.width || 0;
         g("height").value = img.height || 0;
         g("border").value = img.getAttribute("border") || 0;
@@ -415,24 +415,19 @@ var imageUploader = {};
      */
     function showPreviewImage(img, needClone) {
         var tmpWidth = img.width, tmpHeight = img.height;
-        // byxuheng ie9下img.width=tmpWidth这样赋值不上
-        if (!(browser.ie && browser.version == 9) && needClone) {
-            //针对编辑图片时
-            img = img.cloneNode(true);
-            img.width = tmpWidth;
-            img.height = tmpHeight;
-            flagImg = img;
+        var maxWidth = 262,maxHeight = 262,
+            target = scaling(tmpWidth,tmpHeight,maxWidth,maxHeight);
+        target.border = img.border||0;
+        target.src = img.src;
+        flagImg = true;
+        if ((target.width + 2 * target.border) > maxWidth) {
+            target.width = maxWidth - 2 * target.border;
         }
-        var maxWidth = 262;
-        scale(img, maxWidth, maxWidth, maxWidth);
-        if ((img.width + 2 * img.border) > maxWidth) {
-            img.width = maxWidth - 2 * img.border;
-        }
-        if ((img.height + 2 * img.border) > maxWidth) {
-            img.height = maxWidth - 2 * img.border;
+        if ((target.height + 2 * target.border) > maxWidth) {
+            target.height = maxWidth - 2 * target.border;
         }
         var preview = g("preview");
-        preview.innerHTML = '<img src="' + img.src + '" width="' + img.width + '" height="' + img.height + '" border="' + img.border + 'px solid #000" />';
+        preview.innerHTML = '<img src="' + target.src + '" width="' + target.width + '" height="' + target.height + '" border="' + target.border + 'px solid #000" />';
     }
 
     /**
@@ -459,6 +454,20 @@ var imageUploader = {};
         }
     }
 
+    function scaling(width,height,maxWidth,maxHeight){
+        if(width<maxWidth && height<maxHeight) return {width:width,height:height};
+        var srcRatio = (width/height).toFixed(2),
+            tarRatio = (maxWidth/maxHeight).toFixed(2),
+            w,h;
+        if(srcRatio<tarRatio){
+            h = maxHeight;
+            w = h*srcRatio;
+        }else{
+            w = maxWidth;
+            h = w/srcRatio;
+        }
+        return {width:w.toFixed(0),height:h.toFixed(0)}
+    }
     /**
      * 创建flash实例
      * @param opt
@@ -605,9 +614,10 @@ var imageUploader = {};
                                         var w = this.width, h = this.height;
                                         scale(this, 100, 120, 80);
                                         this.title = lang.toggleSelect + w + "X" + h;
+                                        this.onload = null;
                                     };
                                     img.setAttribute(k < 35 ? "src" : "lazy_src", editor.options.imageManagerPath + ci.replace(/\s+|\s+/ig, ""));
-                                    img.setAttribute("data_ue_src", editor.options.imageManagerPath + ci.replace(/\s+|\s+/ig, ""));
+                                    img.setAttribute("_src", editor.options.imageManagerPath + ci.replace(/\s+|\s+/ig, ""));
 
                                 }
                             },

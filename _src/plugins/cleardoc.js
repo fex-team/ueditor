@@ -22,6 +22,10 @@ UE.commands['cleardoc'] = {
             me.body.innerHTML = "<p>"+(ie ? "" : "<br/>")+"</p>";
             range.setStart(me.body.firstChild,0).setCursor(false,true);
         }
+        setTimeout(function(){
+            me.fireEvent("clearDoc");
+        },0);
+
     }
 };
 

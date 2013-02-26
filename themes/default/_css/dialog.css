@@ -153,13 +153,6 @@
     overflow: hidden;
 }
 
-/*emoticon-dialog*/
-.edui-default .edui-for-emoticon .edui-dialog-content {
-    width: 515px;
-    *width: 506px;
-    height: 360px;
-}
-
 /*scrawl-dialog*/
 .edui-default .edui-for-scrawl .edui-dialog-content {
     width: 515px;
@@ -253,18 +246,24 @@
     height: 420px;
 }
 
-/*table-dialog*/
-.edui-default .edui-for-inserttable .edui-dialog-content {
-    width: 510px;
-    height: 275px;
+/*edittable-dialog*/
+.edui-default .edui-for-edittable .edui-dialog-content {
+    width: 540px;
+    _width:590px;
+    height: 265px;
 }
 
-/*td-dialog*/
+/*edittip-dialog*/
+.edui-default .edui-for-edittip .edui-dialog-content {
+    width: 225px;
+    height: 60px;
+}
+
+/*edittd-dialog*/
 .edui-default .edui-for-edittd .edui-dialog-content {
-    width: 220px;
-    height: 125px;
+    width: 240px;
+    height: 50px;
 }
-
 /*snapscreen-dialog*/
 .edui-default .edui-for-snapscreen .edui-dialog-content {
     width: 400px;

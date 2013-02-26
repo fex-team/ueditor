@@ -28,7 +28,7 @@ UE.plugins['formatmatch'] = function(){
 
         function addFormat(range){
 
-            if(text && (!me.currentSelectedArr || !me.currentSelectedArr.length)){
+            if(text){
                 range.selectNode(text);
             }
             return range.applyInlineStyle(list[list.length-1].tagName,null,list);
@@ -64,35 +64,14 @@ UE.plugins['formatmatch'] = function(){
                 me.__hasEnterExecCommand = false;
                 //trace:969
                 range = me.selection.getRange();
-                if(list.length == 0){
-
-                    if(me.currentSelectedArr && me.currentSelectedArr.length > 0){
-                        range.selectNodeContents(me.currentSelectedArr[0]).select();
-                    }
-                }else{
-                    if(me.currentSelectedArr && me.currentSelectedArr.length > 0){
-
-                        for(var i=0,ci;ci=me.currentSelectedArr[i++];){
-                            range.selectNodeContents(ci);
-                            addFormat(range);
-
-                        }
-                        range.selectNodeContents(me.currentSelectedArr[0]).select();
-                    }else{
-
-
-                        addFormat(range);
-
-                    }
+                if(list.length){
+                    addFormat(range);
                 }
-                if(!me.currentSelectedArr || !me.currentSelectedArr.length){
-                    if(text){
-                        range.setStartBefore(text).collapse(true);
+                if(text){
+                    range.setStartBefore(text).collapse(true);
 
-                    }
-
-                    range.select();
                 }
+                range.select();
                 text && domUtils.remove(text);
             }
 
@@ -142,9 +121,6 @@ UE.plugins['formatmatch'] = function(){
 
         },
         queryCommandState : function() {
-             if(this.highlight){
-                       return -1;
-                   }
             return flag;
         },
         notNeedUndo : 1

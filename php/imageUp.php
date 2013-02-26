@@ -6,18 +6,21 @@
      * Time: 上午10:42
      */
     header("Content-Type: text/html; charset=utf-8");
-    error_reporting( E_ERROR | E_WARNING );
+    error_reporting(E_ERROR | E_WARNING);
     include "Uploader.class.php";
+    //上传图片框中的描述表单名称，
+    $title = htmlspecialchars($_POST['pictitle'], ENT_QUOTES);
+    $path = htmlspecialchars($_POST['dir'], ENT_QUOTES);
+
     //上传配置
     $config = array(
-        "savePath" => "upload/" ,
-        "maxSize" => 1000 , //单位KB
-        "allowFiles" => array( ".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp"  )
+        "savePath" => ($path == "1" ? "upload/" : "upload1/"),
+        "maxSize" => 1000, //单位KB
+        "allowFiles" => array(".gif", ".png", ".jpg", ".jpeg", ".bmp")
     );
-    //上传图片框中的描述表单名称，
-    $title = htmlspecialchars( $_POST[ 'pictitle' ] , ENT_QUOTES );
+
     //生成上传实例对象并完成上传
-    $up = new Uploader( "upfile" , $config );
+    $up = new Uploader("upfile", $config);
 
     /**
      * 得到上传文件所对应的各个参数,数组结构

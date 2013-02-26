@@ -14,6 +14,7 @@
     
     baidu.editor.ui.Stateful = {
         alwalysHoverable: false,
+        target:null,//目标元素和this指向dom不一样
         Stateful_init: function (){
             this._Stateful_dGetHtmlTpl = this.getHtmlTpl;
             this.getHtmlTpl = this.Stateful_getHtmlTpl;
@@ -24,6 +25,7 @@
             return tpl.replace(/stateful/g, function (){ return TPL_STATEFUL; });
         },
         Stateful_onMouseEnter: function (evt, el){
+            this.target=el;
             if (!this.isDisabled() || this.alwalysHoverable) {
                 this.addState('hover');
                 this.fireEvent('over');

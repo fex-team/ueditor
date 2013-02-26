@@ -24,7 +24,7 @@ UE.plugins['enterkey'] = function() {
 
                 if (/h\d/i.test(hTag)) {
                     if (browser.gecko) {
-                        var h = domUtils.findParentByTagName(start, [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','blockquote'], true);
+                        var h = domUtils.findParentByTagName(start, [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','blockquote','caption','table'], true);
                         if (!h) {
                             me.document.execCommand('formatBlock', false, '<p>');
                             doSave = 1;
@@ -57,7 +57,21 @@ UE.plugins['enterkey'] = function() {
                 //没有站位符，会出现多行的问题
                 browser.opera &&  range.select();
             }
-
+//            if(browser.ie){
+//                range = me.selection.getRange();
+//                start = range.startContainer;
+//                while(start){
+//                    if(start.nodeType == 1 && start.tagName == 'P'){
+//                        break;
+//                    }
+//                    start = start.parentNode;
+//                }
+//                if(start && domUtils.isEmptyBlock(start)){
+//                    start.innerHTML = '&nbsp;';
+//                    var rng = me.selection.getRange();
+//                    rng.setStart(start,0).setCursor(false,true);
+//                }
+//            }
 
 
             setTimeout(function() {
@@ -89,20 +103,19 @@ UE.plugins['enterkey'] = function() {
                     return;
                 }
             }
-            me.currentSelectedArr && domUtils.clearSelectedArr(me.currentSelectedArr);
-
             if (tag == 'p') {
 
 
                 if (!browser.ie) {
 
-                    start = domUtils.findParentByTagName(range.startContainer, ['ol','ul','p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','blockquote'], true);
+                    start = domUtils.findParentByTagName(range.startContainer, ['ol','ul','p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6','blockquote','caption'], true);
 
                     //opera下执行formatblock会在table的场景下有问题，回车在opera原生支持很好，所以暂时在opera去掉调用这个原生的command
                     //trace:2431
                     if (!start && !browser.opera) {
 
                         me.document.execCommand('formatBlock', false, '<p>');
+
                         if (browser.gecko) {
                             range = me.selection.getRange();
                             start = domUtils.findParentByTagName(range.startContainer, 'p', true);

@@ -90,6 +90,7 @@
             domUtils.un(window, ['scroll','resize'], updateFloating);
             me.removeListener('keydown', defer_updateFloating);
         });
+
         me.addListener('ready', function(){
             if(checkHasUI(me)){
 
@@ -101,15 +102,8 @@
                 if(LteIE6){
                     fixIE6FixedPos();
                 }
-                me.addListener('autoheightchanged', function (t, enabled){
-                    if (enabled) {
-                        domUtils.on(window, ['scroll','resize'], updateFloating);
-                        me.addListener('keydown', defer_updateFloating);
-                    } else {
-                        domUtils.un(window, ['scroll','resize'], updateFloating);
-                        me.removeListener('keydown', defer_updateFloating);
-                    }
-                });
+                domUtils.on(window, ['scroll','resize'], updateFloating);
+                me.addListener('keydown', defer_updateFloating);
 
                 me.addListener('beforefullscreenchange', function (t, enabled){
                     if (enabled) {
@@ -126,6 +120,12 @@
                         updateFloating();
                     },0);
                 });
+                me.addListener("clearDoc",function(){
+                    setTimeout(function(){
+                        updateFloating();
+                    },0);
+
+                })
             }
         });
 	};

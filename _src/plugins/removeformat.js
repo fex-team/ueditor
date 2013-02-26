@@ -163,21 +163,12 @@ UE.plugins['removeformat'] = function(){
                 }
             }
 
-            if ( this.currentSelectedArr && this.currentSelectedArr.length ) {
-                for ( var i = 0,ci; ci = this.currentSelectedArr[i++]; ) {
-                    range.selectNodeContents( ci );
-                    doRemove( range );
-                }
-                range.selectNodeContents( this.currentSelectedArr[0] ).select();
-            } else {
 
-                range = this.selection.getRange();
-                doRemove( range );
-                range.select();
-            }
-        },
-        queryCommandState : function(){
-            return this.highlight ? -1 :0;
+
+            range = this.selection.getRange();
+            doRemove( range );
+            range.select();
+
         }
 
     };

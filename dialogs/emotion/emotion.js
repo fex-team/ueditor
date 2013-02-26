@@ -48,7 +48,7 @@ function InsertSmiley( url, evt ) {
     var obj = {
         src:editor.options.emotionLocalization ? editor.options.UEDITOR_HOME_URL + "dialogs/emotion/" + url : url
     };
-    obj.data_ue_src = obj.src;
+    obj._src = obj.src;
     editor.execCommand( 'insertimage', obj );
     if ( !evt.ctrlKey ) {
         dialog.popup.hide();
@@ -139,7 +139,7 @@ function createTab( tabName ) {
                 infor = emotion.SmileyInfor[tabName][i];
 
                 textHTML.push( '<td  class="' + tableCss + '"   border="1" width="' + iColWidth + '%" style="border-collapse:collapse;" align="center"  bgcolor="transparent" onclick="InsertSmiley(\'' + realUrl.replace( /'/g, "\\'" ) + '\',event)" onmouseover="over(this,\'' + sUrl + '\',\'' + posflag + '\')" onmouseout="out(this)">' );
-                textHTML.push( '<span  style="display:block;">' );
+                textHTML.push( '<span>' );
                 textHTML.push( '<img  style="background-position:left ' + offset + 'px;" title="' + infor + '" src="' + emotion.SmileyPath + (editor.options.emotionLocalization ? '0.gif" width="' : 'default/0.gif" width="') + iWidth + '" height="' + iHeight + '"></img>' );
                 textHTML.push( '</span>' );
             } else {

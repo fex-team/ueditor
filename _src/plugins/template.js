@@ -1,15 +1,14 @@
 ///import core
+///import plugins\inserthtml.js
+///import plugins\cleardoc.js
 ///commands 模板
 ///commandsName  template
 ///commandsTitle  模板
-///commandsDialog  dialogs\template\template.html
+///commandsDialog  dialogs\template
 UE.plugins['template'] = function () {
     UE.commands['template'] = {
         execCommand:function (cmd, obj) {
             obj.html && this.execCommand("inserthtml", obj.html);
-        },
-        queryCommandState:function () {
-            return this.highlight ? -1 : 0;
         }
     };
     this.addListener("click", function (type, evt) {

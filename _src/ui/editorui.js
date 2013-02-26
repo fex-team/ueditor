@@ -5,6 +5,8 @@
     var utils = baidu.editor.utils;
     var editorui = baidu.editor.ui;
     var _Dialog = editorui.Dialog;
+    editorui.buttons={};
+
     editorui.Dialog = function (options) {
         var dialog = new _Dialog(options);
         dialog.addListener('hide', function () {
@@ -32,7 +34,6 @@
     var iframeUrlMap = {
         'anchor':'~/dialogs/anchor/anchor.html',
         'insertimage':'~/dialogs/image/image.html',
-        'inserttable':'~/dialogs/table/table.html',
         'link':'~/dialogs/link/link.html',
         'spechars':'~/dialogs/spechars/spechars.html',
         'searchreplace':'~/dialogs/searchreplace/searchreplace.html',
@@ -45,6 +46,8 @@
         'wordimage':'~/dialogs/wordimage/wordimage.html',
         'attachment':'~/dialogs/attachment/attachment.html',
         'insertframe':'~/dialogs/insertframe/insertframe.html',
+        'edittip':'~/dialogs/table/edittip.html',
+        'edittable':'~/dialogs/table/edittable.html',
         'edittd':'~/dialogs/table/edittd.html',
         'webapp':'~/dialogs/webapp/webapp.html',
         'snapscreen':'~/dialogs/snapscreen/snapscreen.html',
@@ -55,7 +58,7 @@
     };
     //为工具栏添加按钮，以下都是统一的按钮触发命令，所以写在一起
     var btnCmds = ['undo', 'redo', 'formatmatch',
-        'bold', 'italic', 'underline', 'touppercase', 'tolowercase',
+        'bold', 'italic', 'underline', 'fontborder','touppercase', 'tolowercase',
         'strikethrough', 'subscript', 'superscript', 'source', 'indent', 'outdent',
         'blockquote', 'pasteplain', 'pagebreak',
         'selectall', 'print', 'preview', 'horizontal', 'removeformat', 'time', 'date', 'unlink',
@@ -75,6 +78,7 @@
                     theme:editor.options.theme,
                     showText:false
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
                     var state = editor.queryCommandState(cmd);
                     if (state == -1) {
@@ -104,6 +108,7 @@
                 }
             }
         });
+        editorui.buttons["cleardoc"]=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('cleardoc') == -1);
         });
@@ -131,6 +136,7 @@
                                 editor.execCommand(cmd, cmd2);
                             }
                         });
+                        editorui.buttons[cmd]=ui;
                         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
                             ui.setDisabled(editor.queryCommandState(cmd) == -1);
                             ui.setChecked(editor.queryCommandValue(cmd) == cmd2 && !uiReady);
@@ -163,6 +169,7 @@
                         editor.execCommand(cmd, this.color);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     ui.setDisabled(editor.queryCommandState(cmd) == -1);
                 });
@@ -175,7 +182,7 @@
     var dialogBtns = {
         noOk:['searchreplace', 'help', 'spechars', 'webapp'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-            'insertvideo', 'highlightcode', 'insertframe', 'edittd', 'scrawl', 'template','music', 'background']
+            'insertvideo', 'highlightcode', 'insertframe','edittip','edittable', 'edittd','scrawl', 'template','music', 'background']
 
     };
 
@@ -253,9 +260,10 @@
                             theme:editor.options.theme,
                             disabled:cmd == 'scrawl' && editor.queryCommandState("scrawl") == -1
                         });
+                        editorui.buttons[cmd]=ui;
                         editor.addListener('selectionchange', function () {
                             //只存在于右键菜单而无工具栏按钮的ui不需要检测状态
-                            var unNeedCheckState = {'edittd':1, 'edittable':1};
+                            var unNeedCheckState = {'edittable':1};
                             if (cmd in unNeedCheckState)return;
 
                             var state = editor.queryCommandState(cmd);
@@ -281,43 +289,39 @@
             onclick:function () {
                 editor.execCommand("snapscreen");
             },
-            theme:editor.options.theme,
-            disabled:!browser.ie
+            theme:editor.options.theme
 
         });
-
-        if (browser.ie) {
-            iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})["snapscreen"] || iframeUrlMap["snapscreen"];
-            if (iframeUrl) {
-                var dialog = new editorui.Dialog({
-                    iframeUrl:editor.ui.mapUrl(iframeUrl),
-                    editor:editor,
-                    className:'edui-for-snapscreen',
-                    title:title,
-                    buttons:[
-                        {
-                            className:'edui-okbutton',
-                            label:editor.getLang("ok"),
-                            editor:editor,
-                            onclick:function () {
-                                dialog.close(true);
-                            }
-                        },
-                        {
-                            className:'edui-cancelbutton',
-                            label:editor.getLang("cancel"),
-                            editor:editor,
-                            onclick:function () {
-                                dialog.close(false);
-                            }
+        editorui.buttons['snapscreen']=ui;
+        iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})["snapscreen"] || iframeUrlMap["snapscreen"];
+        if (iframeUrl) {
+            var dialog = new editorui.Dialog({
+                iframeUrl:editor.ui.mapUrl(iframeUrl),
+                editor:editor,
+                className:'edui-for-snapscreen',
+                title:title,
+                buttons:[
+                    {
+                        className:'edui-okbutton',
+                        label:editor.getLang("ok"),
+                        editor:editor,
+                        onclick:function () {
+                            dialog.close(true);
                         }
-                    ]
+                    },
+                    {
+                        className:'edui-cancelbutton',
+                        label:editor.getLang("cancel"),
+                        editor:editor,
+                        onclick:function () {
+                            dialog.close(false);
+                        }
+                    }
+                ]
 
-                });
-                dialog.render();
-                editor.ui._dialogs["snapscreenDialog"] = dialog;
-            }
-
+            });
+            dialog.render();
+            editor.ui._dialogs["snapscreenDialog"] = dialog;
         }
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('snapscreen') == -1);
@@ -367,6 +371,7 @@
                 return -1;
             }
         });
+        editorui.buttons['fontfamily']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('FontFamily');
@@ -416,6 +421,7 @@
             },
             className:'edui-for-fontsize'
         });
+        editorui.buttons['fontsize']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('FontSize');
@@ -459,6 +465,7 @@
                 this.showPopup();
             }
         });
+        editorui.buttons['paragraph']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('Paragraph');
@@ -528,6 +535,7 @@
                 return -1;
             }
         });
+        editorui.buttons['customstyle']=ui;
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             if (!uiReady) {
                 var state = editor.queryCommandState('customstyle');
@@ -549,47 +557,7 @@
         return ui;
     };
     editorui.inserttable = function (editor, iframeUrl, title) {
-        iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})['inserttable'] || iframeUrlMap['inserttable'];
         title = editor.options.labelMap['inserttable'] || editor.getLang("labelMap.inserttable") || '';
-        if (iframeUrl) {
-            var dialog = new editorui.Dialog({
-                iframeUrl:editor.ui.mapUrl(iframeUrl),
-                editor:editor,
-                className:'edui-for-inserttable',
-                title:title,
-                buttons:[
-                    {
-                        className:'edui-okbutton',
-                        label:editor.getLang("ok"),
-                        editor:editor,
-                        onclick:function () {
-                            dialog.close(true);
-                        }
-                    },
-                    {
-                        className:'edui-cancelbutton',
-                        label:editor.getLang("cancel"),
-                        editor:editor,
-                        onclick:function () {
-                            dialog.close(false);
-                        }
-                    }
-                ]
-
-            });
-            dialog.render();
-            editor.ui._dialogs['inserttableDialog'] = dialog;
-        }
-        var openDialog = function () {
-            if (dialog) {
-                //打开后再关闭再打开是为了解决fieldset文字错位问题
-                if (browser.webkit) {
-                    dialog.open();
-                    dialog.close();
-                }
-                dialog.open();
-            }
-        };
         var ui = new editorui.TableButton({
             editor:editor,
             title:title,
@@ -597,9 +565,11 @@
             onpicktable:function (t, numCols, numRows) {
                 editor.execCommand('InsertTable', {numRows:numRows, numCols:numCols, border:1});
             },
-            onmore:openDialog,
-            onbuttonclick:openDialog
+            onbuttonclick:function () {
+                this.showPopup();
+            }
         });
+        editorui.buttons['inserttable']=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('inserttable') == -1);
         });
@@ -630,6 +600,7 @@
                 editor.execCommand("LineHeight", value);
             }
         });
+        editorui.buttons['lineheight']=ui;
         editor.addListener('selectionchange', function () {
             var state = editor.queryCommandState('LineHeight');
             if (state == -1) {
@@ -670,6 +641,7 @@
                         editor.execCommand("rowspacing", value, cmd);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     var state = editor.queryCommandState('rowspacing', cmd);
                     if (state == -1) {
@@ -712,6 +684,7 @@
                         editor.execCommand(cmd, value);
                     }
                 });
+                editorui.buttons[cmd]=ui;
                 editor.addListener('selectionchange', function () {
                     var state = editor.queryCommandState(cmd);
                     if (state == -1) {
@@ -735,14 +708,13 @@
             title:title,
             theme:editor.options.theme,
             onclick:function () {
-                var scale=editor.ui.getDom("scale");
                 if (editor.ui) {
-
                     editor.ui.setFullScreen(!editor.ui.isFullScreen());
                 }
                 this.setChecked(editor.ui.isFullScreen());
             }
         });
+        editorui.buttons['fullscreen']=ui;
         editor.addListener('selectionchange', function () {
             var state = editor.queryCommandState('fullscreen');
             ui.setDisabled(state == -1);
@@ -759,6 +731,8 @@
             className:'edui-for-emotion',
             iframeUrl:editor.ui.mapUrl(iframeUrl || (editor.options.iframeUrlMap || {})['emotion'] || iframeUrlMap['emotion'])
         });
+        editorui.buttons['emotion']=ui;
+
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('emotion') == -1)
         });
@@ -774,6 +748,7 @@
                 editor.execCommand('autotypeset')
             }
         });
+        editorui.buttons['autotypeset']=ui;
         editor.addListener('selectionchange', function () {
             ui.setDisabled(editor.queryCommandState('autotypeset') == -1);
         });

@@ -22,9 +22,12 @@ UE.plugins['autoheight'] = function () {
         timer;
 
     function adjustHeight() {
+        var me = this;
         clearTimeout(timer);
+        if(isFullscreen)return;
         timer = setTimeout(function () {
-            if (me.queryCommandState('source') != 1) {
+
+            if (me.queryCommandState && me.queryCommandState('source') != 1) {
                 if (!span) {
                     span = me.document.createElement('span');
                     //trace:1764
@@ -48,9 +51,13 @@ UE.plugins['autoheight'] = function () {
             }
         }, 50);
     }
-
+    var isFullscreen;
+    me.addListener('fullscreenchanged',function(cmd,f){
+        isFullscreen = f
+    });
     me.addListener('destroy', function () {
         me.removeListener('contentchange', adjustHeight);
+        me.removeListener('afterinserthtml',adjustHeight);
         me.removeListener('keyup', adjustHeight);
         me.removeListener('mouseup', adjustHeight);
     });
@@ -63,11 +70,12 @@ UE.plugins['autoheight'] = function () {
         bakOverflow = doc.body.style.overflowY;
         doc.body.style.overflowY = 'hidden';
         me.addListener('contentchange', adjustHeight);
+        me.addListener('afterinserthtml',adjustHeight)
         me.addListener('keyup', adjustHeight);
         me.addListener('mouseup', adjustHeight);
         //ff不给事件算得不对
         setTimeout(function () {
-            adjustHeight();
+            adjustHeight.call(this);
         }, browser.gecko ? 100 : 0);
         me.fireEvent('autoheightchanged', me.autoHeightEnabled);
     };
@@ -88,7 +96,7 @@ UE.plugins['autoheight'] = function () {
         domUtils.on(browser.ie ? me.body : me.document, browser.webkit ? 'dragover' : 'drop', function () {
             clearTimeout(timer);
             timer = setTimeout(function () {
-                adjustHeight();
+                adjustHeight.call(this);
             }, 100);
 
         });

@@ -77,7 +77,7 @@ var bindClick = function () {
                                 this.title = lang.toggleSelect + w + "X" + h;
                             };
                             img.setAttribute(k < 35 ? "src" : "lazy_src", editor.options.imageManagerPath + ci.replace(/\s+|\s+/ig, ""));
-                            img.setAttribute("data_ue_src", editor.options.imageManagerPath + ci.replace(/\s+|\s+/ig, ""));
+                            img.setAttribute("_src", editor.options.imageManagerPath + ci.replace(/\s+|\s+/ig, ""));
 
                         }
                     },
@@ -90,6 +90,7 @@ var bindClick = function () {
                 for (var i = 0, r; r = radios[i++];) {
                     if (r.checked && r.value != "none") {
                         $G("repeatType").style.display = "";
+                        net(r);
                     }
                 }
             }

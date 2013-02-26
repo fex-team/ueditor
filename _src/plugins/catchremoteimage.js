@@ -1,5 +1,7 @@
 ///import core
-///commandsName  catchRemoteImage
+///commands 远程图片抓取
+///commandsName  catchRemoteImage,catchremoteimageenable
+///commandsTitle  远程图片抓取
 /**
  * 远程图片抓取,当开启本插件时所有不符合本地域名的图片都将被抓取成为本地服务器上的图片
  *
@@ -10,11 +12,11 @@ UE.plugins['catchremoteimage'] = function () {
     }
     var me = this;
     this.setOpt({
-            localDomain:["127.0.0.1","localhost","img.baidu.com"],
-            separater:'ue_separate_ue',
-            catchFieldName:"upfile",
-            catchRemoteImageEnable:true
-        });
+        localDomain:["127.0.0.1","localhost","img.baidu.com"],
+        separater:'ue_separate_ue',
+        catchFieldName:"upfile",
+        catchRemoteImageEnable:true
+    });
     var ajax = UE.ajax,
         localDomain = me.options.localDomain ,
         catcherUrl = me.options.catcherUrl,
@@ -49,7 +51,7 @@ UE.plugins['catchremoteimage'] = function () {
             if (ci.getAttribute("word_img")){
                 continue;
             }
-            var src = ci.getAttribute("data_ue_src") || ci.src || "";
+            var src = ci.getAttribute("_src") || ci.src || "";
             if (/^(https?|ftp):/i.test(src) && !test(src,localDomain)) {
                 remoteImages.push(src);
             }
@@ -66,7 +68,7 @@ UE.plugins['catchremoteimage'] = function () {
                     var srcUrls = info.srcUrl.split(separater),
                         urls = info.url.split(separater);
                     for (var i = 0, ci; ci = imgs[i++];) {
-                        var src = ci.getAttribute("data_ue_src") || ci.src || "";
+                        var src = ci.getAttribute("_src") || ci.src || "";
                         for (var j = 0, cj; cj = srcUrls[j++];) {
                             var url = urls[j - 1];
                             if (src == cj && url != "error") {  //抓取失败时不做替换处理
@@ -74,7 +76,7 @@ UE.plugins['catchremoteimage'] = function () {
                                 var newSrc = me.options.catcherPath + url;
                                 domUtils.setAttributes(ci, {
                                     "src":newSrc,
-                                    "data_ue_src":newSrc
+                                    "_src":newSrc
                                 });
                                 break;
                             }

@@ -3,7 +3,7 @@
 ///commands 插入框架
 ///commandsName  InsertFrame
 ///commandsTitle  插入Iframe
-///commandsDialog  dialogs\insertframe\insertframe.html
+///commandsDialog  dialogs\insertframe
 
 UE.plugins['insertframe'] = function() {
    var me =this;
@@ -14,11 +14,6 @@ UE.plugins['insertframe'] = function() {
     me.addListener("selectionchange",function(){
         deleteIframe();
     });
-    me.commands["insertframe"] = {
 
-        queryCommandState : function(){
-            return this.highlight ? -1 :0;
-        }
-    };
 };
 

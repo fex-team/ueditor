@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 
@@ -21,7 +20,7 @@
 </head>
 <body>
     <h2>UEditor提交示例</h2>
-    <form id="form" method="post">
+    <form id="form" method="post" target="_blank">
         <script type="text/plain" id="myEditor" name="myEditor">
             <p>欢迎使用UEditor！</p>
         </script>
@@ -32,7 +31,7 @@
 
     <p>=====================================华丽的分隔线=====================================</p>
 
-    <form id="form1" method="post">
+    <form id="form1" method="post" target="_blank">
     <textarea id="myEditor1" name="myEditor1">这里的内容将会和html，body等标签一块提交</textarea>
         </form>
     <button onclick="editor_a1.sync();document.getElementById('form1').submit()">Form外部提交</button>

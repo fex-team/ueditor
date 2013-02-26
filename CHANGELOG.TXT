@@ -1,16 +1,48 @@
-Ueditor Change List
+UEditor Change List
+
+Version 1.2.5
+新增功能
+  . table整体重构
+  . table支持插入表头和标题
+  . table支持拷贝
+  . table支持任意调整宽高
+  . table支持任意前插后插行列
+  . table键盘操作仿word用户体验
+  . 添加table平均分布行、列
+  . 添加table单元格对齐方式
+  . 添加table对齐方式
+  . 添加选中部分表格,点击backspace或delete删除功能
+  . 重写表格属性、单元格属性dialog
+  . 粘贴支持纯文本,源码,纯标签3个模式选择
+  . 添加计算字数的getContentLength接口
+  . 添加计算字数事件wordcount
+  . 图片上传支持参数动态绑定
+  . 重写了list功能，支持一,一),(一),1),(1),——等新的列表标签
+  . 调整了list中tab键的逻辑
+  . 添加了可以限制列表的层级
+  . 全屏快捷键 ALT+Z
+  . 添加了uparse.js展示页加载器
+
+优化修复
+  . 优化了插入代码功能
+  . ie下默认禁用源码模式下的代码高亮
+  . 截图功能支持非ie浏览器
+  . 修正了非ie下中文输入时回退不准确的问题
+  . 改进了键盘输入时做回退的操作
 
 Version 1.2.4
 新增功能
    . 官网新增API文档
    . CSS按照UI结构进行了模块化拆分
    . 新增皮肤切换功能，并提供一套新皮肤（可通过配置项theme来设置）
-   . 新增编辑器容器拖动缩放功能
+   . 新增编辑器容器拖动缩放功能,配置项为:scaleEnabled、minFrameWidth、minFrameHeight
    . 新增音乐插件
    . 增加了源码模式下,全屏按钮可以使用
    . 添加了UE.getEditor工厂方法
    . 添加了针对jquery配合使用的demo
    . 添加了针对jqueryValidation配合使用的demo
+   . 添加了初始化编辑器宽高配置，配置为项:initialFrameWidth、initialFrameHeight
+
 优化修复
    . 修复涂鸦路径在配置时，添加参数时请求报错
    . 修复涂鸦opera下缩放不能使用
@@ -18,6 +50,7 @@ Version 1.2.4
    . codemirror版本升级到最新版
    . 对opera/safari的支持进行了进一步的优化
    . 优化了部分demo页的代码
+   . 修改原来的minFrameHeight为拖动时的最小高度
 
 Version 1.2.3
 新增功能

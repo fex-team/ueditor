@@ -180,7 +180,6 @@ div.edui-box {
     height: 0;
     overflow: hidden;
     border-spacing: 0;
-    border-collapse: collapse;
 }
 
 .edui-default .edui-editor-bottomContainer td {
@@ -374,7 +373,6 @@ div.edui-box {
     line-height: 20px;
     height: 20px;
     padding-left: 10px;
-    padding-right: 20px;
 }
 
 .edui-default .edui-state-checked .edui-menuitem-body {
@@ -912,7 +910,8 @@ div.edui-box {
 .edui-default .edui-for-rowspacingtop .edui-popup-body .edui-icon,
 .edui-default .edui-for-rowspacingbottom .edui-popup-body .edui-icon,
 .edui-default .edui-for-insertunorderedlist .edui-popup-body .edui-icon {
-    background-position: 0 -40px;
+    /*background-position: 0 -40px;*/
+    background-image: none  ;
 }
 
 /* 弹出菜单 */
@@ -1128,13 +1127,6 @@ div.edui-box {
     overflow: hidden;
 }
 
-/*emoticon-dialog*/
-.edui-default .edui-for-emoticon .edui-dialog-content {
-    width: 515px;
-    *width: 506px;
-    height: 360px;
-}
-
 /*scrawl-dialog*/
 .edui-default .edui-for-scrawl .edui-dialog-content {
     width: 515px;
@@ -1228,18 +1220,24 @@ div.edui-box {
     height: 420px;
 }
 
-/*table-dialog*/
-.edui-default .edui-for-inserttable .edui-dialog-content {
-    width: 510px;
-    height: 275px;
+/*edittable-dialog*/
+.edui-default .edui-for-edittable .edui-dialog-content {
+    width: 540px;
+    _width:590px;
+    height: 265px;
 }
 
-/*td-dialog*/
+/*edittip-dialog*/
+.edui-default .edui-for-edittip .edui-dialog-content {
+    width: 225px;
+    height: 60px;
+}
+
+/*edittd-dialog*/
 .edui-default .edui-for-edittd .edui-dialog-content {
-    width: 220px;
-    height: 125px;
+    width: 240px;
+    height: 50px;
 }
-
 /*snapscreen-dialog*/
 .edui-default .edui-for-snapscreen .edui-dialog-content {
     width: 400px;
@@ -1297,6 +1295,15 @@ div.edui-box {
     line-height: 14px;
 }
 /* 表格弹出菜单 */
+.edui-default .edui-for-inserttable .edui-splitborder {
+    display: none
+}
+.edui-default .edui-for-inserttable  .edui-splitbutton-body .edui-arrow {
+    width: 0
+}
+.edui-default .edui-toolbar .edui-for-inserttable  .edui-state-active .edui-splitborder{
+    border-left: 1px solid transparent;
+}
 .edui-default .edui-tablepicker .edui-infoarea {
     height: 14px;
     line-height: 14px;
@@ -1392,6 +1399,41 @@ div.edui-box {
     margin: 3px 3px 3px 4px;
     *margin: 1px 0 0 0;
 }
+/*自动排版弹出菜单*/
+.edui-default .edui-CellAlignPicker .edui-CellAlignPicker-body {
+    width: 70px;
+    font-size: 12px;
+    cursor: default;
+}
+
+.edui-default .edui-CellAlignPicker-body table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.edui-default .edui-CellAlignPicker-body td{
+    padding: 1px;
+}
+.edui-default .edui-CellAlignPicker-body .edui-icon{
+    height: 20px;
+    width: 20px;
+    padding: 1px;
+    background-image: url(../images/icons.png);
+    background-image: url(../images/icons.gif) \9;
+}
+.edui-default .edui-CellAlignPicker-body .edui-left{
+    background-position: -460px 0;
+}
+.edui-default .edui-CellAlignPicker-body .edui-center{
+    background-position: -420px 0;
+}
+.edui-default .edui-CellAlignPicker-body .edui-right{
+    background-position: -480px 0;
+}
+.edui-default .edui-CellAlignPicker-body td.edui-state-hover {
+    background-color: #fff5d4;
+    padding: 0;
+    border: 1px solid #dcac6c;
+}
 /*分隔线*/
 .edui-default .edui-toolbar .edui-separator {
     width: 2px;
@@ -1434,6 +1476,9 @@ div.edui-box {
 .edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow {
     width: 0
 }
+.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder{
+    border-left: 1px solid transparent;
+}
 /*contextmenu*/
 .edui-default .edui-hassubmenu .edui-arrow {
     height: 20px;
@@ -1462,4 +1507,76 @@ div.edui-box {
     padding: 0 !important;
     background-color: #fff5d4;
     border: 1px solid #dcac6c;
+}
+/*粘贴弹出菜单*/
+.edui-default .edui-wordpastepop .edui-popup-content{
+    border: none;
+    padding: 0;
+    width: 54px;
+    height: 21px;
+}
+.edui-default  .edui-pasteicon {
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/wordpaste.png');
+    background-position: 0 0;
+}
+
+.edui-default  .edui-pasteicon.edui-state-opened {
+    background-position: 0 -34px;
+}
+
+.edui-default  .edui-pastecontainer {
+    position: relative;
+    visibility: hidden;
+    width: 97px;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+.edui-default  .edui-pastecontainer .edui-title {
+    font-weight: bold;
+    background: #F8F8FF;
+    height: 25px;
+    line-height: 25px;
+    font-size: 12px;
+    padding-left: 5px;
+}
+
+.edui-default  .edui-pastecontainer .edui-button {
+    overflow: hidden;
+    margin: 3px 0;
+}
+
+.edui-default  .edui-pastecontainer .edui-button .edui-richtxticon,
+.edui-default  .edui-pastecontainer .edui-button .edui-tagicon,
+.edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon{
+    float: left;
+    cursor: pointer;
+    width: 29px;
+    height: 29px;
+    margin-left: 5px;
+    background-image: url('../images/wordpaste.png');
+    background-repeat: no-repeat;
+}
+.edui-default  .edui-pastecontainer .edui-button .edui-richtxticon {
+    margin-left: 0;
+    background-position: -109px 0;
+}
+.edui-default  .edui-pastecontainer .edui-button .edui-tagicon {
+    background-position: -148px 1px;
+}
+
+.edui-default  .edui-pastecontainer .edui-button .edui-plaintxticon {
+    background-position: -72px 0;
+}
+
+.edui-default  .edui-pastecontainer .edui-button .edui-state-hover .edui-richtxticon {
+    background-position: -109px -34px;
+}
+.edui-default  .edui-pastecontainer .edui-button .edui-state-hover .edui-tagicon{
+    background-position: -148px -34px;
+}
+.edui-default  .edui-pastecontainer .edui-button  .edui-state-hover .edui-plaintxticon{
+    background-position: -72px -34px;
 }

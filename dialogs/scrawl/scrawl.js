@@ -12,7 +12,7 @@ var scrawl = function (options) {
     var canvas = $G("J_brushBoard"),
         context = canvas.getContext('2d'),
         drawStep = [], //undo redo存储
-        drawStepIndex = -1; //undo redo指针
+        drawStepIndex = 0; //undo redo指针
 
     scrawl.prototype = {
         isScrawl:false, //是否涂鸦
@@ -170,7 +170,7 @@ var scrawl = function (options) {
                 context.clearRect(0, 0, context.canvas.width, context.canvas.height);
                 drawStep = [];
                 me._saveOPerate(saveNum);
-                drawStepIndex = 0;
+                drawStepIndex = 1;
                 me.isScrawl = false;
                 me.btn2disable("J_previousStep");
                 me.btn2disable("J_nextStep");
@@ -284,6 +284,10 @@ var scrawl = function (options) {
         _saveOPerate:function (saveNum) {
             var me = this;
             if (drawStep.length <= saveNum) {
+                if(drawStepIndex<drawStep.length){
+                    me.btn2disable("J_nextStep");
+                    drawStep.splice(drawStepIndex);
+                }
                 drawStep.push(context.getImageData(0, 0, context.canvas.width, context.canvas.height));
                 drawStepIndex = drawStep.length;
             } else {
@@ -629,7 +633,7 @@ function exec(scrawlObj) {
                             var imgObj = {},
                                 url = editor.options.scrawlPath + responseObj.url;
                             imgObj.src = url;
-                            imgObj.data_ue_src = url;
+                            imgObj._src = url;
                             editor.execCommand("insertImage", imgObj);
                             dialog.close();
                         } else {

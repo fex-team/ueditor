@@ -161,7 +161,7 @@
             function handleMouseMove(evt){
                 var x = evt.clientX - startX;
                 var y = evt.clientY - startY;
-                callbacks.ondragmove(x, y);
+                callbacks.ondragmove(x, y,evt);
                 if (evt.stopPropagation) {
                     evt.stopPropagation();
                 } else {
@@ -171,7 +171,7 @@
             if (doc.addEventListener) {
                 function handleMouseUp(evt){
                     doc.removeEventListener('mousemove', handleMouseMove, true);
-                    doc.removeEventListener('mouseup', handleMouseMove, true);
+                    doc.removeEventListener('mouseup', handleMouseUp, true);
                     window.removeEventListener('mouseup', handleMouseUp, true);
                     callbacks.ondragstop();
                 }

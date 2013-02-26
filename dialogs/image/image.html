@@ -11,8 +11,8 @@
     <div class="wrapper">
         <div id="imageTab">
             <div id="tabHeads" class="tabhead">
-                <span tabSrc="remote"><var id="lang_tab_remote"></var></span>
-                <span tabSrc="local" class="focus"><var id="lang_tab_local"></var></span>
+                <span tabSrc="remote"  class="focus"><var id="lang_tab_remote"></var></span>
+                <span tabSrc="local"><var id="lang_tab_local"></var></span>
                 <span tabSrc="imgManager"><var id="lang_tab_imgManager"></var></span>
                 <span tabSrc="imgSearch"><var id="lang_tab_imgSearch"></var></span>
             </div>
@@ -55,6 +55,13 @@
                 <div id="local" class="panel">
                     <div id="flashContainer"></div>
                     <div><div id="upload" style="display: none" ></div><div id="duiqi"></div><div id="localFloat"></div></div>
+
+                    <div class="saveDir">
+                        <var id="lang_savePath" ></var>：<select id="savePath">
+                            <option value="1">upload</option>
+                            <option value="2">upload1</option>
+                        </select>
+                    </div>
                 </div>
                 <div id="imgManager" class="panel">
                     <div id="imageList"><var id="lang_imgLoading"></var></div>
@@ -120,12 +127,22 @@
             var callbacks = {
                 // 选择文件的回调
                 selectFileCallback: function(selectFiles){
+                    utils.each(selectFiles,function(file){
+                        var tmp = {};
+                        tmp.id = file.index;
+                        tmp.data = {};
+                        postConfig.push(tmp);
+                    });
                     selectedImageCount += selectFiles.length;
                     if(selectedImageCount) baidu.g("upload").style.display = "";
                     dialog.buttons[0].setDisabled(true); //初始化时置灰确定按钮
                 },
                 // 删除文件的回调
                 deleteFileCallback: function(delFiles){
+                    for(var i = 0,len = delFiles.length;i<len;i++){
+                        var index = delFiles[i].index;
+                        postConfig.splice(index,1);
+                    }
                     selectedImageCount -= delFiles.length;
                     if (!selectedImageCount) {
                         baidu.g("upload").style.display = "none";
@@ -145,21 +162,42 @@
                 // 单个文件上传失败的回调,
                 uploadErrorCallback: function (data){
                     if(!data.info){
-                        alert(lang.netError)
+                        alert(lang.netError);
                     }
                     //console && console.log(data);
                 },
                 // 全部上传完成时的回调
                 allCompleteCallback: function(){
                     dialog.buttons[0].setDisabled(false);    //上传完毕后点亮按钮
-                }
+                },
                 // 文件超出限制的最大体积时的回调
                 //exceedFileCallback: 'exceedFileCallback',
                 // 开始上传某个文件时的回调
-                //startUploadCallback: startUploadCallback
+                startUploadCallback: function(){
+                    var config = postConfig.shift();
+                    //也可以在这里更改
+                    //if(config.id==2){ //设置第三张图片的对应参数
+                    //     config.data={"myParam":"value"}
+                    // }
+                    flashObj.addCustomizedParams(config.id,config.data);
+                }
             };
             imageUploader.init(flashOptions,callbacks);
-            
+            $G("upload").onclick = function () {
+                /**
+                 * 接口imageUploader.setPostParams()可以在提交时设置本次上传提交的参数（包括所有图片）
+                 * 参数为json对象{"key1":"value1","key2":"value2"}，其中key即为向后台post提交的name，value即为值。
+                 * 其中有一个特殊的保留key值为action，若设置，可以更改本次提交的处理地址
+                 */
+                var postParams = {
+                    "dir":baidu.g("savePath").value
+                };
+                imageUploader.setPostParams(postParams);
+                flashObj.upload();
+                this.style.display = "none";
+                $G("savePath").parentNode.style.display = "none";
+            };
+
         });
     </script>
 </body>

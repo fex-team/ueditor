@@ -13,20 +13,27 @@ UE.I18N['en'] = {
         'pasteplain':'PastePlain', 'selectall':'SelectAll', 'print':'Print', 'preview':'Preview',
         'horizontal':'Horizontal', 'removeformat':'RemoveFormat', 'time':'Time', 'date':'Date',
         'unlink':'Unlink', 'insertrow':'InsertRow', 'insertcol':'InsertCol', 'mergeright':'MergeRight', 'mergedown':'MergeDown',
-        'deleterow':'DeleteRow', 'deletecol':'DeleteCol', 'splittorows':'SplitToRows', 'splittocols':'SplitToCols', 'splittocells':'SplitToCells',
-        'mergecells':'MergeCells', 'deletetable':'DeleteTable', 'insertparagraphbeforetable':'ParagraphBeforeTable', 'cleardoc':'Clear',
-        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph', 'insertimage':'Image', 'inserttable':'Table', 'link':'Link',
+        'deleterow':'DeleteRow', 'deletecol':'DeleteCol', 'splittorows':'SplitToRows',
+        'splittocols':'SplitToCols', 'splittocells':'SplitToCells','deletecaption':'DeleteCaption','inserttitle':'InsertTitle',
+        'mergecells':'MergeCells', 'deletetable':'DeleteTable', 'cleardoc':'Clear', 'insertparagraphbeforetable':"InsertParagraphBeforeTable",
+        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph', 'insertimage':'Image','edittable':'Edit Table', edittd:'Edit Td','link':'Link',
         'emotion':'Emotion', 'spechars':'Spechars', 'searchreplace':'SearchReplace', 'map':'BaiduMap', 'gmap':'GoogleMap',
         'insertvideo':'Video', 'help':'Help', 'justifyleft':'JustifyLeft', 'justifyright':'JustifyRight', 'justifycenter':'JustifyCenter',
         'justifyjustify':'Justify', 'forecolor':'FontColor', 'backcolor':'BackColor', 'insertorderedlist':'OL',
         'insertunorderedlist':'UL', 'fullscreen':'FullScreen', 'directionalityltr':'EnterFromLeft', 'directionalityrtl':'EnterFromRight',
         'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'highlightcode':'Code', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
-        'lineheight':'LineHeight','edittd':'EditTD', 'customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
-        'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',
+        'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
+        'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
         'music':'Music'
     },
     'insertorderedlist':{
+        'num':'1,2,3...',
+        'num1':'1),2),3)...',
+        'num2':'(1),(2),(3)...',
+        'cn':'一,二,三....',
+        'cn1':'一),二),三)....',
+        'cn2':'(一),(二),(三)....',
         'decimal':'1,2,3...',
         'lower-alpha':'a,b,c...',
         'lower-roman':'i,ii,iii...',
@@ -36,7 +43,9 @@ UE.I18N['en'] = {
     'insertunorderedlist':{
         'circle':'○ Circle',
         'disc':'● Circle dot',
-        'square':'■ Rectangle '
+        'square':'■ Rectangle ',
+        'dash' :'－ Dash',
+        'dot' : '。dot'
     },
     'paragraph':{'p':'Paragraph', 'h1':'Title 1', 'h2':'Title 2', 'h3':'Title 3', 'h4':'Title 4', 'h5':'Title 5', 'h6':'Title 6'},
     'fontfamily':{
@@ -82,6 +91,12 @@ UE.I18N['en'] = {
         'unlink':"Unlink",
         'paragraph':"Paragraph",
         'edittable':"Table property",
+        'aligncell':'Align cell',
+        'aligntable':'Table alignment',
+        'tableleft':'Left float',
+        'tablecenter':'Center',
+        'tableright':'Right float',
+        'aligntd':'Cell alignment',
         'edittd':"Cell property",
         'table':"Table",
         'justifyleft':'Justify Left',
@@ -89,12 +104,21 @@ UE.I18N['en'] = {
         'justifycenter':'Justify Center',
         'justifyjustify':'Default',
         'deletetable':"Delete table",
-        'insertparagraphbeforetable':"Insert paragraph",
+        'insertparagraphbefore':"InsertedBeforeLine",
+        'insertparagraphafter':'InsertedAfterLine',
         'inserttable':'Insert table',
+        'insertcaption':'Insert caption',
+        'deletecaption':'Delete Caption',
+        'inserttitle':'Insert Title',
+        'deletetitle':'Delete Title',
+        'averageDiseRow':'AverageDise Row',
+        'averageDisCol':'AverageDis Col',
         'deleterow':"Delete row",
         'deletecol':"Delete col",
         'insertrow':"Insert row",
         'insertcol':"Insert col",
+        'insertrownext':'Insert Row Next',
+        'insertcolnext':'Insert Col Next',
         'mergeright':"Merge right",
         'mergeleft':"Merge left",
         'mergedown':"Merge down",
@@ -127,6 +151,10 @@ UE.I18N['en'] = {
     'unset':'Language hasn\'t been set!',
     't_row':'row',
     't_col':'col',
+    'pasteOpt':'Paste Option',
+    'pasteSourceFormat':"Keep Source Formatting",
+    'tagFormat':'Keep tag',
+    'pasteTextFormat':'Keep Text only',
     'more':'More',
     'autoTypeSet':{
         mergeLine:"Merge empty line",
@@ -178,8 +206,8 @@ UE.I18N['en'] = {
             'imgSearchBtn':{value:"Search"},
             'imgSearchReset':{value:"Clear"},
             'upload':{style:'background: url(upload.png);'},
-            'duiqi':{style:'background: url(imglabel.png) -12px 2px no-repeat;'}
-
+            'duiqi':{style:'background: url(imglabel.png) -12px 2px no-repeat;'},
+            'lang_savePath':'Select savePath:'
         },
         'netError':"Network error,please check the config!",
         'noUploadImage':"No pictures has been uploaded！",
@@ -326,7 +354,7 @@ UE.I18N['en'] = {
         'static':{
             'lang_input_about':'About',
             'lang_input_shortcuts':'Shortcuts',
-            'lang_input_version':'Version:1.2.4',
+            'lang_input_version':'Version:1.2.5',
             'lang_input_introduction':"UEditor is developed by Baidu Co.ltd.  It is lightweight, customizable , focusing on user experience and etc. , UEditor is based on open source BSD license , allowing free use and redistribution.",
             'lang_Txt_shortcuts':'Shortcuts',
             'lang_Txt_func':'Function',
@@ -339,10 +367,8 @@ UE.I18N['en'] = {
             'lang_Txt_italic':'Italic',
             'lang_Txt_underline':'Underline',
             'lang_Txt_selectAll':'Select All',
-            'lang_Txt_removeFormat':'Remove Format',
-            'lang_Txt_leftJustification':'Justify Left',
-            'lang_Txt_rightJustification':'Justify Right',
-            'lang_Txt_visualEnter':'Submit'
+            'lang_Txt_visualEnter':'Submit',
+            'lang_Txt_fullscreen':'Fullscreen'
         }
     },
     insertframe:{
@@ -441,50 +467,32 @@ UE.I18N['en'] = {
         pyzm:"Phonetic",
         zyzf:"Others"
     },
-    inserttable:{
+    'edittable':{
         'static':{
-            lang_baseInfo:"Base info",
-            lang_rows:"Rows",
-            lang_rowUnit:"row",
-            lang_width:"Width",
-            lang_widthUnit:"Unit",
-            lang_height:"Height",
-            lang_heightUnit:"Unit",
-            lang_cols:"Cols",
-            lang_colUnit:"col",
-            lang_warmPrompt:"Warm prompt",
-            lang_maxPadding:"Margins maximum can't more than 13 px! ",
-            lang_extendInfo:"Extend info",
-            lang_preview:"Can preview",
-            lang_tableBorder:"Border",
-            lang_borderSize:"Size",
-            lang_borderColor:"Color",
-            lang_mar_pad:"MarginPad",
-            lang_margin:"Mar",
-            lang_padding:"Pad",
-            lang_table_background:"Table background",
-            lang_table_alignment:"Table alignment",
-            lang_borderFor:"Border for",
-            align:{options:["Default", "Justify", "Justify Left", "Justify Right"]},
-            borderType:{options:["Only table", "All cells"]},
-            lang_forPreview:"This is used for preview"
+            'lang_tableStyle':'Table style',
+            'lang_insertCaption':'Add table header row',
+            'lang_insertTitle':'Add table title row',
+            'lang_tableSize':'Automatically adjust table size',
+                'lang_autoSizeContent':'Adaptive by form text',
+            'lang_autoSizePage':'Page width adaptive',
+            'lang_example':'Example',
+            'lang_borderStyle':'Table Border',
+            'lang_color':'Color:'
         },
-        errorNum:"Please enter the right number!",
-        errorColor:"Please enter the right color!",
-        clearColor:"Clear",
-        overflowMsg:"Maximum can't more than {#value} px!",
-        overflowPreviewMsg:"More than {#value} px no longer provide real-time preview!"
+        captionName:'Caption',
+        titleName:'Title',
+        cellsName:'text'
     },
-    edittd:{
+    'edittip':{
         'static':{
-            lang_background:"Back Color",
-            lang_alignment:"Alignment",
-            lang_horizontal:"H",
-            lang_vertical:"V",
-            vAlign:{options:["Default", "Justify", "Justify Top", "Justify Bottom"]},
-            align:{options:["Default", "Justify", "Justify Left", "Justify Right"]}
-        },
-        clearColor:"Clear"
+            lang_delRow:'Delete entire row',
+            lang_delCol:'Delete entire col'
+        }
+    },
+    'edittd':{
+        'static':{
+            lang_tdBkColor:'Background Color:'
+        }
     },
     wordimage:{
         'static':{

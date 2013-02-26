@@ -49,7 +49,6 @@
     height: 0;
     overflow: hidden;
     border-spacing: 0;
-    border-collapse: collapse;
 }
 
 .edui-default .edui-editor-bottomContainer td {

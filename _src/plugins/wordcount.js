@@ -12,36 +12,21 @@
 
 UE.plugins['wordcount'] = function(){
     var me = this;
-    me.setOpt({
-        wordCount:true,
-        maximumWords:10000,
-        wordCountMsg: me.options.wordCountMsg||me.getLang("wordCountMsg"),
-        wordOverFlowMsg:me.options.wordOverFlowMsg||me.getLang("wordOverFlowMsg")
+    me.addListener('contentchange',function(){
+        me.fireEvent('wordcount');
     });
-    var opt = me.options,
-        max = opt.maximumWords,
-        msg = opt.wordCountMsg ,
-        errMsg = opt.wordOverFlowMsg;
-    if(!opt.wordCount){
-        return;
-    }
-    me.commands["wordcount"]={
-        queryCommandValue:function(cmd,onlyCount){
-            var length,contentText,reg;
-            if(onlyCount){
-                reg = new RegExp("[\r\t\n]","g");
-                contentText = this.getContentTxt().replace(reg,"");
-                return contentText.length;
-            }
-            reg = new RegExp("[\r\t\n]","g");
-            contentText = this.getContentTxt().replace(reg,"");
-            length = contentText.length;
-            if(max-length<0){
-                me.fireEvent('wordcountoverflow',length);
-                return errMsg;
-            }
-
-            return msg.replace("{#leave}",max-length >= 0 ? max-length:0).replace("{#count}",length);
-        }
-    };
+    var timer;
+    me.addListener('ready',function(){
+        var me = this;
+        domUtils.on(me.body,"keyup",function(evt){
+            var code = evt.keyCode||evt.which,
+                //忽略的按键,ctr,alt,shift,方向键
+                ignores = {"16":1,"18":1,"20":1,"37":1,"38":1,"39":1,"40":1};
+            if(code in ignores) return;
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+                me.fireEvent('wordcount');
+            },200)
+        })
+    });
 };

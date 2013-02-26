@@ -17,15 +17,23 @@ public class getContent : IHttpHandler {
         //获取数据
         string content = context.Server.HtmlEncode(context.Request.Form["myEditor"]);
         string content1 = context.Server.HtmlEncode(context.Request.Form["myEditor1"]);
+        
         //存入数据库或者其他操作
         //-------------
 
         //显示
+        context.Response.Write("<script src='../uparse.js' type='text/javascript'></script>");
+        context.Response.Write(
+            "<script>uParse('.content',{"+
+                  "'highlightJsUrl':'../third-party/SyntaxHighlighter/shCore.js',"+
+                  "'highlightCssUrl':'../third-party/SyntaxHighlighter/shCoreDefault.css'"+
+              "})"+
+            "</script>");
+
         context.Response.Write("第1个编辑器的值");
-        context.Response.Write(context.Server.HtmlDecode(content));
+        context.Response.Write("<div class='content'>" + context.Server.HtmlDecode(content) + "</div>");
         context.Response.Write("<br/>第2个编辑器的值<br/>");
-        context.Response.Write(context.Server.HtmlDecode("<textarea style='width:500px;height:300px;'>"+content1+"</textarea><br/>"));
-        context.Response.Write("<input type='button' value='点击返回' onclick='javascript:location.href = \"../_examples/submitFormDemo.html\"' />");
+        context.Response.Write("<textarea class='content' style='width:500px;height:300px;'>"+context.Server.HtmlDecode(content1)+"</textarea><br/>");
     }
  
     public bool IsReusable {

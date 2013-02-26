@@ -69,7 +69,6 @@ UE.plugins['pagebreak'] = function () {
                             domUtils.breakParent(hr, pN);
 
                         }
-                        domUtils.clearSelectedArr(me.currentSelectedArr);
                         //table要重写绑定一下拖拽
                         me.fireEvent('afteradjusttable',me.document);
                 }
@@ -124,9 +123,6 @@ UE.plugins['pagebreak'] = function () {
 
             }
 
-        },
-        queryCommandState:function () {
-            return this.highlight ? -1 : 0;
         }
     };
 };

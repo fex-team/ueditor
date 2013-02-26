@@ -20,10 +20,6 @@
                     editor:me.editor,
                     onpicktable: function (t, numCols, numRows){
                         me._onPickTable(numCols, numRows);
-                    },
-                    onmore: function (){
-                        me.popup.hide();
-                        me.fireEvent('more');
                     }
                 }),
                 'editor':me.editor

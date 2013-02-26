@@ -24,9 +24,6 @@ UE.plugins['lineheight'] = function(){
                 var value = domUtils.getComputedStyle(pN,'line-height');
                 return value == 'normal' ? 1 : value.replace(/[^\d.]*/ig,"");
             }
-        },
-        queryCommandState : function(){
-            return this.highlight ? -1 :0;
         }
     };
 };

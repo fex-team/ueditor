@@ -73,8 +73,7 @@ UE.plugins['autotypeset'] = function(){
         }
     }
     function autotype(type,html){
-
-        var cont;
+        var me = this,cont;
         if(html){
             if(!opt.pasteFilter){
                 return;
@@ -88,8 +87,9 @@ UE.plugins['autotypeset'] = function(){
 
           // 行首缩进，段落方向，段间距，段内间距
         for(var i=0,ci;ci=nodes[i++];){
-            if(!highlightCont && ci.tagName == 'DIV' && ci.getAttribute('highlighter')){
-                highlightCont = ci;
+
+            if(me.fireEvent('excludeNodeinautotype',ci) === true){
+                continue;
             }
              //font-size
             if(opt.clearFontSize && ci.style.fontSize){
@@ -243,7 +243,7 @@ UE.plugins['autotypeset'] = function(){
             if(opt.pasteFilter){
                 me.addListener('beforepaste',autotype);
             }
-            autotype();
+            autotype.call(me)
         }
 
     };

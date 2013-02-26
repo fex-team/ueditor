@@ -61,7 +61,11 @@ EventBase.prototype = {
             if (listeners) {
                 k = listeners.length;
                 while (k--) {
+                    if(!listeners[k])continue;
                     t = listeners[k].apply(this, arguments);
+                    if(t === true){
+                        return t;
+                    }
                     if (t !== undefined) {
                         r = t;
                     }

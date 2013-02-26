@@ -22,9 +22,20 @@ td input {
     height: 40px;
     top: 68px;
     left: 260px;
-    background: url("../../themes/default/images/lock.gif") -2px -3px no-repeat;
+    background: url("../../themes/default/images/lock.gif") 3px -4px no-repeat;
     line-height: 40px;
-    padding-top:13px;
+    padding-top:10px;
+}
+.saveDir{
+    /*width: 132px;*/
+    /*text-align: right;*/
+    height: 40px;
+    line-height: 40px;
+    margin-left: 30px;
+    float: left;
+}
+.saveDir select{
+    height: 30px;
 }
 #duiqi{ width: 62px; height: 38px;float: left}
 #remoteFloat div,#localFloat div{cursor:pointer;opacity: 0.5;filter: alpha(opacity = 50);margin-left:1px;width:38px;height:36px;float:left;}

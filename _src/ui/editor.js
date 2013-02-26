@@ -7,7 +7,7 @@
         uiUtils = baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase,
         domUtils = baidu.editor.dom.domUtils;
-    var nodeStack=[];
+    var nodeStack = [];
 
     function EditorUI(options) {
         this.initOptions(options);
@@ -29,31 +29,31 @@
                 editor.getDialog = function (name) {
                     return editor.ui._dialogs[name + "Dialog"];
                 };
-                domUtils.on(editor.window, 'scroll', function () {
-                    baidu.editor.ui.Popup.postHide();
+                domUtils.on(editor.window, 'scroll', function (evt) {
+                    baidu.editor.ui.Popup.postHide(evt);
                 });
+                //提供编辑器实时宽高(全屏时宽高不变化)
+                editor.ui._actualFrameWidth = editor.options.initialFrameWidth;
 
                 //display bottom-bar label based on config
                 if (editor.options.elementPathEnabled) {
                     editor.ui.getDom('elementpath').innerHTML = '<div class="edui-editor-breadcrumb">' + editor.getLang("elementPathTip") + ':</div>';
                 }
                 if (editor.options.wordCount) {
+                    function countFn() {
+                        setCount(editor,me);
+                        domUtils.un(editor.document, "click", arguments.callee);
+                    }
+                    domUtils.on(editor.document, "click", countFn);
                     editor.ui.getDom('wordcount').innerHTML = editor.getLang("wordCountTip");
-                    //为wordcount捕获中文输入法的空格
-                    editor.addListener('keyup', function (type, evt) {
-                        var keyCode = evt.keyCode || evt.which;
-                        if (keyCode == 32) {
-                            me._wordCount();
-                        }
-                    });
                 }
                 editor.ui._scale();
                 if (editor.options.scaleEnabled) {
-                    if(editor.autoHeightEnabled){
+                    if (editor.autoHeightEnabled) {
                         editor.disableAutoHeight();
                     }
                     me.enableScale();
-                }else{
+                } else {
                     me.disableScale();
                 }
                 if (!editor.options.elementPathEnabled && !editor.options.wordCount && !editor.options.scaleEnabled) {
@@ -70,18 +70,85 @@
 
             editor.addListener('mousedown', function (t, evt) {
                 var el = evt.target || evt.srcElement;
-                baidu.editor.ui.Popup.postHide(el);
+                baidu.editor.ui.Popup.postHide(evt, el);
+            });
+            editor.addListener("delcells", function () {
+                if (UE.ui['edittip']) {
+                    new UE.ui['edittip'](editor);
+                }
+                editor.getDialog('edittip').open();
+            });
+
+            var pastePop, isPaste = false, timer;
+            editor.addListener("afterpaste", function () {
+                if(editor.queryCommandState('pasteplain'))
+                    return;
+                pastePop = new baidu.editor.ui.Popup({
+                    content:new baidu.editor.ui.PastePicker({editor:editor}),
+                    editor:editor,
+                    className:'edui-wordpastepop'
+                });
+                pastePop.render();
+                isPaste = true;
+            });
+
+            editor.addListener("afterinserthtml", function () {
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    if (pastePop && (isPaste || editor.ui._isTransfer)) {
+                        var span = domUtils.createElement(editor.document, 'span', {
+                                'style':"line-height:0px;",
+                                'innerHTML':'\ufeff'
+                            }),
+                            range = editor.selection.getRange();
+                        range.insertNode(span);
+                        pastePop.showAnchor(span);
+                        domUtils.remove(span);
+                        delete editor.ui._isTransfer;
+                        isPaste = false;
+                    }
+                }, 200)
             });
             editor.addListener('contextmenu', function (t, evt) {
-                baidu.editor.ui.Popup.postHide();
+                baidu.editor.ui.Popup.postHide(evt);
             });
+            editor.addListener('keydown', function (t, evt) {
+                if (pastePop)    pastePop.dispose(evt);
+                var keyCode = evt.keyCode || evt.which;
+                if(evt.altKey&&keyCode==90){
+                    UE.ui.buttons['fullscreen'].onclick();
+                }
+            });
+            editor.addListener('wordcount', function (type) {
+                setCount(this,me);
+            });
+            function setCount(editor,ui) {
+                editor.setOpt({
+                    wordCount:true,
+                    maximumWords:10000,
+                    wordCountMsg:editor.options.wordCountMsg || editor.getLang("wordCountMsg"),
+                    wordOverFlowMsg:editor.options.wordOverFlowMsg || editor.getLang("wordOverFlowMsg")
+                });
+                var opt = editor.options,
+                    max = opt.maximumWords,
+                    msg = opt.wordCountMsg ,
+                    errMsg = opt.wordOverFlowMsg,
+                    countDom = ui.getDom('wordcount');
+                if (!opt.wordCount) {
+                    return;
+                }
+                var count = editor.getContentLength(true);
+                if (count > max) {
+                    countDom.innerHTML = errMsg;
+                    editor.fireEvent("wordcountoverflow");
+                } else {
+                    countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
+                }
+            }
+
             editor.addListener('selectionchange', function () {
-                //if(!editor.selection.isFocus())return;
                 if (editor.options.elementPathEnabled) {
                     me[(editor.queryCommandState('elementpath') == -1 ? 'dis' : 'en') + 'ableElementPath']()
-                }
-                if (editor.options.wordCount) {
-                    me[(editor.queryCommandState('wordcount') == -1 ? 'dis' : 'en') + 'ableWordCount']()
                 }
                 if (editor.options.scaleEnabled) {
                     me[(editor.queryCommandState('scale') == -1 ? 'dis' : 'en') + 'ableScale']();
@@ -119,9 +186,6 @@
                         case 1:
                             newFrame.setAttribute("align", "right");
                             break;
-                        case 2:
-                            newFrame.setAttribute("align", "middle");
-                            break;
                     }
                     frame.parentNode.insertBefore(newFrame, frame);
                     domUtils.remove(frame);
@@ -154,7 +218,6 @@
                     if (editor.ui._dialogs.insertframeDialog && /iframe/ig.test(el.tagName)) {
                         var html = popup.formatHtml(
                             '<nobr>' + editor.getLang("property") + ': <span onclick=$$._setIframeAlign(-2) class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;<span onclick=$$._setIframeAlign(-1) class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;<span onclick=$$._setIframeAlign(1) class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._setIframeAlign(2) class="edui-clickable">' + editor.getLang("justifycenter") + '</span>' +
                                 ' <span onclick="$$._updateIframe( this);" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>');
                         if (html) {
                             popup.getDom('content').innerHTML = html;
@@ -167,7 +230,7 @@
                 });
                 editor.addListener('selectionchange', function (t, causeByUi) {
                     if (!causeByUi) return;
-                    var html = '',
+                    var html = '', str = "",
                         img = editor.selection.getRange().getClosedNode(),
                         dialogs = editor.ui._dialogs;
                     if (img && img.tagName == 'IMG') {
@@ -201,18 +264,20 @@
                         if (!dialogs[dialogName]) {
                             return;
                         }
-                        !html && (html = popup.formatHtml(
-                            '<nobr>' + editor.getLang("property") + ': <span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("right") class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;' +
-                                '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>'))
+                        str = '<nobr>' + editor.getLang("property") + ': '+
+                            '<span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("right") class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
+                            '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;'+
+                            '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>';
+
+                        !html && (html = popup.formatHtml(str))
 
                     }
                     if (editor.ui._dialogs.linkDialog) {
                         var link = editor.queryCommandValue('link');
                         var url;
-                        if (link && (url = (link.getAttribute('data_ue_src') || link.getAttribute('href', 2)))) {
+                        if (link && (url = (link.getAttribute('_href') || link.getAttribute('href', 2)))) {
                             var txt = url;
                             if (url.length > 30) {
                                 txt = url.substring(0, 20) + "...";
@@ -329,8 +394,8 @@
                     var bk = editor.selection.getRange().createBookmark();
                 }
                 if (fullscreen) {
-                    while(container.tagName!="BODY"){
-                        var position = baidu.editor.dom.domUtils.getComputedStyle(container,"position");
+                    while (container.tagName != "BODY") {
+                        var position = baidu.editor.dom.domUtils.getComputedStyle(container, "position");
                         nodeStack.push(position);
                         container.style.position = "static";
                         container = container.parentNode;
@@ -350,7 +415,7 @@
                     this._bakCssText1 = this.getDom('iframeholder').style.cssText;
                     this._updateFullScreen();
                 } else {
-                    while(container.tagName!="BODY"){
+                    while (container.tagName != "BODY") {
                         container.style.position = nodeStack.shift();
                         container = container.parentNode;
                     }
@@ -376,33 +441,12 @@
                             editor.selection.getRange().moveToBookmark(bk).select(true);
                             baidu.editor.dom.domUtils.remove(input);
                             fullscreen && window.scroll(0, 0);
-                        },0)
-                    },0)
+                        }, 0)
+                    }, 0)
                 }
                 this.editor.fireEvent('fullscreenchanged', fullscreen);
                 this.triggerLayout();
             }
-        },
-        _wordCount:function () {
-            var wdcount = this.getDom('wordcount');
-            if (!this.editor.options.wordCount) {
-                wdcount.style.display = "none";
-                return;
-            }
-            wdcount.innerHTML = this.editor.queryCommandValue("wordcount");
-        },
-        disableWordCount:function () {
-            var w = this.getDom('wordcount');
-            w.innerHTML = '';
-            w.style.display = 'none';
-            this.wordcount = false;
-
-        },
-        enableWordCount:function () {
-            var w = this.getDom('wordcount');
-            w.style.display = '';
-            this.wordcount = true;
-            this._wordCount();
         },
         _updateFullScreen:function () {
             if (this._fullscreen) {
@@ -473,18 +517,19 @@
                 domUtils.on(editorDocument, "mouseup", up);
                 domUtils.on(doc, "mouseup", up);
             }
+
             var me = this;
             //by xuheng 全屏时关掉缩放
-            this.editor.addListener('fullscreenchanged',function(e,fullScreen){
-                if(fullScreen){
+            this.editor.addListener('fullscreenchanged', function (e, fullScreen) {
+                if (fullScreen) {
                     me.disableScale();
 
-                }else{
-                    if(me.editor.options.scaleEnabled){
+                } else {
+                    if (me.editor.options.scaleEnabled) {
                         me.enableScale();
                         var tmpNode = me.editor.document.createElement('span');
                         me.editor.body.appendChild(tmpNode);
-                        me.editor.body.style.height = Math.max(domUtils.getXY(tmpNode).y,me.editor.iframe.offsetHeight - 20 ) + 'px';
+                        me.editor.body.style.height = Math.max(domUtils.getXY(tmpNode).y, me.editor.iframe.offsetHeight - 20) + 'px';
                         domUtils.remove(tmpNode)
                     }
                 }
@@ -510,7 +555,9 @@
             function up() {
                 if (isMouseMove) {
                     isMouseMove = false;
-                    editorHolder.style.width = scalelayer.offsetWidth - 2 + 'px';
+                    editor.ui._actualFrameWidth = scalelayer.offsetWidth - 2;
+                    editorHolder.style.width = editor.ui._actualFrameWidth + 'px';
+
                     editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2);
                 }
                 if (scalelayer) {
@@ -531,7 +578,7 @@
 
             this.enableScale = function () {
                 //trace:2868
-                if(editor.queryCommandState("source")==1)    return;
+                if (editor.queryCommandState("source") == 1)    return;
                 scale.style.display = "";
                 this.scaleEnabled = true;
                 domUtils.on(scale, "mousedown", down);
@@ -608,7 +655,7 @@
 
         var oldRender = editor.render;
         editor.render = function (holder) {
-            if(holder.constructor === String){
+            if (holder.constructor === String) {
                 editor.key = holder;
                 instances[holder] = editor;
             }
@@ -652,7 +699,9 @@
                     var iframeholder = editor.ui.getDom('iframeholder');
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    editor.container.style.cssText = "z-index:" + editor.options.zIndex + ";width:" + editor.options.initialFrameWidth + "px";
+                    var options=editor.options;
+                    var width =Math.max(options.initialFrameWidth,options.minFrameWidth) ;
+                    editor.container.style.cssText = "z-index:" + options.zIndex + ";width:" + width+"px";
                     oldRender.call(editor, iframeholder);
 
                 }
@@ -660,7 +709,6 @@
         };
         return editor;
     };
-
 
 
     /**
