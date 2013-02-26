@@ -291,6 +291,12 @@
         // ,highlightJsUrl:URL + "third-party/SyntaxHighlighter/shCore.js"
         // ,highlightCssUrl:URL + "third-party/SyntaxHighlighter/shCoreDefault.css"
 
+        //formula
+        // 数学公式时需要加载的第三方插件的路径
+        // ,formulaUrl:URL + "third-party/MathJax/MathJax.js?config=//formula
+        // 数学公式时需要加载的第三方插件的路径
+        // ,formulaUrl:URL + "third-party/MathJax/MathJax.js?config=TeX-AMS_HTML""
+
         //tab
         //点击tab键时移动的距离,tabSize倍数，tabNode什么字符做为单位
         //,tabSize:4
