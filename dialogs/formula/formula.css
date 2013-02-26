@@ -1,0 +1,56 @@
+#layout-wrap {
+    width: 100%;
+}
+
+.symbol {
+    margin: 10px;
+}
+
+#layout-wrap .symbol table {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+.symbol td {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    cursor: pointer;
+}
+
+.symbol td:hover {
+    background-color: #a3bde3;
+    opacity: 0.6;
+    filter: alpha(opacity = 60);
+}
+
+#textarea {
+    width: 98%;
+    margin: 0 auto;
+    display: block;
+    overflow: auto;
+}
+
+.title {
+    margin: 5px 0 5px 10px;
+}
+
+.sym1 {
+    background: url(img/img.gif) no-repeat;
+}
+
+.sym2 {
+    background: url(img/img.gif) 0 -64px no-repeat;
+}
+
+.sym3 {
+    background: url(img/img.gif) 0 -96px no-repeat;
+}
+
+.sym4 {
+    background: url(img/img.gif) 0 -128px no-repeat;
+}
+
+.sym5 {
+    background: url(img/cmd.gif) no-repeat;
+}
