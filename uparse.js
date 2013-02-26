@@ -177,7 +177,7 @@ function uParse(selector,opt){
         listDefaultPaddingLeft : '20',
         'highlightJsUrl':'',
         'highlightCssUrl':'',
-        'formulaJsUrl':'',
+        'formulaUrl':'',
         customRule:function(){}
     };
     if(opt){
@@ -343,14 +343,20 @@ function uParse(selector,opt){
                 },
                 'span':function(nodes){
                     _each(nodes,function(pi){
-                        if(/MathJax/i.test(pi.className)){
+                        var flag=false;
+                        _each(nodes,function(pi){
+                            if(/MathJax/i.test(pi.className)){
+                                pi.removeAttribute("class");
+                                flag=true;
+                            }
+                        });
+                        if(flag){
                             loadFile(document,{
-                                src : defaultOption.formulaJsUrl,
+                                src : defaultOption.formulaUrl,
                                 tag : "script",
                                 type : "text/javascript",
                                 defer : "defer"
                             });
-                            return;
                         }
                     });
                 }
