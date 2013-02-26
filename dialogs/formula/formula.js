@@ -4,6 +4,7 @@ var layoutWrap = $G('layout-wrap'),
     bk;
 
 window.onload = function () {
+    editor._MathJaxList=[];
     textEditor.focus();
     textEditor.onmouseup = function () {
         document.selection && (bk = document.selection.createRange().getBookmark());

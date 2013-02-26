@@ -8,19 +8,6 @@
 UE.plugins['formula'] = function () {
     var me = this;
 
-    me.addListener("ready",function(){
-        domUtils.on(me.body,"click",function(){
-            var range=me.selection.getRange();
-            var start = domUtils.findParent(range.startContainer, function (node) {
-                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
-                }, true);
-            if(start){
-                me._MathJaxList = [];
-                me.getDialog("formula").open();
-            }
-        });
-    });
-
     me.commands['formula'] = {
         execCommand:function (cmdName, html, css) {
             var range = me.selection.getRange();
