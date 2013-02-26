@@ -17,7 +17,8 @@ UE.commands['preview'] = {
             "setTimeout(function(){uParse('div',{" +
             "    'highlightJsUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCore.js'," +
                 "    'highlightCssUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCoreDefault.css'" +
-                "})},300)" +
+            "    'formulaJsUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/MathJax.js?config=TeX-AMS_HTML'," +
+            "})},300)" +
             '</script></head><body><div>'+this.getContent(null,null,true)+'</div></body></html>');
         d.close();
     },
