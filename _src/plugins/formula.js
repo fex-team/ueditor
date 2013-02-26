@@ -8,6 +8,17 @@
 UE.plugins['formula'] = function () {
     var me = this;
 
+    me.addListener("ready",function(){
+        domUtils.on(me.body,"click",function(){
+            var range = me.selection.getRange();
+            var start = domUtils.findParent(range.startContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+                }, true);
+            if(start){
+                me.getDialog("formula").open();
+            }
+        });
+    });
     me.commands['formula'] = {
         execCommand:function (cmdName, html, css) {
             var range = me.selection.getRange();
@@ -100,9 +111,11 @@ UE.plugins['formula'] = function () {
     });
     me.addInputRule(function (root) {
         if (me._MathJaxList && me._MathJaxList.length) {
+            var i=0;
             utils.each(root.getNodesByTagName('span'), function (pi) {
-                var val, i = 0;
+                var val;
                 if ((val = pi.getAttr('class'))&&/MathJax/.test(val)) {
+                    debugger;
                     pi.parentNode.replaceChild(me._MathJaxList[i++], pi);
                 }
             });
