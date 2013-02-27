@@ -32,7 +32,7 @@ test( '补全不完整table', function() {
 });
 
 test( '补全不完整li', function() {
-    root = UE.htmlparser('<ol><li><em><u>sdf<li>sdfsdf</ol>');
+    var root = UE.htmlparser('<ol><li><em><u>sdf<li>sdfsdf</ol>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em><u>sdf</u></em></li><li>sdfsdf</li></ol>','补全u，em');
     root = UE.htmlparser('<ol><li><em>sdf</em></li><ul><li>a</li><li>b</li><li>c</ul><li>jkl</ol>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em>sdf</em></li><ul><li>a</li><li>b</li><li>c</li></ul><li>jkl</li></ol>','补全li');
