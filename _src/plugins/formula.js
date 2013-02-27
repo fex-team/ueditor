@@ -9,7 +9,7 @@ UE.plugins['formula'] = function () {
     var me = this;
 
     me.addListener("ready",function(){
-        domUtils.on(me.body,"click",function(){
+        domUtils.on(me.body,"dblclick",function(){
             var range = me.selection.getRange();
             var start = domUtils.findParent(range.startContainer, function (node) {
                     return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
