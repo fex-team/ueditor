@@ -80,7 +80,7 @@ function getPos() {
     return [start, end];
 }
 
-function getStyle() {
+function getCssText() {
     var list = document.head.children, str = "";
     for (var i = 0, node; node = list[i++];) {
         if (/style/ig.test(node.tagName)) {
@@ -89,7 +89,7 @@ function getStyle() {
     }
     return str;
 }
-function format(resultArea, value) {
+function formatHtml(resultArea, value) {
     var mathjaxDom = resultArea.lastChild;
     do {
         mathjaxDom = mathjaxDom.previousSibling;
@@ -108,6 +108,6 @@ function format(resultArea, value) {
 dialog.onok = function () {
     var textValue = textEditor.value.replace(/(^\s*)|(\s*$)/g, '');
     if (textValue.length > 0) {
-        editor.execCommand('formula', format(resultArea, textValue), getStyle());
+        editor.execCommand('formula', formatHtml(resultArea, textValue), getCssText());
     }
 };
