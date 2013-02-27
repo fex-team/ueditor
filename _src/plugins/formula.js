@@ -105,6 +105,7 @@ UE.plugins['formula'] = function () {
             return true;
         }
     });
+
     me.addOutputRule(function (root) {
         me._MathJaxList = [];
         utils.each(root.getNodesByTagName('table'), function (pi) {
