@@ -820,16 +820,16 @@
             if(!table) return -1;
             var interlaced = table.getAttribute("interlaced");
             if(cmd =="interlacetable"){
-                return (interlaced === "enabled") ? -1:0;
+                return /*(interlaced === "enabled") ? -1:*/0;
             }else{
                 return (!interlaced||interlaced === "disabled") ? -1:0;
             }
         },
-        execCommand:function (cmd) {
+        execCommand:function (cmd,classList) {
             var table = getTableItemsByRange(this).table;
-            if(cmd=="interlacetable"){
+            if( cmd == "interlacetable" ){
                 table.setAttribute("interlaced","enabled");
-                this.fireEvent("interlacetable",table);
+                this.fireEvent("interlacetable",table,classList);
             }else{
                 table.setAttribute("interlaced","disabled");
                 this.fireEvent("uninterlacetable",table);

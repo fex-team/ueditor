@@ -281,9 +281,7 @@
         setCellContent:function (cell, content) {
             cell.innerHTML = content || (browser.ie ? domUtils.fillChar : "<br />");
         },
-        cloneCell:function (cell, ignoreMerge) {
-            return UETable.cloneCell(cell,ignoreMerge);
-        },
+        cloneCell:UETable.cloneCell,
         /**
          * 获取跟当前单元格的右边竖线为左边的所有未合并单元格
          */
@@ -811,6 +809,13 @@
                         th = cell.ownerDocument.createElement("th");
                         th.appendChild(cell.firstChild);
                         tableRow.insertBefore(th, cell);
+                        domUtils.remove(cell)
+                    }
+                }else{
+                    if (cell.tagName == 'TH') {
+                        var td = cell.ownerDocument.createElement("td");
+                        td.appendChild(cell.firstChild);
+                        tableRow.insertBefore(td, cell);
                         domUtils.remove(cell)
                     }
                 }

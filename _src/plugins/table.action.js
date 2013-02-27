@@ -75,6 +75,7 @@ UE.plugins['table'] = function () {
         "adaptbywindow":1,
         "adaptbycustomer":1,
         "insertparagraph":1,
+        "insertparagraphbeforetable":1,
         "averagedistributecol":1,
         "averagedistributerow":1
     };
@@ -513,7 +514,7 @@ UE.plugins['table'] = function () {
                 toggleDraggableState(me, false, "", null);
             }
         });
-        me.addListener("interlacetable",function(type,table){
+        me.addListener("interlacetable",function(type,table,classList){
             if(!table) return;
             var me = this,
                 rows = table.rows,
@@ -522,7 +523,7 @@ UE.plugins['table'] = function () {
                     return list[index] ? list[index] : repeat ? list[index % list.length]: "";
                 };
             for(var i = 0;i<len;i++){
-                rows[i].className = getClass(me.options.classList,i,true);
+                rows[i].className = getClass( classList|| me.options.classList,i,true);
             }
         });
         me.addListener("uninterlacetable",function(type,table){
@@ -534,6 +535,7 @@ UE.plugins['table'] = function () {
                 rows[i].className = "";
             }
         });
+
 
 
         me.addListener("mousedown", mouseDownEvent);
