@@ -100,7 +100,7 @@ function formatHtml(resultArea, value) {
     node.setAttribute("data", encodeURIComponent("$$" + value + "$$"));
     domUtils.removeAttributes(mathjaxDom.children[0], ['style']);//删除多余属性
 
-    return '<table style="width:95%;margin: 5px auto;" class="MathJaxer">' +
+    return '<table style="width:100%;margin: 5px auto;" class="MathJaxer">' +
         '<tr><td style="text-align: center;border:1px dotted #ccc;">' + mathjaxDom.innerHTML + '</td></tr>' +
         '</table>';
 }
