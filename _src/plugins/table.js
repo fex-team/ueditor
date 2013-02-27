@@ -61,6 +61,8 @@ UE.plugins['table'] = function () {
         "adaptbywindow":1,
         "adaptbycustomer":1,
         "insertparagraph":1,
+        "insertparagraphaftertable":1,
+        "insertparagraphbeforetable":1,
         "averagedistributecol":1,
         "averagedistributerow":1,
         "fixedwidth":1
@@ -2711,6 +2713,13 @@ UE.plugins['table'] = function () {
                         th.appendChild(cell.firstChild);
                         tableRow.insertBefore(th, cell);
                         domUtils.remove(cell)
+                    }
+                }else{
+                    if (cell.tagName == 'TH') {
+                        var td = cell.ownerDocument.createElement("td");
+                        td.appendChild(cell.firstChild);
+                        tableRow.insertBefore(td, cell);
+                        domUtils.remove(cell);
                     }
                 }
             }
