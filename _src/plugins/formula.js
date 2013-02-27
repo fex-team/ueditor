@@ -14,11 +14,10 @@ UE.plugins['formula'] = function () {
             var start = domUtils.findParent(range.startContainer, function (node) {
                 return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
             }, true);
-            if (start) {
-                me.getDialog("formula").open();
-            }
+            this.contentEditable = start ? "false" : "true";
         });
     });
+
     me.commands['formula'] = {
         execCommand:function (cmdName, html, css) {
             var range = me.selection.getRange();
@@ -98,7 +97,7 @@ UE.plugins['formula'] = function () {
         return orgQuery.apply(this, arguments)
     };
 
-//避免table插件对于公式的影响
+    //避免table插件对于公式的影响
     me.addListener('excludetable excludeNodeinautotype', function (cmd, target) {
         if (target && domUtils.findParent(target, function (node) {
             return domUtils.hasClass(node, 'MathJaxer');
@@ -117,8 +116,8 @@ UE.plugins['formula'] = function () {
                 utils.each(pi.getNodesByTagName('span'), function (node) {
                     var val;
                     if ((val = node.getAttr('class')) && /MathJax/.test(val)) {
-                        var tmpSpan =  UE.uNode.createElement("span");
-                        tmpSpan.setAttr("class","MathJax");
+                        var tmpSpan = UE.uNode.createElement("span");
+                        tmpSpan.setAttr("class", "MathJax");
                         var txtNode = UE.uNode.createText(decodeURIComponent(node.getAttr('data')));
                         tmpSpan.appendChild(txtNode);
                         pi.parentNode.replaceChild(tmpSpan, pi);
