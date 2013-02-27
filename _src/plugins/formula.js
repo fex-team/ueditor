@@ -8,13 +8,13 @@
 UE.plugins['formula'] = function () {
     var me = this;
 
-    me.addListener("ready",function(){
-        domUtils.on(me.body,"dblclick",function(){
+    me.addListener("ready", function () {
+        domUtils.on(me.body, "click", function () {
             var range = me.selection.getRange();
             var start = domUtils.findParent(range.startContainer, function (node) {
-                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
-                }, true);
-            if(start){
+                return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+            }, true);
+            if (start) {
                 me.getDialog("formula").open();
             }
         });
@@ -43,7 +43,9 @@ UE.plugins['formula'] = function () {
                     }
                 }
                 range.setCursor(false, true);
-                domUtils.remove(start);
+                domUtils.remove(domUtils.findParent(start, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer');
+                }, true));
             }
             if (html && css) {
                 me.execCommand('inserthtml', html);
@@ -96,26 +98,43 @@ UE.plugins['formula'] = function () {
         return orgQuery.apply(this, arguments)
     };
 
+//避免table插件对于公式的影响
+    me.addListener('excludetable excludeNodeinautotype', function (cmd, target) {
+        if (target && domUtils.findParent(target, function (node) {
+            return domUtils.hasClass(node, 'MathJaxer');
+        }, true)) {
+            return true;
+        }
+    });
     me.addOutputRule(function (root) {
         me._MathJaxList = [];
-        utils.each(root.getNodesByTagName('span'), function (pi) {
-            var val;
-            if ((val = pi.getAttr('class')) && /MathJax/.test(val)) {
+        utils.each(root.getNodesByTagName('table'), function (pi) {
+            var cls;
+            if ((cls = pi.getAttr('class')) && /MathJaxer/.test(cls)) {
                 var tmpNode = UE.uNode.createElement(pi.toHtml());
                 me._MathJaxList.push(tmpNode);
-                pi.children = [];
-                pi.appendChild(UE.uNode.createText(decodeURIComponent(pi.getAttr('data'))));
-                delete pi.attrs.data;
+
+                utils.each(pi.getNodesByTagName('span'), function (node) {
+                    var val;
+                    if ((val = node.getAttr('class')) && /MathJax/.test(val)) {
+                        var tmpSpan =  UE.uNode.createElement("span");
+                        tmpSpan.setAttr("class","MathJax");
+                        var txtNode = UE.uNode.createText(decodeURIComponent(node.getAttr('data')));
+                        tmpSpan.appendChild(txtNode);
+                        pi.parentNode.replaceChild(tmpSpan, pi);
+                    }
+                });
             }
         });
+
+
     });
     me.addInputRule(function (root) {
         if (me._MathJaxList && me._MathJaxList.length) {
-            var i=0;
+            var i = 0;
             utils.each(root.getNodesByTagName('span'), function (pi) {
                 var val;
-                if ((val = pi.getAttr('class'))&&/MathJax/.test(val)) {
-                    debugger;
+                if ((val = pi.getAttr('class')) && /MathJax/.test(val)) {
                     pi.parentNode.replaceChild(me._MathJaxList[i++], pi);
                 }
             });
