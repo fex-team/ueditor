@@ -107,7 +107,7 @@ function formatHtml(resultArea, value) {
 
 dialog.onok = function () {
     var textValue = textEditor.value.replace(/(^\s*)|(\s*$)/g, '');
-    if (textValue.length > 0) {
+    if (textValue.length > 0&&MathJax.isReady) {
         editor.execCommand('formula', formatHtml(resultArea, textValue), getCssText());
     }
 };
