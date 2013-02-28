@@ -8,25 +8,15 @@
 UE.plugins['formula'] = function () {
     var me = this;
 
-    me.addListener("ready", function () {
-        domUtils.on(me.body, "click", function () {
-            var range = me.selection.getRange();
-            var start = domUtils.findParent(range.startContainer, function (node) {
-                return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
-            }, true);
-            this.contentEditable = start ? "false" : "true";
-        });
-    });
-
     me.commands['formula'] = {
         execCommand:function (cmdName, html, css) {
             var range = me.selection.getRange();
             range.adjustmentBoundary();
             var start = domUtils.findParent(range.startContainer, function (node) {
-                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
                 }, true),
                 end = domUtils.findParent(range.endContainer, function (node) {
-                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
                 }, true);
 
             if (start && end && start === end) {
@@ -104,6 +94,17 @@ UE.plugins['formula'] = function () {
         }, true)) {
             return true;
         }
+    });
+
+    //选中公式不可编辑
+    me.addListener("ready", function () {
+        domUtils.on(me.document, "click", function () {
+            var range = me.selection.getRange();
+            var start = domUtils.findParent(range.startContainer, function (node) {
+                return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
+            }, true);
+            this.body.contentEditable = start ? "false" : "true";
+        });
     });
 
     me.addOutputRule(function (root) {
