@@ -48,3 +48,14 @@ test("getMaxCols",function(){
     maxCols = ut.getMaxCols();
     equal(maxCols,6,"最大列数为6");
 });
+
+test("getSameEndPosCells",function(){
+    var table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td>3</td></tr>" +
+                         "<tr><td>2</td><td>3</td></tr>"),
+        ut = new UT(table);
+    var cell = table.rows[0].cells[0],
+        cells1 = ut.getSameEndPosCells(cell,"x"),
+        cells2 = ut.getSameEndPosCells(cell,"y");
+    ok(cells1.length == 1, "获取到同样X轴结尾位置的cell1个");
+    ok(cells2.length == 2, "获取到同样Y轴结尾位置的cell2个");
+});
