@@ -192,6 +192,10 @@ UE.plugins['table'] = function () {
                 }
             }
         });
+        me.addListener("tablehasdeleted",function(){
+            toggleDraggableState(this, false, "", null);
+            if (dragButton)domUtils.remove(dragButton);
+        });
 
         me.addListener('beforepaste', function (cmd, html) {
             var me = this;

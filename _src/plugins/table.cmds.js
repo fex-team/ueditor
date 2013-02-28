@@ -103,8 +103,8 @@
                     rng.setStart(next, 0)
                 }
                 rng.setCursor(false, true)
-                toggleDragableState(this, false, "", null);
-                if (dragButton)domUtils.remove(dragButton);
+                this.fireEvent("tablehasdeleted")
+
             }
 
         }
