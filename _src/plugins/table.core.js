@@ -1040,6 +1040,7 @@
             }
             //th不参与排序
             flag && trArray.splice(0, 1);
+
             trArray = utils.sort(trArray,function (tr1, tr2) {
                 var txt = function(node){
                     return node.innerText||node.textContent;
