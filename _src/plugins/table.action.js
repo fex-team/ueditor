@@ -89,6 +89,8 @@ UE.plugins['table'] = function () {
                 'td,th{padding: 5px 10px;border: 1px solid #DDD;}' +
                 'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
                 'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
+                'tr.back1{ background-color:#eee }'+
+                'tr.back2{ background-color:#fff }'+
                 'td p{margin:0;padding:0;}', me.document);
 
         var tableCopyList, isFullCol, isFullRow;

@@ -1040,8 +1040,20 @@
             }
             //th不参与排序
             flag && trArray.splice(0, 1);
-
-            trArray = utils.sort(trArray,function (tr1, tr2) {
+            var sort = function(array,compareFn){
+                compareFn = compareFn || function(item1, item2){ return item1.localeCompare(item2);};
+                for(var i= 0,len = array.length; i<len; i++){
+                    for(var j = i,length = array.length; j<length; j++){
+                        if(compareFn(array[i], array[j]) > 0){
+                            var t = array[i];
+                            array[i] = array[j];
+                            array[j] = t;
+                        }
+                    }
+                }
+                return array;
+            };
+            trArray = sort(trArray,function (tr1, tr2) {
                 var txt = function(node){
                     return node.innerText||node.textContent;
                 };
