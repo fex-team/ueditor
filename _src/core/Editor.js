@@ -1038,4 +1038,3 @@
     };
     utils.inherits(Editor, EventBase);
 })();
-
