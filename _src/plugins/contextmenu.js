@@ -71,6 +71,41 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'inserttable'
                         },
                         {
+                            label:"清除表格背景",
+                            cmdName:"cleartablebackground",
+                            exec:function(){
+                                this.execCommand("cleartablebackground");
+                            }
+                        },
+                        {
+                            label:"整个表格隔行变色",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]},true);
+                            }
+                        },
+                        {
+                            label:"三色渐变",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["#aaa","#bbb","#ccc"]});
+                            }
+                        },
+                        {
+                            label:"隔行变色",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]});
+                            }
+                        },
+                        {
+                            label:"红蓝相间",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["red","blue"]});
+                            }
+                        },
+                        {
                             label:lang.deletetable,
                             cmdName:'deletetable'
                         },
@@ -170,6 +205,54 @@ UE.plugins['contextmenu'] = function () {
                                     new UE.ui['edittable']( this );
                                 }
                                 this.getDialog('edittable').open();
+                            }
+                        }
+                    ]
+                },
+                {
+                    group:"表格排序",
+                    icon:'tablesort',
+                    subMenu:[
+                        {
+                            label:"逆序当前",
+                            cmdName:'sorttable',
+                            value:1
+                        },
+                        {
+                            label:"按ASCII字符升序",
+                            cmdName:'sorttable'
+                        },
+                        {
+                            label:"按ASCII字符降序",
+                            cmdName:'sorttable',
+                            exec:function(){
+                                this.execCommand("sorttable",function(td1,td2){
+                                    var value1 = td1.innerHTML,
+                                        value2 = td2.innerHTML;
+                                    return value2.localeCompare(value1);
+                                });
+                            }
+                        },
+                        {
+                            label:"按数值大小升序",
+                            cmdName:'sorttable',
+                            exec:function(){
+                                this.execCommand("sorttable",function(td1,td2){
+                                    var value1 = parseInt(td1.innerHTML,10),
+                                        value2 = parseInt(td2.innerHTML,10);
+                                    return (value1||0) - (value2||0);
+                                });
+                            }
+                        },
+                        {
+                            label:"按数值大小降序",
+                            cmdName:'sorttable',
+                            exec:function(){
+                                this.execCommand("sorttable",function(td1,td2){
+                                    var value1 = parseInt(td1.innerHTML,10),
+                                        value2 = parseInt(td2.innerHTML,10);
+                                    return (value2||0) - (value1||0);
+                                });
                             }
                         }
                     ]
@@ -330,6 +413,8 @@ UE.plugins['contextmenu'] = function () {
                                     return me.getLang("contextMenu.aligntd");
                                 case "aligntable":
                                     return me.getLang("contextMenu.aligntable");
+                                case "tablesort":
+                                    return "表格排序";
                                 default :
                                     return '';
                             }

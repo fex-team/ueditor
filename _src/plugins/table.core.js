@@ -11,7 +11,7 @@
  * @constructor
  */
 (function () {
-    var UETable = UE.UETable = function(table) {
+    var UETable = UE.UETable = function (table) {
         this.table = table;
         this.indexTable = [];
         this.selectedTds = [];
@@ -20,29 +20,29 @@
     };
 
     //===以下为静态工具方法===
-    UETable.removeSelectedClass = function(cells) {
+    UETable.removeSelectedClass = function (cells) {
         utils.each(cells, function (cell) {
             domUtils.removeClasses(cell, "selectTdClass");
         })
     };
-    UETable.addSelectedClass = function(cells){
+    UETable.addSelectedClass = function (cells) {
         utils.each(cells, function (cell) {
             domUtils.addClass(cell, "selectTdClass");
         })
     };
-    UETable.isEmptyBlock = function(node) {
+    UETable.isEmptyBlock = function (node) {
         var reg = new RegExp(domUtils.fillChar, 'g');
         if (node[browser.ie ? 'innerText' : 'textContent'].replace(/^\s*$/, '').replace(reg, '').length > 0) {
             return 0;
         }
-        for (var i in dtd.$isNotEmpty) if(dtd.$isNotEmpty.hasOwnProperty(i)) {
+        for (var i in dtd.$isNotEmpty) if (dtd.$isNotEmpty.hasOwnProperty(i)) {
             if (node.getElementsByTagName(i).length) {
                 return 0;
             }
         }
         return 1;
     };
-    UETable.getWidth = function(cell) {
+    UETable.getWidth = function (cell) {
         if (!cell)return 0;
         return parseInt(domUtils.getComputedStyle(cell, "width"), 10);
     };
@@ -51,7 +51,7 @@
      * 根据当前选区获取相关的table信息
      * @return {Object}
      */
-    UETable.getTableItemsByRange = function(editor) {
+    UETable.getTableItemsByRange = function (editor) {
         var start = editor.selection.getStart(),
         //在table或者td边缘有可能存在选中tr的情况
             cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
@@ -66,7 +66,7 @@
             caption:caption
         }
     };
-    UETable.getUETableBySelected = function(editor){
+    UETable.getUETableBySelected = function (editor) {
         var table = UETable.getTableItemsByRange(editor).table;
         if (table && table.ueTable && table.ueTable.selectedTds.length) {
             return table.ueTable;
@@ -74,7 +74,7 @@
         return null;
     };
 
-    UETable.getDefaultValue = function(editor,table){
+    UETable.getDefaultValue = function (editor, table) {
         var borderMap = {
                 thin:'0px',
                 medium:'1px',
@@ -117,7 +117,7 @@
      * 根据当前点击的td或者table获取索引对象
      * @param tdOrTable
      */
-    UETable.getUETable = function(tdOrTable) {
+    UETable.getUETable = function (tdOrTable) {
         var tag = tdOrTable.tagName.toLowerCase();
         tdOrTable = (tag == "td" || tag == "th" || tag == 'caption') ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
         if (!tdOrTable.ueTable) {
@@ -261,14 +261,14 @@
         setCellContent:function (cell, content) {
             cell.innerHTML = content || (browser.ie ? domUtils.fillChar : "<br />");
         },
-        cloneCell:function(cell,ignoreMerge){
-            if(!cell || utils.isString(cell)){
+        cloneCell:function (cell, ignoreMerge) {
+            if (!cell || utils.isString(cell)) {
                 return this.table.ownerDocument.createElement(cell || 'td');
             }
             var flag = domUtils.hasClass(cell, "selectTdClass");
             flag && domUtils.removeClasses(cell, "selectTdClass");
             var tmpCell = cell.cloneNode(true);
-            if(ignoreMerge){
+            if (ignoreMerge) {
                 tmpCell.rowSpan = tmpCell.colSpan = 1;
             }
             tmpCell.style.borderLeftStyle = "";
@@ -312,10 +312,12 @@
             this.cellsRange = {};
             this.indexTable = [];
             var rows = this.table.rows,
-            //暂时采用rows Length,对残缺表格可能存在问题，
-            //todo 可以考虑取最大值
-                rowsNum = rows.length,
+                rowsNum = this.getMaxRows(),
+                dNum = rowsNum - rows.length,
                 colsNum = this.getMaxCols();
+            while (dNum--) {
+                this.table.insertRow(rows.length);
+            }
             this.rowsNum = rowsNum;
             this.colsNum = colsNum;
             for (var i = 0, len = rows.length; i < len; i++) {
@@ -1009,7 +1011,58 @@
             var tds = this.table.getElementsByTagName("td"),
                 range = this.getCellsRange(tds[0], tds[tds.length - 1]);
             this.setSelected(range);
+        },
+        sortTable:function(sortByCellIndex,compareFn){
+            var table = this.table,
+                rows = table.rows,
+                trArray = [],
+                flag = rows[0].cells[0].tagName === "TH";
+            for (var i = 0, len = rows.length; i < len; i++) {
+                trArray[i] = rows[i];
+            }
+            //th不参与排序
+            flag && trArray.splice(0,1);
+            trArray.sort(function (tr1, tr2) {
+                return compareFn ? (typeof compareFn === "number" ? compareFn : compareFn.call(this,tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex])) : function () {
+                    var value1 = tr1.cells[sortByCellIndex].innerHTML,
+                        value2 = tr2.cells[sortByCellIndex].innerHTML;
+                    return value1.localeCompare(value2);
+                }();
+            });
+            var fragment = table.ownerDocument.createDocumentFragment();
+            for (var j = 0, len = trArray.length; j < len; j++) {
+                fragment.appendChild(trArray[j]);
+            }
+            table.getElementsByTagName("tbody")[0].appendChild(fragment);
+        },
+        setBackground:function(cells,value){
+            if(typeof value ==="string"){
+                utils.each(cells,function(cell){
+                    cell.style.backgroundColor = value;
+                })
+            }else if(typeof value === "object"){
+                value = utils.extend({
+                    repeat:true,
+                    colorList:["#ddd","#fff"]
+                },value);
+                var rowIndex = this.getCellInfo(cells[0]).rowIndex,
+                    count = 0,
+                    colors = value.colorList,
+                    getColor = function(list,index,repeat){
+                        return list[index] ? list[index] : repeat ? list[index % list.length]: "";
+                    };
+                for(var i = 0,cell;cell= cells[i++];){
+                    var cellInfo = this.getCellInfo(cell);
+                    cell.style.backgroundColor = getColor(colors,((rowIndex + count) == cellInfo.rowIndex) ? count : ++count, value.repeat);
+                }
+            }
+        },
+        removeBackground:function(cells){
+            utils.each(cells,function(cell){
+                cell.style.backgroundColor = "";
+            })
         }
     };
-    function showError(e) {}
+    function showError(e) {
+    }
 })();

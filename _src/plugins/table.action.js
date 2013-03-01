@@ -47,7 +47,8 @@ UE.plugins['table'] = function () {
         'defaultRows':5,
         'tdvalign':'top',
         'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_",
-        'tableDragable':false
+        'tableDragable':false,
+        'classList':[".back1",".back2"]
     });
     me.getUETable = getUETable;
     var commands = {
@@ -84,7 +85,7 @@ UE.plugins['table'] = function () {
                 'table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}' +
                 //插入的表格的默认样式
                 'table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
-                'td,th{ background:white; padding: 5px 10px;border: 1px solid #DDD;}' +
+                'td,th{padding: 5px 10px;border: 1px solid #DDD;}' +
                 'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
                 'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
                 'td p{margin:0;padding:0;}', me.document);
@@ -512,6 +513,11 @@ UE.plugins['table'] = function () {
             if (target.tagName == "TABLE") {
                 toggleDraggableState(me, false, "", null);
             }
+        });
+        me.addListener("interlacetable",function(type,table){
+            var rows = table.rows,
+                len;
+
         });
 
 
