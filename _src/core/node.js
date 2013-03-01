@@ -196,6 +196,23 @@
             }
             return this.children ? this.children[this.children.length - 1] : null;
         },
+        previousSibling : function(){
+            var parent = this.parentNode;
+            for (var i = 0, ci; ci = parent.children[i]; i++) {
+                if (ci === this) {
+                   return i == 0 ? null : parent.children[i-1];
+                }
+            }
+
+        },
+        nextSibling : function(){
+            var parent = this.parentNode;
+            for (var i = 0, ci; ci = parent.children[i++];) {
+                if (ci === this) {
+                    return parent.children[i];
+                }
+            }
+        },
         replaceChild:function (target, source) {
             if (this.children) {
                 if(target.parentNode){

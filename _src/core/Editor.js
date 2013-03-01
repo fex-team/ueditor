@@ -437,50 +437,7 @@
          *     return false //编辑器没有内容 ，getContent直接返回空
          * })
          */
-        getContent:function (cmd,fn,isPreview) {
-//            var me = this;
-//            if ( cmd && utils.isFunction( cmd ) ) {
-//                fn = cmd;
-//                cmd = '';
-//            }
-//            if ( fn ? !fn() : !this.hasContents() ) {
-//                return '';
-//            }
-////            var range = me.selection.getRange(),
-////                address = range.createAddress();
-//            var root = UE.htmlparser(me.body.innerHTML);
-//            me.fireEvent( 'beforegetcontent');
-//
-//            me.filterOutputRule(root);
-//            var reg = new RegExp( domUtils.fillChar, 'g' ),
-//            //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
-//                    html = me.body.innerHTML.replace( reg, '' ).replace( />[\t\r\n]*?</g, '><' );
-//            me.fireEvent( 'aftergetcontent', cmd );
-//            try{
-//                range.moveToAddress(address).select(true);
-//            }catch(e){}
-//            if ( me.serialize ) {
-//                var node = me.serialize.parseHTML( html );
-//                node = me.serialize.transformOutput( node );
-//                html = me.serialize.toHTML( node );
-//            }
-//
-//            if ( ie && isPreview ) {
-//                //trace:2471
-//                //两个br会导致空行，所以这里先注视掉
-//                html = html//.replace(/<\s*br\s*\/?\s*>/gi,'<br/><br/>')
-//                        .replace( /<p>\s*?<\/p>/g, '<p>&nbsp;</p>' );
-//            } else {
-//                //多个&nbsp;要转换成空格加&nbsp;的形式，要不预览时会所成一个
-//                html = html.replace( /(&nbsp;)+/g, function ( s ) {
-//                    for ( var i = 0, str = [], l = s.split( ';' ).length - 1; i < l; i++ ) {
-//                        str.push( i % 2 == 0 ? ' ' : '&nbsp;' );
-//                    }
-//                    return str.join( '' );
-//                } );
-//            }
-//
-//            return  html;
+        getContent:function (cmd,fn) {
             var me = this;
             if (cmd && utils.isFunction(cmd)) {
                 fn = cmd;
@@ -501,22 +458,7 @@
                 range.moveToAddress(address).select(true);
             }catch(e){}
 
-            var html = root.toHtml();
-            if (ie && isPreview) {
-                //trace:2471
-                //两个br会导致空行，所以这里先注视掉
-                html = html.replace(/<p>\s*?<\/p>/g, '<p>&nbsp;</p>');
-            } else {
-                //多个&nbsp;要转换成空格加&nbsp;的形式，要不预览时会所成一个
-                html = html.replace(/(&nbsp;)+/g, function (s) {
-                    for (var i = 0, str = [], l = s.split(';').length - 1; i < l; i++) {
-                        str.push(i % 2 == 0 ? ' ' : '&nbsp;');
-                    }
-                    return str.join('');
-                });
-            }
-
-            return  html;
+            return  root.toHtml();
         },
         /**
          * 取得完整的html代码，可以直接显示成完整的html文档
@@ -583,116 +525,19 @@
          * })
          */
         setContent:function (html, isAppendTo, notFireSelectionchange) {
-//            var me = this,
-//                    inline = utils.extend( {a:1, A:1}, dtd.$inline, true ),
-//                    lastTagName;
-//
-//            html = html
-//                    .replace( /^[ \t\r\n]*?</, '<' )
-//                    .replace( />[ \t\r\n]*?$/, '>' )
-//                    //ie有时的源码会有>&nbsp;<的情况
-//                    .replace(/>(?:(\s|&nbsp;)*?)</g,'><' )//代码高量的\n不能去除
-//                    .replace( /[\s\/]?(\w+)?>[ \t\r\n]*?<\/?(\w+)/gi, function ( a, b, c ) {
-//                        if ( b ) {
-//                            lastTagName = c;
-//                        } else {
-//                            b = lastTagName;
-//                        }
-//                        return !inline[b] && !inline[c] ? a.replace( />[ \t\r\n]*?</, '><' ) : a;
-//                    } );
-//            html = {'html':html};
-//            me.fireEvent( 'beforesetcontent',html,root);
-//            html = html.html;
-//            var serialize = this.serialize;
-//            if ( serialize ) {
-//                var node = serialize.parseHTML( html );
-//                node = serialize.transformInput( node );
-//                node = serialize.filter( node );
-//                html = serialize.toHTML( node );
-//            }
-//            //html.replace(new RegExp('[\t\n\r' + domUtils.fillChar + ']*','g'),'');
-//            //去掉了\t\n\r 如果有插入的代码，在源码切换所见即所得模式时，换行都丢掉了
-//            //\r在ie下的不可见字符，在源码切换时会变成多个&nbsp;
-//            //trace:1559
-//            this.body.innerHTML = (isAppendTo ? this.getContent() : '') + html.replace( new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), '' );
-//            //处理ie6下innerHTML自动将相对路径转化成绝对路径的问题
-//            if ( browser.ie && browser.version < 7 ) {
-//                replaceSrc( this.document.body );
-//            }
-//            //给文本或者inline节点套p标签
-//            if ( me.options.enterTag == 'p' ) {
-//
-//                var child = this.body.firstChild, tmpNode;
-//                if ( !child || child.nodeType == 1 &&
-//                        (dtd.$cdata[child.tagName] ||
-//                                domUtils.isCustomeNode( child )
-//                                )
-//                        && child === this.body.lastChild ) {
-//                    this.body.innerHTML = '<p>' + (browser.ie ? '&nbsp;' : '<br/>') + '</p>' + this.body.innerHTML;
-//
-//                } else {
-//                    var p = me.document.createElement( 'p' );
-//                    while ( child ) {
-//                        while ( child && (child.nodeType == 3 || child.nodeType == 1 && dtd.p[child.tagName] && !dtd.$cdata[child.tagName]) ) {
-//                            tmpNode = child.nextSibling;
-//                            p.appendChild( child );
-//                            child = tmpNode;
-//                        }
-//                        if ( p.firstChild ) {
-//                            if ( !child ) {
-//                                me.body.appendChild( p );
-//                                break;
-//                            } else {
-//                                child.parentNode.insertBefore( p, child );
-//                                p = me.document.createElement( 'p' );
-//                            }
-//                        }
-//                        child = child.nextSibling;
-//                    }
-//                }
-//            }
-//            me.fireEvent( 'aftersetcontent' );
-//            me.fireEvent( 'contentchange' );
-//            console.log(root.toHtml())
-//            !notFireSelectionchange && me._selectionChange();
-//            //清除保存的选区
-//            me._bakRange = me._bakIERange = null;
-//            //trace:1742 setContent后gecko能得到焦点问题
-//            var geckoSel;
-//            if ( browser.gecko && (geckoSel = this.selection.getNative()) ) {
-//                geckoSel.removeAllRanges();
-//            }
-            var me = this,
-                inline = utils.extend({a:1, A:1}, dtd.$inline, true),
-                lastTagName;
-
-            html = html
-                .replace(/^[ \t\r\n]*?</, '<')
-                .replace(/>[ \t\r\n]*?$/, '>')
-                //ie有时的源码会有>&nbsp;<的情况
-                .replace(/>(?:(\s|&nbsp;)*?)</g, '><')//代码高量的\n不能去除
-                .replace(/[\s\/]?(\w+)?>[ \t\r\n]*?<\/?(\w+)/gi, function (a, b, c) {
-                    if (b) {
-                        lastTagName = c;
-                    } else {
-                        b = lastTagName;
-                    }
-                    return !inline[b] && !inline[c] ? a.replace(/>[ \t\r\n]*?</, '><') : a;
-                });
+            var me = this;
 
             me.fireEvent( 'beforesetcontent',html);
             var root = UE.htmlparser(html);
             me.filterInputRule(root);
             html = root.toHtml();
 
-            //html.replace(new RegExp('[\t\n\r' + domUtils.fillChar + ']*','g'),'');
-            //去掉了\t\n\r 如果有插入的代码，在源码切换所见即所得模式时，换行都丢掉了
-            //\r在ie下的不可见字符，在源码切换时会变成多个&nbsp;
-            //trace:1559
-            this.body.innerHTML = (isAppendTo ? this.getContent() : '') + html.replace(new RegExp('[\r' + domUtils.fillChar + ']*', 'g'), '');
+
+            me.body.innerHTML = (isAppendTo ? this.getContent() : '') + html;
+
             //处理ie6下innerHTML自动将相对路径转化成绝对路径的问题
             if (browser.ie && browser.version < 7) {
-                replaceSrc(this.body);
+                replaceSrc(me.body);
             }
             //给文本或者inline节点套p标签
             if (me.options.enterTag == 'p') {
@@ -1193,4 +1038,3 @@
     };
     utils.inherits(Editor, EventBase);
 })();
-

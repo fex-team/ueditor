@@ -59,9 +59,6 @@ UE.plugins['snapscreen'] = function(){
             }catch(e){
                 me.ui._dialogs['snapscreenDialog'].open();
             }
-        },
-        queryCommandState: function(){
-            return this.highlight ? -1 :0;
         }
     };
 }
