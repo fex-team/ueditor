@@ -1005,7 +1005,6 @@
                 }
             });
             return last;
-
         },
         selectRow:function (rowIndex) {
             var indexRow = this.indexTable[rowIndex],
