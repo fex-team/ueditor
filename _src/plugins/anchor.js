@@ -40,7 +40,9 @@ UE.plugins['anchor'] = function (){
                 a.setAttr({
                     anchorname :a.getAttr('name'),
                     'class' : 'anchorclass'
-                })
+                });
+                a.setAttr('name')
+
             }
         })
     });
