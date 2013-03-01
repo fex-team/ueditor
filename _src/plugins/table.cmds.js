@@ -78,6 +78,20 @@
             }
         }
     };
+    UE.commands['insertparagraphaftertable'] = {
+        queryCommandState:function () {
+            return getTableItemsByRange(this).cell ? 0 : -1;
+        },
+        execCommand:function () {
+            var table = getTableItemsByRange(this).table;
+            if (table) {
+                var p = this.document.createElement("p");
+                p.innerHTML = browser.ie ? '&nbsp;' : '<br />';
+                domUtils.insertAfter(table,p);
+                this.selection.getRange().setStart(p, 0).setCursor();
+            }
+        }
+    };
 
     UE.commands['deletetable'] = {
         queryCommandState:function () {
