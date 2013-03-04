@@ -62,7 +62,7 @@ var Formula = function () {
                         return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
                     }, true);
                 textEditor.value = decodeURIComponent(ele.getAttribute('data')).replace(/\$/ig, "");
-                me._updateFormula(textEditor.value)
+                me._updateFormula(textEditor.value);
             }
         },
         _updateFormula:function (text) {
