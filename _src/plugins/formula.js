@@ -8,8 +8,34 @@
 UE.plugins['formula'] = function () {
     var me = this;
 
+    function queryState() {
+        try {
+            var range = this.selection.getRange(), start, end;
+            range.adjustmentBoundary();
+            start = domUtils.findParent(range.startContainer, function (node) {
+                return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+            }, true);
+            end = domUtils.findParent(range.endContainer, function (node) {
+                return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+            }, true);
+            if (start && end && start == end) {
+                this.body.contentEditable = "false";
+                return 1;
+            } else {
+                this.body.contentEditable = "true";
+                return 0;
+            }
+        }
+        catch (e) {
+            return 0;
+        }
+    }
+
     me.commands['formula'] = {
         execCommand:function (cmdName, html, css) {
+            html = '<table style="width:100%;margin: 5px auto;" class="MathJaxer">' +
+                '<tr><td style="text-align: center;border:1px dotted #ccc;">' + html + '</td></tr>' +
+                '</table>';
             var range = me.selection.getRange();
             range.adjustmentBoundary();
             var start = domUtils.findParent(range.startContainer, function (node) {
@@ -42,25 +68,122 @@ UE.plugins['formula'] = function () {
             }
         },
         queryCommandState:function () {
-            return queryState.call(this);
+            return queryState.call(me);
         }
     };
-    function queryState() {
-        try {
-            var range = this.selection.getRange(), start, end;
+
+    me.commands['formulainline'] = {
+        execCommand:function () {
+            var range = me.selection.getRange();
             range.adjustmentBoundary();
-            start = domUtils.findParent(range.startContainer, function (node) {
-                return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
-            }, true);
-            end = domUtils.findParent(range.endContainer, function (node) {
-                return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
-            }, true);
-            return start && end && start == end ? 1 : 0;
+            var start = domUtils.findParent(range.startContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
+                }, true),
+                end = domUtils.findParent(range.endContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
+                }, true);
+
+            if (start && end && start === end) {
+                if (start.nextSibling) {
+                    range.setStart(start.nextSibling, 0)
+                } else {
+                    if (start.previousSibling) {
+                        range.setStartAtLast(start.previousSibling)
+                    } else {
+                        var p = me.document.createElement('p');
+                        domUtils.fillNode(me.document, p);
+                        range.setStart(p, 0)
+                    }
+                }
+                range.setCursor(false, true);
+
+                var ele = domUtils.getElementsByTagName(start, "span", function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax');
+                })[0];
+                start.parentNode.replaceChild(ele, start);
+            }
+        },
+        queryCommandState:function () {
+            try {
+                var range = this.selection.getRange(), start, end;
+                range.adjustmentBoundary();
+                start = domUtils.findParent(range.startContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
+                }, true);
+                end = domUtils.findParent(range.endContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
+                }, true);
+                if (start && end && start == end) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+            catch (e) {
+                return -1;
+            }
         }
-        catch (e) {
-            return 0;
+    };
+
+    me.commands['formuladisplay'] = {
+        execCommand:function () {
+            var range = me.selection.getRange();
+            range.adjustmentBoundary();
+            var start = domUtils.findParent(range.startContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+                }, true),
+                end = domUtils.findParent(range.endContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+                }, true);
+
+            if (start && end && start === end) {
+                if (start.nextSibling) {
+                    range.setStart(start.nextSibling, 0)
+                } else {
+                    if (start.previousSibling) {
+                        range.setStartAtLast(start.previousSibling)
+                    } else {
+                        var p = me.document.createElement('p');
+                        domUtils.fillNode(me.document, p);
+                        range.setStart(p, 0)
+                    }
+                }
+                range.setCursor(false, true);
+
+                var table = domUtils.createElement(document,"table", {
+                    style:"width:100%;margin: 5px auto;",
+                    class:"MathJaxer"
+                });
+                table.innerHTML = '<tr><td style="text-align: center;border:1px dotted #ccc;">' + start.outerHTML + '</td></tr>';
+                start.parentNode.replaceChild(table, start);
+            }
+        },
+        queryCommandState:function () {
+            try {
+                var range = this.selection.getRange(), start, end;
+                range.adjustmentBoundary();
+                start = domUtils.findParent(range.startContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+                }, true);
+                end = domUtils.findParent(range.endContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+                }, true);
+                if (start && end && start == end) {
+                    var table = domUtils.findParent(range.startContainer, function (node) {
+                        return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
+                    }, true);
+                    return table ? -1 : 0;
+                } else {
+                    return -1;
+                }
+
+            }
+            catch (e) {
+                return -1;
+            }
         }
-    }
+    };
+
 
     //不需要判断highlight的command列表
     me.notNeedHighlightQuery = {
@@ -76,7 +199,9 @@ UE.plugins['formula'] = function () {
         preview:1,
         insertparagraph:1,
         elementpath:1,
-        formula:1
+        formula:1,
+        formuladisplay:1,
+        formulainline:1
     };
     //将queyCommamndState重置
     var orgQuery = me.queryCommandState;
@@ -94,17 +219,6 @@ UE.plugins['formula'] = function () {
         }, true)) {
             return true;
         }
-    });
-
-    //选中公式不可编辑
-    me.addListener("ready", function () {
-        domUtils.on(me.document, "click", function () {
-            var range = me.selection.getRange();
-            var start = domUtils.findParent(range.startContainer, function (node) {
-                return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
-            }, true);
-            this.body.contentEditable = start ? "false" : "true";
-        });
     });
 
     me.addOutputRule(function (root) {
@@ -128,7 +242,20 @@ UE.plugins['formula'] = function () {
             }
         });
 
+        if (!me._MathJaxList.length)
+            utils.each(root.getNodesByTagName('span'), function (pi) {
+                var cls;
+                if ((cls = pi.getAttr('class')) && /MathJax/.test(cls)) {
+                    var tmpNode = UE.uNode.createElement(pi.toHtml());
+                    me._MathJaxList.push(tmpNode);
 
+                    var tmpSpan = UE.uNode.createElement("span");
+                    tmpSpan.setAttr("class", "MathJax");
+                    var txtNode = UE.uNode.createText(decodeURIComponent(pi.getAttr('data')));
+                    tmpSpan.appendChild(txtNode);
+                    pi.parentNode.replaceChild(tmpSpan, pi);
+                }
+            });
     });
     me.addInputRule(function (root) {
         if (me._MathJaxList && me._MathJaxList.length) {

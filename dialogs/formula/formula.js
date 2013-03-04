@@ -35,7 +35,7 @@ window.onload = function () {
     //同步编辑器中的字体大小与公式一致
     resultArea.style.fontSize = domUtils.getComputedStyle(editor.selection.getRange().startContainer, 'font-size');
 
-    if (editor.queryCommandState("insertformula")) {
+    if (editor.queryCommandState("formula")) {
         var range = editor.selection.getRange(),
             ele = domUtils.findParent(range.startContainer, function (node) {
                 return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
@@ -100,9 +100,7 @@ function formatHtml(resultArea, value) {
     node.setAttribute("data", encodeURIComponent("$$" + value + "$$"));
     domUtils.removeAttributes(mathjaxDom.children[0], ['style']);//删除多余属性
 
-    return '<table style="width:100%;margin: 5px auto;" class="MathJaxer">' +
-        '<tr><td style="text-align: center;border:1px dotted #ccc;">' + mathjaxDom.innerHTML + '</td></tr>' +
-        '</table>';
+    return  mathjaxDom.innerHTML;
 }
 
 dialog.onok = function () {
