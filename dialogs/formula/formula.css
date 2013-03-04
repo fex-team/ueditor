@@ -1,4 +1,4 @@
-#layout-wrap {
+.importBar {
     width: 100%;
 }
 
@@ -6,7 +6,7 @@
     margin: 10px;
 }
 
-#layout-wrap .symbol table {
+.importBar .symbol table {
     border-collapse: separate;
     border-spacing: 2px;
 }
@@ -24,7 +24,7 @@
     filter: alpha(opacity = 60);
 }
 
-#textarea {
+textarea {
     width: 98%;
     margin: 0 auto;
     display: block;

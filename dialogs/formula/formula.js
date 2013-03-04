@@ -1,116 +1,139 @@
-var layoutWrap = $G('layout-wrap'),
-    resultArea = $G('result-area'),
-    textEditor = $G('textarea'),
-    bk;
+var formula = function () {
+    this.init();
+};
+(function () {
+    var importBar = $G('J_importBar'),
+        textEditor = $G('J_textarea'),
+        outputBar = $G('J_outputBar'),
+        bk;
 
-window.onload = function () {
-    editor._MathJaxList = [];
-    textEditor.focus();
-    textEditor.onmouseup = function () {
-        document.selection && (bk = document.selection.createRange().getBookmark());
-    };
-    textEditor.onkeyup = function () {
-        updateFormula.call(this, this.value);
-    };
-    layoutWrap.onclick = function (e) {
-        var e = e || window.event,
-            target = e.target || e.srcElement,
-            signal,
-            posStart,
-            posEnd;
-        if (target.tagName.toLowerCase() === 'td' && (signal = target.getAttribute('data'))) {
-            if (!((posStart = textEditor.selectionStart) != undefined && (posEnd = textEditor.selectionEnd) != undefined)) {
-                var range = textEditor.createTextRange();
-                range.moveToBookmark(bk);
-                range.select();
-                var pos = getPos();
-                posStart = pos[0];
-                posEnd = pos[1];
+    formula.prototype = {
+        init:function () {
+            var me = this;
+            window.onload = function () {
+                editor._MathJaxList = [];
+                me._initTextEditor();//初始化文本输入区域
+                me._initImportBar();//初始化输入工具栏
+                me._initOutputBar();//同步编辑器中的字体大小与公式一致
+                me._autoShowRes();//自动显示结果
+            };
+        },
+        _initTextEditor:function () {
+            var me = this;
+            textEditor.focus();
+
+            domUtils.on(textEditor, "mouseup", function () {
+                document.selection && (bk = document.selection.createRange().getBookmark());
+            });
+            domUtils.on(textEditor, "keyup", function () {
+                me._updateFormula.call(this, this.value);
+            });
+        },
+        _initImportBar:function () {
+            var me=this;
+
+            domUtils.on(importBar, "click", function (e) {
+                var target = e.target || e.srcElement,
+                    signal,
+                    posStart,
+                    posEnd;
+                if (target.tagName.toLowerCase() === 'td' && (signal = target.getAttribute('data'))) {
+                    if (!((posStart = textEditor.selectionStart) != undefined && (posEnd = textEditor.selectionEnd) != undefined)) {
+                        var range = textEditor.createTextRange();
+                        range.moveToBookmark(bk);
+                        range.select();
+                        var pos = me._getPos();
+                        posStart = pos[0];
+                        posEnd = pos[1];
+                    }
+                    textEditor.value = textEditor.value.slice(0, posStart) + signal + textEditor.value.slice(posEnd);
+                    me._updateFormula(textEditor.value);
+                }
+            });
+        },
+        _initOutputBar:function () {
+            outputBar.style.fontSize = domUtils.getComputedStyle(editor.selection.getRange().startContainer, 'font-size');
+        },
+        _autoShowRes:function () {
+            if (editor.queryCommandState("formula")) {
+                var range = editor.selection.getRange(),
+                    ele = domUtils.findParent(range.startContainer, function (node) {
+                        return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+                    }, true);
+                textEditor.value = decodeURIComponent(ele.getAttribute('data')).replace(/\$/ig, "");
+                me._updateFormula(textEditor.value)
             }
-            textEditor.value = textEditor.value.slice(0, posStart) + signal + textEditor.value.slice(posEnd);
-            updateFormula(textEditor.value);
+        },
+        _updateFormula:function (text) {
+            var tmr = arguments.callee.tmr;
+
+            tmr && window.clearTimeout(tmr);
+            arguments.callee.tmr = setTimeout(function () {
+                MathJax.Hub.queue.Push(["Text", MathJax.Hub.getAllJax("J_outputBar")[0], "\\displaystyle{" + text + "}"]);
+            }, 1000);
+        },
+        _getPos:function () {
+            var start, end, doc = document;
+            var range = doc.selection.createRange();
+            var range_all = doc.body.createTextRange();
+
+            range_all.moveToElementText(textEditor);
+            for (start = 0; range_all.compareEndPoints("StartToStart", range) < 0; start++)
+                range_all.moveStart('character', 1);
+            for (var i = 0; i <= start; i++) {
+                if (textEditor.value.charAt(i) == '\n')
+                    start++;
+            }
+            range_all = doc.body.createTextRange();
+            range_all.moveToElementText(textEditor);
+
+            for (end = 0; range_all.compareEndPoints('StartToEnd', range) < 0; end++)
+                range_all.moveStart('character', 1);
+
+            for (var i = 0; i <= end; i++) {
+                if (textEditor.value.charAt(i) == '\n')
+                    end++;
+            }
+            return [start, end];
+        },
+
+        formatCss:function () {
+            var list = document.head.children, str = "";
+            for (var i = 0, node; node = list[i++];) {
+                if (/style/ig.test(node.tagName)) {
+                    str += node[browser.ie ? "innerText" : "textContent"];
+                }
+            }
+            return str;
+        },
+        formatHtml:function (outputBar, value) {
+            var mathjaxDom = outputBar.lastChild;
+            do {
+                mathjaxDom = mathjaxDom.previousSibling;
+            }
+            while (mathjaxDom && mathjaxDom.className != 'MathJax_Display');
+            var node = mathjaxDom.firstChild;
+            node.removeAttribute("id");
+            node.setAttribute("data", encodeURIComponent("$$" + value + "$$"));
+            domUtils.removeAttributes(mathjaxDom.children[0], ['style']);//删除多余属性
+
+            return  mathjaxDom.innerHTML;
         }
     };
 
-    //同步编辑器中的字体大小与公式一致
-    resultArea.style.fontSize = domUtils.getComputedStyle(editor.selection.getRange().startContainer, 'font-size');
+    var formulaObj = new formula();
 
-    if (editor.queryCommandState("formula")) {
-        var range = editor.selection.getRange(),
-            ele = domUtils.findParent(range.startContainer, function (node) {
-                return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
-            }, true);
-        textEditor.value = decodeURIComponent(ele.getAttribute('data')).replace(/\$/ig, "");
-        updateFormula(textEditor.value)
-    }
-};
-
-function updateFormula(text) {
-    var tmr = arguments.callee.tmr;
-
-    tmr && window.clearTimeout(tmr);
-    arguments.callee.tmr = setTimeout(function () {
-        MathJax.Hub.queue.Push(["Text", MathJax.Hub.getAllJax("result-area")[0], "\\displaystyle{" + text + "}"]);
-    }, 1000);
-}
-
-function getPos() {
-    var start, end, doc = document;
-    var range = doc.selection.createRange();
-    var range_all = doc.body.createTextRange();
-    var textBox = $G('textarea');
-
-    range_all.moveToElementText(textBox);
-    for (start = 0; range_all.compareEndPoints("StartToStart", range) < 0; start++)
-        range_all.moveStart('character', 1);
-    for (var i = 0; i <= start; i++) {
-        if (textBox.value.charAt(i) == '\n')
-            start++;
-    }
-    range_all = doc.body.createTextRange();
-    range_all.moveToElementText(textBox);
-
-    for (end = 0; range_all.compareEndPoints('StartToEnd', range) < 0; end++)
-        range_all.moveStart('character', 1);
-
-    for (var i = 0; i <= end; i++) {
-        if (textBox.value.charAt(i) == '\n')
-            end++;
-    }
-    return [start, end];
-}
-
-function getCssText() {
-    var list = document.head.children, str = "";
-    for (var i = 0, node; node = list[i++];) {
-        if (/style/ig.test(node.tagName)) {
-            str += node[browser.ie ? "innerText" : "textContent"];
+    dialog.onok = function () {
+        var textValue = utils.trim(textEditor.value);
+        if (textValue.length && MathJax.isReady) {
+            try {
+                var html = formulaObj.formatHtml(outputBar, textValue);
+                var css = formulaObj.formatCss();
+            } catch (e) {
+                return;
+            }
+            editor.execCommand('formula', html, css);
         }
-    }
-    return str;
-}
-function formatHtml(resultArea, value) {
-    var mathjaxDom = resultArea.lastChild;
-    do {
-        mathjaxDom = mathjaxDom.previousSibling;
-    }
-    while (mathjaxDom && mathjaxDom.className != 'MathJax_Display');
-    var node = mathjaxDom.firstChild;
-    node.removeAttribute("id");
-    node.setAttribute("data", encodeURIComponent("$$" + value + "$$"));
-    domUtils.removeAttributes(mathjaxDom.children[0], ['style']);//删除多余属性
+    };
+})()
 
-    return  mathjaxDom.innerHTML;
-}
-
-dialog.onok = function () {
-    var textValue = textEditor.value.replace(/(^\s*)|(\s*$)/g, '');
-    if (textValue.length > 0&&MathJax.isReady) {
-        try{
-            var html=formatHtml(resultArea, textValue);
-        }catch(e){
-            return;
-        }
-        editor.execCommand('formula', html, getCssText());
-    }
-};
