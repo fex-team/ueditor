@@ -360,7 +360,7 @@ UE.plugins['contextmenu'] = function () {
                     }
                 },{
                     label:"更改为显示",
-                    cmdName:'formuladisplay'
+                    cmdName:'formulablock'
                 },
                 {
                     label:"更改为内嵌",
