@@ -57,6 +57,92 @@ UE.plugins['formula'] = function () {
         }
     }
 
+    //不需要判断highlight的command列表
+    me.notNeedHighlightQuery = {
+        help:1,
+        undo:1,
+        redo:1,
+        source:1,
+        print:1,
+        searchreplace:1,
+        fullscreen:1,
+        autotypeset:1,
+        pasteplain:1,
+        preview:1,
+        insertparagraph:1,
+        elementpath:1,
+        formula:1,
+        formulablock:1,
+        formulainline:1
+    };
+
+    //将queyCommamndState重置
+    var orgQuery = me.queryCommandState;
+    me.queryCommandState = function (cmd) {
+        if (!me.notNeedHighlightQuery[cmd.toLowerCase()] && queryState.call(this) == 1) {
+            return -1;
+        }
+        return orgQuery.apply(this, arguments)
+    };
+
+    //避免table插件对于公式的影响
+    me.addListener('excludetable excludeNodeinautotype', function (cmd, target) {
+        if (target && domUtils.findParent(target, function (node) {
+            return domUtils.hasClass(node, 'MathJaxer')
+        }, true)) {
+            return true;
+        }
+    });
+
+    me.addOutputRule(function (root) {
+        me._MathJaxList = [];
+        utils.each(root.getNodesByTagName('table'), function (pi) {
+            var cls;
+            if ((cls = pi.getAttr('class')) && /MathJaxer/.test(cls)) {
+                var tmpNode = UE.uNode.createElement(pi.toHtml());
+                me._MathJaxList.push(tmpNode);
+
+                utils.each(pi.getNodesByTagName('span'), function (node) {
+                    var val;
+                    if ((val = node.getAttr('class')) && /MathJax/.test(val)) {
+                        var tmpSpan = UE.uNode.createElement("span");
+                        tmpSpan.setAttr("class", "MathJax");
+                        var txtNode = UE.uNode.createText(decodeURIComponent(node.getAttr('data')));
+                        tmpSpan.appendChild(txtNode);
+                        pi.parentNode.replaceChild(tmpSpan, pi);
+                    }
+                });
+            }
+        });
+
+        if (!me._MathJaxList.length)
+            utils.each(root.getNodesByTagName('span'), function (pi) {
+                var cls;
+                if ((cls = pi.getAttr('class')) && /MathJax/.test(cls)) {
+                    var tmpNode = UE.uNode.createElement(pi.toHtml());
+                    me._MathJaxList.push(tmpNode);
+
+                    var tmpSpan = UE.uNode.createElement("span");
+                    tmpSpan.setAttr("class", "MathJax");
+                    var txtNode = UE.uNode.createText(decodeURIComponent(pi.getAttr('data')));
+                    tmpSpan.appendChild(txtNode);
+                    pi.parentNode.replaceChild(tmpSpan, pi);
+                }
+            });
+    });
+
+    me.addInputRule(function (root) {
+        if (me._MathJaxList && me._MathJaxList.length) {
+            var i = 0;
+            utils.each(root.getNodesByTagName('span'), function (pi) {
+                var val;
+                if ((val = pi.getAttr('class')) && /MathJax/.test(val)) {
+                    pi.parentNode.replaceChild(me._MathJaxList[i++], pi);
+                }
+            });
+        }
+    });
+
     me.commands['formula'] = {
         execCommand:function (cmdName, html, css) {
             var range = me.selection.getRange();
@@ -151,89 +237,4 @@ UE.plugins['formula'] = function () {
             }
         }
     };
-
-
-    //不需要判断highlight的command列表
-    me.notNeedHighlightQuery = {
-        help:1,
-        undo:1,
-        redo:1,
-        source:1,
-        print:1,
-        searchreplace:1,
-        fullscreen:1,
-        autotypeset:1,
-        pasteplain:1,
-        preview:1,
-        insertparagraph:1,
-        elementpath:1,
-        formula:1,
-        formulablock:1,
-        formulainline:1
-    };
-    //将queyCommamndState重置
-    var orgQuery = me.queryCommandState;
-    me.queryCommandState = function (cmd) {
-        if (!me.notNeedHighlightQuery[cmd.toLowerCase()] && queryState.call(this) == 1) {
-            return -1;
-        }
-        return orgQuery.apply(this, arguments)
-    };
-
-    //避免table插件对于公式的影响
-    me.addListener('excludetable excludeNodeinautotype', function (cmd, target) {
-        if (target && domUtils.findParent(target, function (node) {
-            return domUtils.hasClass(node, 'MathJaxer')
-        }, true)) {
-            return true;
-        }
-    });
-
-    me.addOutputRule(function (root) {
-        me._MathJaxList = [];
-        utils.each(root.getNodesByTagName('table'), function (pi) {
-            var cls;
-            if ((cls = pi.getAttr('class')) && /MathJaxer/.test(cls)) {
-                var tmpNode = UE.uNode.createElement(pi.toHtml());
-                me._MathJaxList.push(tmpNode);
-
-                utils.each(pi.getNodesByTagName('span'), function (node) {
-                    var val;
-                    if ((val = node.getAttr('class')) && /MathJax/.test(val)) {
-                        var tmpSpan = UE.uNode.createElement("span");
-                        tmpSpan.setAttr("class", "MathJax");
-                        var txtNode = UE.uNode.createText(decodeURIComponent(node.getAttr('data')));
-                        tmpSpan.appendChild(txtNode);
-                        pi.parentNode.replaceChild(tmpSpan, pi);
-                    }
-                });
-            }
-        });
-
-        if (!me._MathJaxList.length)
-            utils.each(root.getNodesByTagName('span'), function (pi) {
-                var cls;
-                if ((cls = pi.getAttr('class')) && /MathJax/.test(cls)) {
-                    var tmpNode = UE.uNode.createElement(pi.toHtml());
-                    me._MathJaxList.push(tmpNode);
-
-                    var tmpSpan = UE.uNode.createElement("span");
-                    tmpSpan.setAttr("class", "MathJax");
-                    var txtNode = UE.uNode.createText(decodeURIComponent(pi.getAttr('data')));
-                    tmpSpan.appendChild(txtNode);
-                    pi.parentNode.replaceChild(tmpSpan, pi);
-                }
-            });
-    });
-    me.addInputRule(function (root) {
-        if (me._MathJaxList && me._MathJaxList.length) {
-            var i = 0;
-            utils.each(root.getNodesByTagName('span'), function (pi) {
-                var val;
-                if ((val = pi.getAttr('class')) && /MathJax/.test(val)) {
-                    pi.parentNode.replaceChild(me._MathJaxList[i++], pi);
-                }
-            });
-        }
-    });
 };
