@@ -55,6 +55,7 @@ var Formula = function () {
             outputBar.style.fontSize = domUtils.getComputedStyle(editor.selection.getRange().startContainer, 'font-size');
         },
         _autoShowRes:function () {
+            var me=this;
             if (editor.queryCommandState("formula")) {
                 var range = editor.selection.getRange(),
                     ele = domUtils.findParent(range.startContainer, function (node) {
