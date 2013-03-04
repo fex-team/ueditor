@@ -229,7 +229,7 @@
             }
         },
         appendChild:function (node) {
-            if (this.type == 'element' && !dtd.$empty[this.tagName]) {
+            if (this.type == 'root' || (this.type == 'element' && !dtd.$empty[this.tagName])) {
                 if (!this.children) {
                     this.children = []
                 }
@@ -246,6 +246,7 @@
                 node.parentNode = this;
                 return node;
             }
+
 
         },
         insertBefore:function (target, source) {
