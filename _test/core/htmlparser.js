@@ -31,9 +31,19 @@ test( '补全不完整table', function() {
     equals(root.toHtml(),'<table><tbody><tr><td></td><td></td></tr></tbody></table>','包含\n，补全table');
 });
 
+
 test( '补全不完整li', function() {
     var root = UE.htmlparser('<ol><li><em><u>sdf<li>sdfsdf</ol>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em><u>sdf</u></em></li><li>sdfsdf</li></ol>','补全u，em');
     root = UE.htmlparser('<ol><li><em>sdf</em></li><ul><li>a</li><li>b</li><li>c</ul><li>jkl</ol>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em>sdf</em></li><ul><li>a</li><li>b</li><li>c</li></ul><li>jkl</li></ol>','补全li');
+});
+
+test( '属性引号问题', function() {
+    var root = UE.htmlparser('<img width=200 height=200 />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+    var root = UE.htmlparser("<img width='200' height='200' />");
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+    var root = UE.htmlparser('<img width="200" height="200" />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
 });
