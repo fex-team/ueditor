@@ -215,7 +215,7 @@ UE.plugins['formula'] = function () {
     //避免table插件对于公式的影响
     me.addListener('excludetable excludeNodeinautotype', function (cmd, target) {
         if (target && domUtils.findParent(target, function (node) {
-            return domUtils.hasClass(node, 'MathJaxer');
+            return domUtils.hasClass(node, 'MathJaxer')
         }, true)) {
             return true;
         }
