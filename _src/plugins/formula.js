@@ -58,7 +58,7 @@ UE.plugins['formula'] = function () {
     }
 
     //不需要判断highlight的command列表
-    me.notNeedHighlightQuery = {
+    me.notNeedFormulaQuery = {
         help:1,
         undo:1,
         redo:1,
@@ -79,7 +79,7 @@ UE.plugins['formula'] = function () {
     //将queyCommamndState重置
     var orgQuery = me.queryCommandState;
     me.queryCommandState = function (cmd) {
-        if (!me.notNeedHighlightQuery[cmd.toLowerCase()] && queryState.call(this) == 1) {
+        if (!me.notNeedFormulaQuery[cmd.toLowerCase()] && queryState.call(this) == 1) {
             return -1;
         }
         return orgQuery.apply(this, arguments)
