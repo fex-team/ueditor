@@ -1,4 +1,4 @@
-var formula = function () {
+var Formula = function () {
     this.init();
 };
 (function () {
@@ -7,7 +7,7 @@ var formula = function () {
         outputBar = $G('J_outputBar'),
         bk;
 
-    formula.prototype = {
+    Formula.prototype = {
         init:function () {
             var me = this;
             window.onload = function () {
@@ -121,7 +121,7 @@ var formula = function () {
         }
     };
 
-    var formulaObj = new formula();
+    var formulaObj = new Formula();
 
     dialog.onok = function () {
         var textValue = utils.trim(textEditor.value);
