@@ -788,7 +788,7 @@
     };
     UE.commands["settablebackground"] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).table ? 0 : -1;
+            return getSelectedArr(this).length>1?0:-1;
         },
         execCommand:function (cmd, value) {
             var table, cells, ut;

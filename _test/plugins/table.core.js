@@ -59,3 +59,65 @@ test("getSameEndPosCells",function(){
     ok(cells1.length == 1, "获取到同样X轴结尾位置的cell1个");
     ok(cells2.length == 2, "获取到同样Y轴结尾位置的cell2个");
 });
+
+test("getHSideCell",function(){
+    var table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td>3</td></tr>" +
+        "<tr><td>2</td><td>3</td></tr>"),
+        ut = new UT(table);
+    var rows = table.rows,
+        cell = rows[1].cells[1],
+        cell1 = ut.getHSideCell(cell),
+        cell2 = ut.getHSideCell(cell,true);
+    equal(cell1,rows[1].cells[0],"左边单元格");
+    equal(cell2,null,"位于右边缘的单元格无右邻居单元格");
+    equal(ut.getHSideCell(rows[0][0]),null,"位于左边缘的单元格无左邻居单元格");
+});
+
+test("getVSideCell",function(){
+    var table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td>3</td></tr>" +
+            "<tr><td>2</td><td>3</td></tr>"),
+        ut = new UT(table);
+    var rows = table.rows,
+        cell = rows[1].cells[1],
+        cell1 = ut.getVSideCell(cell),
+        cell2 = ut.getVSideCell(cell,true),
+        cell3 = ut.getVSideCell(cell,true,true);
+    equal(cell1,rows[0].cells[2],"上边单元格");
+    equal(cell2,null,"位于下边缘的单元格无下邻居单元格");
+    equal(cell3,null,"位于左边缘的单元格无左邻居单元格");
+});
+test("setCellContent",function(){
+    var table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td>3</td></tr>" +
+            "<tr><td>2</td><td>3</td></tr>"),
+        ut = new UT(table);
+    var cell = table.rows[0].cells[0];
+    ut.setCellContent(cell,"这是测试内容");
+    equal(cell.innerHTML,"这是测试内容","设置了正确的内容");
+    ut.setCellContent(cell);
+    equal(cell.innerHTML,browser.ie ? domUtils.fillChar : "<br>");
+});
+
+test("cloneCell",function(){
+    var table = getTable("<tr><td style='border-top-color: red;border-bottom-color: green' rowspan='2'>1</td><td>2</td><td>3</td></tr>" +
+            "<tr><td class='selectedClass'>2</td><td>3</td></tr>"),
+        ut = new UT(table);
+
+    var cell = ut.cloneCell(table.rows[0].cells[0]);
+    equal(cell.rowSpan,2,"clone了一个2行一列的单元格");
+    equal(cell.style.borderTopColor,"green","上边框的颜色将会被下边框取代");
+    cell = ut.cloneCell(table.rows[0].cells[0],true);
+    ok(cell.rowSpan,1,"忽略被合并单元格时将会充值单元格的rowspan和colspan为1")
+});
+
+test("getSameStartPosXCells",function(){
+    var table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td>3</td></tr>" +
+            "<tr><td class='selectedClass'>2</td><td>3</td></tr>"),
+        ut = new UT(table);
+    stop();
+    setTimeout(function(){
+        var cells = ut.getSameStartPosXCells(table.rows[0].cells[1]);
+        ok(cells.length === 2 ,"找到2个");
+        start();
+    },10);
+
+});
