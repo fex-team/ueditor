@@ -120,6 +120,35 @@ UE.plugins['list'] = function () {
         //如果不给宽度会在自定应样式里出现滚动条
         utils.cssRule('list', 'ol,ul{margin:0;pading:0;'+(browser.ie ? '' : 'width:95%')+'}li{clear:both;}'+customCss.join('\n'), me.document);
     });
+    //单独处理剪切的问题
+    me.ready(function(){
+        domUtils.on(me.body,'cut',function(){
+            setTimeout(function(){
+                var rng = me.selection.getRange(),li;
+                if(li = domUtils.findParentByTagName(rng.startContainer,'li',true)){
+                    if(!li.nextSibling && domUtils.isEmptyBlock(li)){
+                        var pn = li.parentNode,node;
+                        if(node = pn.previousSibling){
+                            domUtils.remove(pn);
+                            rng.setStartAtLast(node).collapse(true);
+                            rng.select(true);
+                        }else if(node = pn.nextSibling){
+                            domUtils.remove(pn);
+                            rng.setStartAtFirst(node).collapse(true);
+                            rng.select(true);
+                        }else{
+                            var tmpNode = me.document.createElement('p');
+                            domUtils.fillNode(me.document,tmpNode);
+                            pn.parentNode.insertBefore(tmpNode,pn);
+                            domUtils.remove(pn);
+                            rng.setStart(tmpNode,0).collapse(true);
+                            rng.select(true);
+                        }
+                    }
+                }
+            })
+        })
+    });
 
     function getStyle(node){
         var cls = node.className;
