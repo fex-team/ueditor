@@ -66,7 +66,8 @@
                 return;
             }
             this.getAdv().style.display=this.ishide?"block":"none";
-            obj.innerHTML = this.ishide?"收缩":"高级";
+            domUtils.removeClasses(obj,["arrow_down","arrow_up"]);
+            this.ishide?domUtils.addClass(obj,"arrow_up"):domUtils.addClass(obj,"arrow_down");
             this.ishide = !this.ishide;
             this.fireEvent("changeheight");
         },
@@ -283,7 +284,7 @@
         }
         html += '</tr></table>';
         //高级按钮
-        html += '<span id="##_togglehandle" class="edui-colorpicker-advbtn" onclick="$$._onShowAdv(event, this);">高级</span>';
+        html += '<span id="##_togglehandle" class="edui-colorpicker-advbtn arrow_down" onclick="$$._onShowAdv(event, this);"></span>';
         html += getAdvColorPicker();
         html += '</div>';
         return html;

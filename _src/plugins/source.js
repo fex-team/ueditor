@@ -131,13 +131,11 @@
                     });
                     //重置getContent，源码模式下取值也能是最新的数据
                     me.getContent = function (){
-                        var cont = sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
-                        return cont.replace(/>[ \n\r\t]+/g,'>').replace(/[ \n\r\t]+</g,'<').replace(/>[\n\r\t]+</g,'><');
+                        return sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
                     };
                 } else {
                     me.iframe.style.cssText = bakCssText;
                     var cont = sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
-                    cont = cont.replace(/>[ \n\r\t]+/g,'>').replace(/[ \n\r\t]+</g,'<').replace(/>[\n\r\t]+</g,'><');
                     me.setContent(cont);
                     sourceEditor.dispose();
                     sourceEditor = null;

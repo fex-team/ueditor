@@ -2,7 +2,7 @@ function run( kiss, runnext ) {
 
     window.document.title = kiss;
     var wb = window.brtest = window.brtest || {};
-    wb.timeout = wb.timeout || 30000;
+    wb.timeout = wb.timeout || 60000;
     wb.breakOnError = /breakonerror=true/gi.test( location.search )
         || $( 'input#id_control_breakonerror' ).attr( 'checked' );
     wb.runnext = /batchrun=true/gi.test( location.search ) || runnext

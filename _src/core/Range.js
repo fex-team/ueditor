@@ -1223,6 +1223,19 @@
             }
             return true;
 
+        },
+        traversal:function(doFn,filterFn){
+            if (this.collapsed)
+                return this;
+            var bookmark = this.createBookmark(),
+                end = bookmark.end,
+                current = domUtils.getNextDomNode(bookmark.start, false, filterFn);
+            while (current && current !== end && (domUtils.getPosition(current, end) & domUtils.POSITION_PRECEDING)) {
+                var tmpNode = domUtils.getNextDomNode(current,false,filterFn);
+                doFn(current);
+                current = tmpNode;
+            }
+            return this.moveToBookmark(bookmark);
         }
     };
 })();

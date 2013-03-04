@@ -6,6 +6,8 @@
     <property name="coverage.path" value="_test/coverage"/>
     <property name="report.file" value="_test/tools/br/report.html"/>
     <property name="svn.project" value="ueditor_svn"/>
+    <property name="git.project" value="ueditor_git"/>
+
     <property name="git.user" value=""/>
     <path id="ext.classpath">
         <fileset dir="_test/tools/lib">
@@ -59,8 +61,8 @@
     <!--</target>-->
 
     <target name="executeplugin" depends="init,coverage">
-        <get src="http://${serverip}/${svn.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=plugins"
-             dest="/tmp/${git.user}_${svn.project}plugin.php"/>
+        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=plugins"
+             dest="/tmp/${git.user}_${git.project}plugin.php"/>
     </target>
     <target name="getreportplugin" depends="init,coverage,executeplugin">
         <waitfor maxwait="3000" maxwaitunit="second">
