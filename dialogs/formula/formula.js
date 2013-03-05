@@ -30,7 +30,7 @@ var Formula = function () {
             });
         },
         _initImportBar:function () {
-            var me=this;
+            var me = this;
 
             domUtils.on(importBar, "click", function (e) {
                 var target = e.target || e.srcElement,
@@ -55,7 +55,7 @@ var Formula = function () {
             outputBar.style.fontSize = domUtils.getComputedStyle(editor.selection.getRange().startContainer, 'font-size');
         },
         _autoShowRes:function () {
-            var me=this;
+            var me = this;
             if (editor.queryCommandState("formula")) {
                 var range = editor.selection.getRange(),
                     ele = domUtils.findParent(range.startContainer, function (node) {
@@ -108,7 +108,7 @@ var Formula = function () {
             return str;
         },
         formatHtml:function (outputBar, value) {
-            if(value){
+            if (value.length) {
                 var mathjaxDom = outputBar.lastChild;
                 do {
                     mathjaxDom = mathjaxDom.previousSibling;
@@ -121,17 +121,16 @@ var Formula = function () {
 
                 return  mathjaxDom.innerHTML;
             }
-           return "";
+            return "";
         }
     };
 
     var formulaObj = new Formula();
 
     dialog.onok = function () {
-        var textValue = utils.trim(textEditor.value);
         if (MathJax.isReady) {
             try {
-                var html = formulaObj.formatHtml(outputBar, textValue);
+                var html = formulaObj.formatHtml(outputBar, utils.trim(textEditor.value));
                 var css = formulaObj.formatCss();
             } catch (e) {
                 return;
