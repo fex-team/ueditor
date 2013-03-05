@@ -9,5 +9,5 @@ module( 'plugins.snapscreen' );
 test( '检查高亮', function() {
     var editor = te.obj[0];
     editor.focus();
-    equal( editor.queryCommandState( 'snapscreen' ), ua.browser.ie?0:-1, 'check snapscreen state' );
+    equal( editor.queryCommandState( 'snapscreen' ), 0, 'check snapscreen state' );
 } );

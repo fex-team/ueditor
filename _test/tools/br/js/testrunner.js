@@ -125,11 +125,14 @@
                 }
 
                 try {
+
                     if (config.stopCount == 1) {
                         setTimeout(function() {
                             callback.call(testEnvironment);
-                            start();
-                        }, 80);
+                            if (config.stopCount == 1) {
+                                start();
+                            }
+                        }, 100);
                     }
                     else{
                             callback.call(testEnvironment);

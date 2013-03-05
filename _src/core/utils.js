@@ -64,11 +64,11 @@ var utils = UE.utils = {
         }
         return t;
     },
-    extend2 : function(t){
+    extend2:function (t) {
         var a = arguments;
-        for ( var i=1; i<a.length; i++ ) {
+        for (var i = 1; i < a.length; i++) {
             var x = a[i];
-            for ( var k in x ) {
+            for (var k in x) {
                 if (!t.hasOwnProperty(k)) {
                     t[k] = x[k];
                 }
@@ -152,8 +152,8 @@ var utils = UE.utils = {
     indexOf:function (array, item, start) {
         var index = -1;
         start = this.isNumber(start) ? start : 0;
-        this.each(array,function(v,i){
-            if(i >= start && v === item){
+        this.each(array, function (v, i) {
+            if (i >= start && v === item) {
                 index = i;
                 return false;
             }
@@ -209,10 +209,10 @@ var utils = UE.utils = {
      * UE.utils.unhtml(html,/[<>]/g)  ==>  &lt;body&gt;You say:"你好！Baidu & UEditor!"&lt;/body&gt;
      */
     unhtml:function (str, reg) {
-        return str ? str.replace(reg || /[&<">](?:(amp|lt|quot|gt);)?/g, function (a,b) {
-            if(b){
+        return str ? str.replace(reg || /[&<">](?:(amp|lt|quot|gt);)?/g, function (a, b) {
+            if (b) {
                 return a;
-            }else{
+            } else {
                 return {
                     '<':'&lt;',
                     '&':'&amp;',
@@ -273,40 +273,42 @@ var utils = UE.utils = {
      */
     loadFile:function () {
         var tmpList = [];
-        function getItem(doc,obj){
-            try{
-                for(var i= 0,ci;ci=tmpList[i++];){
-                    if(ci.doc === doc && ci.url == (obj.src || obj.href)){
+
+        function getItem(doc, obj) {
+            try {
+                for (var i = 0, ci; ci = tmpList[i++];) {
+                    if (ci.doc === doc && ci.url == (obj.src || obj.href)) {
                         return ci;
                     }
                 }
-            }catch(e){
+            } catch (e) {
                 return null;
             }
 
         }
+
         return function (doc, obj, fn) {
-            var item = getItem(doc,obj);
+            var item = getItem(doc, obj);
             if (item) {
-                if(item.ready){
+                if (item.ready) {
                     fn && fn();
-                }else{
+                } else {
                     item.funs.push(fn)
                 }
                 return;
             }
             tmpList.push({
                 doc:doc,
-                url:obj.src||obj.href,
+                url:obj.src || obj.href,
                 funs:[fn]
             });
             if (!doc.body) {
                 var html = [];
-                for(var p in obj){
-                    if(p == 'tag')continue;
+                for (var p in obj) {
+                    if (p == 'tag')continue;
                     html.push(p + '="' + obj[p] + '"')
                 }
-                doc.write('<' + obj.tag + ' ' + html.join(' ') + ' ></'+obj.tag+'>');
+                doc.write('<' + obj.tag + ' ' + html.join(' ') + ' ></' + obj.tag + '>');
                 return;
             }
             if (obj.id && doc.getElementById(obj.id)) {
@@ -319,7 +321,7 @@ var utils = UE.utils = {
             }
             element.onload = element.onreadystatechange = function () {
                 if (!this.readyState || /loaded|complete/.test(this.readyState)) {
-                    item = getItem(doc,obj);
+                    item = getItem(doc, obj);
                     if (item.funs.length > 0) {
                         item.ready = 1;
                         for (var fi; fi = item.funs.pop();) {
@@ -329,8 +331,8 @@ var utils = UE.utils = {
                     element.onload = element.onreadystatechange = null;
                 }
             };
-            element.onerror = function(){
-                throw Error('The load '+(obj.href||obj.src)+' fails,check the url settings of file editor_config.js ')
+            element.onerror = function () {
+                throw Error('The load ' + (obj.href || obj.src) + ' fails,check the url settings of file editor_config.js ')
             };
             doc.getElementsByTagName("head")[0].appendChild(element);
         }
@@ -450,23 +452,23 @@ var utils = UE.utils = {
      * @grammar UE.utils.transUnitToPx('20pt') => '27px'
      * @grammar UE.utils.transUnitToPx('0pt') => '0'
      */
-    transUnitToPx : function(val){
-        if(!/(pt|cm)/.test(val)){
+    transUnitToPx:function (val) {
+        if (!/(pt|cm)/.test(val)) {
             return val
         }
         var unit;
-        val.replace(/([\d.]+)(\w+)/,function(str,v,u){
+        val.replace(/([\d.]+)(\w+)/, function (str, v, u) {
             val = v;
             unit = u;
         });
-        switch(unit){
+        switch (unit) {
             case 'cm':
                 val = parseFloat(val) * 25;
                 break;
             case 'pt':
                 val = Math.round(parseFloat(val) * 96 / 72);
         }
-        return val + (val?'px':'');
+        return val + (val ? 'px' : '');
     },
     /**
      * DomReady方法，回调函数将在dom树ready完成后执行
@@ -480,16 +482,17 @@ var utils = UE.utils = {
         function doReady(doc) {
             //确保onready只执行一次
             doc.isReady = true;
-            for (var ci; ci = fnArr.pop();ci()){}
+            for (var ci; ci = fnArr.pop(); ci()) {
+            }
         }
 
-        return function (onready,win) {
+        return function (onready, win) {
             win = win || window;
             var doc = win.document;
             onready && fnArr.push(onready);
             if (doc.readyState === "complete") {
                 doReady(doc);
-            }else{
+            } else {
                 doc.isReady && doReady(doc);
                 if (browser.ie) {
                     (function () {
@@ -502,7 +505,7 @@ var utils = UE.utils = {
                         }
                         doReady(doc);
                     })();
-                    win.attachEvent('onload', function(){
+                    win.attachEvent('onload', function () {
                         doReady(doc)
                     });
                 } else {
@@ -510,7 +513,9 @@ var utils = UE.utils = {
                         doc.removeEventListener("DOMContentLoaded", arguments.callee, false);
                         doReady(doc);
                     }, false);
-                    win.addEventListener('load', function(){doReady(doc)}, false);
+                    win.addEventListener('load', function () {
+                        doReady(doc)
+                    }, false);
                 }
             }
 
@@ -524,48 +529,61 @@ var utils = UE.utils = {
      * @grammar UE.utils.cssRule('body') =>样式的字符串  //取得key值为body的样式的内容,如果没有找到key值先关的样式将返回空，例如刚才那个背景颜色，将返回 body{background:#ccc}
      * @grammar UE.utils.cssRule('body','') =>null //清空给定的key值的背景颜色
      */
-    cssRule : browser.ie ? function(key,style,doc){
-            var indexList,index;
-            doc = doc || document;
-            if(doc.indexList){
-                indexList = doc.indexList;
-            }else{
-                indexList = doc.indexList =  {};
+    cssRule:browser.ie ? function (key, style, doc) {
+        var indexList, index;
+        doc = doc || document;
+        if (doc.indexList) {
+            indexList = doc.indexList;
+        } else {
+            indexList = doc.indexList = {};
+        }
+        var sheetStyle;
+        if (!indexList[key]) {
+            if (style === undefined) {
+                return ''
             }
-            var sheetStyle;
-            if(!indexList[key]){
-                if(style === undefined){
-                    return ''
+            sheetStyle = doc.createStyleSheet('', index = doc.styleSheets.length);
+            indexList[key] = index;
+        } else {
+            sheetStyle = doc.styleSheets[indexList[key]];
+        }
+        if (style === undefined) {
+            return sheetStyle.cssText
+        }
+        sheetStyle.cssText = style || ''
+    } : function (key, style, doc) {
+        doc = doc || document;
+        var head = doc.getElementsByTagName('head')[0], node;
+        if (!(node = doc.getElementById(key))) {
+            if (style === undefined) {
+                return ''
+            }
+            node = doc.createElement('style');
+            node.id = key;
+            head.appendChild(node)
+        }
+        if (style === undefined) {
+            return node.innerHTML
+        }
+        if (style !== '') {
+            node.innerHTML = style;
+        } else {
+            head.removeChild(node)
+        }
+    },
+    sort:function(array,compareFn){
+        compareFn = compareFn || function(item1, item2){ return item1.localeCompare(item2);};
+        for(var i= 0,len = array.length; i<len; i++){
+            for(var j = i,length = array.length; j<length; j++){
+                if(compareFn(array[i], array[j]) > 0){
+                    var t = array[i];
+                    array[i] = array[j];
+                    array[j] = t;
                 }
-                sheetStyle = doc.createStyleSheet('',index = doc.styleSheets.length);
-                indexList[key] = index;
-            }else{
-                sheetStyle = doc.styleSheets[indexList[key]];
-            }
-            if(style === undefined){
-                return sheetStyle.cssText
-            }
-            sheetStyle.cssText = style || ''
-        }:function(key,style,doc){
-            doc = doc || document;
-            var head = doc.getElementsByTagName('head')[0],node;
-            if(!(node = doc.getElementById(key))){
-                if(style === undefined){
-                    return ''
-                }
-                node = doc.createElement('style');
-                node.id = key;
-                head.appendChild(node)
-            }
-            if(style === undefined){
-                return node.innerHTML
-            }
-            if(style !== ''){
-                node.innerHTML = style;
-            }else{
-                head.removeChild(node)
             }
         }
+        return array;
+    }
 
 };
 /**
@@ -588,8 +606,8 @@ var utils = UE.utils = {
  * @name isNumber
  * @grammar UE.utils.isNumber(obj)  => true|false
  */
-utils.each(['String','Function','Array','Number','RegExp','Object'],function(v){
-    UE.utils['is' + v] = function(obj){
+utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object'], function (v) {
+    UE.utils['is' + v] = function (obj) {
         return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
     }
 });

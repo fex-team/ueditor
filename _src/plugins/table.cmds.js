@@ -103,8 +103,8 @@
                     rng.setStart(next, 0)
                 }
                 rng.setCursor(false, true)
-                toggleDragableState(this, false, "", null);
-                if (dragButton)domUtils.remove(dragButton);
+                this.fireEvent("tablehasdeleted")
+
             }
 
         }
@@ -289,8 +289,10 @@
         execCommand:function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange(this).cell,
-                ut = getUETable(cell),
+            var tableItems = getTableItemsByRange(this),
+                cell = tableItems.cell,
+                table = tableItems.table,
+                ut = getUETable(table),
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length ? cellInfo.rowIndex:ut.cellsRange.beginRowIndex,'');
             if (!ut.selectedTds.length) {
@@ -302,6 +304,7 @@
                 }
             }
             rng.moveToBookmark(bk).select();
+            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
         }
     };
     //后插入行
@@ -314,8 +317,10 @@
         execCommand:function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
-            var cell = getTableItemsByRange(this).cell,
-                ut = getUETable(cell),
+            var tableItems = getTableItemsByRange(this),
+                cell = tableItems.cell,
+                table = tableItems.table,
+                ut = getUETable(table),
                 cellInfo = ut.getCellInfo(cell);
             //ut.insertRow(!ut.selectedTds.length? cellInfo.rowIndex + cellInfo.rowSpan : ut.cellsRange.endRowIndex + 1,'');
             if (!ut.selectedTds.length) {
@@ -327,6 +332,7 @@
                 }
             }
             rng.moveToBookmark(bk).select();
+            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
         }
     };
     UE.commands["deleterow"] = {
@@ -366,6 +372,7 @@
                     if (newCell) rng.selectNodeContents(newCell).setCursor(false, true);
                 }
             }
+            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
         }
     };
     UE.commands["insertcol"] = {
@@ -764,13 +771,8 @@
                 tableItems = getTableItemsByRange(me),
                 cell = tableItems.cell,
                 ut = getUETable(tableItems.table),
-                cellIndex = ut.getCellInfo(cell).cellIndex,
-                cells = ut.getSameEndPosCells(cell, "x");
-            if (cells.length < ut.rowsNum) {
-                this.fireEvent("tableForbidSort");
-                return;
-            }
-            ut.sortTable(cellIndex, fn);
+                cellInfo = ut.getCellInfo(cell);
+            ut.sortTable(cellInfo.cellIndex, fn);
             range.moveToBookmark(bk).select();
         }
     };
@@ -786,22 +788,25 @@
     };
     UE.commands["settablebackground"] = {
         queryCommandState:function () {
-            return getTableItemsByRange(this).table ? 0 : -1;
+            return getSelectedArr(this).length>1?0:-1;
         },
-        execCommand:function (cmd, value, allCells) {
+        execCommand:function (cmd, value) {
             var table, cells, ut;
-            if (allCells) {
-                table = getTableItemsByRange(this).table;
-                cells = table.getElementsByTagName("td");
-            } else {
-                cells = getSelectedArr(this);
-            }
+            cells = getSelectedArr(this);
             ut = getUETable(cells[0]);
             ut.setBackground(cells, value);
         }
     };
 
     UE.commands["cleartablebackground"] = {
+        queryCommandState:function(){
+            var cells = getSelectedArr(this);
+            if(!cells.length)return -1;
+            for(var i= 0,cell;cell = cells[i++];){
+                if(cell.style.backgroundColor!=="") return 0;
+            }
+            return -1;
+        },
         execCommand:function () {
             var cells = getSelectedArr(this),
                 ut = getUETable(cells[0]);
@@ -809,11 +814,26 @@
         }
     };
 
-    UE.commands["interlacedtable"] = UE.commands["uninterlacedtable"] = {
-        execCommand:function (cmd) {
+    UE.commands["interlacetable"] = UE.commands["uninterlacetable"] = {
+        queryCommandState:function(cmd){
             var table = getTableItemsByRange(this).table;
-            table.setAttribute("interlaced", cmd == "interlacedtable" ? "enabled" : "disabled");
-            this.fireEvent("interlacetable",table);
+            if(!table) return -1;
+            var interlaced = table.getAttribute("interlaced");
+            if(cmd =="interlacetable"){
+                return /*(interlaced === "enabled") ? -1:*/0;
+            }else{
+                return (!interlaced||interlaced === "disabled") ? -1:0;
+            }
+        },
+        execCommand:function (cmd,classList) {
+            var table = getTableItemsByRange(this).table;
+            if( cmd == "interlacetable" ){
+                table.setAttribute("interlaced","enabled");
+                this.fireEvent("interlacetable",table,classList);
+            }else{
+                table.setAttribute("interlaced","disabled");
+                this.fireEvent("uninterlacetable",table);
+            }
         }
     };
 

@@ -142,7 +142,9 @@
 
         //,imagePopup:true      //图片操作的浮层开关，默认打开
 
-        //,initialStyle:'body{font-size:18px}'   //编辑器内部样式,可以用来改变字体等
+        ,initialStyle:'body{font-size:16px}' +
+            '.back1{background:#eee;}' +
+            '.back2{background:#ddd}'   //编辑器内部样式,可以用来改变字体等
 
         //,emotionLocalization:false //是否开启表情本地化，默认关闭。若要开启请确保emotion文件夹下包含官网提供的images表情文件夹
 

@@ -71,41 +71,6 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'inserttable'
                         },
                         {
-                            label:"清除表格背景",
-                            cmdName:"cleartablebackground",
-                            exec:function(){
-                                this.execCommand("cleartablebackground");
-                            }
-                        },
-                        {
-                            label:"整个表格隔行变色",
-                            cmdName:"settablebackground",
-                            exec:function(){
-                                this.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]},true);
-                            }
-                        },
-                        {
-                            label:"三色渐变",
-                            cmdName:"settablebackground",
-                            exec:function(){
-                                this.execCommand("settablebackground",{repeat:true,colorList:["#aaa","#bbb","#ccc"]});
-                            }
-                        },
-                        {
-                            label:"隔行变色",
-                            cmdName:"settablebackground",
-                            exec:function(){
-                                this.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]});
-                            }
-                        },
-                        {
-                            label:"红蓝相间",
-                            cmdName:"settablebackground",
-                            exec:function(){
-                                this.execCommand("settablebackground",{repeat:true,colorList:["red","blue"]});
-                            }
-                        },
-                        {
                             label:lang.deletetable,
                             cmdName:'deletetable'
                         },
@@ -238,8 +203,10 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'sorttable',
                             exec:function(){
                                 this.execCommand("sorttable",function(td1,td2){
-                                    var value1 = parseInt(td1.innerHTML,10),
-                                        value2 = parseInt(td2.innerHTML,10);
+                                    var value1 = td1.innerHTML.match(/\d+/),
+                                        value2 = td2.innerHTML.match(/\d+/);
+                                    if(value1) value1 = +value1[0];
+                                    if(value2) value2 = +value2[0];
                                     return (value1||0) - (value2||0);
                                 });
                             }
@@ -249,10 +216,60 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'sorttable',
                             exec:function(){
                                 this.execCommand("sorttable",function(td1,td2){
-                                    var value1 = parseInt(td1.innerHTML,10),
-                                        value2 = parseInt(td2.innerHTML,10);
+                                    var value1 = td1.innerHTML.match(/\d+/),
+                                        value2 = td2.innerHTML.match(/\d+/);
+                                    if(value1) value1 = +value1[0];
+                                    if(value2) value2 = +value2[0];
                                     return (value2||0) - (value1||0);
                                 });
+                            }
+                        }
+                    ]
+                },
+                {
+                    group:"边框底纹",
+                    icon:'borderBack',
+                    subMenu:[
+                        {
+                            label:"表格隔行变色",
+                            cmdName:"interlacetable",
+                            exec:function(){
+                                this.execCommand("interlacetable");
+                            }
+                        },
+                        {
+                            label:"取消表格隔行变色",
+                            cmdName:"uninterlacetable",
+                            exec:function(){
+                                this.execCommand("uninterlacetable");
+                            }
+                        },
+                        {
+                            label:"选区背景隔行",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]});
+                            }
+                        },
+                        {
+                            label:"取消选区背景",
+                            cmdName:"cleartablebackground",
+                            exec:function(){
+                                this.execCommand("cleartablebackground");
+                            }
+                        },
+                        {
+                            label:"红蓝相间",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["red","blue"]});
+                            }
+                        },
+                        {
+                            label:"三色渐变",
+                            cmdName:"settablebackground",
+                            exec:function(){
+                                this.execCommand("settablebackground",{repeat:true,colorList:["#aaa","#bbb","#ccc"]});
                             }
                         }
                     ]
@@ -415,6 +432,8 @@ UE.plugins['contextmenu'] = function () {
                                     return me.getLang("contextMenu.aligntable");
                                 case "tablesort":
                                     return "表格排序";
+                                case "borderBack":
+                                    return "边框底纹";
                                 default :
                                     return '';
                             }
