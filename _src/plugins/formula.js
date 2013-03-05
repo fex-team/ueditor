@@ -16,7 +16,7 @@ UE.plugins['formula'] = function () {
 
     var fnBlock = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxer')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxBlock')
         }, true);
     };
 
@@ -88,7 +88,7 @@ UE.plugins['formula'] = function () {
     //避免table插件对于公式的影响
     me.addListener('excludetable excludeNodeinautotype', function (cmd, target) {
         if (target && domUtils.findParent(target, function (node) {
-            return domUtils.hasClass(node, 'MathJaxer')
+            return domUtils.hasClass(node, 'MathJaxBlock')
         }, true)) {
             return true;
         }
@@ -106,7 +106,7 @@ UE.plugins['formula'] = function () {
                 span.appendChild(txtNode);
 
                 var table =domUtils.findParent(pi, function (node) {
-                        return node.type == "element" && node.tagName.toLowerCase() == 'table' &&/MathJaxer/.test(node.attrs.class);
+                        return node.type == "element" && node.tagName.toLowerCase() == 'table' &&/MathJaxBlock/.test(node.attrs.class);
                     }, true);
 
                 if (table) {
@@ -151,7 +151,7 @@ UE.plugins['formula'] = function () {
 
             if (html && css) {
                 me.execCommand('inserthtml',
-                    '<table style="width:100%;margin: 5px auto;" class="MathJaxer">' +
+                    '<table style="width:100%;margin: 5px auto;" class="MathJaxBlock">' +
                         '<tr><td style="text-align: center;border:1px dotted #ccc;">' + html + '</td></tr>' +
                         '</table>');
                 utils.cssRule('formula', css, me.document);
@@ -201,7 +201,7 @@ UE.plugins['formula'] = function () {
             setCursorPos(range, start, end, function () {
                 var table = domUtils.createElement(document, "table", {
                     style:"width:100%;margin: 5px auto;",
-                    class:"MathJaxer"
+                    class:"MathJaxBlock"
                 });
                 table.innerHTML = '<tr><td style="text-align: center;border:1px dotted #ccc;">' + start.outerHTML + '</td></tr>';
                 start.parentNode.replaceChild(table, start);
