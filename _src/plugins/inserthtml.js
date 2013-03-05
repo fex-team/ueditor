@@ -78,8 +78,14 @@ UE.commands['inserthtml'] = {
         //如果当前位置选中了fillchar要干掉，要不会产生空行
         if(range.inFillChar()){
             child = range.startContainer;
-            range.setStartBefore(child).collapse(true);
-            domUtils.remove(child);
+            if(domUtils.isFillChar(child)){
+                range.setStartBefore(child).collapse(true);
+                domUtils.remove(child);
+            }else if(domUtils.isFillChar(child,true)){
+                child.nodeValue = child.nodeValue.replace(fillCharReg,'');
+                range.startOffset--;
+                range.collapsed && range.collapse(true)
+            }
         }
         while ( child = div.firstChild ) {
             range.insertNode( child );
