@@ -788,7 +788,7 @@
                 cellInfo = ut.getCellInfo(cell);
             ut.sortTable(cellInfo.cellIndex, fn);
             range.moveToBookmark(bk).select();
-            me.fireEvent("interlacetable",ut.table);
+            ut.table.getAttribute("interlaced") ==="enabled" && me.fireEvent("interlacetable",ut.table);
         }
     };
 
