@@ -108,17 +108,20 @@ var Formula = function () {
             return str;
         },
         formatHtml:function (outputBar, value) {
-            var mathjaxDom = outputBar.lastChild;
-            do {
-                mathjaxDom = mathjaxDom.previousSibling;
-            }
-            while (mathjaxDom && mathjaxDom.className != 'MathJax_Display');
-            var node = mathjaxDom.firstChild;
-            node.removeAttribute("id");
-            node.setAttribute("data", encodeURIComponent("$$" + value + "$$"));
-            domUtils.removeAttributes(mathjaxDom.children[0], ['style']);//删除多余属性
+            if(value){
+                var mathjaxDom = outputBar.lastChild;
+                do {
+                    mathjaxDom = mathjaxDom.previousSibling;
+                }
+                while (mathjaxDom && mathjaxDom.className != 'MathJax_Display');
+                var node = mathjaxDom.firstChild;
+                node.removeAttribute("id");
+                node.setAttribute("data", encodeURIComponent("$$" + value + "$$"));
+                domUtils.removeAttributes(mathjaxDom.children[0], ['style']);//删除多余属性
 
-            return  mathjaxDom.innerHTML;
+                return  mathjaxDom.innerHTML;
+            }
+           return "";
         }
     };
 
@@ -126,7 +129,7 @@ var Formula = function () {
 
     dialog.onok = function () {
         var textValue = utils.trim(textEditor.value);
-        if (textValue.length && MathJax.isReady) {
+        if (MathJax.isReady) {
             try {
                 var html = formulaObj.formatHtml(outputBar, textValue);
                 var css = formulaObj.formatCss();
