@@ -123,11 +123,12 @@ test( 'b,i标签，切换源码后自动转换成strong和em', function () {
 
 test( 'trace 1734 range的更新/特殊符号的转换', function () {
         var editor = te.obj[0];
-        editor.setContent( '<p>"<></p>' );
+        editor.setContent( '<p><span style="color: #fff;" >"<></span></p>' );
         setTimeout( function () {
                 editor.execCommand( 'source' );
                 setTimeout( function () {
                         editor.execCommand( 'source' );
+
                         equal( editor.getContent(), '<p>&quot;&lt;&gt;</p>' );
                         editor.setContent( "<p>'</p>" );
 //                var range = te.obj[1];
@@ -262,17 +263,17 @@ test( '关于空格的问题', function () {
 test('初始化进入源码模式',function(){
     if(ua.browser.ie>0 && ua.browser.ie<8)
         return 0;
-    var editor = new baidu.editor.Editor({autoFloatEnabled:false,sourceEditorFirst:true});
+    var editor = new UE.ui.Editor({autoFloatEnabled:false,sourceEditorFirst:true});
     var div = document.createElement('div');
     document.body.appendChild(div);
     editor.render(div);
+    stop();
     editor.ready(function(){
-        stop();
         setTimeout(function(){
-            equal(editor.queryCommandState('source'),1,'源码高亮');
-            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
-            start();
-        },50);
+                equal(editor.queryCommandState('source'),1,'源码高亮');
+                equal(editor.queryCommandState('bold'),-1,'加粗灰色');
+                start();
+            },50);       
     });
 });
 
