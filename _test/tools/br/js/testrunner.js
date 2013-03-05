@@ -125,12 +125,19 @@
                 }
 
                 try {
-                    setTimeout(function() {
-                        callback.call(testEnvironment);
-                        if (config.stopCount == 1) {
-                            start();
-                        }
-                    }, 100);
+
+                    if (config.stopCount == 1) {
+                        setTimeout(function() {
+                            callback.call(testEnvironment);
+                            if (config.stopCount == 1) {
+                                start();
+                            }
+                        }, 100);
+                    }
+                    else{
+                            callback.call(testEnvironment);
+                    }
+
 
                 } catch(e) {
                     fail("Test " + name + " died, exception and test follows", e, callback);

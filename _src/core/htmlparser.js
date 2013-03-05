@@ -70,7 +70,7 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
         if (htmlattr) {
             var attrs = {}, match;
             while (match = re_attr.exec(htmlattr)) {
-                attrs[match[1].toLowerCase()] = match[2]
+                attrs[match[1].toLowerCase()] = match[2] || match[3] || match[4]
             }
             elm.attrs = attrs;
         }
