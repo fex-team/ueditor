@@ -96,39 +96,29 @@ UE.plugins['formula'] = function () {
 
     me.addOutputRule(function (root) {
         me._MathJaxList = [];
-        utils.each(root.getNodesByTagName('table'), function (pi) {
-            var cls;
-            if ((cls = pi.getAttr('class')) && /MathJaxer/.test(cls)) {
-                var tmpNode = UE.uNode.createElement(pi.toHtml());
-                me._MathJaxList.push(tmpNode);
 
-                utils.each(pi.getNodesByTagName('span'), function (node) {
-                    var val;
-                    if ((val = node.getAttr('class')) && /MathJax/.test(val)) {
-                        var tmpSpan = UE.uNode.createElement("span");
-                        tmpSpan.setAttr("class", "MathJax");
-                        var txtNode = UE.uNode.createText(decodeURIComponent(node.getAttr('data')));
-                        tmpSpan.appendChild(txtNode);
-                        pi.parentNode.replaceChild(tmpSpan, pi);
-                    }
-                });
+        utils.each(root.getNodesByTagName('span'), function (pi) {
+            var cls;
+            if ((cls = pi.getAttr('class')) && /MathJax/.test(cls)) {
+                var span = UE.uNode.createElement("span");
+                span.setAttr("class", "MathJax");
+                var txtNode = UE.uNode.createText(decodeURIComponent(pi.getAttr('data')));
+                span.appendChild(txtNode);
+
+                var table =domUtils.findParent(pi, function (node) {
+                        return node.type == "element" && node.tagName.toLowerCase() == 'table' &&/MathJaxer/.test(node.attrs.class);
+                    }, true);
+
+                if (table) {
+                    me._MathJaxList.push(table);
+                    table.parentNode.replaceChild(span, table);
+                } else {
+                    me._MathJaxList.push(UE.uNode.createElement(pi.toHtml()));
+                    pi.parentNode.replaceChild(span, pi);
+                }
+
             }
         });
-
-        if (!me._MathJaxList.length)
-            utils.each(root.getNodesByTagName('span'), function (pi) {
-                var cls;
-                if ((cls = pi.getAttr('class')) && /MathJax/.test(cls)) {
-                    var tmpNode = UE.uNode.createElement(pi.toHtml());
-                    me._MathJaxList.push(tmpNode);
-
-                    var tmpSpan = UE.uNode.createElement("span");
-                    tmpSpan.setAttr("class", "MathJax");
-                    var txtNode = UE.uNode.createText(decodeURIComponent(pi.getAttr('data')));
-                    tmpSpan.appendChild(txtNode);
-                    pi.parentNode.replaceChild(tmpSpan, pi);
-                }
-            });
     });
 
     me.addInputRule(function (root) {
