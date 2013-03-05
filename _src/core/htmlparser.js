@@ -62,7 +62,7 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
         var elm = new uNode({
             parentNode:parent,
             type:'element',
-            tagName:tagName,
+            tagName:tagName.toLowerCase(),
             //是自闭合的处理一下
             children:dtd.$empty[tagName] ? null : []
         });
