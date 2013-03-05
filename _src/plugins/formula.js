@@ -20,7 +20,7 @@ UE.plugins['formula'] = function () {
         }, true);
     };
 
-    var setCursorPos = function (range,start, end, callback) {
+    var setCursorPos = function (range, start, end, callback) {
         if (start && end && start === end) {
             if (start.nextSibling) {
                 range.setStart(start.nextSibling, 0)
@@ -155,7 +155,7 @@ UE.plugins['formula'] = function () {
                 end = fnInline(range.endContainer);
             }
 
-            setCursorPos(range,start, end, function () {
+            setCursorPos(range, start, end, function () {
                 domUtils.remove(start);
             });
 
@@ -179,7 +179,7 @@ UE.plugins['formula'] = function () {
             var start = fnBlock(range.startContainer),
                 end = fnBlock(range.endContainer);
 
-            setCursorPos(range,start, end, function () {
+            setCursorPos(range, start, end, function () {
                 var ele = domUtils.getElementsByTagName(start, "span", function (node) {
                     return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax');
                 })[0];
@@ -208,7 +208,7 @@ UE.plugins['formula'] = function () {
             var start = fnInline(range.startContainer),
                 end = fnInline(range.endContainer);
 
-            setCursorPos(range,start, end, function () {
+            setCursorPos(range, start, end, function () {
                 var table = domUtils.createElement(document, "table", {
                     style:"width:100%;margin: 5px auto;",
                     class:"MathJaxer"
