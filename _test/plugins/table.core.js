@@ -109,15 +109,30 @@ test("cloneCell",function(){
     ok(cell.rowSpan,1,"忽略被合并单元格时将会充值单元格的rowspan和colspan为1")
 });
 
-test("getSameStartPosXCells",function(){
+
+
+test("getCellsRange、getCells",function(){
     var table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td>3</td></tr>" +
             "<tr><td class='selectedClass'>2</td><td>3</td></tr>"),
         ut = new UT(table);
-    stop();
-    setTimeout(function(){
-        var cells = ut.getSameStartPosXCells(table.rows[0].cells[1]);
-        ok(cells.length === 2 ,"找到2个");
-        start();
-    },10);
+    var range = ut.getCellsRange(table.rows[0].cells[1],table.rows[1].cells[0]);
+    ok(range.beginRowIndex===0 && range.beginColIndex===1 && range.endRowIndex===1 && range.endColIndex===1,"获取到range")
+
+    var cells = ut.getCells(range);
+    ok(cells.length ==2,"获取到2个单元格");
+    ok(cells[0] == table.rows[0].cells[1],"第一个单元格存在");
+});
+
+test("insertRow、deleterRow",function(){
+    var table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td>3</td></tr>" +
+            "<tr><td class='selectedClass'>2</td><td>3</td></tr>"),
+        ut = new UT(table);
+
+    var cellPrototype = document.createElement("td");
+    cellPrototype.innerHTML = "aa";
+    cellPrototype.setAttribute("vAlign","top");
+    ut.insertRow(2,cellPrototype);
+    ok(table.rows.length ===3,"行数变成3行");
+    ok(table.rows[2].cells[0].getAttribute("vAlign") =="top","新插入的单元格中包含原型单元格中的属性");
 
 });
