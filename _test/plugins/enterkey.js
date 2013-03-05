@@ -140,16 +140,19 @@ test( 'table中回车', function () {
 } );
 
 test( '去除_moz_dirty', function () {
-    var editor = te.obj[0];
-    var range = te.obj[1];
+    if(browser.gecko){
+        var editor = te.obj[0];
+        var range = te.obj[1];
         editor.setContent( '<strong>迎使</strong><em  _moz_dirty=""><strong  _moz_dirty="">用ued</strong>it</em>' );
-        range.selectNode(editor.body.firstChild).select();
+        range.selectNode(editor.body.firstChild.lastChild.firstChild).select();
         ua.keydown(editor.body,{'keyCode':13});
         setTimeout( function () {
             equal(ua.getChildHTML(editor.body),'<p><strong>迎使</strong><em><strong>用ued</strong>it</em></p>','');
             start();
         }, 20 );
         stop();
+    }
+   
 } );
 ///*不作处理chrome会产生div*/
 test( 'chrome删除div', function () {
