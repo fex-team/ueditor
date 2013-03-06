@@ -365,8 +365,7 @@ function uParse(selector, opt) {
                         }
                     }
 
-                    var REPLAYCE_NODE=document.body,
-                        listOrg = REPLAYCE_NODE.cloneNode(true),
+                    var listOrg = document.body.cloneNode(true),
                         flag = false;
 
                     _each(nodes, function (pi) {
@@ -389,7 +388,7 @@ function uParse(selector, opt) {
                                     richArr.push(node);
                                 }
 
-                                REPLAYCE_NODE = listOrg;
+                                document.body = listOrg;
 
                                 var txtList = getElementsByClassName("MathJax");
                                 for (var k = 0, ele; ele = txtList[k++];) {
