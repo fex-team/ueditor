@@ -103,10 +103,10 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
         }
         if (match[3]) {
             //start tag
-            currentParent = element(currentParent, match[3], match[4]);
+            currentParent = element(currentParent, match[3].toLowerCase(), match[4]);
 
         } else if (match[1]) {
-            while(currentParent.type == 'element' && currentParent.tagName != match[1]){
+            while(currentParent.type == 'element' && currentParent.tagName != match[1].toLowerCase()){
                 currentParent = currentParent.parentNode;
             }
             //end tag

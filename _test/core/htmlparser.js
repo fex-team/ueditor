@@ -47,3 +47,7 @@ test( '属性引号问题', function() {
     var root = UE.htmlparser('<img width="200" height="200" />');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
 });
+test( '大小写', function() {
+    var root = UE.htmlparser('<p><TD></TD></p>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p>');
+});
