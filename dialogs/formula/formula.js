@@ -114,10 +114,10 @@ var Formula = function () {
                     mathjaxDom = mathjaxDom.previousSibling;
                 }
                 while (mathjaxDom && mathjaxDom.className != 'MathJax_Display');
-                var node = mathjaxDom.firstChild;
-                node.removeAttribute("id");
+
+                var node = mathjaxDom.children[0];
                 node.setAttribute("data", encodeURIComponent("$$" + value + "$$"));
-                domUtils.removeAttributes(mathjaxDom.children[0], ['style']);//删除多余属性
+                domUtils.removeAttributes(node, ['id','style']);
 
                 return  mathjaxDom.innerHTML;
             }
