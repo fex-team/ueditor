@@ -16,7 +16,7 @@ UE.plugins['formula'] = function () {
 
     var fnBlock = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'MathJaxBlock')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'MJBlock')
         }, true);
     };
 
@@ -129,18 +129,8 @@ UE.plugins['formula'] = function () {
                 var txtNode = UE.uNode.createText(decodeURIComponent(pi.getAttr('data')));
                 span.appendChild(txtNode);
 
-                var p = domUtils.findParent(pi, function (node) {
-                    return node.type == "element" && node.tagName.toLowerCase() == 'p' && /MathJaxBlock/.test(node.attrs.class);
-                }, true);
-
-                if (p) {
-                    me._MathJaxList.push(p);
-                    p.parentNode.replaceChild(span, p);
-                } else {
-                    me._MathJaxList.push(UE.uNode.createElement(pi.toHtml()));
-                    pi.parentNode.replaceChild(span, pi);
-                }
-
+                me._MathJaxList.push(UE.uNode.createElement(pi.toHtml()));
+                pi.parentNode.replaceChild(span, pi);
             }
         });
     });
@@ -174,7 +164,7 @@ UE.plugins['formula'] = function () {
             });
 
             if (html && css) {
-                html = '<p class="MathJaxBlock" style="text-align: center;">' + html + '</p>';
+                html = '<p class="MJBlock" style="text-align: center;">' + html + '</p>';
                 me.execCommand('inserthtml', html);
                 utils.cssRule('formula', css, me.document);
             }
@@ -235,7 +225,7 @@ UE.plugins['formula'] = function () {
 
                 var p = domUtils.createElement(document, "p", {
                     style:'text-align:center',
-                    class:'MathJaxBlock'
+                    class:'MJBlock'
                 });
                 start.parentNode.replaceChild(p, start);
                 p.appendChild(start)
