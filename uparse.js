@@ -365,46 +365,45 @@ function uParse(selector, opt) {
                         }
                     }
 
+                    var REPLAYCE_NODE=document.body,
+                        listOrg = REPLAYCE_NODE.cloneNode(true),
+                        flag = false;
+
                     _each(nodes, function (pi) {
-                        var bodyOrg = document.body.cloneNode(true),
-                            flag = false;
-
-                        _each(nodes, function (pi) {
-                            if (/MathJax/i.test(pi.className)) {
-                                pi.removeAttribute("class");
-                                flag = true;
-                            }
-                        });
-
-                        if (flag) {
-                            loadFile(document, {
-                                src:defaultOption.formulaUrl,
-                                tag:"script",
-                                type:"text/javascript",
-                                defer:"defer"
-                            }, function () {
-                                setTimeout(function () {
-                                    var richList = getElementsByClassName("MathJax"), richArr = [], txtArr = [];
-                                    for (var j = 0, node; node = richList[j++];) {
-                                        richArr.push(node);
-                                    }
-
-                                    document.body = bodyOrg;
-
-                                    var txtList = getElementsByClassName("MathJax");
-                                    for (var k = 0, ele; ele = txtList[k++];) {
-                                        txtArr.push(ele);
-                                    }
-
-                                    if (richArr.length && txtArr.length) {
-                                        for (var i = 0, len = txtArr.length; i < len; i++) {
-                                            txtArr[i].parentNode.replaceChild(richArr[i], txtArr[i]);
-                                        }
-                                    }
-                                }, 2000);
-                            });
+                        if (/MathJax/i.test(pi.className)) {
+                            pi.removeAttribute("class");
+                            flag = true;
                         }
                     });
+
+                    if (flag) {
+                        loadFile(document, {
+                            src:defaultOption.formulaUrl,
+                            tag:"script",
+                            type:"text/javascript",
+                            defer:"defer"
+                        }, function () {
+                            setTimeout(function () {
+                                var richList = getElementsByClassName("MathJax"), richArr = [], txtArr = [];
+                                for (var j = 0, node; node = richList[j++];) {
+                                    richArr.push(node);
+                                }
+
+                                REPLAYCE_NODE = listOrg;
+
+                                var txtList = getElementsByClassName("MathJax");
+                                for (var k = 0, ele; ele = txtList[k++];) {
+                                    txtArr.push(ele);
+                                }
+
+                                if (richArr.length && txtArr.length) {
+                                    for (var i = 0, len = txtArr.length; i < len; i++) {
+                                        txtArr[i].parentNode.replaceChild(richArr[i], txtArr[i]);
+                                    }
+                                }
+                            }, 2000);
+                        });
+                    }
                 }
             };
             //�Ȳ���Ĭ�ϵ�����
