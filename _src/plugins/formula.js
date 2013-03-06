@@ -16,7 +16,7 @@ UE.plugins['formula'] = function () {
 
     var fnBlock = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'table' && domUtils.hasClass(node, 'MathJaxBlock')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'MathJaxBlock')
         }, true);
     };
 
@@ -38,6 +38,38 @@ UE.plugins['formula'] = function () {
         }
     };
 
+    function toInline(node, ignorePre, ignoreNext) {
+        function merge(rtl, start, node) {
+            var next;
+            if ((next = node[rtl]) && !domUtils.isBookmarkNode(next) && next.nodeType == 1) {
+                while (next.firstChild) {
+                    if (start == 'firstChild') {
+                        node.insertBefore(next.lastChild, node.firstChild);
+                    }
+                    else {
+                        node.appendChild(next.firstChild);
+                    }
+                }
+                domUtils.remove(next);
+            }
+        }
+
+        !ignorePre && merge('previousSibling', 'firstChild', node);
+        !ignoreNext && merge('nextSibling', 'lastChild', node);
+    }
+
+    function addFillChar(node) {
+        var previous = node.previousSibling,
+            next = node.nextSibling;
+
+        if (!previous || !domUtils.isFillChar(previous)) {
+            node.parentNode.insertBefore(document.createTextNode(domUtils.fillChar), node);
+        }
+        if (!next || !domUtils.isFillChar(next)) {
+            domUtils.insertAfter(node, document.createTextNode(domUtils.fillChar));
+        }
+    }
+
     function queryState() {
         try {
             var range = this.selection.getRange();
@@ -46,6 +78,7 @@ UE.plugins['formula'] = function () {
             end = fnInline(range.endContainer);
             if (start && end && start == end) {
                 this.body.contentEditable = "false";
+                addFillChar(start);
                 return 1;
             } else {
                 this.body.contentEditable = "true";
@@ -85,15 +118,6 @@ UE.plugins['formula'] = function () {
         return orgQuery.apply(this, arguments)
     };
 
-    //避免table插件对于公式的影响
-    me.addListener('excludetable excludeNodeinautotype', function (cmd, target) {
-        if (target && domUtils.findParent(target, function (node) {
-            return domUtils.hasClass(node, 'MathJaxBlock')
-        }, true)) {
-            return true;
-        }
-    });
-
     me.addOutputRule(function (root) {
         me._MathJaxList = [];
 
@@ -105,13 +129,13 @@ UE.plugins['formula'] = function () {
                 var txtNode = UE.uNode.createText(decodeURIComponent(pi.getAttr('data')));
                 span.appendChild(txtNode);
 
-                var table =domUtils.findParent(pi, function (node) {
-                        return node.type == "element" && node.tagName.toLowerCase() == 'table' &&/MathJaxBlock/.test(node.attrs.class);
-                    }, true);
+                var p = domUtils.findParent(pi, function (node) {
+                    return node.type == "element" && node.tagName.toLowerCase() == 'p' && /MathJaxBlock/.test(node.attrs.class);
+                }, true);
 
-                if (table) {
-                    me._MathJaxList.push(table);
-                    table.parentNode.replaceChild(span, table);
+                if (p) {
+                    me._MathJaxList.push(p);
+                    p.parentNode.replaceChild(span, p);
                 } else {
                     me._MathJaxList.push(UE.uNode.createElement(pi.toHtml()));
                     pi.parentNode.replaceChild(span, pi);
@@ -150,10 +174,8 @@ UE.plugins['formula'] = function () {
             });
 
             if (html && css) {
-                me.execCommand('inserthtml',
-                    '<table style="width:100%;margin: 5px auto;" class="MathJaxBlock">' +
-                        '<tr><td style="text-align: center;border:1px dotted #ccc;">' + html + '</td></tr>' +
-                        '</table>');
+                html = '<p class="MathJaxBlock" style="text-align: center;">' + html + '</p>';
+                me.execCommand('inserthtml', html);
                 utils.cssRule('formula', css, me.document);
             }
         },
@@ -170,10 +192,18 @@ UE.plugins['formula'] = function () {
                 end = fnBlock(range.endContainer);
 
             setCursorPos(range, start, end, function () {
-                var ele = domUtils.getElementsByTagName(start, "span", function (node) {
-                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax');
-                })[0];
-                start.parentNode.replaceChild(ele, start);
+                if (start.previousSibling || start.nextSibling || /li/i.test(start.parentNode.tagName)) {
+                    toInline(start);
+                }
+                else {
+                    var p = document.createElement("p");
+                    p.appendChild(start);
+                    start.parentNode.replaceChild(p, start);
+                }
+                domUtils.removeAttributes(start, ["style", "class"]);
+
+                range.setEndAfter(start);
+                range.setCursor(true);
             });
         },
         queryCommandState:function () {
@@ -199,12 +229,18 @@ UE.plugins['formula'] = function () {
                 end = fnInline(range.endContainer);
 
             setCursorPos(range, start, end, function () {
-                var table = domUtils.createElement(document, "table", {
-                    style:"width:100%;margin: 5px auto;",
-                    class:"MathJaxBlock"
+                domUtils.breakParent(start, domUtils.findParent(start, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'p'
+                }, false));
+
+                var p = domUtils.createElement(document, "p", {
+                    style:'text-align:center',
+                    class:'MathJaxBlock'
                 });
-                table.innerHTML = '<tr><td style="text-align: center;border:1px dotted #ccc;">' + start.outerHTML + '</td></tr>';
-                start.parentNode.replaceChild(table, start);
+                start.parentNode.replaceChild(p, start);
+                p.appendChild(start)
+                range.setEndAfter(start);
+                range.setCursor(true);
             });
         },
         queryCommandState:function () {
@@ -215,8 +251,8 @@ UE.plugins['formula'] = function () {
                     end = fnInline(range.endContainer);
 
                 if (start && end && start == end) {
-                    var table = fnBlock(range.startContainer);
-                    return table ? -1 : 0;
+                    var p = fnBlock(range.startContainer);
+                    return p ? -1 : 0;
                 } else {
                     return -1;
                 }
