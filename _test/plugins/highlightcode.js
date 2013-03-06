@@ -6,42 +6,39 @@
  * To change this template use File | Settings | File Templates.
  */
 module('plugins.highlightcode');
-
+//trace 3290
 test('插入代码',function(){
-    var editor = te.obj[0];
-    var range = te.obj[1];
-    var div = te.dom[0];
-    editor.render( div );
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+    te.obj[2].render(div);
+    var range = new baidu.editor.dom.Range( te.obj[2].document );
     stop();
-    editor.ready(function(){
+    te.obj[2].ready(function(){
         var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
-        editor.setContent('<p>' + br + '</p>');
-//        debugger
-        range.setStart(editor.body.firstChild,0).collapse(1).select();
-//        debugger
+        te.obj[2].setContent('<p>' + br + '</p>');
+        range.setStart(te.obj[2].body.firstChild,0).collapse(1).select();
         setTimeout(function(){
-//            debugger
-            editor.execCommand('highlightcode','<?php echo "Hello World"; ?>','php');
-            ua.manualDeleteFillData(editor.body);
-            equal( editor.getContent().substring(0, 78),'<pre class=\"brush:php;toolbar:false;\">&lt;?php echo "Hello World"; ?&gt;</pre>','代码高亮');
-            var tds = editor.body.firstChild.getElementsByTagName('td');
+            te.obj[2].execCommand('highlightcode','<?php echo "Hello World"; ?>','php');
+            ua.manualDeleteFillData(te.obj[2].body);
+            equal( te.obj[2].getContent().substring(0, 78),'<pre class=\"brush: php;toolbar:false;\" >&lt;?php echo "Hello World"; ?&gt;</pre>','代码高亮');
+            var tds = te.obj[2].body.firstChild.getElementsByTagName('td');
             range.selectNode(tds[0]).select();
-            equal(editor.queryCommandState('highlightcode'),1,'插入代码高亮');
-            editor.execCommand('highlightcode','<?php echo "Hello World"; echo "Hello World"; echo "Hello World"; echo "Hello World"; echo "Hello World"; ?>','php');
+            equal(te.obj[2].queryCommandState('highlightcode'),1,'插入代码高亮');
+            te.obj[2].execCommand('highlightcode','<?php echo "Hello World"; echo "Hello World"; echo "Hello World"; echo "Hello World"; echo "Hello World"; ?>','php');
             stop();
             setTimeout(function(){
-                equal( editor.getContent().substring(0, 158),'<pre class=\"brush:php;toolbar:false;\">&lt;?php echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; ?&gt;</pre>','代码修改');
-                editor.fireEvent('fullscreenchanged');
-                var html = {html:''};
-                editor.fireEvent('getAllHtml',html);
-                ok(html.html.indexOf('third-party/SyntaxHighlighter/shCoreDefault.css')!=-1,'加载shCoreDefault.css');
-                ok(html.html.indexOf('third-party/SyntaxHighlighter/shCore.js')!=-1,'加载shCore.js');
-                ua.manualDeleteFillData(editor.body);
-                tds = editor.body.getElementsByTagName('td');
+                equal( te.obj[2].getContent().substring(0, 158),'<pre class=\"brush: php;toolbar:false;\ ">&lt;?php echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; echo \"Hello World\"; ?&gt;</pre>','代码修改');
+                te.obj[2].fireEvent('fullscreenchanged');
+                var html = [];
+                te.obj[2].fireEvent('getAllHtml',html);
+                ok(html[0].indexOf('SyntaxHighlighter')!=-1,'加载SyntaxHighlighter');
+                ua.manualDeleteFillData(te.obj[2].body);
+                tds = te.obj[2].body.getElementsByTagName('td');
                 range.selectNode(tds[0]).select();
-                editor.execCommand('highlightcode');
+                te.obj[2].execCommand('highlightcode');
                 var br = ua.browser.ie?'&nbsp;':'<br>'
-                equal(ua.getChildHTML(editor.body),'<p>'+br+'</p>','去掉代码高亮');
+                equal(ua.getChildHTML(te.obj[2].body),'<p>'+br+'</p>','去掉代码高亮');
+                div.parentNode.removeChild(div);
                 start();
             },50);
         },500);
@@ -50,19 +47,22 @@ test('插入代码',function(){
 });
 /*trace 2648*/
 test('切换源码不插入br',function(){
-    var editor = te.obj[0];
-    var range = te.obj[1];
-    editor.setContent('<p></p>')
-    range.setStart(editor.body.firstChild,0).select();
-    editor.execCommand('highlightcode','<?php echo "Hello World"; ?>','php');
-    var length=editor.body.childNodes.length;
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+    te.obj[2].render(div);
+    var range = new baidu.editor.dom.Range( te.obj[2].document );
     stop();
     setTimeout(function(){
-        ua.manualDeleteFillData(editor.body);
-        editor.execCommand('source');
+        te.obj[2].setContent('<p></p>');
+        range.setStart(te.obj[2].body.firstChild,0).collapse(true).select();
+        te.obj[2].execCommand('highlightcode','<?php echo "Hello World"; ?>','php');
+        var length=te.obj[2].body.childNodes.length;
+        ua.manualDeleteFillData(te.obj[2].body);
+        te.obj[2].execCommand('source');
         setTimeout(function(){
-            editor.execCommand('source');
-            ok(length==editor.body.childNodes.length,'不增加br');
+            te.obj[2].execCommand('source');
+            ok(length==te.obj[2].body.childNodes.length,'不增加br');
+            div.parentNode.removeChild(div);
             start();
         },50);
     },50);
@@ -70,16 +70,21 @@ test('切换源码不插入br',function(){
 
 /*trace 2472*/
 test('插入两个字符',function(){
-    var editor = te.obj[0];
-    var range = te.obj[1];
-    editor.setContent('<p></p>')
-    range.setStart(editor.body.firstChild,0).select();
-    editor.execCommand('highlightcode','aa','php');
+
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+    te.obj[2].render(div);
+    var range = new baidu.editor.dom.Range( te.obj[2].document );
     stop();
-    setTimeout(function(){
-        ua.manualDeleteFillData(editor.body);
-        var br = ua.browser.ie?' ':'<br />'
-        equal( editor.getContent().substring(0, 158),'<pre class=\"brush:php;toolbar:false;\">aa</pre><p>'+br+'</p>','插入成功');
-        start();
+        setTimeout(function(){
+            te.obj[2].setContent('<p></p>');
+            range.setStart(te.obj[2].body.firstChild,0).collapse(true).select();
+            te.obj[2].execCommand('highlightcode','aaa','php');
+            ua.manualDeleteFillData(te.obj[2].body);
+            var br = ua.browser.ie?' ':'<br/>';
+            equal( te.obj[2].getContent().substring(0, 158),'<pre class=\"brush: php;toolbar:false;\" >aaa</pre><p>'+br+'</p>','插入成功');
+            div.parentNode.removeChild(div);
+            start();
     },50);
+
 });
