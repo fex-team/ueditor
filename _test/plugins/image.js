@@ -195,7 +195,7 @@ test( ' 默认样式切换到居中再切换回默认，会把居中导致的3�
         var a = body.firstChild.firstChild.nextSibling;
         equal( a.tagName.toLowerCase(), 'a', 'p的孩子为a' );
         equal( a.firstChild.tagName.toLowerCase(), 'img', 'a的孩子是img' );
-        equal( ua.getFloatStyle( a.firstChild ), 'none', 'image对齐方式float为空' );
+        equal( ua.getFloatStyle( a.firstChild ), '', 'image对齐方式float为空' );
         start();
     }, 50 );
     stop();
