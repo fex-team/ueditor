@@ -136,3 +136,43 @@ test("insertRow、deleterRow",function(){
     ok(table.rows[2].cells[0].getAttribute("vAlign") =="top","新插入的单元格中包含原型单元格中的属性");
 
 });
+
+test("mergeRight,mergeDown",function(){
+    var table = getTable("<tr><td rowspan='3'>1</td><td>2</td><td>3</td><td rowspan='2'>4</td><td>5</td><td>6</td></tr>" +
+                         "<tr><td>2</td><td>3</td><td>5</td><td>6</td></tr>"+
+                         "<tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>"),
+        ut = new UT(table);
+    var cell = table.rows[0].cells[1];
+    ut.mergeDown(cell);
+    ok(cell.rowSpan===2,"向下合并成功");
+
+    ut.mergeDown(cell);
+    ok(cell.rowSpan===3,"向下合并成功");
+
+    cell = cell.previousSibling;
+    ut.mergeRight(cell);
+    ok(cell.rowSpan===3 && cell.colSpan ===2,"向右合并成功");
+
+    equal(cell.parentNode.rowIndex,0,"合并到了正确的位置" )
+});
+test("split",function(){
+    var table = getTable("<tr><td rowspan='3'>1</td><td>2</td><td>3</td><td rowspan='2' colspan='2'>4</td><td>6</td><td>7</td></tr>" +
+            "<tr><td>2</td><td>3</td><td>6</td><td>7</td></tr>"+
+            "<tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>"),
+        ut = new UT(table);
+    var cell = table.rows[0].cells[0],
+        num = table.getElementsByTagName("td").length;
+    ut.splitToCells(cell);
+    ok(cell.rowSpan==1&&cell.colSpan==1,"单元格被成功拆分");
+
+    var newNum = table.getElementsByTagName("td").length;
+    ok(num+2 ==newNum,"单元格数量增加了2个");
+
+    cell = table.rows[0].cells[3];
+    ut.splitToCols(cell);
+    ok(cell.colSpan===1 && cell.rowSpan==2 ,"被拆分成了2列");
+
+
+
+});
+
