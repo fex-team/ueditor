@@ -382,7 +382,7 @@ function uParse(selector, opt) {
                             type:"text/javascript",
                             defer:"defer"
                         }, function () {
-                            setTimeout(function () {
+                            MathJax.Hub.Queue(function(){
                                 var richList = getElementsByClassName("MathJax"), richArr = [], txtArr = [];
                                 for (var j = 0, node; node = richList[j++];) {
                                     richArr.push(node);
@@ -400,9 +400,10 @@ function uParse(selector, opt) {
                                         txtArr[i].parentNode.replaceChild(richArr[i], txtArr[i]);
                                     }
                                 }
-                            }, 2000);
+                            });
                         });
                     }
+
                 }
             };
             //�Ȳ���Ĭ�ϵ�����
