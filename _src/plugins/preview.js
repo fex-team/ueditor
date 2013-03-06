@@ -10,7 +10,7 @@
  */
 UE.commands['preview'] = {
     execCommand : function(){
-        var w = window.open('', '_self', ''),
+        var w = window.open('', '_blank', ''),
             d = w.document;
         d.open();
         d.write('<html><head><script src="'+this.options.UEDITOR_HOME_URL+'uparse.js"></script><script>' +
