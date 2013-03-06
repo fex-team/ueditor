@@ -117,7 +117,7 @@ var Formula = function () {
 
                 var node = mathjaxDom.children[0];
                 node.setAttribute("data", encodeURIComponent("$$" + value + "$$"));
-                domUtils.removeAttributes(node, ['id','style']);
+                domUtils.removeAttributes(node, ['id', 'style']);
 
                 return  mathjaxDom.innerHTML;
             }
