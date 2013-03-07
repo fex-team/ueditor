@@ -77,11 +77,10 @@ UE.plugins['formula'] = function () {
             var start = fnInline(range.startContainer);
             end = fnInline(range.endContainer);
             if (start && end && start == end) {
-                this.body.contentEditable = "false";
+                start.contentEditable = "false";
                 addFillChar(start);
                 return 1;
             } else {
-                this.body.contentEditable = "true";
                 return 0;
             }
         }
