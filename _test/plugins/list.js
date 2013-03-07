@@ -27,8 +27,8 @@ test( '多个p，选中其中几个变为列表', function () {
         start();
     },50);
     stop();
-
 } );
+
 //trace 988，有序123切到abc再切到123
 test( '有序列表的切换', function () {
     var editor = te.obj[0];
@@ -126,7 +126,6 @@ test( '闭合方式有序和无序列表之间的切换', function () {
     equal( editor.queryCommandValue( 'insertorderedlist' ), null, '有序列表查询结果为null' );
 } );
 
-
 test( '非闭合方式切换有序和无序列表', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -161,9 +160,7 @@ test( '将列表下的文本合并到列表中', function () {
         start();
     },50);
     stop();
-
 } );
-
 
 test( '多个列表', function () {
     var editor = te.obj[0];
@@ -177,9 +174,7 @@ test( '多个列表', function () {
     equal( body.childNodes.length, 1, 'body只有1个孩子ol' );
     equal( body.firstChild.childNodes.length, 2, '下面的列表合并到上面' );
     equal( ua.getChildHTML( body.lastChild ), '<li><p>hello1</p></li><li><p>hello2</p></li>', '2个li子节点' );
-
 } );
-
 
 test( '修改列表中间某一段列表为另一种列表', function () {
     var editor = te.obj[0];
@@ -196,21 +191,19 @@ test( '修改列表中间某一段列表为另一种列表', function () {
     equal( ua.getChildHTML( body.childNodes[1] ), '<li><p>hello2</p></li><li><p>hello3</p></li>', '检查第二个列表的内容' );
 } );
 
-//改策略了，现在不会合并
-//test( '三个列表，将下面的合并上去', function() {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    var body = editor.body;
-////    editor.setContent( '<ol><li>hello1</li></ol><ul>hello2</ul>' );
-//    editor.setContent( '<ol><li>hello3</li></ol><ol><li>hello1</li></ol><ul><li>hello2</li></ul>' );
-//    range.selectNode( body.lastChild ).select();
-//    /*将无序的变为有序，有序上面的有序也合并一起了*/
-//    editor.execCommand( 'insertorderedlist' );
-//    equal( body.firstChild.tagName.toLowerCase(), 'ol', '仍然是ol' );
-//    equal( body.childNodes.length, 1, 'body只有一个孩子ol' );
-//    equal( body.firstChild.childNodes.length, 3, '下面和上面的列表合并到上面去了' );
-//    equal( ua.getChildHTML( body.firstChild ), '<li>hello3</li><li>hello1</li><li>hello2</li>', '3个li子节点' );
-//} );
+test( '两个列表，将下面的合并上去', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var body = editor.body;
+    editor.setContent( '<ol><li>hello3</li></ol><ol><li>hello1</li></ol><ul><li>hello2</li></ul>' );
+    range.selectNode( body.lastChild ).select();
+    /*将无序的变为有序，有序上面的有序不会合并在一起了*/
+    editor.execCommand( 'insertorderedlist' );
+    equal( body.firstChild.tagName.toLowerCase(), 'ol', '仍然是ol' );
+    equal( body.childNodes.length, 2, 'body有两个孩子ol' );
+    equal( body.lastChild.childNodes.length, 2, '下面和上面的列表合并到上面去了' );
+    equal( ua.getChildHTML( editor.body ), '<ol class=" list-paddingleft-2" ><li><p>hello3</p></li></ol><ol class=" list-paddingleft-2" ><li><p>hello1</p></li><li><p>hello2</p></li></ol>', '3个li子节点' );
+} );
 
 test( '列表下的文本合并到列表中', function () {
     var editor = te.obj[0];
@@ -277,9 +270,9 @@ test('列表内后退',function(){
     var range = te.obj[1];
     var lis;
     var br = ua.browser.ie?'':'<br>';
-    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':' style=\"padding-left: 30px;\"';
-
-    editor.setContent('<ol><li></li><li><p>hello2</p></li><li></li><li><sss>hello3</sss></li><li><p>hello4</p></li><li><p>hello5</p></li></ol>');
+//////标签空格的处理
+    editor.setContent('<ol><li><br></li><li><p>hello2</p></li><li><br></li><li><sss>hello3</sss></li><li><p>hello4</p></li><li><p>hello5</p></li></ol>');
+//    editor.setContent('<ol><li><br></li><li><p>hello2</p></li><li></li><li><sss>hello3</sss></li><li><p>hello4</p></li><li><p>hello5</p></li></ol>');
     range.setStart(editor.body.firstChild.lastChild.firstChild.firstChild,0).collapse(1).select();
     ua.manualDeleteFillData(editor.body);
     ua.keydown(editor.body,{keyCode:8});
@@ -287,7 +280,7 @@ test('列表内后退',function(){
     var ol = editor.body.getElementsByTagName('ol');
     lis = editor.body.getElementsByTagName('li');
     equal(lis.length,'5','变成5个列表项');
-    equal(ua.getChildHTML(editor.body),'<ol'+padding+'><li><p>'+br+'</p></li><li><p>hello2</p></li><li><p>'+br+'</p></li><li><sss>hello3</sss></li><li><p>hello4</p><p>hello5</p></li></ol>','最后一个列表项');
+    equal(ua.getChildHTML(editor.body.firstChild),'<li><p>'+br+'</p></li><li><p>hello2</p></li><li><p>'+br+'</p></li><li><sss>hello3</sss></li><li><p>hello4</p><p>hello5</p></li>','最后一个列表项');
     range.setStart(lis[0].firstChild,0).collapse(1).select();
     ua.keydown(editor.body,{keyCode:8});
 
@@ -304,7 +297,7 @@ test('列表内后退',function(){
         range.setStart(lis[1].firstChild.firstChild,0).collapse(1).select();
         ua.manualDeleteFillData(editor.body);
         ua.keydown(editor.body,{keyCode:8});
-        equal(ua.getChildHTML(editor.body),'<p><br></p><ol'+padding+'><li><p>hello2</p><p><br></p><sss>hello3</sss></li><li><p>hello4</p><p>hello5</p></li></ol>','自定义标签后退');
+        equal(ua.getChildHTML(editor.body),'<p><br></p><ol class=\" list-paddingleft-2\"><li><p>hello2</p><p><br></p><sss>hello3</sss></li><li><p>hello4</p><p>hello5</p></li></ol>','自定义标签后退');
     }
 });
 
@@ -319,37 +312,37 @@ test('列表内回车',function(){
     ua.keydown(editor.body,{keyCode:13});
     var spa = ua.browser.opera?'<br>':'';
     equal(ua.getChildHTML(editor.body),spa+'<p><sss></sss><sss></sss></p>','空列表项回车--无列表');
-    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':' style=\"padding-left: 30px;\"';
 
     editor.setContent('<ol><li><sss>hello1</sss><p>hello2</p></li></ol>');
     lis = editor.body.getElementsByTagName('li');
     range.setStart(lis[0].lastChild,0).collapse(1).select();
     ua.keydown(editor.body,{keyCode:13});
-    equal(ua.getChildHTML(editor.body),'<ol'+padding+'><li><p><sss>hello1</sss><p></p></p></li><li><p><p>hello2</p></p></li></ol>','单个列表项内回车');
-
-    editor.setContent('<ol><li></li><li><p>hello5</p></li><li><p></p><p></p></li></ol>');
+    equal(ua.getChildHTML(editor.body.firstChild),'<li><p><sss>hello1</sss><p></p></p></li><li><p><p>hello2</p></p></li>','单个列表项内回车');
+//////标签空格的处理
+//    editor.setContent('<ol><li><br></li><li><p>hello5</p></li><li><p><br></p><p><br></p></li></ol>');
+    editor.setContent('<ol><li><br></li><li><p>hello5</p></li><li><p><br></p><p><br></p></li></ol>');
     lis = editor.body.getElementsByTagName('li');
     range.setStart(lis[2].firstChild.firstChild,0).setEnd(lis[2].lastChild.firstChild,0).select();
     ua.keydown(editor.body,{keyCode:13});
-    equal(ua.getChildHTML(editor.body),'<ol'+padding+'><li><p>'+br+'</p></li><li><p>hello5</p></li></ol><p>'+br+'</p>','最后一个列表项为空行回车');
+    equal(ua.getChildHTML(editor.body),'<ol class=\" list-paddingleft-2\"><li><p>'+br+'</p></li><li><p>hello5</p></li></ol><p>'+br+'</p>','最后一个列表项为空行回车');
 
     /*trace 2652*/
     range.setStart(editor.body.firstChild.firstChild.firstChild,0).collapse(1).select();
     ua.keydown(editor.body,{keyCode:13});
-    equal(ua.getChildHTML(editor.body),'<p>'+br+'</p><ol'+padding+'><li><p>hello5</p></li></ol><p>'+br+'</p>','第一个列表项为空行下回车');
+    equal(ua.getChildHTML(editor.body),'<p>'+br+'</p><ol class=\" list-paddingleft-2\"><li><p>hello5</p></li></ol><p>'+br+'</p>','第一个列表项为空行下回车');
 
     /*trace 2653*/
     editor.setContent('<ol><li><p>hello2</p></li><li><p>hello3</p></li><li><p><br /></p><p>hello5</p></li></ol>');
     lis = editor.body.getElementsByTagName('li');
     range.setStart(lis[0].firstChild.firstChild,2).setEnd(lis[1].firstChild.firstChild,4).select();
     ua.keydown(editor.body,{keyCode:13});
-    equal(ua.getChildHTML(editor.body),'<ol'+padding+'><li><p>he</p></li><li><p>o3</p></li><li><p><br></p><p>hello5</p></li></ol>','非闭合回车');
+    equal(ua.getChildHTML(editor.body.firstChild),'<li><p>he</p></li><li><p>o3</p></li><li><p><br></p><p>hello5</p></li>','非闭合回车');
 
     editor.setContent('<ol><li><sss>hello</sss><p>hello4</p></li><li><p>hello5</p></li></ol>');
     lis = editor.body.getElementsByTagName('li');
     range.setStart(lis[0].lastChild.firstChild,1).setEnd(lis[0].lastChild.firstChild,2).select();
     ua.keydown(editor.body,{keyCode:13});
-    equal(ua.getChildHTML(editor.body),'<ol'+padding+'><li><p><sss>hello</sss><p>h</p></p></li><li><p><p>llo4</p></p></li><li><p>hello5</p></li></ol>','一个列表项内两行');
+    equal(ua.getChildHTML(editor.body.firstChild),'<li><p><sss>hello</sss><p>h</p></p></li><li><p><p>llo4</p></p></li><li><p>hello5</p></li>','一个列表项内两行');
 });
 
 test('tab键',function(){
@@ -362,9 +355,8 @@ test('tab键',function(){
     range.setStart(lis[1],0).collapse(1).select();
     ua.keydown(editor.body,{keyCode:9});
     ua.keydown(editor.body,{keyCode:9});
-//    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':' style=\"padding-left: 30px;\"';
-    var str='<ol style=\"padding-left: 30px\"><li><p>hello1</p></li><ol style=\"list-style-type: lower-alpha; padding-left: 30px\"><ol style=\"list-style-type: lower-roman; padding-left: 30px\"><li><p>hello2</p></li></ol style=\"padding-left: 30px\"></ol></ol>';
-    ua.checkHTMLSameStyle(str,editor.document,editor.body,'有序列表---tab键');
+    var str='<li><p>hello1</p></li><ol style="list-style-type: lower-alpha;" class=" list-paddingleft-2" ><ol style="list-style-type: lower-roman;" class=" list-paddingleft-2" ><li><p>hello2</p></li></ol></ol>';
+    ua.checkHTMLSameStyle(str,editor.document,editor.body.firstChild,'有序列表---tab键');
 });
 
 test( '回车后产生新的li-选区闭合', function () {
@@ -398,31 +390,31 @@ test( '回车后产生新的li-选区闭合', function () {
     },50);
     stop();
 } );
+
 test( 'trace 1622:表格中插入列表', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
-    /*必须加br，否则没办法占位*/
-    editor.setContent( '<table><tbody><tr><td><br></td><td>你好</td></tr><tr><td>hello2</td><td>你好2</td></tr></tbody></table>' );
+    editor.setContent( '<table><tbody><tr><td><br></td><td>你好</td></tr><tr><td>hello2</td><td>你好2</td></tr></tbody></table>' ); /*必须加br，否则没办法占位*/
     var tds = body.getElementsByTagName( 'td' );
-    /*选中一个单元格*/
-    range.setStart( tds[0], 0 ).collapse( 1 ).select();
-    editor.execCommand( 'insertorderedlist' );
-
+    range.setStart( tds[0], 0 ).collapse( 1 ).select();                             /*选中一个单元格*/
+    editor.execCommand( 'insertorderedlist' );                                      /*插入有序列表*/
     equal( tds[0].firstChild.tagName.toLowerCase(), 'ol', '查询列表的类型' );
     equal( tds[0].firstChild.style['listStyleType'], 'decimal', '查询有序列表的类型' );
     var br = baidu.editor.browser.ie ? "" : "<br>";
-    equal( ua.getChildHTML( tds[0].firstChild ), '<li>' + br + '</li>' );
-    //TODO  用select选择和实际操作的选择结果不一样，实际只会选中第一个单元格，是假选
-    /*选中多个单元格*/
-    range.setStart( tds[1], 0 ).setEnd( tds[3], 1 ).select();
-    editor.currentSelectedArr = [tds[1], tds[3]];
-    editor.execCommand( 'insertunorderedlist', 'circle' );
+    equal( ua.getChildHTML( tds[0].firstChild ), '<li>' + '<p>' + br + '</p>' + '</li>' );
+
+    var trs = editor.body.firstChild.getElementsByTagName( 'tr' );                  /*选中多个单元格*/
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[1].cells[1]);
+    ut.setSelected(cellsRange);
+    range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+    tds = body.getElementsByTagName( 'td' );
+    editor.execCommand( 'insertunorderedlist', 'circle' );                            /*插入无序列表*/
     equal( tds[1].firstChild.tagName.toLowerCase(), 'ul', '查询无序列表' );
     equal( tds[1].firstChild.style['listStyleType'], 'circle', '查询无序列表的类型' );
-    /*注释掉，等bug修复后再开*/
-//    equal( ua.getChildHTML( tds[1].firstChild ), '<li>你好</li>' );
-//    equal( ua.getChildHTML( tds[3].firstChild ), '<li>你好2</li>' );
+    equal( ua.getChildHTML( tds[1].firstChild ), '<li>你好</li>' );
+    equal( ua.getChildHTML( tds[3].firstChild ), '<li>你好2</li>' );
 } );
 
 ///*presskey*/
@@ -444,7 +436,6 @@ test( 'trace 1622:表格中插入列表', function () {
 ////        equal( ua.getChildHTML( body ), '<ol><li><p>hello1</p></li><li><p>hello3' + br + '</p></li></ol>', '第二个li被删除' );
 //        start();
 //    }, 30 );
-//
 //} );
 ///*presskey*/
 //test( ' trace 1544,1624 :列表中回车后再回退，会产生一个空行', function () {
@@ -483,8 +474,7 @@ test( 'trace1620:修改上面的列表与下面的列表一致', function () {
     editor.setContent( '<p>你好</p><ol><li><p>数字列表1</p></li><li><p>数字列表2</p></li></ol><ol style="list-style-type:lower-alpha; "><li><p>字母列表2</p></li><li><p>字母列表2</p></li></ol>' );
     range.selectNode( editor.body.firstChild.nextSibling ).select();
     editor.execCommand( 'insertorderedlist', 'lower-alpha' );
-//    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':' style=\"padding-left: 30px;\"';
-    var html = '<p>你好</p><ol style="list-style-type:lower-alpha;padding-left: 30px "><li><p>数字列表1</p></li><li><p>数字列表2</p></li><li><p>字母列表1</p></li><li><p>字母列表2</p></li></ol>';
+    var html = '<p>你好</p><ol style="list-style-type: lower-alpha;" class=" list-paddingleft-2" ><li><p>数字列表1</p></li><li><p>数字列表2</p></li><li><p>字母列表2</p></li><li><p>字母列表2</p></li></ol>'
     ua.checkHTMLSameStyle( html, editor.document, editor.body, '检查列表结果' );
 });
 
@@ -494,7 +484,7 @@ test( 'trace 1621:选中多重列表，设置为相同类型的列表', function
     var body = editor.body;
     editor.setContent( '<ol style="list-style-type:decimal; "><li><p>数字列表1</p></li><li><p>数字列表2</p></li></ol><ol style="list-style-type:lower-alpha; "><li><p>字母列表1</p></li><li><p>字母列表2</p></li></ol><ol style="list-style-type: upper-alpha; "><li><p>​大写字母1<br></p></li><li><p>大写字母2</p></li><li><p>大写字母3</p></li></ol>' );
     range.setStart( body, 1 ).setEnd( body.lastChild.firstChild.nextSibling, 1 ).select();
-    var html = '<ol style="list-style-type:decimal; padding-left: 30px"><li><p>数字列表1</p></li><li><p>数字列表2</p></li></ol><ol style="list-style-type: upper-alpha; padding-left: 30px"><li><p>字母列表1</p></li><li><p>字母列表2</p></li><li><p>​大写字母1<br></p></li><li><p>大写字母2</p></li><li><p>大写字母3</p></li></ol>';
+    var html = '<ol style="list-style-type: decimal;" class=" list-paddingleft-2" ><li><p>数字列表1</p></li><li><p>数字列表2</p></li></ol><ol style="list-style-type: upper-alpha;" class=" list-paddingleft-2" ><li><p>字母列表1</p></li><li><p>字母列表2</p></li><li><p>大写字母1<br/></p></li><li><p>大写字母2</p></li><li><p>大写字母3</p></li></ol>';
     editor.execCommand( 'insertorderedlist', 'upper-alpha' );
     ua.checkHTMLSameStyle( html, editor.document, editor.body, 'trace 1621' );
 });
