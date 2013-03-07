@@ -175,7 +175,7 @@ UE.plugins['list'] = function () {
 
                 }
             }
-            if(tmpP.firstChild() && !tmpP.parentNode){
+            if(tmpP.firstChild() && !tmpP.parentNode || !li.firstChild()){
                 li.appendChild(tmpP);
             }
         })
