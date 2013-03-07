@@ -176,3 +176,32 @@ test("split",function(){
 
 });
 
+test("selectRow",function(){
+    var table = getTable("<tr><td rowspan='3'>1</td><td>2</td><td>3</td><td rowspan='2' colspan='2'>4</td><td>6</td><td>7</td></tr>" +
+            "<tr><td>2</td><td>3</td><td>6</td><td>7</td></tr>"+
+            "<tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>"),
+        ut = new UT(table);
+    ut.selectRow(1);
+    equal(ut.selectedTds.length,table.getElementsByTagName("td").length,"选中了所有单元格")
+    var cells = table.rows[1].cells,
+        flag = false;
+    utils.each(cells,function(cell){
+        if(cell.className==""){
+            flag = true;
+        }
+    });
+    ok(!flag,"所有单元格都被选中");
+    ok(ut.cellsRange.beginRowIndex===0,"cellsRange正确");
+
+});
+test("selectTable",function(){
+    var table = getTable("<tr><td rowspan='3'>1</td><td>2</td><td>3</td><td rowspan='2' colspan='2'>4</td><td>6</td><td>7</td></tr>" +
+            "<tr><td>2</td><td>3</td><td>6</td><td>7</td></tr>"+
+            "<tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>"),
+        ut = new UT(table);
+    ut.selectTable();
+    ok(ut.selectedTds.length === table.getElementsByTagName("td").length,"选中了整个表格")
+
+});
+
+
