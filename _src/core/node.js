@@ -298,7 +298,7 @@
             }
         },
         getAttr:function (attrName) {
-            return this.attrs[attrName.toLowerCase()]
+            return this.attrs && this.attrs[attrName.toLowerCase()]
         },
         setAttr:function (attrName, attrVal) {
             if (!attrName) {

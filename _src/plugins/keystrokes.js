@@ -49,13 +49,15 @@ UE.plugins['keystrokes'] = function() {
         if (keyCode == 8) {//|| keyCode == 46
             var start,end;
             //避免按两次删除才能生效的问题
-            if(rng.inFillChar()){
+            if(rng.collapsed && rng.inFillChar()){
                 start = rng.startContainer;
                 rng.setStartBefore(start).shrinkBoundary(true).collapse(true);
                 if(domUtils.isFillChar(start)){
                     domUtils.remove(start)
                 }else{
                     start.nodeValue = start.nodeValue.replace(new RegExp('^' + domUtils.fillChar ),'');
+                    rng.startOffset--;
+                    rng.collapse(true).select(true)
                 }
             }
 

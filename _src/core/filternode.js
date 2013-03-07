@@ -20,12 +20,24 @@ var filterNode = UE.filterNode = function () {
                        var parentNode = node.parentNode,
                            index = node.getIndex();
                        val(node);
-                       for(var i = index,ci;ci=parentNode.children[i];){
-                           filterNode(ci,rules);
-                           if(ci.parentNode){
-                               i++;
+                       if(node.parentNode){
+                           if(node.children){
+                               for(var i = 0,ci;ci=node.children[i];){
+                                   filterNode(ci,rules);
+                                   if(ci.parentNode){
+                                       i++;
+                                   }
+                               }
+                           }
+                       }else{
+                           for(var i = index,ci;ci=parentNode.children[i];){
+                               filterNode(ci,rules);
+                               if(ci.parentNode){
+                                   i++;
+                               }
                            }
                        }
+
 
                    }else{
                        var attrs = val['$'];
@@ -44,7 +56,7 @@ var filterNode = UE.filterNode = function () {
                                    });
                                    tmpVal = tmpCssStyle.join(';')
                                }
-                               if(tmpVal !== ""){
+                               if(tmpVal){
                                    tmpAttrs[a] = tmpVal;
                                }
 
