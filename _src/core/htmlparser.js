@@ -14,7 +14,7 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
     var uNode = UE.uNode,
         needParentNode = {
             'td':'tr',
-            'tr':'tbody',
+            'tr':['tbody','thead','tfoot'],
             'tbody':'table',
             'th':'tr',
             'thead':'table',
