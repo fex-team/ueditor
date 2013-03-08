@@ -239,9 +239,18 @@ test("setBackground",function(){
     ut.setBackground(table.getElementsByTagName("td"),{
         repeat:true,
         colorList:["green","red"]
-    })
+    });
     ok(table.rows[0].cells[0].style.backgroundColor == "green","第一行的单元格为绿色");
     ok(table.rows[1].cells[0].style.backgroundColor =="red","第二行的单元格为红色");
+    ok(table.rows[2].cells[0].style.backgroundColor =="green","第三行的单元格为绿色");
 
+    ut.removeBackground(table.getElementsByTagName("td"));
+    ut.setBackground(table.getElementsByTagName("td"),{
+        repeat:false,
+        colorList:["green","red"]
+    });
+    ok(table.rows[0].cells[0].style.backgroundColor == "green","第一行的单元格为绿色");
+    ok(table.rows[1].cells[0].style.backgroundColor =="red","第二行的单元格为红色");
+    ok(table.rows[2].cells[0].style.backgroundColor =="","第三行的单元格没有颜色");
 
 });
