@@ -15,16 +15,24 @@ test( '选中多个单元格插入列表', function() {
     var range = te.obj[1];
     var body = editor.body;
     editor.setContent( '<table><tbody><tr><td></td><td></td></tr></tbody></table>' );
-    var tds = body.firstChild.getElementsByTagName( 'td' );
-    editor.currentSelectedArr = [tds[0],tds[1]];
-    range.selectNode( tds[0].parentNode ).select();
-    editor.execCommand( 'inserthtml', '<ol><li>hello</li></ol>' );
-    equal( tds[0].firstChild.tagName.toLowerCase(), 'ol', '插入列表' );
-    equal( ua.getChildHTML( tds[0].firstChild ), '<li><p>hello</p></li>', '查询列表内容' );
-    //空的td有br
-    var br = ua.browser.ie?'':'<br>';
-    ua.manualDeleteFillData(tds[1]);
-    equal( tds[1].innerHTML, br, '第二个单元格没有插入任何东西' );
+    setTimeout(function(){
+        var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
+        ut.setSelected(cellsRange);
+        range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+        var tds = body.firstChild.getElementsByTagName( 'td' );
+
+        editor.execCommand( 'inserthtml', '<ol><li>hello</li></ol>' );
+        equal( tds[0].firstChild.tagName.toLowerCase(), 'ol', '插入列表' );
+        equal( ua.getChildHTML( tds[0].firstChild ), '<li><p>hello</p></li>', '查询列表内容' );
+        //空的td有br
+        var br = ua.browser.ie?'':'<br>';
+        ua.manualDeleteFillData(tds[1]);
+        equal( tds[1].innerHTML, br, '第二个单元格没有插入任何东西' );
+        start();
+    },50);
+    stop();
 } );
 
 test( '表格中插入图片', function() {
@@ -32,30 +40,48 @@ test( '表格中插入图片', function() {
     var range = te.obj[1];
     var body = editor.body;
     editor.setContent( '<table><tbody><tr><td></td><td></td></tr></tbody></table>' );
-    var tds = body.firstChild.getElementsByTagName( 'td' );
-    editor.currentSelectedArr = [tds[0],tds[1]];
-    range.selectNode( tds[0].parentNode ).select();
-    editor.execCommand( 'inserthtml', '<img style="float:left"/>' );
-    equal( tds[0].firstChild.tagName.toLowerCase(), 'img', '插入图片' );
-    equal( tds[0].firstChild.style['styleFloat']||tds[0].firstChild.style['cssFloat'], 'left', '查询图片浮动方式' );
-    var br = ua.browser.ie?'':'<br>';
-    ua.manualDeleteFillData(tds[1]);
-    equal( tds[1].innerHTML, br, '第二个单元格没有插入任何东西' );
-
+    setTimeout(function(){
+        var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
+        ut.setSelected(cellsRange);
+        range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+        var tds = body.firstChild.getElementsByTagName( 'td' );
+        editor.execCommand( 'inserthtml', '<img style="float:left"/>' );
+        equal( tds[0].firstChild.tagName.toLowerCase(), 'img', '插入图片' );
+        equal( tds[0].firstChild.style['styleFloat']||tds[0].firstChild.style['cssFloat'], 'left', '查询图片浮动方式' );
+        var br = ua.browser.ie?'':'<br>';
+        ua.manualDeleteFillData(tds[1]);
+        equal( tds[1].innerHTML, br, '第二个单元格没有插入任何东西' );
+        start();
+    },50);
+    stop();
 } );
 
 test( '选中多个单元格插入超链接', function() {
     var editor = te.obj[0];
+    var range = te.obj[1];
     var body = editor.body;
     editor.setContent( '<table><tbody><tr><td></td><td></td></tr></tbody></table>' );
-    var tds = body.firstChild.getElementsByTagName( 'td' );
-    editor.currentSelectedArr = [tds[0],tds[1]];
-    editor.execCommand( 'link', {href:'http://www.baidu.com/'} );
-    equal( tds[0].firstChild.tagName.toLowerCase(), 'a', '插入超链接' );
-    equal( tds[0].firstChild.tagName.toLowerCase(), 'a', '插入超链接' );
-    equal( ua.getChildHTML(tds[0]), '<a href="http://www.baidu.com/">http://www.baidu.com/</a>', '查询第一个表格插入的超链接' );
-    equal( tds[1].innerHTML, tds[0].innerHTML, '第二个单元格也插入超链接' );
+    setTimeout(function(){
+        var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
+        ut.setSelected(cellsRange);
+        range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+        var tds = body.firstChild.getElementsByTagName( 'td' );
+
+        editor.execCommand( 'link', {href:'http://www.baidu.com/'} );
+        equal( tds[0].firstChild.tagName.toLowerCase(), 'a', '插入超链接' );
+        equal( tds[0].firstChild.tagName.toLowerCase(), 'a', '插入超链接' );
+        equal( ua.getChildHTML(tds[0]), '<a href="http://www.baidu.com/">http://www.baidu.com/</a>', '查询第一个表格插入的超链接' );
+        var br = ua.browser.ie?'':'<br>';
+        equal( ua.getChildHTML(tds[1]), br, '第二个单元格也插入超链接' );
+        start();
+    },50);
+    stop();
 } );
+
 test( 'notSerialize', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -77,5 +103,4 @@ test( 'notSerialize', function() {
         },50);
     },50);
     stop();
-
 } );
