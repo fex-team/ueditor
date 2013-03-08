@@ -25,34 +25,35 @@ test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function(
         innerHTML = '<span style="color:#c4bd97"><span></span><strong>xx</strong><em>em</em><em></em></span>';
         editor.setContent( innerHTML );
         if(ua.browser.ie ==9){
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;"><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em" );
+            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;" ><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em" );
         }
         else{
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97"><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em" );
+            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em" );
         }
         innerHTML = '<span style="color:#c4bd97"></span><strong>xx</strong><em>em</em><em></em>';
         editor.setContent( innerHTML );
         /*inline标签上只要有属性就不清理*/
         if(ua.browser.ie ==9){
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;"></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空" );
+            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;" ></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空" );
         }
         else{
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97"></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空" );
+            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空" );
         }
         innerHTML = '<span style="color:#c4bd97">asdf<strong>xx</strong><em>em</em><em></em></span>';
         editor.setContent( innerHTML );
         if(ua.browser.ie ==9){
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;">asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空" );
+            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;" >asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空" );
         }
         else{
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97">asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空" );
+            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" >asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空" );
         }
         innerHTML = '<a href="http://www.baidu.com"></a><a>a</a><strong>xx</strong><em>em</em><em></em>';
         editor.setContent( innerHTML );
-        equal( editor.getContent(), '<p><a href="http://www.baidu.com"></a><a>a</a><strong>xx</strong><em>em</em></p>', "a 有href但内容为空,不过滤a标签" );
+        equal( editor.getContent(), '<p><a href="http://www.baidu.com" ></a><a>a</a><strong>xx</strong><em>em</em></p>', "a 有href但内容为空,不过滤a标签" );
         start()
     },100);
 } );
+
 //editor.options.autoClearEmptyNode
 test("getContent--不去除无用的空标签:autoClearEmptyNode==false", function() {
     var editor = new UE.Editor({autoClearEmptyNode:false,'autoFloatEnabled':false});
@@ -69,17 +70,17 @@ test("getContent--不去除无用的空标签:autoClearEmptyNode==false", functi
         editor.setContent(innerHTML);
         ua.manualDeleteFillData(editor.body);
         if (ua.browser.ie == 9) {
-            equal(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;"></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
+            equal(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;" ></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
         }
         else {
-            equal(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97"></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
+            equal(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
         }
         start();
     },100);
 });
 
 test("getContent--转换空格，nbsp与空格相间显示", function() {
-    var editor = te.obj[1];
+    var editor = te.obj[0];
     var div = te.dom[0];
     editor.render(div);
     editor.focus();
