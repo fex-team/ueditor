@@ -94,7 +94,7 @@ UE.plugins['keystrokes'] = function() {
                 domUtils.preventDefault(evt);
                 return;
             }
-            range = me.selection.getRange();
+            var range = me.selection.getRange();
             me.fireEvent('saveScene');
             for (var i = 0,txt = '',tabSize = me.options.tabSize|| 4,tabNode =  me.options.tabNode || '&nbsp;'; i < tabSize; i++) {
                 txt += tabNode;
