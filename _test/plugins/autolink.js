@@ -177,3 +177,11 @@ test( 'trace 2121', function() {
 //    stop();
 //} );
 //
+
+test( 'trace 1727:过滤超链接后面的空格', function () {
+    var serialize = te.obj[0].serialize;
+    var html = '<a href="www.baidu.com">baidu</a> ddd';
+    var node = serialize.parseHTML( html );
+    node = serialize.filter( node );
+    equal( serialize.toHTML( node ), '<a href="www.baidu.com">baidu</a>&nbsp;ddd' );
+} );

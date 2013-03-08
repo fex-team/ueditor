@@ -488,3 +488,16 @@ test( 'trace 1621:选中多重列表，设置为相同类型的列表', function
     editor.execCommand( 'insertorderedlist', 'upper-alpha' );
     ua.checkHTMLSameStyle( html, editor.document, editor.body, 'trace 1621' );
 });
+
+test( 'parseHTML,toHTML---列表相关', function () {
+    var serialize = te.obj[0].serialize;
+    /*补li的parent*/
+    var node = serialize.parseHTML( '<li>123' );
+    equal( serialize.toHTML( node ).toLowerCase(), '<ul><li>123</li></ul>', '<li>123--补全li的parent--ul，前面有文本' );
+    /*补ul的child*/
+    node = serialize.parseHTML( '<ul>123' );
+    equal( serialize.toHTML( node ).toLowerCase(), '<ul><li>123</li></ul>', '<ul>123--补全ul的child--li，前面有文本' );
+    /*补li开始标签*/
+    node = serialize.parseHTML( '</li>123' );
+    equal( serialize.toHTML( node ).toLowerCase(), '<ul><li></li></ul>123', '</li>123--补全li开始标签，前面有文本' );
+} );
