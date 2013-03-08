@@ -125,6 +125,13 @@ UE.plugins['paste'] = function() {
             }
             //执行默认的处理
             me.filterInputRule(root);
+            for(var i = 0,ci;ci=root.children[i++];){
+                if(ci.type == 3 || !dtd.$block[ci.tagName]){
+                    var p = UE.uNode.createElement('p');
+                    ci.parentNode.insertBefore(p,ci);
+                    p.appendChild(ci);
+                }
+            }
             html = {'html':root.toHtml()};
             me.fireEvent('beforepaste',html);
             root = UE.htmlparser(html.html);
@@ -193,8 +200,8 @@ UE.plugins['paste'] = function() {
             if(!range.collapsed && me.undoManger){
                 me.undoManger.save();
             }
-
         });
+
         //ie下beforepaste在点击右键时也会触发，所以用监控键盘才处理
         domUtils.on(me.body, browser.ie || browser.opera ? 'keydown' : 'paste',function(e){
             if((browser.ie || browser.opera) && ((!e.ctrlKey && !e.metaKey) || e.keyCode != '86')){
