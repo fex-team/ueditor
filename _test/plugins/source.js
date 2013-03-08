@@ -1,5 +1,32 @@
 module( 'plugins.source' );
 
+test( 'chrome删除后切换源码再切换回来，光标没了', function() {
+    //opera 取不到range值
+    if(ua.browser.opera) return 0;
+    var editor = te.obj[0];
+    var div = te.dom[0];
+    editor.render( div );
+    editor.setContent( 'hello' );
+    var range = editor.selection.getRange();
+    range.selectNode( editor.body.firstChild ).select();
+    editor.execCommand( 'cleardoc' );
+    stop();
+    expect( 2 );
+    //source 包含超时操作，ie下必须有同步操作，否则会报错
+    setTimeout(function() {
+        editor.execCommand('source');
+        setTimeout(function() {
+            editor.execCommand('source');
+            start();
+        },20);
+    },20);
+    range = editor.selection.getRange();
+    equal( range.startContainer.nodeType, 1, '光标定位在p里' );
+    equal( range.startContainer.tagName.toLowerCase(), 'p', 'startContainer为p' );
+    te.dom.push( div );
+    start();
+} );
+
 /*trace 986*/
 test( '切换源码，视频地址被添加了网站前缀', function () {
     if ( !ua.browser.ie ) {
