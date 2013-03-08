@@ -55,3 +55,9 @@ test( '大小写', function() {
     var root = UE.htmlparser('<IMG width=200 height=200 />');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
 });
+
+test( '裸字', function() {
+    var root = UE.htmlparser('sdfasdfasdf');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'sdfasdfasdf');
+
+});
