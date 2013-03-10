@@ -22,7 +22,7 @@ var Formula = function (cfg) {
 };
 Formula.prototype = {
     init:function () {
-        editor._mathList=[];
+        editor._mathList = [];
         this.initTab();//初始化tab
         this.initEditArea();//初始化编辑区域
     },
@@ -44,9 +44,9 @@ Formula.prototype = {
             }
 
             if (pro == "常用公式") {
-                arrContent.push('<div class="mathBox">' + arrChar.join('') + '</div>');
+                arrContent.push('<div>' + arrChar.join('') + '</div>');
             } else {
-                arrContent.push('<div class="mathBox" style="display: none;">' + arrChar.join('') + '</div>');
+                arrContent.push('<div style="display: none;">' + arrChar.join('') + '</div>');
             }
 
             //重置数据
@@ -58,15 +58,15 @@ Formula.prototype = {
         content.innerHTML = arrContent.join('');
     },
     initEditArea:function () {
-        var rng=editor.selection.getRange();
+        var rng = editor.selection.getRange();
         var fnInline = function (node) {
             return domUtils.findParent(node, function (node) {
                 return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'mathquill-rendered-math')
             }, true);
         };
-        var node= fnInline(rng.startContainer),txt="";
-        if(node){
-            txt=decodeURIComponent(node.getAttribute("data"));
+        var node = fnInline(rng.startContainer), txt = "";
+        if (node) {
+            txt = decodeURIComponent(node.getAttribute("data"));
         }
         $("#J_editArea")
             .html("")
@@ -93,32 +93,39 @@ Formula.prototype = {
         return "background-position:" + vertical + "px " + horizontal + "px;"
     },
     showTab:function (evt) {
-        var tgt = evt.target || evt.srcElement;
-        var index = domUtils.getNodeIndex(tgt);
-        var list = $G('J_tabContent').children;
+        var tgt = evt.target || evt.srcElement,
+            index = domUtils.getNodeIndex(tgt),
+            listTitle = $G('J_tabTitle').children,
+            listContent = $G('J_tabContent').children;
 
-        for (var i = 0, node; node = list[i++];) {
-            node.style.display = (i - 1) == index ? "" : "none";
+        for (var i = 0,len=listTitle.length; i <len;i++) {
+            if (i  == index) {
+                domUtils.addClass(listTitle[i],"cur");
+                listContent[i].style.display = "";
+            } else {
+                domUtils.removeClasses(listTitle[i],["cur"]);
+                listContent[i].style.display = "none";
+            }
         }
     },
-    format:function(node){
-        domUtils.setAttributes(node,{
+    format:function (node) {
+        domUtils.setAttributes(node, {
             "data":encodeURIComponent($("#J_editArea").mathquill("latex")),
             "mark":"formula"
         });
-        domUtils.removeAttributes(node,['id','mathquill-block-id']);
-        domUtils.removeClasses(node,"mathquill-editable")
+        domUtils.removeAttributes(node, ['id', 'mathquill-block-id']);
+        domUtils.removeClasses(node, "mathquill-editable")
     },
     insert:function (txt) {
         $("#J_editArea")
             .focus()
-            .mathquill("write", txt.replace("{/}","\\"));
+            .mathquill("write", txt.replace("{/}", "\\"));
     }
 };
 var obj = new Formula();
 
-dialog.onok=function(){
-    var editArea=$G('J_editArea');
+dialog.onok = function () {
+    var editArea = $G('J_editArea');
     obj.format(editArea);
     editor.execCommand('math', editArea.outerHTML);
 };
