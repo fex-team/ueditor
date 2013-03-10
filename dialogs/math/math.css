@@ -1,0 +1,40 @@
+li{float:left;list-style:none;}
+div{float: left;width: 100%;}
+.tabMenu{
+    border:solid #E1E6E6 1px;
+    width:320px;
+    background-color:white;
+}
+.tabTitle li{
+    cursor:pointer;
+}
+.tabTitle li.cur{
+    background-color:white;
+    border-top:solid #E1E6E6 1px;
+    border-left:solid #E1E6E6 1px;
+    border-right:solid #E1E6E6 1px;
+}
+.tabTitle{
+    padding-left:10px;
+    width:310px;
+    background:blue;
+    opacity: 0.6;
+}
+.tabTitle li{
+    padding:2px;
+    margin-top:5px;
+    padding-bottom:7px;
+    width:80px;
+    text-align:center;
+    line-height:16px;
+}
+.tabContent li{
+    width:30px;
+    height:30px;
+    margin:5px;
+    background-image:url(img/math.png);
+    background-repeat: no-repeat;
+}
+.editCon{
+    margin-top: 10px;
+}
