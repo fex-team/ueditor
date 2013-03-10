@@ -17,7 +17,9 @@ UE.commands['preview'] = {
             "setTimeout(function(){uParse('div',{" +
             "    'highlightJsUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCore.js'," +
                 "    'highlightCssUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCoreDefault.css'," +
-            "    'formulaUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/MathJax/MathJax.js?config=TeX-AMS_HTML'" +
+            "    'mathCssUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/mathquill-0.9.1/mathquill.css'," +
+            "    'jqueryUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/mathquill-0.9.1/jquery-1.8.3.min.js'," +
+            "    'mathJsUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/mathquill-0.9.1/mathquill.min.js'" +
             "})},300)" +
             '</script></head><body><div>'+this.getContent(null,null,true)+'</div></body></html>');
         d.close();

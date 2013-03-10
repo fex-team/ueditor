@@ -280,3 +280,8 @@
     width: 1060px;
     height: 500px;
 }
+/*math-dialog*/
+.edui-default .edui-for-math .edui-dialog-content {
+    width: 350px;
+    height: 350px;
+}

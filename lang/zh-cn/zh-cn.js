@@ -480,6 +480,10 @@ UE.I18N['zh-cn'] = {
         'static':{
         }
     },
+    'math':{
+        'static':{
+        }
+    },
     'wordimage':{
         'static':{
             lang_resave:"转存步骤",
