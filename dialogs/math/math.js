@@ -35,7 +35,11 @@ Formula.prototype = {
         var arrTitle = [], arrContent = [], arrChar = [], x = 0, y = 0;
 
         for (var pro in me.config) {
-            arrTitle.push("<li onclick=\"obj.showTab(event)\">" + pro + "</li>");
+            if (pro == "常用公式") {
+                arrTitle.push("<li class='cur' onclick=\"obj.showTab(event)\">" + pro + "</li>");
+            } else {
+                arrTitle.push("<li onclick=\"obj.showTab(event)\">" + pro + "</li>");
+            }
 
             var charArr = me.config[pro];
             for (var i = 0, tmp; tmp = charArr[i++];) {
