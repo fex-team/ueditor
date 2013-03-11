@@ -5,7 +5,7 @@
 ///commandsTitle  插入公式
 ///commandsDialog  dialogs\math\math.html
 
-UE.plugins['math'] = function () {
+UE.plugins['formula'] = function () {
     var me = this;
 
     var fnInline = function (node) {
@@ -16,7 +16,7 @@ UE.plugins['math'] = function () {
 
     var fnBlock = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'mathBlock')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'formulaBlock')
         }, true);
     };
 
@@ -40,10 +40,26 @@ UE.plugins['math'] = function () {
 
     me.addListener("ready", function () {
         utils.loadFile(me.document, {
+            id:"mathquill_css",
             tag:"link",
             rel:"stylesheet",
             type:"text/css",
-            href:me.options.mathCssUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill-0.9.1/mathquill.css"
+            href:me.options.formulaCssUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill-0.9.1/mathquill.css"
+        });
+        utils.loadFile(me.document,{
+            id : "jquery-1.8.3.min.js",
+            src : me.options.jqueryUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill-0.9.1/jquery-1.8.3.min.js",
+            tag : "script",
+            type : "text/javascript",
+            defer : "defer"
+        },function(){
+            utils.loadFile(me.document,{
+                id : "mathquill_js",
+                src : me.options.formulaJsUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill-0.9.1/mathquill.js",
+                tag : "script",
+                type : "text/javascript",
+                defer : "defer"
+            },
         });
     });
 
@@ -111,9 +127,9 @@ UE.plugins['math'] = function () {
         preview:1,
         insertparagraph:1,
         elementpath:1,
-        math:1,
-        mathblock:1,
-        mathinline:1
+        formula:1,
+        formulablock:1,
+        formulainline:1
     };
 
     //将queyCommamndState重置
@@ -153,7 +169,7 @@ UE.plugins['math'] = function () {
         }
     });
 
-    me.commands['math'] = {
+    me.commands['formula'] = {
         execCommand:function (cmdName, html) {
             var range = me.selection.getRange();
             range.adjustmentBoundary();
@@ -169,7 +185,7 @@ UE.plugins['math'] = function () {
             });
 
             if (html) {
-                html = '<p class="mathBlock" style="text-align: center;">' + html + '</p>';
+                html = '<p class="formulaBlock" style="text-align: center;">' + html + '</p>';
                 me.execCommand('inserthtml', html);
             }
         },
@@ -178,7 +194,7 @@ UE.plugins['math'] = function () {
         }
     };
 
-    me.commands['mathinline'] = {
+    me.commands['formulainline'] = {
         execCommand:function () {
             var range = me.selection.getRange();
             range.adjustmentBoundary();
@@ -215,7 +231,7 @@ UE.plugins['math'] = function () {
         }
     };
 
-    me.commands['mathblock'] = {
+    me.commands['formulablock'] = {
         execCommand:function () {
             var range = me.selection.getRange();
             range.adjustmentBoundary();
@@ -228,8 +244,8 @@ UE.plugins['math'] = function () {
                 }, false));
 
                 var p = domUtils.createElement(document, "p", {
-//                    style:"text-align:center",
-//                    class:"mathBlock"
+                    style:"text-align:center",
+                    class:"formulaBlock"
                 });
                 start.parentNode.replaceChild(p, start);
                 p.appendChild(start)

@@ -181,8 +181,8 @@ function uParse(selector, opt) {
         listDefaultPaddingLeft:'20',
         'highlightJsUrl':'',
         'highlightCssUrl':'',
-        'mathCssUrl':'',
-        'mathJsUrl':'',
+        'formulaCssUrl':'',
+        'formulaJsUrl':'',
         'jqueryUrl':'',
         customRule:function () {
         }
@@ -361,7 +361,7 @@ function uParse(selector, opt) {
                             tag:"link",
                             rel:"stylesheet",
                             type:"text/css",
-                            href:defaultOption.mathCssUrl
+                            href:defaultOption.formulaCssUrl
                         });
                         loadFile(document, {
                             tag:"script",
@@ -371,7 +371,7 @@ function uParse(selector, opt) {
                             loadFile(document, {
                                 tag:"script",
                                 type:"text/javascript",
-                                src:defaultOption.mathJsUrl
+                                src:defaultOption.formulaJsUrl
                             });
                         });
                 }

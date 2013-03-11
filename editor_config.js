@@ -293,12 +293,9 @@
 
         //formula
         // 数学公式时需要加载的第三方插件的路径
-        // ,formulaUrl:URL + "third-party/MathJax/MathJax.js?config=TeX-AMS_HTML""
-
-
-        //math
-        // 数学公式时需要加载的第三方插件的路径
-        // ,mathCssUrl:URL + "third-party/mathquill-0.9.1/mathquill.css"
+        // ,formulaCssUrl:URL + "third-party/mathquill-0.9.1/mathquill.css"
+        // ,jqueryUrl:URL + "third-party/mathquill-0.9.1/jquery-1.8.3.min.js"
+        // ,formulaJsUrl:URL + "third-party/mathquill-0.9.1/mathquill.min.js"
 
         //tab
         //点击tab键时移动的距离,tabSize倍数，tabNode什么字符做为单位

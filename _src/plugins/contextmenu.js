@@ -360,11 +360,11 @@ UE.plugins['contextmenu'] = function () {
                     }
                 },{
                     label:"更改为显示",
-                    cmdName:'mathblock'
+                    cmdName:'formulablock'
                 },
                 {
                     label:"更改为内嵌",
-                    cmdName:'mathinline'
+                    cmdName:'formulainline'
                 }
             ];
     if ( !items.length ) {
