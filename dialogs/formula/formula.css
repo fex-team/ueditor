@@ -1,56 +1,41 @@
-.importBar {
+li{float:left;list-style:none;}
+.wrapper{
+    margin: 10px auto;
+    width: 320px;
+}
+.wrapper div{
+    float: left;
     width: 100%;
 }
-
-.symbol {
-    margin: 10px;
+.tabMenu{
+    border:solid #E1E6E6 1px;
+    background-color:white;
 }
-
-.importBar .symbol table {
-    border-collapse: separate;
-    border-spacing: 2px;
-}
-
-.symbol td {
-    width: 30px;
+.tabTitle li{
+    padding: 0 5px;
     height: 30px;
-    border: 0;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 5px;
     cursor: pointer;
 }
-
-.symbol td:hover {
-    background-color: #a3bde3;
-    opacity: 0.6;
-    filter: alpha(opacity = 60);
+.tabTitle li.cur{
+    background: #fff;
+    font-weight: bold;
 }
-
-textarea {
-    width: 98%;
-    margin: 0 auto;
-    display: block;
-    overflow: auto;
+.tabContent{
+    border: 1px solid #ccc;
 }
-
-.title {
-    margin: 5px 0 5px 10px;
+.tabContent li{
+    width:30px;
+    height:30px;
+    margin:5px;
+    background-image:url(img/formula.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
 }
-
-.sym1 {
-    background: url(img/img.gif) no-repeat;
-}
-
-.sym2 {
-    background: url(img/img.gif) 0 -64px no-repeat;
-}
-
-.sym3 {
-    background: url(img/img.gif) 0 -96px no-repeat;
-}
-
-.sym4 {
-    background: url(img/img.gif) 0 -128px no-repeat;
-}
-
-.sym5 {
-    background: url(img/cmd.gif) no-repeat;
+.editCon{
+    margin-top: 10px;
 }

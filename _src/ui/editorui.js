@@ -53,7 +53,6 @@
         'snapscreen':'~/dialogs/snapscreen/snapscreen.html',
         'scrawl':'~/dialogs/scrawl/scrawl.html',
         'formula':'~/dialogs/formula/formula.html',
-        'math':'~/dialogs/math/math.html',
         'music':'~/dialogs/music/music.html',
         'template':'~/dialogs/template/template.html',
         'background':'~/dialogs/background/background.html'
@@ -184,7 +183,7 @@
     var dialogBtns = {
         noOk:['searchreplace', 'help', 'spechars', 'webapp'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-            'insertvideo', 'highlightcode', 'insertframe','edittip','edittable', 'edittd','scrawl', 'template','music', 'background','formula','math']
+            'insertvideo', 'highlightcode', 'insertframe','edittip','edittable', 'edittd','scrawl', 'template','music', 'background','formula']
 
     };
 

@@ -1,22 +1,22 @@
 ///import core
 ///import commands/inserthtml.js
 ///commands 插入公式
-///commandsName  insertFormula
+///commandsName  insertmath
 ///commandsTitle  插入公式
-///commandsDialog  dialogs\formula\formula.html
+///commandsDialog  dialogs\math\math.html
 
-UE.plugins['formula'] = function () {
+UE.plugins['math'] = function () {
     var me = this;
 
     var fnInline = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'MathJax')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' &&  domUtils.hasClass(node, 'mathquill-rendered-math')
         }, true);
     };
 
     var fnBlock = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'MJBlock')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'mathBlock')
         }, true);
     };
 
@@ -37,6 +37,15 @@ UE.plugins['formula'] = function () {
             callback();
         }
     };
+
+    me.addListener("ready", function () {
+        utils.loadFile(me.document, {
+            tag:"link",
+            rel:"stylesheet",
+            type:"text/css",
+            href:me.options.mathCssUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill-0.9.1/mathquill.css"
+        });
+    });
 
     function toInline(node, ignorePre, ignoreNext) {
         function merge(rtl, start, node) {
@@ -73,7 +82,6 @@ UE.plugins['formula'] = function () {
     function queryState() {
         try {
             var range = this.selection.getRange();
-            range.adjustmentBoundary();
             var start = fnInline(range.startContainer);
             end = fnInline(range.endContainer);
             if (start && end && start == end) {
@@ -90,7 +98,7 @@ UE.plugins['formula'] = function () {
     }
 
     //不需要判断highlight的command列表
-    me.notNeedFormulaQuery = {
+    me.notNeedmathQuery = {
         help:1,
         undo:1,
         redo:1,
@@ -103,51 +111,50 @@ UE.plugins['formula'] = function () {
         preview:1,
         insertparagraph:1,
         elementpath:1,
-        formula:1,
-        formulablock:1,
-        formulainline:1
+        math:1,
+        mathblock:1,
+        mathinline:1
     };
 
     //将queyCommamndState重置
     var orgQuery = me.queryCommandState;
     me.queryCommandState = function (cmd) {
-        if (!me.notNeedFormulaQuery[cmd.toLowerCase()] && queryState.call(this) == 1) {
+        if (!me.notNeedmathQuery[cmd.toLowerCase()] && queryState.call(this) == 1) {
             return -1;
         }
         return orgQuery.apply(this, arguments)
     };
 
     me.addOutputRule(function (root) {
-        me._MathJaxList = [];
+        me._mathList = [];
 
         utils.each(root.getNodesByTagName('span'), function (pi) {
             var cls;
-            if ((cls = pi.getAttr('class')) && /MathJax/.test(cls)) {
+            if ((cls = pi.getAttr('class')) && /mathquill-rendered-math/.test(cls)) {
                 var span = UE.uNode.createElement("span");
-                span.setAttr("class", "MathJax");
+                span.setAttr("class", "mathquill-embedded-latex");
                 var txtNode = UE.uNode.createText(decodeURIComponent(pi.getAttr('data')));
                 span.appendChild(txtNode);
 
-                me._MathJaxList.push(UE.uNode.createElement(pi.toHtml()));
+                me._mathList.push(UE.uNode.createElement(pi.toHtml()));
                 pi.parentNode.replaceChild(span, pi);
             }
         });
     });
 
     me.addInputRule(function (root) {
-        if (me._MathJaxList && me._MathJaxList.length) {
-            var i = 0;
-            utils.each(root.getNodesByTagName('span'), function (pi) {
+        if (me._mathList && me._mathList.length) {
+            utils.each(root.getNodesByTagName('span'), function (pi,i) {
                 var val;
-                if ((val = pi.getAttr('class')) && /MathJax/.test(val)) {
-                    pi.parentNode.replaceChild(me._MathJaxList[i++], pi);
+                if ((val = pi.getAttr('class')) && /mathquill-embedded-latex/.test(val)) {
+                    pi.parentNode.replaceChild(me._mathList[i++], pi);
                 }
             });
         }
     });
 
-    me.commands['formula'] = {
-        execCommand:function (cmdName, html, css) {
+    me.commands['math'] = {
+        execCommand:function (cmdName, html) {
             var range = me.selection.getRange();
             range.adjustmentBoundary();
             var start = fnBlock(range.startContainer);
@@ -157,15 +164,13 @@ UE.plugins['formula'] = function () {
                 start = fnInline(range.startContainer);
                 end = fnInline(range.endContainer);
             }
-
             setCursorPos(range, start, end, function () {
                 domUtils.remove(start);
             });
 
-            if (html && css) {
-                html = '<p class="MJBlock" style="text-align: center;">' + html + '</p>';
+            if (html) {
+                html = '<p class="mathBlock" style="text-align: center;">' + html + '</p>';
                 me.execCommand('inserthtml', html);
-                utils.cssRule('formula', css, me.document);
             }
         },
         queryCommandState:function () {
@@ -173,7 +178,7 @@ UE.plugins['formula'] = function () {
         }
     };
 
-    me.commands['formulainline'] = {
+    me.commands['mathinline'] = {
         execCommand:function () {
             var range = me.selection.getRange();
             range.adjustmentBoundary();
@@ -210,7 +215,7 @@ UE.plugins['formula'] = function () {
         }
     };
 
-    me.commands['formulablock'] = {
+    me.commands['mathblock'] = {
         execCommand:function () {
             var range = me.selection.getRange();
             range.adjustmentBoundary();
@@ -223,8 +228,8 @@ UE.plugins['formula'] = function () {
                 }, false));
 
                 var p = domUtils.createElement(document, "p", {
-                    style:'text-align:center',
-                    class:'MJBlock'
+//                    style:"text-align:center",
+//                    class:"mathBlock"
                 });
                 start.parentNode.replaceChild(p, start);
                 p.appendChild(start)

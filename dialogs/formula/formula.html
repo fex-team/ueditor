@@ -1,219 +1,33 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>插入公式</title>
     <link rel="stylesheet" type="text/css" href="formula.css">
     <script type="text/javascript" src="../internal.js"></script>
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-        showMathMenu: false
-        });
-    </script>
-    <script type="text/javascript" src="../../third-party/MathJax/MathJax.js?config=TeX-AMS_HTML"></script>
-</head>
 
+    <link rel="stylesheet" type="text/css" href="../../third-party/mathquill-0.9.1/mathquill.css">
+    <script src="../../third-party/mathquill-0.9.1/jquery-1.8.3.min.js"></script>
+    <script src="../../third-party/mathquill-0.9.1/mathquill.min.js"></script>
+</head>
 <body>
-<table id="J_importBar" class="importBar" border="0" cellpadding="0" cellspacing="0">
-    <tr>
-        <td>
-            <div class="symbol">
-                <table class="sym1">
-                    <tr>
-                        <td data="\alpha"></td>
-                        <td data="\beta"></td>
-                        <td data="\gamma"></td>
-                        <td data="\delta"></td>
-                        <td data="\epsilon"></td>
-                        <td data="\varepsilon"></td>
-                        <td data="\zeta"></td>
-                        <td data="\eta"></td>
-                        <td data="\theta"></td>
-                        <td data="\vartheta"></td>
-                        <td data="\iota"></td>
-                        <td data="\kappa"></td>
-                        <td data="\lambda"></td>
-                        <td data="\mu"></td>
-                        <td data="\nu"></td>
-                        <td data="\xi"></td>
-                        <td data="\pi"></td>
-                        <td data="\varpi"></td>
-                        <td data="\rho"></td>
-                        <td data="\varrho"></td>
-                        <td data="\sigma"></td>
-                        <td data="\varsigma"></td>
-                        <td data="\tau"></td>
-                        <td data="\upsilon"></td>
-                        <td data="\phi"></td>
-                        <td data="\varphi"></td>
-                        <td data="\chi"></td>
-                        <td data="\psi"></td>
-                        <td data="\omega"></td>
-                    </tr>
-                </table>
-                <table class="sym2">
-                    <tr>
-                        <td data="\pm"></td>
-                        <td data="\mp"></td>
-                        <td data="\times"></td>
-                        <td data="\div"></td>
-                        <td data="\ast"></td>
-                        <td data="\star"></td>
-                        <td data="\circ"></td>
-                        <td data="\bullet"></td>
-                        <td data="\cdot"></td>
-                        <td data="\oplus"></td>
-                        <td data="\bigoplus"></td>
-                        <td data="\ominus"></td>
-                        <td data="\otimes"></td>
-                        <td data="\bigotimes"></td>
-                        <td data="\oslash"></td>
-                        <td data="\odot"></td>
-                        <td data="\bigodot"></td>
-                        <td data="\biguplus"></td>
-                        <td data="\exists"></td>
-                        <td data="\ni"></td>
-                        <td data="\forall"></td>
-                        <td data="\neg"></td>
-                    </tr>
-                </table>
-                <table class="sym3">
-                    <tr>
-                        <td data="\in"></td>
-                        <td data="\emptyset"></td>
-                        <td data="\subset"></td>
-                        <td data="\supset"></td>
-                        <td data="\subseteq"></td>
-                        <td data="\supseteq"></td>
-                        <td data="\subseteqq"></td>
-                        <td data="\supseteqq"></td>
-                        <td data="\subsetneq"></td>
-                        <td data="\supsetneq"></td>
-                        <td data="\subsetneqq"></td>
-                        <td data="\supsetneqq"></td>
-                        <td data="\varsubsetneq"></td>
-                        <td data="\varsupsetneq"></td>
-                        <td data="\varsubsetneqq"></td>
-                        <td data="\varsupsetneqq"></td>
-                        <td data="\nsubseteq"></td>
-                        <td data="\nsupseteq"></td>
-                        <td data="\nsupseteqq"></td>
-                        <td data="\sqsubset"></td>
-                        <td data="\sqsupset"></td>
-                        <td data="\sqsubseteq"></td>
-                        <td data="\sqsupseteq"></td>
-                        <td data="\Subset"></td>
-                        <td data="\Supset"></td>
-                        <td data="\bigcap"></td>
-                        <td data="\bigcup"></td>
-                        <td data="\bigsqcup"></td>
-                        <td data="\bigvee"></td>
-                        <td data="\bigwedge"></td>
-                    </tr>
-                </table>
-                <table class="sym4">
-                    <tr>
-                        <td data="="></td>
-                        <td data="<"></td>
-                        <td data=">"></td>
-                        <td data="\leq"></td>
-                        <td data="\geq"></td>
-                        <td data="\leqq"></td>
-                        <td data="\geqq"></td>
-                        <td data="\leqslant"></td>
-                        <td data="\geqslant"></td>
-                        <td data="\neq"></td>
-                        <td data="\lneq"></td>
-                        <td data="\gneq"></td>
-                        <td data="\lneqq"></td>
-                        <td data="\gneqq"></td>
-                        <td data="\lvertneqq"></td>
-                        <td data="\gvertneqq"></td>
-                        <td data="\nleq"></td>
-                        <td data="\ngeq"></td>
-                        <td data="\nleqslant"></td>
-                        <td data="\ngeqslant"></td>
-                        <td data="\nleqq"></td>
-                        <td data="\ngeqq"></td>
-                    </tr>
-                </table>
-                <table class="sym5">
-                    <tr>
-                        <td data="{x}^{a}"></td>
-                        <td data="{x}_{b}"></td>
-                        <td data="{}^{a}_{b}x"></td>
-                        <td data="\overset{a}{X}"></td>
-                        <td data="\underset{b}{X}"></td>
-                        <td data="\frac{a}{b}"></td>
-                        <td data="\binom{n}{r}"></td>
-                        <td data="\frac{\partial y}{\partial x}"></td>
-                        <td data="\sqrt{x}"></td>
-                        <td data="\sqrt[n]{x}"></td>
-                        <td data="\sum_{n=0}^{\infty}"></td>
-                        <td data="\prod_{n=1}^{\infty}"></td>
-                        <td data="\int_{a}^{b}"></td>
-                        <td data="\oint_{1}^{n}"></td>
-                        <td data="\iint_{1}^{2}"></td>
-                        <td data="\iiint"></td>
-                        <td data="\log_{e} x^{2}"></td>
-                        <td data="\lim_{n \to \infty}"></td>
-                        <td data="{e}^{-i \theta}"></td>
-                        <td data="\left( \right)"></td>
-                        <td data="\left[ \right]"></td>
-                        <td data="\left| \right|"></td>
-                        <td data="\left\| \right\|"></td>
-                        <td data="\left\{ \right\}"></td>
-                        <td data="\begin{cases}
- & \text{ if } x=  \\ 
- & \text{ if } x= 
- \end{cases}"></td>
-                        <td data="\begin{matrix}
-  a & b \\ 
- c & d 
-\end{matrix}"></td>
-                        <td data="\begin{bmatrix}
-  \cdots &  &  \\ 
-   & \cdots &  \\ 
-   &  & \cdots 
- \end{bmatrix}"></td>
-                        <td data="\begin{pmatrix}
- \ a & b \\ 
- c & d 
-\end{pmatrix}"></td>
-                        <td data="\begin{bmatrix}
- \ a & b \\ 
- c & d 
-\end{bmatrix}"></td>
-                        <td data="\begin{vmatrix}
- \ a & b \\ 
- c & d 
-\end{vmatrix}"></td>
-                        <td data="\begin{Vmatrix}
- \ a & b \\ 
- c & d 
-\end{Vmatrix}"></td>
-                        <td data="\begin{Bmatrix}
- \ a & b \\ 
- c & d 
-\end{Bmatrix}"></td>
-                    </tr>
-                </table>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <div class="title">公式输入：</div>
-            <textarea id="J_textarea" class="textarea" rows="8"></textarea>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <div class="title">公式预览：</div>
-            <div id="J_outputBar">$${}$$</div>
-        </td>
-    </tr>
-</table>
+
+<div class="wrapper">
+    <div class="tabHead" id="J_tabMenu">
+        <div class="tabTitle" id="J_tabTitle">
+        </div>
+        <div class="tabContent" id="J_tabContent">
+        </div>
+    </div>
+
+    <div id="J_editCon" class="editCon">
+        <p>
+            <span id="J_editArea"></span>
+        </p>
+    </div>
+</div>
+
+
+
 <script type="text/javascript" src="formula.js"></script>
 </body>
 </html>
