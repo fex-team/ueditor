@@ -61,3 +61,8 @@ test( '裸字', function() {
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'sdfasdfasdf');
 
 });
+test( '只有结束标签的情况', function() {
+    var root = UE.htmlparser('<p>hello1</a></p><p>hello2</p>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<p>hello1</p><p>hello2</p>');
+
+});

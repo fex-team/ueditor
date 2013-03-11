@@ -463,3 +463,11 @@ test( 'trace 721：预先设置下划线和字体颜色，再输入文本，查�
     }
 } );
 
+test( '转换font标签', function () {
+    var serialize = te.obj[0].serialize;
+    var html = '<font size="3" color="red"><b><i>x</i></b></font>';
+    var node = serialize.parseHTML( html );
+    node = serialize.transformInput( node );
+    equal( serialize.toHTML( node ), '<span style="font-size:16px;color:red;"><strong><em>x</em></strong></span>' , '转换font标签');
+} );
+

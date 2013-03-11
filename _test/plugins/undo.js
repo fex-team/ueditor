@@ -578,3 +578,32 @@ test( 'trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动�
 //			editor.execCommand('Undo');
 //			equals(getHTML(editor.document.body), 'test');
 //		});
+
+test( 'ctrl+z/y', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var body = editor.body;
+    editor.setContent( '<p>没有加粗的文本</p>' );
+    range.selectNode( body.firstChild ).select();
+    var p = body.firstChild;
+
+    editor.focus();
+    setTimeout( function() {
+        ua.keydown(editor.body,{'keyCode':66,'ctrlKey':true});
+        setTimeout( function() {
+            equal( ua.getChildHTML( p ), '<strong>没有加粗的文本</strong>' );
+            ua.keydown(editor.body,{'keyCode':90,'ctrlKey':true});
+            setTimeout( function() {
+                editor.focus();
+                equal( ua.getChildHTML( body.firstChild ), '没有加粗的文本' );
+                ua.keydown(editor.body,{'keyCode':89,'ctrlKey':true});
+                editor.focus();
+                setTimeout( function() {
+                    equal( ua.getChildHTML( body.firstChild ), '<strong>没有加粗的文本</strong>' );
+                    start();
+                }, 100 );
+            }, 100 );
+        }, 150 );
+    }, 100 );
+    stop();
+} );
