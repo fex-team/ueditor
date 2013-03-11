@@ -12,7 +12,7 @@ test('自动长高',function(){
         var height=editor.body.style.height;
         editor.setContent('<br/>nmnmknmm,<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>');
         setTimeout(function(){
-            ok(height!=editor.body.offsetHeight,'自动长高');
+            ok(height!=editor.body.offsetHeight+'px','自动长高');
             editor.disableAutoHeight();
             editor.body.style.height=height;
             editor.setContent('<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>');
