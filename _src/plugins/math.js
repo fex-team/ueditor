@@ -144,8 +144,7 @@ UE.plugins['math'] = function () {
 
     me.addInputRule(function (root) {
         if (me._mathList && me._mathList.length) {
-            var i = 0;
-            utils.each(root.getNodesByTagName('span'), function (pi) {
+            utils.each(root.getNodesByTagName('span'), function (pi,i) {
                 var val;
                 if ((val = pi.getAttr('class')) && /mathquill-embedded-latex/.test(val)) {
                     pi.parentNode.replaceChild(me._mathList[i++], pi);
@@ -229,8 +228,8 @@ UE.plugins['math'] = function () {
                 }, false));
 
                 var p = domUtils.createElement(document, "p", {
-                    style:'text-align:center',
-                    class:'mathBlock'
+//                    style:"text-align:center",
+//                    class:"mathBlock"
                 });
                 start.parentNode.replaceChild(p, start);
                 p.appendChild(start)

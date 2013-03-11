@@ -37,14 +37,14 @@ Formula.prototype = {
 
         for (var pro in me.config) {
             if (pro == "常用公式") {
-                arrTitle.push("<li class='cur' onclick=\"obj.showTab(event)\">" + pro + "</li>");
+                arrTitle.push("<li class='cur' onclick=\"formula.showTab(event)\">" + pro + "</li>");
             } else {
-                arrTitle.push("<li onclick=\"obj.showTab(event)\">" + pro + "</li>");
+                arrTitle.push("<li onclick=\"formula.showTab(event)\">" + pro + "</li>");
             }
 
             var charArr = me.config[pro];
             for (var i = 0, tmp; tmp = charArr[i++];) {
-                arrChar.push("<li onclick=\"obj.insert('" + tmp + "')\" style='" + me._addStyle(x, y) + "'></li>");
+                arrChar.push("<li onclick=\"formula.insert('" + tmp + "')\" style='" + me._addStyle(x, y) + "'></li>");
                 y += 1;
             }
 
@@ -119,7 +119,8 @@ Formula.prototype = {
             "mark":"formula"
         });
         domUtils.removeAttributes(node, ['id', 'mathquill-block-id']);
-        domUtils.removeClasses(node, "mathquill-editable")
+        domUtils.removeClasses(node, "mathquill-editable");
+        domUtils.remove(domUtils.getElementsByTagName(node,"textarea")[0])
     },
     insert:function (txt) {
         $("#J_editArea")
@@ -127,10 +128,10 @@ Formula.prototype = {
             .mathquill("write", txt.replace("{/}", "\\"));
     }
 };
-var obj = new Formula();
+var formula = new Formula;
 
 dialog.onok = function () {
     var editArea = $G('J_editArea');
-    obj.format(editArea);
+    formula.format(editArea);
     editor.execCommand('math', editArea.outerHTML);
 };
