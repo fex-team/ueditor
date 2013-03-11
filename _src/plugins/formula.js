@@ -10,7 +10,7 @@ UE.plugins['formula'] = function () {
 
     var fnInline = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' &&  domUtils.hasClass(node, 'mathquill-rendered-math')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'mathquill-rendered-math')
         }, true);
     };
 
@@ -44,22 +44,22 @@ UE.plugins['formula'] = function () {
             tag:"link",
             rel:"stylesheet",
             type:"text/css",
-            href:me.options.formulaCssUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill-0.9.1/mathquill.css"
+            href:me.options.formulaCssUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill/mathquill.css"
         });
-        utils.loadFile(me.document,{
-            id : "jquery-1.8.3.min.js",
-            src : me.options.jqueryUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill-0.9.1/jquery-1.8.3.min.js",
-            tag : "script",
-            type : "text/javascript",
-            defer : "defer"
-        },function(){
-            utils.loadFile(me.document,{
-                id : "mathquill_js",
-                src : me.options.formulaJsUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill-0.9.1/mathquill.js",
-                tag : "script",
-                type : "text/javascript",
-                defer : "defer"
-            },
+        utils.loadFile(me.document, {
+            id:"jquery-1.8.3.min_js",
+            src:me.options.jqueryUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill/jquery-1.8.3.min.js",
+            tag:"script",
+            type:"text/javascript",
+            defer:"defer"
+        }, function () {
+            utils.loadFile(me.document, {
+                id:"mathquill_js",
+                src:me.options.formulaJsUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill/mathquill.min.js",
+                tag:"script",
+                type:"text/javascript",
+                defer:"defer"
+            });
         });
     });
 
@@ -160,7 +160,7 @@ UE.plugins['formula'] = function () {
 
     me.addInputRule(function (root) {
         if (me._mathList && me._mathList.length) {
-            utils.each(root.getNodesByTagName('span'), function (pi,i) {
+            utils.each(root.getNodesByTagName('span'), function (pi, i) {
                 var val;
                 if ((val = pi.getAttr('class')) && /mathquill-embedded-latex/.test(val)) {
                     pi.parentNode.replaceChild(me._mathList[i++], pi);
