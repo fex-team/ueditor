@@ -248,7 +248,7 @@ test( 'ctrl+u', function() {
         range.selectNode( body.firstChild ).select();
         editor.focus();
         setTimeout( function() {
-            var html = '<span style="text-decoration: underline">没有加粗的文本</span>';
+            var html = '<span style="text-decoration: underline;">没有加粗的文本</span>';
             ua.checkHTMLSameStyle( html, editor.document, body.firstChild, '文本被添加了下划线' );
             equal(ua.getChildHTML(editor.body.firstChild),html);
             start();
