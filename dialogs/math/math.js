@@ -20,119 +20,117 @@ var Formula = function (cfg) {
 
     this.init(cfg);
 };
-(function(){
-    var editArea = $G('J_editArea');
 
-    Formula.prototype = {
-        init:function () {
-            editor._mathList = [];
-            this.initTab();//初始化tab
-            this.initEditArea();//初始化编辑区域
-        },
-        initTab:function () {
-            var me = this,
-                container = $G("J_tabMenu"),
-                title = container.children[0],
-                content = container.children[1];
+Formula.prototype = {
+    init:function () {
+        editor._mathList = [];
+        this.initTab();//初始化tab
+        this.initEditArea();//初始化编辑区域
+    },
+    initTab:function () {
+        var me = this,
+            container = $G("J_tabMenu"),
+            title = container.children[0],
+            content = container.children[1];
 
-            var arrTitle = [], arrContent = [], arrChar = [], x = 0, y = 0;
+        var arrTitle = [], arrContent = [], arrChar = [], x = 0, y = 0;
 
-            for (var pro in me.config) {
-                if (pro == "常用公式") {
-                    arrTitle.push("<li class='cur' onclick=\"obj.showTab(event)\">" + pro + "</li>");
-                } else {
-                    arrTitle.push("<li onclick=\"obj.showTab(event)\">" + pro + "</li>");
-                }
-
-                var charArr = me.config[pro];
-                for (var i = 0, tmp; tmp = charArr[i++];) {
-                    arrChar.push("<li onclick=\"obj.insert('" + tmp + "')\" style='" + me._addStyle(x, y) + "'></li>");
-                    y += 1;
-                }
-
-                if (pro == "常用公式") {
-                    arrContent.push('<div>' + arrChar.join('') + '</div>');
-                } else {
-                    arrContent.push('<div style="display: none;">' + arrChar.join('') + '</div>');
-                }
-
-                //重置数据
-                arrChar = [];
-                x += 1;
-                y = 0;
-            }
-            title.innerHTML = arrTitle.join('');
-            content.innerHTML = arrContent.join('');
-        },
-        initEditArea:function () {
-            var rng = editor.selection.getRange();
-            var fnInline = function (node) {
-                return domUtils.findParent(node, function (node) {
-                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'mathquill-rendered-math')
-                }, true);
-            };
-            var node = fnInline(rng.startContainer), txt = "";
-            if (node) {
-                txt = decodeURIComponent(node.getAttribute("data"));
-            }
-            $("#J_editArea")
-                .html("")
-                .css("font-size", domUtils.getComputedStyle(editor.body, "font-size"))
-                .mathquill('editable')
-                .mathquill('write', txt);
-        },
-        _addStyle:function (x, y) {
-            var vertical, horizontal, row, col, CONSTANT = 34;
-            if (x == 0) {
-                row = 8;
-            } else if (x == 1) {
-                row = 5;
+        for (var pro in me.config) {
+            if (pro == "常用公式") {
+                arrTitle.push("<li class='cur' onclick=\"obj.showTab(event)\">" + pro + "</li>");
             } else {
-                row = 0;
+                arrTitle.push("<li onclick=\"obj.showTab(event)\">" + pro + "</li>");
             }
 
-            row += Math.floor(y / 8);
-            col = y % 8;
-
-            vertical = -(CONSTANT * col);
-            horizontal = -(CONSTANT * row);
-
-            return "background-position:" + vertical + "px " + horizontal + "px;"
-        },
-        showTab:function (evt) {
-            var tgt = evt.target || evt.srcElement,
-                index = domUtils.getNodeIndex(tgt),
-                listTitle = $G('J_tabTitle').children,
-                listContent = $G('J_tabContent').children;
-
-            for (var i = 0,len=listTitle.length; i <len;i++) {
-                if (i  == index) {
-                    domUtils.addClass(listTitle[i],"cur");
-                    listContent[i].style.display = "";
-                } else {
-                    domUtils.removeClasses(listTitle[i],["cur"]);
-                    listContent[i].style.display = "none";
-                }
+            var charArr = me.config[pro];
+            for (var i = 0, tmp; tmp = charArr[i++];) {
+                arrChar.push("<li onclick=\"obj.insert('" + tmp + "')\" style='" + me._addStyle(x, y) + "'></li>");
+                y += 1;
             }
-        },
-        format:function (node) {
-            domUtils.setAttributes(node, {
-                "data":encodeURIComponent($("#J_editArea").mathquill("latex")),
-                "mark":"formula"
-            });
-            domUtils.removeAttributes(node, ['id', 'mathquill-block-id']);
-            domUtils.removeClasses(node, "mathquill-editable")
-        },
-        insert:function (txt) {
-            $("#J_editArea")
-                .focus()
-                .mathquill("write", txt.replace("{/}", "\\"));
+
+            if (pro == "常用公式") {
+                arrContent.push('<div>' + arrChar.join('') + '</div>');
+            } else {
+                arrContent.push('<div style="display: none;">' + arrChar.join('') + '</div>');
+            }
+
+            //重置数据
+            arrChar = [];
+            x += 1;
+            y = 0;
         }
-    };
-    var obj = new Formula();
+        title.innerHTML = arrTitle.join('');
+        content.innerHTML = arrContent.join('');
+    },
+    initEditArea:function () {
+        var rng = editor.selection.getRange();
+        var fnInline = function (node) {
+            return domUtils.findParent(node, function (node) {
+                return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'mathquill-rendered-math')
+            }, true);
+        };
+        var node = fnInline(rng.startContainer), txt = "";
+        if (node) {
+            txt = decodeURIComponent(node.getAttribute("data"));
+        }
+        $("#J_editArea")
+            .html("")
+            .css("font-size", domUtils.getComputedStyle(editor.body, "font-size"))
+            .mathquill('editable')
+            .mathquill('write', txt);
+    },
+    _addStyle:function (x, y) {
+        var vertical, horizontal, row, col, CONSTANT = 34;
+        if (x == 0) {
+            row = 8;
+        } else if (x == 1) {
+            row = 5;
+        } else {
+            row = 0;
+        }
 
-    dialog.onok = function () {
-        obj.format(editArea);
-        editor.execCommand('math', editArea.outerHTML);
-    };
-})();
+        row += Math.floor(y / 8);
+        col = y % 8;
+
+        vertical = -(CONSTANT * col);
+        horizontal = -(CONSTANT * row);
+
+        return "background-position:" + vertical + "px " + horizontal + "px;"
+    },
+    showTab:function (evt) {
+        var tgt = evt.target || evt.srcElement,
+            index = domUtils.getNodeIndex(tgt),
+            listTitle = $G('J_tabTitle').children,
+            listContent = $G('J_tabContent').children;
+
+        for (var i = 0, len = listTitle.length; i < len; i++) {
+            if (i == index) {
+                domUtils.addClass(listTitle[i], "cur");
+                listContent[i].style.display = "";
+            } else {
+                domUtils.removeClasses(listTitle[i], ["cur"]);
+                listContent[i].style.display = "none";
+            }
+        }
+    },
+    format:function (node) {
+        domUtils.setAttributes(node, {
+            "data":encodeURIComponent($("#J_editArea").mathquill("latex")),
+            "mark":"formula"
+        });
+        domUtils.removeAttributes(node, ['id', 'mathquill-block-id']);
+        domUtils.removeClasses(node, "mathquill-editable")
+    },
+    insert:function (txt) {
+        $("#J_editArea")
+            .focus()
+            .mathquill("write", txt.replace("{/}", "\\"));
+    }
+};
+var obj = new Formula();
+
+dialog.onok = function () {
+    var editArea = $G('J_editArea');
+    obj.format(editArea);
+    editor.execCommand('math', editArea.outerHTML);
+};
