@@ -200,13 +200,3 @@ test( ' 默认样式切换到居中再切换回默认，会把居中导致的3�
     }, 50 );
     stop();
 } );
-
-test( '转换img标签', function () {
-    var editor = te.obj[0];
-    var serialize = editor.serialize;
-    var html = '<img src="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" width="553" height="275" />';
-    var node = serialize.parseHTML( html );
-    node = serialize.transformInput( node );
-    var spa=ua.browser.ie==6?' orgSrc="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif"':'';
-    equal( serialize.toHTML( node ).replace( new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), '' ), '<img src="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" width="553" height="275" word_img="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" style="background:url('+editor.options.UEDITOR_HOME_URL+'lang/'+editor.options.lang+'/images/localimage.png) no-repeat center center;border:1px solid #ddd"'+spa+' />' , '转换img标签');
-} );

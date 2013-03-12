@@ -110,21 +110,6 @@ test( '切换源码去掉空的span', function () {
     stop();
     equal( editor.getContent(), '<p>切换源码去掉空的span</p>' );
 } );
-//1。2版本后不做删去空的a标签的操作
-// test('切换源码去掉没有子节点的内联元素',function(){
-//    var editor = te.obj[0];
-//    editor.setContent('<p>切换源码,去掉空的内联元素a<a href="www.baidu.com"></a></p>');
-//    setTimeout(function() {
-//            editor.execCommand('source');
-//            setTimeout(function() {
-//                editor.execCommand('source');
-//                start();
-//            },100);
-//        },100);
-//     stop();
-//
-//    equal(editor.getContent(),'<p>切换源码,去掉空的内联元素a</p>');
-// });
 
 test( 'b,i标签，切换源码后自动转换成strong和em', function () {
     var editor = te.obj[0];
@@ -196,7 +181,7 @@ test( '插入分页符,源码中显示：_baidu_page_break_tag_', function () {
         }
         ua.manualDeleteFillData( editor.body );
 //        var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
-        ok( editor.getContent().indexOf( '_baidu_page_break_tag_' ) >= 0, 'pagebreak被解析' );
+        ok( editor.getContent().indexOf( '_ueditor_page_break_tag_' ) >= 0, 'pagebreak被解析' );
 //        equal( editor.getContent(), '<p>' + br + '</p>_baidu_page_break_tag_<p>' + br + '</p>' );
         document.body.removeChild( div );
         start();
@@ -300,5 +285,25 @@ test('初始化进入源码模式',function(){
             start();
         },50);
     });
+});
+
+test('在font,b,i标签中输入，会自动转换标签 ',function(){
+//    if(!ua.browser.gecko){
+        var editor = te.obj[0];
+        editor.body.innerHTML = '<p><font size="3" color="red"><b><i>x</i></b></font></p>';
+        setTimeout(function(){
+            editor.execCommand( 'source' );
+            setTimeout(function(){
+                editor.execCommand( 'source' );
+                equal(editor.body.firstChild.firstChild.tagName.toLowerCase(),'span','font转换成span');
+                equal($(editor.body.firstChild.firstChild).css('font-size'),'12px','检查style');
+                var EMstyle = $(editor.body.firstChild.firstChild).css('color');
+                ok(EMstyle=='rgb(255, 0, 0)'||EMstyle=='red'||EMstyle=='#ff0000','检查style');
+                equal(ua.getChildHTML(editor.body.firstChild.firstChild),'<strong><em>x</em></strong>','b转成strong,i转成em ');
+                start();
+            },20);
+        },20);
+        stop();
+//    }
 });
 
