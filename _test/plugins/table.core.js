@@ -254,3 +254,7 @@ test("setBackground",function(){
     ok(table.rows[2].cells[0].style.backgroundColor =="","第三行的单元格没有颜色");
 
 });
+
+test("",function(){
+
+})
