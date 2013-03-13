@@ -24,8 +24,8 @@ UE.plugins['formula'] = function () {
             href:me.options.formulaCssUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill/mathquill.css"
         });
         utils.loadFile(me.document, {
-            id:"jquery-1.8.3.min_js",
-            src:me.options.jqueryUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill/jquery-1.8.3.min.js",
+            id:"jquery.min_js",
+            src:me.options.jqueryUrl || me.options.UEDITOR_HOME_URL + "third-party/mathquill/jquery.min.js",
             tag:"script",
             type:"text/javascript",
             defer:"defer"
