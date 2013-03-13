@@ -129,7 +129,7 @@ test( 'table首行中回车', function () {
         stop();
         setTimeout(function(){
 //            if(ua.browser.opera || (ua.browser.safari && !ua.browser.chrome)){
-                equal(ua.getChildHTML(te.obj[0].body.firstChild),'<br>','加入p');//opera中，由原生方法实现p标签
+            equal(ua.getChildHTML(te.obj[0].body.firstChild),'<br>','加入p');//opera中，由原生方法实现p标签
 //            }
 //            else{
 //                equal(ua.getChildHTML(te.obj[0].body.firstChild),'<br>','加入p');
@@ -152,7 +152,7 @@ test( '去除_moz_dirty', function () {
         }, 20 );
         stop();
     }
-   
+
 } );
 ///*不作处理chrome会产生div*/
 test( 'chrome删除div', function () {

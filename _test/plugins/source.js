@@ -289,21 +289,21 @@ test('初始化进入源码模式',function(){
 
 test('在font,b,i标签中输入，会自动转换标签 ',function(){
 //    if(!ua.browser.gecko){
-        var editor = te.obj[0];
-        editor.body.innerHTML = '<p><font size="3" color="red"><b><i>x</i></b></font></p>';
+    var editor = te.obj[0];
+    editor.body.innerHTML = '<p><font size="3" color="red"><b><i>x</i></b></font></p>';
+    setTimeout(function(){
+        editor.execCommand( 'source' );
         setTimeout(function(){
             editor.execCommand( 'source' );
-            setTimeout(function(){
-                editor.execCommand( 'source' );
-                equal(editor.body.firstChild.firstChild.tagName.toLowerCase(),'span','font转换成span');
-                equal($(editor.body.firstChild.firstChild).css('font-size'),'12px','检查style');
-                var EMstyle = $(editor.body.firstChild.firstChild).css('color');
-                ok(EMstyle=='rgb(255, 0, 0)'||EMstyle=='red'||EMstyle=='#ff0000','检查style');
-                equal(ua.getChildHTML(editor.body.firstChild.firstChild),'<strong><em>x</em></strong>','b转成strong,i转成em ');
-                start();
-            },20);
+            equal(editor.body.firstChild.firstChild.tagName.toLowerCase(),'span','font转换成span');
+            equal($(editor.body.firstChild.firstChild).css('font-size'),'12px','检查style');
+            var EMstyle = $(editor.body.firstChild.firstChild).css('color');
+            ok(EMstyle=='rgb(255, 0, 0)'||EMstyle=='red'||EMstyle=='#ff0000','检查style');
+            equal(ua.getChildHTML(editor.body.firstChild.firstChild),'<strong><em>x</em></strong>','b转成strong,i转成em ');
+            start();
         },20);
-        stop();
+    },20);
+    stop();
 //    }
 });
 

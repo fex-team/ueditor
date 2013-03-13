@@ -44,7 +44,7 @@ test( 'innerText', function() {
     var tmp = new UE.uNode.createElement('area');
     tmp.innerHTML('<p></p>');
     equals(tmp.innerText(),tmp,'标签类型特殊');
-    var tmp = new UE.uNode.createText('');
+    tmp = new UE.uNode.createText('');
     tmp.innerHTML('<p></p>');
     equals(tmp.innerText(),tmp,'对象类型不为element');
     var uNode = UE.uNode;
@@ -56,7 +56,7 @@ test( 'innerText', function() {
 test( 'getData', function() {
     var tmp = new UE.uNode.createElement('div');
     equals(tmp.getData(),'','element元素');
-    var tmp = new UE.uNode.createText('askdj');
+    tmp = new UE.uNode.createText('askdj');
     equals(tmp.getData(),"askdj",'其他类型');
 });
 
@@ -91,7 +91,7 @@ test( 'replaceChild && setAttr', function() {
     node.insertAfter(tmp,node.lastChild());
     equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p><div></div><p></p>','setAttr为空');
     node.innerHTML('<p><td></td></p>');
-    var tmp = uNode.createElement('div');
+    tmp = uNode.createElement('div');
     node.appendChild(tmp);
     node.replaceChild(node.firstChild(),tmp);
     equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p>','replaceChild');
@@ -168,21 +168,21 @@ test( 'traversal', function() {
     var count = 0;
     node.traversal(function(node){
         count++;
-    })
+    });
     equals(count,4);
     count = 0;
     node.traversal(function(node){
         if(node.type == 'text'){
             count++
         }
-    })
+    });
     equals(count,2);
     node.traversal(function(node){
         if(node.type == 'text'){
 
             node.parentNode.removeChild(node)
         }
-    })
+    });
     equals(node.toHtml(),'<div><div><b></b></div></div>');
     node.innerHTML('<div>asdfasdf<b>sdf</b></div>');
     node.traversal(function(node){
@@ -191,6 +191,6 @@ test( 'traversal', function() {
             node.parentNode.insertBefore(span,node);
             span.appendChild(node);
         }
-    })
+    });
     equals(node.toHtml(),'<div><div><span>asdfasdf</span><b><span>sdf</span></b></div></div>');
 });

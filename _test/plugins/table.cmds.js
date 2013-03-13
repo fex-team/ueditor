@@ -93,7 +93,7 @@ test('完全拆分单元格',function(){
         editor.undoManger.undo();
         equal( tds[0].getAttribute( 'colspan' ), 2, '撤销--[0][0]单元格colspan' );
         equal( tds[0].getAttribute( 'rowspan' ), 2, '撤销--[0][0]单元格rowspan' );
-            start();
+        start();
     },50);
     stop();
 });

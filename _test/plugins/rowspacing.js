@@ -2,15 +2,15 @@ module( 'plugins.rowspacing' );
 
 /*trace 1029*/
 test( '设置段前距查看状态反射', function () {
-        var editor = te.obj[0];
-        var range = te.obj[1];
-        editor.setContent( '<p>hello1</p><p>hello2</p>' );
-        range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
-        editor.execCommand( 'rowspacing', 15 ,'top');
-        equal( editor.queryCommandValue( 'rowspacing' ,'top'), 15, '查看段前距' );
-        /*光标闭合时查看状态反射*/
-        range.setStart( editor.body.firstChild.firstChild, 1 ).collapse( true ).select();
-        equal( editor.queryCommandValue( 'rowspacing','top' ), 15, '查看段前距' );
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p>hello1</p><p>hello2</p>' );
+    range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
+    editor.execCommand( 'rowspacing', 15 ,'top');
+    equal( editor.queryCommandValue( 'rowspacing' ,'top'), 15, '查看段前距' );
+    /*光标闭合时查看状态反射*/
+    range.setStart( editor.body.firstChild.firstChild, 1 ).collapse( true ).select();
+    equal( editor.queryCommandValue( 'rowspacing','top' ), 15, '查看段前距' );
 } );
 
 /*trace 1035*/
