@@ -358,13 +358,6 @@ UE.plugins['contextmenu'] = function () {
                         }
                         this.ui._dialogs['highlightcodeDialog'].open();
                     }
-                },{
-                    label:"更改为显示",
-                    cmdName:'formulablock'
-                },
-                {
-                    label:"更改为内嵌",
-                    cmdName:'formulainline'
                 }
             ];
     if ( !items.length ) {
