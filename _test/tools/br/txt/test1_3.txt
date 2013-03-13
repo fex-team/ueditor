@@ -1,0 +1,65 @@
+<table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" style="border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; border-image: initial; ">
+ <tbody><tr>
+  <td width="189" valign="top" style="width:142.0pt;border:solid windowtext 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
+  <p class="MsoNormal">欢迎使用<span lang="EN-US">ueditor!</span><o:p></o:p></p>
+  </td>
+  <td width="189" valign="top" style="width:142.05pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
+  <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+  </td>
+  <td width="189" valign="top" style="width:142.05pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
+  <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="189" valign="top" style="width:142.0pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt">
+  <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+  </td>
+  <td width="189" valign="top" style="width:142.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
+  <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+  </td>
+  <td width="189" valign="top" style="width:142.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
+  <p class="MsoNormal">欢迎使用<span lang="EN-US">ueditor!</span><o:p></o:p></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal"><span lang="EN-US"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="图片_x0020_1" o:spid="_x0000_i1025" type="#_x0000_t75"
+ style='width:275.25pt;height:109.5pt;visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="file:///C:\DOCUME~1\lisisi01\LOCALS~1\Temp\msohtmlclip1\01\clip_image001.png"
+  o:title=""/>
+</v:shape><![endif]--><!--[if !vml]--><img width="367" height="146" src="file:///C:/DOCUME~1/lisisi01/LOCALS~1/Temp/msohtmlclip1/01/clip_image001.png" v:shapes="图片_x0020_1"><!--[endif]--></span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal"><span lang="EN-US"><a href="file:///C:/Documents%20and%20Settings/lisisi01/%E6%A1%8C%E9%9D%A2/www.baidu.com">www.baidu.com</a><o:p></o:p></span></p>
