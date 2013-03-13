@@ -218,3 +218,58 @@ test( '单击B再在其他地方单击I，空的strong标签被删除 ', functio
             equal( body.innerHTML.toLowerCase(), '<p><em></em>hello</p>', '空strong标签被删除' )
     }
 } );
+
+test( 'ctrl+i', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var body = editor.body;
+    editor.setContent( '<p>没有加粗的文本</p>' );
+    range.selectNode( body.firstChild ).select();
+    var p = body.firstChild;
+    editor.focus();
+    setTimeout( function() {
+        ua.keydown(editor.body,{'keyCode':73,'ctrlKey':true});
+        editor.focus();
+        setTimeout( function() {
+            equal( ua.getChildHTML( p ), '<em>没有加粗的文本</em>' );
+            start();
+        }, 150 );
+    }, 100 );
+    stop();
+} );
+
+test( 'ctrl+u', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var body = editor.body;
+    stop();
+    editor.setContent( '<p>没有加粗的文本</p>' );
+    setTimeout( function() {
+        range.selectNode( body.firstChild ).select();
+        editor.focus();
+        setTimeout( function() {
+            var html = '<span style="text-decoration: underline;">没有加粗的文本</span>';
+            ua.checkHTMLSameStyle( html, editor.document, body.firstChild, '文本被添加了下划线' );
+            equal(ua.getChildHTML(editor.body.firstChild),html);
+            start();
+        }, 150 );
+        ua.keydown(editor.body,{'keyCode':85,'ctrlKey':true});
+    }, 150 );
+} );
+
+test( 'ctrl+b', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var body = editor.body;
+    editor.setContent( '<p>没有加粗的文本</p>' );
+    range.selectNode( body.firstChild ).select();
+    editor.focus();
+    setTimeout( function() {
+        ua.keydown(editor.body,{'keyCode':66,'ctrlKey':true});
+        setTimeout( function() {
+            equal( ua.getChildHTML( body.firstChild ), '<strong>没有加粗的文本</strong>' );
+            start();
+        }, 150 );
+    }, 150 );
+    stop();
+} );

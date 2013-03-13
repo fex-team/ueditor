@@ -26,42 +26,6 @@ test( 'trace 583,1726 插入表格、表情,撤销', function () {
     equal( editor.getContent().toLowerCase(), '', '插入表格、表情,撤销' );
 } );
 
-///*trace 584*/
-//test('trace 584 撤销回车之前的文本', function() {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    var body = editor.body;
-//    editor.setContent( '<p>hello</p>' );
-//    range.setStart(editor.body.firstChild, 0).collapse(true).select();
-//    ua.keydown(body);
-//   ua.manualDeleteFillData( editor.body );
-//    //输入回车，再输入文本
-//    setTimeout(function() {
-//        range.setStart(body.firstChild, 1).collapse(true).select();
-//        editor.focus();
-//        setTimeout(function() {
-//            te.presskey("enter", "");
-//            editor.focus();
-//            setTimeout(function() {
-//               ua.manualDeleteFillData( editor.body );
-//                //var br = ua.browser.ie?'&nbsp;':'<br>';
-//                equal(body.getElementsByTagName('p').length,2);
-//                range.setStart(body.childNodes[1], 0).collapse(true).select();
-//                setTimeout(function() {
-//                    range.insertNode(editor.document.createTextNode('hello'));
-//
-//                    for (var i = 0; i < 20; i++)
-//                        ua.keydown(body, {keyCode:30});
-//                    editor.execCommand('Undo');
-//                    equal(editor.getContent().toLowerCase(), '<p>hello</p>', '撤销回车');
-//                    start();
-//                }, 20);
-//            }, 20);
-//        }, 20);
-//    });
-//    stop();
-//});
-
 /*trace 595*/
 test( 'trace 595 撤销合并单元格后再合并单元格', function () {
     var editor = te.obj[0];
@@ -71,7 +35,7 @@ test( 'trace 595 撤销合并单元格后再合并单元格', function () {
     editor.execCommand( 'inserttable', {numCols:3, numRows:3} );
     var tds = editor.body.firstChild.getElementsByTagName( 'td' );
     for ( var i = 0; i < 5; i++ ) {
-            tds[i].innerHTML = 'hello';
+        tds[i].innerHTML = 'hello';
     }
     //合并单元格
     setTimeout(function(){
@@ -170,7 +134,7 @@ test( 'trace 632 合并单元格后撤销再合并单元格不会丢字', functi
     editor.execCommand( 'inserttable', {numCols:4, numRows:4} );
     var tds = editor.body.firstChild.getElementsByTagName( 'td' );
     for ( var i = 0; i < 6; i++ ) {
-            tds[i].innerHTML = 'hello';
+        tds[i].innerHTML = 'hello';
     }
     //合并单元格
     setTimeout(function(){
@@ -230,7 +194,7 @@ test( 'trace 685 合并单元格后,删除行,再撤销,再删除行', function 
             ut.setSelected(cellsRange);
             range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
             var tds = editor.body.getElementsByTagName( 'td' );
-             editor.execCommand( 'mergecells' );
+            editor.execCommand( 'mergecells' );
             ok( tds[1].colSpan == 1 && tds[1].rowSpan == 3, '第2，3，4行的第一个单元格合并成一个' );
 
             //单击第二步合并的单元格，点击删除行
@@ -376,28 +340,6 @@ test('undo--redo',function(){
         equal(ua.getChildHTML(editor.body),'<p><img anchorname=\"hello\" class=\"anchorclass\">'+br+'</p>','');
 });
 
-/*trace 960 这个bug标记不修*/
-/*trace 1000*/
-//test('trace 1000 回车后撤销按钮高亮', function() {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    editor.setContent('<p>欢迎使用<a href="http://www.baidu.com">ueditor</a></p>');
-//    range.setStart(editor.body.firstChild.firstChild, 2).collapse(true).select();
-//    editor.focus();
-//    setTimeout(function() {
-//        //必须调用这个keydown，撤销按钮才能高亮
-//        ua.keydown(editor.body);
-//        te.presskey("enter", "");
-//        ua.keyup(editor.body);
-//        editor.focus();
-//        setTimeout(function() {
-//            equal(editor.queryCommandState('undo'), 0, '回车后撤销按钮高亮');
-//            start();
-//        }, 20);
-//    }, 20);
-//    stop();
-//});
-
 /*trace 1068  格式刷图片*/
 test( 'trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动图片刷默认样式的图片', function () {
     var editor = te.obj[0];
@@ -438,122 +380,6 @@ test( 'trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动�
         }, 500 );
     }, 500 );
 } );
-/*trace 1182 如描述设成2行的列表，在第二行结尾两次回车不会分成两个列表，如果是3行的列表就可以了*/
-//回车问题
-//test('trace 1182 列表后回车再回车,撤销再回车', function() {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    var body = editor.body;
-//    editor.setContent('<p>hello1</p><p>hello2</p><p>hello3</p>');
-//    range.setStart(body.firstChild, 0).setEnd(body.lastChild, 1).select();
-//    editor.execCommand('insertorderedlist');
-//    ok(editor.body.getElementsByTagName('ol').length == 1 && editor.body.getElementsByTagName('ol')[0].childNodes.length == 3, '插入3行的有序列表');
-//    range.setStart(editor.body.firstChild.childNodes[1], 1).collapse(true).select();
-//    editor.focus();
-//    setTimeout(function() {
-//        ua.keydown(editor.body);
-//        te.presskey("enter", "");
-//        ua.keyup(editor.body);
-//        editor.focus();
-////        setTimeout(function() {
-////            range.setStart(editor.body.firstChild.childNodes[2], 1).collapse(true).select();
-////            editor.focus();
-//        setTimeout(function() {
-//            ua.keydown(editor.body);
-//            te.presskey("enter", "");
-//            ua.keyup(editor.body);
-//            editor.focus();
-//            setTimeout(function() {
-//               ok(editor.body.getElementsByTagName('ol').length == 2 && editor.body.getElementsByTagName('ol')[0].childNodes.length == 2 && editor.body.getElementsByTagName('ol')[1].childNodes.length == 1, '2次回车后,列表分为前后两个');
-//                editor.execCommand('Undo');
-//                editor.focus();
-//                setTimeout(function() {
-//                    ua.keydown(editor.body);
-//                    te.presskey("enter", "");
-//                    ua.keyup(editor.body);
-//                    editor.focus();
-//                    setTimeout(function() {
-//                        ok(editor.body.getElementsByTagName('ol').length == 2 && editor.body.getElementsByTagName('ol')[0].childNodes.length == 2 && editor.body.getElementsByTagName('ol')[1].childNodes.length == 1, '撤销再回车，跟上一步结果相同');
-//                        start();
-////
-//                    }, 20);
-//                }, 20);
-//            }, 20);
-//        }, 100);
-//    }, 20);
-//    stop();
-//});
-///*trace 1278 可以结合在trace 1182的用例中*/
-//test('trace 1278 列表后回车再回车，撤销', function() {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    var body = editor.body;
-//    editor.setContent('<p>hello1</p><p>hello2</p>');
-//    range.setStart(body.firstChild, 0).setEnd(body.lastChild, 1).select();
-//    editor.execCommand('insertorderedlist');
-//    ok(editor.body.getElementsByTagName('ol').length == 1 && editor.body.getElementsByTagName('ol')[0].childNodes.length == 2, '插入2行的有序列表');
-//    range.setStart(editor.body.firstChild.childNodes[1], 1).collapse(true).select();
-//    editor.focus();
-//    setTimeout(function() {
-//        ua.keydown(editor.body);
-//        te.presskey("enter", "");
-//        ua.keyup(editor.body);
-//        editor.focus();
-//        setTimeout(function() {
-//            ok(editor.body.getElementsByTagName('ol').length == 1 && editor.body.getElementsByTagName('ol')[0].childNodes.length == 3, '1次回车后,列表多1行');
-//            ua.keydown(editor.body);
-//            te.presskey("enter", "");
-//            ua.keyup(editor.body);
-//            editor.focus();
-//            setTimeout(function() {
-//                editor.execCommand('Undo');
-//                ok(editor.body.getElementsByTagName('ol').length == 1 && editor.body.getElementsByTagName('ol')[0].childNodes.length == 3, '回车再撤销，与上一步结果相同');
-//                start();
-//            }, 20);
-//        }, 20);
-//    }, 20);
-//    stop();
-//});
-/*trace 1381 只针对chrome和trace 上记载的步骤有差别*/
-//回车问题
-//test('trace 1381 输入http://www.baidu.com后回车，自动添加超链接，改变文本内容，超链接地址不变', function() {
-//    if(ua.browser.chrome){
-//        var editor = te.obj[0];
-//        var range = te.obj[1];
-//        editor.setContent('<p>http://www.baidu.com</p>');
-//        range.setStart(editor.body.firstChild, 1).collapse(true).select();
-//        editor.focus();
-//        setTimeout(function() {
-//            te.presskey("enter", "");
-//            editor.focus();
-//
-//            setTimeout(function() {
-//                ua.keydown(editor.body);
-//                editor.execCommand('Undo');
-//               ua.manualDeleteFillData( editor.body );
-//                range.setStart(editor.body.childNodes[0].childNodes[0].childNodes[0], 20).collapse(true).select();
-//                editor.focus();
-//                setTimeout(function() {
-//                    te.presskey("back", "");
-//                    setTimeout(function() {
-//                        te.presskey("back", "");
-//                        editor.focus();
-//                        setTimeout(function() {
-//                            ok( $(editor.body.childNodes[0].childNodes[0]).attr( 'href' ).indexOf( 'http://www.baidu.com' ) != -1, '检查a的href' );
-//                            start();
-//                        }, 20);
-//                    }, 20);
-//                }, 20);
-//
-//            }, 20);
-//
-//        }, 20);
-//        stop();
-//    }
-//    else{
-//        equal(ua.browser.chrome,0,'此用例只针对chrome');
-//    }
-//});
 
 //test(
 //		'undo',
@@ -578,3 +404,32 @@ test( 'trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动�
 //			editor.execCommand('Undo');
 //			equals(getHTML(editor.document.body), 'test');
 //		});
+
+test( 'ctrl+z/y', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var body = editor.body;
+    editor.setContent( '<p>没有加粗的文本</p>' );
+    range.selectNode( body.firstChild ).select();
+    var p = body.firstChild;
+
+    editor.focus();
+    setTimeout( function() {
+        ua.keydown(editor.body,{'keyCode':66,'ctrlKey':true});
+        setTimeout( function() {
+            equal( ua.getChildHTML( p ), '<strong>没有加粗的文本</strong>' );
+            ua.keydown(editor.body,{'keyCode':90,'ctrlKey':true});
+            setTimeout( function() {
+                editor.focus();
+                equal( ua.getChildHTML( body.firstChild ), '没有加粗的文本' );
+                ua.keydown(editor.body,{'keyCode':89,'ctrlKey':true});
+                editor.focus();
+                setTimeout( function() {
+                    equal( ua.getChildHTML( body.firstChild ), '<strong>没有加粗的文本</strong>' );
+                    start();
+                }, 100 );
+            }, 100 );
+        }, 150 );
+    }, 100 );
+    stop();
+} );

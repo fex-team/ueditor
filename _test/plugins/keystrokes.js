@@ -16,7 +16,7 @@ test('trace 2747 普通情况,选中一个节点，输入tab键',function(){
         range.setStart( editor.body.lastChild,1 ).setEnd(editor.body.lastChild,2).select();
         ua.keydown(editor.body,{'keyCode':9});
         setTimeout(function(){
-            equal(te.obj[0].undoManger.index,1,'');
+            equal(te.obj[0].undoManger.list.length,1,'');
             var html = '<h1>hello<br></h1><p>he&nbsp;&nbsp;&nbsp;&nbsp;oll</p>';
             equal(ua.getChildHTML(te.obj[0].body),html,'普通情况，选中一个节点，输入tab键');
             start();
@@ -42,19 +42,6 @@ test('trace 2746 删除自闭合标签',function(){
     stop();
 });
 
-test('在h1内输入退格，h1变成p',function(){
-    var editor = te.obj[0];
-    editor.setContent( '<h1><br></h1><p>hello</p>' );
-    var range = te.obj[1];
-    range.setStart( editor.body.firstChild,0 ).collapse(true).select();
-    ua.keydown(editor.body,{'keyCode':8});
-    stop();
-    setTimeout(function(){
-        var br = ua.browser.ie?'':'<br>';
-        equal(ua.getChildHTML(te.obj[0].body),'<p>'+br+'</p><p>hello</p>','在h1内输入退格，h1变成p');
-        start();
-    },20);
-});
 test('全选后，退格，剩下空p',function(){
     var editor = te.obj[0];
     editor.setContent( 'hello' );
@@ -70,21 +57,7 @@ test('全选后，退格，剩下空p',function(){
         start();
     },20);
 });
-test('删除空节点 ',function(){
-        var editor = te.obj[0];
-        editor.setContent('<p><em><span style="color: red"><br></span></em></p>') ;
-        var range = te.obj[1];
-        setTimeout(function(){
-            range.setStartAtFirst(editor.body.getElementsByTagName('span')[0]).collapse(true).select(true);
-            ua.keyup(te.obj[0].body,{'keyCode':8});
-            setTimeout(function(){
-                var br = ua.browser.ie?'':'<br>';
-                equal(ua.getChildHTML(editor.body),'<p>'+br+'</p>','删除空节点');
-                start();
-            },20);
-        },20);
-        stop();
-});
+
 test('针对ff下在列表首行退格，不能删除空格行的问题 ',function(){
     if(ua.browser.gecko){
         var editor = te.obj[0];
@@ -100,28 +73,6 @@ test('针对ff下在列表首行退格，不能删除空格行的问题 ',functi
         },20);
         stop();
     }
-//    else{}
-});
-test('在font,b,i标签中输入，会自动转换标签 ',function(){
-    if(!ua.browser.gecko){
-        var editor = te.obj[0];
-        editor.body.innerHTML = '<p><font size="3" color="red"><b><i>x</i></b></font></p>';
-        var range = te.obj[1];
-        setTimeout(function(){
-            range.setStartAtLast(editor.body.getElementsByTagName('i')[0]).collapse(true);
-            ua.keyup(te.obj[0].body,{'keyCode':88});
-            setTimeout(function(){
-                equal(editor.body.firstChild.firstChild.tagName.toLowerCase(),'span','font转换成span');
-                equal($(editor.body.firstChild.firstChild).css('font-size'),'16px','检查style');
-                var EMstyle = $(editor.body.firstChild.firstChild).css('color');
-                ok(EMstyle=='rgb(255, 0, 0)'||EMstyle=='red'||EMstyle=='#ff0000','检查style');
-                equal(ua.getChildHTML(editor.body.firstChild.firstChild),'<strong><em>x</em></strong>','b转成strong,i转成em ');
-                start();
-            },20);
-        },20);
-        stop();
-    }
-//    else{}
 });
 
 test('在列表中，跨行选中第2，3行，输入tab键',function(){
@@ -144,24 +95,23 @@ test('在列表中，跨行选中第2，3行，输入tab键',function(){
     },50);
     stop();
 });
+
 //todo 这个检查存在问题，如何检查 evt.preventDefault();？
 test('在h1内输入del',function(){
-//    if(ua.browser.gecko){
-        var editor = te.obj[0];
-        editor.setContent( '<h1><br></h1><p>hello</p>' );
-        var range = te.obj[1];
+    var editor = te.obj[0];
+    editor.setContent( '<h1><br></h1><p>hello</p>' );
+    var range = te.obj[1];
+    setTimeout(function(){
+        range.setStart(editor.body.childNodes[0],0).collapse(true).select(true);
+        ua.keydown(te.obj[0].body,{'keyCode':46});
         setTimeout(function(){
-            range.setStart(editor.body.childNodes[0],0).collapse(true).select(true);
-            ua.keydown(te.obj[0].body,{'keyCode':46});
-            setTimeout(function(){
-                equal(ua.getChildHTML(te.obj[0].body),'<h1><br></h1><p>hello</p>','在h1内输入del');
-                start();
-            },20);
+            equal(ua.getChildHTML(te.obj[0].body),'<h1><br></h1><p>hello</p>','在h1内输入del');
+            start();
         },20);
-        stop();
-//    }
-//    else{}
+    },20);
+    stop();
 });
+
 test('在列表中，跨行选中，输入tab键',function(){
     var editor = te.obj[0];
     editor.setContent( '<ol style="list-style-type:decimal;"><li><p>欢迎使用</p></li><li><p>ueditor</p></li><li><p>ueditor</p></li></ol>' );
@@ -170,18 +120,19 @@ test('在列表中，跨行选中，输入tab键',function(){
         range.setStart( editor.body.firstChild.firstChild.firstChild.firstChild,1 ).setEnd(editor.body.firstChild.childNodes[1].firstChild.firstChild,1 ).select();
         ua.keydown(editor.body,{'keyCode':9});
         setTimeout(function(){
-            equal(te.obj[0].undoManger.index,1,'undoManger.index');
+            equal(te.obj[0].undoManger.list.length,1,'undoManger.index');
             ua.manualDeleteFillData(te.obj[0].body);
             equal(te.obj[0].body.firstChild.tagName.toLowerCase(),'ol','外面套了一层ol');
-            equal(te.obj[0].body.firstChild.childNodes.length,1,'');
+            equal(te.obj[0].body.firstChild.childNodes.length,2,'');
             equal(te.obj[0].body.firstChild.firstChild.tagName.toLowerCase(),'ol','原列表');
-            equal($(te.obj[0].body.firstChild.firstChild).css('list-style-type'),'decimal','原列表类型');
-            equal(ua.getChildHTML(te.obj[0].body.firstChild.firstChild),'<li><p>欢迎使用</p></li><li><p>ueditor</p></li><li><p>ueditor</p></li>','检查内容');
+            equal($(te.obj[0].body.firstChild).css('list-style-type'),'decimal','原列表类型');
+            equal(ua.getChildHTML(te.obj[0].body.firstChild.firstChild),'<li><p>欢迎使用</p></li><li><p>ueditor</p></li>','检查内容');
             start();
         },20);
     },50);
     stop();
 });
+
 test(' 光标定位到列表前，输入tab键',function(){
     var editor = te.obj[0];
     editor.setContent( '<ol style="list-style-type:decimal;"><li><p>欢迎使用</p></li><li><p>ueditor</p></li></ol>' );
@@ -190,7 +141,7 @@ test(' 光标定位到列表前，输入tab键',function(){
         range.setStart( editor.body.firstChild.firstChild.firstChild,0 ).collapse(true).select();
         ua.keydown(editor.body,{'keyCode':9});
         setTimeout(function(){
-            equal(te.obj[0].undoManger.index,1,'undoManger.index');
+            equal(te.obj[0].undoManger.list.length,1,'undoManger.index');
             ua.manualDeleteFillData(te.obj[0].body);
             equal($(te.obj[0].body.firstChild).css('list-style-type'),'decimal','原列表类型');
             equal(te.obj[0].body.firstChild.childNodes.length,2,'列表有两个子节点');
@@ -204,4 +155,60 @@ test(' 光标定位到列表前，输入tab键',function(){
     stop();
 });
 
+test( '删除inline的标签', function() {
+    var editor = te.obj[0];
+    editor.setContent( '<p><strong><em>hello world</em><span>wasai</span></strong></p>' );
+    var range = te.obj[1];
+    setTimeout(function(){
+        var strong = editor.body.firstChild.firstChild;
+        range.selectNode( strong ).select();
+        ua.keydown(editor.body,{'keyCode':8});
+        setTimeout(function(){
+            ua.manualDeleteFillData( editor.body );
+            equal( editor.body.firstChild.tagName.toLowerCase(), 'p', 'strong 以及子inline节点都被删除' );
+            if ( !baidu.editor.browser.ie )
+                equal( editor.body.lastChild.innerHTML, '<br>', '内容被删除了' );
+            else
+                equal( editor.body.lastChild.innerHTML, '', '内容被删除了' );
+            start();
+        },20);
+    },20);
+    stop();
+} );
 
+/*trace 1089*/
+test( '跨行选择2个块元素', function() {
+    var editor = te.obj[0];
+    editor.setContent( '<p><strong>hello world<span>wasai</span></strong></p><div><em><span>hello 2</span></em></div>' );
+    var range = te.obj[1];
+    setTimeout(function(){
+        var body = editor.body;
+        range.setStart( body.firstChild, 0 ).setEnd( body.lastChild,1 ).select();
+        ua.keydown(editor.body,{'keyCode':8});
+        setTimeout(function(){
+            ua.manualDeleteFillData( editor.body );
+            range = editor.selection.getRange();
+            equal( body.childNodes.length, 1, 'div被删除，保留p' );
+            var br = baidu.editor.browser.ie?"":"<br>";
+            equal( ua.getChildHTML( body ), '<p>'+br+'</p>' );
+            start();
+        },20);
+    },20);
+    stop();
+} );
+
+//test('删除空节点 ',function(){
+//        var editor = te.obj[0];
+//        editor.setContent('<p><em><span style="color: red"><br></span></em></p>') ;
+//        var range = te.obj[1];
+//        setTimeout(function(){
+//            range.setStartAtFirst(editor.body.getElementsByTagName('span')[0]).collapse(true).select(true);
+//            ua.keyup(te.obj[0].body,{'keyCode':8});
+//            setTimeout(function(){
+//                var br = ua.browser.ie?'':'<br>';
+//                equal(ua.getChildHTML(editor.body),'<p>'+br+'</p>','删除空节点');
+//                start();
+//            },20);
+//        },20);
+//        stop();
+//});
