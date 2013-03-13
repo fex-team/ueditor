@@ -142,7 +142,23 @@
             }
         }
     }
+    function nodeTraversal(root,fn){
+        if(root.children && root.children.length){
+            for(var i= 0,ci;ci=root.children[i];){
+                nodeTraversal(ci,fn);
+                //ci被替换的情况，这里就不再走 fn了
+                if(ci.parentNode ){
+                    if(ci.children){
+                        fn(ci)
+                    }
+                    if(ci.parentNode) i++
+                }
+            }
+        }else{
+            fn(root)
+        }
 
+    }
     uNode.prototype = {
         toHtml:function (formatter) {
             var arr = [];
@@ -229,7 +245,7 @@
             }
         },
         appendChild:function (node) {
-            if (this.type == 'element' && !dtd.$empty[this.tagName]) {
+            if (this.type == 'root' || (this.type == 'element' && !dtd.$empty[this.tagName])) {
                 if (!this.children) {
                     this.children = []
                 }
@@ -246,6 +262,7 @@
                 node.parentNode = this;
                 return node;
             }
+
 
         },
         insertBefore:function (target, source) {
@@ -297,7 +314,7 @@
             }
         },
         getAttr:function (attrName) {
-            return this.attrs[attrName.toLowerCase()]
+            return this.attrs && this.attrs[attrName.toLowerCase()]
         },
         setAttr:function (attrName, attrVal) {
             if (!attrName) {
@@ -389,6 +406,12 @@
                 exec(name, val)
             }
             this.setAttr('style', cssStyle)
+        },
+        traversal:function(fn){
+            if(this.children && this.children.length){
+                nodeTraversal(this,fn);
+            };
+            return this;
         }
     }
 })();

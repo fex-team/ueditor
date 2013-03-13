@@ -160,3 +160,37 @@ test( 'getIndex', function() {
     node.appendChild(tmp);
     equals(tmp.getIndex(),2,'节点索引');
 });
+
+test( 'traversal', function() {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('div');
+    node.innerHTML('<div>asdfasdf<b>sdf</b></div>')
+    var count = 0;
+    node.traversal(function(node){
+        count++;
+    })
+    equals(count,4);
+    count = 0;
+    node.traversal(function(node){
+        if(node.type == 'text'){
+            count++
+        }
+    })
+    equals(count,2);
+    node.traversal(function(node){
+        if(node.type == 'text'){
+
+            node.parentNode.removeChild(node)
+        }
+    })
+    equals(node.toHtml(),'<div><div><b></b></div></div>');
+    node.innerHTML('<div>asdfasdf<b>sdf</b></div>');
+    node.traversal(function(node){
+        if(node.type == 'text'){
+            var span = uNode.createElement('span');
+            node.parentNode.insertBefore(span,node);
+            span.appendChild(node);
+        }
+    })
+    equals(node.toHtml(),'<div><div><span>asdfasdf</span><b><span>sdf</span></b></div></div>');
+});

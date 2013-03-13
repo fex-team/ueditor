@@ -14,7 +14,7 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
     var uNode = UE.uNode,
         needParentNode = {
             'td':'tr',
-            'tr':'tbody',
+            'tr':['tbody','thead','tfoot'],
             'tbody':'table',
             'th':'tr',
             'thead':'table',
@@ -62,7 +62,7 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
         var elm = new uNode({
             parentNode:parent,
             type:'element',
-            tagName:tagName,
+            tagName:tagName.toLowerCase(),
             //是自闭合的处理一下
             children:dtd.$empty[tagName] ? null : []
         });
@@ -70,7 +70,7 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
         if (htmlattr) {
             var attrs = {}, match;
             while (match = re_attr.exec(htmlattr)) {
-                attrs[match[1].toLowerCase()] = match[2]
+                attrs[match[1].toLowerCase()] = match[2] || match[3] || match[4]
             }
             elm.attrs = attrs;
         }
@@ -103,10 +103,10 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
         }
         if (match[3]) {
             //start tag
-            currentParent = element(currentParent, match[3], match[4]);
+            currentParent = element(currentParent, match[3].toLowerCase(), match[4]);
 
         } else if (match[1]) {
-            while(currentParent.type == 'element' && currentParent.tagName != match[1]){
+            while(currentParent.type == 'element' && currentParent.tagName != match[1].toLowerCase()){
                 currentParent = currentParent.parentNode;
             }
             //end tag

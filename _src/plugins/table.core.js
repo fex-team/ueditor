@@ -126,6 +126,26 @@
         return tdOrTable.ueTable;
     };
 
+    UETable.cloneCell = function(cell,ignoreMerge){
+        if (!cell || utils.isString(cell)) {
+            return this.table.ownerDocument.createElement(cell || 'td');
+        }
+        var flag = domUtils.hasClass(cell, "selectTdClass");
+        flag && domUtils.removeClasses(cell, "selectTdClass");
+        var tmpCell = cell.cloneNode(true);
+        if (ignoreMerge) {
+            tmpCell.rowSpan = tmpCell.colSpan = 1;
+        }
+        tmpCell.style.borderLeftStyle = "";
+        tmpCell.style.borderTopStyle = "";
+        tmpCell.style.borderLeftColor = cell.style.borderRightColor;
+        tmpCell.style.borderLeftWidth = cell.style.borderRightWidth;
+        tmpCell.style.borderTopColor = cell.style.borderBottomColor;
+        tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
+        flag && domUtils.addClass(cell, "selectTdClass");
+        return tmpCell;
+    }
+
     UETable.prototype = {
         getMaxRows:function () {
             var rows = this.table.rows, maxLen = 1;
@@ -261,25 +281,7 @@
         setCellContent:function (cell, content) {
             cell.innerHTML = content || (browser.ie ? domUtils.fillChar : "<br />");
         },
-        cloneCell:function (cell, ignoreMerge) {
-            if (!cell || utils.isString(cell)) {
-                return this.table.ownerDocument.createElement(cell || 'td');
-            }
-            var flag = domUtils.hasClass(cell, "selectTdClass");
-            flag && domUtils.removeClasses(cell, "selectTdClass");
-            var tmpCell = cell.cloneNode(true);
-            if (ignoreMerge) {
-                tmpCell.rowSpan = tmpCell.colSpan = 1;
-            }
-            tmpCell.style.borderLeftStyle = "";
-            tmpCell.style.borderTopStyle = "";
-            tmpCell.style.borderLeftColor = cell.style.borderRightColor;
-            tmpCell.style.borderLeftWidth = cell.style.borderRightWidth;
-            tmpCell.style.borderTopColor = cell.style.borderBottomColor;
-            tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
-            flag && domUtils.addClass(cell, "selectTdClass");
-            return tmpCell;
-        },
+        cloneCell:UETable.cloneCell,
         /**
          * 获取跟当前单元格的右边竖线为左边的所有未合并单元格
          */
@@ -505,8 +507,6 @@
                     endColIndex = Math.max(cellAInfo.colIndex + cellAInfo.colSpan - 1, cellBInfo.colIndex + cellBInfo.colSpan - 1);
 
                 return checkRange(beginRowIndex, beginColIndex, endRowIndex, endColIndex);
-
-
             } catch (e) {
                 if (debug) throw e;
             }
@@ -811,6 +811,13 @@
                         tableRow.insertBefore(th, cell);
                         domUtils.remove(cell)
                     }
+                }else{
+                    if (cell.tagName == 'TH') {
+                        var td = cell.ownerDocument.createElement("td");
+                        td.appendChild(cell.firstChild);
+                        tableRow.insertBefore(td, cell);
+                        domUtils.remove(cell)
+                    }
                 }
             }
 
@@ -1012,20 +1019,34 @@
                 range = this.getCellsRange(tds[0], tds[tds.length - 1]);
             this.setSelected(range);
         },
-        sortTable:function(sortByCellIndex,compareFn){
+        sortTable:function (sortByCellIndex, compareFn) {
             var table = this.table,
                 rows = table.rows,
                 trArray = [],
-                flag = rows[0].cells[0].tagName === "TH";
-            for (var i = 0, len = rows.length; i < len; i++) {
-                trArray[i] = rows[i];
+                flag = rows[0].cells[0].tagName === "TH",
+                lastRowIndex = 0;
+            if(this.selectedTds.length){
+                var range = this.cellsRange,
+                    len = range.endRowIndex + 1;
+                for (var i = range.beginRowIndex; i < len; i++) {
+                    trArray[i] = rows[i];
+                }
+                trArray.splice(0,range.beginRowIndex);
+                lastRowIndex = (range.endRowIndex +1) === this.rowsNum ? 0 : range.endRowIndex +1;
+            }else{
+                for (var i = 0,len = rows.length; i < len; i++) {
+                    trArray[i] = rows[i];
+                }
             }
             //th不参与排序
-            flag && trArray.splice(0,1);
-            trArray.sort(function (tr1, tr2) {
-                return compareFn ? (typeof compareFn === "number" ? compareFn : compareFn.call(this,tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex])) : function () {
-                    var value1 = tr1.cells[sortByCellIndex].innerHTML,
-                        value2 = tr2.cells[sortByCellIndex].innerHTML;
+            flag && trArray.splice(0, 1);
+            trArray = utils.sort(trArray,function (tr1, tr2) {
+                var txt = function(node){
+                    return node.innerText||node.textContent;
+                };
+                return compareFn ? (typeof compareFn === "number" ? compareFn : compareFn.call(this, tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex])) : function () {
+                    var value1 = txt(tr1.cells[sortByCellIndex]),
+                        value2 = txt(tr2.cells[sortByCellIndex]);
                     return value1.localeCompare(value2);
                 }();
             });
@@ -1033,35 +1054,42 @@
             for (var j = 0, len = trArray.length; j < len; j++) {
                 fragment.appendChild(trArray[j]);
             }
-            table.getElementsByTagName("tbody")[0].appendChild(fragment);
+            var tbody = table.getElementsByTagName("tbody")[0];
+            if(!lastRowIndex){
+                tbody.appendChild(fragment);
+            }else{
+                tbody.insertBefore(fragment,rows[lastRowIndex- range.endRowIndex + range.beginRowIndex - 1])
+            }
         },
-        setBackground:function(cells,value){
-            if(typeof value ==="string"){
-                utils.each(cells,function(cell){
+        setBackground:function (cells, value) {
+            if (typeof value === "string") {
+                utils.each(cells, function (cell) {
                     cell.style.backgroundColor = value;
                 })
-            }else if(typeof value === "object"){
+            } else if (typeof value === "object") {
                 value = utils.extend({
                     repeat:true,
-                    colorList:["#ddd","#fff"]
-                },value);
+                    colorList:["#ddd", "#fff"]
+                }, value);
                 var rowIndex = this.getCellInfo(cells[0]).rowIndex,
                     count = 0,
                     colors = value.colorList,
-                    getColor = function(list,index,repeat){
-                        return list[index] ? list[index] : repeat ? list[index % list.length]: "";
+                    getColor = function (list, index, repeat) {
+                        return list[index] ? list[index] : repeat ? list[index % list.length] : "";
                     };
-                for(var i = 0,cell;cell= cells[i++];){
+                for (var i = 0, cell; cell = cells[i++];) {
                     var cellInfo = this.getCellInfo(cell);
-                    cell.style.backgroundColor = getColor(colors,((rowIndex + count) == cellInfo.rowIndex) ? count : ++count, value.repeat);
+                    cell.style.backgroundColor = getColor(colors, ((rowIndex + count) == cellInfo.rowIndex) ? count : ++count, value.repeat);
                 }
             }
         },
-        removeBackground:function(cells){
-            utils.each(cells,function(cell){
+        removeBackground:function (cells) {
+            utils.each(cells, function (cell) {
                 cell.style.backgroundColor = "";
             })
         }
+
+
     };
     function showError(e) {
     }

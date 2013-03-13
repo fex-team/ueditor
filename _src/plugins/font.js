@@ -37,7 +37,7 @@ UE.plugins['font'] = function() {
           ],
         'fontsize':[10, 11, 12, 14, 16, 18, 20, 24, 36]
     });
-    function mergesibling(range){
+    function mergesibling(range,me){
         var collapsed = range.collapsed,
             bk = range.createBookmark(),common;
         if(collapsed){
@@ -205,7 +205,7 @@ UE.plugins['font'] = function() {
                                 range = me.selection.getRange();
 
                                 range.applyInlineStyle( 'span', {'style':style + ':' + value} );
-                                mergesibling(range);
+                                mergesibling(range,me);
                                 range.select();
                             } else {
 
@@ -262,12 +262,12 @@ UE.plugins['font'] = function() {
                                     if(opera){
                                         setTimeout(function(){
                                             range.setStart(span,0).collapse(true);
-                                            mergesibling(range);
+                                            mergesibling(range,me);
                                             range.select();
                                         });
                                     }else{
                                         range.setStart(span,0).collapse(true);
-                                        mergesibling(range);
+                                        mergesibling(range,me);
                                         range.select();
                                     }
 

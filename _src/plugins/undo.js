@@ -216,9 +216,7 @@ UE.plugins['undo'] = function () {
             if (inputType)
                 return;
             if (me.undoManger.list.length == 0 || ((keyCode == 8 || keyCode == 46) && lastKeyCode != keyCode)) {
-
                 me.fireEvent('contentchange');
-
                 me.undoManger.save(true);
                 lastKeyCode = keyCode;
                 return;
@@ -237,6 +235,18 @@ UE.plugins['undo'] = function () {
                 me.undoManger.save();
                 me.undoManger.mousedown = false;
             }
+        }
+    });
+    me.addListener('keyup', function (type, evt) {
+        var keyCode = evt.keyCode || evt.which;
+        if (!keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey) {
+            if (inputType)
+                return;
+            if (me.undoManger.list.length == 1  ) {
+                me.undoManger.save(true);
+            }
+
+
         }
     });
     me.addListener('mousedown',function(){

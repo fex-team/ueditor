@@ -19,8 +19,8 @@
         var domUtils = baidu.editor.dom.domUtils;
         var div_dom = document.body.appendChild( document.createElement( 'div' ) );
         div_dom.id = 'test';
-        stop();
-        setTimeout(function(){
+//        stop();
+//        setTimeout(function(){
             te.dom.push( div );
             te.dom.push( iframe );
             te.dom.push( div_dom);
@@ -28,7 +28,7 @@
             te.obj.push( editor );
             te.obj.push( range );
             te.obj.push( domUtils );
-        },50);
+//        },50);
     }
 
     var s = QUnit.testStart;

@@ -31,9 +31,38 @@ test( '补全不完整table', function() {
     equals(root.toHtml(),'<table><tbody><tr><td></td><td></td></tr></tbody></table>','包含\n，补全table');
 });
 
+
 test( '补全不完整li', function() {
     var root = UE.htmlparser('<ol><li><em><u>sdf<li>sdfsdf</ol>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em><u>sdf</u></em></li><li>sdfsdf</li></ol>','补全u，em');
     root = UE.htmlparser('<ol><li><em>sdf</em></li><ul><li>a</li><li>b</li><li>c</ul><li>jkl</ol>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em>sdf</em></li><ul><li>a</li><li>b</li><li>c</li></ul><li>jkl</li></ol>','补全li');
+});
+
+test( '属性引号问题', function() {
+    var root = UE.htmlparser('<img width=200 height=200 />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+    var root = UE.htmlparser("<img width='200' height='200' />");
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+    var root = UE.htmlparser('<img width="200" height="200" />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+});
+test( '大小写', function() {
+    var root = UE.htmlparser('<p><TD></TD></p>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<p><table><tbody><tr><td></td></tr></tbody></table></p>');
+    var root = UE.htmlparser('<OL><LI><em><u>sdf<LI>sdfsdf</OL>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em><u>sdf</u></em></li><li>sdfsdf</li></ol>','补全u，em');
+    var root = UE.htmlparser('<IMG width=200 height=200 />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+});
+
+test( '裸字', function() {
+    var root = UE.htmlparser('sdfasdfasdf');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'sdfasdfasdf');
+
+});
+test( '只有结束标签的情况', function() {
+    var root = UE.htmlparser('<p>hello1</a></p><p>hello2</p>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<p>hello1</p><p>hello2</p>');
+
 });
