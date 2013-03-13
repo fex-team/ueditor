@@ -138,9 +138,9 @@ UE.plugins['formula'] = function () {
             } else {
                 var doc = me.document;
                 var span = domUtils.createElement(doc, "span", {
-                    class:'mathquill-editable',
                     formulaid:me._formulaid
                 });
+                span.className="mathquill-editable";
                 span.appendChild(doc.createTextNode(txt));
                 me.execCommand('inserthtml', span.outerHTML);
 
