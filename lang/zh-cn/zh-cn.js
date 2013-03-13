@@ -476,6 +476,14 @@ UE.I18N['zh-cn'] = {
             lang_tdBkColor:'背景颜色:'
         }
     },
+    'formula':{
+        'static':{
+        }
+    },
+    'math':{
+        'static':{
+        }
+    },
     'wordimage':{
         'static':{
             lang_resave:"转存步骤",
