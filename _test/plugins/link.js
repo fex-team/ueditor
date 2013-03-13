@@ -138,9 +138,9 @@ test( '添加链接--表格第一个单元格没有超链接', function () {
         equal( ua.getChildHTML( trs[0].cells[1] ), '<a href="www.baidu.com">google</a>', 'a标签的地址被修改了' );
         equal( ua.getChildHTML( trs[0].cells[0] ), '<a href="www.baidu.com">www.baidu.com</a>', 'td 1 被添加了超链接' );
         if ( !baidu.editor.browser.gecko )
-            ua.checkResult( range, trs[0].cells[0].firstChild.firstChild, trs[0].cells[0].firstChild.firstChild, 0, 13, false, 'check link result' );
+            ua.checkResult( range, trs[0].cells[0].firstChild.firstChild, trs[0].cells[0].firstChild.firstChild, 0, 0, true, 'check link result' );
         else
-            ua.checkResult( range, trs[0].cells[0].firstChild, trs[0].cells[0].firstChild, 0, 1, false, 'check link result' );
+            ua.checkResult( range, trs[0].cells[0].firstChild, trs[0].cells[0].firstChild, 0, 0, true, 'check link result' );
         start();
     },50);
     stop();

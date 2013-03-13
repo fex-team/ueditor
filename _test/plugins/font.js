@@ -148,35 +148,6 @@ test( ' 选中文本设置前景色为默认', function() {
     },50);
 } );
 
-/*trace 869*/
-//插件相关！！！！！！！！！！
-//test( 'trace 869：设置前景色后清除前景色，再输入文本', function() {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    editor.setContent( '' );
-//    stop()
-////    alert(navigator.userAgent)
-//    setTimeout( function() {
-//        range.setStart( editor.body.firstChild, 0 ).select();
-//        editor.execCommand( 'forecolor', 'red' );
-//        editor.execCommand( 'forecolor', 'default' );
-//        range = editor.selection.getRange();
-//        editor.focus();
-//        setTimeout( function() {
-//        //TODO maxthon有2种模式，句柄分为IE的和maxthon两种，需要根据userAgent区别对待，但是貌似还是有问题的
-//            te.presskey( '', 'e' );
-//            editor.focus();
-//            setTimeout( function() {
-//                var br = baidu.editor.browser.ie ? '' : '<br />';
-//                ua.manualDeleteFillData( editor.body );
-//                equal( editor.getContent(), '<p>e' + br + '</p>' );
-//            start();
-//            }, 250 );
-//        }, 100 );
-////    range.insertNode( document.createTextNode( 'hello' ) );
-//    }, 150 );
-//} );
-
 /*trace 823*/
 //TODO 涉及文本输入和光标位置移动的结合
 // 不好测，采取workaround，不用输入的方式
@@ -227,7 +198,6 @@ test( 'trace 819, 765：删除线和下划线互斥', function() {
         start();
     },50);
 } );
-
 
 /*trace 810*/
 test( 'trace 810：闭合时设置删除线会改变文本前景色', function() {
@@ -462,4 +432,3 @@ test( 'trace 721：预先设置下划线和字体颜色，再输入文本，查�
         },50);
     }
 } );
-

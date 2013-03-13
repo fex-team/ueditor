@@ -55,3 +55,14 @@ test( '大小写', function() {
     var root = UE.htmlparser('<IMG width=200 height=200 />');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
 });
+
+test( '裸字', function() {
+    var root = UE.htmlparser('sdfasdfasdf');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'sdfasdfasdf');
+
+});
+test( '只有结束标签的情况', function() {
+    var root = UE.htmlparser('<p>hello1</a></p><p>hello2</p>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<p>hello1</p><p>hello2</p>');
+
+});

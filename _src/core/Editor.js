@@ -97,7 +97,6 @@
             zIndex:999,
             imagePopup:true,
             enterTag:'p',
-            pageBreakTag:'_baidu_page_break_tag_',
             customDomain:false,
             lang:'zh-cn',
             langPath:me.options.UEDITOR_HOME_URL + 'lang/',

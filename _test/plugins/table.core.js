@@ -282,8 +282,30 @@ test("last", function () {
     ok(ut.isLastCell(cell), "是最后一个单元格");
     ok(!ut.isLastCell(table.rows[1].cells[0]), "不是最后一个单元格");
 });
-test("getNexeCell",function(){
+test("getNextCell",function(){
+    var table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
+            "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
+            "<tr><td>21</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>"),
+        ut = new UT(table);
+    var cell = table.rows[2].cells[5];
+    var newCell = ut.getNextCell(cell);
+    ok(newCell===table.rows[1].cells[5],"找到正确单元格");
+    cell = table.rows[0].cells[4];
+    newCell = ut.getNextCell(cell);
+    ok(!newCell,"顶行不存在nextCell");
+    newCell = ut.getNextCell(cell,true);
+    ok(newCell===table.rows[1].cells[4],"获取到下一行的单元格");
 
+});
+
+test("getPreviewCell",function(){
+    var table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
+            "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
+            "<tr><td>21</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>"),
+        ut = new UT(table);
+    var cell = table.rows[2].cells[5];
+    var newCell = ut.getPreviewCell(cell);
+    ok(newCell===cell.previousSibling,"找到前置单元格");
 });
 
 

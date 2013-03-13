@@ -336,8 +336,8 @@
         //,indentValue:'2em'
 
         //pageBreakTag
-        //分页标识符,默认是_baidu_page_break_tag_
-        //,pageBreakTag:'_baidu_page_break_tag_'
+        //分页标识符,默认是_ueditor_page_break_tag_
+        //,pageBreakTag:'_ueditor_page_break_tag_'
 
         //sourceEditor
         //源码的查看方式,codemirror 是代码高亮，textarea是文本框,默认是codemirror
