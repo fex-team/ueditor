@@ -55,99 +55,108 @@
 <script type="text/javascript">
     //实例化编辑器
     var ue = UE.getEditor('editor', {
-//        filterRules: function () {
-//            return{
-//                p: {$: {}},
-//                div: function (node) {
-//                    var tmpNode, p = UE.uNode.createElement('p');
-//                    while (tmpNode = node.firstChild()) {
-//                        if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
-//                            p.appendChild(tmpNode);
-//                        } else {
-//                            if (p.firstChild()) {
-//                                node.parentNode.insertBefore(p, node);
-//                                p = UE.uNode.createElement('p');
-//                            } else {
-//                                node.parentNode.insertBefore(tmpNode, node);
-//                            }
-//                        }
-//                    }
-//                    if (p.firstChild()) {
-//                        node.parentNode.insertBefore(p, node);
-//                    }
-//                    node.parentNode.removeChild(node);
-//                },
-//                br: {$: {}},
-//                a: function (node) {
-//                    node.setAttr();
-//                    node.setAttr('href', '#')
-//                },
-//                iframe: function (node) {
-//                    var val = node.getAttr('data-type');
-//                    if (!val || val != 'album') {
-//                        node.setAttr()
-//                    }
-//                },
-//                strong: {$: {}},
-//                em: {$: {}},
-//                img: function (node) {
-//                    var src = node.getAttr('src'),
-//                        float = node.getStyle('float'),
-//                        type = node.getAttr('data-type');
-//                    if(src && /baike/.test(src) && float|| type && type == 'map'){
-//
-//                    }else{
-//                        node.setAttr();
-//                        node.setAttr({'src':src})
-//                    }
-//                },
-//                ol: function (node) {
-//                    var className = node.getAttr('class');
-//                    if (!className || !/custom_/.test(className)) {
-//                        node.setAttr()
-//                    }
-//                },
-//                ul: function (node) {
-//                    var className = node.getAttr('class');
-//                    if (!className || !/custom_/.test(className)) {
-//                        node.setAttr()
-//                    }
-//                },
-//                li: function (node) {
-//                    var className = node.getAttr('class');
-//                    if (!className || !/list\-/.test(className)) {
-//                        node.setAttr()
-//                    }
-//                },
-//                table: function (node) {
-//                    UE.utils.each(node.getNodesByTagName('table'), function (t) {
-//                        UE.utils.each(t.getNodesByTagName('tr'), function (tr) {
-//                            var p = UE.uNode.createElement('p'), child, html = [];
-//                            while (child = tr.firstChild()) {
-//                                html.push(child.innerHTML());
-//                                tr.removeChild(child);
-//                            }
-//                            p.innerHTML(html.join('&nbsp;&nbsp;'));
-//                            t.parentNode.insertBefore(p, t);
-//                        })
-//                        t.parentNode.removeChild(t)
-//                    });
-//                    var val = node.getAttr('width');
-//                    node.setAttr();
-//                    if (val) {
-//                        ode.setAttr('width', val);
-//                    }
-//                },
-//                tbody: {$: {}},
-//                caption: {$: {}},
-//                th: {$: {}},
-//                td: {$: {valign: 1, align: 1}},
-//                tr: {$: {}},
-//                h1: {$: {}},
-//                h2: {$: {}},
-//                '-': 'script style meta'
-//            }
-//        }()
+        filterRules: function () {
+            return{
+                p: function(node){
+                    node.setAttr();
+                    if(!node.firstChild()){
+                        node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
+                    }
+                },
+                div: function (node) {
+                    var tmpNode, p = UE.uNode.createElement('p');
+                    while (tmpNode = node.firstChild()) {
+                        if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
+                            p.appendChild(tmpNode);
+                        } else {
+                            if (p.firstChild()) {
+                                node.parentNode.insertBefore(p, node);
+                                p = UE.uNode.createElement('p');
+                            } else {
+                                node.parentNode.insertBefore(tmpNode, node);
+                            }
+                        }
+                    }
+                    if (p.firstChild()) {
+                        node.parentNode.insertBefore(p, node);
+                    }
+                    node.parentNode.removeChild(node);
+                },
+                br: {$: {}},
+                a: function (node) {
+                    if(!node.firstChild()){
+                        node.parentNode.removeChild(node);
+                        return;
+                    }
+                    node.setAttr();
+                    node.setAttr('href', '#')
+                },
+                iframe: function (node) {
+                    var val = node.getAttr('data-type');
+                    if (!val || val != 'album') {
+                        node.setAttr()
+                    }
+                },
+                strong: {$: {}},
+                em: {$: {}},
+                img: function (node) {
+                    var src = node.getAttr('src'),
+                        float = node.getStyle('float'),
+                        type = node.getAttr('data-type');
+                    if(src && /baike/.test(src) && float|| type && type == 'map'){
+
+                    }else{
+                        node.setAttr();
+                        node.setAttr({'src':src})
+                    }
+                },
+                ol: function (node) {
+                    var className = node.getAttr('class');
+                    if (!className || !/custom_/.test(className)) {
+                        node.setAttr()
+                    }
+                },
+                ul: function (node) {
+                    var className = node.getAttr('class');
+                    if (!className || !/custom_/.test(className)) {
+                        node.setAttr()
+                    }
+                },
+                li: function (node) {
+                    var className = node.getAttr('class');
+                    if (!className || !/list\-/.test(className)) {
+                        node.setAttr()
+                    }
+                },
+                table: function (node) {
+                    UE.utils.each(node.getNodesByTagName('table'), function (t) {
+                        UE.utils.each(t.getNodesByTagName('tr'), function (tr) {
+                            var p = UE.uNode.createElement('p'), child, html = [];
+                            while (child = tr.firstChild()) {
+                                html.push(child.innerHTML());
+                                tr.removeChild(child);
+                            }
+                            p.innerHTML(html.join('&nbsp;&nbsp;'));
+                            t.parentNode.insertBefore(p, t);
+                        })
+                        t.parentNode.removeChild(t)
+                    });
+                    var val = node.getAttr('width');
+                    node.setAttr();
+                    if (val) {
+                        node.setAttr('width', val);
+                    }
+                },
+                tbody: {$: {}},
+                caption: {$: {}},
+                th: {$: {}},
+                td: {$: {valign: 1, align: 1}},
+                tr: {$: {}},
+                h1: {$: {}},
+                h2: {$: {}},
+                '-': 'script style meta'
+            }
+        }()
     });
 
     ue.addListener('ready', function () {

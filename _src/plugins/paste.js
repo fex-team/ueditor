@@ -52,7 +52,6 @@ UE.plugins['paste'] = function() {
     }
 
     var me = this;
-    var word_img_flag = {flag:""};
 
     var txtContent,htmlContent,address;
 
