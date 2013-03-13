@@ -46,24 +46,24 @@ UE.I18N['zh-cn'] = {
     },
     'paragraph':{'p':'段落', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
     'fontfamily':{
-           'songti':'宋体',
-           'kaiti':'楷体',
-           'heiti':'黑体',
-           'lishu':'隶书',
-           'yahei':'微软雅黑',
-           'andaleMono':'andale mono',
-           'arial': 'arial',
-           'arialBlack':'arial black',
-           'comicSansMs':'comic sans ms',
-           'impact':'impact',
-           'timesNewRoman':'times new roman'
+        'songti':'宋体',
+        'kaiti':'楷体',
+        'heiti':'黑体',
+        'lishu':'隶书',
+        'yahei':'微软雅黑',
+        'andaleMono':'andale mono',
+        'arial': 'arial',
+        'arialBlack':'arial black',
+        'comicSansMs':'comic sans ms',
+        'impact':'impact',
+        'timesNewRoman':'times new roman'
     },
     'customstyle':{
-            'tc':'标题居中',
-            'tl':'标题居左',
-            'im':'强调',
-            'hi':'明显强调'
-        },
+        'tc':'标题居中',
+        'tl':'标题居左',
+        'im':'强调',
+        'hi':'明显强调'
+    },
     elementPathTip:"元素路径",
     'wordCountTip':"字数统计",
     'wordCountMsg':'当前已输入{#count}个字符, 您还可以输入{#leave}个字符。 ',
@@ -350,7 +350,7 @@ UE.I18N['zh-cn'] = {
             'lang_Txt_underline':'给选中字加下划线',
             'lang_Txt_selectAll':'全部选中',
             'lang_Txt_visualEnter':'软回车',
-             'lang_Txt_fullscreen':'全屏'
+            'lang_Txt_fullscreen':'全屏'
         }
     },
     'insertframe':{
@@ -477,10 +477,6 @@ UE.I18N['zh-cn'] = {
         }
     },
     'formula':{
-        'static':{
-        }
-    },
-    'math':{
         'static':{
         }
     },
