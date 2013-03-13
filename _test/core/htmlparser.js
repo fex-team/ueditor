@@ -225,7 +225,6 @@ test( 'trace 1727:过滤超链接后面的空格', function () {
 
 test( '转换img标签', function () {
     var root = UE.htmlparser('<img src="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" width="553" height="275" />');
-    equals(root.toHtml().replace(new RegExp( '[\r' + domUtils.fillChar + ']*', 'g' ), ''),'');
-//        '<img src="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" width="553" height="275" word_img="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" style="background:url('+editor.options.UEDITOR_HOME_URL+'lang/'+editor.options.lang+'/images/localimage.png) no-repeat center center;border:1px solid #ddd"'+spa+' />' , '转换img标签');
-//    var spa=ua.browser.ie==6?' orgSrc="'+editor.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif"':'';
+    var spa=ua.browser.ie==6?' orgSrc="'+te.obj[1].options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif"':'';
+    equals(root.toHtml().replace(/[ ]+>/g,'>'), '<img src="'+te.obj[1].options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" width="553" height="275" word_img="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" style="background:url('+te.obj[1].options.UEDITOR_HOME_URL+'lang/'+te.obj[1].options.lang+'/images/localimage.png) no-repeat center center;border:1px solid #ddd"'+spa+' />' , '转换img标签');
 } );
