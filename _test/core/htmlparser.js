@@ -127,7 +127,7 @@ test( '补全不完整li', function() {
     equals(root.toHtml().replace(/[ ]+>/g,'>'), '<ul><li>123</li></ul>', '<ul>123--补全ul的child--li，前面有文本' );
     /*补li开始标签*/
     root = UE.htmlparser('</li>123');
-    equals(root.toHtml().replace(/[ ]+>/g,'>'), '<ul><li></li></ul>123', '</li>123--补全li开始标签，前面有文本' );
+    equals(root.toHtml().replace(/[ ]+>/g,'>'), '123', '</li>123--补全li开始标签，前面有文本' );
 });
 
 test( '属性引号问题', function() {
