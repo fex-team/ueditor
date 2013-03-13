@@ -59,8 +59,8 @@ var htmlparser = UE.htmlparser = function (htmlstr) {
             }
         }
         //按dtd处理嵌套
-        if(parent.type != 'root' && !dtd[parent.tagName][tagName])
-            parent = parent.parentNode;
+//        if(parent.type != 'root' && !dtd[parent.tagName][tagName])
+//            parent = parent.parentNode;
         var elm = new uNode({
             parentNode:parent,
             type:'element',
