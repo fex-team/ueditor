@@ -724,21 +724,26 @@
         return ui;
     };
 
-    // 表情
-    editorui.emotion = function (editor, iframeUrl) {
-        var ui = new editorui.MultiMenuPop({
-            title:editor.options.labelMap['emotion'] || editor.getLang("labelMap.emotion") || '',
-            editor:editor,
-            className:'edui-for-emotion',
-            iframeUrl:editor.ui.mapUrl(iframeUrl || (editor.options.iframeUrlMap || {})['emotion'] || iframeUrlMap['emotion'])
-        });
-        editorui.buttons['emotion']=ui;
+    // 表情、公式
+    var multiMenus = ['emotion', 'formula'];
+    for (var m = 0, mi; mi = multiMenus[m++];) {
+        (function (cmd) {
+            editorui[cmd] = function (editor, iframeUrl) {
+                var ui = new editorui.MultiMenuPop({
+                    title:editor.options.labelMap[cmd] || editor.getLang("labelMap." + cmd + "") || '',
+                    editor:editor,
+                    className:'edui-for-' + cmd,
+                    iframeUrl:editor.ui.mapUrl(iframeUrl || (editor.options.iframeUrlMap || {})[cmd] || iframeUrlMap[cmd])
+                });
+                editorui.buttons[cmd] = ui;
 
-        editor.addListener('selectionchange', function () {
-            ui.setDisabled(editor.queryCommandState('emotion') == -1)
-        });
-        return ui;
-    };
+                editor.addListener('selectionchange', function () {
+                    ui.setDisabled(editor.queryCommandState(cmd) == -1)
+                });
+                return ui;
+            };
+        })(mi)
+    }
 
     editorui.autotypeset = function (editor) {
         var ui = new editorui.AutoTypeSetButton({
