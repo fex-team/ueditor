@@ -309,7 +309,6 @@ test( '文本刷a标签(闭合)', function () {
     stop();
     setTimeout(function(){
         editor.setContent('hello<a href="http://www.baidu.com/">baidu</a>');
-        debugger
         var p = editor.body.firstChild;
         var a = p.lastChild;
         range.selectNode( p.firstChild ).select();
