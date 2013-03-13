@@ -95,24 +95,24 @@ UE.plugins['formula'] = function () {
         return orgQuery.apply(this, arguments)
     };
 
-    me.addListener("beforegetcontent beforegetscene",function(){
+    me.addListener("beforegetcontent beforegetscene", function () {
         if (!me.window || !me.window.$)return;
-        utils.each(domUtils.getElementsByTagName(me.body,'span','mathquill-rendered-math'),function(di){
+        utils.each(domUtils.getElementsByTagName(me.body, 'span', 'mathquill-rendered-math'), function (di) {
             var id = di.getAttribute("formulaid");
-            var txt =  me.window.$("[formulaid=" + id + "]").mathquill("latex");
-            var span = domUtils.createElement(me.document,'span',{
-                'class' : 'mathquill-embedded-latex',
+            var txt = me.window.$("[formulaid=" + id + "]").mathquill("latex");
+            var span = domUtils.createElement(me.document, 'span', {
+                'class':'mathquill-embedded-latex',
                 'formulaid':id
             });
             span.appendChild(me.document.createTextNode(txt));
-            di.parentNode.replaceChild(span,di);
+            di.parentNode.replaceChild(span, di);
         });
     });
 
     me.addListener("aftergetcontent aftersetcontent aftergetscene", function () {
         if (!me.window || !me.window.$)return;
         var list = me.window.$(".mathquill-embedded-latex"), obj = {};
-        if(list.length){
+        if (list.length) {
             for (var i = 0, len = list.length; i < len; i++) {
                 obj[list[i].getAttribute("formulaid")] = list[i].innerText || list[i].textContent || list[i].nodeValue;
             }
@@ -131,7 +131,7 @@ UE.plugins['formula'] = function () {
             var rng = me.selection.getRange();
             var start = filter(rng.startContainer);
             var end = filter(rng.endContainer);
-            var id=0;
+            var id = 0;
 
             if (start && end && start == end) {
                 id = start.getAttribute("formulaid");
@@ -140,12 +140,12 @@ UE.plugins['formula'] = function () {
                 var span = domUtils.createElement(doc, "span", {
                     formulaid:me._formulaid
                 });
-                span.className="mathquill-editable";
+                span.className = "mathquill-editable";
                 span.appendChild(doc.createTextNode(txt));
                 me.execCommand('inserthtml', span.outerHTML);
 
                 id = me._formulaid;
-                me.window.$("[formulaid=" + id+ "]").html("").mathquill('editable');
+                me.window.$("[formulaid=" + id + "]").html("").mathquill('editable');
                 me._formulaid += 1;
             }
 
