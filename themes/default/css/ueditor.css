@@ -493,6 +493,9 @@ div.edui-box {
 .edui-default  .edui-for-bold .edui-icon {
     background-position: 0 0;
 }
+.edui-default  .edui-for-border .edui-icon {
+    background-position:-160px -40px;
+}
 
 .edui-default  .edui-for-italic .edui-icon {
     background-position: -60px 0;
