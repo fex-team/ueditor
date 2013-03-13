@@ -109,12 +109,10 @@ test('删除table',function(){
 
     var tds = editor.body.getElementsByTagName( 'td' );
     range.setStart( tds[0], 0 ).collapse( true ).select();
-//    setTimeout(function(){    editor.execCommand( 'deletetable' );
-//    },1000);
-//
-//    ua.manualDeleteFillData(editor.body);
-//    var table=editor.body.getElementsByTagName('table')[0];
-//    equal(table,undefined,'删除成功');
+    editor.execCommand( 'deletetable' );
+    ua.manualDeleteFillData(editor.body);
+    var table=editor.body.getElementsByTagName('table')[0];
+    equal(table,undefined,'删除成功');
 });
 //
 //test('修改table屬性',function(){
