@@ -1,0 +1,41 @@
+li{float:left;list-style:none;}
+.wrapper{
+    margin: 10px auto;
+    width: 320px;
+}
+.wrapper div{
+    float: left;
+    width: 100%;
+}
+.tabMenu{
+    border:solid #E1E6E6 1px;
+    background-color:white;
+}
+.tabTitle li{
+    padding: 0 5px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.tabTitle li.cur{
+    background: #fff;
+    font-weight: bold;
+}
+.tabContent{
+    border: 1px solid #ccc;
+}
+.tabContent li{
+    width:30px;
+    height:30px;
+    margin:5px;
+    background-image:url(img/formula.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+.editCon{
+    margin-top: 10px;
+}
