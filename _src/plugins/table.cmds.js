@@ -87,7 +87,7 @@
             if (table) {
                 var p = this.document.createElement("p");
                 p.innerHTML = browser.ie ? '&nbsp;' : '<br />';
-                domUtils.insertAfter(table,p);
+                domUtils.insertAfter(table, p);
                 this.selection.getRange().setStart(p, 0).setCursor();
             }
         }
@@ -318,7 +318,7 @@
                 }
             }
             rng.moveToBookmark(bk).select();
-            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
+            if (table.getAttribute("interlaced") === "enabled")this.fireEvent("interlacetable", table);
         }
     };
     //后插入行
@@ -346,7 +346,7 @@
                 }
             }
             rng.moveToBookmark(bk).select();
-            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
+            if (table.getAttribute("interlaced") === "enabled")this.fireEvent("interlacetable", table);
         }
     };
     UE.commands["deleterow"] = {
@@ -386,7 +386,7 @@
                     if (newCell) rng.selectNodeContents(newCell).setCursor(false, true);
                 }
             }
-            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
+            if (table.getAttribute("interlaced") === "enabled")this.fireEvent("interlacetable", table);
         }
     };
     UE.commands["insertcol"] = {
@@ -684,7 +684,7 @@
         queryCommandState:function () {
             return getTableItemsByRange(this).table ? 0 : -1
         },
-        execCommand:function (cmd, data) {
+        execCommand:function (cmd, data, forTable) {
             var me = this,
                 ut = getUETableBySelected(me);
 
@@ -699,9 +699,9 @@
                 }
                 me.selection.getRange().setCursor(true);
             } else {
-                utils.each(ut.selectedTds, function (cell) {
+                utils.each(!forTable ? ut.selectedTds : domUtils.getElementsByTagName(ut.table, "td"), function (cell) {
                     domUtils.setAttributes(cell, data);
-                });
+                })
             }
         }
     };
@@ -788,7 +788,7 @@
                 cellInfo = ut.getCellInfo(cell);
             ut.sortTable(cellInfo.cellIndex, fn);
             range.moveToBookmark(bk).select();
-            ut.table.getAttribute("interlaced") ==="enabled" && me.fireEvent("interlacetable",ut.table);
+            ut.table.getAttribute("interlaced") === "enabled" && me.fireEvent("interlacetable", ut.table);
         }
     };
 
@@ -814,11 +814,11 @@
     };
 
     UE.commands["cleartablebackground"] = {
-        queryCommandState:function(){
+        queryCommandState:function () {
             var cells = getSelectedArr(this);
-            if(!cells.length)return -1;
-            for(var i= 0,cell;cell = cells[i++];){
-                if(cell.style.backgroundColor!=="") return 0;
+            if (!cells.length)return -1;
+            for (var i = 0, cell; cell = cells[i++];) {
+                if (cell.style.backgroundColor !== "") return 0;
             }
             return -1;
         },
@@ -830,24 +830,24 @@
     };
 
     UE.commands["interlacetable"] = UE.commands["uninterlacetable"] = {
-        queryCommandState:function(cmd){
+        queryCommandState:function (cmd) {
             var table = getTableItemsByRange(this).table;
-            if(!table) return -1;
+            if (!table) return -1;
             var interlaced = table.getAttribute("interlaced");
-            if(cmd =="interlacetable"){
+            if (cmd == "interlacetable") {
                 return /*(interlaced === "enabled") ? -1:*/0;
-            }else{
-                return (!interlaced||interlaced === "disabled") ? -1:0;
+            } else {
+                return (!interlaced || interlaced === "disabled") ? -1 : 0;
             }
         },
-        execCommand:function (cmd,classList) {
+        execCommand:function (cmd, classList) {
             var table = getTableItemsByRange(this).table;
-            if( cmd == "interlacetable" ){
-                table.setAttribute("interlaced","enabled");
-                this.fireEvent("interlacetable",table,classList);
-            }else{
-                table.setAttribute("interlaced","disabled");
-                this.fireEvent("uninterlacetable",table);
+            if (cmd == "interlacetable") {
+                table.setAttribute("interlaced", "enabled");
+                this.fireEvent("interlacetable", table, classList);
+            } else {
+                table.setAttribute("interlaced", "disabled");
+                this.fireEvent("uninterlacetable", table);
             }
         }
     };
