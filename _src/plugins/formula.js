@@ -95,33 +95,33 @@ UE.plugins['formula'] = function () {
         return orgQuery.apply(this, arguments)
     };
 
-    me.addOutputRule(function (root) {
-        utils.each(root.getNodesByTagName('span'), function (pi) {
-            var cls;
-            if ((cls = pi.getAttr('class')) && /mathquill-rendered-math/.test(cls)) {
-                var id = pi.getAttr("formulaid");
-                var txt = me.window.$("[formulaid=" + id + "]").mathquill("latex");
-                var span = UE.uNode.createElement("span");
-
-                span.setAttr('class', 'mathquill-embedded-latex');
-                span.setAttr("formulaid", id);
-                span.appendChild(UE.uNode.createText(txt));
-                pi.parentNode.replaceChild(span, pi);
-            }
+    me.addListener("beforegetcontent beforegetscene",function(){
+        if (!me.window || !me.window.$)return;
+        utils.each(domUtils.getElementsByTagName(me.body,'span','mathquill-rendered-math'),function(di){
+            var id = di.getAttribute("formulaid");
+            var txt =  me.window.$("[formulaid=" + id + "]").mathquill("latex");
+            var span = domUtils.createElement(me.document,'span',{
+                'class' : 'mathquill-embedded-latex',
+                'formulaid':id
+            });
+            span.appendChild(me.document.createTextNode(txt));
+            di.parentNode.replaceChild(span,di);
         });
     });
 
-    me.addListener("aftersetcontent", function () {
+    me.addListener("aftergetcontent aftersetcontent aftergetscene", function () {
         if (!me.window || !me.window.$)return;
         var list = me.window.$(".mathquill-embedded-latex"), obj = {};
-        for (var i = 0, len = list.length; i < len; i++) {
-            obj[list[i].getAttribute("formulaid")] = list[i].innerText || list[i].textContent || list[i].nodeValue;
-        }
-        for (var attr in obj) {
-            me.window.$("[formulaid=" + attr + "]")
-                .html("")
-                .mathquill("editable")
-                .mathquill("write", obj[attr].replace("{/}", "\\"));
+        if(list.length){
+            for (var i = 0, len = list.length; i < len; i++) {
+                obj[list[i].getAttribute("formulaid")] = list[i].innerText || list[i].textContent || list[i].nodeValue;
+            }
+            for (var attr in obj) {
+                me.window.$("[formulaid=" + attr + "]")
+                    .html("")
+                    .mathquill("editable")
+                    .mathquill("write", obj[attr].replace("{/}", "\\"));
+            }
         }
     });
 
