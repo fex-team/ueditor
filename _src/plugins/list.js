@@ -162,7 +162,7 @@ UE.plugins['list'] = function () {
         utils.each(root.getNodesByTagName('li'),function(li){
             var tmpP = UE.uNode.createElement('p');
             for(var i= 0,ci;ci=li.children[i];){
-                if(ci.type == 'text' || dtd.$inline[ci.tagName]){
+                if(ci.type == 'text' || dtd.p[ci.tagName]){
                     tmpP.appendChild(ci);
                 }else{
                     if(tmpP.firstChild()){
@@ -183,7 +183,6 @@ UE.plugins['list'] = function () {
 
     //调整索引标签
     me.addListener('contentchange',function(){
-
         adjustListStyle(me.document)
     });
 
