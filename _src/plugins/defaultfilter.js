@@ -55,7 +55,16 @@ UE.plugins['defaultfilter'] = function (){
             }
 
         });
-
+        if(me.options.autoClearEmptyNode){
+            root.traversal(function(node){
+                if(node.type=='element' && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attr){
+                    if( !node.firstChild()) node.parentNode.removeChild(node);
+                    else if(node.tagName == 'span'){
+                        node.parentNode.removeChild(node,true)
+                    }
+                }
+            })
+        }
     });
 
     //从编辑器出去的内容处理
@@ -88,5 +97,16 @@ UE.plugins['defaultfilter'] = function (){
 
             }
         });
+        if(me.options.autoClearEmptyNode){
+            root.traversal(function(node){
+                if(node.type=='element' && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attr){
+                    if( !node.firstChild()) node.parentNode.removeChild(node);
+                    else if(node.tagName == 'span'){
+                        node.parentNode.removeChild(node,true)
+                    }
+                }
+            })
+        }
+
     });
 };
