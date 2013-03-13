@@ -57,9 +57,9 @@ UE.plugins['defaultfilter'] = function (){
         });
         if(me.options.autoClearEmptyNode){
             root.traversal(function(node){
-                if(node.type=='element' && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attr){
+                if(node.type=='element' && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attrs){
                     if( !node.firstChild()) node.parentNode.removeChild(node);
-                    else if(node.tagName == 'span'){
+                    else if(node.tagName == 'span'&& !node.attr){
                         node.parentNode.removeChild(node,true)
                     }
                 }
@@ -99,9 +99,9 @@ UE.plugins['defaultfilter'] = function (){
         });
         if(me.options.autoClearEmptyNode){
             root.traversal(function(node){
-                if(node.type=='element' && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attr){
+                if(node.type=='element' && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attrs){
                     if( !node.firstChild()) node.parentNode.removeChild(node);
-                    else if(node.tagName == 'span'){
+                    else if(node.tagName == 'span' ){
                         node.parentNode.removeChild(node,true)
                     }
                 }
