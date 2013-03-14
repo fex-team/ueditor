@@ -679,6 +679,26 @@
         }
     };
 
+    UE.commands["colalign"] = {
+        queryCommandState:function () {
+            return getTableItemsByRange(this).table ? 0 : -1
+        },
+        execCommand:function(cmd,data){
+            var me = this,
+                tmpCell = getTableItemsByRange(me).cell,
+                ut = getUETable(tmpCell),
+                tmpInfo = ut.getCellInfo(tmpCell),
+                cell = ut.getCell(0,ut.indexTable[0][tmpInfo.colIndex].cellIndex),
+                cellInfo = ut.getCellInfo(cell),
+                endTdCol = ut.getCell(ut.rowsNum - 1, ut.indexTable[ut.rowsNum - 1][!ut.selectedTds.length ? cellInfo.colIndex:ut.cellsRange.endColIndex].cellIndex);
+            var cellsRng = ut.getCellsRange(cell,endTdCol),
+                cells = ut.getCells(cellsRng);
+            utils.each(cells, function (cell) {
+                domUtils.setAttributes(cell, data);
+            })
+        }
+    };
+
     //单元格对齐方式
     UE.commands['cellalignment'] = {
         queryCommandState:function () {
