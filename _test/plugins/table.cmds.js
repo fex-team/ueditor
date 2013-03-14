@@ -224,6 +224,15 @@ test('删除行',function(){
     range.setStart(tds[5],0).collapse(1).select();
     editor.execCommand('deleterow');
     equal(editor.body.getElementsByTagName('tr').length,2,'删除行');
+
+    var table = editor.document.getElementsByTagName("table")[0];
+    var cell = table.rows[0].cells[0];
+    range.setStart(cell,0).setCursor();
+    editor.execCommand("mergeDown");
+    equal(cell.rowSpan,2,"合并了一行");
+    editor.execCommand("deleterow");
+    equal(table.rows.length,1,"在合并的单元格中删除行后，表格变成了一行");
+
 });
 
 //test('mouse event',function(){
