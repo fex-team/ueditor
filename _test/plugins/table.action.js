@@ -27,6 +27,7 @@ test( 'backspace事件:删除caption', function() {
         start();
     },20);
 });
+
 test( 'backspace事件:deleterow', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -51,6 +52,7 @@ test( 'backspace事件:deleterow', function() {
       start();
     },20);
 });
+
 test( 'backspace事件:deletecol', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -75,6 +77,54 @@ test( 'backspace事件:deletecol', function() {
         start();
     },20);
 });
+
 test( 'backspace事件:delcells', function() {
    //TODO
+});
+
+/*trace 3067*/
+test( 'trace 3067 向右合并--tab键', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:2,numRows:2} );
+    ua.manualDeleteFillData( editor.body );
+
+    var tds = editor.body.getElementsByTagName( 'td' );
+    range.setStart( tds[0], 0 ).collapse( true ).select();
+    editor.execCommand( 'mergeright' );
+    range.setStart( tds[0], 0 ).collapse( true ).select();
+    range = editor.selection.getRange();
+    var common = range.getCommonAncestor(true, true);
+    equal(common.colSpan,2,'tab键前光标位于合并后的单元格中');
+    ua.keydown(editor.body,{'keyCode':9});
+    setTimeout(function(){
+        range = editor.selection.getRange();
+        common = range.getCommonAncestor(true, true);
+        equal(common.colSpan,1,'tab键前光标跳到合并后单元格的下一个单元格中');
+        start();
+    },20);
+    stop();
+} );
+
+test('拖拽',function(){
+    if (browser.ie && browser.version < 8) return;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable');
+    ua.manualDeleteFillData( editor.body );
+    var tds = te.obj[0].body.getElementsByTagName('td');
+    equal(tds[1].width,71,'拖拽前');
+    ua.mousemove(tds[1],{clientX:199,clientY:100});
+    ua.mousedown(tds[1],{clientX:199,clientY:100});
+    setTimeout(function(){
+        ua.mousemove(tds[1],{clientX:299,clientY:100});
+        ua.mouseup(tds[1],{clientX:299,clientY:100});
+        equal(tds[1].width,143,'拖拽后');
+        start();
+    },20);
+    stop();
 });
