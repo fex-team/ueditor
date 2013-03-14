@@ -5,7 +5,7 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
-test( '注册del/backspace事件:删除caption', function() {
+test( 'backspace事件:删除caption', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );
@@ -27,7 +27,7 @@ test( '注册del/backspace事件:删除caption', function() {
         start();
     },20);
 });
-test( '注册del/backspace事件:deleterow', function() {
+test( 'backspace事件:deleterow', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );
@@ -51,7 +51,7 @@ test( '注册del/backspace事件:deleterow', function() {
       start();
     },20);
 });
-test( '注册del/backspace事件:deletecol', function() {
+test( 'backspace事件:deletecol', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );
@@ -75,6 +75,6 @@ test( '注册del/backspace事件:deletecol', function() {
         start();
     },20);
 });
-test( '注册del/backspace事件:delcells', function() {
+test( 'backspace事件:delcells', function() {
    //TODO
 });
