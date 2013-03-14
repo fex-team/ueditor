@@ -345,7 +345,7 @@ test("execCommand", function() {
     range.selectNode(p).select();
     editor.execCommand("forecolor", "red");
     /*span发生了变化，需要重新获取*/
- 
+
     var span = doc.getElementsByTagName('span')[0];
     equal(span.style['color'], 'red', 'check execCommand color');
     var div_new = document.createElement('div');

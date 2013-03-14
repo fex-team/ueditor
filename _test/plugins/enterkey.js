@@ -119,7 +119,7 @@ test( 'br做回车，选区闭合,在节点尾部输入回车，要插入2个br'
     },50);
 } );
 
-test( 'table中回车', function () {
+test( 'table首行中回车', function () {
     var editor = te.obj[0];
     if(!ua.browser.ie){
         var range = new baidu.editor.dom.Range( editor.document );
@@ -128,12 +128,12 @@ test( 'table中回车', function () {
         ua.keydown(editor.body,{'keyCode':13});
         stop();
         setTimeout(function(){
-            if(ua.browser.opera || (ua.browser.safari && !ua.browser.chrome)){
-                equal(ua.getChildHTML(te.obj[0].body.firstChild),'<tbody><tr><td><br></td></tr></tbody>','加入p');//opera中，由原生方法实现p标签
-            }
-            else{
-                equal(ua.getChildHTML(te.obj[0].body.firstChild),'<tbody><tr><td><p><br></p></td></tr></tbody>','加入p');
-            }
+//            if(ua.browser.opera || (ua.browser.safari && !ua.browser.chrome)){
+            equal(ua.getChildHTML(te.obj[0].body.firstChild),'<br>','加入p');//opera中，由原生方法实现p标签
+//            }
+//            else{
+//                equal(ua.getChildHTML(te.obj[0].body.firstChild),'<br>','加入p');
+//            }
             start();
         },20);
     }
@@ -152,7 +152,7 @@ test( '去除_moz_dirty', function () {
         }, 20 );
         stop();
     }
-   
+
 } );
 ///*不作处理chrome会产生div*/
 test( 'chrome删除div', function () {

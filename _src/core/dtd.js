@@ -31,7 +31,7 @@ var dtd = dom.dtd = (function() {
         N = _({'#':1}),
         O = X( _({param:1}), K ),
         P = X( _({form:1}), A, D, E, I ),
-        Q = _({li:1}),
+        Q = _({li:1,ol:1,ul:1}),
         R = _({style:1,script:1}),
         S = _({base:1,link:1,meta:1,title:1}),
         T = X( S, R ),

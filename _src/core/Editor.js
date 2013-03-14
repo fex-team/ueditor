@@ -97,7 +97,6 @@
             zIndex:999,
             imagePopup:true,
             enterTag:'p',
-            pageBreakTag:'_baidu_page_break_tag_',
             customDomain:false,
             lang:'zh-cn',
             langPath:me.options.UEDITOR_HOME_URL + 'lang/',
@@ -188,7 +187,6 @@
                 }
             }
             UE.delEditor(key);
-
         },
         /**
          * 渲染编辑器的DOM到指定容器，必须且只能调用一次

@@ -51,8 +51,9 @@ UE.plugins['keystrokes'] = function() {
             //避免按两次删除才能生效的问题
             if(rng.collapsed && rng.inFillChar()){
                 start = rng.startContainer;
-                rng.setStartBefore(start).shrinkBoundary(true).collapse(true);
+
                 if(domUtils.isFillChar(start)){
+                    rng.setStartBefore(start).shrinkBoundary(true).collapse(true);
                     domUtils.remove(start)
                 }else{
                     start.nodeValue = start.nodeValue.replace(new RegExp('^' + domUtils.fillChar ),'');
@@ -94,7 +95,7 @@ UE.plugins['keystrokes'] = function() {
                 domUtils.preventDefault(evt);
                 return;
             }
-            range = me.selection.getRange();
+            var range = me.selection.getRange();
             me.fireEvent('saveScene');
             for (var i = 0,txt = '',tabSize = me.options.tabSize|| 4,tabNode =  me.options.tabNode || '&nbsp;'; i < tabSize; i++) {
                 txt += tabNode;

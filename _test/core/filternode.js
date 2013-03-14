@@ -145,3 +145,34 @@ test( '特殊规则过滤', function() {
     });
     equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><p></p></div>','innerHTML中包含注释');
 });
+
+test( '只有white list--滤除属性', function () {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa"><p>sdf</p><i>sdf</i></div>');
+    node.innerHTML('<table></table>hellotable<!--hello--><p><div class="div_class" id="div_id" name="div_name">hellodiv<span style="color:red;font-size:12px" ><p>hellospan</span><!--hello--></p></div></p><span style="color:red;font-size:12px" >hellospan</span>');
+    UE.filterNode(node,{
+        div:{
+            $:{
+                id:{},
+                'class':{}
+            }
+        },
+        table:{},
+        span:{}
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'), '<div id="aa"><table></table>hellotable<!--hello--><div id="div_id" class="div_class">hellodivhellospan<!--hello--></div><span style="color:red;font-size:12px" >hellospan</span></div>', '滤除属性');
+} );
+
+test( '只有black list', function () {
+    var uNode = UE.uNode;
+    var node = uNode.createElement('<div id="aa"><p>sdf</p><i>sdf</i></div>');
+    node.innerHTML('<style  type="text/css"></style><script type="text/javascript"></script><!--comment--><div><script type="text/javascript"></script><span>hello1</span>hello2</div>');
+    UE.filterNode(node,{
+        span:'-',
+        em:'-',
+        '#comment':'-',
+        script:'-',
+        style:'-'
+    });
+    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa">hello2</div>','过滤规则中包含html中不存在的标签');
+} );

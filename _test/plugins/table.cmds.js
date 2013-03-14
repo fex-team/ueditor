@@ -93,7 +93,7 @@ test('完全拆分单元格',function(){
         editor.undoManger.undo();
         equal( tds[0].getAttribute( 'colspan' ), 2, '撤销--[0][0]单元格colspan' );
         equal( tds[0].getAttribute( 'rowspan' ), 2, '撤销--[0][0]单元格rowspan' );
-            start();
+        start();
     },50);
     stop();
 });
@@ -109,12 +109,10 @@ test('删除table',function(){
 
     var tds = editor.body.getElementsByTagName( 'td' );
     range.setStart( tds[0], 0 ).collapse( true ).select();
-//    setTimeout(function(){    editor.execCommand( 'deletetable' );
-//    },1000);
-//
-//    ua.manualDeleteFillData(editor.body);
-//    var table=editor.body.getElementsByTagName('table')[0];
-//    equal(table,undefined,'删除成功');
+    editor.execCommand( 'deletetable' );
+    ua.manualDeleteFillData(editor.body);
+    var table=editor.body.getElementsByTagName('table')[0];
+    equal(table,undefined,'删除成功');
 });
 //
 //test('修改table屬性',function(){
@@ -541,3 +539,19 @@ test( 'trace 1307:adjustTable--多次合并单元格切换到源码再切回来-
 //    var table = editor.body.getElementsByTagName('table');
 //    equal($(table).attr('class'),'asdf noBorderTable','table的class');
 //});
+
+test( '表格中设置对齐方式', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<table><tbody><tr><td></td><td><p>hello</p></td></tr></tbody></table>' );
+    var tds = editor.body.getElementsByTagName( 'td' );
+    range.setStart( tds[0], 0 ).collapse( true ).select();
+    editor.execCommand( 'cellalignment', {align:'right',vAlign:'top'} );
+    equal( tds[0].align, 'right', 'td对齐方式为右上对齐' );
+    equal( tds[0].vAlign, 'top', 'td对齐方式为右上对齐' );
+
+    /*不闭合设置对齐方式*/
+    range.selectNode( tds[1].firstChild, 0 ).select();
+    editor.execCommand( 'cellalignment', {align:'center',vAlign:'middle'} );
+    equal( tds[1].align, 'center', 'p对齐方式为居中对齐' );
+} );

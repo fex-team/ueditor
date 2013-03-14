@@ -37,6 +37,9 @@ UE.plugins['highlightcode'] = function() {
                 if(pre){
                     domUtils.removeAttributes(pre,'id');
                     me.window.SyntaxHighlighter.highlight(pre);
+                    utils.each(me.document.getElementsByTagName('code'),function(code){
+                        code.innerHTML = code.innerHTML.replace(/\s/g,'&nbsp;')
+                    })
                 }
             }
 

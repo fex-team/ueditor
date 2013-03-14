@@ -9,6 +9,7 @@
 UE.plugins['pagebreak'] = function () {
     var me = this,
         notBreakTags = ['td'];
+    me.setOpt('pageBreakTag','_ueditor_page_break_tag_');
 
     function fillNode(node){
         if(domUtils.isEmptyBlock(node)){
@@ -30,6 +31,25 @@ UE.plugins['pagebreak'] = function () {
     function isHr(node){
         return node && node.nodeType == 1 && node.tagName == 'HR' && node.className == 'pagebreak';
     }
+    me.addInputRule(function(root){
+        root.traversal(function(node){
+            if(node.type == 'text' && node.data == me.options.pageBreakTag){
+                var hr = UE.uNode.createElement('<hr class="pagebreak" noshade="noshade" size="5" style="-webkit-user-select: none;">');
+                node.parentNode.insertBefore(hr,node);
+                node.parentNode.removeChild(node)
+            }
+        })
+    });
+    me.addOutputRule(function(node){
+        utils.each(node.getNodesByTagName('hr'),function(n){
+            if(n.getAttr('class') == 'pagebreak'){
+                var txt = UE.uNode.createText(me.options.pageBreakTag);
+                n.parentNode.insertBefore(txt,n);
+                n.parentNode.removeChild(n);
+            }
+        })
+
+    });
     me.commands['pagebreak'] = {
         execCommand:function () {
             var range = me.selection.getRange(),hr = me.document.createElement('hr');
