@@ -330,23 +330,24 @@ test("getTabNextCell", function () {
     ok(newCell === table.rows[1].cells[0], "找到下一行的第一个单元格");
 });
 
-test("getSameStartPosXCells", function () {
-    var table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
-            "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
-            "<tr><td>21</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>"),
-        ut = new UT(table);
-    var cell = table.rows[0].cells[1];
-    var cells = ut.getSameStartPosXCells(cell);
-    equal(cells.length, 3, "获取到三个单元格")
-
-    table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
-        "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
-        "<tr><td>21</td><td colspan='2'>2</td><td>4</td><td>6</td><td>7</td></tr>");
-    ut = new UT(table);
-    cells = ut.getSameStartPosXCells(cell);
-    ok(cells.length === 2, "获取到2个单元格");
-
-    cells = ut.getSameStartPosXCells(table.rows[0].cells[0]);
-    ok(cells.length===3,"获取到三个单元格")
-});
+//test("getSameStartPosXCells", function () {
+//    var table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
+//            "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
+//            "<tr><td>21</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>"),
+//        ut = new UT(table);
+//    var cell = table.rows[0].cells[1];
+//    var cells = ut.getSameStartPosXCells(cell);
+//    equal(cells.length, 3, "获取到三个单元格")
+//
+//    table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
+//        "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
+//        "<tr><td>21</td><td colspan='2'>2</td><td>4</td><td>6</td><td>7</td></tr>");
+//    ut = new UT(table);
+//    cells = ut.getSameStartPosXCells(cell);
+//    ok(cells.length === 2, "获取到2个单元格");
+//
+//    cells = ut.getSameStartPosXCells(table.rows[0].cells[0]);
+//    ok(cells.length===3,"获取到三个单元格");
+//
+//});
 
