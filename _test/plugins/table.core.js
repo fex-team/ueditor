@@ -154,6 +154,18 @@ test("mergeRight,mergeDown", function () {
 
     equal(cell.parentNode.rowIndex, 0, "合并到了正确的位置")
 });
+test("mergeRange",function(){
+    var table = getTable("<tr><td rowspan='3'>1</td><td>2</td><td>3</td><td rowspan='2'>4</td><td>5</td><td>6</td></tr>" +
+            "<tr><td>2</td><td>3</td><td>5</td><td>6</td></tr>" +
+            "<tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>"),
+        ut = new UT(table);
+    var range = ut.getCellsRange(table.rows[0].cells[1],table.rows[2].cells[3]);
+    ut.setSelected(range);
+    ut.mergeRange();
+    ok(table.rows[0].cells[1].rowSpan===3,"合并选区")
+
+});
+
 test("split", function () {
     var table = getTable("<tr><td rowspan='3'>1</td><td>2</td><td>3</td><td rowspan='2' colspan='2'>4</td><td>6</td><td>7</td></tr>" +
             "<tr><td>2</td><td>3</td><td>6</td><td>7</td></tr>" +
