@@ -203,6 +203,12 @@ test('插入列',function(){
     equal( tds[0].getAttribute('colspan'), 3, '[0][0]单元格colspan');
     editor.undoManger.undo();
     equal( tds[0].getAttribute('colspan'), 2, '[0][0]单元格colspan');
+
+    range.setStart(tds[1],0).setCursor();
+    editor.execCommand("insertcol");
+    equal(tds[0].parentNode.cells.length,3,"插入了一列")
+
+
 });
 
 test('删除行',function(){
@@ -222,6 +228,17 @@ test('删除行',function(){
     range.setStart(tds[5],0).collapse(1).select();
     editor.execCommand('deleterow');
     equal(editor.body.getElementsByTagName('tr').length,2,'删除行');
+
+    var table = editor.document.getElementsByTagName("table")[0];
+    var cell = table.rows[0].cells[0];
+    range.setStart(cell,0).setCursor();
+    editor.execCommand("mergeDown");
+    equal(cell.rowSpan,2,"合并了一行");
+    editor.execCommand("deleterow");
+    equal(table.rows.length,1,"在合并的单元格中删除行后，表格变成了一行");
+
+
+
 });
 
 //test('mouse event',function(){
