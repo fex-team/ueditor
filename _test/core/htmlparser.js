@@ -1,3 +1,10 @@
+/**
+ * Created with JetBrains PhpStorm.
+ * User: luqiong
+ * Date: 13-3-14
+ * Time: 下午2:31
+ * To change this template use File | Settings | File Templates.
+ */
 module( 'core.htmlparser' );
 
 test( '普通标签处理', function() {
@@ -30,32 +37,32 @@ test( '补全不完整table', function() {
     root = UE.htmlparser('<td></td>' + '\n\r' + '<td></td>');
     equals(root.toHtml(),'<table><tbody><tr><td></td><td></td></tr></tbody></table>','包含\n，补全table');
     root = UE.htmlparser('<table>');
-    equals( root.toHtml().toLowerCase(), '<table><tr><td></td></tr></table>', '<table>--补孩子' );
+    equals( root.toHtml().toLowerCase(), '<table></table>', '<table>--不补孩子' );
     /*补parent*/
     root = UE.htmlparser('<td>');
     equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td></tr></tbody></table>', '<td>--补父亲' );
     /*补parent和child*/
     root = UE.htmlparser('<tr>hello');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td>hello</td></tr></tbody></table>', '<tr>hello--孩子父亲都补' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr>hell</tr></tbody></table>', '<tr>hello--补父亲不补孩子' );
 
     root = UE.htmlparser('<td>123');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td>123</td></tr></tbody></table>', '<td>123' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td></tr></tbody></table>123', '<td>123--文本放在table外' );
 
     root = UE.htmlparser('123<td>');
     equals( root.toHtml().toLowerCase(), '123<table><tbody><tr><td></td></tr></tbody></table>', '123<td>' );
 
     root = UE.htmlparser('<tr><td>123');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td>123</td></tr></tbody></table>', '<tr><td>123' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td></tr></tbody></table>123', '<tr><td>123' );
 
     root = UE.htmlparser('<td>123<tr>');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td>123</td></tr><tr><td></td></tr></tbody></table>', '<td>123<tr>' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td></tr></tbody></table>123<table><tbody><tr><td></td></tr></tbody></table>', '<td>123<tr>' );
 
     /*补充为2个td*/
     root = UE.htmlparser('<tr>123<td>');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td>123</td><td></td></tr></tbody></table>', '<tr>123<td>--tr和td之间有文字' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr></tr></tbody></table>123<table><tbody><tr><td></td></tr></tbody></table>', '<tr>123<td>--tr和td之间有文字' );
 
     root = UE.htmlparser('<td><td>123');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td><td>123</td></tr></tbody></table>', '<td><td>123' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td><td></td></tr></tbody></table>123', '<td><td>123' );
 
     root = UE.htmlparser('<td>123<td>');
     equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td>123</td><td></td></tr></tbody></table>', '<td>123<td>' );
@@ -66,16 +73,16 @@ test( '补全不完整table', function() {
 
     /*开标签、文本与闭标签混合*/
     root = UE.htmlparser('<tr>123</td>');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td>123</td></tr></tbody></table>', '<tr>123</td>--tr和td之间有文字' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr></tr></tbody></table>123', '<tr>123</td>--tr和td之间有文字' );
 
     root = UE.htmlparser('<tr></td>123');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td></tr></tbody></table>123', '<tr></td>123--td闭标签后面有文字' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr></tr></tbody></table>123', '<tr></td>123--td闭标签后面有文字' );
 
     root = UE.htmlparser('123</tr><td>');
-    equals( root.toHtml().toLowerCase(), '123<table><tbody><tr><td></td></tr><tr><td></td></tr></tbody></table>', '123</tr><td>' );
+    equals( root.toHtml().toLowerCase(), '123<table><tbody><tr><td></td></tr></tbody></table>', '123</tr><td>' );
 
     root = UE.htmlparser('</tr><td>123');
-    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td></tr><tr><td>123</td></tr></tbody></table>', '</tr><td>123' );
+    equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td></tr></tbody></table>123', '</tr><td>123' );
 
     root = UE.htmlparser('</tr>123<td>');
     equals( root.toHtml().toLowerCase(), '<table><tbody><tr><td></td></tr></tbody></table>123<table><tbody><tr><td></td></tr></tbody></table>', '</tr>123<td>' );
@@ -127,7 +134,7 @@ test( '补全不完整li', function() {
     equals(root.toHtml().replace(/[ ]+>/g,'>'), '<ul><li>123</li></ul>', '<ul>123--补全ul的child--li，前面有文本' );
     /*补li开始标签*/
     root = UE.htmlparser('</li>123');
-    equals(root.toHtml().replace(/[ ]+>/g,'>'), '123', '</li>123--补全li开始标签，前面有文本' );
+    equals(root.toHtml().replace(/[ ]+>/g,'>'), '123', '</li>123--删掉标签' );
 });
 
 test( '属性引号问题', function() {
@@ -151,8 +158,8 @@ test( '大小写', function() {
 test( '裸字', function() {
     var root = UE.htmlparser('sdfasdfasdf');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'sdfasdfasdf');
-
 });
+
 test( '只有结束标签的情况', function() {
     var root = UE.htmlparser('<p>hello1</a></p><p>hello2</p>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<p>hello1</p><p>hello2</p>');
