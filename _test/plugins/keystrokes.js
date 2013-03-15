@@ -98,18 +98,18 @@ test('在列表中，跨行选中第2，3行，输入tab键',function(){
 
 //todo 这个检查存在问题，如何检查 evt.preventDefault();？
 test('在h1内输入del',function(){
-        var editor = te.obj[0];
-        editor.setContent( '<h1><br></h1><p>hello</p>' );
-        var range = te.obj[1];
+    var editor = te.obj[0];
+    editor.setContent( '<h1><br></h1><p>hello</p>' );
+    var range = te.obj[1];
+    setTimeout(function(){
+        range.setStart(editor.body.childNodes[0],0).collapse(true).select(true);
+        ua.keydown(te.obj[0].body,{'keyCode':46});
         setTimeout(function(){
-            range.setStart(editor.body.childNodes[0],0).collapse(true).select(true);
-            ua.keydown(te.obj[0].body,{'keyCode':46});
-            setTimeout(function(){
-                equal(ua.getChildHTML(te.obj[0].body),'<h1><br></h1><p>hello</p>','在h1内输入del');
-                start();
-            },20);
+            equal(ua.getChildHTML(te.obj[0].body),'<h1><br></h1><p>hello</p>','在h1内输入del');
+            start();
         },20);
-        stop();
+    },20);
+    stop();
 });
 
 test('在列表中，跨行选中，输入tab键',function(){

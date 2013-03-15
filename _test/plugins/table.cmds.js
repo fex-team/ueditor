@@ -93,7 +93,7 @@ test('完全拆分单元格',function(){
         editor.undoManger.undo();
         equal( tds[0].getAttribute( 'colspan' ), 2, '撤销--[0][0]单元格colspan' );
         equal( tds[0].getAttribute( 'rowspan' ), 2, '撤销--[0][0]单元格rowspan' );
-            start();
+        start();
     },50);
     stop();
 });
@@ -109,12 +109,10 @@ test('删除table',function(){
 
     var tds = editor.body.getElementsByTagName( 'td' );
     range.setStart( tds[0], 0 ).collapse( true ).select();
-//    setTimeout(function(){    editor.execCommand( 'deletetable' );
-//    },1000);
-//
-//    ua.manualDeleteFillData(editor.body);
-//    var table=editor.body.getElementsByTagName('table')[0];
-//    equal(table,undefined,'删除成功');
+    editor.execCommand( 'deletetable' );
+    ua.manualDeleteFillData(editor.body);
+    var table=editor.body.getElementsByTagName('table')[0];
+    equal(table,undefined,'删除成功');
 });
 //
 //test('修改table屬性',function(){

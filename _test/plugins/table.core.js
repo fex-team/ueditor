@@ -310,14 +310,14 @@ test("getNextCell", function () {
 
 });
 
-test("getPreviewCell", function () {
+test("getPreviewCell",function(){
     var table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
             "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
             "<tr><td>21</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>"),
         ut = new UT(table);
     var cell = table.rows[2].cells[5];
     var newCell = ut.getPreviewCell(cell);
-    ok(newCell === cell.previousSibling, "找到前置单元格");
+    ok(newCell===cell.previousSibling,"找到前置单元格");
 });
 
 test("getLastCell", function () {

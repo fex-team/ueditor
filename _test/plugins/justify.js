@@ -34,7 +34,7 @@ test( '不闭合在段落中设置对齐方式', function() {
         equal( body.firstChild.style['textAlign'], 'center', 'p对齐方式为居中对齐' );
         start();
     },50);
-   stop();
+    stop();
 } );
 
 //test( '对齐方式-参数为json', function() {

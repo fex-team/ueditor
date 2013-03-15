@@ -5,6 +5,7 @@
     <property name="report.path" value="_test/tools/br/report_plugins"/>
     <property name="coverage.path" value="_test/coverage"/>
     <property name="report.file" value="_test/tools/br/report.html"/>
+    <property name="svn.project" value="ueditor_svn"/>
     <property name="git.project" value="ueditor_git"/>
 
     <property name="git.user" value=""/>
