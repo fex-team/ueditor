@@ -494,6 +494,10 @@ UE.I18N['en'] = {
             lang_tdBkColor:'Background Color:'
         }
     },
+    'formula':{
+        'static':{
+        }
+    },
     wordimage:{
         'static':{
             lang_resave:"The re-save step",
