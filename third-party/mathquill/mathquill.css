@@ -64,6 +64,7 @@
     line-height: 1;
     display: -moz-inline-box;
     display: inline-block;
+    margin: 0 10px;
 }
 .mathquill-rendered-math .non-leaf,
 .mathquill-rendered-math .scaled {
