@@ -1,9 +1,9 @@
 ///import core
 ///import commands/inserthtml.js
 ///commands 插入公式
-///commandsName  insertmath
+///commandsName  formula
 ///commandsTitle  插入公式
-///commandsDialog  dialogs\math\math.html
+///commandsDialog  dialogs\formula\formula.html
 
 UE.plugins['formula'] = function () {
     var me = this;
@@ -11,9 +11,53 @@ UE.plugins['formula'] = function () {
 
     var filter = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'mathquill-editable')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' && domUtils.hasClass(node, 'mathquill-rendered-math')
         }, true);
     };
+
+    var fnBlock = function (node) {
+        return domUtils.findParent(node, function (node) {
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'formulaBlock')
+        }, true);
+    };
+
+    var setCursorPos = function (range, start, end, callback) {
+        if (start && end && start === end) {
+            if (start.nextSibling) {
+                range.setStart(start.nextSibling, 0)
+            } else {
+                if (start.previousSibling) {
+                    range.setStartAtLast(start.previousSibling)
+                } else {
+                    var p = me.document.createElement('p');
+                    domUtils.fillNode(me.document, p);
+                    range.setStart(p, 0)
+                }
+            }
+            range.setCursor(false, true);
+            callback();
+        }
+    };
+
+    function toInline(node, ignorePre, ignoreNext) {
+        function merge(rtl, start, node) {
+            var next;
+            if ((next = node[rtl]) && !domUtils.isBookmarkNode(next) && next.nodeType == 1) {
+                while (next.firstChild) {
+                    if (start == 'firstChild') {
+                        node.insertBefore(next.lastChild, node.firstChild);
+                    }
+                    else {
+                        node.appendChild(next.firstChild);
+                    }
+                }
+                domUtils.remove(next);
+            }
+        }
+
+        !ignorePre && merge('previousSibling', 'firstChild', node);
+        !ignoreNext && merge('nextSibling', 'lastChild', node);
+    }
 
     me.addListener("ready", function () {
         utils.loadFile(me.document, {
@@ -83,7 +127,9 @@ UE.plugins['formula'] = function () {
         preview:1,
         insertparagraph:1,
         elementpath:1,
-        formula:1
+        formula:1,
+        formulainline:1,
+        formulablock:1
     };
 
     //将queyCommamndState重置
@@ -125,7 +171,6 @@ UE.plugins['formula'] = function () {
         }
     });
 
-
     me.commands['formula'] = {
         execCommand:function (cmdName, txt) {
             var rng = me.selection.getRange();
@@ -156,4 +201,78 @@ UE.plugins['formula'] = function () {
             return queryState.call(me);
         }
     };
+
+    me.commands['formulainline'] = {
+        execCommand:function () {
+            var range = me.selection.getRange();
+            range.adjustmentBoundary();
+            var start = fnBlock(range.startContainer),
+                end = fnBlock(range.endContainer);
+
+            setCursorPos(range, start, end, function () {
+                if (start.previousSibling || start.nextSibling || /li/i.test(start.parentNode.tagName)) {
+                    toInline(start);
+                }
+                else {
+                    var p = document.createElement("p");
+                    p.appendChild(start);
+                    start.parentNode.replaceChild(p, start);
+                }
+                domUtils.removeAttributes(start, ["style", "class"]);
+            });
+        },
+        queryCommandState:function () {
+            try {
+                var range = this.selection.getRange();
+                var start = fnBlock(range.startContainer),
+                    end = fnBlock(range.startContainer);
+
+                return start && end && start == end ? 0 : -1;
+            }
+            catch (e) {
+                return -1;
+            }
+        }
+    };
+
+    me.commands['formulablock'] = {
+        execCommand:function () {
+            var range = me.selection.getRange();
+            range.adjustmentBoundary();
+            var start = filter(range.startContainer),
+                end = filter(range.endContainer);
+
+            setCursorPos(range, start, end, function () {
+                domUtils.breakParent(start, domUtils.findParent(start, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'p'
+                }, false));
+
+                var p = domUtils.createElement(document, "p", {
+                    style:"text-align:center",
+                    class:"formulaBlock"
+                });
+                start.parentNode.replaceChild(p, start);
+                p.appendChild(start);
+            });
+        },
+        queryCommandState:function () {
+            try {
+                var range = me.selection.getRange();
+                var start = filter(range.startContainer),
+                    end = filter(range.endContainer);
+
+                if (start && end && start == end) {
+                    var p = fnBlock(range.startContainer);
+                    return p ? -1 : 0;
+                } else {
+                    return -1;
+                }
+
+            }
+            catch (e) {
+                return -1;
+            }
+        }
 };
+
+}

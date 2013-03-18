@@ -78,7 +78,11 @@
 ///import plugins/catchremoteimage;
 ///import plugins/webapp;
 ///import plugins/autofloat;
-
+///import plugins/insertparagraph;
+///import plugins/defaultfilter;
+///import plugins/formula;
+///import plugins/puretxtpaste;
+///import plugins/template;
 
 ///import ui/ui;
 ///import ui/uiutils;
@@ -92,6 +96,8 @@
 ///import ui/popup;
 ///import ui/colorpicker;
 ///import ui/colorbutton;
+///import ui/cellalignpicker;
+///import ui/pastepicker;
 ///import ui/menu;
 ///import ui/menubutton;
 ///import ui/multiMenu;
@@ -104,3 +110,4 @@
 ///import ui/tablebutton;
 ///import ui/autotypesetpicker;
 ///import ui/autotypesetbutton;
+

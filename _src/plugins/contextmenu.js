@@ -375,6 +375,14 @@ UE.plugins['contextmenu'] = function () {
                         }
                         this.ui._dialogs['highlightcodeDialog'].open();
                     }
+                },
+                {
+                    label:"内嵌",
+                    cmdName:'formulainline'
+                },
+                {
+                    label:"显示",
+                    cmdName:'formulablock'
                 }
             ];
     if ( !items.length ) {

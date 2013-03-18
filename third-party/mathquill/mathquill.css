@@ -1,8 +1,3 @@
-@font-face {
-    font-family: Symbola;
-    src: url(font/Symbola.eot);
-    src: local("Symbola Regular"), local("Symbola"), url(font/Symbola.ttf) format("truetype"), url(font/Symbola.otf) format("opentype"), url(font/Symbola.svg#Symbola) format("svg");
-}
 .mathquill-editable {
     display: -moz-inline-box;
     display: inline-block;
@@ -21,7 +16,6 @@
 }
 .mathquill-editable,
 .mathquill-embedded-latex .mathquill-editable {
-    border: 1px solid gray;
     padding: 2px;
 }
 .mathquill-embedded-latex .mathquill-editable {
@@ -70,6 +64,7 @@
     line-height: 1;
     display: -moz-inline-box;
     display: inline-block;
+    margin: 0 10px;
 }
 .mathquill-rendered-math .non-leaf,
 .mathquill-rendered-math .scaled {
