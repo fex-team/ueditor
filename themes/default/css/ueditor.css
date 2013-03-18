@@ -493,14 +493,14 @@ div.edui-box {
 .edui-default  .edui-for-bold .edui-icon {
     background-position: 0 0;
 }
-.edui-default  .edui-for-border .edui-icon {
-    background-position:-160px -40px;
-}
 
 .edui-default  .edui-for-italic .edui-icon {
     background-position: -60px 0;
 }
 
+.edui-default  .edui-for-fontborder .edui-icon {
+    background-position:-160px -40px;
+}
 .edui-default  .edui-for-underline .edui-icon {
     background-position: -140px 0;
 }
@@ -831,6 +831,10 @@ div.edui-box {
 
 .edui-default  .edui-for-music .edui-icon {
     background-position: -18px -40px
+}
+
+.edui-default  .edui-for-formula .edui-icon {
+    background-position: -200px -40px
 }
 /*splitbutton*/
 .edui-default .edui-toolbar .edui-splitbutton-body .edui-arrow,
@@ -1227,7 +1231,7 @@ div.edui-box {
 .edui-default .edui-for-edittable .edui-dialog-content {
     width: 540px;
     _width:590px;
-    height: 265px;
+    height: 285px;
 }
 
 /*edittip-dialog*/
@@ -1381,6 +1385,82 @@ div.edui-box {
     height: 14px;
     margin: 0;
 }
+.edui-default .edui-colorpicker-advbtn{
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    height:20px;
+}
+.arrow_down{
+    background: white url('../images/arrow_down.png') no-repeat center;
+}
+.arrow_up{
+    background: white url('../images/arrow_up.png') no-repeat center;
+}
+/*高级的样式*/
+.edui-colorpicker-adv{
+    position: relative;
+    overflow: hidden;
+    height: 180px;
+    display: none;
+}
+.edui-colorpicker-plant, .edui-colorpicker-hue {
+    border: solid 1px #666;
+}
+.edui-colorpicker-pad {
+    width: 150px;
+    height: 150px;
+    left: 14px;
+    top: 13px;
+    position: absolute;
+    background: red;
+    overflow: hidden;
+    cursor: crosshair;
+}
+.edui-colorpicker-cover{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background: url("../images/tangram-colorpicker.png") -160px -200px;
+}
+.edui-colorpicker-padDot{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    overflow: hidden;
+    background: url(../images/tangram-colorpicker.png) 0px -200px repeat-x;
+    z-index: 1000;
+
+}
+.edui-colorpicker-sliderMain {
+    position: absolute;
+    left: 171px;
+    top: 13px;
+    width: 19px;
+    height: 152px;
+    background: url(../images/tangram-colorpicker.png) -179px -12px no-repeat;
+
+}
+.edui-colorpicker-slider {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.edui-colorpicker-thumb{
+    position: absolute;
+    top: 0;
+    cursor: pointer;
+    height: 3px;
+    left: -1px;
+    right: -1px;
+    border: 1px solid black;
+    background: white;
+    opacity: .8;
+}
 /*自动排版弹出菜单*/
 .edui-default .edui-autotypesetpicker .edui-autotypesetpicker-body {
     font-size: 12px;
@@ -1403,36 +1483,36 @@ div.edui-box {
     *margin: 1px 0 0 0;
 }
 /*自动排版弹出菜单*/
-.edui-default .edui-CellAlignPicker .edui-CellAlignPicker-body {
+.edui-default .edui-cellalignpicker .edui-cellalignpicker-body {
     width: 70px;
     font-size: 12px;
     cursor: default;
 }
 
-.edui-default .edui-CellAlignPicker-body table {
+.edui-default .edui-cellalignpicker-body table {
     border-collapse: separate;
     border-spacing: 0;
 }
-.edui-default .edui-CellAlignPicker-body td{
+.edui-default .edui-cellalignpicker-body td{
     padding: 1px;
 }
-.edui-default .edui-CellAlignPicker-body .edui-icon{
+.edui-default .edui-cellalignpicker-body .edui-icon{
     height: 20px;
     width: 20px;
     padding: 1px;
     background-image: url(../images/icons.png);
     background-image: url(../images/icons.gif) \9;
 }
-.edui-default .edui-CellAlignPicker-body .edui-left{
+.edui-default .edui-cellalignpicker-body .edui-left{
     background-position: -460px 0;
 }
-.edui-default .edui-CellAlignPicker-body .edui-center{
+.edui-default .edui-cellalignpicker-body .edui-center{
     background-position: -420px 0;
 }
-.edui-default .edui-CellAlignPicker-body .edui-right{
+.edui-default .edui-cellalignpicker-body .edui-right{
     background-position: -480px 0;
 }
-.edui-default .edui-CellAlignPicker-body td.edui-state-hover {
+.edui-default .edui-cellalignpicker-body td.edui-state-hover {
     background-color: #fff5d4;
     padding: 0;
     border: 1px solid #dcac6c;
@@ -1460,26 +1540,39 @@ div.edui-box {
 .edui-default .edui-for-emotion .edui-icon {
     background-position: -60px -20px;
 }
-
-.edui-default .edui-for-emotion .edui-popup-content {
-    position: relative;
-    z-index: 555
-}
-
-.edui-default .edui-for-emotion .edui-popup-content iframe {
+.edui-default .edui-for-emotion .edui-popup-content iframe
+{
     width: 514px;
     height: 380px;
     overflow: hidden;
 }
+.edui-default .edui-for-formula .edui-popup-content iframe
+{
+    width: 350px;
+    height: 270px;
+    overflow: hidden;
+}
+.edui-default .edui-for-emotion .edui-popup-content,
+.edui-default .edui-for-formula .edui-popup-content
+{
+    position: relative;
+    z-index: 555
+}
 
-.edui-default .edui-for-emotion .edui-splitborder {
+.edui-default .edui-for-emotion .edui-splitborder ,
+.edui-default .edui-for-formula .edui-splitborder
+{
     display: none
 }
 
-.edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow {
+.edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow ,
+.edui-default .edui-for-formula .edui-splitbutton-body .edui-arrow
+{
     width: 0
 }
-.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder{
+.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder,
+.edui-default .edui-toolbar .edui-for-formula  .edui-state-active .edui-splitborder
+{
     border-left: 1px solid transparent;
 }
 /*contextmenu*/
