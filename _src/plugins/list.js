@@ -178,6 +178,68 @@ UE.plugins['list'] = function () {
             if(tmpP.firstChild() && !tmpP.parentNode || !li.firstChild()){
                 li.appendChild(tmpP);
             }
+        });
+        var orderlisttype = {
+                'num1':/^\d+\)/,
+                'decimal':/^\d+\./,
+                'lower-alpha':/^[a-z]+\)/,
+                'upper-alpha':/^[A-Z]+\./,
+                'cn':/^[\u4E00\u4E8C\u4E09\u56DB\u516d\u4e94\u4e03\u516b\u4e5d]+[\u3001]/,
+                'cn2':/^\([\u4E00\u4E8C\u4E09\u56DB\u516d\u4e94\u4e03\u516b\u4e5d]+\)/
+            },
+            unorderlisttype = {
+                'square':'n'
+            };
+        function checkListType(content,container){
+            var span = container.firstChild();
+            if(span &&  span.type == 'element' && span.tagName == 'span' && /Wingdings/.test(span.getStyle('font-family'))){
+                for(var p in unorderlisttype){
+                    if(unorderlisttype[p] == span.data){
+                        return p
+                    }
+                }
+                return 'disc'
+            }
+            for(var p in orderlisttype){
+                if(orderlisttype[p].test(content)){
+                    return p;
+                }
+            }
+
+        }
+        utils.each(root.getNodesByTagName('p'),function(node){
+
+            function appendLi(list,p,type){
+                if(list.tagName == 'ol'){
+                    p.innerHTML(p.innerHTML().replace(orderlisttype[type],''));
+                }else{
+                    p.removeChild(p.firstChild())
+                }
+
+                var li = UE.uNode.createElement('li');
+                li.appendChild(p);
+                list.appendChild(li);
+            }
+            var tmp = node,type;
+
+            if(node.parentNode.tagName != 'li' && (type = checkListType(node.innerText(),node))){
+
+                var list = UE.uNode.createElement(me.options.insertorderedlist.hasOwnProperty(type) ? 'ol' : 'ul');
+                if(customStyle[type]){
+                    list.setAttr('class','custom_'+type)
+                }else{
+                    list.setStyle('list-style-type',type)
+                }
+                while(node && node.parentNode.tagName != 'li' && checkListType(node.innerText(),node)){
+                    tmp = node.nextSibling();
+                    if(!tmp){
+                        node.parentNode.insertBefore(list,node)
+                    }
+                    appendLi(list,node,type);
+                    node = tmp;
+                }
+
+            }
         })
     });
 
@@ -459,6 +521,8 @@ UE.plugins['list'] = function () {
 
 
             }
+
+
         }
         if (keyCode == 8) {
             //修中ie中li下的问题
