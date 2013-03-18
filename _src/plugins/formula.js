@@ -1,9 +1,9 @@
 ///import core
 ///import commands/inserthtml.js
 ///commands 插入公式
-///commandsName  insertmath
+///commandsName  formula
 ///commandsTitle  插入公式
-///commandsDialog  dialogs\math\math.html
+///commandsDialog  dialogs\formula\formula.html
 
 UE.plugins['formula'] = function () {
     var me = this;
@@ -170,7 +170,6 @@ UE.plugins['formula'] = function () {
             }
         }
     });
-
 
     me.commands['formula'] = {
         execCommand:function (cmdName, txt) {

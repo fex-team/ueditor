@@ -383,7 +383,7 @@ UE.plugins['contextmenu'] = function () {
                 {
                     label:"显示",
                     cmdName:'formulablock'
-                },
+                }
             ];
     if ( !items.length ) {
         return;

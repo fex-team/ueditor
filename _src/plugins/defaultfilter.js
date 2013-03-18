@@ -59,7 +59,7 @@ UE.plugins['defaultfilter'] = function (){
             root.traversal(function(node){
                 if(node.type=='element' && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attrs){
                     if( !node.firstChild()) node.parentNode.removeChild(node);
-                    else if(node.tagName == 'span'&& !node.attr){
+                    else if(node.tagName == 'span'&& !node.attrs){
                         node.parentNode.removeChild(node,true)
                     }
                 }
@@ -101,7 +101,7 @@ UE.plugins['defaultfilter'] = function (){
             root.traversal(function(node){
                 if(node.type=='element' && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attrs){
                     if( !node.firstChild()) node.parentNode.removeChild(node);
-                    else if(node.tagName == 'span' ){
+                    else if(node.tagName == 'span'&& !node.attrs ){
                         node.parentNode.removeChild(node,true)
                     }
                 }
