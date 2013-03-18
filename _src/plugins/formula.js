@@ -85,15 +85,15 @@ UE.plugins['formula'] = function () {
     });
 
     function addFillChar(node) {
-//        var previous = node.previousSibling,
-//            next = node.nextSibling;
-//
-//        if (!previous || !domUtils.isFillChar(previous)) {
-//            node.parentNode.insertBefore(document.createTextNode(domUtils.fillChar), node);
-//        }
-//        if (!next || !domUtils.isFillChar(next)) {
-//            domUtils.insertAfter(node, document.createTextNode(domUtils.fillChar));
-//        }
+        var previous = node.previousSibling,
+            next = node.nextSibling;
+
+        if (!previous || !domUtils.isFillChar(previous)) {
+            node.parentNode.insertBefore(document.createTextNode(domUtils.fillChar), node);
+        }
+        if (!next || !domUtils.isFillChar(next)) {
+            domUtils.insertAfter(node, document.createTextNode(domUtils.fillChar));
+        }
     }
 
     function queryState() {
