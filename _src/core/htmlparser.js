@@ -1,12 +1,13 @@
 //html字符串转换成uNode节点
 //by zhanyi
-var htmlparser = UE.htmlparser = function (htmlstr) {
+var htmlparser = UE.htmlparser = function (htmlstr,coverBlank) {
     var reg = new RegExp(domUtils.fillChar, 'g');
     //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
     htmlstr = htmlstr.replace(reg, '')
         .replace(/(?:^[ \t\r\n]*?<)/, '<')
-        .replace(/(?:>[ \t\r\n]*?$)/, '>')
-        .replace(/>(?:[ \t\r\n]*)/g, '>').replace(/(?:[ \t\r\n]*)</g, '<');
+        .replace(/(?:>[ \t\r\n]*?$)/, '>');
+
+    !coverBlank && (htmlstr = htmlstr.replace(/>(?:[ \t\r\n]*)/g, '>').replace(/(?:[ \t\r\n]*)</g, '<'));
 
     var re_tag = /<(?:(?:\/([^>]+)>)|(?:!--([\S|\s]*?)-->)|(?:([^\s\/>]+)\s*((?:(?:"[^"]*")|(?:'[^']*')|[^"'<>])*)\/?>))/g,
         re_attr = /([\w\-:.]+)(?:(?:\s*=\s*(?:(?:"([^"]*)")|(?:'([^']*)')|([^\s>]+)))|(?=\s|$))/g;
