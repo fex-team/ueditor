@@ -117,19 +117,30 @@ UE.plugins['paste'] = function() {
             //过滤word粘贴过来的冗余属性
             html = UE.filterWord(html);
 
-            var root = UE.htmlparser(html);
+            var root = UE.htmlparser(html,true);
             //如果给了过滤规则就先进行过滤
             if(me.options.filterRules){
                 UE.filterNode(root,me.options.filterRules);
             }
             //执行默认的处理
             me.filterInputRule(root);
-            for(var i = 0,ci;ci=root.children[i++];){
+            var p = UE.uNode.createElement('p');
+            for(var i = 0,ci;ci=root.children[i];){
                 if(ci.type == 3 || !dtd.$block[ci.tagName]){
-                    var p = UE.uNode.createElement('p');
-                    ci.parentNode.insertBefore(p,ci);
                     p.appendChild(ci);
+                }else{
+                    if(p.firstChild()){
+                        ci.parentNode.insertBefore(p,ci);
+                        p = UE.uNode.createElement('p');
+                        i++;
+                    }
                 }
+                if(ci.parentNode === root){
+                    i++
+                }
+            }
+            if(p.firstChild() && !p.parentNode){
+                root.appendChild(p)
             }
             html = {'html':root.toHtml()};
             me.fireEvent('beforepaste',html);
