@@ -43,10 +43,10 @@
             'plugins/lineheight.js',
             'plugins/cleardoc.js',
             'plugins/anchor.js',
-//            'plugins/wordcount.js',
+            'plugins/wordcount.js',
             'plugins/pagebreak.js',
             'plugins/wordimage.js',
-//            'plugins/undo.js',
+            'plugins/undo.js',
             'plugins/paste.js',           //粘贴时候的提示依赖了UI
             'plugins/list.js',
             'plugins/source.js',
