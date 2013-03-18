@@ -139,6 +139,10 @@ test('插入两段代码后修改第一段代码',function(){
                 equal( te.obj[2].body.getElementsByTagName('table').length,2,'2段代码');
                 equal( te.obj[2].body.getElementsByTagName('code')[0].innerHTML,'123&lt;body&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/body&gt;','第一段代码被修改');
                 equal( te.obj[2].body.getElementsByTagName('code')[1].innerHTML,'&lt;body&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/body&gt;','第二段代码内容不变');
+                /*trace 3221*/
+                range.selectNode(tds[0]).select();
+                equal(te.obj[2].queryCommandState('autotypeset'),-1,'自动排版不可用');
+                equal(te.obj[2].queryCommandState('pasteplain'),-1,'纯文本粘贴不可用');
                 div.parentNode.removeChild(div);
                 start();
             },500);

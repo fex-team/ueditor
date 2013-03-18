@@ -248,8 +248,8 @@ UE.plugins['formula'] = function () {
                 }, false));
 
                 var p = domUtils.createElement(document, "p", {
-                    style:"text-align:center",
-                    class:"formulaBlock"
+                    "style":"text-align:center",
+                    "class":"formulaBlock"
                 });
                 start.parentNode.replaceChild(p, start);
                 p.appendChild(start);
