@@ -163,7 +163,8 @@ UE.plugins['formula'] = function () {
         formula:1,
         formulainline:1,
         formulablock:1,
-        deleteformula:1
+        formuladelete:1,
+        formualmergeup:1
     };
 
     //将queyCommamndState重置
@@ -311,7 +312,7 @@ UE.plugins['formula'] = function () {
         }
     };
 
-    me.commands["deleteformula"] = {
+    me.commands["formuladelete"] = {
         execCommand:function () {
             var range = me.selection.getRange();
             var start = filter(range.startContainer),
@@ -327,6 +328,49 @@ UE.plugins['formula'] = function () {
                 var start = filter(rng.startContainer);
                 var end = filter(rng.endContainer);
                 return start && end && start == end ? 0 : -1;
+            } catch (e) {
+                return -1;
+            }
+
+        }
+    }
+
+    me.commands["formualmergeup"] = {
+        execCommand:function () {
+            var range = me.selection.getRange();
+            var start = filter(range.startContainer),
+                end = filter(range.endContainer);
+
+            setCursorPos(range, start, end, function () {
+                var p = domUtils.findParent(start, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'p';
+                });
+                var cur = start.previousSibling;
+                while (cur) {
+                    if (!domUtils.isFillChar(cur) && domUtils.isBr(cur)) {
+                        domUtils.remove(cur);
+                        break;
+                    }else{
+                        cur=cur.previousSibling;
+                    }
+                }
+                domUtils.mergeSibling(p, false, true);
+            });
+        },
+        queryCommandState:function () {
+            try {
+                var rng = me.selection.getRange();
+                var start = filter(rng.startContainer);
+                var end = filter(rng.endContainer);
+                if (start && end && start == end) {
+                    if (fnBlock(start)) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return -1;
+                }
             } catch (e) {
                 return -1;
             }

@@ -386,7 +386,11 @@ UE.plugins['contextmenu'] = function () {
                 },
                 {
                     label:"删除公式",
-                    cmdName:'deleteformula'
+                    cmdName:'formuladelete'
+                },
+                {
+                    label:"向上合并",
+                    cmdName:'formualmergeup'
                 }
             ];
     if ( !items.length ) {
