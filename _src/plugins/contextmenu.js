@@ -383,6 +383,10 @@ UE.plugins['contextmenu'] = function () {
                 {
                     label:"显示",
                     cmdName:'formulablock'
+                },
+                {
+                    label:"删除公式",
+                    cmdName:'deleteformula'
                 }
             ];
     if ( !items.length ) {
