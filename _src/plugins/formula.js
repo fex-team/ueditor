@@ -85,23 +85,9 @@ UE.plugins['formula'] = function () {
     });
 
     me.addListener("afterbackspace", function (types, evt) {
-        var rng = me.selection.getRange();
-        var formula = rng.startContainer.childNodes[rng.startOffset - 1];
-        if (formula) {
-            if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
-                var bk = rng.createBookmark();
-                domUtils.remove(formula);
-                rng.moveToBookmark(bk).select();
-                evt.preventDefault();
-            }
-        }
-    });
-
-    me.addListener("keydown", function (types, evt) {
-        var keyCode = evt.keyCode || evt.which;
-        if (keyCode == 46) {
+        if (!browser.ie) {
             var rng = me.selection.getRange();
-            var formula = domUtils.getNextDomNode(rng.startContainer);
+            var formula = rng.startContainer.childNodes[rng.startOffset - 1];
             if (formula) {
                 if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
                     var bk = rng.createBookmark();
@@ -112,6 +98,25 @@ UE.plugins['formula'] = function () {
             }
         }
     });
+
+    me.addListener("keydown", function (types, evt) {
+        if (!browser.ie) {
+            var keyCode = evt.keyCode || evt.which;
+            if (keyCode == 46) {
+                var rng = me.selection.getRange();
+                var formula = domUtils.getNextDomNode(rng.startContainer);
+                if (formula) {
+                    if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
+                        var bk = rng.createBookmark();
+                        domUtils.remove(formula);
+                        rng.moveToBookmark(bk).select();
+                        evt.preventDefault();
+                    }
+                }
+            }
+        }
+    });
+
     function addFillChar(node) {
         var previous = node.previousSibling,
             next = node.nextSibling;
@@ -157,7 +162,8 @@ UE.plugins['formula'] = function () {
         elementpath:1,
         formula:1,
         formulainline:1,
-        formulablock:1
+        formulablock:1,
+        deleteformula:1
     };
 
     //将queyCommamndState重置
@@ -305,4 +311,26 @@ UE.plugins['formula'] = function () {
         }
     };
 
+    me.commands["deleteformula"] = {
+        execCommand:function () {
+            var range = me.selection.getRange();
+            var start = filter(range.startContainer),
+                end = filter(range.endContainer);
+
+            setCursorPos(range, start, end, function () {
+                domUtils.remove(start);
+            });
+        },
+        queryCommandState:function () {
+            try {
+                var rng = me.selection.getRange();
+                var start = filter(rng.startContainer);
+                var end = filter(rng.endContainer);
+                return start && end && start == end ? 0 : -1;
+            } catch (e) {
+                return -1;
+            }
+
+        }
+    }
 }
