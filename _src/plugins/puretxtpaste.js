@@ -18,8 +18,44 @@ UE.plugins['pasteplain'] = function(){
                 '-' : 'script style object iframe embed input select',
                 'p': {$:{}},
                 'br':{$:{}},
-                'div':{'$':{}},
-                'li':{'$':{}},
+                div: function (node) {
+                    var tmpNode, p = UE.uNode.createElement('p');
+                    while (tmpNode = node.firstChild()) {
+                        if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
+                            p.appendChild(tmpNode);
+                        } else {
+                            if (p.firstChild()) {
+                                node.parentNode.insertBefore(p, node);
+                                p = UE.uNode.createElement('p');
+                            } else {
+                                node.parentNode.insertBefore(tmpNode, node);
+                            }
+                        }
+                    }
+                    if (p.firstChild()) {
+                        node.parentNode.insertBefore(p, node);
+                    }
+                    node.parentNode.removeChild(node);
+                },
+                ol: function (node) {
+                    node.parentNode.removeChild(node,true)
+                },
+                ul: function (node) {
+                    node.parentNode.removeChild(node,true)
+                },
+
+                dl:function(node){
+                    node.parentNode.removeChild(node,true)
+                },
+                dt:function(node){
+                    node.parentNode.removeChild(node,true)
+                },
+                dd:function(node){
+                    node.parentNode.removeChild(node,true)
+                },
+                'li': function(node){
+                    node.parentNode.removeChild(node,true)
+                },
                 'caption':transP,
                 'th':transP,
                 'tr':transP,

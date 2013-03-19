@@ -55,108 +55,178 @@
 <script type="text/javascript">
     //实例化编辑器
     var ue = UE.getEditor('editor', {
-        filterRules: function () {
-            return{
-                p: function(node){
-                    node.setAttr();
-                    if(!node.firstChild()){
-                        node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
-                    }
-                },
-                div: function (node) {
-                    var tmpNode, p = UE.uNode.createElement('p');
-                    while (tmpNode = node.firstChild()) {
-                        if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
-                            p.appendChild(tmpNode);
-                        } else {
-                            if (p.firstChild()) {
-                                node.parentNode.insertBefore(p, node);
-                                p = UE.uNode.createElement('p');
-                            } else {
-                                node.parentNode.insertBefore(tmpNode, node);
-                            }
-                        }
-                    }
-                    if (p.firstChild()) {
-                        node.parentNode.insertBefore(p, node);
-                    }
-                    node.parentNode.removeChild(node);
-                },
-                br: {$: {}},
-                a: function (node) {
-                    if(!node.firstChild()){
-                        node.parentNode.removeChild(node);
-                        return;
-                    }
-                    node.setAttr();
-                    node.setAttr('href', '#')
-                },
-                iframe: function (node) {
-                    var val = node.getAttr('data-type');
-                    if (!val || val != 'album') {
-                        node.setAttr()
-                    }
-                },
-                strong: {$: {}},
-                em: {$: {}},
-                img: function (node) {
-                    var src = node.getAttr('src'),
-                        float = node.getStyle('float'),
-                        type = node.getAttr('data-type');
-                    if(src && /baike/.test(src) && float|| type && type == 'map'){
-
-                    }else{
-                        node.setAttr();
-                        node.setAttr({'src':src})
-                    }
-                },
-                ol: function (node) {
-                    var className = node.getAttr('class');
-                    if (!className || !/custom_/.test(className)) {
-                        node.setAttr()
-                    }
-                },
-                ul: function (node) {
-                    var className = node.getAttr('class');
-                    if (!className || !/custom_/.test(className)) {
-                        node.setAttr()
-                    }
-                },
-                li: function (node) {
-                    var className = node.getAttr('class');
-                    if (!className || !/list\-/.test(className)) {
-                        node.setAttr()
-                    }
-                },
-                table: function (node) {
-                    UE.utils.each(node.getNodesByTagName('table'), function (t) {
-                        UE.utils.each(t.getNodesByTagName('tr'), function (tr) {
-                            var p = UE.uNode.createElement('p'), child, html = [];
-                            while (child = tr.firstChild()) {
-                                html.push(child.innerHTML());
-                                tr.removeChild(child);
-                            }
-                            p.innerHTML(html.join('&nbsp;&nbsp;'));
-                            t.parentNode.insertBefore(p, t);
-                        })
-                        t.parentNode.removeChild(t)
-                    });
-                    var val = node.getAttr('width');
-                    node.setAttr();
-                    if (val) {
-                        node.setAttr('width', val);
-                    }
-                },
-                tbody: {$: {}},
-                caption: {$: {}},
-                th: {$: {}},
-                td: {$: {valign: 1, align: 1}},
-                tr: {$: {}},
-                h1: {$: {}},
-                h2: {$: {}},
-                '-': 'script style meta'
-            }
-        }()
+//        filterRules: function () {
+//            return{
+//                span:function(node){
+//                    if(/Wingdings/.test(node.getStyle('font-family'))){
+//                        return true;
+//                    }else{
+//                        node.parentNode.removeChild(node,true)
+//                    }
+//                },
+//                p: function(node){
+//                    node.setAttr();
+//                    if(!node.firstChild()){
+//                        node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
+//                    }
+//                },
+//                div: function (node) {
+//                    //检索百科的图片
+//                    var layout = node.getAttr('data-layout');
+//
+//                    if(/text_pic/.test(node.getAttr('class')) && layout){
+//                        var tmp,title,cssFloat;
+//                        if(tmp = node.getNodesByTagName('p')[0]){
+//                            title = tmp.lastChild() && tmp.lastChild().data;
+//                            if(/center/.test(layout)){
+//                                cssFloat = 'display:block;margin:0 auto'
+//                            }else if(/right/.test(layout)){
+//                                cssFloat = 'float:right'
+//                            }
+//                            tmp.parentNode.removeChild(tmp);
+//                            if(tmp = node.getNodesByTagName('img')[0]){
+//
+//                                tmp.setAttr({
+//                                    title:title,
+//                                    style:cssFloat,
+//                                    'data-layout':layout
+//                                })
+//                            }
+//                        }
+//                    }
+//                    var tmpNode, p = UE.uNode.createElement('p');
+//                    while (tmpNode = node.firstChild()) {
+//                        if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
+//                            p.appendChild(tmpNode);
+//                        } else {
+//                            if (p.firstChild()) {
+//                                node.parentNode.insertBefore(p, node);
+//                                p = UE.uNode.createElement('p');
+//                            } else {
+//                                node.parentNode.insertBefore(tmpNode, node);
+//                            }
+//                        }
+//                    }
+//                    if (p.firstChild()) {
+//                        node.parentNode.insertBefore(p, node);
+//                    }
+//                    node.parentNode.removeChild(node);
+//                },
+//                br: {$: {}},
+//                a: function (node) {
+//                    if(!node.firstChild()){
+//                        node.parentNode.removeChild(node);
+//                        return;
+//                    }
+//                    node.setAttr();
+//                    node.setAttr('href', '#')
+//                },
+//                iframe: function (node) {
+//                    var val = node.getAttr('data-type');
+//                    if (!val || val != 'album') {
+//                        node.setAttr()
+//                    }
+//                },
+//                strong: {$: {}},
+//                b:function(node){
+//                    node.tagName = 'strong'
+//                },
+//                i:function(node){
+//                    node.tagName = 'em'
+//                },
+//                em: {$: {}},
+//                img: function (node) {
+//                    var src = node.getAttr('src'),
+//                            title = node.getAttr('title'),
+//                            style = node.getAttr('style'),
+//                            layout = node.getAttr('data-layout');
+//                    if(layout || /baidu/.test(src)){
+//                        node.setAttr();
+//                        node.setAttr({
+//                            src : src,
+//                            title : title,
+//                            style : style,
+//                            'data-layout' : layout
+//                        })
+//                    }else{
+//                        node.setAttr();
+//                        node.setAttr({'src':src})
+//                    }
+//                },
+//                ol: function (node) {
+//                    var className = node.getAttr('class');
+//                    if (!className || !/custom_/.test(className)) {
+//                        node.setAttr();
+//                        var parent = node.parentNode,level = 0;
+//
+//                        while(parent.type == 'element' && parent.tagName == 'ol'){
+//                            level++;
+//                            parent = parent.parentNode;
+//                        }
+//                        node.setAttr('class','custom_num' + (!level ? '':level))
+//                    }
+//                },
+//                ul: function (node) {
+//                    var className = node.getAttr('class');
+//                    if (!className || !/custom_/.test(className)) {
+//                        node.setAttr();
+//                        node.setAttr('class','custom_dot')
+//                    }
+//                },
+//
+//                dl:function(node){
+//                    node.tagName = 'ul';
+//                    node.setAttr()
+//                },
+//                dt:function(node){
+//                    node.tagName = 'li';
+//                    node.setAttr()
+//                },
+//                dd:function(node){
+//                    node.tagName = 'li';
+//                    node.setAttr()
+//                },
+//                li: function (node) {
+//                    var className = node.getAttr('class');
+//                    if (!className || !/list\-/.test(className)) {
+//                        node.setAttr()
+//                    }
+//                    var tmpNodes = node.getNodesByTagName('ol ul');
+//                    UE.utils.each(tmpNodes,function(n){
+//                        node.parentNode.insertAfter(n,node);
+//
+//                    })
+//
+//                },
+//                table: function (node) {
+//                    UE.utils.each(node.getNodesByTagName('table'), function (t) {
+//                        UE.utils.each(t.getNodesByTagName('tr'), function (tr) {
+//                            var p = UE.uNode.createElement('p'), child, html = [];
+//                            while (child = tr.firstChild()) {
+//                                html.push(child.innerHTML());
+//                                tr.removeChild(child);
+//                            }
+//                            p.innerHTML(html.join('&nbsp;&nbsp;'));
+//                            t.parentNode.insertBefore(p, t);
+//                        })
+//                        t.parentNode.removeChild(t)
+//                    });
+//                    var val = node.getAttr('width');
+//                    node.setAttr();
+//                    if (val) {
+//                        node.setAttr('width', val);
+//                    }
+//                },
+//                tbody: {$: {}},
+//                caption: {$: {}},
+//                th: {$: {}},
+//                td: {$: {valign: 1, align: 1,rowspan:1,colspan:1,width:1,height:1}},
+//                tr: {$: {}},
+//                h3: {$: {}},
+//                h2: {$: {}},
+//                '-': 'script style meta sup'
+//            }
+//        }()
     });
 
     ue.addListener('ready', function () {

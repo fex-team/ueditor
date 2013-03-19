@@ -124,23 +124,12 @@ UE.plugins['paste'] = function() {
             }
             //执行默认的处理
             me.filterInputRule(root);
-            var p = UE.uNode.createElement('p');
-            for(var i = 0,ci;ci=root.children[i];){
-                if(ci.type == 3 || !dtd.$block[ci.tagName]){
-                    p.appendChild(ci);
-                }else{
-                    if(p.firstChild()){
-                        ci.parentNode.insertBefore(p,ci);
-                        p = UE.uNode.createElement('p');
-                        i++;
-                    }
+            //针对chrome的处理
+            if(browser.webkit){
+                var br = root.lastChild();
+                if(br && br.type == 'element' && br.tagName == 'br'){
+                    root.removeChild(br)
                 }
-                if(ci.parentNode === root){
-                    i++
-                }
-            }
-            if(p.firstChild() && !p.parentNode){
-                root.appendChild(p)
             }
             html = {'html':root.toHtml()};
             me.fireEvent('beforepaste',html);

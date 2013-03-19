@@ -201,15 +201,15 @@
             return this.data
         },
         firstChild:function () {
-            if (this.type != 'element' || dtd.$empty[this.tagName]) {
-                return this;
-            }
+//            if (this.type != 'element' || dtd.$empty[this.tagName]) {
+//                return this;
+//            }
             return this.children ? this.children[0] : null;
         },
         lastChild:function () {
-            if (this.type != 'element' || dtd.$empty[this.tagName]) {
-                return this;
-            }
+//            if (this.type != 'element' || dtd.$empty[this.tagName] ) {
+//                return this;
+//            }
             return this.children ? this.children[this.children.length - 1] : null;
         },
         previousSibling : function(){
