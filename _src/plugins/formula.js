@@ -94,7 +94,6 @@ UE.plugins['formula'] = function () {
                 rng.moveToBookmark(bk).select();
                 evt.preventDefault();
             }
-
         }
     });
 
