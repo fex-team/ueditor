@@ -350,27 +350,35 @@ UE.plugins['formula'] = function () {
                     if (!domUtils.isFillChar(cur) && domUtils.isBr(cur)) {
                         domUtils.remove(cur);
                         break;
-                    }else{
-                        cur=cur.previousSibling;
+                    } else {
+                        cur = cur.previousSibling;
                     }
                 }
+
                 domUtils.mergeSibling(p, false, true);
             });
         },
         queryCommandState:function () {
             try {
                 var rng = me.selection.getRange();
-                var start = filter(rng.startContainer);
-                var end = filter(rng.endContainer);
-                if (start && end && start == end) {
-                    if (fnBlock(start)) {
-                        return -1;
+                var li = domUtils.findParent(rng.startContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'li';
+                }, true);
+
+                if (!li) {
+                    var start = filter(rng.startContainer);
+                    var end = filter(rng.endContainer);
+                    if (start && end && start == end) {
+                        if (fnBlock(start)) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
                     } else {
-                        return 0;
+                        return -1;
                     }
-                } else {
-                    return -1;
                 }
+
             } catch (e) {
                 return -1;
             }
