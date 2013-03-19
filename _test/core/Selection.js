@@ -142,7 +142,7 @@ test( 'getRange--闭合选区的边界情况', function () {
 //test( '不闭合选区的边界情况', function () {
 //
 //} );
-
+//
 test( 'trace 1742  isFocus', function () {
     if(!ua.browser.opera){
         var div1 = document.createElement( 'div' );
@@ -160,6 +160,8 @@ test( 'trace 1742  isFocus', function () {
         editor2.focus();
         ok(editor2.selection.isFocus(),'设editor内容是<span> editor2 is focused');
         ok(!editor1.selection.isFocus(),'设editor内容是<span> editor1 is not focused');
+        div1.parentNode.removeChild(div1);
+        div2.parentNode.removeChild(div2);
 
         var div3 = document.createElement( 'div' );
         var div4 = document.createElement( 'div' );
@@ -169,12 +171,15 @@ test( 'trace 1742  isFocus', function () {
         var editor4 =   new UE.Editor({'initialContent':'<h1>hello</h1>','autoFloatEnabled':false});
         editor3.render(div3);
         editor4.render(div4);
+
         editor3.focus();
         ok(editor3.selection.isFocus(),'设editor内容是<h1> editor1 is focused');
         ok(!editor4.selection.isFocus(),'设editor内容是<h1> editor2 is not focused');
         editor4.focus();
         ok(editor4.selection.isFocus(),'设editor内容是<h1> editor2 is focused');
         ok(!editor3.selection.isFocus(),'设editor内容是<h1> editor1 is not focused');
+        div3.parentNode.removeChild(div3);
+        div4.parentNode.removeChild(div4);
     }
 } );
 
