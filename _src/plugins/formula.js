@@ -84,6 +84,35 @@ UE.plugins['formula'] = function () {
         });
     });
 
+    me.addListener("afterbackspace", function (types, evt) {
+        var rng = me.selection.getRange();
+        var formula = rng.startContainer.childNodes[rng.startOffset - 1];
+        if (formula) {
+            if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
+                var bk = rng.createBookmark();
+                domUtils.remove(formula);
+                rng.moveToBookmark(bk).select();
+                evt.preventDefault();
+            }
+
+        }
+    });
+
+    me.addListener("keydown", function (types, evt) {
+        var keyCode = evt.keyCode || evt.which;
+        if (keyCode == 46) {
+            var rng = me.selection.getRange();
+            var formula = domUtils.getNextDomNode(rng.startContainer);
+            if (formula) {
+                if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
+                    var bk = rng.createBookmark();
+                    domUtils.remove(formula);
+                    rng.moveToBookmark(bk).select();
+                    evt.preventDefault();
+                }
+            }
+        }
+    });
     function addFillChar(node) {
         var previous = node.previousSibling,
             next = node.nextSibling;
@@ -196,6 +225,8 @@ UE.plugins['formula'] = function () {
 
             var selector = "[formulaid=" + id + "]";
             me.window.$(selector).focus().mathquill("write", txt.replace("{/}", "\\"));
+            rng.setStartAfter(me.window.$(selector)[0]).collapse(true);
+            rng.setCursor();
         },
         queryCommandState:function () {
             return queryState.call(me);
@@ -273,6 +304,6 @@ UE.plugins['formula'] = function () {
                 return -1;
             }
         }
-};
+    };
 
 }
