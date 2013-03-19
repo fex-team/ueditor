@@ -326,7 +326,7 @@ UE.plugins['formula'] = function () {
                 var rng = me.selection.getRange();
                 var start = filter(rng.startContainer);
                 var end = filter(rng.endContainer);
-                return start && end && start == end ? 0 : 1;
+                return start && end && start == end ? 0 : -1;
             } catch (e) {
                 return -1;
             }
