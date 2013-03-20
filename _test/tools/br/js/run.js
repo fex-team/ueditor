@@ -7,7 +7,7 @@ function run( kiss, runnext ) {
         || $( 'input#id_control_breakonerror' ).attr( 'checked' );
     wb.runnext = /batchrun=true/gi.test( location.search ) || runnext
         || $( 'input#id_control_runnext' ).attr( 'checked' );
-    kiss = kiss.replace('/','_');
+
     wb.kiss = kiss;
     var cid = 'id_case_' + kiss.split( '.' ).join( '_' );
     /* 只有参数有showsrconly的时候才显示div */
@@ -215,7 +215,7 @@ function covcalc() {
         }
 
         var percentage = (num_statements === 0 ? 0 : ( 100* num_executed / num_statements ).toFixed(1));
-        var kiss = file.replace( '.js', '' ).split( '/' ).join( '.' );
+        var kiss = file.replace( '.js', '' );
         // 统计所有用例的覆盖率信息和测试结果
 
         if ( brkisses[kiss] == undefined )
