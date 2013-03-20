@@ -377,19 +377,19 @@ UE.plugins['contextmenu'] = function () {
                     }
                 },
                 {
-                    label:"内嵌",
+                    label:lang.formulainline,
                     cmdName:'formulainline'
                 },
                 {
-                    label:"显示",
+                    label:lang.formulablock,
                     cmdName:'formulablock'
                 },
                 {
-                    label:"删除公式",
+                    label:lang.formuladelete,
                     cmdName:'formuladelete'
                 },
                 {
-                    label:"向上合并",
+                    label:lang.formualmergeup,
                     cmdName:'formualmergeup'
                 }
             ];

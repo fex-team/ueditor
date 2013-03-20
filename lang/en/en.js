@@ -130,6 +130,10 @@ UE.I18N['en'] = {
         'copymsg':"Please use 'Ctrl + c' instead!",
         'paste':"Paste(Ctrl + v)",
         'pastemsg':"Please use 'Ctrl + v' instead!",
+        'formulainline':"Inline",
+        'formulablock':"Diplay",
+        'formuladelete':"Delete formula",
+        'formualmergeup':"Merge up",
         'highlightcode':'insert code'
     },
 
