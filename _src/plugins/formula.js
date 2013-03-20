@@ -129,7 +129,7 @@ UE.plugins['formula'] = function () {
         try {
             var rng = this.selection.getRange();
             var start = filter(rng.startContainer);
-            end = filter(rng.endContainer);
+            var end = filter(rng.endContainer);
             if (start && end && start == end) {
                 addFillChar(start);
                 return 1;
@@ -271,7 +271,6 @@ UE.plugins['formula'] = function () {
     me.commands['formulablock'] = {
         execCommand:function () {
             var range = me.selection.getRange();
-            range.adjustmentBoundary();
             var start = filter(range.startContainer),
                 end = filter(range.endContainer);
 
@@ -329,7 +328,7 @@ UE.plugins['formula'] = function () {
             }
 
         }
-    }
+    } ;
 
     me.commands["formualmergeup"] = {
         execCommand:function () {
@@ -380,5 +379,5 @@ UE.plugins['formula'] = function () {
             }
 
         }
-    }
-}
+    }  ;
+};
