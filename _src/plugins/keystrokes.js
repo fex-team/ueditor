@@ -163,7 +163,11 @@ UE.plugins['keystrokes'] = function() {
             }
 //            //chrome下如果删除了inline标签，浏览器会有记忆，在输入文字还是会套上刚才删除的标签，所以这里再选一次就不会了
             if(browser.chrome && rng.collapsed && rng.startContainer.nodeType == 1 && domUtils.isEmptyBlock(rng.startContainer)){
-                rng.select(true);
+                //光标所在节点为textarea，执行select后光标会跳出来 by xuheng
+                var node=rng.startContainer.childNodes[rng.startOffset];
+                if(!/textarea/i.test(node)){
+                    rng.select(true);
+                }
             }
         }
     })
