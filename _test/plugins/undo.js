@@ -433,3 +433,17 @@ test( 'ctrl+z/y', function() {
     }, 100 );
     stop();
 } );
+
+/*trace 3209  格式刷图片*/
+test( 'trace 3209 插入表格,undo redo', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable');
+    editor.execCommand( 'undo' );
+    equal( editor.getContent().toLowerCase(), '', '插入表格,撤销' );
+    editor.execCommand( 'redo' );
+    ua.manualDeleteFillData( editor.body );
+    equal( editor.body.firstChild.tagName.toLowerCase(), 'table', '插入表格,撤销重做' );
+} );

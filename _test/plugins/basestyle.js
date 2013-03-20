@@ -273,3 +273,31 @@ test( 'ctrl+b', function() {
     }, 150 );
     stop();
 } );
+
+/*trace 3240*/
+test('表格中文本加粗',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable');
+    ua.manualDeleteFillData( editor.body );
+    setTimeout(function(){
+        var tds = editor.body.getElementsByTagName( 'td' );
+        tds[0].innerHTML='asd';
+        tds[10].innerHTML='asd';
+        var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[2].cells[0]);
+        ut.setSelected(cellsRange);
+        range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+
+        editor.execCommand( 'bold' );
+        equal( editor.queryCommandState( 'bold' ), 1, 'b高亮' );
+        equal(trs[0].cells[0].firstChild.tagName.toLowerCase(),'strong','[0][0]单元格中文本标签');
+        equal(trs[1].cells[0].firstChild.tagName.toLowerCase(),'br','[1][0]单元格中文本标签');
+        equal(trs[2].cells[0].firstChild.tagName.toLowerCase(),'strong','[2][0]单元格中文本标签');
+        start();
+    },50);
+    stop();
+});
