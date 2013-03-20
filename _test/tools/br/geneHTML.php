@@ -101,7 +101,7 @@ function getTrCase($caseList,$onlyFail,$onlyCoverd){
         $totalCov = calTotalCov($caseDetail,$numBro);
         $averageCov +=$totalCov;
         $numCov = $totalCov==0?$numCov:$numCov+1;
-        if(($onlyCoverd==1&&$totalCov!=0)||($onlyCoverd==0&&$totalCov==0))//$onlyCoverd 为0时，只显示全浏览器覆盖率为0的用例;为1时，只显示全浏览器覆盖率不为0的用例；
+        if(($onlyCoverd==0&&$totalCov!=0)||($onlyCoverd==1&&$totalCov==0))//$onlyCoverd 为0时，只显示全浏览器覆盖率为0的用例;为1时，只显示全浏览器覆盖率不为0的用例；
             continue;
         if(!$onlyFail){//对于展示 fail 的用例的列表，不显示全浏览器覆盖率
 		    $trCase .= "<td title='全浏览器覆盖率'>".$totalCov.($totalCov=="_"?"":"%")."</td>";
