@@ -85,33 +85,29 @@ UE.plugins['formula'] = function () {
     });
 
     me.addListener("afterbackspace", function (types, evt) {
-        if (!browser.ie) {
+        var rng = me.selection.getRange();
+        var formula = rng.startContainer.childNodes[rng.startOffset - 1];
+        if (formula) {
+            if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
+                var bk = rng.createBookmark();
+                domUtils.remove(formula);
+                rng.moveToBookmark(bk).select();
+                evt.preventDefault();
+            }
+        }
+    });
+
+    me.addListener("keydown", function (types, evt) {
+        var keyCode = evt.keyCode || evt.which;
+        if (keyCode == 46) {
             var rng = me.selection.getRange();
-            var formula = rng.startContainer.childNodes[rng.startOffset - 1];
+            var formula = domUtils.getNextDomNode(rng.startContainer);
             if (formula) {
                 if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
                     var bk = rng.createBookmark();
                     domUtils.remove(formula);
                     rng.moveToBookmark(bk).select();
                     evt.preventDefault();
-                }
-            }
-        }
-    });
-
-    me.addListener("keydown", function (types, evt) {
-        if (!browser.ie) {
-            var keyCode = evt.keyCode || evt.which;
-            if (keyCode == 46) {
-                var rng = me.selection.getRange();
-                var formula = domUtils.getNextDomNode(rng.startContainer);
-                if (formula) {
-                    if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
-                        var bk = rng.createBookmark();
-                        domUtils.remove(formula);
-                        rng.moveToBookmark(bk).select();
-                        evt.preventDefault();
-                    }
                 }
             }
         }
@@ -133,7 +129,7 @@ UE.plugins['formula'] = function () {
         try {
             var rng = this.selection.getRange();
             var start = filter(rng.startContainer);
-            end = filter(rng.endContainer);
+            var end = filter(rng.endContainer);
             if (start && end && start == end) {
                 addFillChar(start);
                 return 1;
@@ -275,7 +271,6 @@ UE.plugins['formula'] = function () {
     me.commands['formulablock'] = {
         execCommand:function () {
             var range = me.selection.getRange();
-            range.adjustmentBoundary();
             var start = filter(range.startContainer),
                 end = filter(range.endContainer);
 
@@ -333,7 +328,7 @@ UE.plugins['formula'] = function () {
             }
 
         }
-    }
+    } ;
 
     me.commands["formualmergeup"] = {
         execCommand:function () {
@@ -384,5 +379,5 @@ UE.plugins['formula'] = function () {
             }
 
         }
-    }
-}
+    }  ;
+};
