@@ -134,7 +134,7 @@ UE.I18N['en'] = {
         'formulablock':"Diplay",
         'formuladelete':"Delete formula",
         'formualmergeup':"Merge up",
-        'highlightcode':'insert code'
+        'highlightcode':'Insert code'
     },
 
     'anthorMsg':"Link",
