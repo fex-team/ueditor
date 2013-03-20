@@ -10,7 +10,8 @@ module( "plugins.list" );
  * <li>去除链接
  *
  * */
-test( '多个p，选中其中几个变为列表', function () {
+
+ test( '多个p，选中其中几个变为列表', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
@@ -732,4 +733,17 @@ test( 'trace 3168：表格中列表更改样式', function () {
         start();
     },50);
     stop();
+});
+
+test('trace 3213：tab键后更改列表样式',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<ol><li><p>hello1</p></li><li><p>hello2</p></li><li><p>hello1</p></li><li><p>hello1</p></li></ol>');
+    var lis = editor.body.getElementsByTagName('li');
+    range.setStart( lis[2], 0 ).setEnd( lis[3], 1 ).select();
+    ua.keydown(editor.body,{keyCode:9});
+    ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
+    editor.execCommand( 'insertorderedlist', 'lower-alpha' );
+    var str='<ol style="list-style-type: lower-alpha;" class=" list-paddingleft-2"><li><p>hello1</p></li><li><p>hello2</p></li><li><p>hello1</p></li><li><p>hello1</p></li></ol>';
+    equal(editor.body.innerHTML,str);
 });
