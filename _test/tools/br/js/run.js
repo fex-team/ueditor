@@ -7,6 +7,7 @@ function run( kiss, runnext ) {
         || $( 'input#id_control_breakonerror' ).attr( 'checked' );
     wb.runnext = /batchrun=true/gi.test( location.search ) || runnext
         || $( 'input#id_control_runnext' ).attr( 'checked' );
+    kiss = kiss.replace('/','_');
     wb.kiss = kiss;
     var cid = 'id_case_' + kiss.split( '.' ).join( '_' );
     /* 只有参数有showsrconly的时候才显示div */
