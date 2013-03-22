@@ -172,7 +172,47 @@ UE.plugins['formula'] = function () {
         return orgQuery.apply(this, arguments)
     };
 
-    me.addListener("beforegetcontent beforegetscene", function () {
+    me.addOutputRule(function (root) {
+        utils.each(root.getNodesByTagName('span'), function (pi) {
+            var cls;
+            if ((cls = pi.getAttr('class')) && /mathquill-rendered-math/.test(cls)) {
+                var id = pi.getAttr("formulaid");
+                var txt = me.window.$("[formulaid=" + id + "]").mathquill("latex");
+                var span = UE.uNode.createElement("span");
+
+                span.setAttr('class', 'mathquill-embedded-latex');
+                span.setAttr("formulaid", id);
+                span.appendChild(UE.uNode.createText(txt));
+                pi.parentNode.replaceChild(span, pi);
+            }
+        });
+    });
+    me.addInputRule(function(root){
+        if(!me.window||!me.window.SyntaxHighlighter)return;
+        utils.each(root.getNodesByTagName('span'),function(pi){
+            var val;
+            if(val = pi.getAttr('class')){
+                if(/mathquill-embedded-latex/.test(val)){
+                    var tmpDiv = me.document.createElement('div');
+                    tmpDiv.innerHTML = pi.toHtml();
+                    me.window.$("[formulaid=" + pi.getAttr("formulaid") + "]")
+                        .html("")
+                        .mathquill("editable")
+                        .mathquill("write", tmpDiv.firstChild.innerText.replace("{/}", "\\"));
+                    var node = UE.uNode.createElement(tmpDiv.innerHTML);
+                    pi.parentNode.replaceChild(node,pi)
+                }
+            }
+            if(domUtils.hasClass(pi,'mathquill-embedded-latex')){
+                me.window.$(".mathquill-embedded-latex")
+                    .html("")
+                    .mathquill("editable")
+                    .mathquill("write", tmpDiv.firstChild.replace("{/}", "\\"));
+            }
+        });
+    });
+
+    me.addListener("beforegetscene", function () {
         if (!me.window || !me.window.$)return;
         utils.each(domUtils.getElementsByTagName(me.body, 'span', 'mathquill-rendered-math'), function (di) {
             var id = di.getAttribute("formulaid");
@@ -185,8 +225,7 @@ UE.plugins['formula'] = function () {
             di.parentNode.replaceChild(span, di);
         });
     });
-
-    me.addListener("aftergetcontent aftersetcontent aftergetscene", function () {
+    me.addListener("aftergetscene", function () {
         if (!me.window || !me.window.$)return;
         var list = me.window.$(".mathquill-embedded-latex"), obj = {};
         if (list.length) {
