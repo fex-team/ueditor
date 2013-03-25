@@ -35,7 +35,7 @@ function report()
         if ($key == 'config')
             continue;
         $info = explode(";", $value);
-        if ($filter!='' && substr_count($key, $filter) == 0)
+        if ($filter!='' && (substr_count($key, $filter) == 0 || strpos($key, $filter) > 0))
             continue;
         //errornum + ',' + allnum + ','+ kissPerc || 0 + ',' + wb.kissstart + ','+ wb.kissend;
         $casetime = ($info[4] - $info[3]) / 1000;
@@ -57,7 +57,7 @@ function report()
             $failinfo = $case->appendChild($dom->createElement('failure'));
             $failinfo->setAttribute('type', 'junit.framework.AssertionFailedError');
             //FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
-            $kiss = join(".", split("_", $key));
+            $kiss = join(".", split("/", $key));
             //                $failinfo->appendChild( new DOMText( $value ) );
             $failinfo->appendChild(new DOMText("<a href=\"http://10.48.31.90:8089/ueditor_git/_test/tools/br/run.php?case=$kiss\">run</a>"));
         }

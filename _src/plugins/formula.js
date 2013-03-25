@@ -84,6 +84,35 @@ UE.plugins['formula'] = function () {
         });
     });
 
+    me.addListener("afterbackspace", function (types, evt) {
+        var rng = me.selection.getRange();
+        var formula = rng.startContainer.childNodes[rng.startOffset - 1];
+        if (formula) {
+            if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
+                var bk = rng.createBookmark();
+                domUtils.remove(formula);
+                rng.moveToBookmark(bk).select();
+                evt.preventDefault();
+            }
+        }
+    });
+
+    me.addListener("keydown", function (types, evt) {
+        var keyCode = evt.keyCode || evt.which;
+        if (keyCode == 46) {
+            var rng = me.selection.getRange();
+            var formula = domUtils.getNextDomNode(rng.startContainer);
+            if (formula) {
+                if (domUtils.hasClass(formula, "mathquill-rendered-math")) {
+                    var bk = rng.createBookmark();
+                    domUtils.remove(formula);
+                    rng.moveToBookmark(bk).select();
+                    evt.preventDefault();
+                }
+            }
+        }
+    });
+
     function addFillChar(node) {
         var previous = node.previousSibling,
             next = node.nextSibling;
@@ -100,7 +129,7 @@ UE.plugins['formula'] = function () {
         try {
             var rng = this.selection.getRange();
             var start = filter(rng.startContainer);
-            end = filter(rng.endContainer);
+            var end = filter(rng.endContainer);
             if (start && end && start == end) {
                 addFillChar(start);
                 return 1;
@@ -129,7 +158,9 @@ UE.plugins['formula'] = function () {
         elementpath:1,
         formula:1,
         formulainline:1,
-        formulablock:1
+        formulablock:1,
+        formuladelete:1,
+        formualmergeup:1
     };
 
     //将queyCommamndState重置
@@ -141,7 +172,47 @@ UE.plugins['formula'] = function () {
         return orgQuery.apply(this, arguments)
     };
 
-    me.addListener("beforegetcontent beforegetscene", function () {
+    me.addOutputRule(function (root) {
+        utils.each(root.getNodesByTagName('span'), function (pi) {
+            var cls;
+            if ((cls = pi.getAttr('class')) && /mathquill-rendered-math/.test(cls)) {
+                var id = pi.getAttr("formulaid");
+                var txt = me.window.$("[formulaid=" + id + "]").mathquill("latex");
+                var span = UE.uNode.createElement("span");
+
+                span.setAttr('class', 'mathquill-embedded-latex');
+                span.setAttr("formulaid", id);
+                span.appendChild(UE.uNode.createText(txt));
+                pi.parentNode.replaceChild(span, pi);
+            }
+        });
+    });
+    me.addInputRule(function(root){
+        if(!me.window||!me.window.SyntaxHighlighter)return;
+        utils.each(root.getNodesByTagName('span'),function(pi){
+            var val;
+            if(val = pi.getAttr('class')){
+                if(/mathquill-embedded-latex/.test(val)){
+                    var tmpDiv = me.document.createElement('div');
+                    tmpDiv.innerHTML = pi.toHtml();
+                    me.window.$("[formulaid=" + pi.getAttr("formulaid") + "]")
+                        .html("")
+                        .mathquill("editable")
+                        .mathquill("write", tmpDiv.firstChild.innerText.replace("{/}", "\\"));
+                    var node = UE.uNode.createElement(tmpDiv.innerHTML);
+                    pi.parentNode.replaceChild(node,pi)
+                }
+            }
+            if(domUtils.hasClass(pi,'mathquill-embedded-latex')){
+                me.window.$(".mathquill-embedded-latex")
+                    .html("")
+                    .mathquill("editable")
+                    .mathquill("write", tmpDiv.firstChild.replace("{/}", "\\"));
+            }
+        });
+    });
+
+    me.addListener("beforegetscene", function () {
         if (!me.window || !me.window.$)return;
         utils.each(domUtils.getElementsByTagName(me.body, 'span', 'mathquill-rendered-math'), function (di) {
             var id = di.getAttribute("formulaid");
@@ -154,8 +225,7 @@ UE.plugins['formula'] = function () {
             di.parentNode.replaceChild(span, di);
         });
     });
-
-    me.addListener("aftergetcontent aftersetcontent aftergetscene", function () {
+    me.addListener("aftergetscene", function () {
         if (!me.window || !me.window.$)return;
         var list = me.window.$(".mathquill-embedded-latex"), obj = {};
         if (list.length) {
@@ -196,6 +266,8 @@ UE.plugins['formula'] = function () {
 
             var selector = "[formulaid=" + id + "]";
             me.window.$(selector).focus().mathquill("write", txt.replace("{/}", "\\"));
+            rng.setStartAfter(me.window.$(selector)[0]).collapse(true);
+            rng.setCursor();
         },
         queryCommandState:function () {
             return queryState.call(me);
@@ -238,7 +310,6 @@ UE.plugins['formula'] = function () {
     me.commands['formulablock'] = {
         execCommand:function () {
             var range = me.selection.getRange();
-            range.adjustmentBoundary();
             var start = filter(range.startContainer),
                 end = filter(range.endContainer);
 
@@ -273,6 +344,79 @@ UE.plugins['formula'] = function () {
                 return -1;
             }
         }
-};
+    };
 
-}
+    me.commands["formuladelete"] = {
+        execCommand:function () {
+            var range = me.selection.getRange();
+            var start = filter(range.startContainer),
+                end = filter(range.endContainer);
+
+            setCursorPos(range, start, end, function () {
+                domUtils.remove(start);
+            });
+        },
+        queryCommandState:function () {
+            try {
+                var rng = me.selection.getRange();
+                var start = filter(rng.startContainer);
+                var end = filter(rng.endContainer);
+                return start && end && start == end ? 0 : -1;
+            } catch (e) {
+                return -1;
+            }
+
+        }
+    } ;
+
+    me.commands["formualmergeup"] = {
+        execCommand:function () {
+            var range = me.selection.getRange();
+            var start = filter(range.startContainer),
+                end = filter(range.endContainer);
+
+            setCursorPos(range, start, end, function () {
+                var p = domUtils.findParent(start, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'p';
+                });
+                var cur = start.previousSibling;
+                while (cur) {
+                    if (!domUtils.isFillChar(cur) && domUtils.isBr(cur)) {
+                        domUtils.remove(cur);
+                        break;
+                    } else {
+                        cur = cur.previousSibling;
+                    }
+                }
+
+                domUtils.mergeSibling(p, false, true);
+            });
+        },
+        queryCommandState:function () {
+            try {
+                var rng = me.selection.getRange();
+                var li = domUtils.findParent(rng.startContainer, function (node) {
+                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'li';
+                }, true);
+
+                if (!li) {
+                    var start = filter(rng.startContainer);
+                    var end = filter(rng.endContainer);
+                    if (start && end && start == end) {
+                        if (fnBlock(start)) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    } else {
+                        return -1;
+                    }
+                }
+
+            } catch (e) {
+                return -1;
+            }
+
+        }
+    }  ;
+};

@@ -377,12 +377,20 @@ UE.plugins['contextmenu'] = function () {
                     }
                 },
                 {
-                    label:"内嵌",
+                    label:lang.formulainline,
                     cmdName:'formulainline'
                 },
                 {
-                    label:"显示",
+                    label:lang.formulablock,
                     cmdName:'formulablock'
+                },
+                {
+                    label:lang.formuladelete,
+                    cmdName:'formuladelete'
+                },
+                {
+                    label:lang.formualmergeup,
+                    cmdName:'formualmergeup'
                 }
             ];
     if ( !items.length ) {
