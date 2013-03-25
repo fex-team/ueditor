@@ -1773,7 +1773,7 @@ UE.plugins['table'] = function () {
                     cell = tableItems.cell;
                 if (table) {
                     if (cmd == 'adaptbywindow') {
-                        resetTdWidth(table);
+                        resetTdWidth(this,table);
                     } else {
                         var cells = domUtils.getElementsByTagName(table,"td th");
                         utils.each(cells,function(cell){
@@ -2022,7 +2022,7 @@ UE.plugins['table'] = function () {
         }
 
     };
-    function resetTdWidth(table){
+    function resetTdWidth(me,table){
         var tds = table.getElementsByTagName("td");
         utils.each(tds, function (td) {
             td.removeAttribute("width");
