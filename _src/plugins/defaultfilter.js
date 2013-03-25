@@ -123,14 +123,9 @@ UE.plugins['defaultfilter'] = function (){
                                 }
                                 p.innerHTML(html.join('&nbsp;&nbsp;'));
                                 t.parentNode.insertBefore(p, t);
-                            })
+                            });
                             t.parentNode.removeChild(t)
                         });
-                        var val = node.getAttr('width');
-                        node.setAttr();
-                        if (val) {
-                            node.setAttr('width', val);
-                        }
 
                 }
 
