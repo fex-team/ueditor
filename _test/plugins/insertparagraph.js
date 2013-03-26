@@ -11,5 +11,5 @@ test( '插入空行', function() {
     equal( ua.getChildHTML( body ), '<p>'+br+'</p><p>hello</p>', '插入空行' );
     range.setStart( body.firstChild.nextSibling, 0 ).collapse( 1 ).select();
     editor.execCommand( 'insertparagraph', false );
-    equal( ua.getChildHTML( body ), '<p>'+br+'</p><p>hello</p><p>'+br+'</p>', '插入文本节点' );
+    equal( ua.getChildHTML( body ), '<p>'+br+'</p><p>hello</p><p>'+br+'</p>', '' );
 } );
