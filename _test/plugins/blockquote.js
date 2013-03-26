@@ -115,6 +115,7 @@ test( '对段落添加引用和去除引用', function () {
     equal( ua.getChildHTML( body ), '<p><strong><em>hello1</em></strong></p><blockquote><p>hello2&nbsp;world</p></blockquote>', '闭合添加引用 ' );
 } );
 
+/*trace 3285*/
 test( 'startContainer为body添加引用', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
