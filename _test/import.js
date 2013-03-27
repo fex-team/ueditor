@@ -83,6 +83,7 @@
 ///import plugins/formula;
 ///import plugins/puretxtpaste;
 ///import plugins/template;
+///import plugins/background;
 
 ///import ui/ui;
 ///import ui/uiutils;
