@@ -192,7 +192,7 @@ UE.plugins['list'] = function () {
             };
         function checkListType(content,container){
             var span = container.firstChild();
-            if(span &&  span.type == 'element' && span.tagName == 'span' && /Wingdings/.test(span.getStyle('font-family'))){
+            if(span &&  span.type == 'element' && span.tagName == 'span' && /Wingdings|Symbol/.test(span.getStyle('font-family'))){
                 for(var p in unorderlisttype){
                     if(unorderlisttype[p] == span.data){
                         return p
@@ -208,7 +208,10 @@ UE.plugins['list'] = function () {
 
         }
         utils.each(root.getNodesByTagName('p'),function(node){
-
+            if(node.getAttr('class') != 'MsoListParagraph'){
+                return
+            }
+            node.setAttr('class','');
             function appendLi(list,p,type){
                 if(list.tagName == 'ol'){
                     p.innerHTML(p.innerHTML().replace(orderlisttype[type],''));
@@ -238,7 +241,9 @@ UE.plugins['list'] = function () {
                     appendLi(list,node,type);
                     node = tmp;
                 }
-
+                if(!list.parentNode && node && node.parentNode){
+                    node.parentNode.insertBefore(list,node)
+                }
             }
         })
     });
