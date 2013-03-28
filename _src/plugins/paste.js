@@ -93,7 +93,7 @@ UE.plugins['paste'] = function() {
 
                 var brs = div.querySelectorAll('br');
                 for(i=0;ci=brs[i++];){
-                    if(/^apple-/.test(ci)){
+                    if(/^apple-/i.test(ci.className)){
                         domUtils.remove(ci);
                     }
                 }
@@ -116,7 +116,6 @@ UE.plugins['paste'] = function() {
 
             //过滤word粘贴过来的冗余属性
             html = UE.filterWord(html);
-
             var root = UE.htmlparser(html,true);
             //如果给了过滤规则就先进行过滤
             if(me.options.filterRules){
@@ -130,6 +129,11 @@ UE.plugins['paste'] = function() {
                 if(br && br.type == 'element' && br.tagName == 'br'){
                     root.removeChild(br)
                 }
+                utils.each(me.body.querySelectorAll('div'),function(node){
+                    if(domUtils.isEmptyBlock(node)){
+                        domUtils.remove(node)
+                    }
+                })
             }
             html = {'html':root.toHtml()};
             me.fireEvent('beforepaste',html);
