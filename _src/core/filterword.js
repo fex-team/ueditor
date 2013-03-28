@@ -45,7 +45,10 @@ var filterWord = UE.filterWord = function () {
                 .replace( /<(!|script[^>]*>.*?<\/script(?=[>\s])|\/?(\?xml(:\w+)?|xml|meta|link|style|\w+:\w+)(?=[\s\/>]))[^>]*>/gi, "" )
                 .replace( /<p [^>]*class="?MsoHeading"?[^>]*>(.*?)<\/p>/gi, "<p><strong>$1</strong></p>" )
                 //去掉多余的属性
-                .replace( /\s+(class|lang|align)\s*=\s*(['"]?)[\w-]+\2/ig, "" )
+                .replace( /\s+(class|lang|align)\s*=\s*(['"]?)([\w-]+)\2/ig, function(str,name,marks,val){
+                    //保留list的标示
+                    return name == 'class' && val == 'MsoListParagraph' ? str : ''
+                })
                 //清除多余的font/span不能匹配&nbsp;有可能是空格
                 .replace( /<(font|span)[^>]*>\s*<\/\1>/gi, '' )
                 //处理style的问题
