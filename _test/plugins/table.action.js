@@ -5,6 +5,7 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
+
 test( 'backspace事件:删除caption', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -82,6 +83,28 @@ test( 'backspace事件:delcells', function() {
    //TODO
 });
 
+test('拖拽',function(){
+    if (browser.ie && browser.version < 8) return;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable');
+    ua.manualDeleteFillData( editor.body );
+    var tds = te.obj[0].body.getElementsByTagName('td');
+    var width1 = tds[1].width;
+    ua.mousemove(tds[1],{clientX:199,clientY:100});
+    ua.mousedown(tds[1],{clientX:199,clientY:100});
+    setTimeout(function(){
+        ua.mousemove(tds[1],{clientX:299,clientY:100});
+        ua.mouseup(tds[1],{clientX:299,clientY:100});
+        var width2 = tds[1].width;
+        ok(width2-width1>50,'拖拽后单元格宽度改变');
+        start();
+    },20);
+    stop();
+});
+
 /*trace 3022*/
 test( 'trace 3022 向右合并--tab键', function() {
     var editor = te.obj[0];
@@ -115,6 +138,28 @@ test( 'trace 3022 向右合并--tab键', function() {
     },20);
 });
 
+/*trace 3047*/
+test('trace 3047 全屏插入表格',function(){
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+    var editor = te.obj[2];
+    editor.render(div);
+    stop();
+    editor.ready(function(){
+        editor.setContent('<p></p>');
+        editor.ui.setFullScreen(!editor.ui.isFullScreen());
+        editor.execCommand('inserttable');
+        var width1 = editor.body.getElementsByTagName('td')[0].width;
+        editor.ready(function(){
+            editor.ui.setFullScreen(!editor.ui.isFullScreen());
+            var width2 = editor.body.getElementsByTagName('td')[0].width;
+            ok((width1-width2)>100,'页面宽度自适应');
+            div.parentNode.removeChild(div);
+            start();
+        });
+    });
+});
+
 /*trace 3067*/
 test( 'trace 3067 向右合并--tab键', function() {
     var editor = te.obj[0];
@@ -141,8 +186,8 @@ test( 'trace 3067 向右合并--tab键', function() {
     stop();
 } );
 
-test('拖拽',function(){
-    if (browser.ie && browser.version < 8) return;
+/*trace 3059*/
+test('trace 3059 表格右浮动',function(){
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );
@@ -150,14 +195,114 @@ test('拖拽',function(){
     editor.execCommand( 'inserttable');
     ua.manualDeleteFillData( editor.body );
     var tds = te.obj[0].body.getElementsByTagName('td');
-    equal(tds[1].width,71,'拖拽前');
-    ua.mousemove(tds[1],{clientX:199,clientY:100});
-    ua.mousedown(tds[1],{clientX:199,clientY:100});
-    setTimeout(function(){
-        ua.mousemove(tds[1],{clientX:299,clientY:100});
-        ua.mouseup(tds[1],{clientX:299,clientY:100});
-        equal(tds[1].width,143,'拖拽后');
-        start();
-    },20);
+    ua.dblclick(tds[0],{clientX:199,clientY:100});
     stop();
+    setTimeout(function(){
+        tds = editor.body.firstChild.getElementsByTagName( 'td' );
+        ok(tds[0].width<10, '第一列宽度变小' );
+        range.setStart( tds[0], 0 ).collapse( true ).select();
+        editor.execCommand( 'tablealignment', ['float','right'] );
+        var table = te.obj[0].body.getElementsByTagName('table')[0];
+        equal( table.style['float']||table.style['FLOAT'], 'right', '表格右浮动' );
+        start();
+    },50);
+});
+
+test('表格粘贴',function(){
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable');                              /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(tds[0],tds[24]);
+    ut.setSelected(cellsRange);                                     /*确定选区*/
+    range.setStart( tds[0], 0 ).collapse( true ).select();          /*定光标*/
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    var html ={html:editor.body.innerHTML};
+    range.setStart(editor.body.lastChild,0).collapse(true).select();
+    equal(editor.body.getElementsByTagName('table').length,'1','触发粘贴事件前有1个table');
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+    editor.fireEvent("afterpaste");
+    equal(editor.body.getElementsByTagName('table').length,'2','触发粘贴事件后有2个table');
+});
+
+test('trace 3105 在表格名称中粘贴',function(){
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable',{numCols:2,numRows:2});
+    range.setStart(editor.body.getElementsByTagName('td')[0],0).collapse(true).select();
+    editor.execCommand('insertcaption');
+    var str = ua.getChildHTML(editor.body);
+    var ut = editor.getUETable(editor.body.firstChild);
+    var tds = editor.body.getElementsByTagName('td');
+    var cellsRange = ut.getCellsRange(tds[0],tds[1]);
+    ut.setSelected(cellsRange);
+    range.setStart( tds[0], 0 ).collapse( true ).select();
+
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});
+    var html ={html:editor.body.innerHTML};
+    range.setStart(editor.body.getElementsByTagName('caption')[0],0).collapse(true).select();
+    editor.fireEvent('beforepaste',html);
+    editor.fireEvent("afterpaste");
+    ut.clearSelected();
+    equal(editor.body.getElementsByTagName('table').length,'1','触发粘贴事件后有1个table');
+    equal(ua.getChildHTML(editor.body),str,'粘贴无效');
+});
+
+test('trace 3106 粘贴标题行',function(){
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable');
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],0).collapse(true).select();
+    editor.execCommand('inserttitle');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var ths = editor.body.getElementsByTagName('th');
+    var cellsRange = ut.getCellsRange(ths[0],ths[4]);
+    ut.setSelected(cellsRange);
+    range.setStart( ths[0], 0 ).collapse( true ).select();
+
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});
+    var html ={html:editor.body.innerHTML};
+    range.setStart(editor.body.lastChild,0).collapse(true).select();
+    editor.fireEvent('beforepaste',html);
+    editor.fireEvent("afterpaste");
+    equal(editor.body.getElementsByTagName('table').length,'2','触发粘贴事件后有2个table');
+    equal(editor.body.firstChild.nextSibling.firstChild.firstChild.firstChild.tagName.toLowerCase(),'td','不是th，是td');
+    range.setStart(editor.body.firstChild.nextSibling.firstChild.firstChild.firstChild, 0 ).collapse( true ).select();
+    equal( editor.queryCommandState( 'inserttable' ), -1, '应当不可以插入表格' );
+    equal( editor.queryCommandState( 'mergeright' ), 0, '应当可以右合并单元格' );
+});
+
+test('trace 3114 在单元格内粘贴行',function(){
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable');
+    var tds = editor.body.getElementsByTagName('td');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(tds[0],tds[9]);
+    ut.setSelected(cellsRange);
+    range.setStart( tds[0], 0 ).collapse( true ).select();
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});
+    var html ={html:editor.body.innerHTML};
+    range.setStart(tds[0],0).collapse(true).select();
+    editor.fireEvent('beforepaste',html);
+    editor.fireEvent("afterpaste");
+    equal(editor.body.getElementsByTagName('table').length,'1','触发粘贴事件后有1个table');
+    setTimeout(function() {
+        editor.execCommand('source');
+        setTimeout(function() {
+            editor.execCommand('source');
+            equal(editor.body.getElementsByTagName('tr').length,'7','触发粘贴事件后有7个tr');
+            start();
+        },20);
+    },20);
 });

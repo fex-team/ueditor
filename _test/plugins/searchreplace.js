@@ -17,6 +17,7 @@ test('全部替换',function(){
 });
 
 ///*trace 917*/
+///*trace 3288*/
 //test('替换内容包含查找内容,全部替换',function(){
 //    if(ua.browser.opera)
 //        return;
