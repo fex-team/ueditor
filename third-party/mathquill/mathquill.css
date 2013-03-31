@@ -89,7 +89,7 @@
     white-space: pre-wrap;
 }
 .mathquill-rendered-math .empty {
-    background: #ccc;
+    border:1px dotted #ccc;
 }
 .mathquill-rendered-math.empty {
     background: transparent;
