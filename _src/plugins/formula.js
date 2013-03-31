@@ -202,7 +202,7 @@ UE.plugins['formula'] = function () {
         }
     });
     me.addListener("beforepaste",function(type,obj){
-       obj.html= obj.html.replace(/formulaid=["'](\d)["']/ig,function(){
+       obj.html= obj.html.replace(/formulaid=(["'])(\d)*\1/ig,function(){
             me._formulaid+=1;
             return "formulaid='"+me._formulaid+"'";
         });
@@ -210,7 +210,7 @@ UE.plugins['formula'] = function () {
     me.addListener("afterpaste",function(type,obj){
         if (!me.window || !me.window.$)return;
         var list=[];
-        obj.html.replace(/formulaid=["'](\d)["']/ig,function(all,id){
+        obj.html.replace(/formulaid=(["'])(\d*)\1/ig,function(all,char,id){
             list.push(id);
         });
         if (list.length) {
@@ -224,9 +224,7 @@ UE.plugins['formula'] = function () {
                 span.className = "mathquill-editable";
                 span.appendChild(me.document.createTextNode(txt));
                 node[0].parentNode.replaceChild(span,node[0]);
-                setTimeout(function(){
-                    me.window.$("[formulaid=" +  me._formulaid + "]").mathquill("editable");
-                },0);
+                me.window.$("[formulaid=" +  me._formulaid + "]").mathquill("editable");
             }
         }
     });
