@@ -217,14 +217,13 @@ UE.plugins['formula'] = function () {
             for (var i = 0, id; id = list[i++];) {
                 var node=me.window.$("[formulaid=" + id + "]");
                 var txt=node.mathquill("latex");
-                me._formulaid+=1;
                 var span = domUtils.createElement(me.document, "span", {
-                    formulaid:me._formulaid
+                    formulaid:id
                 });
                 span.className = "mathquill-editable";
                 span.appendChild(me.document.createTextNode(txt));
                 node[0].parentNode.replaceChild(span,node[0]);
-                me.window.$("[formulaid=" +  me._formulaid + "]").mathquill("editable");
+                me.window.$("[formulaid=" + id + "]").mathquill("editable");
             }
         }
     });
