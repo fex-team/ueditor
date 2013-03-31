@@ -150,7 +150,7 @@ UE.plugins['paste'] = function() {
                 address = me.selection.getRange().createAddress(true);
                 me.execCommand( 'insertHtml',htmlContent,true);
             }
-            me.fireEvent("afterpaste");
+            me.fireEvent("afterpaste",html);
         }
     }
 

@@ -172,47 +172,7 @@ UE.plugins['formula'] = function () {
         return orgQuery.apply(this, arguments)
     };
 
-    me.addOutputRule(function (root) {
-        utils.each(root.getNodesByTagName('span'), function (pi) {
-            var cls;
-            if ((cls = pi.getAttr('class')) && /mathquill-rendered-math/.test(cls)) {
-                var id = pi.getAttr("formulaid");
-                var txt = me.window.$("[formulaid=" + id + "]").mathquill("latex");
-                var span = UE.uNode.createElement("span");
-
-                span.setAttr('class', 'mathquill-embedded-latex');
-                span.setAttr("formulaid", id);
-                span.appendChild(UE.uNode.createText(txt));
-                pi.parentNode.replaceChild(span, pi);
-            }
-        });
-    });
-    me.addInputRule(function(root){
-        if(!me.window||!me.window.SyntaxHighlighter)return;
-        utils.each(root.getNodesByTagName('span'),function(pi){
-            var val;
-            if(val = pi.getAttr('class')){
-                if(/mathquill-embedded-latex/.test(val)){
-                    var tmpDiv = me.document.createElement('div');
-                    tmpDiv.innerHTML = pi.toHtml();
-                    me.window.$("[formulaid=" + pi.getAttr("formulaid") + "]")
-                        .html("")
-                        .mathquill("editable")
-                        .mathquill("write", tmpDiv.firstChild.innerText.replace("{/}", "\\"));
-                    var node = UE.uNode.createElement(tmpDiv.innerHTML);
-                    pi.parentNode.replaceChild(node,pi)
-                }
-            }
-            if(domUtils.hasClass(pi,'mathquill-embedded-latex')){
-                me.window.$(".mathquill-embedded-latex")
-                    .html("")
-                    .mathquill("editable")
-                    .mathquill("write", tmpDiv.firstChild.replace("{/}", "\\"));
-            }
-        });
-    });
-
-    me.addListener("beforegetscene", function () {
+    me.addListener("beforegetcontent beforegetscene", function () {
         if (!me.window || !me.window.$)return;
         utils.each(domUtils.getElementsByTagName(me.body, 'span', 'mathquill-rendered-math'), function (di) {
             var id = di.getAttribute("formulaid");
@@ -225,7 +185,8 @@ UE.plugins['formula'] = function () {
             di.parentNode.replaceChild(span, di);
         });
     });
-    me.addListener("aftergetscene", function () {
+
+    me.addListener("aftergetcontent aftersetcontent aftergetscene", function () {
         if (!me.window || !me.window.$)return;
         var list = me.window.$(".mathquill-embedded-latex"), obj = {};
         if (list.length) {
@@ -240,7 +201,33 @@ UE.plugins['formula'] = function () {
             }
         }
     });
-
+    me.addListener("beforepaste",function(type,obj){
+       obj.html= obj.html.replace(/formulaid="(\d)"/ig,function(){
+            me._formulaid+=1;
+            return "formulaid='"+me._formulaid+"'";
+        });
+    });
+    me.addListener("afterpaste",function(type,obj){
+        if (!me.window || !me.window.$)return;
+        var list=[];
+        obj.html.replace(/formulaid=["'](\d)["']/ig,function(all,id){
+            list.push(id);
+        });
+        if (list.length) {
+            for (var i = 0, id; id = list[i++];) {
+                var node=me.window.$("[formulaid=" + id + "]");
+                var txt=node.mathquill("latex");
+                me._formulaid+=1;
+                var span = domUtils.createElement(me.document, "span", {
+                    formulaid:me._formulaid
+                });
+                span.className = "mathquill-editable";
+                span.appendChild(me.document.createTextNode(txt));
+                node[0].parentNode.replaceChild(span,node[0]);
+                me.window.$("[formulaid=" +  me._formulaid + "]").mathquill("editable");
+            }
+        }
+    });
     me.commands['formula'] = {
         execCommand:function (cmdName, txt) {
             var rng = me.selection.getRange();
