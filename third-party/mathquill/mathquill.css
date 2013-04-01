@@ -23,9 +23,6 @@
 }
 .mathquill-editable.hasCursor,
 .mathquill-editable .hasCursor {
-    -webkit-box-shadow: #68b4df 0 0 3px 2px;
-    -moz-box-shadow: #68b4df 0 0 3px 2px;
-    box-shadow: #68b4df 0 0 3px 2px;
 }
 .mathquill-editable .latex-command-input {
     color: inherit;
@@ -89,7 +86,7 @@
     white-space: pre-wrap;
 }
 .mathquill-rendered-math .empty {
-    border:1px dotted #ccc;
+    border:1px dotted #000;
 }
 .mathquill-rendered-math.empty {
     background: transparent;
@@ -328,4 +325,18 @@
 .mathquill-rendered-math .matrixed-container {
     filter: progid:DXImageTransform.Microsoft.Chroma(color='white');
     margin-top: -0.1em;
+}
+/*覆盖百科样式
+*/
+.mathquill-rendered-math{
+    text-indent: 0;
+    font-size: 20px;
+    padding: 4px;
+}
+.mathquill-rendered-math sup{
+    font-weight: normal;
+    font-style: normal;
+    cursor: default;
+    color: inherit;
+    background: none;
 }
