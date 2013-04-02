@@ -7723,7 +7723,7 @@ UE.plugins['undo'] = function() {
             range.shrinkBoundary();
             browser.ie && (cont = cont.replace(/>&nbsp;</g,'><').replace(/\s*</g,'').replace(/>\s*/g,'>'));
 
-            if(browser.opera || browser.safari){
+            if(browser.opera || browser.safari || browser.chrome){
                 return {
                     senceRange : new sceneRange(range),
                     content : cont,
