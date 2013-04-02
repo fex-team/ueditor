@@ -193,7 +193,7 @@ UE.plugins['formula'] = function () {
         if (list.length) {
             for (var i = 0, id; id = list[i++];) {
                 var nodes = me.window.$("[formulaid=" + id + "]");
-                var txt = nodes[0].mathquill("latex");
+                var txt = nodes.mathquill("latex");
                 var span = domUtils.createElement(me.document, "span", {
                     'class':'mathquill-editable',
                     formulaid:id
