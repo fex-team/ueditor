@@ -231,7 +231,7 @@ UE.plugins['formula'] = function () {
             }
 
             var list = me.window.$("[formulaid=" + id + "]");
-            list.mathquill("write", txt.replace("{/}", "\\"));
+            list.focus().mathquill("write", txt.replace("{/}", "\\"));
 
             rng.setStartAfter(list[0]).collapse(true);
             rng.setCursor();
