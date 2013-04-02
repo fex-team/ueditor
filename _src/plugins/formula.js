@@ -172,8 +172,10 @@ UE.plugins['formula'] = function () {
                 });
                 node.parentNode.replaceChild(span, node);
 
-                me.window.$("[formulaid=" + attr + "]").html("").mathquill("editable")
-                    .mathquill("write", obj[attr].replace("{/}", "\\"));
+                if(obj[attr]){
+                    me.window.$("[formulaid=" + attr + "]").html("").mathquill("editable")
+                        .mathquill("write", obj[attr].replace("{/}", "\\"));
+                }
             }
         }
     });
