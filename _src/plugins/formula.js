@@ -192,14 +192,14 @@ UE.plugins['formula'] = function () {
         });
         if (list.length) {
             for (var i = 0, id; id = list[i++];) {
-                var node = me.window.$("[formulaid=" + id + "]")[0];
-                var txt = node.mathquill("latex");
+                var nodes = me.window.$("[formulaid=" + id + "]");
+                var txt = nodes[0].mathquill("latex");
                 var span = domUtils.createElement(me.document, "span", {
                     'class':'mathquill-editable',
                     formulaid:id
                 });
                 span.appendChild(me.document.createTextNode(txt));
-                node.parentNode.replaceChild(span, node);
+                nodes[0].parentNode.replaceChild(span, nodes[0]);
                 me.window.$("[formulaid=" + id + "]").mathquill("editable");
             }
         }
