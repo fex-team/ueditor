@@ -322,16 +322,19 @@ UE.plugins['contextmenu'] = function () {
                     subMenu:[
                         {
                             cmdName:'tablealignment',
+                            className: 'left',
                             label:lang.tableleft,
                             value:['float','left']
                         },
                         {
                             cmdName:'tablealignment',
+                            className: 'center',
                             label:lang.tablecenter,
                             value:['margin','0 auto']
                         },
                         {
                             cmdName:'tablealignment',
+                            className: 'right',
                             label:lang.tableright,
                             value:['float','right']
                         }
@@ -397,7 +400,39 @@ UE.plugins['contextmenu'] = function () {
         return;
     }
     var uiUtils = UE.ui.uiUtils;
+
+    /**
+     * 获取当前激活右键菜单的表格单元格的状态， 该状态将决定菜单的 “单元格对齐方式”的初始状态
+     * @param targetNode 触发事件的节点
+     */
+    function getActiveTableCellStatus( targetNode ) {
+
+        //激活菜单的单元格
+        var activeMenuCell = domUtils.findParentByTagName( targetNode, ['td', 'th'], true),
+            temp = null;
+
+        if( !activeMenuCell ) {
+
+            return null;
+
+        } else if( activeMenuCell._cache !== undefined ) {
+
+            temp = activeMenuCell._cache;
+            activeMenuCell._cache = null;
+            delete activeMenuCell._cache;
+
+            return temp;
+
+        } else {
+
+            return UE.UETable.getTableCellState( activeMenuCell );
+
+        }
+
+    }
+
     me.addListener( 'contextmenu', function ( type, evt ) {
+
         var offset = uiUtils.getViewportOffsetByEvent( evt );
         me.fireEvent( 'beforeselectionchange' );
         if ( menu ) {
@@ -424,7 +459,7 @@ UE.plugins['contextmenu'] = function () {
                                         (subItem.query ? subItem.query() : me.queryCommandState( subItem.cmdName )) > -1 ) {
                                     subMenu.push( {
                                         'label':subItem.label || me.getLang( "contextMenu." + subItem.cmdName + (subItem.value || '') )||"",
-                                        'className':'edui-for-' +subItem.cmdName,
+                                        'className':'edui-for-' +subItem.cmdName + ( subItem.className ? ( ' edui-for-' + subItem.cmdName + '-' + subItem.className ) : '' ),
                                         onclick:subItem.exec ? function () {
                                                 subItem.exec.call( me );
                                         } : function () {
@@ -496,9 +531,11 @@ UE.plugins['contextmenu'] = function () {
         if ( contextItems[contextItems.length - 1] == '-' ) {
             contextItems.pop();
         }
+
         menu = new UE.ui.Menu( {
             items:contextItems,
-            editor:me
+            editor:me,
+            cellAlignStatus: getActiveTableCellStatus( evt.target || evt.srcElement )
         } );
         menu.render();
         menu.showAt( offset );

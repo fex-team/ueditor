@@ -10,6 +10,12 @@
         Popup = baidu.editor.ui.Popup,
         Stateful = baidu.editor.ui.Stateful,
         CellAlignPicker = baidu.editor.ui.CellAlignPicker,
+
+        /**
+         * 新增了一个初始化参数 cellAlignStatus
+         * @param cellAlignStatus 当前菜单的 “单元格对齐方式”的初始化状态； 如果出发的事件不是在table内部， 则应该忽略该参数
+         * @update 2013/4/2 hancong03@baidu.com
+         */
         Menu = baidu.editor.ui.Menu = function (options) {
             this.initOptions(options);
             this.initMenu();
@@ -41,15 +47,15 @@
                 } else if (!(item instanceof MenuItem)) {
                     item.editor = this.editor;
                     item.theme = this.editor.options.theme;
-                    this.items[i] = this.createItem(item);
+                    this.items[i] = this.createItem(item, this.cellAlignStatus);
                 }
             }
         },
         getSeparator:function () {
             return menuSeparator;
         },
-        createItem:function (item) {
-            return new MenuItem(item);
+        createItem:function (item, cellAlignStatus) {
+            return new MenuItem(item, cellAlignStatus);
         },
         _Popup_getContentHtmlTpl:Popup.prototype.getContentHtmlTpl,
         getContentHtmlTpl:function () {
@@ -117,13 +123,14 @@
     };
     utils.inherits(Menu, Popup);
 
-    var MenuItem = baidu.editor.ui.MenuItem = function (options) {
+    var MenuItem = baidu.editor.ui.MenuItem = function (options, cellAlignStatus) {
         this.initOptions(options);
         this.initUIBase();
         this.Stateful_init();
         if (this.subMenu && !(this.subMenu instanceof Menu)) {
             if (options.className && options.className.indexOf("aligntd") != -1) {
                 var me = this;
+                this.subMenu.selected = cellAlignStatus;
                 this.subMenu = new Popup({
                     content:new CellAlignPicker(this.subMenu),
                     parentMenu:me,
