@@ -353,3 +353,15 @@
 .edui-default  .edui-for-formula .edui-icon {
     background-position: -200px -40px
 }
+
+.edui-default  .edui-for-aligntd  .edui-icon {
+    background-position: -236px -76px;
+}
+
+.edui-default  .edui-for-insertparagraphtrue  .edui-icon {
+    background-position: -625px -76px;
+}
+
+.edui-default  .edui-for-insertparagraph  .edui-icon {
+    background-position: -602px -76px;
+}

@@ -26,8 +26,8 @@
 .edui-default .edui-menuitem .edui-icon {
     width: 20px !important;
     height: 20px !important;
-    background: url(../images/icons.png) 0 -40px;
-    background: url(../images/icons.gif) 0 -40 px\9;
+    background: url(../images/icons-extend.png) 0 -40px;
+    background: url(../images/icons-extend.gif) 0 -40 px\9;
 }
 
 .edui-default .edui-menuitem .edui-label {

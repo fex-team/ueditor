@@ -16,18 +16,24 @@
     height: 20px;
     width: 20px;
     padding: 1px;
-    background-image: url(../images/icons.png);
-    background-image: url(../images/icons.gif) \9;
+    background-image: url(../images/table-cell-align.png);
+    background-image: url(../images/table-cell-align.gif) \9;
 }
 .edui-default .edui-cellalignpicker-body .edui-left{
-    background-position: -460px 0;
+    background-position: 0 1px;
 }
+
 .edui-default .edui-cellalignpicker-body .edui-center{
-    background-position: -420px 0;
+    background-position: -25px 1px;
 }
 .edui-default .edui-cellalignpicker-body .edui-right{
-    background-position: -480px 0;
+    background-position: -51px 1px;
 }
+
+.edui-default .edui-cellalignpicker-body .edui-left:HOVER{
+    background-position: 0 1px;
+}
+
 .edui-default .edui-cellalignpicker-body td.edui-state-hover {
     background-color: #fff5d4;
     padding: 0;
