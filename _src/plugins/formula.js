@@ -99,15 +99,20 @@ UE.plugins['formula'] = function () {
         }
     });
 
-    function queryState() {
+    function queryState(cmd) {
         try {
             var rng = this.selection.getRange();
             var start = filter(rng.startContainer);
             var end = filter(rng.endContainer);
             if (start && end && start == end) {
                 addFillChar(start);
+                if (!domUtils.hasClass(start, "hasCursor")) {
+                    var selector = "[formulaid=" + start.getAttribute("formulaid") + "]";
+                    me.window.$(selector).addClass("hasCursor");
+                }
                 return 1;
             } else {
+                cmd === "formula" && me.window.$(".mathquill-rendered-math").removeClass("hasCursor");
                 return 0;
             }
         }
@@ -138,7 +143,7 @@ UE.plugins['formula'] = function () {
     //将queyCommamndState重置
     var orgQuery = me.queryCommandState;
     me.queryCommandState = function (cmd) {
-        if (!me.notNeedmathQuery[cmd.toLowerCase()] && queryState.call(this) == 1) {
+        if (!me.notNeedmathQuery[cmd.toLowerCase()] && queryState.call(this, cmd) == 1) {
             return -1;
         }
         return orgQuery.apply(this, arguments)
@@ -172,7 +177,7 @@ UE.plugins['formula'] = function () {
                 });
                 node.parentNode.replaceChild(span, node);
 
-                if(obj[attr]){
+                if (obj[attr]) {
                     me.window.$("[formulaid=" + attr + "]").html("").mathquill("editable")
                         .mathquill("write", obj[attr].replace("{/}", "\\"));
                 }
@@ -237,7 +242,7 @@ UE.plugins['formula'] = function () {
             rng.setCursor();
         },
         queryCommandState:function () {
-            return queryState.call(me);
+            return queryState.call(me, "formula");
         }
     };
 
