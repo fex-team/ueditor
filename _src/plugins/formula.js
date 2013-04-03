@@ -15,12 +15,6 @@ UE.plugins['formula'] = function () {
         }, true);
     };
 
-    var fnBlock = function (node) {
-        return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p' && domUtils.hasClass(node, 'formulaBlock')
-        }, true);
-    };
-
     var setCursorPos = function (range, start, end, callback) {
         if (start && end && start === end) {
             if (start.nextSibling) {
@@ -39,24 +33,16 @@ UE.plugins['formula'] = function () {
         }
     };
 
-    function toInline(node, ignorePre, ignoreNext) {
-        function merge(rtl, start, node) {
-            var next;
-            if ((next = node[rtl]) && !domUtils.isBookmarkNode(next) && next.nodeType == 1) {
-                while (next.firstChild) {
-                    if (start == 'firstChild') {
-                        node.insertBefore(next.lastChild, node.firstChild);
-                    }
-                    else {
-                        node.appendChild(next.firstChild);
-                    }
-                }
-                domUtils.remove(next);
-            }
-        }
+    function addFillChar(node) {
+        var previous = node.previousSibling,
+            next = node.nextSibling;
 
-        !ignorePre && merge('previousSibling', 'firstChild', node);
-        !ignoreNext && merge('nextSibling', 'lastChild', node);
+        if (!previous || !domUtils.isFillChar(previous)) {
+            node.parentNode.insertBefore(document.createTextNode(domUtils.fillChar), node);
+        }
+        if (!next || !domUtils.isFillChar(next)) {
+            domUtils.insertAfter(node, document.createTextNode(domUtils.fillChar));
+        }
     }
 
     me.addListener("ready", function () {
@@ -113,18 +99,6 @@ UE.plugins['formula'] = function () {
         }
     });
 
-    function addFillChar(node) {
-        var previous = node.previousSibling,
-            next = node.nextSibling;
-
-        if (!previous || !domUtils.isFillChar(previous)) {
-            node.parentNode.insertBefore(document.createTextNode(domUtils.fillChar), node);
-        }
-        if (!next || !domUtils.isFillChar(next)) {
-            domUtils.insertAfter(node, document.createTextNode(domUtils.fillChar));
-        }
-    }
-
     function queryState() {
         try {
             var rng = this.selection.getRange();
@@ -157,8 +131,6 @@ UE.plugins['formula'] = function () {
         insertparagraph:1,
         elementpath:1,
         formula:1,
-        formulainline:1,
-        formulablock:1,
         formuladelete:1,
         formualmergeup:1
     };
@@ -177,7 +149,7 @@ UE.plugins['formula'] = function () {
         utils.each(domUtils.getElementsByTagName(me.body, 'span', 'mathquill-rendered-math'), function (di) {
             var id = di.getAttribute("formulaid");
             var txt = me.window.$("[formulaid=" + id + "]").mathquill("latex");
-            var span = domUtils.createElement(me.document, 'span', {
+            var span = domUtils.createElement(me.document, 'math', {
                 'class':'mathquill-embedded-latex',
                 'formulaid':id
             });
@@ -185,48 +157,56 @@ UE.plugins['formula'] = function () {
             di.parentNode.replaceChild(span, di);
         });
     });
-
     me.addListener("aftergetcontent aftersetcontent aftergetscene", function () {
         if (!me.window || !me.window.$)return;
-        var list = me.window.$(".mathquill-embedded-latex"), obj = {};
+        var list = me.window.$("math"), obj = {};
         if (list.length) {
             for (var i = 0, len = list.length; i < len; i++) {
                 obj[list[i].getAttribute("formulaid")] = list[i].innerText || list[i].textContent || list[i].nodeValue;
             }
             for (var attr in obj) {
-                me.window.$("[formulaid=" + attr + "]")
-                    .html("")
-                    .mathquill("editable")
-                    .mathquill("write", obj[attr].replace("{/}", "\\"));
+                var node = me.window.$("[formulaid=" + attr + "]")[0];
+                var span = domUtils.createElement(me.document, 'span', {
+                    'class':'mathquill-embedded-latex',
+                    'formulaid':node.getAttribute("formulaid")
+                });
+                node.parentNode.replaceChild(span, node);
+
+                if(obj[attr]){
+                    me.window.$("[formulaid=" + attr + "]").html("").mathquill("editable")
+                        .mathquill("write", obj[attr].replace("{/}", "\\"));
+                }
             }
         }
     });
-    me.addListener("beforepaste",function(type,obj){
-       obj.html= obj.html.replace(/formulaid=(["'])(\d)*\1/ig,function(){
-            me._formulaid+=1;
-            return "formulaid='"+me._formulaid+"'";
+
+    me.addListener("beforepaste", function (type, obj) {
+        obj.html = obj.html.replace(/formulaid=(["'])(\d)*\1/ig, function () {
+            me._formulaid += 1;
+            return "formulaid='" + me._formulaid + "'";
         });
     });
-    me.addListener("afterpaste",function(type,obj){
+    me.addListener("afterpaste", function (type, obj) {
         if (!me.window || !me.window.$)return;
-        var list=[];
-        obj.html.replace(/formulaid=(["'])(\d*)\1/ig,function(all,char,id){
+        var list = [];
+        obj.html.replace(/formulaid=(["'])(\d*)\1/ig, function (all, char, id) {
             list.push(id);
         });
         if (list.length) {
             for (var i = 0, id; id = list[i++];) {
-                var node=me.window.$("[formulaid=" + id + "]");
-                var txt=node.mathquill("latex");
+                var nodes = me.window.$("[formulaid=" + id + "]");
+                var txt = nodes.mathquill("latex");
                 var span = domUtils.createElement(me.document, "span", {
+                    'class':'mathquill-editable',
                     formulaid:id
                 });
-                span.className = "mathquill-editable";
                 span.appendChild(me.document.createTextNode(txt));
-                node[0].parentNode.replaceChild(span,node[0]);
+                nodes[0].parentNode.replaceChild(span, nodes[0]);
                 me.window.$("[formulaid=" + id + "]").mathquill("editable");
             }
         }
     });
+
     me.commands['formula'] = {
         execCommand:function (cmdName, txt) {
             var rng = me.selection.getRange();
@@ -239,9 +219,9 @@ UE.plugins['formula'] = function () {
             } else {
                 var doc = me.document;
                 var span = domUtils.createElement(doc, "span", {
+                    'class':'mathquill-editable',
                     formulaid:me._formulaid
                 });
-                span.className = "mathquill-editable";
                 span.appendChild(doc.createTextNode(txt));
                 me.execCommand('inserthtml', span.outerHTML);
 
@@ -250,85 +230,14 @@ UE.plugins['formula'] = function () {
                 me._formulaid += 1;
             }
 
-            var selector = "[formulaid=" + id + "]";
-            me.window.$(selector).focus().mathquill("write", txt.replace("{/}", "\\"));
-            rng.setStartAfter(me.window.$(selector)[0]).collapse(true);
+            var list = me.window.$("[formulaid=" + id + "]");
+            list.focus().mathquill("write", txt.replace("{/}", "\\"));
+
+            rng.setStartAfter(list[0]).collapse(true);
             rng.setCursor();
         },
         queryCommandState:function () {
             return queryState.call(me);
-        }
-    };
-
-    me.commands['formulainline'] = {
-        execCommand:function () {
-            var range = me.selection.getRange();
-            range.adjustmentBoundary();
-            var start = fnBlock(range.startContainer),
-                end = fnBlock(range.endContainer);
-
-            setCursorPos(range, start, end, function () {
-                if (start.previousSibling || start.nextSibling || /li/i.test(start.parentNode.tagName)) {
-                    toInline(start);
-                }
-                else {
-                    var p = document.createElement("p");
-                    p.appendChild(start);
-                    start.parentNode.replaceChild(p, start);
-                }
-                domUtils.removeAttributes(start, ["style", "class"]);
-            });
-        },
-        queryCommandState:function () {
-            try {
-                var range = this.selection.getRange();
-                var start = fnBlock(range.startContainer),
-                    end = fnBlock(range.startContainer);
-
-                return start && end && start == end ? 0 : -1;
-            }
-            catch (e) {
-                return -1;
-            }
-        }
-    };
-
-    me.commands['formulablock'] = {
-        execCommand:function () {
-            var range = me.selection.getRange();
-            var start = filter(range.startContainer),
-                end = filter(range.endContainer);
-
-            setCursorPos(range, start, end, function () {
-                domUtils.breakParent(start, domUtils.findParent(start, function (node) {
-                    return node.nodeType == 1 && node.tagName.toLowerCase() == 'p'
-                }, false));
-
-                var p = domUtils.createElement(document, "p", {
-                    "style":"text-align:center",
-                    "class":"formulaBlock"
-                });
-                start.parentNode.replaceChild(p, start);
-                p.appendChild(start);
-            });
-        },
-        queryCommandState:function () {
-            try {
-                var range = me.selection.getRange();
-                var start = filter(range.startContainer),
-                    end = filter(range.endContainer);
-
-                if (start && end && start == end) {
-                    var p = fnBlock(range.startContainer);
-                    return p ? -1 : 0;
-                } else {
-                    return -1;
-                }
-
-            }
-            catch (e) {
-                return -1;
-            }
         }
     };
 
@@ -353,7 +262,7 @@ UE.plugins['formula'] = function () {
             }
 
         }
-    } ;
+    };
 
     me.commands["formualmergeup"] = {
         execCommand:function () {
@@ -388,15 +297,7 @@ UE.plugins['formula'] = function () {
                 if (!li) {
                     var start = filter(rng.startContainer);
                     var end = filter(rng.endContainer);
-                    if (start && end && start == end) {
-                        if (fnBlock(start)) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
-                    } else {
-                        return -1;
-                    }
+                    return start && end && start == end ? 0 : 1;
                 }
 
             } catch (e) {
@@ -404,5 +305,5 @@ UE.plugins['formula'] = function () {
             }
 
         }
-    }  ;
+    };
 };

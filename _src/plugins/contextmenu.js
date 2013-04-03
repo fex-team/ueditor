@@ -380,14 +380,6 @@ UE.plugins['contextmenu'] = function () {
                     }
                 },
                 {
-                    label:lang.formulainline,
-                    cmdName:'formulainline'
-                },
-                {
-                    label:lang.formulablock,
-                    cmdName:'formulablock'
-                },
-                {
                     label:lang.formuladelete,
                     cmdName:'formuladelete'
                 },
