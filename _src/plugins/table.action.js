@@ -22,9 +22,6 @@ UE.plugins['table'] = function () {
             return UT.removeSelectedClass(cells);
         };
 
-    //把获取单元格“对齐状态”的方法绑定为UETable的静态方法
-    UT.getTableCellState = getTableCellState;
-
     function showError(e) {
         if (debug) throw e;
     }
@@ -972,7 +969,7 @@ UE.plugins['table'] = function () {
                 }
 
                 //获取当前触发contextmenu事件的单元格或者单元格组合的“单元格对齐”状态
-                td._cache  = getTableCellState( flag ? ut.selectedTds : td );
+                td._cache  = UT.getTableCellState( flag ? ut.selectedTds : td );
 
             }
             return;
@@ -1257,42 +1254,4 @@ UE.plugins['table'] = function () {
         return target && !(editor.fireEvent("excludetable", target) === true) ? target : null;
     }
 
-    /**
-     * 获取单元格或者单元格组的“对齐”状态。 如果当前的检测对象是一个单元格组， 只有在满足所有单元格的 水平和竖直 对齐属性都相同的
-     * 条件时才会返回其状态值，否则将返回null； 如果当前只检测了一个单元格， 则直接返回当前单元格的对齐状态；
-     * @param table cell or table cells , 支持单个单元格dom对象 或者 单元格dom对象数组
-     * @return { align: 'left' || 'right' || 'center', valign: 'top' || 'middle' || 'bottom' } 或者 null
-     */
-    function getTableCellState( cells ) {
-
-        !utils.isArray( cells ) && ( cells = [cells] );
-
-        var result = {},
-            status = ['align', 'valign'],
-            tempStatus = null,
-            isSame = true;//状态是否相同
-
-        utils.each( cells, function( cellNode ){
-
-            utils.each( status, function( currentState ){
-
-                tempStatus = cellNode.attributes[ currentState ];
-                tempStatus = tempStatus && tempStatus.nodeValue;
-
-                if( !result[ currentState ] && tempStatus ) {
-                    result[ currentState ] = tempStatus;
-                } else if( !result[ currentState ] || ( tempStatus !== result[ currentState ] ) ) {
-                    isSame = false;
-                    return false;
-                }
-
-            } );
-
-            return isSame;
-
-        });
-
-        return isSame ? result : null;
-
-    }
 };
