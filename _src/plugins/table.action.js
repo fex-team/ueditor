@@ -967,10 +967,6 @@ UE.plugins['table'] = function () {
                     }, 0);
 
                 }
-
-                //获取当前触发contextmenu事件的单元格或者单元格组合的“单元格对齐”状态
-                td._cache  = UT.getTableCellState( flag ? ut.selectedTds : td );
-
             }
             return;
         }

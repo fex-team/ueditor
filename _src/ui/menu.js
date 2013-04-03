@@ -12,9 +12,9 @@
         CellAlignPicker = baidu.editor.ui.CellAlignPicker,
 
         /**
-         * 新增了一个初始化参数 cellAlignStatus
-         * @param cellAlignStatus 当前菜单的 “单元格对齐方式”的初始化状态； 如果出发的事件不是在table内部， 则应该忽略该参数
-         * @update 2013/4/2 hancong03@baidu.com
+         * 新增了一个初始化参数 sourceEvent
+         * @param sourceEvent 触发当前菜单的浏览器原生事件
+         * @update 2013/4/3 hancong03@baidu.com
          */
         Menu = baidu.editor.ui.Menu = function (options) {
             this.initOptions(options);
@@ -47,15 +47,17 @@
                 } else if (!(item instanceof MenuItem)) {
                     item.editor = this.editor;
                     item.theme = this.editor.options.theme;
-                    this.items[i] = this.createItem(item, this.cellAlignStatus);
+                    this.items[i] = this.createItem(item);
                 }
             }
         },
         getSeparator:function () {
             return menuSeparator;
         },
-        createItem:function (item, cellAlignStatus) {
-            return new MenuItem(item, cellAlignStatus);
+        createItem:function (item) {
+            //新增一个参数menu, 该参数存储了menuItem所对应的menu引用
+            item.menu = this;
+            return new MenuItem(item);
         },
         _Popup_getContentHtmlTpl:Popup.prototype.getContentHtmlTpl,
         getContentHtmlTpl:function () {
@@ -123,14 +125,22 @@
     };
     utils.inherits(Menu, Popup);
 
-    var MenuItem = baidu.editor.ui.MenuItem = function (options, cellAlignStatus) {
+    /**
+     * @update 2013/04/03 hancong03 新增一个参数menu, 该参数存储了menuItem所对应的menu引用
+     * @type {Function}
+     */
+    var MenuItem = baidu.editor.ui.MenuItem = function (options) {
         this.initOptions(options);
         this.initUIBase();
         this.Stateful_init();
         if (this.subMenu && !(this.subMenu instanceof Menu)) {
             if (options.className && options.className.indexOf("aligntd") != -1) {
-                var me = this;
-                this.subMenu.selected = cellAlignStatus;
+                var me = this,
+                    eventTarget = this.menu && ( this.menu.sourceEvent.target || this.menu.sourceEvent.srcElement );
+
+                //获取单元格对齐初始状态
+                this.subMenu.selected = this.editor.queryCommandValue( 'cellalignment', eventTarget );
+
                 this.subMenu = new Popup({
                     content:new CellAlignPicker(this.subMenu),
                     parentMenu:me,
