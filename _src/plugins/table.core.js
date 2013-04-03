@@ -66,8 +66,7 @@
 
             utils.each( status, function( currentState ){
 
-                tempStatus = cellNode.attributes[ currentState ];
-                tempStatus = tempStatus && tempStatus.nodeValue;
+                tempStatus = cellNode.getAttribute( currentState );
 
                 if( !result[ currentState ] && tempStatus ) {
                     result[ currentState ] = tempStatus;
