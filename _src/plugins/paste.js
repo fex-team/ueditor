@@ -136,7 +136,7 @@ UE.plugins['paste'] = function() {
                 })
             }
             html = {'html':root.toHtml()};
-            me.fireEvent('beforepaste',html);
+            me.fireEvent('beforepaste',html,root);
             root = UE.htmlparser(html.html);
             //如果开启了纯文本模式
             if(me.queryCommandState('pasteplain')){
