@@ -322,16 +322,19 @@ UE.plugins['contextmenu'] = function () {
                     subMenu:[
                         {
                             cmdName:'tablealignment',
+                            className: 'left',
                             label:lang.tableleft,
                             value:['float','left']
                         },
                         {
                             cmdName:'tablealignment',
+                            className: 'center',
                             label:lang.tablecenter,
                             value:['margin','0 auto']
                         },
                         {
                             cmdName:'tablealignment',
+                            className: 'right',
                             label:lang.tableright,
                             value:['float','right']
                         }
@@ -377,14 +380,6 @@ UE.plugins['contextmenu'] = function () {
                     }
                 },
                 {
-                    label:lang.formulainline,
-                    cmdName:'formulainline'
-                },
-                {
-                    label:lang.formulablock,
-                    cmdName:'formulablock'
-                },
-                {
                     label:lang.formuladelete,
                     cmdName:'formuladelete'
                 },
@@ -397,7 +392,9 @@ UE.plugins['contextmenu'] = function () {
         return;
     }
     var uiUtils = UE.ui.uiUtils;
+
     me.addListener( 'contextmenu', function ( type, evt ) {
+
         var offset = uiUtils.getViewportOffsetByEvent( evt );
         me.fireEvent( 'beforeselectionchange' );
         if ( menu ) {
@@ -424,7 +421,7 @@ UE.plugins['contextmenu'] = function () {
                                         (subItem.query ? subItem.query() : me.queryCommandState( subItem.cmdName )) > -1 ) {
                                     subMenu.push( {
                                         'label':subItem.label || me.getLang( "contextMenu." + subItem.cmdName + (subItem.value || '') )||"",
-                                        'className':'edui-for-' +subItem.cmdName,
+                                        'className':'edui-for-' +subItem.cmdName + ( subItem.className ? ( ' edui-for-' + subItem.cmdName + '-' + subItem.className ) : '' ),
                                         onclick:subItem.exec ? function () {
                                                 subItem.exec.call( me );
                                         } : function () {
@@ -496,9 +493,11 @@ UE.plugins['contextmenu'] = function () {
         if ( contextItems[contextItems.length - 1] == '-' ) {
             contextItems.pop();
         }
+
         menu = new UE.ui.Menu( {
             items:contextItems,
-            editor:me
+            editor:me,
+            sourceEvent: evt
         } );
         menu.render();
         menu.showAt( offset );

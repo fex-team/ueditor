@@ -689,6 +689,36 @@
                     domUtils.setAttributes(cell, data);
                 });
             }
+        },
+        /**
+         * 查询当前点击的单元格的对齐状态， 如果当前已经选择了多个单元格， 则会返回所有单元格经过统一协调过后的状态
+         * @see UE.UETable.getTableCellAlignState
+         */
+        queryCommandValue: function( cmd, targetNode ){
+
+            if( !targetNode ) {
+                return null;
+            }
+
+            //激活菜单的单元格
+            var activeMenuCell = domUtils.findParentByTagName( targetNode, ['td', 'th'], true),
+                temp = null;
+
+            if( !activeMenuCell ) {
+
+                return null;
+
+            } else {
+
+                //获取同时选中的其他单元格
+                var cells = UE.UETable.getUETable( activeMenuCell ).selectedTds;
+
+                !cells.length && ( cells = activeMenuCell );
+
+                return UE.UETable.getTableCellAlignState( cells );
+
+            }
+
         }
     };
     //表格对齐方式

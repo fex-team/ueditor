@@ -967,7 +967,6 @@ UE.plugins['table'] = function () {
                     }, 0);
 
                 }
-
             }
             return;
         }
@@ -1250,4 +1249,5 @@ UE.plugins['table'] = function () {
         //排除了非td内部以及用于代码高亮部分的td
         return target && !(editor.fireEvent("excludetable", target) === true) ? target : null;
     }
+
 };

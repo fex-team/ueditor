@@ -357,6 +357,7 @@ test( 'trace 744：设置超链接背景色后切换到源码再切回来', func
             editor.execCommand( 'source' );
             setTimeout(function(){
                 ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '切换后html代码不变' );       /*切换源码前后代码应当相同*/
+                div.parentNode.removeChild(div);
                 start();
             },50);
         },50);
@@ -401,7 +402,6 @@ test( '对表格中的文本添加颜色和下划线', function() {
         range.selectNode(trs[0].firstChild).select();
         setTimeout(function(){
             editor.execCommand( 'underline' );
-
             ua.checkHTMLSameStyle( '<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色' );
             ua.checkHTMLSameStyle( '<span style="color: rgb(255, 100, 100); ">hello2</span>', editor.document, trs[0].lastChild, '第2个单元格有前景色' );
             ua.checkHTMLSameStyle( '<span style="color: rgb(255, 100, 100); ">hello3</span>', editor.document, trs[1].firstChild, '第3个单元格有前景色' );
@@ -463,3 +463,55 @@ test( 'trace 721：预先设置下划线和字体颜色，再输入文本，查�
     }
 } );
 
+test( '字符边框', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart(editor.body.firstChild,0).collapse(true).select();
+    editor.execCommand( 'fontborder' );
+    range = editor.selection.getRange();
+    range.insertNode( editor.document.createTextNode( 'hello' ) );
+    ua.manualDeleteFillData( editor.body );
+    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
+    equal(editor.queryCommandValue('fontborder'),'1px solid rgb(0, 0, 0)','检查反射值');
+    equal(ua.getChildHTML(editor.body.firstChild),'<span style="border: 1px solid rgb(0, 0, 0);">hello</span>'+br,'查看添加了字符边框后的样式');
+    range.setStart(editor.body.firstChild.firstChild.firstChild,5).collapse(true).select();
+    editor.execCommand( 'fontborder' );
+    equal(editor.queryCommandState('fontborder'),'0');
+    equal(editor.queryCommandValue('fontborder'),'','无反射值');
+    editor.setContent( '<p><span style="color: red">欢</span>迎光临</p>' );
+    range.selectNode( editor.body.firstChild ).select();
+    editor.execCommand( 'fontborder' );
+    var p1 = '<span style=\"border: 1px solid rgb(0, 0, 0);\"><span style=\"color: red; border: 1px solid rgb(0, 0, 0);\">欢</span><span style=\"border: 1px solid rgb(0, 0, 0);\">迎光临</span></span>';
+    equal(ua.getChildHTML(editor.body.firstChild),p1,'查看添加了字符边框后的样式');
+} );
+
+test( 'trace 3096：单元格中改变字号', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:3,numRows:3} );
+    var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+    trs[0].cells[0].innerHTML = 'asd';
+    range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild.firstChild,0).setEnd(editor.body.firstChild.firstChild.firstChild.firstChild.firstChild,3).select();
+    editor.execCommand( 'fontsize', '32px' );
+    equal(editor.body.firstChild.getElementsByTagName('td')[0].style.height,'','不固定高度');
+});
+
+test( '转换font标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<font size="16" color="red"><b><i>x</i></b></font>' );
+    equal(editor.getContent(),'<p><span style="font-size:16px;color:red" ><strong><em>x</em></strong></span></p>' , '转换font标签');
+    editor.setContent( '<font style="color:red"><u>x</u></font>' );
+    equal(ua.getChildHTML(editor.body.firstChild),'<span style="color:red"><span style="text-decoration:underline;" >x</span></span>' , '转换font标签');
+} );
+
+test( 'font转span', function() {
+    var editor = te.obj[0];
+    editor.setContent( '<font size="12" color="red" lang="en" face="arial"><b><i>hello</i>hello</b>' );
+    equal(ua.getChildHTML(editor.body.firstChild),'<span style="font-size:12px;color:red;font-family:arial"><strong><em>hello</em>hello</strong></span>','转换font标签');
+    /*size的值在sizeMap中有对应的值*/
+    editor.setContent( '<b><font size="10" color="#ff0000" lang="en" face="楷体">hello' );
+    equal(ua.getChildHTML(editor.body.firstChild),'<strong><span style="font-size:10px;color:#ff0000;font-family:楷体">hello</span></strong>','转换font标签');
+} );

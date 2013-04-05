@@ -207,11 +207,19 @@
 }
 
 .edui-default  .edui-for-insertrow .edui-icon {
-    background-position: -740px -20px;
+    background-position: -478px -76px;
+}
+
+.edui-default  .edui-for-insertrownext .edui-icon {
+    background-position: -498px -76px;
 }
 
 .edui-default  .edui-for-insertcol .edui-icon {
-    background-position: -700px -20px;
+    background-position: -455px -76px;
+}
+
+.edui-default  .edui-for-insertcolnext  .edui-icon {
+    background-position: -429px -76px;
 }
 
 .edui-default  .edui-for-mergeright .edui-icon {
@@ -352,4 +360,48 @@
 
 .edui-default  .edui-for-formula .edui-icon {
     background-position: -200px -40px
+}
+
+.edui-default  .edui-for-aligntd  .edui-icon {
+    background-position: -236px -76px;
+}
+
+.edui-default  .edui-for-insertparagraphtrue  .edui-icon {
+    background-position: -625px -76px;
+}
+
+.edui-default  .edui-for-insertparagraph  .edui-icon {
+    background-position: -602px -76px;
+}
+
+.edui-default  .edui-for-insertcaption  .edui-icon {
+    background-position: -336px -76px;
+}
+
+.edui-default  .edui-for-deletecaption  .edui-icon {
+    background-position: -362px -76px;
+}
+
+.edui-default  .edui-for-inserttitle  .edui-icon {
+    background-position: -286px -76px;
+}
+
+.edui-default  .edui-for-deletetitle  .edui-icon {
+    background-position: -311px -76px;
+}
+
+.edui-default  .edui-for-aligntable  .edui-icon {
+    background-position: -440px 0;
+}
+
+.edui-default  .edui-for-tablealignment-left  .edui-icon {
+    background-position: -460px 0;
+}
+
+.edui-default  .edui-for-tablealignment-center  .edui-icon {
+    background-position: -420px 0;
+}
+
+.edui-default  .edui-for-tablealignment-right  .edui-icon {
+    background-position: -480px 0;
 }
