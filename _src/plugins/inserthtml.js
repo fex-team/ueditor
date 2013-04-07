@@ -87,74 +87,119 @@ UE.commands['inserthtml'] = {
                 range.collapsed && range.collapse(true)
             }
         }
-        while ( child = div.firstChild ) {
-            range.insertNode( child );
-            nextNode = child.nextSibling;
-            if ( !hadBreak && child.nodeType == domUtils.NODE_ELEMENT && domUtils.isBlockElm( child ) ){
+        //列表单独处理
+        var li = domUtils.findParentByTagName(range.startContainer,'li',true);
+        if(li){
+            var next,last;
+            while(child = div.firstChild){
 
-                parent = domUtils.findParent( child,function ( node ){ return domUtils.isBlockElm( node ); } );
-                if ( parent && parent.tagName.toLowerCase() != 'body' && !(dtd[parent.tagName][child.nodeName] && child.parentNode === parent)){
-                    if(!dtd[parent.tagName][child.nodeName]){
-                        pre = parent;
-                    }else{
-                        tmp = child.parentNode;
-                        while (tmp !== parent){
-                            pre = tmp;
-                            tmp = tmp.parentNode;
+                while(child && (child.nodeType == 3 || !domUtils.isBlockElm(child))){
+                    next = child.nextSibling;
+                    range.insertNode( child );
+                    last = child;
+                    child = next;
 
+                }
+                if(child){
+                    if(/^(ol|ul)$/i.test(child.tagName)){
+                        while(child.firstChild){
+                            last = child.firstChild;
+                            domUtils.insertAfter(li,child.firstChild);
+                            li = li.nextSibling;
                         }
+                        domUtils.remove(child)
+                    }else{
+                        var tmpLi;
+                        next = child.nextSibling;
+                        tmpLi = me.document.createElement('li');
+                        domUtils.insertAfter(li,tmpLi);
+                        tmpLi.appendChild(child);
+                        last = child;
+                        child = next;
+                        li = tmpLi;
                     }
 
-
-                    domUtils.breakParent( child, pre || tmp );
-                    //去掉break后前一个多余的节点  <p>|<[p> ==> <p></p><div></div><p>|</p>
-                    var pre = child.previousSibling;
-                    domUtils.trimWhiteTextNode(pre);
-                    if(!pre.childNodes.length){
-                        domUtils.remove(pre);
-                    }
-                    //trace:2012,在非ie的情况，切开后剩下的节点有可能不能点入光标添加br占位
-
-                    if(!browser.ie &&
-                        (next = child.nextSibling) &&
-                        domUtils.isBlockElm(next) &&
-                        next.lastChild &&
-                        !domUtils.isBr(next.lastChild)){
-                        next.appendChild(me.document.createElement('br'));
-                    }
-                    hadBreak = 1;
                 }
             }
-            var next = child.nextSibling;
-            if(!div.firstChild && next && domUtils.isBlockElm(next)){
-
-                range.setStart(next,0).collapse(true);
-                break;
+            li = domUtils.findParentByTagName(range.startContainer,'li',true);
+            if(domUtils.isEmptyBlock(li)){
+                domUtils.remove(li)
             }
-            range.setEndAfter( child ).collapse();
+            if(last){
 
-        }
+                range.setStartAfter(last).collapse(true).select(true)
+            }
+        }else{
+            while ( child = div.firstChild ) {
+                range.insertNode( child );
+                nextNode = child.nextSibling;
+                if ( !hadBreak && child.nodeType == domUtils.NODE_ELEMENT && domUtils.isBlockElm( child ) ){
 
-        child = range.startContainer;
+                    parent = domUtils.findParent( child,function ( node ){ return domUtils.isBlockElm( node ); } );
+                    if ( parent && parent.tagName.toLowerCase() != 'body' && !(dtd[parent.tagName][child.nodeName] && child.parentNode === parent)){
+                        if(!dtd[parent.tagName][child.nodeName]){
+                            pre = parent;
+                        }else{
+                            tmp = child.parentNode;
+                            while (tmp !== parent){
+                                pre = tmp;
+                                tmp = tmp.parentNode;
 
-        if(nextNode && domUtils.isBr(nextNode)){
-            domUtils.remove(nextNode)
-        }
-        //用chrome可能有空白展位符
-        if(domUtils.isBlockElm(child) && domUtils.isEmptyNode(child)){
-            if(nextNode = child.nextSibling){
-                domUtils.remove(child);
-                if(nextNode.nodeType == 1 && dtd.$block[nextNode.tagName]){
+                            }
+                        }
 
-                    range.setStart(nextNode,0).collapse(true).shrinkBoundary()
+
+                        domUtils.breakParent( child, pre || tmp );
+                        //去掉break后前一个多余的节点  <p>|<[p> ==> <p></p><div></div><p>|</p>
+                        var pre = child.previousSibling;
+                        domUtils.trimWhiteTextNode(pre);
+                        if(!pre.childNodes.length){
+                            domUtils.remove(pre);
+                        }
+                        //trace:2012,在非ie的情况，切开后剩下的节点有可能不能点入光标添加br占位
+
+                        if(!browser.ie &&
+                            (next = child.nextSibling) &&
+                            domUtils.isBlockElm(next) &&
+                            next.lastChild &&
+                            !domUtils.isBr(next.lastChild)){
+                            next.appendChild(me.document.createElement('br'));
+                        }
+                        hadBreak = 1;
+                    }
                 }
-            }else{
-                child.innerHTML = browser.ie ? domUtils.fillChar : '<br/>';
+                var next = child.nextSibling;
+                if(!div.firstChild && next && domUtils.isBlockElm(next)){
+
+                    range.setStart(next,0).collapse(true);
+                    break;
+                }
+                range.setEndAfter( child ).collapse();
+
             }
 
+            child = range.startContainer;
+
+            if(nextNode && domUtils.isBr(nextNode)){
+                domUtils.remove(nextNode)
+            }
+            //用chrome可能有空白展位符
+            if(domUtils.isBlockElm(child) && domUtils.isEmptyNode(child)){
+                if(nextNode = child.nextSibling){
+                    domUtils.remove(child);
+                    if(nextNode.nodeType == 1 && dtd.$block[nextNode.tagName]){
+
+                        range.setStart(nextNode,0).collapse(true).shrinkBoundary()
+                    }
+                }else{
+                    child.innerHTML = browser.ie ? domUtils.fillChar : '<br/>';
+                }
+
+            }
+            //加上true因为在删除表情等时会删两次，第一次是删的fillData
+            range.select(true);
         }
-        //加上true因为在删除表情等时会删两次，第一次是删的fillData
-        range.select(true);
+
 
 
         setTimeout(function(){

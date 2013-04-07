@@ -62,6 +62,17 @@ UE.plugins['list'] = function () {
         listiconpath : 'http://bs.baidu.com/listicon/',
         maxListLevel : 3//-1不限制
     } );
+    function listToArray(list){
+        var arr = [];
+        for(var p in list){
+            arr.push(p)
+        }
+        return arr;
+    }
+    var listStyle = {
+        'OL':listToArray(me.options.insertorderedlist),
+        'UL':listToArray(me.options.insertunorderedlist)
+    };
     var liiconpath = me.options.listiconpath;
 
     //根据用户配置，调整customStyle
@@ -155,8 +166,47 @@ UE.plugins['list'] = function () {
         if(domUtils.hasClass(node,/custom_/)){
             return cls.match(/custom_(\w+)/)[1]
         }
-        return ''
+        return domUtils.getStyle(node, 'list-style-type')
     }
+
+    me.addListener('beforepaste',function(type,html,root){
+        var me = this,
+            rng = me.selection.getRange(),li;
+
+        if(li = domUtils.findParentByTagName(rng.startContainer,'li',true)){
+            var list = li.parentNode,tagName = list.tagName == 'OL' ? 'ul':'ol';
+            utils.each(root.getNodesByTagName(tagName),function(n){
+                n.tagName = list.tagName;
+                n.setAttr();
+                if(n.parentNode === root){
+                    type = getStyle(list) || (list.tagName == 'OL' ? 'decimal' : 'disc')
+                }else{
+                    var className = n.parentNode.getAttr('class');
+                    if(className && /custom_/.test(className)){
+                        type = className.match(/custom_(\w+)/)[1]
+                    }else{
+                        type = n.parentNode.getStyle('list-style-type');
+                    }
+                    if(!type){
+                        type = list.tagName == 'OL' ? 'decimal' : 'disc';
+                    }
+                }
+                var index = utils.indexOf(listStyle[list.tagName], type);
+                if(n.parentNode !== root)
+                    index = index + 1 == listStyle[list.tagName].length ? 0 : index + 1;
+                var currentStyle = listStyle[list.tagName][index];
+                if(customStyle[currentStyle]){
+                    n.setAttr('class', 'custom_' + currentStyle)
+
+                }else{
+                    n.setStyle('list-style-type',currentStyle)
+                }
+            })
+
+        }
+
+        html.html = root.toHtml();
+    });
     //进入编辑器的li要套p标签
     me.addInputRule(function(root){
         utils.each(root.getNodesByTagName('li'),function(li){
@@ -313,7 +363,7 @@ UE.plugins['list'] = function () {
                     domUtils.removeAttributes(li,'class')
                 }
             });
-            !ignore && adjustList(node,node.tagName.toLowerCase(),getStyle(node)||domUtils.getStyle(node, 'list-style-type'),true)
+            !ignore && adjustList(node,node.tagName.toLowerCase(),getStyle(node)||domUtils.getStyle(node, 'list-style-type'),true);
         })
     }
     function adjustList(list, tag, style,ignoreEmpty) {
@@ -652,18 +702,9 @@ UE.plugins['list'] = function () {
     });
     //处理tab键
     me.addListener('tabkeydown',function(){
-        function listToArray(list){
-            var arr = [];
-            for(var p in list){
-                arr.push(p)
-            }
-            return arr;
-        }
-        var range = me.selection.getRange(),
-            listStyle = {
-                'OL':listToArray(me.options.insertorderedlist),
-                'UL':listToArray(me.options.insertunorderedlist)
-            };
+
+        var range = me.selection.getRange();
+
         //控制级数
         function checkLevel(li){
             if(me.options.maxListLevel != -1){

@@ -53,7 +53,7 @@
      * @param table cell or table cells , 支持单个单元格dom对象 或者 单元格dom对象数组
      * @return { align: 'left' || 'right' || 'center', valign: 'top' || 'middle' || 'bottom' } 或者 null
      */
-    UETable.getTableCellState = function ( cells ) {
+    UETable.getTableCellAlignState = function ( cells ) {
 
         !utils.isArray( cells ) && ( cells = [cells] );
 
@@ -66,8 +66,7 @@
 
             utils.each( status, function( currentState ){
 
-                tempStatus = cellNode.attributes[ currentState ];
-                tempStatus = tempStatus && tempStatus.nodeValue;
+                tempStatus = cellNode.getAttribute( currentState );
 
                 if( !result[ currentState ] && tempStatus ) {
                     result[ currentState ] = tempStatus;

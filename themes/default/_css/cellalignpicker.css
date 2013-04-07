@@ -17,8 +17,8 @@
     width: 20px;
     padding: 1px;
     background-image: url(../images/table-cell-align.png);
-    background-image: url(../images/table-cell-align.gif) \9;
 }
+
 .edui-default .edui-cellalignpicker-body .edui-left{
     background-position: 0 0;
 }
