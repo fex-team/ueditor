@@ -55,8 +55,7 @@
         'formula':'~/dialogs/formula/formula.html',
         'music':'~/dialogs/music/music.html',
         'template':'~/dialogs/template/template.html',
-        'background':'~/dialogs/background/background.html',
-        'formula':'~/dialogs/formula/formula.html'
+        'background':'~/dialogs/background/background.html'
     };
     //为工具栏添加按钮，以下都是统一的按钮触发命令，所以写在一起
     var btnCmds = ['undo', 'redo', 'formatmatch',
@@ -184,7 +183,7 @@
     var dialogBtns = {
         noOk:['searchreplace', 'help', 'spechars', 'webapp'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-            'insertvideo', 'highlightcode', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background']
+            'insertvideo', 'highlightcode', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background',"formula"]
 
     };
 
@@ -725,26 +724,22 @@
         return ui;
     };
 
-    // 表情、公式
-    var multiMenus = ['emotion', 'formula'];
-    for (var m = 0, mi; mi = multiMenus[m++];) {
-        (function (cmd) {
-            editorui[cmd] = function (editor, iframeUrl) {
-                var ui = new editorui.MultiMenuPop({
-                    title:editor.options.labelMap[cmd] || editor.getLang("labelMap." + cmd + "") || '',
-                    editor:editor,
-                    className:'edui-for-' + cmd,
-                    iframeUrl:editor.ui.mapUrl(iframeUrl || (editor.options.iframeUrlMap || {})[cmd] || iframeUrlMap[cmd])
-                });
-                editorui.buttons[cmd] = ui;
+    // 表情
+    editorui["emotion"] = function (editor, iframeUrl) {
+        var cmd = "emotion";
+        var ui = new editorui.MultiMenuPop({
+            title:editor.options.labelMap[cmd] || editor.getLang("labelMap." + cmd + "") || '',
+            editor:editor,
+            className:'edui-for-' + cmd,
+            iframeUrl:editor.ui.mapUrl(iframeUrl || (editor.options.iframeUrlMap || {})[cmd] || iframeUrlMap[cmd])
+        });
+        editorui.buttons[cmd] = ui;
 
-                editor.addListener('selectionchange', function () {
-                    ui.setDisabled(editor.queryCommandState(cmd) == -1)
-                });
-                return ui;
-            };
-        })(mi)
-    }
+        editor.addListener('selectionchange', function () {
+            ui.setDisabled(editor.queryCommandState(cmd) == -1)
+        });
+        return ui;
+    };
 
     editorui.autotypeset = function (editor) {
         var ui = new editorui.AutoTypeSetButton({
