@@ -81,7 +81,7 @@ UE.plugins['keystrokes'] = function() {
                     return;
                 }
             }
-            me.fireEvent("afterbackspace",evt);
+
         }
         //处理tab键的逻辑
         if (keyCode == 9) {
