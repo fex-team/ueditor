@@ -82,9 +82,9 @@
   margin: 0;
   padding: 0;
   border-color: black;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+  /*-webkit-user-select: none;*/
+  /*-moz-user-select: none;*/
+  /*user-select: none;*/
   white-space: pre-wrap;
 }
 .mathquill-rendered-math .empty {
@@ -327,18 +327,4 @@
 .mathquill-rendered-math .matrixed-container {
   filter: progid:DXImageTransform.Microsoft.Chroma(color='white');
   margin-top: -0.1em;
-}
-/*覆盖百科样式
-*/
-.mathquill-rendered-math{
-    text-indent: 0;
-    font-size: 20px;
-    padding: 4px;
-}
-.mathquill-rendered-math sup{
-    font-weight: normal;
-    font-style: normal;
-    cursor: default;
-    color: inherit;
-    background: none;
 }

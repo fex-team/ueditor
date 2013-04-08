@@ -9,32 +9,21 @@
     height: 380px;
     overflow: hidden;
 }
-.edui-default .edui-for-formula .edui-popup-content iframe
-{
-    width: 350px;
-    height: 270px;
-    overflow: hidden;
-}
-.edui-default .edui-for-emotion .edui-popup-content,
-.edui-default .edui-for-formula .edui-popup-content
+.edui-default .edui-for-emotion .edui-popup-content
 {
     position: relative;
     z-index: 555
 }
 
-.edui-default .edui-for-emotion .edui-splitborder ,
-.edui-default .edui-for-formula .edui-splitborder
-{
+.edui-default .edui-for-emotion .edui-splitborder {
     display: none
 }
 
-.edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow ,
-.edui-default .edui-for-formula .edui-splitbutton-body .edui-arrow
+.edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow
 {
     width: 0
 }
-.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder,
-.edui-default .edui-toolbar .edui-for-formula  .edui-state-active .edui-splitborder
+.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder
 {
     border-left: 1px solid transparent;
 }
