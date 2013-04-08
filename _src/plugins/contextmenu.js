@@ -378,14 +378,6 @@ UE.plugins['contextmenu'] = function () {
                         }
                         this.ui._dialogs['highlightcodeDialog'].open();
                     }
-                },
-                {
-                    label:lang.formuladelete,
-                    cmdName:'formuladelete'
-                },
-                {
-                    label:lang.formualmergeup,
-                    cmdName:'formualmergeup'
                 }
             ];
     if ( !items.length ) {
