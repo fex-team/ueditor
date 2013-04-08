@@ -82,9 +82,9 @@
   margin: 0;
   padding: 0;
   border-color: black;
-  /*-webkit-user-select: none;*/
-  /*-moz-user-select: none;*/
-  /*user-select: none;*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   white-space: pre-wrap;
 }
 .mathquill-rendered-math .empty {
