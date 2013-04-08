@@ -14,7 +14,9 @@ UE.plugins['snapscreen'] = function(){
         var container = me.container;
         doc = container.ownerDocument || container.document;
         snapplugin = doc.createElement("object");
-        try{snapplugin.type = "application/x-pluginbaidusnap";}catch(e){snapplugin = doc.createElement("object");};
+        try{snapplugin.type = "application/x-pluginbaidusnap";}catch(e){
+            return;
+        };
         snapplugin.style.cssText = "position:absolute;left:-9999px;";
         snapplugin.setAttribute("width","0");
         snapplugin.setAttribute("height","0");
