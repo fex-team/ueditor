@@ -19,13 +19,65 @@
      * 因此，UEditor提供了针对不同页面的编辑器可单独配置的根路径，具体来说，在需要实例化编辑器的页面最顶部写上如下代码即可。当然，需要令此处的URL等于对应的配置。
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
-    var URL;
+    var URL = (function(){
+
+        function PathStack() {
+            this.protocol = self.location.protocol + '//';
+            this.separator = '/';
+            this.path = [];
+        }
+
+        PathStack.isParentPath = function( path ){
+            return path === '..';
+        };
+
+        PathStack.prototype = {
+            push: function( path ){
+
+                if( path.indexOf( this.protocol ) === 0 ) {
+                    this.path = [];
+                }
+
+                path = path.replace( this.protocol , '' ).split( this.separator );
+                path.length = path.length - 1;
+
+
+                for( var i= 0, tempPath, root = this.path; tempPath = path[ i ]; i++ ) {
+
+                    if( PathStack.isParentPath( tempPath ) ) {
+                        root.pop();
+                    } else {
+                        root.push( tempPath );
+                    }
+
+                }
+
+            },
+            toString: function(){
+                return this.protocol + ( this.path.concat( [''] ) ).join( this.separator );
+            }
+        };
+
+        var root = document.URL || self.location.href,
+            currentPath = document.getElementsByTagName('script');
+
+        currentPath = currentPath[ currentPath.length -1 ].src;
+
+        var path = new PathStack();
+
+        path.push( root );
+        path.push( currentPath );
+
+        alert(path+"")
+
+
+    })();
 
     /**
      * 此处配置写法适用于UEditor小组成员开发使用，外部部署用户请按照上述说明方式配置即可，建议保留下面两行，以兼容可在具体每个页面配置window.UEDITOR_HOME_URL的功能。
      */
     var tmp = location.protocol.indexOf("file")==-1 ? location.pathname : location.href;
-    URL = window.UEDITOR_HOME_URL||tmp.substr(0,tmp.lastIndexOf("\/")+1).replace("_examples/","").replace("website/","");//这里你可以配置成ueditor目录在您网站的相对路径或者绝对路径（指以http开头的绝对路径）
+//    URL = window.UEDITOR_HOME_URL||tmp.substr(0,tmp.lastIndexOf("\/")+1).replace("_examples/","").replace("website/","");//这里你可以配置成ueditor目录在您网站的相对路径或者绝对路径（指以http开头的绝对路径）
 
     /**
      * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
