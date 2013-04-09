@@ -22,11 +22,11 @@
     var URL = (function(){
 
         function PathStack() {
-            this.protocol = self.location.protocol + '//';
-            this.protocolPattern = new RegExp( '^' + this.protocol + '/*' );
-            this.protocol = this.protocolPattern.exec( document.URL )[0];
+
+            var documentURL = document.URL || self.location.href;
+            this.protocol = PathStack.updateProtocol( documentURL );
             this.separator = '/';
-            this.localSeparator = /\\|\//.exec( ( document.URL || self.location.href ).replace( this.protocol ) )[0];
+            this.localSeparator = /\\|\//.exec( documentURL.replace( this.protocol ) )[0];
             this.separatorPattern = /\\|\//g;
             this.currentDir = './';
             this.currentDirPattern = /^[.]\/]/;
@@ -37,12 +37,28 @@
             return path === '..';
         };
 
+        PathStack.updateProtocol = function( path ) {
+
+            //根协议
+            var rootProtocol = self.location.protocol + '//',
+                protocol = null,
+                protocolPattern = new RegExp( '^' + rootProtocol + '/*' );
+
+            protocol = protocolPattern.exec( path );
+
+            return protocol && protocol[0];
+
+        };
+
         PathStack.prototype = {
             push: function( path ){
 
                 var hasProtocol = path.indexOf( this.protocol ) === 0;
 
-                hasProtocol && ( this.path = [] );
+                if( hasProtocol ) {
+                    this.path = [];
+                    this.protocol = PathStack.updateProtocol( path );
+                }
 
                 path = path.replace( this.protocol , '').replace( this.currentDirPattern, '' ).split( hasProtocol ? this.localSeparator : this.separator );
                 path.length = path.length - 1;
