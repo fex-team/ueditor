@@ -25,7 +25,7 @@ test( 'getNodesByTagName', function() {
     var node = uNode.createElement('<div id="aa"><div id="bb"><div id="cc"></div> </div>sdfadf</div>');
     var nodelist = node.getNodesByTagName('div');
     equals(nodelist.length,2,'div节点列表长度');
-    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<div id="bb"><div id="cc"></div> </div>sdfadf','innerHTML内容');
+    equals(node.innerHTML().replace(/[ ]+>/g,'>'),'<div id="bb"><div id="cc"></div></div>sdfadf','innerHTML内容');
 });
 
 test( 'innerHTML', function() {
@@ -38,6 +38,9 @@ test( 'innerHTML', function() {
         ci.tagName = 'p';
     }
     equals(node.innerHTML(),'<p><p><p></p></p></p>','innerHTML内容');
+    node = uNode.createElement('<div></div>');
+    node.innerHTML('asdf');
+    equals(node.innerHTML(),'asdf','innerHTML内容');
 });
 
 test( 'innerText', function() {
@@ -51,6 +54,8 @@ test( 'innerText', function() {
     var node = uNode.createElement('<div id="aa">sdfadf</div>');
     node.innerHTML('<p>dfsdfsdf<b>eee</b>sdf</p>');
     equals(node.innerText(),'dfsdfsdfeeesdf','获取标签中纯文本');
+    node.innerText('sdf');
+    equals(node.innerHTML(),'sdf','设置文本节点');
 });
 
 test( 'getData', function() {

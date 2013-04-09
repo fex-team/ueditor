@@ -190,12 +190,22 @@
                 return tmpRoot.toHtml();
             }
         },
-        innerText:function () {
+        innerText:function (textStr) {
             if (this.type != 'element' || dtd.$empty[this.tagName]) {
                 return this;
             }
-            var html = this.toHtml();
-            return html.replace(/<[^>]+>/g, '');
+            if (textStr) {
+                if(this.children){
+                    for (var i = 0, ci; ci = this.children[i++];) {
+                        ci.parentNode = null;
+                    }
+                }
+                this.children = [];
+                this.appendChild(uNode.createText(textStr));
+                return this;
+            } else {
+                return this.toHtml().replace(/<[^>]+>/g, '');
+            }
         },
         getData:function () {
             if (this.type == 'element')
