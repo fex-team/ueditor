@@ -170,8 +170,10 @@
                 return this;
             }
             if (htmlstr) {
-                for (var i = 0, ci; ci = this.children[i++];) {
-                    ci.parentNode = null;
+                if(this.children){
+                    for (var i = 0, ci; ci = this.children[i++];) {
+                        ci.parentNode = null;
+                    }
                 }
                 this.children = [];
                 var tmpRoot = UE.htmlparser(htmlstr);
