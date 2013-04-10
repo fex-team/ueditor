@@ -122,17 +122,10 @@ Formula.prototype = {
         domUtils.removeClasses(node, "mathquill-editable");
         domUtils.remove(domUtils.getElementsByTagName(node,"textarea")[0])
     },
-    insert:function (txt,isGroup) {
-        txt="\frac{ }{2},{/}Delta"
-        var list=$("#J_editArea");
-        if(isGroup){
-            var arr=txt.split(",");
-            for(var i= 0,tmp;tmp=arr[i++];){
-                list.mathquill("write", tmp.replace("{/}", "\\"));
-            }
-        }else{
-            list.mathquill("write", txt.replace("{/}", "\\"));
-        }
+    insert:function (txt) {
+        $("#J_editArea")
+            .focus()
+            .mathquill("write", txt.replace("{/}", "\\"));
     }
 };
 var formula = new Formula;
