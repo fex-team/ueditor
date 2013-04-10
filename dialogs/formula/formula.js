@@ -123,9 +123,17 @@ Formula.prototype = {
         domUtils.remove(domUtils.getElementsByTagName(node,"textarea")[0])
     },
     insert:function (txt) {
+        var orgTxt=$("#J_editArea").mathquill('latex');
+        var node=document.getElementById("J_editArea");
+        var tmpSpan=domUtils.createElement(document,"span",{
+            'id':"J_editArea"
+        });
+        node.parentNode.replaceChild(tmpSpan,node);
         $("#J_editArea")
-            .focus()
-            .mathquill("write", txt.replace("{/}", "\\"));
+            .html("")
+            .css("font-size", domUtils.getComputedStyle(editor.body, "font-size"))
+            .mathquill('editable')
+            .mathquill('write',orgTxt + txt.replace("{/}", "\\"));
     }
 };
 var formula = new Formula;
