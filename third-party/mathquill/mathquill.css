@@ -1,17 +1,3 @@
-/*
- * LaTeX Math in pure HTML and CSS -- No images whatsoever
- * v0.xa
- * by Jay and Han
- * Lesser GPL Licensed: http: //www.gnu.org/licenses/lgpl.html
- *
- * This file is automatically included by mathquill.js
- *
- */
-@font-face {
-    font-family: Symbola;
-    src: url(font/Symbola.eot);
-    src: local("Symbola Regular"), local("Symbola"), url(font/Symbola.ttf) format("truetype"), url(font/Symbola.otf) format("opentype"), url(font/Symbola.svg) format("svg");
-}
 .mathquill-editable {
     display: -moz-inline-box;
     display: inline-block;
