@@ -10,7 +10,7 @@ UE.plugins['formula'] = function () {
 
     var filter = function (node) {
         return domUtils.findParent(node, function (node) {
-            return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' &&  domUtils.hasClass(node, 'mathquill-rendered-math')
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'span' &&  domUtils.hasClass(node, 'mathquill-rendered-math');
         }, true);
     };
 
@@ -56,11 +56,10 @@ UE.plugins['formula'] = function () {
 
     function queryState() {
         try {
-            var range = this.selection.getRange();
-            var start = filter(range.startContainer);
-            var end = filter(range.endContainer);
+            var rng = this.selection.getRange();
+            var start = filter(rng.startContainer);
+            var end = filter(rng.endContainer);
             if (start && end && start == end) {
-                start.contentEditable = "false";
                 addFillChar(start);
                 return 1;
             } else {
@@ -86,7 +85,9 @@ UE.plugins['formula'] = function () {
         preview:1,
         insertparagraph:1,
         elementpath:1,
-        formula:1
+        formula:1,
+        formuladelete:1,
+        formualmergeup:1
     };
 
     //将queyCommamndState重置
