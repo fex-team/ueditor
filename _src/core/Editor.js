@@ -81,7 +81,7 @@
         //设置默认的常用属性
         me.setOpt({
             isShow: true,
-            initialContent: '欢迎使用ueditor!',
+            initialContent: '',
             autoClearinitialContent: false,
             iframeCssUrl: me.options.UEDITOR_HOME_URL + 'themes/iframe.css',
             textarea: 'editorValue',
@@ -104,7 +104,8 @@
             themePath: me.options.UEDITOR_HOME_URL + 'themes/',
             allHtmlEnabled: false,
             scaleEnabled: false,
-            tableNativeEditInFF: false
+            tableNativeEditInFF: false,
+            autoSyncData : true
         });
 
         utils.loadFile(document, {
@@ -281,9 +282,15 @@
             //为form提交提供一个隐藏的textarea
             for (var form = this.iframe.parentNode; !domUtils.isBody(form); form = form.parentNode) {
                 if (form.tagName == 'FORM') {
-                    domUtils.on(form, 'submit', function () {
-                        setValue(this, me);
-                    });
+                    if(me.options.autoSyncData){
+                        domUtils.on(me.window,'blur',function(){
+                            setValue(form,me);
+                        });
+                    }else{
+                        domUtils.on(form, 'submit', function () {
+                            setValue(this, me);
+                        });
+                    }
                     break;
                 }
             }
@@ -444,18 +451,18 @@
             if (fn ? !fn() : !this.hasContents()) {
                 return '';
             }
-            var range = me.selection.getRange(),
-                address = range.createAddress();
+//            var range = me.selection.getRange(),
+//                address = range.createAddress();
 
             me.fireEvent('beforegetcontent');
             var root = UE.htmlparser(me.body.innerHTML);
             me.filterOutputRule(root);
             me.fireEvent('aftergetcontent', cmd);
 
-            try {
-                !notSetCursor && range.moveToAddress(address).select(true);
-            } catch (e) {
-            }
+//            try {
+//                !notSetCursor && range.moveToAddress(address).select(true);
+//            } catch (e) {
+//            }
 
             return  root.toHtml();
         },
