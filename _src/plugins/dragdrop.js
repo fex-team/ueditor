@@ -1,54 +1,56 @@
-///import core
-
-/**
- * 编辑器中拖拽的处理
- * @function
- */
 UE.plugins['dragdrop'] = function (){
+
     var me = this;
     me.ready(function(){
-        //针对图片的拖动定位
-        var parent;
-        domUtils.on(this.body,'dragstart',function(){
-            var rng = me.selection.getRange();
-            var node = rng.getClosedNode();
-            if(node && node.tagName == 'IMG'){
-                parent = node.parentNode;
-                if(parent && domUtils.isBlockElm(parent) && domUtils.getComputedStyle(parent,'text-align') == 'center'){
-
-                }else{
-                    parent = null;
-                }
-            }
-        });
-
         domUtils.on(this.body,'dragend',function(){
 
             var rng = me.selection.getRange();
-            var node = rng.getClosedNode();
+            var node = rng.getClosedNode()||me.selection.getStart();
+
             if(node && node.tagName == 'IMG'){
-                if(parent){
-                    if(!domUtils.isEmptyBlock(parent)){
-                        parent = parent.cloneNode(false);
-                    }
 
-                    node.parentNode.insertBefore(parent,node);
-                    parent.appendChild(node);
-                }else{
-                    var pre = node.previousSibling;
-                    var next = node.nextSibling;
-                    if((pre && domUtils.isBlockElm(pre) || !pre) && (!next || domUtils.isBlockElm(next))){
-                        if(pre){
-                            pre.appendChild(node);
-                            domUtils.moveChild(next,pre)
-                        }else  if(next){
-                            next.insertBefore(next.firstChild,node);
-
-                        }
+                var pre = node.previousSibling,next;
+                while(next = node.nextSibling){
+                    if(next.nodeType == 1 && next.tagName == 'SPAN' && !next.firstChild){
+                        domUtils.remove(next)
+                    }else{
+                        break;
                     }
                 }
 
+
+                if((pre && pre.nodeType == 1 && !domUtils.isEmptyBlock(pre) || !pre) && (!next || next && !domUtils.isEmptyBlock(next))){
+                    if(pre && pre.tagName == 'P' && !domUtils.isEmptyBlock(pre)){
+                        pre.appendChild(node);
+                        domUtils.moveChild(next,pre);
+                        domUtils.remove(next);
+                    }else  if(next && next.tagName == 'P' && !domUtils.isEmptyBlock(next)){
+                        next.insertBefore(node,next.firstChild);
+                    }
+
+                    if(pre && pre.tagName == 'P' && domUtils.isEmptyBlock(pre)){
+                        domUtils.remove(pre)
+                    }
+                    if(next && next.tagName == 'P' && domUtils.isEmptyBlock(next)){
+                        domUtils.remove(next)
+                    }
+                    rng.selectNode(node).select();
+                    me.fireEvent('saveScene');
+                }
+
             }
+
         })
     });
+    me.addListener('keyup', function(type, evt) {
+        var keyCode = evt.keyCode || evt.which;
+        if (keyCode == 13) {//??
+            var rng = me.selection.getRange(),node;
+            if(node = domUtils.findParentByTagName(rng.startContainer,'p',true)){
+                if(domUtils.getComputedStyle(node,'text-align') == 'center'){
+                    domUtils.removeStyle(node,'text-align')
+                }
+            }
+        }
+    })
 };
