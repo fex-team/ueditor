@@ -93,12 +93,6 @@
     })();
 
     /**
-     * 此处配置写法适用于UEditor小组成员开发使用，外部部署用户请按照上述说明方式配置即可，建议保留下面两行，以兼容可在具体每个页面配置window.UEDITOR_HOME_URL的功能。
-     */
-    var tmp = location.protocol.indexOf("file")==-1 ? location.pathname : location.href;
-//    URL = window.UEDITOR_HOME_URL||tmp.substr(0,tmp.lastIndexOf("\/")+1).replace("_examples/","").replace("website/","");//这里你可以配置成ueditor目录在您网站的相对路径或者绝对路径（指以http开头的绝对路径）
-
-    /**
      * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
      */
     window.UEDITOR_CONFIG = {
@@ -213,10 +207,9 @@
 
         //,imagePopup:true      //图片操作的浮层开关，默认打开
 
-        ,initialStyle:'body{font-size:16px}' +
-            '.back1{background:#eee;}' +
-            '.back2{background:#ddd}'   //编辑器内部样式,可以用来改变字体等
+        //,initialStyle:''//编辑器内部样式,可以用来改变字体等
 
+        //,autoSyncData:true //自动同步编辑器要提交的数据
         //,emotionLocalization:false //是否开启表情本地化，默认关闭。若要开启请确保emotion文件夹下包含官网提供的images表情文件夹
 
         //,pasteplain:false  //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
