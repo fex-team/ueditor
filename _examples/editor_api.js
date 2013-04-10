@@ -46,8 +46,9 @@
             'plugins/wordcount.js',
             'plugins/pagebreak.js',
             'plugins/wordimage.js',
+            'plugins/dragdrop.js',
             'plugins/undo.js',
-            'plugins/paste.js',           //粘贴时候的提示依赖了UI
+            'plugins/paste.js',     //粘贴时候的提示依赖了UI
             'plugins/list.js',
             'plugins/source.js',
             'plugins/enterkey.js',
