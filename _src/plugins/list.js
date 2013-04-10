@@ -60,7 +60,7 @@ UE.plugins['list'] = function () {
         },
         listDefaultPaddingLeft : '30',
         listiconpath : 'http://bs.baidu.com/listicon/',
-        maxListLevel : 3//-1不限制
+        maxListLevel : -1//-1不限制
     } );
     function listToArray(list){
         var arr = [];
@@ -167,6 +167,7 @@ UE.plugins['list'] = function () {
             return cls.match(/custom_(\w+)/)[1]
         }
         return domUtils.getStyle(node, 'list-style-type')
+
     }
 
     me.addListener('beforepaste',function(type,html,root){
@@ -308,7 +309,19 @@ UE.plugins['list'] = function () {
 
             if(!domUtils.inDoc(node,doc))
                 return;
-            var index = 0,type = 2,parent = node.parentNode;
+
+            var parent = node.parentNode;
+            if(parent.tagName == node.tagName){
+                var nodeStyleType = getStyle(node) || (node.tagName == 'OL' ? 'decimal' : 'disc'),
+                    parentStyleType = getStyle(parent) || (parent.tagName == 'OL' ? 'decimal' : 'disc');
+                if(nodeStyleType == parentStyleType){
+                    var styleIndex = utils.indexOf(listStyle[node.tagName], nodeStyleType);
+                    styleIndex = styleIndex + 1 == listStyle[node.tagName].length ? 0 : styleIndex + 1;
+                    setListStyle(node,listStyle[node.tagName][styleIndex])
+                }
+
+            }
+            var index = 0,type = 2;
             if( domUtils.hasClass(node,/custom_/)){
                 if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/))){
                     type = 1;
@@ -318,7 +331,8 @@ UE.plugins['list'] = function () {
                     type = 3;
                 }
             }
-            style = domUtils.getStyle(node, 'list-style-type');
+
+            var style = domUtils.getStyle(node, 'list-style-type');
             node.style.cssText = style ? 'list-style-type:' + style : '';
             node.className = utils.trim(node.className.replace(/list-paddingleft-\w+/,'')) + ' list-paddingleft-' + type;
             utils.each(domUtils.getElementsByTagName(node,'li'),function(li){

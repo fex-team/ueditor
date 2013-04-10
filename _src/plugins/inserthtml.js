@@ -7,7 +7,7 @@
  * @author zhanyi
  */
 UE.commands['inserthtml'] = {
-    execCommand: function (command,html,notSerialize){
+    execCommand: function (command,html,notNeedFilter){
         var me = this,
             range,
             div;
@@ -18,7 +18,7 @@ UE.commands['inserthtml'] = {
         div = range.document.createElement( 'div' );
         div.style.display = 'inline';
 
-        if (!notSerialize) {
+        if (!notNeedFilter) {
             var root = UE.htmlparser(html);
             //如果给了过滤规则就先进行过滤
             if(me.options.filterRules){
@@ -118,7 +118,6 @@ UE.commands['inserthtml'] = {
                         child = next;
                         li = tmpLi;
                     }
-
                 }
             }
             li = domUtils.findParentByTagName(range.startContainer,'li',true);
@@ -131,6 +130,18 @@ UE.commands['inserthtml'] = {
             }
         }else{
             while ( child = div.firstChild ) {
+                if(hadBreak){
+                    var p = me.document.createElement('p');
+                    while(child && (child.nodeType == 3 || !dtd.$block[child.tagName])){
+                        nextNode = child.nextSibling;
+                        p.appendChild(child);
+                        child = nextNode;
+                    }
+                    if(p.firstChild){
+
+                        child = p
+                    }
+                }
                 range.insertNode( child );
                 nextNode = child.nextSibling;
                 if ( !hadBreak && child.nodeType == domUtils.NODE_ELEMENT && domUtils.isBlockElm( child ) ){
