@@ -184,7 +184,7 @@
                 'directionalityltr', 'directionalityrtl', 'indent', '|',
                 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
                 'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
-                'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'highlightcode', 'webapp', 'pagebreak', 'template', 'background', 'formula', '|',
+                'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'highlightcode', 'webapp', 'pagebreak', 'template', 'background', '|',
                 'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
                 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|',
                 'print', 'preview', 'searchreplace', 'help']
@@ -388,11 +388,7 @@
         // 代码高亮时需要加载的第三方插件的路径
         // ,highlightJsUrl:URL + "third-party/SyntaxHighlighter/shCore.js"
         // ,highlightCssUrl:URL + "third-party/SyntaxHighlighter/shCoreDefault.css"
-        //formula
-        // 数学公式时需要加载的第三方插件的路径
-        // ,formulaCssUrl:URL + "third-party/mathquill/mathquill.css"
-        // ,jqueryUrl:URL + "third-party/mathquill/jquery.min.js"
-        // ,formulaJsUrl:URL + "third-party/mathquill/mathquill.min.js"
+
         //tab
         //点击tab键时移动的距离,tabSize倍数，tabNode什么字符做为单位
         //,tabSize:4
