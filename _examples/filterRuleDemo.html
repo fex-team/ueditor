@@ -19,7 +19,7 @@
 <body>
 <p>尝试粘贴内容近来，这里边不能粘贴任何inlined的样式，不能有iframe,style,script,embed等标签，表格不能嵌套</p>
 <div>
-    <script id="editor" type="text/plain" style="width:200px"></script>
+    <script id="editor" type="text/plain" style="width:500px;height:500px"></script>
 </div>
 
 
@@ -68,6 +68,7 @@
                     }
                     node.parentNode.removeChild(node);
                 },
+                //$:{}表示不保留任何属性
                 br: {$: {}},
                 a: function (node) {
                     if(!node.firstChild()){
@@ -144,6 +145,7 @@
                 tr: {$: {}},
                 h3: {$: {}},
                 h2: {$: {}},
+                //黑名单，以下标签及其子节点都会被过滤掉
                 '-': 'script style meta iframe embed object'
             }
         }()
