@@ -177,9 +177,6 @@ function uParse(selector,opt){
         listDefaultPaddingLeft : '20',
         'highlightJsUrl':'',
         'highlightCssUrl':'',
-        'formulaCssUrl':'',
-        'formulaJsUrl':'',
-        'jqueryUrl':'',
         customRule:function(){}
     };
     if(opt){
