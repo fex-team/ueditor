@@ -83,9 +83,9 @@ class Kiss
         print '<link media="screen" href="css/qunit.css" type="text/css" rel="stylesheet" />' . "\n";
         print '<link  href="../../../themes/default/_css/ueditor.css" type="text/css" rel="stylesheet" />' . "\n";
         print '<script type="text/javascript" src="js/tools.js"></script>' . "\n";
-        print '<script type="text/javascript" charset="utf-8" src="../../editor_config.js"></script>' . "\n";
-        print '<script type="text/javascript" charset="utf-8" src="../../../third-party/SyntaxHighlighter/shCore.js"></script>' . "\n";        //                print '<script type="text/javascript" charset="utf-8" src="../../editor_config_src.js"></script>' . "\n";
-        print '<script type="text/javascript" charset="utf-8" src="../../../editor_config.js"></script>' . "\n";
+        print '<script type="text/javascript" charset="utf-8" src="../../ueditor.config.js"></script>' . "\n";
+        print '<script type="text/javascript" charset="utf-8" src="../../../third-party/SyntaxHighlighter/shCore.js"></script>' . "\n";        //                print '<script type="text/javascript" charset="utf-8" src="../../ueditor.config_src.js"></script>' . "\n";
+        print '<script type="text/javascript" charset="utf-8" src="../../../ueditor.config.js"></script>' . "\n";
 
 
         /* load case source*/

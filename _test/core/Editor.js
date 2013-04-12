@@ -419,11 +419,11 @@ test('2个实例采用2个配置文件', function() {
     var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = '../../editor_config.js';
+    script.src = '../../ueditor.config.js';
     head.appendChild(script);
     stop();
     expect(6);
-    /*动态加载js需要时间，用这个editor_config.js覆盖默认的配置文件*/
+    /*动态加载js需要时间，用这个ueditor.config.js覆盖默认的配置文件*/
     setTimeout(function() {
         var editor1 = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','initialContent':'欢迎使用ueditor','autoFloatEnabled':false});
         var editor2 = new baidu.editor.Editor(UEDITOR_CONFIG2);
@@ -437,7 +437,7 @@ test('2个实例采用2个配置文件', function() {
         ua.checkHTMLSameStyle(html, editor2.document, editor2.body.firstChild, '初始内容为自定制的');
         equal(editor2.options.enterTag, 'br', 'enterTag is br');
         html = '欢迎使用ueditor';
-        equal(html, editor1.body.firstChild.innerHTML, '内容和editor_config一致');
+        equal(html, editor1.body.firstChild.innerHTML, '内容和ueditor.config一致');
         equal(editor1.options.enterTag, 'p', 'enterTag is p');
         start();
     }, 500);

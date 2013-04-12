@@ -224,7 +224,7 @@ UE.I18N['zh-cn'] = {
     },
     'webapp':{
         tip1:"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",
-        tip2:"申请完成之后请至editor_config.js中配置获得的appkey! ",
+        tip2:"申请完成之后请至ueditor.config.js中配置获得的appkey! ",
         applyFor:"点此申请",
         anthorApi:"百度API"
     },

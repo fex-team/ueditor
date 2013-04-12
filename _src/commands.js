@@ -116,7 +116,7 @@
 /**
  * 清除当前选中文字上的所有样式或者指定样式
  * @name removeFormat
- * @grammar editor.execCommand("removeFormat")   //根据editor_config.js里的removeFormatTags，removeFormatAttributes两个属性作为规则
+ * @grammar editor.execCommand("removeFormat")   //根据ueditor.config.js里的removeFormatTags，removeFormatAttributes两个属性作为规则
  * @grammar editor.execCommand("removeFormat",tags,style);   //清除指定tags上的指定style
  * @example
  * editor.execCommand("removeFormat",'span,a','color,background-color')

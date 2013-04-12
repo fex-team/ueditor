@@ -65,7 +65,7 @@ Version 1.2.3
    . 新增国际化支持
    . 新增涂鸦功能
    . 新增大小写功能
-   . 新增getAllHtml方法，可以将整个页面的内容打出来,可以在editor_config.js里通过配置allHtmlEnabled,来配置在提交时是否使用getAllHtml来得到内容
+   . 新增getAllHtml方法，可以将整个页面的内容打出来,可以在ueditor.config.js里通过配置allHtmlEnabled,来配置在提交时是否使用getAllHtml来得到内容
    . 新增插入模板的功能
    . 新增背景功能
    . 新增UE.instants全局对象，下边挂接了所有实例化的编辑器对象
@@ -97,7 +97,7 @@ Version 1.2.2
 Version 1.2.1
 1.插入表情时，按住CTRL键可连续插入多个表情
 2.按住CTRL+Enter提交表单
-3.增加readonly属性在editor_config.js，编辑器实例上增加setEnabled,setDisabled方法，设置编辑区域是否可以编辑
+3.增加readonly属性在ueditor.config.js，编辑器实例上增加setEnabled,setDisabled方法，设置编辑区域是否可以编辑
 4.Editor上添加了getPlainTxt方法，得到编辑器的纯文本内容，但会保留段落格式
 5.修正了initialContent赋值失效的问题，赋值顺序以标签内容为先，如果没有再看initialContent内容。
 6.为insertHtml命令添加了过滤机制
@@ -185,7 +185,7 @@ Version 1.1.7.3
 
 
 version 1.1.7.2
-1.去掉了iframe.css 改为在editor_config.js中配置，避免css文件找不到的问题
+1.去掉了iframe.css 改为在ueditor.config.js中配置，避免css文件找不到的问题
 2.给下拉菜单添加了默认的文字说明
 3.Ueditor.css去掉了对外部页面css的影响
 4.修正了ie9下，编辑器的高度不随着内容缩短的问题
@@ -211,7 +211,7 @@ version 1.1.7.2
 24.优化了源码模式下的代码格式
 
 version 1.1.6.1
-1.去掉了iframe.css 改为在editor_config.js中配置，避免css文件找不到的问题
+1.去掉了iframe.css 改为在ueditor.config.js中配置，避免css文件找不到的问题
 2.给下拉菜单添加了默认的文字说明
 3.Ueditor.css去掉了对外部页面css的影响
 4.修正了ie9下，编辑器的高度不随着内容缩短的问题
