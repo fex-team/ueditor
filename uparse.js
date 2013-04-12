@@ -342,33 +342,6 @@ function uParse(selector,opt){
                         });
                     }
 
-                },
-                'span':function (nodes) {
-                    var flag = false;
-                    _each(nodes, function (pi) {
-                        if (/mathquill-embedded-latex/i.test(pi.className)) {
-                            flag = true;
-                        }
-                    });
-                    if (flag) {
-                        loadFile(document, {
-                            tag:"link",
-                            rel:"stylesheet",
-                            type:"text/css",
-                            href:defaultOption.formulaCssUrl
-                        });
-                        loadFile(document, {
-                            tag:"script",
-                            type:"text/javascript",
-                            src:defaultOption.jqueryUrl
-                        },function(){
-                            loadFile(document, {
-                                tag:"script",
-                                type:"text/javascript",
-                                src:defaultOption.formulaJsUrl
-                            });
-                        });
-                    }
                 }
             };
             //�Ȳ���Ĭ�ϵ�����
