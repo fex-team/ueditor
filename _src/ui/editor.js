@@ -696,13 +696,27 @@
                     }
                     domUtils.addClass(holder, "edui-" + editor.options.theme);
                     editor.ui.render(holder);
-                    var iframeholder = editor.ui.getDom('iframeholder');
+                    var opt = editor.options;
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    var options=editor.options;
-                    var width =Math.max(options.initialFrameWidth,options.minFrameWidth) ;
-                    editor.container.style.cssText = "z-index:" + options.zIndex + ";width:" + width+"px";
-                    oldRender.call(editor, iframeholder);
+                    if(opt.initialFrameWidth){
+                        opt.minFrameWidth = opt.initialFrameWidth
+                    }else{
+                        opt.minFrameWidth = opt.initialFrameWidth = holder.offsetWidth;
+                    }
+                    if(opt.initialFrameHeight){
+                        opt.minFrameHeight = opt.initialFrameHeight
+                    }else{
+                        opt.initialFrameHeight = opt.minFrameHeight = holder.offsetHeight;
+                    }
+                    //编辑器最外容器设置了高度，会导致，编辑器不占位
+                    //todo 先去掉，没有找到原因
+                    if(holder.style.height){
+                        holder.style.height = ''
+                    }
+                    editor.container.style.width = opt.initialFrameWidth+ 'px';
+                    editor.container.style.zIndex = opt.zIndex;
+                    oldRender.call(editor, editor.ui.getDom('iframeholder'));
 
                 }
             })

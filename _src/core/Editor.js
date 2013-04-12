@@ -87,10 +87,6 @@
             textarea: 'editorValue',
             focus: false,
             focusInEnd: true,
-            initialFrameWidth: 1000,
-            initialFrameHeight: me.options.minFrameHeight || 320, //兼容老版本配置项
-            minFrameWidth: 800,
-            minFrameHeight: 220,
             autoClearEmptyNode: true,
             fullscreen: false,
             readonly: false,
@@ -195,7 +191,7 @@
          * @grammar editor.render(containerId);    //可以指定一个容器ID
          * @grammar editor.render(containerDom);   //也可以直接指定容器对象
          */
-        render: function (container) {
+        render: function (container,holder) {
             var me = this, options = me.options;
             if (utils.isString(container)) {
                 container = document.getElementById(container);
@@ -218,7 +214,7 @@
                 if (options.customDomain && document.domain != location.hostname) {
                     html += '<script>window.parent.UE.instants[\'ueditorInstant' + me.uid + '\']._setup(document);</script></html>';
                     container.appendChild(domUtils.createElement(document, 'iframe', {
-                        id: 'baidu_editor_' + me.uid,
+                        id: 'ueditor_' + me.uid,
                         width: "100%",
                         height: "100%",
                         frameborder: "0",
@@ -226,7 +222,21 @@
                             'document.write("' + html + '");document.close();}())'
                     }));
                 } else {
-                    container.innerHTML = '<iframe id="' + 'baidu_editor_' + this.uid + '"' + 'width="100%" height="100%" scroll="no" frameborder="0" ></iframe>';
+
+                    if(options.initialFrameWidth){
+                        options.minFrameWidth = options.initialFrameWidth
+                    }else{
+                        options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
+                    }
+                    if(options.initialFrameHeight){
+                        options.minFrameHeight = options.initialFrameHeight
+                    }else{
+                        options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
+                    }
+                    container.style.width = options.initialFrameWidth+ 'px';
+                    container.style.height = options.initialFrameHeight + 'px';
+                    container.style.zIndex = options.zIndex;
+                    container.innerHTML = '<iframe id="' + 'ueditor_' + this.uid + '"' + 'width="100%" height="100%" scroll="no" frameborder="0" ></iframe>';
                     var doc = container.firstChild.contentWindow.document;
                     //去掉了原来的判断!browser.webkit，因为会导致onload注册的事件不触发
                     doc.open();
@@ -764,7 +774,7 @@
             }
             if (!cmd.notNeedUndo && !me.__hasEnterExecCommand) {
                 me.__hasEnterExecCommand = true;
-                if (me.queryCommandState(cmdName) != -1) {
+                if (me.queryCommandState.apply(me,arguments) != -1) {
                     me.fireEvent('beforeexeccommand', cmdName);
                     result = this._callCmdFn('execCommand', arguments);
                     !me._ignoreContentChange && me.fireEvent('contentchange');
