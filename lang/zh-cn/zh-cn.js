@@ -125,10 +125,6 @@ UE.I18N['zh-cn'] = {
         'copy':"复制(Ctrl + c)",
         'copymsg':"请使用 'Ctrl + c'执行复制操作",
         'paste':"粘贴(Ctrl + v)",
-        'formulainline':"内嵌",
-        'formulablock':"显示",
-        'formuladelete':"删除公式",
-        'formualmergeup':"向上合并",
         'highlightcode':'插入代码'
     },
 

@@ -19,76 +19,108 @@
      * 因此，UEditor提供了针对不同页面的编辑器可单独配置的根路径，具体来说，在需要实例化编辑器的页面最顶部写上如下代码即可。当然，需要令此处的URL等于对应的配置。
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
-    var URL = (function(){
+    var URL = window.UEDITOR_HOME_URL || (function(){
 
         function PathStack() {
 
-            var documentURL = document.URL || self.location.href;
-            this.protocol = PathStack.updateProtocol( documentURL );
+            this.documentURL = self.document.URL || self.location.href;
+
             this.separator = '/';
-            this.localSeparator = /\\|\//.exec( documentURL.replace( this.protocol ) )[0];
             this.separatorPattern = /\\|\//g;
             this.currentDir = './';
             this.currentDirPattern = /^[.]\/]/;
-            this.path = [];
+
+            this.path = this.documentURL;
+            this.stack = [];
+
+            this.push( this.documentURL );
+
         }
 
         PathStack.isParentPath = function( path ){
             return path === '..';
         };
 
-        PathStack.updateProtocol = function( path ) {
+        PathStack.hasProtocol = function( path ){
+            return !!PathStack.getProtocol( path );
+        };
 
-            //根协议
-            var rootProtocol = self.location.protocol + '//',
-                protocol = null,
-                protocolPattern = new RegExp( '^' + rootProtocol + '/*' );
+        PathStack.getProtocol = function( path ){
 
-            protocol = protocolPattern.exec( path );
+            var protocol = /^[^:]*:\/*/.exec( path );
 
-            return protocol && protocol[0];
+            return protocol ? protocol[0] : null;
 
         };
 
         PathStack.prototype = {
             push: function( path ){
 
-                var hasProtocol = path.indexOf( this.protocol ) === 0;
+                this.path = path;
 
-                if( hasProtocol ) {
-                    this.path = [];
-                    this.protocol = PathStack.updateProtocol( path );
-                }
-
-                path = path.replace( this.protocol , '').replace( this.currentDirPattern, '' ).split( hasProtocol ? this.localSeparator : this.separator );
-                path.length = path.length - 1;
-
-                for( var i= 0, tempPath, root = this.path; tempPath = path[ i ]; i++ ) {
-
-                    if( PathStack.isParentPath( tempPath ) ) {
-                        root.pop();
-                    } else {
-                        root.push( tempPath );
-                    }
-
-                }
+                update.call( this );
+                parse.call( this );
 
                 return this;
 
             },
+            getPath: function(){
+                return this + "";
+            },
             toString: function(){
-                return this.protocol + ( this.path.concat( [''] ) ).join( this.separator );
+                return this.protocol + ( this.stack.concat( [''] ) ).join( this.separator );
             }
         };
 
-        var root = document.URL || self.location.href,
-            currentPath = document.getElementsByTagName('script');
+        function update() {
+
+            var protocol = PathStack.getProtocol( this.path || '' );
+
+            if( protocol ) {
+
+                //根协议
+                this.protocol = protocol;
+
+                //local
+                this.localSeparator = /\\|\//.exec( this.path.replace( protocol, '' ) )[0];
+
+                this.stack = [];
+            } else {
+                protocol = /\\|\//.exec( this.path );
+                protocol && (this.localSeparator = protocol[0]);
+            }
+
+        }
+
+        function parse(){
+
+            var parsedStack = this.path.replace( this.currentDirPattern, '' );
+
+            if( PathStack.hasProtocol( this.path ) ) {
+                parsedStack = parsedStack.replace( this.protocol , '');
+            }
+
+            parsedStack = parsedStack.split( this.localSeparator );
+            parsedStack.length = parsedStack.length - 1;
+
+            for( var i= 0, tempPath, root = this.stack; tempPath = parsedStack[ i ]; i++ ) {
+
+                if( PathStack.isParentPath( tempPath ) ) {
+                    root.pop();
+                } else {
+                    root.push( tempPath );
+                }
+
+            }
+
+        }
+
+        var currentPath = document.getElementsByTagName('script');
 
         currentPath = currentPath[ currentPath.length -1 ].src;
 
-        var path = new PathStack();
+        return new PathStack().push( currentPath ) + "";
 
-        return path.push( root).push( currentPath ) + "";
 
     })();
 
@@ -152,7 +184,7 @@
                 'directionalityltr', 'directionalityrtl', 'indent', '|',
                 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
                 'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
-                'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'highlightcode', 'webapp', 'pagebreak', 'template', 'background', 'formula', '|',
+                'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'highlightcode', 'webapp', 'pagebreak', 'template', 'background', '|',
                 'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
                 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|',
                 'print', 'preview', 'searchreplace', 'help']
@@ -356,11 +388,7 @@
         // 代码高亮时需要加载的第三方插件的路径
         // ,highlightJsUrl:URL + "third-party/SyntaxHighlighter/shCore.js"
         // ,highlightCssUrl:URL + "third-party/SyntaxHighlighter/shCoreDefault.css"
-        //formula
-        // 数学公式时需要加载的第三方插件的路径
-        // ,formulaCssUrl:URL + "third-party/mathquill/mathquill.css"
-        // ,jqueryUrl:URL + "third-party/mathquill/jquery.min.js"
-        // ,formulaJsUrl:URL + "third-party/mathquill/mathquill.min.js"
+
         //tab
         //点击tab键时移动的距离,tabSize倍数，tabNode什么字符做为单位
         //,tabSize:4
