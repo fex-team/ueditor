@@ -539,7 +539,8 @@
             html = root.toHtml();
 
 
-            me.body.innerHTML = (isAppendTo ? this.getContent() : '') + html;
+            me.body.innerHTML = (isAppendTo ? me.body.innerHTML : '') + html;
+
 
             //处理ie6下innerHTML自动将相对路径转化成绝对路径的问题
             if (browser.ie && browser.version < 7) {
