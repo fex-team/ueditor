@@ -71,7 +71,7 @@ test( "render-- element", function() {
     equal( div.innerHTML, "", "before render" );
     editor.render( div );
     equal( div.firstChild.tagName.toLocaleLowerCase(), 'iframe', 'check iframe' );
-    ok( /baidu_editor_/.test( div.firstChild.id ), 'check iframe id' );
+    ok( /ueditor_/.test( div.firstChild.id ), 'check iframe id' );
     te.dom.push( div );
 } );
 
@@ -80,7 +80,7 @@ test( "render-- elementid", function() {
     var div = te.dom[0];
     editor.render( div.id );
     equal( div.firstChild.tagName.toLocaleLowerCase(), 'iframe', 'check iframe' );
-    ok( /baidu_editor_/.test( div.firstChild.id ), 'check iframe id' );
+    ok( /ueditor_/.test( div.firstChild.id ), 'check iframe id' );
 } );
 
 test( "render-- options", function() {
