@@ -10,6 +10,13 @@ UE.plugins['defaultfilter'] = function () {
         //进行默认的处理
         root.traversal(function (node) {
             if (node.type == 'element') {
+                if (me.options.autoClearEmptyNode && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && (!node.attrs || utils.isEmptyObject(node.attrs))) {
+                    if (!node.firstChild()) node.parentNode.removeChild(node);
+                    else if (node.tagName == 'span' && (!node.attrs || utils.isEmptyObject(node.attrs))) {
+                        node.parentNode.removeChild(node, true)
+                    }
+                    return;
+                }
                 switch (node.tagName) {
                     case 'style':
                     case 'script':
@@ -39,7 +46,7 @@ UE.plugins['defaultfilter'] = function () {
                         if (browser.webkit && (val = node.getStyle('white-space'))) {
                             if (/nowrap|normal/.test(val)) {
                                 node.setStyle('white-space', '');
-                                if (utils.isEmptyObject(node.attrs)) {
+                                if (me.options.autoClearEmptyNode && utils.isEmptyObject(node.attrs)) {
                                     node.parentNode.removeChild(node, true)
                                 }
                             }
@@ -108,9 +115,10 @@ UE.plugins['defaultfilter'] = function () {
         var val;
         root.traversal(function (node) {
             if (node.type == 'element') {
-                if (me.options.autoClearEmptyNode && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && !node.attrs) {
+
+                if (me.options.autoClearEmptyNode && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && (!node.attrs || utils.isEmptyObject(node.attrs))) {
                     if (!node.firstChild()) node.parentNode.removeChild(node);
-                    else if (node.tagName == 'span' && !node.attrs) {
+                    else if (node.tagName == 'span' && (!node.attrs || utils.isEmptyObject(node.attrs))) {
                         node.parentNode.removeChild(node, true)
                     }
                     return;
