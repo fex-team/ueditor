@@ -55,6 +55,8 @@ var dtd = dom.dtd = (function() {
         //内联元素列表
         $inline : L,
 
+        $inlineWithA : X(_({a:1}),L),
+
         $body : X( _({script:1,style:1}), block ),
 
         $cdata : _({script:1,style:1}),

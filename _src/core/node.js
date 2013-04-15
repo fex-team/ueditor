@@ -73,7 +73,7 @@
     }
 
     function isText(node, arr) {
-        arr.push(node.data)
+        arr.push(node.parentNode.tagName == 'pre' ? node.data : node.data.replace(/[ ]{2}/g,' &nbsp;'))
     }
 
     function isElement(node, arr, formatter, current) {
@@ -91,7 +91,7 @@
             (dtd.$empty[node.tagName] ? '\/' : '' ) + '>'
         );
         //插入新行
-        if (formatter &&  !dtd.$inline[node.tagName]) {
+        if (formatter  &&  !dtd.$inlineWithA[node.tagName]) {
             current = insertLine(arr, current, true);
             insertIndent(arr, current)
         }
@@ -105,7 +105,7 @@
             }
         }
         if (!dtd.$empty[node.tagName]) {
-            if (formatter && !dtd.$inline[node.tagName]) {
+            if (formatter && !dtd.$inlineWithA[node.tagName]) {
                 current = insertLine(arr, current);
                 insertIndent(arr, current)
             }
