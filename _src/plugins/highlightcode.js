@@ -12,6 +12,7 @@ UE.plugins['highlightcode'] = function() {
 
     me.commands['highlightcode'] = {
         execCommand: function (cmdName, code, syntax) {
+            var me = this;
             var range = this.selection.getRange(),
                 start = domUtils.findParentByTagName(range.startContainer, 'table', true),
                 end = domUtils.findParentByTagName(range.endContainer, 'table', true);
@@ -37,9 +38,7 @@ UE.plugins['highlightcode'] = function() {
                 if(pre){
                     domUtils.removeAttributes(pre,'id');
                     me.window.SyntaxHighlighter.highlight(pre);
-                    utils.each(me.document.getElementsByTagName('code'),function(code){
-                        code.innerHTML = code.innerHTML.replace(/\s/g,'&nbsp;')
-                    })
+                    adjustHeight(me);
                 }
             }
 
@@ -48,6 +47,7 @@ UE.plugins['highlightcode'] = function() {
             return queryHighlight.call(this);
         }
     };
+
 
     function queryHighlight(){
         try{
@@ -82,6 +82,7 @@ UE.plugins['highlightcode'] = function() {
     //将queyCommamndState重置
     var orgQuery = me.queryCommandState;
     me.queryCommandState = function(cmd){
+        var me = this;
         if(!me.notNeedHighlightQuery[cmd.toLowerCase()] && queryHighlight.call(this) == 1){
             return -1;
         }
@@ -89,11 +90,13 @@ UE.plugins['highlightcode'] = function() {
     };
 
     me.addListener('beforeselectionchange afterselectionchange',function(type){
+        var me = this;
         me.highlight = /^b/.test(type) ? me.queryCommandState('highlightcode') : 0;
     });
 
 
     me.addListener("ready",function(){
+        var me = this;
         //避免重复加载高亮文件
         if(typeof me.XRegExp == "undefined"){
             utils.loadFile(me.document,{
@@ -117,24 +120,23 @@ UE.plugins['highlightcode'] = function() {
         }
 
     });
-    me.addListener("beforegetscene",function(){
-        utils.each(domUtils.getElementsByTagName(me.body,'table','syntaxhighlighter'),function(di){
-            var str = [],parentCode = '';
-            utils.each(di.getElementsByTagName('code'),function(ci){
-                if(parentCode !== ci.parentNode){
-                    parentCode = ci.parentNode;
-                    //去掉左右空格，针对ie的不能回退的问题
-                    str.push(utils.trim(parentCode[browser.ie?'innerText':'textContent']))
-                }
-
-            });
-            var pre = domUtils.createElement(me.document,'pre',{
-                'class' : 'brush: '+di.className.replace(/\s+/g,' ').split(' ')[1]+';toolbar:false;'
-            });
-            pre.appendChild(me.document.createTextNode(str.join('\n')));
-            di.parentNode.replaceChild(pre,di);
-        });
-    });
+//    me.addListener("beforegetscene",function(){
+//        utils.each(domUtils.getElementsByTagName(me.body,'table','syntaxhighlighter'),function(di){
+//            var str = [],parentCode = '';
+//            utils.each(di.getElementsByTagName('code'),function(ci){
+//                if(parentCode !== ci.parentNode){
+//                    parentCode = ci.parentNode;
+//                    str.push(parentCode[browser.ie?'innerText':'textContent'])
+//                }
+//
+//            });
+//            var pre = domUtils.createElement(me.document,'pre',{
+//                'class' : 'brush: '+di.className.replace(/\s+/g,' ').split(' ')[1]+';toolbar:false;'
+//            });
+//            pre.appendChild(me.document.createTextNode(str.join('\n')));
+//            di.parentNode.replaceChild(pre,di);
+//        });
+//    });
     me.addOutputRule(function(root){
         utils.each(root.getNodesByTagName('table'),function(node){
             var val;
@@ -143,8 +145,7 @@ UE.plugins['highlightcode'] = function() {
                 utils.each(node.getNodesByTagName('code'),function(ci){
                     if(parentCode !== ci.parentNode){
                         parentCode = ci.parentNode;
-                        //去掉左右空格，针对ie的不能回退的问题
-                        str.push(utils.trim(parentCode.innerText()))
+                        str.push(parentCode.innerText())
                     }
                 });
                 node.tagName = 'pre';
@@ -175,7 +176,23 @@ UE.plugins['highlightcode'] = function() {
             }
         });
     });
-    me.addListener("aftergetscene",changePre);
+
+    function adjustHeight(cont){
+        utils.each(cont.document.getElementsByTagName('table'),function(pi){
+            if(/SyntaxHighlighter/gi.test(pi.className)){
+                var tds = pi.getElementsByTagName('td');
+                for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
+                    ri = tds[1].firstChild.childNodes[i];
+                    if(ri){
+                        li.style.height = ri.offsetHeight - (browser.ie ? 1 : 0) + 'px';
+                    }
+                }
+            }
+        });
+    }
+    me.addListener("aftergetscene",function(){
+        adjustHeight(me);
+    });
 
 
     //避免table插件对于代码高亮的影响
@@ -193,12 +210,23 @@ UE.plugins['highlightcode'] = function() {
         utils.each(domUtils.getElementsByTagName(me.document,"pre"),function(pi){
             if(domUtils.hasClass(pi,'brush')){
                 me.window.SyntaxHighlighter.highlight(pi);
+                utils.each(me.document.getElementsByTagName('table'),function(pi){
+                    if(/SyntaxHighlighter/gi.test(pi.className)){
+                        var tds = pi.getElementsByTagName('td');
+                        for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
+                            ri = tds[1].firstChild.childNodes[i];
+                            if(ri){
+                                li.style.height = ri.offsetHeight - (browser.ie ? 1 : 0) + 'px';
+                            }
+                        }
+                    }
+                });
             }
         });
     }
 
     me.addListener('getAllHtml',function(type,headHtml){
-        var coreHtml = '';
+        var coreHtml = '',me = this;
         for(var i= 0,ci,divs=domUtils.getElementsByTagName(me.document,'table');ci=divs[i++];){
             if(domUtils.hasClass(ci,'syntaxhighlighter')){
                 coreHtml = '<script type="text/javascript">window.onload = function(){SyntaxHighlighter.highlight();' +

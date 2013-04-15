@@ -87,9 +87,11 @@ UE.plugins['undo'] = function () {
 
         this.restore = function () {
             var scene = this.list[this.index];
+            var root = UE.htmlparser(scene.content.replace(fillchar, ''));
+            me.filterInputRule(root);
             //trace:873
             //去掉展位符
-            me.document.body.innerHTML = scene.content.replace(fillchar, '');
+            me.document.body.innerHTML = root.toHtml();
             //处理undo后空格不展位的问题
             if (browser.ie) {
                 utils.each(domUtils.getElementsByTagName(me.document,'td th caption p'),function(node){
@@ -98,7 +100,11 @@ UE.plugins['undo'] = function () {
                     }
                 })
             }
-            new dom.Range(me.document).moveToAddress(scene.address).select();
+
+            try{
+                new dom.Range(me.document).moveToAddress(scene.address).select();
+            }catch(e){}
+
             this.update();
             this.clearKey();
             //不能把自己reset了
@@ -111,7 +117,9 @@ UE.plugins['undo'] = function () {
                 rngAddress = rng.createAddress(false,true);
 
             me.fireEvent('beforegetscene');
-            var cont = me.body.innerHTML.replace(fillchar, '');
+            var root = UE.htmlparser(me.body.innerHTML.replace(fillchar, ''));
+            me.filterOutputRule(root);
+            var cont = root.toHtml();
             browser.ie && (cont = cont.replace(/>&nbsp;</g, '><').replace(/\s*</g, '<').replace(/>\s*/g, '>'));
             me.fireEvent('aftergetscene');
             try{
