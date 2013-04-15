@@ -422,7 +422,7 @@
         traversal:function(fn){
             if(this.children && this.children.length){
                 nodeTraversal(this,fn);
-            };
+            }
             return this;
         }
     }
