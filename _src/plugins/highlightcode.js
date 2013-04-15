@@ -145,7 +145,7 @@ UE.plugins['highlightcode'] = function() {
                 utils.each(node.getNodesByTagName('code'),function(ci){
                     if(parentCode !== ci.parentNode){
                         parentCode = ci.parentNode;
-                        str.push(parentCode.innerText())
+                        str.push(parentCode.innerText().replace(/&nbsp;/g,' '))
                     }
                 });
                 node.tagName = 'pre';
@@ -184,7 +184,8 @@ UE.plugins['highlightcode'] = function() {
                 for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
                     ri = tds[1].firstChild.childNodes[i];
                     if(ri){
-                        li.style.height = ri.offsetHeight - (browser.ie ? 1 : 0) + 'px';
+                        ri.style.height = li.style.height = ri.offsetHeight - (browser.ie ? 1 : 0) + 'px';
+
                     }
                 }
             }
