@@ -184,7 +184,11 @@ UE.plugins['highlightcode'] = function() {
                 for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
                     ri = tds[1].firstChild.childNodes[i];
                     if(ri){
-                        ri.style.height = li.style.height = ri.offsetHeight - (browser.ie ? 1 : 0) + 'px';
+                        li.style.height = ri.offsetHeight - (browser.ie ? 1 : 0) + 'px';
+                        if(browser.chrome){
+                            ri.style.height = li.style.height;
+                        }
+
 
                     }
                 }
