@@ -46,7 +46,6 @@ test( '在源码模式设置超链接的name属性，切换到编辑器模式检
             }, 100 );
         }, 100 );
     },100);
-
 } );
 
 test( '在源码模式设置超链接没有name属性，切换到编辑器模式检查超链接不变为锚点', function() {
@@ -62,7 +61,8 @@ test( '在源码模式设置超链接没有name属性，切换到编辑器模式
             setTimeout( function() {
                 editor.execCommand( 'source' );
                 ua.manualDeleteFillData(editor.body);
-                equal( body.firstChild.firstChild.tagName.toLowerCase(), 'a', 'a标签不会转化' );
+//                equal( body.firstChild.firstChild.tagName.toLowerCase(), 'a', 'a标签不会转化' );
+                equal( body.firstChild.lastChild.tagName.toLowerCase(), 'a', 'a标签不会转化' );   //兼容opera
                 start();
                 }, 50 );
         }, 10 );
