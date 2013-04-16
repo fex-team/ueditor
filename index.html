@@ -17,14 +17,12 @@
 <!-- HEADER -->
 <div id="header_wrap" class="outer">
     <header class="inner">
-        <a id="forkme_banner" href="https://github.com/campaign/ueditor">View on GitHub</a>
+        <a id="forkme_banner" href="https://github.com/campaign/ueditor/tree/dev-1.2.6">View on GitHub</a>
 
         <h1 id="project_title">Ueditor</h1>
         <h2 id="project_tagline">注重编辑体验的富文本编辑器</h2>
-
         <section id="downloads">
-            <a class="zip_download_link" href="https://github.com/campaign/ueditor/zipball/master">Download this project as a .zip file</a>
-            <a class="tar_download_link" href="https://github.com/campaign/ueditor/tarball/master">Download this project as a tar.gz file</a>
+            <a class="zip_download_link" href="https://github.com/campaign/ueditor/archive/dev-1.2.6.zip">Download this project as a .zip file</a>
         </section>
     </header>
 </div>
@@ -34,12 +32,34 @@
     <section id="main_content" class="inner">
         <h1>ueditor富文本编辑器 1.2.6 demo展示</h1>
         <hr>
-        <script style="width:700px;height:400px" type="text/plain" id="ueditor"></script>
-        <script>
-            UE.getEditor('ueditor')
-        </script>
     </section>
+    <section id="main_content" class="inner">
+        <h2>升级列表</h2>
+        <ol>
+            <li>
+                优化了编辑器路径的设置，可以不用手动设置路径，自动识别相关路径，解决路径设置繁琐的问题
+            </li>
+            <li>
+                重写了过滤粘贴机制，采用黑白名单，可以书写符合自己需求的过滤规则，可以完全定义标签的属性，甚至是style上的某个属性及其数值 </li>
+            <li>
+                优化了拖拽机制，处理浮动图片拖拽不能跟指定的某行对齐</li>
+            <li>
+                添加了字体边框</li>
+            <li>
+                优化了backspace/del键的操作</li>
+            <li>
+                优化了编辑器的宽高设置</li>
+            <li>
+                优化了插入代码后的左右对其</li>
 
+
+        </ol>
+        <hr>
+    </section>
+    <script style="width:1000px;height:400px;margin:0 auto" type="text/plain" id="ueditor"></script>
+    <script>
+        UE.getEditor('ueditor')
+    </script>
 </div>
 
 <!-- FOOTER  -->
