@@ -182,14 +182,15 @@ UE.plugins['highlightcode'] = function() {
             if(/SyntaxHighlighter/gi.test(pi.className)){
                 var tds = pi.getElementsByTagName('td');
                 for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
+                    if(!li.style.height){
+                        return;
+                    }
                     ri = tds[1].firstChild.childNodes[i];
-                    if(ri){
+                    if(ri && !li.style.height){
                         li.style.height = ri.offsetHeight - (browser.ie ? 1 : 0) + 'px';
                         if(browser.chrome){
                             ri.style.height = li.style.height;
                         }
-
-
                     }
                 }
             }
