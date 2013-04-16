@@ -37,7 +37,7 @@ test( 'backspace事件:deleterow', function() {
     editor.execCommand( 'inserttable', {numCols:3,numRows:3} );
     expect(5);
     editor.addListener('saveScene',function(){
-       ok(true);
+        ok(true);
     });
     var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
     var ut = editor.getUETable(editor.body.firstChild);
@@ -50,7 +50,7 @@ test( 'backspace事件:deleterow', function() {
         equal(te.obj[0].body.getElementsByTagName('tr').length,2,'删除整行');
         equal(te.obj[0].selection.getRange().collapsed,true,'检查光标');
         equal(te.obj[0].selection.getRange().startContainer,te.obj[0].body.getElementsByTagName('td')[0],'检查光标');
-      start();
+        start();
     },20);
 });
 
@@ -80,7 +80,34 @@ test( 'backspace事件:deletecol', function() {
 });
 
 test( 'backspace事件:delcells', function() {
-   //TODO
+    //TODO
+});
+
+test( 'trace 3097 标题行中backspace键', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:3,numRows:3} );
+    var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+    range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+    editor.execCommand( 'insertcaption');
+    range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse( true ).select();
+    editor.execCommand( 'inserttitle');
+    range.setStart(editor.body.getElementsByTagName('th')[0], 0).collapse( true ).select();
+    ua.keydown(editor.body,{'keyCode':8});
+    stop();
+    setTimeout( function() {
+        editor = te.obj[0];
+        equal(editor.body.getElementsByTagName('caption').length,1,'不会删除caption');
+        equal(editor.body.getElementsByTagName('th').length,3,'不会误删除标题行');
+        equal(editor.body.getElementsByTagName('table').length,1,'不会增加表格数量');
+        equal(editor.body.getElementsByTagName('tr').length,4,'不会增加表格行数量');
+        equal(editor.body.getElementsByTagName('tr')[0].cells.length,3,'不会增加表格列数量');
+        equal(editor.selection.getRange().collapsed,true,'检查光标');
+        equal(editor.selection.getRange().startContainer,te.obj[0].body.getElementsByTagName('th')[0],'检查光标');
+        start();
+    },50);
 });
 
 test('拖拽',function(){
@@ -106,7 +133,7 @@ test('拖拽',function(){
 });
 
 /*trace 3022*/
-test( 'trace 3022 向右合并--tab键', function() {
+test( 'trace 3022 表格名称中backspace、ctrl+z、enter', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );
@@ -186,6 +213,32 @@ test( 'trace 3067 向右合并--tab键', function() {
     stop();
 } );
 
+/*trace 3100*/
+test( 'trace 3100 表格名称中tab键', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:3,numRows:3} );
+    var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+    range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+    editor.execCommand( 'insertcaption');
+    range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse( true ).select();
+    ua.keydown(editor.body,{'keyCode':9});
+    stop();
+    setTimeout( function() {
+        editor = te.obj[0];
+        equal(editor.body.getElementsByTagName('caption').length,1,'不会删除caption');
+        equal(editor.body.getElementsByTagName('th').length,0,'不会误插入标题行');
+        equal(editor.body.getElementsByTagName('table').length,1,'不会增加表格数量');
+        equal(editor.body.getElementsByTagName('tr').length,3,'不会增加表格行数量');
+        equal(editor.body.getElementsByTagName('tr')[0].cells.length,3,'不会增加表格列数量');
+        equal(editor.selection.getRange().collapsed,true,'检查光标');
+        equal(editor.selection.getRange().startContainer,te.obj[0].body.getElementsByTagName('td')[0],'检查光标');
+        start();
+    },50);
+});
+
 /*trace 3059*/
 test('trace 3059 表格右浮动',function(){
     var editor = te.obj[0];
@@ -226,6 +279,40 @@ test('表格粘贴',function(){
     editor.fireEvent('beforepaste',html);                           /*粘贴*/
     editor.fireEvent("afterpaste");
     equal(editor.body.getElementsByTagName('table').length,'2','触发粘贴事件后有2个table');
+    equal(editor.body.childNodes.length, 2, '2个子节点' );
+});
+
+test('trace 3104 粘贴后合并单元格',function(){
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable');
+    var trs = editor.body.getElementsByTagName('tr');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[4].cells[0]);
+    ut.setSelected(cellsRange);
+    range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});
+    ut.clearSelected();
+    var html ={html:editor.body.innerHTML};
+    range.setStart(editor.body.lastChild,0).collapse(true).select();
+    editor.fireEvent('beforepaste',html);
+    editor.fireEvent("afterpaste");
+    var table = editor.body.getElementsByTagName('table');
+    equal(table.length,'2','触发粘贴事件后有2个table');
+    equal(table[1].firstChild.childNodes.length,'5','5行');
+    equal(table[1].firstChild.firstChild.childNodes.length,'1','1列');
+
+    var tds = editor.body.getElementsByTagName('td');
+    ut = editor.getUETable(editor.body.firstChild.nextSibling);
+    cellsRange = ut.getCellsRange(tds[25],tds[29]);
+    ut.setSelected(cellsRange);
+    range.setStart(tds[25], 0 ).collapse( true ).select();
+    editor.execCommand('mergecells');
+    table = editor.body.getElementsByTagName('table');
+    equal(table[1].firstChild.childNodes.length,'1','1行');
+    equal(table[1].firstChild.firstChild.childNodes.length,'1','1列');
 });
 
 test('trace 3105 在表格名称中粘贴',function(){
