@@ -8,22 +8,6 @@
 (function () {
     var uid = 0, _selectionChangeTimer;
 
-
-    /**
-     * 替换src和href
-     * @private
-     * @ignore
-     * @param root
-     */
-    function replaceSrc(root) {
-        utils.each(domUtils.getElementsByTagName(root, 'a img'), function (node) {
-            var val, attr = node.tagName == 'A' ? 'href' : 'src';
-            if (val = node.getAttribute('_' + attr)) {
-                node.setAttribute(attr, val)
-            }
-        });
-    }
-
     /**
      * @private
      * @ignore
@@ -551,10 +535,7 @@
             me.body.innerHTML = (isAppendTo ? me.body.innerHTML : '') + html;
 
 
-            //处理ie6下innerHTML自动将相对路径转化成绝对路径的问题
-            if (browser.ie && browser.version < 7) {
-                replaceSrc(me.body);
-            }
+
             //给文本或者inline节点套p标签
             if (me.options.enterTag == 'p') {
 
@@ -932,9 +913,7 @@
             return function (cont) {
                 var me = this;
                 me.body.innerHTML = '<p id="initContent">' + cont + '</p>';
-                if (browser.ie && browser.version < 7) {
-                    replaceSrc(me.body);
-                }
+
                 me.addListener('firstBeforeExecCommand focus', clear);
             }
         }(),
