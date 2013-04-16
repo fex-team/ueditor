@@ -18,7 +18,15 @@
 </head>
 <body>
 <div>
-    <script id="editor" type="text/plain" style="width:1024px;height:500px">这里可以书写，编辑器的初始内容</script>
+    <script id="editor" type="text/plain" style="width:1024px;height:500px">
+        <table>
+            <tr>
+                <td>
+                    sdfasdfasfd
+                </td>
+            </tr>
+        </table>
+    </script>
 </div>
 
 
@@ -41,6 +49,7 @@
         <button onclick="setDisabled()">不可编辑</button>
         <button onclick=" UE.getEditor('editor').setHide()">隐藏编辑器</button>
         <button onclick=" UE.getEditor('editor').setShow()">显示编辑器</button>
+        <button onclick=" UE.getEditor('editor').setHeight(300)">设置编辑器的高度为500</button>
     </div>
 
 </div>
