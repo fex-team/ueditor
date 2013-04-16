@@ -269,8 +269,7 @@
             me.window = doc.defaultView || doc.parentWindow;
             me.iframe = me.window.frameElement;
             me.body = doc.body;
-            //设置编辑器最小高度
-            me.setHeight(Math.max(options.minFrameHeight, options.initialFrameHeight));
+
             me.selection = new dom.Selection(doc);
             //gecko初始化就能得到range,无法判断isFocus了
             var geckoSel;

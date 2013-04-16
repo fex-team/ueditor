@@ -164,7 +164,7 @@
                             input.focus();
                             setTimeout(function(){
                                 me.body.contentEditable = true;
-                                me.selection.getRange().moveToAddress(bakAddress).select();
+                                me.selection.getRange().moveToAddress(bakAddress).select(true);
                                 domUtils.remove(input);
                             });
 
@@ -172,7 +172,7 @@
                     }else{
                         //ie下有可能报错，比如在代码顶头的情况
                         try{
-                            me.selection.getRange().moveToAddress(bakAddress).select();
+                            me.selection.getRange().moveToAddress(bakAddress).select(true);
                         }catch(e){}
 
                     }
