@@ -92,6 +92,7 @@ UE.plugins['undo'] = function () {
             //trace:873
             //去掉展位符
             me.document.body.innerHTML = root.toHtml();
+            me.fireEvent('afterscencerestore');
             //处理undo后空格不展位的问题
             if (browser.ie) {
                 utils.each(domUtils.getElementsByTagName(me.document,'td th caption p'),function(node){

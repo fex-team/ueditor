@@ -84,6 +84,10 @@ UE.plugins['enterkey'] = function() {
     me.addListener('keydown', function(type, evt) {
         var keyCode = evt.keyCode || evt.which;
         if (keyCode == 13) {//回车
+            if(me.fireEvent('beforeenterkeydown')){
+                domUtils.preventDefault(evt);
+                return;
+            }
             if (me.undoManger) {
                 me.undoManger.save();
             }

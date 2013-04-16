@@ -127,21 +127,22 @@ UE.plugins['highlightcode'] = function() {
                 codeNode = null;
                 var rng = me.selection.getRange(),common = rng.getCommonAncestor(true,true);
                 var codeContainer;
-                if(codeContainer = domUtils.findParent(common,function(node){return node.tagName == 'TABLE' && domUtils.hasClass(node,'syntaxhighlighter')})){
+                if(!rng.collapsed && (codeContainer = domUtils.findParent(common,function(node){return node.tagName == 'TABLE' && domUtils.hasClass(node,'syntaxhighlighter')}))){
                     var frag = rng.cloneContents();
                     var tmpNode = me.document.createElement('div');
                     tmpNode.appendChild(frag);
                     var pre = me.document.createElement('pre');
-                    var str = [],parentCode = '';
-                    utils.each(tmpNode.getElementsByTagName('code'),function(ci){
-                        if(parentCode !== ci.parentNode){
-                            parentCode = ci.parentNode;
-                            str.push(parentCode[browser.ie ? 'innerText' : 'textContent'].replace(/&nbsp;/g,' '))
-                        }
+                    var str = '';
+                    utils.each(tmpNode.getElementsByTagName('div'),function(ci){
+                        var codeStr = ci[browser.ie ? 'innerText' : 'textContent'].replace(/&nbsp;/g,' ');
+                        str += (/^\s+$/.test(codeStr) ? '\n' : codeStr+'\n');
                     });
+                    if(!str){
+                        str = tmpNode[browser.ie ? 'innerText' : 'textContent'].replace(/&nbsp;/g,' ')
+                    }
                     var val = codeContainer.className;
                     pre.className = 'brush: '+val.replace(/\s+/g,' ').split(' ')[1]+';toolbar:false;';
-                    pre.appendChild(me.document.createTextNode(str.join('\n')));
+                    pre.appendChild(me.document.createTextNode(str));
                     codeNode = pre;
                     return false;
                 }
@@ -182,19 +183,26 @@ UE.plugins['highlightcode'] = function() {
         utils.each(root.getNodesByTagName('table'),function(node){
             var val;
             if((val = node.getAttr('class')) && /syntaxhighlighter/.test(val)){
-                var str = [],parentCode = '';
-                utils.each(node.getNodesByTagName('code'),function(ci){
-                    if(parentCode !== ci.parentNode){
-                        parentCode = ci.parentNode;
-                        str.push(parentCode.innerText().replace(/&nbsp;/g,' '))
+                var divContainer;
+                utils.each(node.getNodesByTagName('div'),function(n){
+                    val = n.getAttr('class');
+                    if(val && /container/.test(val)){
+                        divContainer = n;
+                        return;
                     }
+                });
+                var str = '';
+                utils.each(divContainer.getNodesByTagName('div'),function(ci){
+                    var codeStr = ci.innerText().replace(/&nbsp;/g,' ');
+                    str += (/^\s+$/.test(codeStr) ? '\n' : codeStr+'\n')
+
                 });
                 node.tagName = 'pre';
                 val = node.getAttr('class');
                 node.setAttr();
                 node.setAttr('class', 'brush: '+val.replace(/\s+/g,' ').split(' ')[1]+';toolbar:false;');
                 node.children = [];
-                node.appendChild(UE.uNode.createText(str.join('\n')))
+                node.appendChild(UE.uNode.createText(str))
             }
         })
     });
@@ -212,12 +220,11 @@ UE.plugins['highlightcode'] = function() {
                     pi.parentNode.replaceChild(node,pi)
                 }
             }
-            if(domUtils.hasClass(pi,'brush')){
-                me.window.SyntaxHighlighter.highlight(pi);
-            }
         });
     });
-
+    me.addListener('afterscencerestore',function(){
+        adjustHeight(this)
+    })
     function adjustHeight(cont){
         utils.each(cont.document.getElementsByTagName('table'),function(pi){
             if(/SyntaxHighlighter/gi.test(pi.className)){
@@ -237,11 +244,17 @@ UE.plugins['highlightcode'] = function() {
             }
         });
     }
-    me.addListener("beforegetscene",function(){
-        adjustHeight(me);
+
+    //不能回车在代码高亮里
+    me.addListener('beforeenterkeydown',function(){
+        var range = this.selection.getRange();
+
+        if(domUtils.findParent(range.startContainer,function(node){
+            return node.nodeType == 1 && node.tagName == 'TABLE' && domUtils.hasClass(node,'syntaxhighlighter');
+        },true)){
+            return true;
+        }
     });
-
-
     //避免table插件对于代码高亮的影响
     me.addListener('excludetable excludeNodeinautotype',function (cmd,target){
         if(target && domUtils.findParent(target,function(node){
