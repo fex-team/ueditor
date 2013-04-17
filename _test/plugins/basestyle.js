@@ -70,7 +70,7 @@ test( '不闭合插入上下标', function () {
         range.setStart( body.firstChild.firstChild, 0 ).setEnd( body.firstChild.lastChild, 3 ).select();
         editor.execCommand( 'superscript' );
             ua.manualDeleteFillData( body );
-            equal( ua.getChildHTML( body.firstChild ), '<sup><strong>hello1<em>hello2</em></strong></sup><a href="http://www.baid.com/"><sup><strong>baidu_link</strong></sup></a><sup>hel</sup>lo3', '普通文本添加上标' );
+            equal( editor.getContent(), '<p><sup><strong>hello1<em>hello2</em></strong></sup><a href="http://www.baid.com/" ><sup><strong>baidu_link</strong></sup></a><sup>hel</sup>lo3</p>', '普通文本添加上标' );
             start();
     }, 100 );
 } );
@@ -93,7 +93,7 @@ test( 'trace 870:加粗文本前面去加粗', function () {
     equal( editor.queryCommandState( 'bold' ), 0, '不加粗' );
     range.insertNode( editor.document.createTextNode( 'hello2' ) );     /*插入一个文本节点*/
     ua.manualDeleteFillData( editor.body );
-    if ( baidu.editor.browser.ie || baidu.editor.browser.opera)     /*ie下插入节点后会自动移动光标到节点后面，而其他浏览器不会*/
+    if (!ua.browser.chrome && !ua.browser.safari)     /*ie下插入节点后会自动移动光标到节点后面，而其他浏览器不会*/
         equal( editor.getContent(), '<p><strong>hello</strong>hello2<br/></p>' );
     else
         equal( editor.getContent(), '<p>hello2<strong>hello</strong><br/></p>' );
@@ -250,7 +250,7 @@ test( 'ctrl+u', function() {
         setTimeout( function() {
             var html = '<span style="text-decoration: underline;">没有加粗的文本</span>';
             ua.checkHTMLSameStyle( html, editor.document, body.firstChild, '文本被添加了下划线' );
-            equal(ua.getChildHTML(editor.body.firstChild),html);
+            equal(editor.body.firstChild.firstChild.style.textDecoration,'underline');
             start();
         }, 150 );
         ua.keydown(editor.body,{'keyCode':85,'ctrlKey':true});
@@ -293,9 +293,11 @@ test('表格中文本加粗',function(){
         range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
 
         editor.execCommand( 'bold' );
+        ua.manualDeleteFillData( editor.body );
         equal( editor.queryCommandState( 'bold' ), 1, 'b高亮' );
         equal(trs[0].cells[0].firstChild.tagName.toLowerCase(),'strong','[0][0]单元格中文本标签');
-        equal(trs[1].cells[0].firstChild.tagName.toLowerCase(),'br','[1][0]单元格中文本标签');
+        if(!ua.browser.ie)
+            equal(trs[1].cells[0].firstChild.tagName.toLowerCase(),'br','[1][0]单元格中文本标签');
         equal(trs[2].cells[0].firstChild.tagName.toLowerCase(),'strong','[2][0]单元格中文本标签');
         start();
     },50);
