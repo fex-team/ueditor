@@ -68,6 +68,11 @@ UE.plugins['defaultfilter'] = function () {
                         }
                         break;
                     case 'div':
+                        //针对代码这里不处理插入代码的div
+                        val = node.getAttr('class');
+                        if(val && /^line number\d+/.test(val)){
+                            break;
+                        }
                         var tmpNode, p = UE.uNode.createElement('p');
                         while (tmpNode = node.firstChild()) {
                             if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
@@ -117,6 +122,7 @@ UE.plugins['defaultfilter'] = function () {
             if (node.type == 'element') {
 
                 if (me.options.autoClearEmptyNode && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && (!node.attrs || utils.isEmptyObject(node.attrs))) {
+
                     if (!node.firstChild()) node.parentNode.removeChild(node);
                     else if (node.tagName == 'span' && (!node.attrs || utils.isEmptyObject(node.attrs))) {
                         node.parentNode.removeChild(node, true)

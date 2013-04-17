@@ -404,15 +404,19 @@
                     this._bakBodyOverflow = document.body.style.overflow;
                     this._bakAutoHeight = this.editor.autoHeightEnabled;
                     this._bakScrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+
+                    this._bakEditorContaninerWidth = editor.iframe.parentNode.offsetWidth;
                     if (this._bakAutoHeight) {
                         //当全屏时不能执行自动长高
                         editor.autoHeightEnabled = false;
                         this.editor.disableAutoHeight();
                     }
+
                     document.documentElement.style.overflow = 'hidden';
                     document.body.style.overflow = 'hidden';
                     this._bakCssText = this.getDom().style.cssText;
                     this._bakCssText1 = this.getDom('iframeholder').style.cssText;
+                    editor.iframe.parentNode.style.width = '';
                     this._updateFullScreen();
                 } else {
                     while (container.tagName != "BODY") {
@@ -428,6 +432,7 @@
 
                     document.documentElement.style.overflow = this._bakHtmlOverflow;
                     document.body.style.overflow = this._bakBodyOverflow;
+                    editor.iframe.parentNode.style.width = this._bakEditorContaninerWidth + 'px';
                     window.scrollTo(0, this._bakScrollTop);
                 }
                 if (baidu.editor.browser.gecko) {

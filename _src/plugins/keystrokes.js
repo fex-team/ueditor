@@ -3,7 +3,7 @@
  */
 UE.plugins['keystrokes'] = function() {
     var me = this;
-
+    var collapsed = true;
     me.addListener('keydown', function(type, evt) {
         var keyCode = evt.keyCode || evt.which,
             rng = me.selection.getRange();
@@ -47,6 +47,8 @@ UE.plugins['keystrokes'] = function() {
         //处理backspace
         if (keyCode == 8) {
             rng = me.selection.getRange();
+            collapsed = rng.collapsed;
+
             var start,end;
             //避免按两次删除才能生效的问题
             if(rng.collapsed && rng.inFillChar()){
@@ -185,7 +187,7 @@ UE.plugins['keystrokes'] = function() {
 
 
             //chrome下如果删除了inline标签，浏览器会有记忆，在输入文字还是会套上刚才删除的标签，所以这里再选一次就不会了
-            if((rng.startContainer.nodeType == 3 || rng.startContainer.nodeType == 1 && domUtils.isEmptyBlock(rng.startContainer))){
+            if( !collapsed && (rng.startContainer.nodeType == 3 || rng.startContainer.nodeType == 1 && domUtils.isEmptyBlock(rng.startContainer))){
                 if(browser.ie){
                     var span = rng.document.createElement('span');
                     rng.insertNode(span).setStartBefore(span).collapse(true);

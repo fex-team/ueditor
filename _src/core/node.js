@@ -53,7 +53,7 @@
             case 'root':
                 for (var i = 0, ci; ci = node.children[i++];) {
                     //插入新行
-                    if (formatter && ci.type == 'element' && !dtd.$inline[ci.tagName] && i > 1) {
+                    if (formatter && ci.type == 'element' && !dtd.$inlineWithA[ci.tagName] && i > 1) {
                         insertLine(arr, current, true);
                         insertIndent(arr, current)
                     }
@@ -97,7 +97,7 @@
         }
         if (node.children && node.children.length) {
             for (var i = 0, ci; ci = node.children[i++];) {
-                if (formatter && ci.type == 'element' &&  !dtd.$inline[ci.tagName] && i > 1) {
+                if (formatter && ci.type == 'element' &&  !dtd.$inlineWithA[ci.tagName] && i > 1) {
                     insertLine(arr, current);
                     insertIndent(arr, current)
                 }
