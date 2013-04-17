@@ -90,7 +90,7 @@ test( 'trace1183：选中列表中添加引用，再去掉引用', function () {
     equal( body.getElementsByTagName( 'ol' ).length, 1, '只有一个有序列表' );
 } );
 
-test( '对段落添加引用和去除引用', function () {
+test( 'trace 3298：对段落添加引用和去除引用', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p><strong><em>hello1</em></strong></p><p>hello2 world</p>' );
@@ -116,7 +116,7 @@ test( '对段落添加引用和去除引用', function () {
 } );
 
 /*trace 3285*/
-test( 'startContainer为body添加引用', function () {
+test( 'trace 3285：startContainer为body添加引用', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( 'hello<ol><li>hello1</li><li>hello2</li></ol>' );
@@ -149,13 +149,13 @@ test('aa标签',function(){
 });
 
 /*trace 3284*/
-test('列表内引用',function(){
+test('trace 3284：列表内引用',function(){
     var editor = te.obj[0];
     var range = te.obj[1];
 //    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':(ua.browser.webkit?' style=\"padding-left: 30px;\"':' style=\"padding-left: 30px;\"');
     var padding  = ' class=\" list-paddingleft-2\"';
     editor.setContent('<ol><li><blockquote><p>hello1</p></blockquote></li><blockquote><li><p>hello2</p></li></blockquote></ol>');
-    range.selectNode(editor.body.firstChild).select();
+    range.selectNode(editor.body).select();
     editor.execCommand('blockquote');
-    equal(ua.getChildHTML(editor.body ),'<ol'+padding+'><li><p>hello1</p></li><ul'+padding+'><li><p>hello2</p></li></ul></ol>','引用删除');
+    equal(ua.getChildHTML(editor.body ),'<ol'+padding+'><li><p>hello1</p></li><li><p>hello2</p></li></ol>','引用删除');
 });

@@ -78,7 +78,7 @@ test('首行缩进',function(){
 });
 /*trace 2650*/
 /*trace 3277*/
-test( '图像对齐', function () {
+test( 'trace 3277：图像对齐', function () {
     var editor = te.obj[0];
     editor.setContent( '<p><img src="http://img.baidu.com/hi/jx2/j_0001.gif" width="50" height="51" _src="http://img.baidu.com/hi/jx2/j_0001.gif"></p>' );
     setTimeout(function(){
