@@ -710,7 +710,7 @@ UE.plugins['list'] = function () {
         if (keyCode == 8) {
             var rng = me.selection.getRange(),list;
             if(list = domUtils.findParentByTagName(rng.startContainer,['ol', 'ul'],true)){
-                adjustList(list,list.tagName.toLowerCase(),getStyle(list)||domUtils.getComputedStyle(list,'list-style-type'))
+                adjustList(list,list.tagName.toLowerCase(),getStyle(list)||domUtils.getComputedStyle(list,'list-style-type'),true)
             }
         }
     });
