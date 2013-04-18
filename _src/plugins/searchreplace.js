@@ -40,8 +40,10 @@ UE.plugins['searchreplace'] = function(){
                         opt.dir = 1;
                         if(currentRange){
                             tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',currentRange);
+                        }else{
+                            tmpRange.moveToElementText(me.document.body);
                         }
-                        tmpRange.moveToElementText(me.document.body);
+
                     }else{
                         tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',nativeRange);
                         if(opt.hasOwnProperty("replaceStr")){
@@ -80,9 +82,10 @@ UE.plugins['searchreplace'] = function(){
                             nativeRange = currentRange;
                         }else{
                             nativeRange  = me.document.createRange();
+                            nativeRange.setStart(me.document.body,0);
+                            nativeRange.collapse(true);
                         }
-                        nativeRange.setStart(me.document.body,0);
-                        nativeRange.collapse(true);
+
                         nativeSel.removeAllRanges();
                         nativeSel.addRange( nativeRange );
                         first = 0;
@@ -94,9 +97,6 @@ UE.plugins['searchreplace'] = function(){
 
                         }
                         nativeRange = w.getSelection().getRangeAt(0);
-
-
-
                         if(opt.hasOwnProperty("replaceStr")){
                             nativeRange.collapse(opt.dir == 1 ? true : false);
                         }
