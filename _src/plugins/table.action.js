@@ -25,6 +25,23 @@ UE.plugins['table'] = function () {
     function showError(e) {
         if (debug) throw e;
     }
+    me.ready(function(){
+        var me = this;
+        var orgGetText = me.selection.getText;
+        me.selection.getText = function(){
+            var table = getUETableBySelected(me);
+            if(table){
+                var str = '';
+                utils.each(table.selectedTds,function(td){
+                    str += td[browser.ie?'innerText':'textContent'];
+                })
+                return str;
+            }else{
+                return orgGetText.call(me.selection)
+            }
+
+        }
+    })
 
     //处理拖动及框选相关方法
     var startTd = null, //鼠标按下时的锚点td
