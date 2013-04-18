@@ -381,6 +381,7 @@ UE.plugins['list'] = function () {
         })
     }
     function adjustList(list, tag, style,ignoreEmpty) {
+        debugger
         var nextList = list.nextSibling;
         if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (getStyle(nextList) || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(nextList, list);
@@ -1057,7 +1058,7 @@ UE.plugins['list'] = function () {
                 list.appendChild(frag);
                 range.insertNode(list);
                 //当前list上下看能否合并
-                adjustList(list, tag, style,true);
+                adjustList(list, tag, style);
                 //去掉冗余的tmpDiv
                 for (var i = 0, ci, tmpDivs = domUtils.getElementsByTagName(list, 'div'); ci = tmpDivs[i++];) {
                     if (ci.getAttribute('tmpDiv')) {
