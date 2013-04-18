@@ -54,12 +54,12 @@ test('非闭合选择----字符串包括大写跟小写',function(){
     var text="<p>HEllo1</p><p>heLLo2</p>";
     editor.setContent(text);
     setTimeout(function(){
-        range.selectNode(body).select();
+        range.setStart(body.firstChild.firstChild,0).setEnd(body.lastChild.firstChild,6).select();
         editor.execCommand("touppercase");
         equal(editor.getContent(),"<p>HELLO1</p><p>HELLO2</p>","非闭合--包含大小写--up");
         editor.setContent(text);
         setTimeout(function(){
-            range.selectNode(body).select();
+            range.setStart(body.firstChild.firstChild,0).setEnd(body.lastChild.firstChild,6).select();
             editor.execCommand("tolowercase");
             equal(editor.getContent(),"<p>hello1</p><p>hello2</p>","非闭合--包含大小写--low");
             start();
@@ -71,13 +71,13 @@ test('非闭合选择----字符串包括换行跟空格',function(){
     var editor=te.obj[0];
     var range=te.obj[1];
     var body=editor.body;
-    editor.setContent('<p>HEllo1<br /> heLLO2</p>');
+    editor.setContent('<p>HEllo1<br/> heLLO2</p>');
     setTimeout(function(){
         range.setStart(body.firstChild.firstChild,0).setEnd(body.firstChild.lastChild,6).select();
         editor.execCommand("touppercase");
-        equal(editor.getContent(),"<p>HELLO1<br /> HELLO2</p>","非闭合--包含大小写--up");
+        equal(editor.getContent(),"<p>HELLO1<br/> HELLO2</p>","非闭合--包含大小写--up");
         editor.execCommand("tolowercase");
-        equal(editor.getContent(),"<p>hello1<br /> hello2</p>","非闭合--包含大小写--low");
+        equal(editor.getContent(),"<p>hello1<br/> hello2</p>","非闭合--包含大小写--low");
         start();
     },50);
     stop();
@@ -135,7 +135,7 @@ test('h1&table',function(){
     var body=editor.body;
     var text="<h1>hello</h1><table><tbody><tr><td>hello1</td><td>hello2</td></tr><tr><td>hello3</td><td>hello4</td></tr></tbody></table>";
     editor.setContent(text);
-    range.selectNode(body).select();
+    range.setStart(body.firstChild.firstChild,0).setEnd(body.lastChild.firstChild.lastChild.lastChild.firstChild,6).select();
     var tds=body.lastChild.getElementsByTagName('td');
     editor.execCommand("touppercase");
     ok(body.firstChild.tagName=="h1"||body.firstChild.tagName=="H1","h1标签");

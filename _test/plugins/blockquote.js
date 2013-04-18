@@ -155,7 +155,7 @@ test('trace 3284：列表内引用',function(){
 //    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':(ua.browser.webkit?' style=\"padding-left: 30px;\"':' style=\"padding-left: 30px;\"');
     var padding  = ' class=\" list-paddingleft-2\"';
     editor.setContent('<ol><li><blockquote><p>hello1</p></blockquote></li><blockquote><li><p>hello2</p></li></blockquote></ol>');
-    range.selectNode(editor.body).select();
+    range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild,0).setEnd(editor.body.firstChild.lastChild.firstChild.firstChild,6).select();
     editor.execCommand('blockquote');
     equal(ua.getChildHTML(editor.body ),'<ol'+padding+'><li><p>hello1</p></li><li><p>hello2</p></li></ol>','引用删除');
 });

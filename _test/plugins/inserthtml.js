@@ -1,13 +1,13 @@
 module( "plugins.inserthtml" );
 
-test( '闭合方式插入文本', function() {
+test( 'trace 3301：闭合方式插入文本', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
     editor.setContent( '<p><br></p>' );
     range.setStart( body.firstChild, 0 ).collapse( 1 ).select();
     editor.execCommand( 'inserthtml', 'hello2' );
-    equal( ua.getChildHTML( body ), '<p>hello2<br></p>', '插入文本节点' );
+    equal( ua.getChildHTML( body ), '<p>hello2</p>', '插入文本节点' );
 } );
 
 test( '选中多个单元格插入列表', function() {
@@ -82,23 +82,23 @@ test( '选中多个单元格插入超链接', function() {
     stop();
 } );
 
-test( 'notSerialize', function() {
+test( 'trace 3297：notSerialize', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
     editor.setContent( '<p><br></p>' );
     setTimeout(function(){
         range.setStart( body.firstChild, 0 ).collapse( 1 ).select();
-        editor.execCommand( 'inserthtml', '<p>b</p>_baidu_page_break_tag_' ,false);
+        editor.execCommand( 'inserthtml', '<p>b</p>_ueditor_page_break_tag_' ,false);
         equal( editor.body.childNodes.length, 3, 'notSerialize=false 插入分页符' );
         equal( editor.body.childNodes[1].tagName.toLowerCase(), 'hr', '插入分页符 hr class=\"pagebreak\"  ' );
         equal( editor.body.childNodes[1].className.toLowerCase(), "pagebreak", '插入分页符 hr class=\"pagebreak\"  ' );
         editor.setContent( '<p><br></p>' );
         setTimeout(function(){
             range.setStart( body.firstChild, 0 ).collapse( 1 ).select();
-            editor.execCommand( 'inserthtml', '<p>b</p>_baidu_page_break_tag_' ,true);
+            editor.execCommand( 'inserthtml', '<p>b</p>_ueditor_page_break_tag_' ,true);
             equal( editor.body.childNodes.length, 3, 'notSerialize=true 插入分页符' );
-            equal( editor.body.childNodes[1].data , '_baidu_page_break_tag_', '插入分页符');
+            equal( editor.body.childNodes[1].innerHTML , '_ueditor_page_break_tag_', '插入分页符');
             start();
         },50);
     },50);

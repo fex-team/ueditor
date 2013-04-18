@@ -22,11 +22,11 @@ test( 'trace 800:清除超链接的颜色', function () {
         editor.setContent('<a href="http://www.baidu.com/">baidu</a>');
         range.selectNode(editor.body.firstChild).select();
         editor.execCommand( 'forecolor', 'rgb(255,0,0)' );
-        var html = '<a href="http://www.baidu.com/" style="color: rgb(255, 0, 0); text-decoration: underline;"><span style="color: rgb(255, 0, 0);">baidu</span></a>';
+        var html = '<a href="http://www.baidu.com/" _href=\"http://www.baidu.com/\" style="color: rgb(255, 0, 0); text-decoration: underline;"><span style="color: rgb(255, 0, 0);">baidu</span></a>';
         ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '查看加了颜色后超链接的样式' );
         editor.execCommand( 'removeformat' );
         var cl = ua.browser.ie && ua.browser.ie == 8 ? 'class=\"\"' : "";
-        html = '<a href="http://www.baidu.com/">baidu</a>';
+        html = '<a href="http://www.baidu.com/" _href=\"http://www.baidu.com/\">baidu</a>';
         ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '查看清除样式后超链接的样式' );
         div.parentNode.removeChild(div);
         start();
@@ -77,7 +77,7 @@ test( '闭合方式清除样式', function () {
     equal( ua.getChildHTML( body ), '<p>hello1</p><p><strong><em>hello2</em></strong></p>' );
 } );
 
-test( '移除表格中的样式', function () {
+test( 'trace 3294：移除表格中的样式', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<table><tbody><tr><td><span>表格文本1</span></td><td><em>表格文本2</em></td></tr></tbody></table>' );

@@ -16,8 +16,8 @@ module( 'plugins.enterkey' );
 // 复合操作
 // 1.回车后撤销
 // */
-
-test( 'table中回车,br做回车', function () {
+/*trace 3174*/
+test( 'trace 2864：table中回车,br做回车', function () {
     te.dom[0].parentNode.removeChild(te.dom[0]);
     var div2 = document.body.appendChild( document.createElement( 'div' ) );
     $( div2 ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
@@ -167,7 +167,7 @@ test( 'chrome删除div', function () {
         var index = editor.undoManger.index;
         var br = ua.browser.ie ? '' : '<br>';
         ua.keyup(editor.body,{'keyCode':13});
-        equal(editor.undoManger.index,index+1,'保存现场');
+        equal(editor.undoManger.list.length,1,'保存现场');
         setTimeout( function () {
             equal( body.childNodes.length, 2, '2个子节点' );
             equal(body.lastChild.tagName.toLowerCase(),'p','div转成p');

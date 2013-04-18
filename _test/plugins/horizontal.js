@@ -79,7 +79,7 @@ test( 'horizontal&&collapsed', function() {
     equal( ua.getChildHTML( db ), "<p><strong><em>top</em></strong></p><hr><p>bottom"+spase+"</p>", "边界不在table里" );
 } );
 
-test( 'horizontal&&enterTag', function() {
+test( 'trace 3338：horizontal&&enterTag', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.options.enterTag ='br';
