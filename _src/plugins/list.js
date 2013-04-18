@@ -381,7 +381,6 @@ UE.plugins['list'] = function () {
         })
     }
     function adjustList(list, tag, style,ignoreEmpty) {
-        debugger
         var nextList = list.nextSibling;
         if (nextList && nextList.nodeType == 1 && nextList.tagName.toLowerCase() == tag && (getStyle(nextList) || domUtils.getStyle(nextList, 'list-style-type') || (tag == 'ol' ? 'decimal' : 'disc')) == style) {
             domUtils.moveChild(nextList, list);
