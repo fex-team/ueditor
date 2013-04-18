@@ -313,6 +313,7 @@ UE.plugins['table'] = function () {
                 me.fireEvent('contentchange');
                 me.fireEvent('saveScene');
                 html.html = '';
+                return true;
             } else {
                 var div = me.document.createElement("div"), tables;
                 div.innerHTML = html.html;
