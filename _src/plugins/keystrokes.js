@@ -153,8 +153,11 @@ UE.plugins['keystrokes'] = function() {
     });
     me.addListener('keyup', function(type, evt) {
         var keyCode = evt.keyCode || evt.which,
-            rng;
+            rng,me = this;
         if(keyCode == 8){
+            if(me.fireEvent('delkeyup')){
+                return;
+            }
             rng = me.selection.getRange();
             if(rng.collapsed){
                 var tmpNode,
