@@ -320,6 +320,7 @@ UserAction = {
                 case "mouseenter":// 非标准支持，仅为测试提供，该项仅IE下work
                 case "mouseleave":
                 case "contextmenu":
+                case "blur":
                     break;
                 default:
                     throw new Error( "simulateMouseEvent(): Event type '" + type
@@ -636,6 +637,19 @@ UserAction = {
      */
     contextmenu:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
         this.fireMouseEvent( target, "contextmenu", options );
+    },
+    /**
+     * Simulates a blur on a particular element.
+     *
+     * @param {HTMLElement}
+        *            target The element to show blur.
+     * @param {Object}
+        *            options Additional event options (use DOM standard names).
+     * @method blur
+     * @static
+     */
+    blur:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
+        this.fireMouseEvent( target, "blur", options );
     },
     dragto:function ( target, options ) {
         var me = this;
@@ -1465,7 +1479,6 @@ UserAction = {
     clearWhiteNode:function(node){
         for(var i=0;i<node.childNodes.length;i++){
             var tmpNode = node.childNodes[i];
-//            debugger;
             if(tmpNode.nodeType==3 && !tmpNode.length){
                 tmpNode.parentNode.removeChild(tmpNode);
                 i--;
