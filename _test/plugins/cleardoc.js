@@ -97,10 +97,10 @@ test( '全选后删除', function() {
         editor.execCommand( 'cleardoc' );
         equal( editor.body.childNodes.length, 1, '删除后只剩一个bolock元素' );
         equal( editor.body.firstChild.tagName.toLowerCase(), 'p', '删除后只剩一个p' );
-        if ( !baidu.editor.browser.ie )
+        if ( !UE.browser.ie )
             equal( editor.body.lastChild.innerHTML, '<br>', '内容被删除了' );
         else
-            equal( editor.body.lastChild.innerHTML, '&nbsp;', '内容被删除了' );
+            equal( editor.body.lastChild.innerHTML, '', '内容被删除了' );
         start();
     },50);
     stop();
@@ -115,7 +115,7 @@ test( '删除所有列表', function() {
         editor.execCommand( 'selectall' );
         editor.execCommand( 'cleardoc' );
         equal( body.childNodes.length, 1, '删除后只剩一个ol元素' );
-        var br = baidu.editor.browser.ie?"&nbsp;":"<br>";
+        var br = UE.browser.ie?"":"<br>";
         equal( ua.getChildHTML(body), '<p>'+br+'</p>', '删除后只剩一个p' );
         start();
     },50);

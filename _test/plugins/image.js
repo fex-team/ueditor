@@ -62,7 +62,7 @@ test( '修改已有图片的属性', function () {
     editor.setContent( '<p><img src="http://img.baidu.com/hi/jx2/j_0004.gif" >hello<img src="http://img.baidu.com/hi/jx2/j_0053.gif" ></p>' );
     range.selectNode( body.firstChild.firstChild ).select();
     editor.execCommand( 'insertimage', {src:'http://img.baidu.com/hi/jx2/j_0018.gif'} );
-    equal( ua.getChildHTML( body.firstChild ), '<img src="http://img.baidu.com/hi/jx2/j_0018.gif">hello<img src="http://img.baidu.com/hi/jx2/j_0053.gif">', '检查插入的图像地址' );
+    equal( ua.getChildHTML( body.firstChild ), '<img src="http://img.baidu.com/hi/jx2/j_0018.gif" _src=\"http://img.baidu.com/hi/jx2/j_0004.gif\">hello<img src="http://img.baidu.com/hi/jx2/j_0053.gif" _src=\"http://img.baidu.com/hi/jx2/j_0053.gif\">', '检查插入的图像地址' );
     equal( body.firstChild.childNodes.length, 3, '2个img孩子' );
 } );
 

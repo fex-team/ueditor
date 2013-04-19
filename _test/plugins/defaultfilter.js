@@ -20,7 +20,7 @@ test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function(
         editor.setContent( innerHTML );
         editor.execCommand('source');
         editor.execCommand('source');
-        equal( editor.getContent(), '<p><strong>xx</strong><em>em</em></p><div>xxxx</div>', "span style空，套空的em和不空的em" );
+        equal( editor.getContent(), '<p><strong>xx</strong><em>em</em></p><p>xxxx</p>', "span style空，套空的em和不空的em" );
         //style="color:#c4bd97;"
         innerHTML = '<span style="color:#c4bd97"><span></span><strong>xx</strong><em>em</em><em></em></span>';
         editor.setContent( innerHTML );

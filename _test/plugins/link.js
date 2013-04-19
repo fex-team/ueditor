@@ -39,8 +39,9 @@ test( '给图片添加超链接', function () {
     editor.setContent( '<p><img  style="width: 200px;height: 200px" src="http://ueditor.baidu.com/img/logo.png">hello</p>' );
     range.selectNode( editor.body.firstChild.firstChild ).select();
     editor.execCommand( 'link', {href:'http://www.baidu.com/'} );
-    var html = '<a  href="http://www.baidu.com/" ><img  src="http://ueditor.baidu.com/img/logo.png" style="width: 200px;height: 200px" ></a>hello';
+    var html = '<a  href="http://www.baidu.com/" ><img  src="http://ueditor.baidu.com/img/logo.png" _src=\"http://ueditor.baidu.com/img/logo.png" style="width: 200px;height: 200px" ></a>hello';
     ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '给图片添加超链接' );
+//    equal(html,editor.body.firstChild.innerHTML);
 } );
 
 /*trace 758

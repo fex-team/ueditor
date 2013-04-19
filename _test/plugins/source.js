@@ -215,7 +215,7 @@ test( 'trace 1977 1949 插入代码,源码中对应的标签是pre', function ()
                 equal( td_gutter.attributes['class'].nodeValue, 'gutter', '第一列class=gutter' );
                 equal( td_code.attributes['class'].nodeValue, 'code', '第一列class=code' );
             }
-            equal( editor.getContent().substring( 0, 116 ), '<pre class=\"brush: html;toolbar:false;\" >&lt;ahref=\"http://net.tutsplus.com\"class=\"logo\"&gt;Nettuts+&lt;/a&gt;</pre>' );
+            equal( editor.getContent().substring( 0, 119 ), '<pre class=\"brush: html;toolbar:false;\" >&lt;a href=\"http://net.tutsplus.com\" class=\"logo\"&gt;Nettuts+&lt;/a&gt; </pre>' );
             //highlightcode空格问题
 //            equal( editor.getContent().substring( 0, 116 ), '<pre class=\"brush:html;toolbar:false;\" >&lt;a href=\"http://net.tutsplus.com\" class=\"logo\"&gt;Nettuts+&lt;/a&gt;</pre>' );
             te.dom.push( div );
@@ -245,7 +245,7 @@ test( 'trace 1727:插入超链接后再插入空格，空格不能被删除', fu
         editor.execCommand( 'source' );
         setTimeout( function () {
             editor.execCommand( 'source' );
-            equal( editor.body.innerHTML.toLowerCase(), '<p><a href="http://www.baidu.com/">绝对路径网址</a>&nbsp;&nbsp;ddd</p>', '查看空格是否被删除' );
+            equal( editor.body.innerHTML.toLowerCase(), '<p><a href="http://www.baidu.com/" _href=\"http://www.baidu.com/\">绝对路径网址</a>&nbsp;&nbsp;ddd</p>', '查看空格是否被删除' );
             start();
         }, 100 );
     }, 100 );

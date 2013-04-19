@@ -53,6 +53,9 @@ test('通过选区路径取range',function(){
     editor.options.elementPathEnabled=true;
     editor.setContent('<table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>45</td></tr></tbody></table>');
     var tds = editor.body.getElementsByTagName('td');
+    var trs = editor.body.getElementsByTagName('tr');
+    var tbodys = editor.body.getElementsByTagName('tbody');
+    var table = editor.body.getElementsByTagName('table');
     range.setStart(tds[3].firstChild, 0).collapse(true).select();
     editor.queryCommandValue('elementpath');
     editor.execCommand('elementpath','4');
@@ -60,27 +63,36 @@ test('通过选区路径取range',function(){
     setTimeout(function(){
         range = editor.selection.getRange();
         if(ua.browser.gecko){
-            ua.checkResult(range,tds[3],tds[3],0,2,false,'取range--td');
+            ua.checkResult(range,trs[1],trs[1],1,2,false,'取range--td');
         }else{
-            ua.checkResult(range,tds[3].firstChild,tds[3].lastChild,0,2,false,'取range--td');
+            if(ua.browser.ie)
+                ua.checkResult(range,tds[3].firstChild,tds[3].lastChild,0,2,false,'取range--td');
+            else
+                ua.checkResult(range,tds[3].firstChild,editor.body,0,1,false,'取range--td');
         }
         range.setStart(tds[3].firstChild, 1).collapse(1).select();
         editor.execCommand('elementpath','3');
         setTimeout(function(){
             range = editor.selection.getRange();
             if(ua.browser.gecko){
-                ua.checkResult(range,tds[2],tds[2],0,1,false,'取range--tr');
+                ua.checkResult(range,tbodys[0],tbodys[0],1,2,false,'取range--tr');
             }else{
-                ua.checkResult(range,tds[2].firstChild,tds[2].lastChild,0,1,false,'取range--tr');
+                if(ua.browser.ie)
+                    ua.checkResult(range,tds[2].firstChild,tds[3].lastChild,0,2,false,'取range--tr');
+                else
+                    ua.checkResult(range,tds[2].firstChild,editor.body,0,1,false,'取range--tr');
             }
             range.setStart(tds[3].firstChild, 0).collapse(1).select();
             editor.execCommand('elementpath','2');
             setTimeout(function(){
                 range = editor.selection.getRange();
                 if(ua.browser.gecko){
-                    ua.checkResult(range,tds[0],tds[0],0,1,false,'取range--tbody');
+                    ua.checkResult(range,table[0],table[0],0,1,false,'取range--tbody');
                 }else{
-                    ua.checkResult(range,tds[0].firstChild,tds[0].lastChild,0,1,false,'取range--tbody');
+                    if(ua.browser.ie)
+                        ua.checkResult(range,tds[0].firstChild,tds[3].lastChild,0,2,false,'取range--tbody');
+                    else
+                        ua.checkResult(range,editor.body,editor.body,0,1,false,'取range--tbody');
                 }
                 editor.setContent('<p>45645</p>');
                 range.selectNode(editor.body.firstChild).select();
@@ -90,14 +102,14 @@ test('通过选区路径取range',function(){
                     range = editor.selection.getRange();
                     var p = editor.body.firstChild;
                     if(ua.browser.gecko){
-                        ua.checkResult(range,p,p,0,1,false,'取range--p');
+                        ua.checkResult(range,editor.body,editor.body,0,1,false,'取range--p');
                     }else{
                         ua.checkResult(range,p.firstChild,p.firstChild,0,5,false,'取range--p');
                     }
                     start();
-                },50);
-            },50);
-        },50);
+                },20);
+            },20);
+        },20);
     },20);
 });
 
@@ -117,11 +129,9 @@ test( 'trace 1539:列表', function () {
         /*选中列表中的表格*/
         range.selectNode( body.firstChild.getElementsByTagName( 'table' )[0] ).select();
         eles = editor.queryCommandValue( 'elementpath' );
-        if ( !ua.browser.ie ){
-            ua.checkElementPath( eles, ['body', 'ol', 'li','table', 'tbody', 'tr', 'td'], '选中列表中的表格' );
-        }
+        ua.checkElementPath( eles, ['body', 'ol', 'li','table', 'tbody', 'tr', 'td'], '选中列表中的表格' );
         /*选中列表中的br*/
-        range.selectNode( body.firstChild.getElementsByTagName( 'br' )[0]).select();
+        range.setStart(body.firstChild.firstChild.nextSibling.firstChild.firstChild,6).collapse(true).select();
         eles = editor.queryCommandValue( 'elementpath' );
         ua.checkElementPath( eles, ['body','ol','li','p'], '选中列表中的br' );
         div.parentNode.removeChild(div);
