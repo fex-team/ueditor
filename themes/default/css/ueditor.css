@@ -47,7 +47,7 @@ div.edui-box {
     clear: both;
 }
 
- * html div.edui-box {
+* html div.edui-box {
     display: inline !important;
 }
 
@@ -296,7 +296,14 @@ div.edui-box {
     line-height: 22px;
     padding-left: 5px;
 }
-
+.edui-default .edui-for-insertcode .edui-listitem-label {
+    min-width: 120px;
+    _width: 120px;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    padding-left: 5px;
+}
 .edui-default .edui-for-underline .edui-listitem-label {
     min-width: 120px;
     _width: 120px;
@@ -364,8 +371,8 @@ div.edui-box {
 .edui-default .edui-menuitem .edui-icon {
     width: 20px !important;
     height: 20px !important;
-    background: url(../images/icons.png) 0 -40px;
-    background: url(../images/icons.gif) 0 -40 px\9;
+    background: url(../images/icons.png) 0 -4000px;
+    background: url(../images/icons.gif) 0 -4000px\9;
 }
 
 .edui-default .edui-menuitem .edui-label {
@@ -690,11 +697,19 @@ div.edui-box {
 }
 
 .edui-default  .edui-for-insertrow .edui-icon {
-    background-position: -740px -20px;
+    background-position: -478px -76px;
+}
+
+.edui-default  .edui-for-insertrownext .edui-icon {
+    background-position: -498px -76px;
 }
 
 .edui-default  .edui-for-insertcol .edui-icon {
-    background-position: -700px -20px;
+    background-position: -455px -76px;
+}
+
+.edui-default  .edui-for-insertcolnext  .edui-icon {
+    background-position: -429px -76px;
 }
 
 .edui-default  .edui-for-mergeright .edui-icon {
@@ -835,6 +850,50 @@ div.edui-box {
 
 .edui-default  .edui-for-formula .edui-icon {
     background-position: -200px -40px
+}
+
+.edui-default  .edui-for-aligntd  .edui-icon {
+    background-position: -236px -76px;
+}
+
+.edui-default  .edui-for-insertparagraphtrue  .edui-icon {
+    background-position: -625px -76px;
+}
+
+.edui-default  .edui-for-insertparagraph  .edui-icon {
+    background-position: -602px -76px;
+}
+
+.edui-default  .edui-for-insertcaption  .edui-icon {
+    background-position: -336px -76px;
+}
+
+.edui-default  .edui-for-deletecaption  .edui-icon {
+    background-position: -362px -76px;
+}
+
+.edui-default  .edui-for-inserttitle  .edui-icon {
+    background-position: -286px -76px;
+}
+
+.edui-default  .edui-for-deletetitle  .edui-icon {
+    background-position: -311px -76px;
+}
+
+.edui-default  .edui-for-aligntable  .edui-icon {
+    background-position: -440px 0;
+}
+
+.edui-default  .edui-for-tablealignment-left  .edui-icon {
+    background-position: -460px 0;
+}
+
+.edui-default  .edui-for-tablealignment-center  .edui-icon {
+    background-position: -420px 0;
+}
+
+.edui-default  .edui-for-tablealignment-right  .edui-icon {
+    background-position: -480px 0;
 }
 /*splitbutton*/
 .edui-default .edui-toolbar .edui-splitbutton-body .edui-arrow,
@@ -1500,22 +1559,43 @@ div.edui-box {
     height: 20px;
     width: 20px;
     padding: 1px;
-    background-image: url(../images/icons.png);
-    background-image: url(../images/icons.gif) \9;
+    background-image: url(../images/table-cell-align.png);
 }
+
 .edui-default .edui-cellalignpicker-body .edui-left{
-    background-position: -460px 0;
+    background-position: 0 0;
 }
+
 .edui-default .edui-cellalignpicker-body .edui-center{
-    background-position: -420px 0;
+    background-position: -25px 0;
 }
 .edui-default .edui-cellalignpicker-body .edui-right{
-    background-position: -480px 0;
+    background-position: -51px 0;
 }
-.edui-default .edui-cellalignpicker-body td.edui-state-hover {
-    background-color: #fff5d4;
-    padding: 0;
-    border: 1px solid #dcac6c;
+
+.edui-default .edui-cellalignpicker-body td.edui-state-hover .edui-left{
+    background-position: -73px 0;
+}
+
+.edui-default .edui-cellalignpicker-body td.edui-state-hover .edui-center{
+    background-position: -98px 0;
+}
+
+.edui-default .edui-cellalignpicker-body td.edui-state-hover .edui-right{
+    background-position: -124px 0;
+}
+
+.edui-default .edui-cellalignpicker-body td.edui-cellalign-selected .edui-left {
+    background-position: -146px 0;
+    backgroun-color: #f1f4f5;
+}
+
+.edui-default .edui-cellalignpicker-body td.edui-cellalign-selected .edui-center {
+    background-position: -245px 0;
+}
+
+.edui-default .edui-cellalignpicker-body td.edui-cellalign-selected .edui-right {
+    background-position: -271px 0;
 }
 /*分隔线*/
 .edui-default .edui-toolbar .edui-separator {
@@ -1546,32 +1626,21 @@ div.edui-box {
     height: 380px;
     overflow: hidden;
 }
-.edui-default .edui-for-formula .edui-popup-content iframe
-{
-    width: 350px;
-    height: 270px;
-    overflow: hidden;
-}
-.edui-default .edui-for-emotion .edui-popup-content,
-.edui-default .edui-for-formula .edui-popup-content
+.edui-default .edui-for-emotion .edui-popup-content
 {
     position: relative;
     z-index: 555
 }
 
-.edui-default .edui-for-emotion .edui-splitborder ,
-.edui-default .edui-for-formula .edui-splitborder
-{
+.edui-default .edui-for-emotion .edui-splitborder {
     display: none
 }
 
-.edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow ,
-.edui-default .edui-for-formula .edui-splitbutton-body .edui-arrow
+.edui-default .edui-for-emotion .edui-splitbutton-body .edui-arrow
 {
     width: 0
 }
-.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder,
-.edui-default .edui-toolbar .edui-for-formula  .edui-state-active .edui-splitborder
+.edui-default .edui-toolbar .edui-for-emotion  .edui-state-active .edui-splitborder
 {
     border-left: 1px solid transparent;
 }
