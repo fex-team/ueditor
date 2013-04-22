@@ -41,7 +41,7 @@
         'gmap':'~/dialogs/gmap/gmap.html',
         'insertvideo':'~/dialogs/video/video.html',
         'help':'~/dialogs/help/help.html',
-        'highlightcode':'~/dialogs/highlightcode/highlightcode.html',
+       //'highlightcode':'~/dialogs/highlightcode/highlightcode.html',
         'emotion':'~/dialogs/emotion/emotion.html',
         'wordimage':'~/dialogs/wordimage/wordimage.html',
         'attachment':'~/dialogs/attachment/attachment.html',
@@ -182,7 +182,7 @@
     var dialogBtns = {
         noOk:['searchreplace', 'help', 'spechars', 'webapp'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-            'insertvideo', 'highlightcode', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background']
+            'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background']
 
     };
 
@@ -329,8 +329,70 @@
         return ui;
     };
 
+    editorui.insertcode = function (editor, list, title) {
+        list = editor.options['insertcode'] || [];
+        title = editor.options.labelMap['insertcode'] || editor.getLang("labelMap.insertcode") || '';
+       // if (!list.length) return;
+        var items = [];
+        utils.each(list,function(key,val){
+            items.push({
+                label:key,
+                value:val,
+                theme:editor.options.theme,
+                renderLabelHtml:function () {
+                    return '<div class="edui-label %%-label" >' + (this.label || '') + '</div>';
+                }
+            });
+        });
 
+        var ui = new editorui.Combox({
+            editor:editor,
+            items:items,
+            onselect:function (t, index) {
+                editor.execCommand('insertcode', this.items[index].value);
+            },
+            onbuttonclick:function () {
+                this.showPopup();
+            },
+            title:title,
+            initValue:title,
+            className:'edui-for-insertcode',
+            indexByValue:function (value) {
+                if (value) {
+                    for (var i = 0, ci; ci = this.items[i]; i++) {
+                        if (ci.value.indexOf(value) != -1)
+                            return i;
+                    }
+                }
+
+                return -1;
+            }
+        });
+        editorui.buttons['insertcode'] = ui;
+        editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
+            if (!uiReady) {
+                var state = editor.queryCommandState('insertcode');
+                if (state == -1) {
+                    ui.setDisabled(true);
+                } else {
+                    ui.setDisabled(false);
+                    var value = editor.queryCommandValue('insertcode');
+                    if(!value){
+                        ui.setValue(title);
+                        return;
+                    }
+                    //trace:1871 ie下从源码模式切换回来时，字体会带单引号，而且会有逗号
+                    value && (value = value.replace(/['"]/g, '').split(',')[0]);
+                    ui.setValue(value);
+
+                }
+            }
+
+        });
+        return ui;
+    };
     editorui.fontfamily = function (editor, list, title) {
+
         list = editor.options['fontfamily'] || [];
         title = editor.options.labelMap['fontfamily'] || editor.getLang("labelMap.fontfamily") || '';
         if (!list.length) return;

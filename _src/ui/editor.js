@@ -319,7 +319,6 @@
                         if (toolbarItem == '|') {
                             toolbarItem = 'Separator';
                         }
-
                         if (baidu.editor.ui[toolbarItem]) {
                             toolbarItemUi = new baidu.editor.ui[toolbarItem](editor);
                         }

@@ -105,18 +105,19 @@ UE.plugins['insertcode'] = function() {
         }
         return orgQuery.apply(this,arguments)
     };
-    me.addListener('beforeenterkeydown',function(cmd){
+    me.addListener('beforeenterkeydown',function(){
         var rng = me.selection.getRange();
         var pre = domUtils.findParentByTagName(rng.startContainer,'pre',true);
         if(pre){
-           if(!rng.collapsed){
+            me.fireEvent('saveScene');
+            if(!rng.collapsed){
                rng.deleteContents();
                rng.setCursor(false,true);
 
-           }
-           var tmpNode = me.document.createTextNode('\n\r');
-           rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true).select(true);
-
+            }
+            var tmpNode = me.document.createTextNode('\n\n');
+            rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true).select(true);
+            me.fireEvent('saveScene');
            return true;
         }
 
@@ -135,7 +136,6 @@ UE.plugins['insertcode'] = function() {
             rng.insertNode(txtNode).setStartAfter(txtNode).setCursor(false,true);
             return true;
         }
+    });
 
-
-    })
 };
