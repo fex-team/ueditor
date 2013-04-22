@@ -41,6 +41,7 @@
             'plugins/time.js',
             'plugins/rowspacing.js',
             'plugins/lineheight.js',
+            'plugins/insertcode.js',
             'plugins/cleardoc.js',
             'plugins/anchor.js',
             'plugins/wordcount.js',
@@ -57,7 +58,7 @@
             'plugins/autolink.js',
             'plugins/autoheight.js',
             'plugins/autofloat.js',  //依赖UEditor UI,在IE6中，会覆盖掉body的背景图属性
-            'plugins/highlightcode.js',
+//            'plugins/highlightcode.js',
             'plugins/puretxtpaste.js',
             'plugins/video.js',
             'plugins/table.core.js',

@@ -14,6 +14,9 @@ UE.commands['inserthtml'] = {
         if(!html){
             return;
         }
+        if(me.fireEvent('beforeinserthtml',html) === true){
+            return;
+        }
         range = me.selection.getRange();
         div = range.document.createElement( 'div' );
         div.style.display = 'inline';
@@ -92,8 +95,8 @@ UE.commands['inserthtml'] = {
         if(li){
             var next,last;
             while(child = div.firstChild){
-
-                while(child && (child.nodeType == 3 || !domUtils.isBlockElm(child))){
+                //针对hr单独处理一下先
+                while(child && (child.nodeType == 3 || !domUtils.isBlockElm(child) || child.tagName=='HR' )){
                     next = child.nextSibling;
                     range.insertNode( child );
                     last = child;

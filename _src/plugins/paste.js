@@ -139,7 +139,7 @@ UE.plugins['paste'] = function() {
             me.fireEvent('beforepaste',html,root);
             root = UE.htmlparser(html.html);
             //如果开启了纯文本模式
-            if(me.queryCommandState('pasteplain')){
+            if(me.queryCommandState('pasteplain') === 1){
                 me.execCommand( 'insertHtml',UE.filterNode(root,me.options.filterTxtRules).toHtml(),true);
             }else{
                 //文本模式

@@ -76,7 +76,7 @@ UE.plugins['pasteplain'] = function(){
 
     me.commands['pasteplain'] = {
         queryCommandState: function (){
-            return pasteplain;
+            return pasteplain ? 1 : 0;
         },
         execCommand: function (){
             pasteplain = !pasteplain|0;
