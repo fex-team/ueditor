@@ -1,4 +1,49 @@
 module("core.Editor");
+test( "autoSyncData:true,textarea容器", function() {
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+    div.innerHTML = '<form id="form" method="post" target="_blank"><textarea id="myEditor" name="myEditor">这里的内容将会和html，body等标签一块提交</textarea></form>';
+    var editor_a = UE.getEditor('myEditor');
+    equal(document.getElementById('form').childNodes.length,1,'form里只有一个子节点');
+    stop();
+    editor_a.ready(function(){
+        editor_a.setContent( '<p>设置内容autoSyncData 1<br/></p>' );
+        equal(document.getElementById('form').childNodes.length,2,'form里有2个子节点');
+        ua.blur(editor_a.window);
+        setTimeout(function(){
+            var form  = document.getElementById('form');
+            equal(form.childNodes.length,2,'失去焦点,form里多了textarea');
+            equal(form.lastChild.tagName.toLowerCase(),'textarea','失去焦点,form里多了textarea');
+            equal(form.lastChild.value,'<p>设置内容autoSyncData 1<br/></p>','textarea内容正确');
+            div = form.parentNode;
+            editor_a.destroy();
+            div.parentNode.removeChild(div);
+            start();
+
+        },100);
+    });
+} );
+test( "autoSyncData:true", function() {
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+   div.innerHTML = '<form id="form" method="post" ><script type="text/plain" id="myEditor" name="myEditor"> <p>欢迎使用UEditor！</p></script></form>';
+    var editor_a = UE.getEditor('myEditor');
+    stop();
+    editor_a.ready(function(){
+        editor_a.setContent( '<p>设置内容autoSyncData 2<br/></p>' );
+        equal(document.getElementById('form').childNodes.length,1,'本来没有textarea，form里只有一个子节点');
+        ua.blur(editor_a.window);
+        setTimeout(function(){
+            var form  = document.getElementById('form');
+            equal(form.childNodes.length,2,'失去焦点,form里多了textarea');
+            equal(form.lastChild.tagName.toLowerCase(),'textarea','失去焦点,form里多了textarea');
+            equal(form.lastChild.value,'<p>设置内容autoSyncData 2<br/></p>','textarea内容正确');
+            editor_a.destroy();
+            form.parentNode.removeChild(form);
+            start();
+
+        },100);
+    });
+} );
+
 
 test( "hide,show", function() {
     var editor = te.obj[1];
