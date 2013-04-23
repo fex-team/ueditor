@@ -86,19 +86,22 @@ UE.plugins['insertcode'] = function() {
             utils.each(code,function(c){
                 if(c.length){
                     pre.appendChild(UE.uNode.createText(c));
-                    pre.appendChild(UE.uNode.createElement('br'))
                 }
+                pre.appendChild(UE.uNode.createElement('br'))
             })
        })
     });
     me.addOutputRule(function(root){
         utils.each(root.getNodesByTagName('pre'),function(pre){
-            var code = ''
-           utils.each(pre.children,function(n){
+            var code = '';
+            utils.each(pre.children,function(n){
                if(n.type == 'text'){
-                   code += n.data + '\n'
+                   code += n.data;
+               }else{
+                   code  += '\n'
                }
-           })
+
+            });
             pre.innerText(code)
         })
     });
