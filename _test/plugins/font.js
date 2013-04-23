@@ -497,7 +497,22 @@ test( 'trace 3337：字符边框', function() {
     else
         ua.checkHTMLSameStyle(p1,editor.document,editor.body.firstChild,'查看添加了字符边框后的样式');
 } );
-
+test( 'trace 3342：字符ab， 给a 加边框再给b加边框，边框效果错误', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p>hello</p>' );
+    range.setStart(editor.body.firstChild.firstChild,0).setEnd(editor.body.firstChild.firstChild,2).select();
+    editor.execCommand( 'fontborder' );
+    range.setStart(editor.body.firstChild.lastChild,0).setEnd(editor.body.firstChild.lastChild,2).select();
+    editor.execCommand( 'fontborder' );
+    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
+    if(ua.browser.ie){
+        equal(ua.getChildHTML(editor.body.firstChild),"<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hell</span>e&nbsp;",'查看添加了字符边框后的样式');
+    }
+    else{
+        ua.checkHTMLSameStyle('<span style="border: 1px solid rgb(0, 0, 0);">hell</span>e'+br,editor.document,editor.body.firstChild,'查看添加了字符边框后的样式');
+    }
+} );
 test( 'trace 3096：单元格中改变字号', function() {
     var editor = te.obj[0];
     var range = te.obj[1];

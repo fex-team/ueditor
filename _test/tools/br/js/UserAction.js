@@ -1666,9 +1666,94 @@ UserAction = {
             }
         } );
     }
-
-
-
+    ,checkLowerCase:function(stringA,stringB){
+        if(!(stringA||stringB))
+            return true;
+        else if(!stringA||!stringB)
+            return false;
+        else{
+            return stringA.toLowerCase()==stringB.toLowerCase();
+        }
+    }
+    ,removeEndSemicolon:function(styleValue){
+        if(styleValue.length-1==styleValue.lastIndexOf(';'))
+             styleValue = styleValue.substring(0,styleValue.length-1);
+        return styleValue;
+    }
+    ,checkNodeStyle:function(nodeA ,nodeB){
+        var nodeAStyle = this.removeEndSemicolon(nodeA.getAttr("style").replace(/\s+/g,"")).split(";");
+        var nodeBStyle = this.removeEndSemicolon(nodeB.getAttr("style").replace(/\s+/g,"")).split(";");
+        var lengthA = nodeAStyle.length;
+        var lengthB = nodeBStyle.length;
+        if(!(lengthA&&lengthB))
+            return true;
+        else if(lengthA!=lengthB)
+            return false;
+        else{
+            for(var i=0;i<lengthA;i++){
+                if( nodeAStyle[i].match(/\w+\s*:/)){
+                    var styleName =  nodeAStyle[i].match(/\w+\s*:/)[0].replace(/\s*:/,"");
+                    if(nodeA.getStyle(styleName).toLowerCase().replace(/\s+/g,"")!=nodeB.getStyle(styleName).toLowerCase().replace(/\s+/g,""))
+                        return false ;
+                }
+            }
+        }
+        return true;
+    }
+    ,checkSameNodeAttrs:function(nodeA,nodeB){
+        var lengthA = Object.keys(nodeA.attrs).length;
+        var lengthB = Object.keys(nodeB.attrs).length;
+        if(!(lengthA&&lengthB))
+            return true;
+        else if(lengthA!=lengthB)
+            return false;
+        else{
+            for(var p in nodeA.attrs){
+                if(!nodeB.getAttr(p))
+                    return false;
+                else if(p.toLowerCase()=="style"){
+                    if(!this.checkNodeStyle(nodeA,nodeB))
+                        return false;
+                }
+                else{
+                    if(!nodeA.getAttr(p).toLowerCase()==nodeB.getAttr(p).toLowerCase())
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    ,checkChildren:function(nodeA,nodeB){
+        if(!(nodeA.children||nodeB.children))
+            return true;
+        else if(!(nodeA.children&&nodeB.children))
+            return false ;
+        else if(nodeA.children.length!=nodeB.children.length)
+            return false;
+        else{
+            var lengthA = nodeA.children.length;
+            for(var i = 0 ;i<lengthA;i++){
+                if(!this.checkSameNode(nodeA.children[i],nodeB.children[i]))
+                    return false;
+            }
+        }
+        return true;
+    }
+    ,checkSameNode:function(nodeA,nodeB){
+        UE.htmlparser("<span style=\"border: 1px solid rgb(0, 0, 0);\" >he</span>");
+        if(!this.checkSameNodeAttrs(nodeA,nodeB))
+            return false;
+        else if(!this.checkChildren(nodeA,nodeB))
+            return false;
+        else if(nodeA.data!=nodeB.data)
+            return false;
+        else if(!this.checkLowerCase(nodeA.tagName,nodeB.tagName))
+            return false;
+        else if(!this.checkLowerCase(nodeA.type,nodeB.type))
+            return false;
+        else
+            return true;
+    }
 };
 var ua = UserAction;
 var upath = ua.commonData.currentPath();
