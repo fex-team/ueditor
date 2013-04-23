@@ -169,7 +169,7 @@
             if (this.type != 'element' || dtd.$empty[this.tagName]) {
                 return this;
             }
-            if (htmlstr) {
+            if (utils.isString(htmlstr)) {
                 if(this.children){
                     for (var i = 0, ci; ci = this.children[i++];) {
                         ci.parentNode = null;

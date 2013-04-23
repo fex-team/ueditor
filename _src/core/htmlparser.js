@@ -1,19 +1,22 @@
 //html字符串转换成uNode节点
 //by zhanyi
-var htmlparser = UE.htmlparser = function (htmlstr,coverBlank) {
+var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
     var re_tag = /<(?:(?:\/([^>]+)>)|(?:!--([\S|\s]*?)-->)|(?:([^\s\/>]+)\s*((?:(?:"[^"]*")|(?:'[^']*')|[^"'<>])*)\/?>))/g,
         re_attr = /([\w\-:.]+)(?:(?:\s*=\s*(?:(?:"([^"]*)")|(?:'([^']*)')|([^\s>]+)))|(?=\s|$))/g;
 
     var reg = new RegExp(domUtils.fillChar, 'g');
     //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
 
-    htmlstr = htmlstr.replace(reg, '')
-        .replace(/\s*<\/?(\w+)\s*(?:[^>]*)>\s*/g, function(a,b){
+    htmlstr = htmlstr.replace(reg, '');
+    if(!ignoreBlank){
+        htmlstr = htmlstr.replace(/\s*<\/?(\w+)\s*(?:[^>]*)>\s*/g, function(a,b){
             if(dtd.$inlineWithA[b]||dtd.$empty[b]){
                 return a.replace(/[\t\r\n]+/,'');
             }
             return a.replace(/^\s+/,'').replace(/\s+$/,'');
         });
+    }
+
 
     var uNode = UE.uNode,
         needParentNode = {

@@ -6,11 +6,11 @@
 UE.plugins['insertcode'] = function() {
     var me = this;
     me.ready(function(){
-        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:2px;background:#f8f8f8;}',
+        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:5px;background:#f8f8f8;}',
             me.document)
     });
     me.setOpt('insertcode',{
-        'as3':'ActionScript3',
+            'as3':'ActionScript3',
             'bash':'Bash/Shell',
             'cpp':'C/C++',
             'css':'Css',
@@ -42,7 +42,7 @@ UE.plugins['insertcode'] = function() {
                 rng = me.selection.getRange(),
                 pre = domUtils.findParentByTagName(rng.startContainer,'pre',true);
             if(pre){
-                pre.className = lang;
+                pre.className = 'brush:'+lang+';toolbar:false;';
             }else{
                 var code = '';
                 if(rng.collapsed){
@@ -53,11 +53,10 @@ UE.plugins['insertcode'] = function() {
                     div.appendChild(frag);
                     var code = '';
                     utils.each(UE.filterNode(UE.htmlparser(div.innerHTML),me.options.filterTxtRules).children,function(node){
-                        code += node.innerText() + '\n'
+                        code += node.innerText() + '<br/>'
                     });
-
                 }
-                me.execCommand('inserthtml','<pre id="coder"class="'+lang+'">'+code+'</pre>',true);
+                me.execCommand('inserthtml','<pre id="coder"class="brush:'+lang+';toolbar:false">'+code+'</pre>',true);
                 pre = me.document.getElementById('coder');
                 domUtils.removeAttributes(pre,'id');
                 me.selection.getRange().setStart(pre,0).setCursor(false,true);
@@ -71,7 +70,8 @@ UE.plugins['insertcode'] = function() {
             var lang = '';
             utils.each(path,function(node){
                 if(node.nodeName =='PRE'){
-                    lang = node.className;
+                    var match = node.className.match(/brush:([^;]+)/);
+                    lang = match && match[1] ? match[1] : '';
                     return false;
                 }
             });
@@ -79,6 +79,29 @@ UE.plugins['insertcode'] = function() {
         }
     }
 
+    me.addInputRule(function(root){
+       utils.each(root.getNodesByTagName('pre'),function(pre){
+            var code = pre.innerText().split(/\n/);
+            pre.innerHTML('');
+            utils.each(code,function(c){
+                if(c.length){
+                    pre.appendChild(UE.uNode.createText(c));
+                    pre.appendChild(UE.uNode.createElement('br'))
+                }
+            })
+       })
+    });
+    me.addOutputRule(function(root){
+        utils.each(root.getNodesByTagName('pre'),function(pre){
+            var code = ''
+           utils.each(pre.children,function(n){
+               if(n.type == 'text'){
+                   code += n.data + '\n'
+               }
+           })
+            pre.innerText(code)
+        })
+    });
     //不需要判断highlight的command列表
     me.notNeedCodeQuery ={
         help:1,
@@ -112,28 +135,98 @@ UE.plugins['insertcode'] = function() {
             me.fireEvent('saveScene');
             if(!rng.collapsed){
                rng.deleteContents();
-               rng.setCursor(false,true);
-
             }
-            var tmpNode = me.document.createTextNode('\n\n');
-            rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true).select(true);
+            if(!browser.ie){
+                var tmpNode = me.document.createElement('br');
+                rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true);
+                var next = tmpNode.nextSibling;
+                if(!next){
+                    rng.insertNode(tmpNode.cloneNode(false));
+                }else{
+                    rng.setStartAfter(tmpNode);
+                }
+                rng.collapse(true).select(true);
+            }else{
+                var tmpNode = me.document.createElement('br');
+                rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true).select(true);
+            }
             me.fireEvent('saveScene');
-           return true;
+            return true;
         }
 
 
     });
+
+    me.addListener('tabkeydown',function(){
+        var rng = me.selection.getRange();
+        var pre = domUtils.findParentByTagName(rng.startContainer,'pre',true);
+        if(pre){
+            me.fireEvent('saveScene');
+            if(!rng.collapsed){
+                var bk = rng.createBookmark();
+                var start = bk.start.previousSibling;
+
+                while(start){
+                    if(pre.firstChild === start && !domUtils.isBr(start)){
+                        pre.insertBefore(me.document.createTextNode('    '),start)
+
+                        break;
+                    }
+                    if(domUtils.isBr(start)){
+                        pre.insertBefore(me.document.createTextNode('    '),start.nextSibling);
+
+                        break;
+                    }
+                    start = start.previousSibling;
+                }
+                var end = bk.end;
+                start = bk.start.nextSibling;
+                if(pre.firstChild === bk.start){
+                    pre.insertBefore(me.document.createTextNode('    '),start.nextSibling)
+
+                }
+                while(start && start !== end){
+                    if(domUtils.isBr(start) && start.nextSibling){
+                        if(start.nextSibling === end){
+                            break;
+                        }
+                        pre.insertBefore(me.document.createTextNode('    '),start.nextSibling)
+                    }
+
+                    start = start.nextSibling;
+                }
+                rng.moveToBookmark(bk).select();
+            }else{
+                var tmpNode = me.document.createTextNode('    ');
+                rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true).select(true);
+            }
+
+            me.fireEvent('saveScene');
+            return true;
+        }
+
+
+    });
+
+
     me.addListener('beforeinserthtml',function(evtName,html){
         var me = this,
             rng = me.selection.getRange(),
             pre = domUtils.findParentByTagName(rng.startContainer,'pre',true);
         if(pre){
-            var code = '';
+            var br = '',frag = me.document.createDocumentFragment();
             utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
-                code += node.innerText() + '\n'
+                if(node.type == 'element' && node.tagName == 'br'){
+                    br = me.document.createElement('br');
+                    frag.appendChild(br);
+                    return;
+                }
+                var html = node.type == 'element' ? node.innerText() : node.getData();
+                frag.appendChild(me.document.createTextNode(html.replace(/&nbsp;/g,' ')));
+                br = me.document.createElement('br');
+                frag.appendChild(br);
             });
-            var txtNode = me.document.createTextNode(utils.trim(code.replace(/&nbsp;/g,' ')));
-            rng.insertNode(txtNode).setStartAfter(txtNode).setCursor(false,true);
+            rng.insertNode(frag).setStartAfter(br).setCursor(false,true);
             return true;
         }
     });
