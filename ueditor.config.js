@@ -161,7 +161,7 @@
         ,imageManagerPath:URL + "php/"                                    //图片修正地址，同imagePath
 
         //屏幕截图配置区
-        ,snapscreenHost: '127.0.0.1'                                  //屏幕截图的server端文件所在的网站地址或者ip，请不要加http://
+        ,snapscreenHost: location.host                                  //屏幕截图的server端文件所在的网站地址或者ip，请不要加http://
         ,snapscreenServerUrl: URL +"php/imageUp.php" //屏幕截图的server端保存程序，UEditor的范例代码为“URL +"server/upload/php/snapImgUp.php"”
         ,snapscreenPath: URL + "php/"
         //,snapscreenServerPort: 80                                    //屏幕截图的server端端口

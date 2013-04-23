@@ -56,6 +56,8 @@ UE.plugins['snapscreen'] = function(){
                 alert(lang.uploadErrorMsg);
             };
             try{
+                editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.split( editorOptions.snapscreenHost );
+                editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl[1] || editorOptions.snapscreenServerUrl[0];
                 var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, editorOptions.snapscreenServerPort.toString());
                 onSuccess(ret);
             }catch(e){
