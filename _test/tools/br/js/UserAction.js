@@ -1740,7 +1740,6 @@ UserAction = {
         return true;
     }
     ,checkSameNode:function(nodeA,nodeB){
-        UE.htmlparser("<span style=\"border: 1px solid rgb(0, 0, 0);\" >he</span>");
         if(!this.checkSameNodeAttrs(nodeA,nodeB))
             return false;
         else if(!this.checkChildren(nodeA,nodeB))
@@ -1753,6 +1752,9 @@ UserAction = {
             return false;
         else
             return true;
+    }
+    ,checkSameHtml:function(stringA,stringB,scholium){
+        ok(this.checkSameNode(UE.htmlparser(stringA),UE.htmlparser(stringB)),scholium);
     }
 };
 var ua = UserAction;

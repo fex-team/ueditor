@@ -1,5 +1,15 @@
 module( "plugins.font" );
 
+test( 'font转span', function() {
+    var editor = te.obj[0];
+    editor.setContent( '<font size="12" color="red" lang="en" face="arial"><b><i>hello</i>hello</b>' );
+    var html = '<span style="font-size:12px;color:red;font-family:arial"><strong><em>hello</em>hello</strong></span>';
+    ua.checkSameHtml(editor.body.firstChild.innerHTML,html,'转换font标签');
+    /*size的值在sizeMap中有对应的值*/
+    editor.setContent( '<b><font size="10" color="#ff0000" lang="en" face="楷体">hello' );
+    html = '<strong><span style="font-size:10px;color:#ff0000;font-family:楷体">hello</span></strong>';
+    ua.checkSameHtml(editor.body.firstChild.innerHTML,html,'转换font标签');
+} );
 test( 'beforegetContent', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -533,16 +543,5 @@ test( '转换font标签', function () {
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换font标签');
     editor.setContent( '<font style="color:red"><u>x</u></font>' );
     html = '<span style="color:red"><span style="text-decoration:underline;">x</span></span>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
-} );
-
-test( 'font转span', function() {
-    var editor = te.obj[0];
-    editor.setContent( '<font size="12" color="red" lang="en" face="arial"><b><i>hello</i>hello</b>' );
-    var html = '<span style="font-size:12px;color:red;font-family:arial"><strong><em>hello</em>hello</strong></span>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
-    /*size的值在sizeMap中有对应的值*/
-    editor.setContent( '<b><font size="10" color="#ff0000" lang="en" face="楷体">hello' );
-    html = '<strong><span style="font-size:10px;color:#ff0000;font-family:楷体">hello</span></strong>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
 } );
