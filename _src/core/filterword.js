@@ -135,9 +135,6 @@ var filterWord = UE.filterWord = function () {
                                     }
                                     continue;
                                 case 'background':
-                                    if(value == 'initial'){
-
-                                    }
                                     break;
                                 case 'margin':
                                     if ( !/[1-9]/.test( value ) ) {
