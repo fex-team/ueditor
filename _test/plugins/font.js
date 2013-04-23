@@ -1,5 +1,15 @@
 module( "plugins.font" );
 
+test( 'font转span', function() {
+    var editor = te.obj[0];
+    editor.setContent( '<font size="12" color="red" lang="en" face="arial"><b><i>hello</i>hello</b>' );
+    var html = '<span style="font-size:12px;color:red;font-family:arial"><strong><em>hello</em>hello</strong></span>';
+    ua.checkSameHtml(editor.body.firstChild.innerHTML,html,'转换font标签');
+    /*size的值在sizeMap中有对应的值*/
+    editor.setContent( '<b><font size="10" color="#ff0000" lang="en" face="楷体">hello' );
+    html = '<strong><span style="font-size:10px;color:#ff0000;font-family:楷体">hello</span></strong>';
+    ua.checkSameHtml(editor.body.firstChild.innerHTML,html,'转换font标签');
+} );
 test( 'beforegetContent', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -497,7 +507,22 @@ test( 'trace 3337：字符边框', function() {
     else
         ua.checkHTMLSameStyle(p1,editor.document,editor.body.firstChild,'查看添加了字符边框后的样式');
 } );
-
+test( 'trace 3342：字符ab， 给a 加边框再给b加边框，边框效果错误', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p>hello</p>' );
+    range.setStart(editor.body.firstChild.firstChild,0).setEnd(editor.body.firstChild.firstChild,2).select();
+    editor.execCommand( 'fontborder' );
+    range.setStart(editor.body.firstChild.lastChild,0).setEnd(editor.body.firstChild.lastChild,2).select();
+    editor.execCommand( 'fontborder' );
+    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
+    if(ua.browser.ie){
+        equal(ua.getChildHTML(editor.body.firstChild),"<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hell</span>e&nbsp;",'查看添加了字符边框后的样式');
+    }
+    else{
+        ua.checkHTMLSameStyle('<span style="border: 1px solid rgb(0, 0, 0);">hell</span>e'+br,editor.document,editor.body.firstChild,'查看添加了字符边框后的样式');
+    }
+} );
 test( 'trace 3096：单元格中改变字号', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -518,16 +543,5 @@ test( '转换font标签', function () {
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换font标签');
     editor.setContent( '<font style="color:red"><u>x</u></font>' );
     html = '<span style="color:red"><span style="text-decoration:underline;">x</span></span>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
-} );
-
-test( 'font转span', function() {
-    var editor = te.obj[0];
-    editor.setContent( '<font size="12" color="red" lang="en" face="arial"><b><i>hello</i>hello</b>' );
-    var html = '<span style="font-size:12px;color:red;font-family:arial"><strong><em>hello</em>hello</strong></span>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
-    /*size的值在sizeMap中有对应的值*/
-    editor.setContent( '<b><font size="10" color="#ff0000" lang="en" face="楷体">hello' );
-    html = '<strong><span style="font-size:10px;color:#ff0000;font-family:楷体">hello</span></strong>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
 } );
