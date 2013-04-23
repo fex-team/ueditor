@@ -1,7 +1,6 @@
-//�༭��չʾҳ�����ݽ�����������Դ����
 //by zhanyi
 function uParse(selector,opt){
-    //��Ҫ�Ĺ��߷���
+
     var ie = !!window.ActiveXObject,
         cssRule = ie ? function(key,style,doc){
             var indexList,index;
@@ -185,7 +184,6 @@ function uParse(selector,opt){
         }
     }
     domReady(function(){
-        //��������
         var contents;
         if(document.querySelectorAll){
             contents = document.querySelectorAll(selector)
@@ -301,7 +299,6 @@ function uParse(selector,opt){
                 'ol' : checkList,
                 'ul' : checkList,
                 'pre': function(nodes){
-                    //�����ظ����ظ����ļ�
                     if(typeof XRegExp == "undefined"){
                         loadFile(document,{
                             id : "syntaxhighlighter_js",

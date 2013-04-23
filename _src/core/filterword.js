@@ -165,6 +165,6 @@ var filterWord = UE.filterWord = function () {
     }
 
     return function ( html ) {
-        return (isWordDocument( html ) ? filterPasteWord( html ) : html).replace( />[ \t\r\n]*</g, '><' );
+        return (isWordDocument( html ) ? filterPasteWord( html ) : html);
     };
 }();
