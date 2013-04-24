@@ -53,13 +53,14 @@ UE.plugins['undo'] = function () {
         this.undo = function () {
             if (this.hasUndo) {
                 var currentScene = this.getScene(),
-                    lastScene = this.list[this.index],
-                    lastContent = adjustContent(lastScene.content),
-                    currentContent = adjustContent(currentScene.content);
+                    lastScene = this.list[this.index];
+                //有可能引起undo/redo丢场景
+//                    lastContent = adjustContent(lastScene.content),
+//                    currentContent = adjustContent(currentScene.content);
 
-                if (lastContent != currentContent) {
-                    this.save();
-                }
+//                if (lastContent != currentContent) {
+//                    this.save();
+//                }
                 if (!this.list[this.index - 1] && this.list.length == 1) {
                     this.reset();
                     return;
