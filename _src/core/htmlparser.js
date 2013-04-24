@@ -10,7 +10,8 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
     htmlstr = htmlstr.replace(reg, '');
     if(!ignoreBlank){
         htmlstr = htmlstr.replace(/\s*<\/?(\w+)\s*(?:[^>]*)>\s*/g, function(a,b){
-            if(dtd.$inlineWithA[b]||dtd.$empty[b]){
+            //br暂时单独处理
+            if(!/^br$/i.test(b) && (dtd.$inlineWithA[b]|| dtd.$empty[b])){
                 return a.replace(/[\t\r\n]+/,'');
             }
             return a.replace(/^\s+/,'').replace(/\s+$/,'');

@@ -77,7 +77,7 @@ UE.plugins['insertcode'] = function() {
             });
             return lang;
         }
-    }
+    };
 
     me.addInputRule(function(root){
        utils.each(root.getNodesByTagName('pre'),function(pre){
@@ -225,7 +225,7 @@ UE.plugins['insertcode'] = function() {
                     return;
                 }
                 var html = node.type == 'element' ? node.innerText() : node.getData();
-                frag.appendChild(me.document.createTextNode(html.replace(/&nbsp;/g,' ')));
+                frag.appendChild(me.document.createTextNode(utils.html(html.replace(/&nbsp;/g,' '))));
                 br = me.document.createElement('br');
                 frag.appendChild(br);
             });

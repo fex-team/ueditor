@@ -784,11 +784,15 @@
         adjustmentBoundary:function () {
             if (!this.collapsed) {
                 while (!domUtils.isBody(this.startContainer) &&
-                    this.startOffset == this.startContainer[this.startContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length
+                    this.startOffset == this.startContainer[this.startContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length &&
+                    this.startContainer[this.startContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length
                     ) {
+
                     this.setStartAfter(this.startContainer);
                 }
-                while (!domUtils.isBody(this.endContainer) && !this.endOffset) {
+                while (!domUtils.isBody(this.endContainer) && !this.endOffset &&
+                    this.endContainer[this.endContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length
+                    ) {
                     this.setEndBefore(this.endContainer);
                 }
             }
