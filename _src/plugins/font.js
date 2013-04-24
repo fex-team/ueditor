@@ -37,109 +37,146 @@ UE.plugins['font'] = function() {
           ],
         'fontsize':[10, 11, 12, 14, 16, 18, 20, 24, 36]
     });
-    function mergesibling(range,me){
-        var collapsed = range.collapsed,
-            bk = range.createBookmark(),common;
+//    function mergesibling(range,me){
+//        var collapsed = range.collapsed,
+//            bk = range.createBookmark(),common;
+//        if(collapsed){
+//            common = bk.start.parentNode;
+//            while(dtd.$inline[common.tagName]){
+//                common = common.parentNode;
+//            }
+//        }else{
+//
+//            common = domUtils.getCommonAncestor(bk.start,bk.end);
+//        }
+//
+//        utils.each(domUtils.getElementsByTagName(common,'span'),function(node){
+//            if(!node.parentNode){
+//                return;
+//            }
+//            function isBorder(n){
+//                if(!n)
+//                    return false;
+//                if(n.tagName != 'SPAN')
+//                    return false;
+//                var val;
+//                if(val = domUtils.getComputedStyle( n, 'border' )){
+//                    if(/1px/.test(val) && /solid/.test(val)){
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//            function nextSibling(node){
+//                var next = node.nextSibling;
+//                if(next && domUtils.isBookmarkNode(next)){
+//                    next = next.nextSibling;
+//                }
+//                return next;
+//            }
+//
+//            var span = me.document.createElement('span');
+//            span.style.cssText = 'border:1px solid #000';
+//            node.parentNode.insertBefore(span,node);
+//            while(isBorder(node) && isBorder(nextSibling(node))){
+//                var val = utils.trim(node.style.cssText.replace(/border[^:]+:[^;]+;?/gi,''));
+//                node.style.cssText = val;
+//                var tmp  = node.nextSibling;
+//                if(!val){
+//                    while(node.firstChild){
+//                        if(isBorder(node.firstChild)){
+//                            node.firstChild.style.cssText = node.firstChild.style.cssText.replace(/border[^:]+:[^;]+;?/gi,'');
+//                        }
+//                        span.appendChild(node.firstChild)
+//                    }
+//                    domUtils.remove(node)
+//                }else{
+//                    span.appendChild(node);
+//                }
+//                if(domUtils.isBookmarkNode(tmp)){
+//                    node = tmp.nextSibling;
+//                    span.appendChild(tmp)
+//                }else{
+//                    node = tmp;
+//                }
+//            }
+//            if(!span.firstChild){
+//                domUtils.remove(span)
+//            }else{
+//                if(isBorder(span) && isBorder(nextSibling(span))){
+//                    node = span.nextSibling;
+//                    var val = utils.trim(node.style.cssText.replace(/border[^:]+:[^;]+;?/gi,''));
+//                    node.style.cssText = val;
+//
+//                    if(!val){
+//                        while(node.firstChild){
+//                            if(isBorder(node.firstChild)){
+//                                node.firstChild.style.cssText = node.firstChild.style.cssText.replace(/border[^:]+:[^;];?/,'');
+//                            }
+//                            span.appendChild(node.firstChild)
+//                        }
+//                        domUtils.remove(node)
+//                    }else{
+//                        span.appendChild(node);
+//                    }
+//                }
+//            }
+//            if(isBorder(node)){
+//                var tmpParent = node.parentNode;
+//                while(dtd.$inline[tmpParent.tagName]){
+//                    if(isBorder(tmpParent)){
+//                        var val = utils.trim(node.style.cssText.replace(/border[^:]+:[^;]+;?/gi,''));
+//                        node.style.cssText = val;
+//                        if(!val){
+//                            domUtils.remove(node,true)
+//                        }
+//                        break;
+//                    }
+//                    tmpParent = tmpParent.parentNode;
+//
+//                }
+//
+//            }
+//
+//        });
+//        range.moveToBookmark(bk);
+//    }
+    function mergesibling(rng){
+        var collapsed = rng.collapsed,
+            bk = rng.createBookmark(),common;
         if(collapsed){
             common = bk.start.parentNode;
             while(dtd.$inline[common.tagName]){
                 common = common.parentNode;
             }
         }else{
-
             common = domUtils.getCommonAncestor(bk.start,bk.end);
         }
-
-        utils.each(domUtils.getElementsByTagName(common,'span'),function(node){
-            if(!node.parentNode){
-                return;
+        utils.each(domUtils.getElementsByTagName(common,'span'),function(span){
+            if(!span.parentNode || domUtils.isBookmarkNode(span))return;
+            if(/^\s*border\s*:\s*none;\s*/i.test(span.style.cssText)){
+                domUtils.remove(span,true);
+                return
             }
-            function isBorder(n){
-                if(!n)
-                    return false;
-                if(n.tagName != 'SPAN')
-                    return false;
-                var val;
-                if(val = domUtils.getComputedStyle( n, 'border' )){
-                    if(/1px/.test(val) && /solid/.test(val)){
-                        return true;
-                    }
-                }
-                return false;
+            if(/border/i.test(span.style.cssText) && span.parentNode.tagName == 'SPAN' && /border/i.test(span.parentNode.style.cssText)){
+                span.style.cssText = span.style.cssText.replace(/border[^:]*:[^;]+;?/gi,'');
             }
-            function nextSibling(node){
-                var next = node.nextSibling;
-                if(next && domUtils.isBookmarkNode(next)){
-                    next = next.nextSibling;
-                }
-                return next;
-            }
-
-            var span = me.document.createElement('span');
-            span.style.cssText = 'border:1px solid #000';
-            node.parentNode.insertBefore(span,node);
-            while(isBorder(node) && isBorder(nextSibling(node))){
-                var val = utils.trim(node.style.cssText.replace(/border[^:]+:[^;]+;?/gi,''));
-                node.style.cssText = val;
-                var tmp  = node.nextSibling;
-                if(!val){
-                    while(node.firstChild){
-                        if(isBorder(node.firstChild)){
-                            node.firstChild.style.cssText = node.firstChild.style.cssText.replace(/border[^:]+:[^;]+;?/gi,'');
-                        }
-                        span.appendChild(node.firstChild)
-                    }
-                    domUtils.remove(node)
+            var next = span.nextSibling;
+            while(next && next.nodeType == 1 && next.tagName == 'SPAN'){
+                if(domUtils.isBookmarkNode(next)){
+                    span.appendChild(next);
                 }else{
-                    span.appendChild(node);
-                }
-                if(domUtils.isBookmarkNode(tmp)){
-                    node = tmp.nextSibling;
-                    span.appendChild(tmp)
-                }else{
-                    node = tmp;
-                }
-            }
-            if(!span.firstChild){
-                domUtils.remove(span)
-            }else{
-                if(isBorder(span) && isBorder(nextSibling(span))){
-                    node = span.nextSibling;
-                    var val = utils.trim(node.style.cssText.replace(/border[^:]+:[^;]+;?/gi,''));
-                    node.style.cssText = val;
-
-                    if(!val){
-                        while(node.firstChild){
-                            if(isBorder(node.firstChild)){
-                                node.firstChild.style.cssText = node.firstChild.style.cssText.replace(/border[^:]+:[^;];?/,'');
-                            }
-                            span.appendChild(node.firstChild)
-                        }
-                        domUtils.remove(node)
-                    }else{
-                        span.appendChild(node);
+                    if(next.style.cssText == span.style.cssText){
+                        domUtils.moveChild(next,span);
+                        domUtils.remove(next);
                     }
                 }
+                if(span.nextSibling === next)
+                    break;
+                next = span.nextSibling;
             }
-            if(isBorder(node)){
-                var tmpParent = node.parentNode;
-                while(dtd.$inline[tmpParent.tagName]){
-                    if(isBorder(tmpParent)){
-                        var val = utils.trim(node.style.cssText.replace(/border[^:]+:[^;]+;?/gi,''));
-                        node.style.cssText = val;
-                        if(!val){
-                            domUtils.remove(node,true)
-                        }
-                        break;
-                    }
-                    tmpParent = tmpParent.parentNode;
-
-                }
-
-            }
-
         });
-        range.moveToBookmark(bk);
+        rng.moveToBookmark(bk);
     }
     me.addInputRule(function(root){
         utils.each(root.getNodesByTagName('u s del font'),function(node){
