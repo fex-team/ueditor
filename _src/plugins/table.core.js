@@ -710,13 +710,11 @@
             }
 
             // 删除剩余的Cells
-            var cells = this.getCells(range),
-                len = cells.length, cell;
-            while (len--) {
-                cell = cells[len];
-                if (cell !== leftTopCell) {
-                    this.moveContent(leftTopCell, cell);
-                    this.deleteCell(cell);
+            var cells = this.getCells(range);
+            for(var i= 0,ci;ci=cells[i++];){
+                if (ci !== leftTopCell) {
+                    this.moveContent(leftTopCell, ci);
+                    this.deleteCell(ci);
                 }
             }
             // 修改左上角Cell的rowSpan和colSpan，并调整宽度属性设置
