@@ -435,7 +435,7 @@
          *     return false //编辑器没有内容 ，getContent直接返回空
          * })
          */
-        getContent: function (cmd, fn,notSetCursor) {
+        getContent: function (cmd, fn,notSetCursor,ignoreBlank) {
             var me = this;
             if (cmd && utils.isFunction(cmd)) {
                 fn = cmd;
@@ -444,19 +444,10 @@
             if (fn ? !fn() : !this.hasContents()) {
                 return '';
             }
-//            var range = me.selection.getRange(),
-//                address = range.createAddress();
-
             me.fireEvent('beforegetcontent');
-            var root = UE.htmlparser(me.body.innerHTML);
+            var root = UE.htmlparser(me.body.innerHTML,ignoreBlank);
             me.filterOutputRule(root);
             me.fireEvent('aftergetcontent', cmd);
-
-//            try {
-//                !notSetCursor && range.moveToAddress(address).select(true);
-//            } catch (e) {
-//            }
-
             return  root.toHtml();
         },
         /**

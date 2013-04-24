@@ -114,9 +114,9 @@
 
                     bakCssText = me.iframe.style.cssText;
                     me.iframe.style.cssText += 'position:absolute;left:-32768px;top:-32768px;';
-                    var root = UE.htmlparser(me.getContent());
 
-                    var content = me.hasContents() ? root.toHtml(true) : '';
+
+                    var content = me.hasContents() ? me.getContent(null,null,null,true) : '';
 
                     sourceEditor = createSourceEditor(me.iframe.parentNode);
 

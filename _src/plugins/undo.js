@@ -52,15 +52,15 @@ UE.plugins['undo'] = function () {
         this.hasRedo = false;
         this.undo = function () {
             if (this.hasUndo) {
-                var currentScene = this.getScene(),
-                    lastScene = this.list[this.index];
-                //有可能引起undo/redo丢场景
-//                    lastContent = adjustContent(lastScene.content),
-//                    currentContent = adjustContent(currentScene.content);
-
-//                if (lastContent != currentContent) {
-//                    this.save();
-//                }
+//                var currentScene = this.getScene(),
+//                    lastScene = this.list[this.index];
+//                //有可能引起undo/redo丢场景
+////                    lastContent = adjustContent(lastScene.content),
+////                    currentContent = adjustContent(currentScene.content);
+//
+////                if (lastContent != currentContent) {
+////                    this.save();
+////                }
                 if (!this.list[this.index - 1] && this.list.length == 1) {
                     this.reset();
                     return;
@@ -117,9 +117,8 @@ UE.plugins['undo'] = function () {
             var rng = me.selection.getRange(),
                 restoreAddress = rng.createAddress(),
                 rngAddress = rng.createAddress(false,true);
-
             me.fireEvent('beforegetscene');
-            var root = UE.htmlparser(me.body.innerHTML.replace(fillchar, ''));
+            var root = UE.htmlparser(me.body.innerHTML.replace(fillchar, ''),true);
             me.filterOutputRule(root);
             var cont = root.toHtml();
             browser.ie && (cont = cont.replace(/>&nbsp;</g, '><').replace(/\s*</g, '<').replace(/>\s*/g, '>'));

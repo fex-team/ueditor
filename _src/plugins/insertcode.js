@@ -140,7 +140,7 @@ UE.plugins['insertcode'] = function() {
                rng.deleteContents();
             }
             if(!browser.ie){
-                var tmpNode = me.document.createElement('br');
+                var tmpNode = me.document.createElement('br'),pre;
                 rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true);
                 var next = tmpNode.nextSibling;
                 if(!next){
@@ -148,10 +148,67 @@ UE.plugins['insertcode'] = function() {
                 }else{
                     rng.setStartAfter(tmpNode);
                 }
+                pre = tmpNode.previousSibling;
+                var tmp;
+                while(pre ){
+                    tmp = pre;
+                    pre = pre.previousSibling;
+                    if(!pre || pre.nodeName == 'BR'){
+                        pre = tmp;
+                        break;
+                    }
+                }
+                if(pre){
+                    var str = '';
+                    while(pre && pre.nodeName != 'BR' &&  new RegExp('^[ '+domUtils.fillChar+']*$').test(pre.nodeValue)){
+                        str += pre.nodeValue;
+                        pre = pre.nextSibling;
+                    }
+                    if(pre.nodeName != 'BR'){
+                        var match = pre.nodeValue.match(new RegExp('^([ '+domUtils.fillChar+']+)'));
+                        if(match && match[1]){
+                            str += match[1]
+                        }
+
+                    }
+                    if(str){
+                        str = me.document.createTextNode(str);
+                        rng.insertNode(str).setStartAfter(str);
+                    }
+                }
                 rng.collapse(true).select(true);
             }else{
                 var tmpNode = me.document.createElement('br');
-                rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true).select(true);
+                rng.insertNode(tmpNode).setStartAfter(tmpNode);
+                pre = tmpNode.previousSibling;
+                var tmp;
+                while(pre ){
+                    tmp = pre;
+                    pre = pre.previousSibling;
+                    if(!pre || pre.nodeName == 'BR'){
+                        pre = tmp;
+                        break;
+                    }
+                }
+                if(pre){
+                    var str = '';
+                    while(pre && pre.nodeName != 'BR' &&  new RegExp('^[ '+domUtils.fillChar+']*$').test(pre.nodeValue)){
+                        str += pre.nodeValue;
+                        pre = pre.nextSibling;
+                    }
+                    if(pre.nodeName != 'BR'){
+                        var match = pre.nodeValue.match(new RegExp('^([ '+domUtils.fillChar+']+)'));
+                        if(match && match[1]){
+                            str += match[1]
+                        }
+
+                    }
+                    if(str){
+                        str = me.document.createTextNode(str);
+                        rng.insertNode(str).setStartAfter(str);
+                    }
+                }
+                rng.collapse(true).select(true);
             }
             me.fireEvent('saveScene');
             return true;
@@ -171,7 +228,7 @@ UE.plugins['insertcode'] = function() {
 
                 while(start){
                     if(pre.firstChild === start && !domUtils.isBr(start)){
-                        pre.insertBefore(me.document.createTextNode('    '),start)
+                        pre.insertBefore(me.document.createTextNode('    '),start);
 
                         break;
                     }
