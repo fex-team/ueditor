@@ -135,16 +135,32 @@ div.edui-box {
     background-color: white;
     position: relative;
     overflow: visible;
+    border-radius:10px;
 }
 
 .edui-default .edui-editor-toolbarbox {
     position: relative;
     zoom: 1;
+    -webkit-box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
+    box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .edui-default .edui-editor-toolbarboxouter {
     border-bottom: 1px solid #ccc;
-    background: white url(../images/toolbar_bg.png) repeat-x bottom left;
+    background: #eeeeee; /* Old browsers */
+    background: -moz-linear-gradient(top,  #eeeeee 0%, #eeeeee 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #eeeeee 0%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #eeeeee 0%,#eeeeee 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #eeeeee 0%,#eeeeee 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #eeeeee 0%,#eeeeee 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    -webkit-box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
+    box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .edui-default .edui-editor-toolbarboxinner {
@@ -154,7 +170,7 @@ div.edui-box {
 .edui-default .edui-editor-iframeholder {
     position: relative;
     /*for fix ie6 toolbarmsg under iframe bug. relative -> static */
-    /*_position: static !important;*/
+    /*_position: static !important;*
 }
 
 .edui-default .edui-editor-iframeholder textarea {
