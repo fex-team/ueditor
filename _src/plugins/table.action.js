@@ -65,7 +65,7 @@ UE.plugins['table'] = function () {
         'tdvalign':'top',
         'cursorpath':me.options.UEDITOR_HOME_URL + "themes/default/images/cursor_",
         'tableDragable':false,
-        'classList':["back1","back2"]
+        'classList':["ue-table-interlace-color-single","ue-table-interlace-color-double"]
     });
     me.getUETable = getUETable;
     var commands = {
@@ -106,6 +106,7 @@ UE.plugins['table'] = function () {
                 'td,th{padding: 5px 10px;border: 1px solid #DDD;}' +
                 'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
                 'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
+                '.ue-table-interlace-color-single{ background-color: #fcfcfc; } .ue-table-interlace-color-double{ background-color: #f7faff; }' +
                 'td p{margin:0;padding:0;}', me.document);
 
         var tableCopyList, isFullCol, isFullRow;
@@ -536,6 +537,9 @@ UE.plugins['table'] = function () {
                 toggleDraggableState(me, false, "", null);
             }
         });
+        /**
+         * 表格隔行变色
+         */
         me.addListener("interlacetable",function(type,table,classList){
             if(!table) return;
             var me = this,
