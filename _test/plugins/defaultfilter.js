@@ -84,8 +84,8 @@ test("getContent--转换空格，nbsp与空格相间显示", function() {
     var div = te.dom[0];
     editor.render(div);
     editor.focus();
-    //策略改变,原nbsp不做处理
-    var innerHTML = '<p> x  x   x &nbsp;x&nbsp;&nbsp;  &nbsp; </p>';
+    //策略改变,原nbsp不做处理,类似:'<p> d </p>'中的空格会被过滤
+    var innerHTML = '<div>x  x   x &nbsp;x&nbsp;&nbsp;  &nbsp;</div>';
     editor.setContent(innerHTML);
-    equal(editor.getContent(), '<p> x &nbsp;x &nbsp; x &nbsp;x&nbsp;&nbsp; &nbsp;&nbsp; </p>', "转换空格，nbsp与空格相间显示");
+    equal(editor.getContent(), '<p>x &nbsp;x &nbsp; x &nbsp;x&nbsp;&nbsp; &nbsp;&nbsp;</p>', "转换空格，nbsp与空格相间显示");
 });
