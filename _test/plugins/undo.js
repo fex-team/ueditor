@@ -8,8 +8,12 @@ test( 'trace 856 输入文本后撤销按钮不亮', function () {
     range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
     ua.keydown( editor.body );
     range.insertNode( editor.document.createTextNode( 'hello' ) );
-    ua.keyup( editor.body );
-    equal( editor.queryCommandState( 'undo' ), 0, '模拟输入文本后撤销按钮应当高亮' );
+    ua.keydown( editor.body );
+    stop();
+    setTimeout(function(){
+        equal( editor.queryCommandState( 'undo' ), 0, '模拟输入文本后撤销按钮应当高亮' );
+        start();
+    },250);
 } );
 
 /*trace 583,1726*/
