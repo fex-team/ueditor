@@ -11,48 +11,52 @@ module( 'plugins.defaultfilter' );
 test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function() {
     var editor = new UE.Editor({autoClearEmptyNode:true,'autoFloatEnabled':false});
     stop();
-    setTimeout(function(){
+    setTimeout(function () {
         var div = document.body.appendChild(document.createElement('div'));
         editor.render(div);
         te.dom.push(div);
         editor.focus();
         var innerHTML = '<span><span></span><strong>xx</strong><em>em</em><em></em></span><div>xxxx</div>';
-        editor.setContent( innerHTML );
+        editor.setContent(innerHTML);
         editor.execCommand('source');
-        editor.execCommand('source');
-        equal( editor.getContent(), '<p><strong>xx</strong><em>em</em></p><p>xxxx</p>', "span style空，套空的em和不空的em" );
-        //style="color:#c4bd97;"
-        innerHTML = '<span style="color:#c4bd97"><span></span><strong>xx</strong><em>em</em><em></em></span>';
-        editor.setContent( innerHTML );
-        if(ua.browser.ie ==9){
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;" ><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em" );
-        }
-        else{
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em" );
-        }
-        innerHTML = '<span style="color:#c4bd97"></span><strong>xx</strong><em>em</em><em></em>';
-        editor.setContent( innerHTML );
-        /*inline标签上只要有属性就不清理*/
-        if(ua.browser.ie ==9){
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;" ></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空" );
-        }
-        else{
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空" );
-        }
-        innerHTML = '<span style="color:#c4bd97">asdf<strong>xx</strong><em>em</em><em></em></span>';
-        editor.setContent( innerHTML );
-        if(ua.browser.ie ==9){
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;" >asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空" );
-        }
-        else{
-            equal( editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" >asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空" );
-        }
-        innerHTML = '<a href="http://www.baidu.com"></a><a>a</a><strong>xx</strong><em>em</em><em></em>';
-        editor.setContent( innerHTML );
-        equal( editor.getContent(), '<p><a href="http://www.baidu.com" ></a><a>a</a><strong>xx</strong><em>em</em></p>', "a 有href但内容为空,不过滤a标签" );
-        start()
-    },100);
-} );
+        setTimeout(function () {
+            editor.execCommand('source');
+            setTimeout(function () {
+                equal(editor.getContent(), '<p><strong>xx</strong><em>em</em></p><p>xxxx</p>', "span style空，套空的em和不空的em");
+                //style="color:#c4bd97;"
+                innerHTML = '<span style="color:#c4bd97"><span></span><strong>xx</strong><em>em</em><em></em></span>';
+                editor.setContent(innerHTML);
+                if (ua.browser.ie == 9) {
+                    ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color: rgb(196, 189, 151);" ><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em");
+                }
+                else {
+                    ua.checkSameHtml(editor.getContent().toLowerCase(),'<p><span style="color:#c4bd97" ><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em");
+                }
+                innerHTML = '<span style="color:#c4bd97"></span><strong>xx</strong><em>em</em><em></em>';
+                editor.setContent(innerHTML);
+                /*inline标签上只要有属性就不清理*/
+                if (ua.browser.ie == 9) {
+                    ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color: rgb(196, 189, 151);" ></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空");
+                }
+                else {
+                    ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空");
+                }
+                innerHTML = '<span style="color:#c4bd97">asdf<strong>xx</strong><em>em</em><em></em></span>';
+                editor.setContent(innerHTML);
+                if (ua.browser.ie == 9) {
+                    ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color: rgb(196, 189, 151);" >asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空");
+                }
+                else {
+                    ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" >asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空");
+                }
+                innerHTML = '<a href="http://www.baidu.com"></a><a>a</a><strong>xx</strong><em>em</em><em></em>';
+                editor.setContent(innerHTML);
+                ua.checkSameHtml(editor.getContent(), '<p><a href="http://www.baidu.com" ></a><a>a</a><strong>xx</strong><em>em</em></p>', "a 有href但内容为空,不过滤a标签");
+                start()
+            }, 50);
+        }, 50);
+    }, 100);
+});
 
 //editor.options.autoClearEmptyNode
 test("getContent--不去除无用的空标签:autoClearEmptyNode==false", function() {
@@ -70,10 +74,10 @@ test("getContent--不去除无用的空标签:autoClearEmptyNode==false", functi
         editor.setContent(innerHTML);
         ua.manualDeleteFillData(editor.body);
         if (ua.browser.ie == 9) {
-            equal(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97;" ></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
+            ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color: rgb(196, 189, 151);" ></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
         }
         else {
-            equal(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
+            ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
         }
         start();
     },100);

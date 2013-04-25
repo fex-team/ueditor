@@ -4,19 +4,19 @@
 UserAction = {
     beforedispatch:null,
 //    flag : true,
-    isf /* is function ? */:function ( value ) {
+    isf /* is function ? */:function (value) {
         return value && (typeof value == 'function');
     },
-    isb /* is boolean? */:function ( value ) {
+    isb /* is boolean? */:function (value) {
         return value && (typeof value == 'boolean');
     },
-    iso /* is object? */:function ( value ) {
+    iso /* is object? */:function (value) {
         return value && (typeof value == 'object');
     },
-    iss /* is string? */:function ( value ) {
+    iss /* is string? */:function (value) {
         return value && (typeof value == 'string');
     },
-    isn /* is number? */:function ( value ) {
+    isn /* is number? */:function (value) {
         return value && (typeof value == 'number');
     },
     // --------------------------------------------------------------------------
@@ -33,52 +33,52 @@ UserAction = {
      * @private
      * @static
      * @param {HTMLElement}
-        *            target The target of the given event.
+     *            target The target of the given event.
      * @param {String}
-        *            type The type of event to fire. This can be any one of the
+     *            type The type of event to fire. This can be any one of the
      *            following: keyup, keydown, and keypress.
      * @param {Boolean}
-        *            bubbles (Optional) Indicates if the event can be bubbled up.
+     *            bubbles (Optional) Indicates if the event can be bubbled up.
      *            DOM Level 3 specifies that all key events bubble by default.
      *            The default is true.
      * @param {Boolean}
-        *            cancelable (Optional) Indicates if the event can be canceled
+     *            cancelable (Optional) Indicates if the event can be canceled
      *            using preventDefault(). DOM Level 3 specifies that all key
      *            events can be cancelled. The default is true.
      * @param {Window}
-        *            view (Optional) The view containing the target. This is
+     *            view (Optional) The view containing the target. This is
      *            typically the window object. The default is window.
      * @param {Boolean}
-        *            ctrlKey (Optional) Indicates if one of the CTRL keys is
+     *            ctrlKey (Optional) Indicates if one of the CTRL keys is
      *            pressed while the event is firing. The default is false.
      * @param {Boolean}
-        *            altKey (Optional) Indicates if one of the ALT keys is pressed
+     *            altKey (Optional) Indicates if one of the ALT keys is pressed
      *            while the event is firing. The default is false.
      * @param {Boolean}
-        *            shiftKey (Optional) Indicates if one of the SHIFT keys is
+     *            shiftKey (Optional) Indicates if one of the SHIFT keys is
      *            pressed while the event is firing. The default is false.
      * @param {Boolean}
-        *            metaKey (Optional) Indicates if one of the META keys is
+     *            metaKey (Optional) Indicates if one of the META keys is
      *            pressed while the event is firing. The default is false.
      * @param {int}
-        *            keyCode (Optional) The code for the key that is in use. The
+     *            keyCode (Optional) The code for the key that is in use. The
      *            default is 0.
      * @param {int}
-        *            charCode (Optional) The Unicode code for the character
+     *            charCode (Optional) The Unicode code for the character
      *            associated with the key being used. The default is 0.
      */
-    simulateKeyEvent:function ( target /* :HTMLElement */, type /* :String */, bubbles /* :Boolean */, cancelable /* :Boolean */, view /* :Window */, ctrlKey /* :Boolean */, altKey /* :Boolean */, shiftKey /* :Boolean */, metaKey /* :Boolean */, keyCode /* :int */, charCode /* :int */ ) /* :Void */ {
+    simulateKeyEvent:function (target /* :HTMLElement */, type /* :String */, bubbles /* :Boolean */, cancelable /* :Boolean */, view /* :Window */, ctrlKey /* :Boolean */, altKey /* :Boolean */, shiftKey /* :Boolean */, metaKey /* :Boolean */, keyCode /* :int */, charCode /* :int */) /* :Void */ {
         // check target
-        target = typeof target == 'string' ? document.getElementById( target )
+        target = typeof target == 'string' ? document.getElementById(target)
             : target;
-        if ( !target ) {
-            throw new Error( "simulateKeyEvent(): Invalid target." );
+        if (!target) {
+            throw new Error("simulateKeyEvent(): Invalid target.");
         }
 
         // check event type
-        if ( typeof type == 'string' ) {
+        if (typeof type == 'string') {
             type = type.toLowerCase();
-            switch ( type ) {
+            switch (type) {
                 case "keyup":
                 case "keydown":
                 case "keypress":
@@ -88,39 +88,39 @@ UserAction = {
                     break;
                 // @TODO was the fallthrough intentional, if so throw error
                 default:
-                    throw new Error( "simulateKeyEvent(): Event type '" + type
-                        + "' not supported." );
+                    throw new Error("simulateKeyEvent(): Event type '" + type
+                        + "' not supported.");
             }
         } else {
-            throw new Error( "simulateKeyEvent(): Event type must be a string." );
+            throw new Error("simulateKeyEvent(): Event type must be a string.");
         }
 
         // setup default values
-        if ( !this.isb( bubbles ) ) {
+        if (!this.isb(bubbles)) {
             bubbles = true; // all key events bubble
         }
-        if ( !this.isb( cancelable ) ) {
+        if (!this.isb(cancelable)) {
             cancelable = true; // all key events can be cancelled
         }
-        if ( !this.iso( view ) ) {
+        if (!this.iso(view)) {
             view = window; // view is typically window
         }
-        if ( !this.isb( ctrlKey ) ) {
+        if (!this.isb(ctrlKey)) {
             ctrlKey = false;
         }
-        if ( !this.isb( typeof altKey == 'boolean' ) ) {
+        if (!this.isb(typeof altKey == 'boolean')) {
             altKey = false;
         }
-        if ( !this.isb( shiftKey ) ) {
+        if (!this.isb(shiftKey)) {
             shiftKey = false;
         }
-        if ( !this.isb( metaKey ) ) {
+        if (!this.isb(metaKey)) {
             metaKey = false;
         }
-        if ( !(typeof keyCode == 'number') ) {
+        if (!(typeof keyCode == 'number')) {
             keyCode = 0;
         }
-        if ( !(typeof charCode == 'number') ) {
+        if (!(typeof charCode == 'number')) {
             charCode = 0;
         }
 
@@ -128,12 +128,12 @@ UserAction = {
         var customEvent /* :MouseEvent */ = null;
 
         // check for DOM-compliant browsers first
-        if ( this.isf( document.createEvent ) ) {
+        if (this.isf(document.createEvent)) {
 
             try {
 
                 // try to create key event
-                customEvent = document.createEvent( "KeyEvents" );
+                customEvent = document.createEvent("KeyEvents");
 
                 /*
                  * Interesting problem: Firefox implemented a non-standard
@@ -145,10 +145,10 @@ UserAction = {
                  */
                 // TODO: Decipher between Firefox's implementation and a correct
                 // one.
-                customEvent.initKeyEvent( type, bubbles, cancelable, view,
-                    ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode );
+                customEvent.initKeyEvent(type, bubbles, cancelable, view,
+                    ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode);
 
-            } catch ( ex /* :Error */ ) {
+            } catch (ex /* :Error */) {
 
                 /*
                  * If it got here, that means key events aren't officially
@@ -162,16 +162,16 @@ UserAction = {
                 try {
 
                     // try to create generic event - will fail in Safari 2.x
-                    customEvent = document.createEvent( "Events" );
+                    customEvent = document.createEvent("Events");
 
-                } catch ( uierror /* :Error */ ) {
+                } catch (uierror /* :Error */) {
 
                     // the above failed, so create a UIEvent for Safari 2.x
-                    customEvent = document.createEvent( "UIEvents" );
+                    customEvent = document.createEvent("UIEvents");
 
                 } finally {
 
-                    customEvent.initEvent( type, bubbles, cancelable );
+                    customEvent.initEvent(type, bubbles, cancelable);
 
                     // initialize
                     customEvent.view = view;
@@ -187,14 +187,14 @@ UserAction = {
             }
 
             // before dispatch
-            if ( this.beforedispatch && typeof this.beforedispatch == 'function' )
-                this.beforedispatch( customEvent );
+            if (this.beforedispatch && typeof this.beforedispatch == 'function')
+                this.beforedispatch(customEvent);
             this.beforedispatch = null;
 
             // fire the event
-            target.dispatchEvent( customEvent );
+            target.dispatchEvent(customEvent);
 
-        } else if ( this.iso( document.createEventObject ) ) { // IE
+        } else if (this.iso(document.createEventObject)) { // IE
 
             // create an IE event object
             customEvent = document.createEventObject();
@@ -215,16 +215,16 @@ UserAction = {
             customEvent.keyCode = (charCode > 0) ? charCode : keyCode;
 
             // before dispatch
-            if ( this.beforedispatch && typeof this.beforedispatch == 'function' )
-                this.beforedispatch( customEvent );
+            if (this.beforedispatch && typeof this.beforedispatch == 'function')
+                this.beforedispatch(customEvent);
             this.beforedispatch = null;
 
             // fire the event
-            target.fireEvent( "on" + type, customEvent );
+            target.fireEvent("on" + type, customEvent);
 
         } else {
             throw new Error(
-                "simulateKeyEvent(): No event simulation framework present." );
+                "simulateKeyEvent(): No event simulation framework present.");
         }
 
         this.beforedispatch = null;
@@ -240,76 +240,76 @@ UserAction = {
      * @private
      * @static
      * @param {HTMLElement}
-        *            target The target of the given event.
+     *            target The target of the given event.
      * @param {String}
-        *            type The type of event to fire. This can be any one of the
+     *            type The type of event to fire. This can be any one of the
      *            following: click, dblclick, mousedown, mouseup, mouseout,
      *            mouseover, and mousemove.
      * @param {Boolean}
-        *            bubbles (Optional) Indicates if the event can be bubbled up.
+     *            bubbles (Optional) Indicates if the event can be bubbled up.
      *            DOM Level 2 specifies that all mouse events bubble by default.
      *            The default is true.
      * @param {Boolean}
-        *            cancelable (Optional) Indicates if the event can be canceled
+     *            cancelable (Optional) Indicates if the event can be canceled
      *            using preventDefault(). DOM Level 2 specifies that all mouse
      *            events except mousemove can be cancelled. The default is true
      *            for all events except mousemove, for which the default is
      *            false.
      * @param {Window}
-        *            view (Optional) The view containing the target. This is
+     *            view (Optional) The view containing the target. This is
      *            typically the window object. The default is window.
      * @param {int}
-        *            detail (Optional) The number of times the mouse button has
+     *            detail (Optional) The number of times the mouse button has
      *            been used. The default value is 1.
      * @param {int}
-        *            screenX (Optional) The x-coordinate on the screen at which
+     *            screenX (Optional) The x-coordinate on the screen at which
      *            point the event occured. The default is 0.
      * @param {int}
-        *            screenY (Optional) The y-coordinate on the screen at which
+     *            screenY (Optional) The y-coordinate on the screen at which
      *            point the event occured. The default is 0.
      * @param {int}
-        *            clientX (Optional) The x-coordinate on the client at which
+     *            clientX (Optional) The x-coordinate on the client at which
      *            point the event occured. The default is 0.
      * @param {int}
-        *            clientY (Optional) The y-coordinate on the client at which
+     *            clientY (Optional) The y-coordinate on the client at which
      *            point the event occured. The default is 0.
      * @param {Boolean}
-        *            ctrlKey (Optional) Indicates if one of the CTRL keys is
+     *            ctrlKey (Optional) Indicates if one of the CTRL keys is
      *            pressed while the event is firing. The default is false.
      * @param {Boolean}
-        *            altKey (Optional) Indicates if one of the ALT keys is pressed
+     *            altKey (Optional) Indicates if one of the ALT keys is pressed
      *            while the event is firing. The default is false.
      * @param {Boolean}
-        *            shiftKey (Optional) Indicates if one of the SHIFT keys is
+     *            shiftKey (Optional) Indicates if one of the SHIFT keys is
      *            pressed while the event is firing. The default is false.
      * @param {Boolean}
-        *            metaKey (Optional) Indicates if one of the META keys is
+     *            metaKey (Optional) Indicates if one of the META keys is
      *            pressed while the event is firing. The default is false.
      * @param {int}
-        *            button (Optional) The button being pressed while the event is
+     *            button (Optional) The button being pressed while the event is
      *            executing. The value should be 0 for the primary mouse button
      *            (typically the left button), 1 for the terciary mouse button
      *            (typically the middle button), and 2 for the secondary mouse
      *            button (typically the right button). The default is 0.
      * @param {HTMLElement}
-        *            relatedTarget (Optional) For mouseout events, this is the
+     *            relatedTarget (Optional) For mouseout events, this is the
      *            element that the mouse has moved to. For mouseover events,
      *            this is the element that the mouse has moved from. This
      *            argument is ignored for all other events. The default is null.
      */
-    simulateMouseEvent:function ( target /* :HTMLElement */, type /* :String */, bubbles /* :Boolean */, cancelable /* :Boolean */, view /* :Window */, detail /* :int */, screenX /* :int */, screenY /* :int */, clientX /* :int */, clientY /* :int */, ctrlKey /* :Boolean */, altKey /* :Boolean */, shiftKey /* :Boolean */, metaKey /* :Boolean */, button /* :int */, relatedTarget /* :HTMLElement */ ) /* :Void */ {
+    simulateMouseEvent:function (target /* :HTMLElement */, type /* :String */, bubbles /* :Boolean */, cancelable /* :Boolean */, view /* :Window */, detail /* :int */, screenX /* :int */, screenY /* :int */, clientX /* :int */, clientY /* :int */, ctrlKey /* :Boolean */, altKey /* :Boolean */, shiftKey /* :Boolean */, metaKey /* :Boolean */, button /* :int */, relatedTarget /* :HTMLElement */) /* :Void */ {
 
         // check target
-        target = typeof target == 'string' ? document.getElementById( target )
+        target = typeof target == 'string' ? document.getElementById(target)
             : target;
-        if ( !target ) {
-            throw new Error( "simulateMouseEvent(): Invalid target." );
+        if (!target) {
+            throw new Error("simulateMouseEvent(): Invalid target.");
         }
 
         // check event type
-        if ( this.iss( type ) ) {
+        if (this.iss(type)) {
             type = type.toLowerCase();
-            switch ( type ) {
+            switch (type) {
                 case "mouseover":
                 case "mouseout":
                 case "mousedown":
@@ -323,53 +323,53 @@ UserAction = {
                 case "blur":
                     break;
                 default:
-                    throw new Error( "simulateMouseEvent(): Event type '" + type
-                        + "' not supported." );
+                    throw new Error("simulateMouseEvent(): Event type '" + type
+                        + "' not supported.");
             }
         } else {
             throw new Error(
-                "simulateMouseEvent(): Event type must be a string." );
+                "simulateMouseEvent(): Event type must be a string.");
         }
 
         // setup default values
-        if ( !this.isb( bubbles ) ) {
+        if (!this.isb(bubbles)) {
             bubbles = true; // all mouse events bubble
         }
-        if ( !this.isb( cancelable ) ) {
+        if (!this.isb(cancelable)) {
             cancelable = (type != "mousemove"); // mousemove is the only one
             // that can't be cancelled
         }
-        if ( !this.iso( view ) ) {
+        if (!this.iso(view)) {
             view = window; // view is typically window
         }
-        if ( !this.isn( detail ) ) {
+        if (!this.isn(detail)) {
             detail = 1; // number of mouse clicks must be at least one
         }
-        if ( !this.isn( screenX ) ) {
+        if (!this.isn(screenX)) {
             screenX = 0;
         }
-        if ( !this.isn( screenY ) ) {
+        if (!this.isn(screenY)) {
             screenY = 0;
         }
-        if ( !this.isn( clientX ) ) {
+        if (!this.isn(clientX)) {
             clientX = 0;
         }
-        if ( !this.isn( clientY ) ) {
+        if (!this.isn(clientY)) {
             clientY = 0;
         }
-        if ( !this.isb( ctrlKey ) ) {
+        if (!this.isb(ctrlKey)) {
             ctrlKey = false;
         }
-        if ( !this.isb( altKey ) ) {
+        if (!this.isb(altKey)) {
             altKey = false;
         }
-        if ( !this.isb( shiftKey ) ) {
+        if (!this.isb(shiftKey)) {
             shiftKey = false;
         }
-        if ( !this.isb( metaKey ) ) {
+        if (!this.isb(metaKey)) {
             metaKey = false;
         }
-        if ( !this.isn( button ) ) {
+        if (!this.isn(button)) {
             button = 0;
         }
 
@@ -377,20 +377,20 @@ UserAction = {
         var customEvent /* :MouseEvent */ = null;
 
         // check for DOM-compliant browsers first
-        if ( this.isf( document.createEvent ) ) {
+        if (this.isf(document.createEvent)) {
 
-            customEvent = document.createEvent( "MouseEvents" );
+            customEvent = document.createEvent("MouseEvents");
 
             // Safari 2.x (WebKit 418) still doesn't implement initMouseEvent()
-            if ( this.browser.ie !== 9 && customEvent.initMouseEvent ) {
-                customEvent.initMouseEvent( type, bubbles, cancelable, view,
+            if (this.browser.ie !== 9 && customEvent.initMouseEvent) {
+                customEvent.initMouseEvent(type, bubbles, cancelable, view,
                     detail, screenX, screenY, clientX, clientY, ctrlKey,
-                    altKey, shiftKey, metaKey, button, relatedTarget );
+                    altKey, shiftKey, metaKey, button, relatedTarget);
             } else { // Safari
 
                 // the closest thing available in Safari 2.x is UIEvents
-                customEvent = document.createEvent( "UIEvents" );
-                customEvent.initEvent( type, bubbles, cancelable );
+                customEvent = document.createEvent("UIEvents");
+                customEvent.initEvent(type, bubbles, cancelable);
                 customEvent.view = view;
                 customEvent.detail = detail;
                 customEvent.screenX = screenX;
@@ -413,23 +413,23 @@ UserAction = {
              * proprietary toElement property for mouseout event and fromElement
              * property for mouseover event.
              */
-            if ( relatedTarget && !customEvent.relatedTarget ) {
-                if ( type == "mouseout" ) {
+            if (relatedTarget && !customEvent.relatedTarget) {
+                if (type == "mouseout") {
                     customEvent.toElement = relatedTarget;
-                } else if ( type == "mouseover" ) {
+                } else if (type == "mouseover") {
                     customEvent.fromElement = relatedTarget;
                 }
             }
 
             // before dispatch
-            if ( this.beforedispatch && typeof this.beforedispatch == 'function' )
-                this.beforedispatch( customEvent );
+            if (this.beforedispatch && typeof this.beforedispatch == 'function')
+                this.beforedispatch(customEvent);
             this.beforedispatch = null;
 
             // fire the event
-            target.dispatchEvent( customEvent );
+            target.dispatchEvent(customEvent);
 
-        } else if ( this.iso( document.createEventObject ) ) { // IE
+        } else if (this.iso(document.createEventObject)) { // IE
 
             // create an IE event object
             customEvent = document.createEventObject();
@@ -449,7 +449,7 @@ UserAction = {
             customEvent.shiftKey = shiftKey;
 
             // fix button property for IE's wacky implementation
-            switch ( button ) {
+            switch (button) {
                 case 0:
                     customEvent.button = 1;
                     break;
@@ -471,15 +471,15 @@ UserAction = {
             customEvent.relatedTarget = relatedTarget;
 
             // before dispatch
-            if ( this.beforedispatch && typeof this.beforedispatch == 'function' )
-                this.beforedispatch( customEvent );
+            if (this.beforedispatch && typeof this.beforedispatch == 'function')
+                this.beforedispatch(customEvent);
             this.beforedispatch = null;
             // fire the event
-            target.fireEvent( "on" + type, customEvent );
+            target.fireEvent("on" + type, customEvent);
 
         } else {
             throw new Error(
-                "simulateMouseEvent(): No event simulation framework present." );
+                "simulateMouseEvent(): No event simulation framework present.");
         }
     },
 
@@ -491,80 +491,80 @@ UserAction = {
      * Simulates a mouse event on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to click on.
+     *            target The element to click on.
      * @param {String}
-        *            type The type of event to fire. This can be any one of the
+     *            type The type of event to fire. This can be any one of the
      *            following: click, dblclick, mousedown, mouseup, mouseout,
      *            mouseover, and mousemove.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method mouseEvent
      * @static
      */
-    fireMouseEvent:function ( target /* :HTMLElement */, type /* :String */, options /* :Object */ ) /* :Void */ {
+    fireMouseEvent:function (target /* :HTMLElement */, type /* :String */, options /* :Object */) /* :Void */ {
         options = options || {};
-        this.simulateMouseEvent( target, type, options.bubbles,
+        this.simulateMouseEvent(target, type, options.bubbles,
             options.cancelable, options.view, options.detail,
             options.screenX, options.screenY, options.clientX,
             options.clientY, options.ctrlKey, options.altKey,
             options.shiftKey, options.metaKey, options.button,
-            options.relatedTarget );
+            options.relatedTarget);
     },
 
     /**
      * Simulates a click on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to click on.
+     *            target The element to click on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method click
      * @static
      */
-    click:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "click", options );
+    click:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
+        this.fireMouseEvent(target, "click", options);
     },
 
     /**
      * Simulates a double click on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to double click on.
+     *            target The element to double click on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method dblclick
      * @static
      */
-    dblclick:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "dblclick", options );
+    dblclick:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
+        this.fireMouseEvent(target, "dblclick", options);
     },
 
     /**
      * Simulates a mousedown on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to act on.
+     *            target The element to act on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method mousedown
      * @static
      */
-    mousedown:function ( target /* :HTMLElement */, options /* Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "mousedown", options );
+    mousedown:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireMouseEvent(target, "mousedown", options);
     },
 
     /**
      * Simulates a mousemove on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to act on.
+     *            target The element to act on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method mousemove
      * @static
      */
-    mousemove:function ( target /* :HTMLElement */, options /* Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "mousemove", options );
+    mousemove:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireMouseEvent(target, "mousemove", options);
     },
 
     /**
@@ -576,14 +576,14 @@ UserAction = {
      * YAHOO.util.Event.getRelatedTarget() to work correctly in both browsers.
      *
      * @param {HTMLElement}
-        *            target The element to act on.
+     *            target The element to act on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method mouseout
      * @static
      */
-    mouseout:function ( target /* :HTMLElement */, options /* Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "mouseout", options );
+    mouseout:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireMouseEvent(target, "mouseout", options);
     },
 
     /**
@@ -596,87 +596,87 @@ UserAction = {
      * browsers.
      *
      * @param {HTMLElement}
-        *            target The element to act on.
+     *            target The element to act on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method mouseover
      * @static
      */
-    mouseover:function ( target /* :HTMLElement */, options /* Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "mouseover", options );
+    mouseover:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireMouseEvent(target, "mouseover", options);
     },
 
     /**
      * Simulates a mouseup on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to act on.
+     *            target The element to act on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method mouseup
      * @static
      */
-    mouseup:function ( target /* :HTMLElement */, options /* Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "mouseup", options );
+    mouseup:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireMouseEvent(target, "mouseup", options);
     },
-    mouseenter:function ( target /* :HTMLElement */, options /* Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "mouseenter", options );
+    mouseenter:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireMouseEvent(target, "mouseenter", options);
     },
-    mouseleave:function ( target /* :HTMLElement */, options /* Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "mouseleave", options );
+    mouseleave:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireMouseEvent(target, "mouseleave", options);
     },
     /**
      * Simulates a contextmenu on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to show contextmenu.
+     *            target The element to show contextmenu.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method contextmenu
      * @static
      */
-    contextmenu:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "contextmenu", options );
+    contextmenu:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
+        this.fireMouseEvent(target, "contextmenu", options);
     },
     /**
      * Simulates a blur on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to show blur.
+     *            target The element to show blur.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method blur
      * @static
      */
-    blur:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
-        this.fireMouseEvent( target, "blur", options );
+    blur:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
+        this.fireMouseEvent(target, "blur", options);
     },
-    dragto:function ( target, options ) {
+    dragto:function (target, options) {
         var me = this;
-        me.mousemove( target, {
+        me.mousemove(target, {
             clientX:options.startX,
             clientY:options.startY
-        } );
-        setTimeout( function () {
-            me.mousedown( target, {
+        });
+        setTimeout(function () {
+            me.mousedown(target, {
                 clientX:options.startX,
                 clientY:options.startY
-            } );
-            setTimeout( function () {
-                me.mousemove( target, {
+            });
+            setTimeout(function () {
+                me.mousemove(target, {
                     clientX:options.endX,
                     clientY:options.endY
-                } );
-                setTimeout( function () {
-                    me.mouseup( target, {
+                });
+                setTimeout(function () {
+                    me.mouseup(target, {
                         clientX:options.endX,
                         clientY:options.endY
-                    } );
-                    if ( options.callback )
+                    });
+                    if (options.callback)
                         options.callback();
-                }, options.aftermove || 20 );
-            }, options.beforemove || 20 );
-        }, options.beforestart || 50 );
+                }, options.aftermove || 20);
+            }, options.beforemove || 20);
+        }, options.beforestart || 50);
     },
 
     // --------------------------------------------------------------------------
@@ -690,63 +690,63 @@ UserAction = {
      *
      * @private
      * @param {String}
-        *            type The type of event ("keyup", "keydown" or "keypress").
+     *            type The type of event ("keyup", "keydown" or "keypress").
      * @param {HTMLElement}
-        *            target The target of the event.
+     *            target The target of the event.
      * @param {Object}
-        *            options Options for the event. Either keyCode or charCode are
+     *            options Options for the event. Either keyCode or charCode are
      *            required.
      * @method fireKeyEvent
      * @static
      */
-    fireKeyEvent:function ( type /* :String */, target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
+    fireKeyEvent:function (type /* :String */, target /* :HTMLElement */, options /* :Object */) /* :Void */ {
         options = options || {};
-        this.simulateKeyEvent( target, type, options.bubbles,
+        this.simulateKeyEvent(target, type, options.bubbles,
             options.cancelable, options.view, options.ctrlKey,
             options.altKey, options.shiftKey, options.metaKey,
-            options.keyCode, options.charCode );
+            options.keyCode, options.charCode);
     },
 
     /**
      * Simulates a keydown event on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to act on.
+     *            target The element to act on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method keydown
      * @static
      */
-    keydown:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
-        this.fireKeyEvent( "keydown", target, options );
+    keydown:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
+        this.fireKeyEvent("keydown", target, options);
     },
 
     /**
      * Simulates a keypress on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to act on.
+     *            target The element to act on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method keypress
      * @static
      */
-    keypress:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
-        this.fireKeyEvent( "keypress", target, options );
+    keypress:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
+        this.fireKeyEvent("keypress", target, options);
     },
 
     /**
      * Simulates a keyup event on a particular element.
      *
      * @param {HTMLElement}
-        *            target The element to act on.
+     *            target The element to act on.
      * @param {Object}
-        *            options Additional event options (use DOM standard names).
+     *            options Additional event options (use DOM standard names).
      * @method keyup
      * @static
      */
-    keyup:function ( target /* :HTMLElement */, options /* Object */ ) /* :Void */ {
-        this.fireKeyEvent( "keyup", target, options );
+    keyup:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireKeyEvent("keyup", target, options);
     },
 
     /**
@@ -764,7 +764,7 @@ UserAction = {
      *            测试完毕执行步骤，默认为QUnit.start()
      *
      */
-    frameExt:function ( op ) {
+    frameExt:function (op) {
         stop();
         op = typeof op == 'function' ? {
             ontest:op
@@ -773,35 +773,35 @@ UserAction = {
             : op.id, fid = 'iframe#' + id;
 
         op.finish = function () {
-            pw.$( fid ).unbind();
-            setTimeout( function () {
-                pw.$( 'div#div' + id ).remove();
+            pw.$(fid).unbind();
+            setTimeout(function () {
+                pw.$('div#div' + id).remove();
                 start();
-            }, 20 );
+            }, 20);
         };
 
-        if ( pw.$( fid ).length == 0 ) {
+        if (pw.$(fid).length == 0) {
             /* 添加frame，部分情况下，iframe没有边框，为了可以看到效果，添加一个带边框的div */
-            pw.$( pw.document.body ).append( '<div id="div' + id + '"></div>' );
-            pw.$( 'div#div' + id ).append( '<iframe id="' + id + '"></iframe>' );
+            pw.$(pw.document.body).append('<div id="div' + id + '"></div>');
+            pw.$('div#div' + id).append('<iframe id="' + id + '"></iframe>');
         }
-        op.onafterstart && op.onafterstart( $( 'iframe#f' )[0] );
-        pw.$( 'script' ).each( function () {
-            if ( this.src && this.src.indexOf( 'import.php' ) >= 0 ) {
-                url = this.src.split( 'import.php' )[1];
+        op.onafterstart && op.onafterstart($('iframe#f')[0]);
+        pw.$('script').each(function () {
+            if (this.src && this.src.indexOf('import.php') >= 0) {
+                url = this.src.split('import.php')[1];
             }
-        } );
-        pw.$( fid ).one( 'load',
-            function ( e ) {
+        });
+        pw.$(fid).one('load',
+            function (e) {
                 var w = e.target.contentWindow;
-                var h = setInterval( function () {
-                    if ( w.baidu ) {// 等待加载完成，IE6下这地方总出问题
-                        clearInterval( h );
-                        op.ontest( w, w.frameElement );
+                var h = setInterval(function () {
+                    if (w.baidu) {// 等待加载完成，IE6下这地方总出问题
+                        clearInterval(h);
+                        op.ontest(w, w.frameElement);
                     }
-                }, 20 );
+                }, 20);
                 // 找到当前操作的iframe，然后call ontest
-            } ).attr( 'src', cpath + 'frame.php' + url );
+            }).attr('src', cpath + 'frame.php' + url);
     },
 
     /**
@@ -810,15 +810,15 @@ UserAction = {
      *
      * @static
      */
-    isEqualArray:function ( array1, array2 ) {
-        if ( '[object Array]' != Object.prototype.toString.call( array1 )
-            || '[object Array]' != Object.prototype.toString.call( array2 ) )
+    isEqualArray:function (array1, array2) {
+        if ('[object Array]' != Object.prototype.toString.call(array1)
+            || '[object Array]' != Object.prototype.toString.call(array2))
             return (array1 === array2);
-        else if ( array1.length != array2.length )
+        else if (array1.length != array2.length)
             return false;
         else {
-            for ( var i in array1 ) {
-                if ( array1[i] != array2[i] )
+            for (var i in array1) {
+                if (array1[i] != array2[i])
                     return false;
             }
             return true;
@@ -835,16 +835,16 @@ UserAction = {
     commonData:{// 针对测试文件的路径而不是UserAction的路径
         "testdir":'../../',
         datadir:(function () {
-            return location.href.split( "/_test/" )[0] + "/_test/tools/data/";
+            return location.href.split("/_test/")[0] + "/_test/tools/data/";
         })(),
         currentPath:function () {
-            var params = location.search.substring( 1 ).split( '&' );
-            for ( var i = 0; i < params.length; i++ ) {
+            var params = location.search.substring(1).split('&');
+            for (var i = 0; i < params.length; i++) {
                 var p = params[i];
-                if ( p.split( '=' )[0] == 'case' ) {
-                    var casepath = p.split( '=' )[1].split( '.' ).join( '/' );
-                    return location.href.split( '/_test/' )[0] + '/_test/'
-                        + casepath.substring( 0, casepath.lastIndexOf( '/' ) )
+                if (p.split('=')[0] == 'case') {
+                    var casepath = p.split('=')[1].split('.').join('/');
+                    return location.href.split('/_test/')[0] + '/_test/'
+                        + casepath.substring(0, casepath.lastIndexOf('/'))
                         + '/';
                 }
             }
@@ -852,117 +852,117 @@ UserAction = {
         }
     },
 
-    importsrc:function ( src, callback, matcher, exclude, win ) {
+    importsrc:function (src, callback, matcher, exclude, win) {
         win = win || window;
         var doc = win.document;
 
-        var srcpath = location.href.split( "/_test/" )[0]
+        var srcpath = location.href.split("/_test/")[0]
             + "/_test/tools/br/import.php";
         var param0 = src;
         var ps = {
             f:src
         };
-        if ( exclude )
+        if (exclude)
             ps.e = exclude;
         var param1 = exclude || "";
         /**
          * IE下重复载入会出现无法执行情况
          */
-        if ( win.execScript ) {
-            $.get( srcpath, ps, function ( data ) {
-                win.execScript( data );
-            } );
+        if (win.execScript) {
+            $.get(srcpath, ps, function (data) {
+                win.execScript(data);
+            });
         } else {
-            var head = doc.getElementsByTagName( 'head' )[0];
-            var sc = doc.createElement( 'script' );
+            var head = doc.getElementsByTagName('head')[0];
+            var sc = doc.createElement('script');
             sc.type = 'text/javascript';
             sc.src = srcpath + "?f=" + param0 + "&e=" + param1;
-            head.appendChild( sc );
+            head.appendChild(sc);
         }
 
         matcher = matcher || src;
-        var mm = matcher.split( "," )[0].split( "." );
-        var h = setInterval( function () {
+        var mm = matcher.split(",")[0].split(".");
+        var h = setInterval(function () {
             var p = win;
-            for ( var i = 0; i < mm.length; i++ ) {
-                if ( typeof (p[mm[i]]) == 'undefined' ) {
+            for (var i = 0; i < mm.length; i++) {
+                if (typeof (p[mm[i]]) == 'undefined') {
                     // console.log(mm[i]);
                     return;
                 }
                 p = p[mm[i]];
             }
-            clearInterval( h );
-            if ( callback && 'function' == typeof callback )
+            clearInterval(h);
+            if (callback && 'function' == typeof callback)
                 callback();
-        }, 20 );
+        }, 20);
     },
 
     /* 用于加载css文件，如果没有加载完毕则不执行回调函数 */
-    loadcss:function ( url, callback, classname, style, value ) {
-        var links = document.getElementsByTagName( 'link' );
-        for ( var link in links ) {
-            if ( link.href == url ) {
+    loadcss:function (url, callback, classname, style, value) {
+        var links = document.getElementsByTagName('link');
+        for (var link in links) {
+            if (link.href == url) {
                 callback();
                 return;
             }
         }
-        var head = document.getElementsByTagName( 'head' )[0];
-        var link = head.appendChild( document.createElement( 'link' ) );
-        link.setAttribute( "rel", "stylesheet" );
-        link.setAttribute( "type", "text/css" );
-        link.setAttribute( "href", url );
-        var div = document.body.appendChild( document.createElement( "div" ) );
-        $( document ).ready(
+        var head = document.getElementsByTagName('head')[0];
+        var link = head.appendChild(document.createElement('link'));
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("type", "text/css");
+        link.setAttribute("href", url);
+        var div = document.body.appendChild(document.createElement("div"));
+        $(document).ready(
             function () {
                 div.className = classname || 'cssloaded';
-                var h = setInterval( function () {
-                    if ( $( div ).css( style || 'width' ) == value
-                        || $( div ).css( style || 'width' ) == '20px' ) {
-                        clearInterval( h );
-                        document.body.removeChild( div );
-                        setTimeout( callback, 20 );
+                var h = setInterval(function () {
+                    if ($(div).css(style || 'width') == value
+                        || $(div).css(style || 'width') == '20px') {
+                        clearInterval(h);
+                        document.body.removeChild(div);
+                        setTimeout(callback, 20);
                     }
-                }, 20 );
-            } );
+                }, 20);
+            });
     },
 
     /**
      * options supported
      */
-    delayhelper:function ( oncheck, onsuccess, onfail, timeout ) {
+    delayhelper:function (oncheck, onsuccess, onfail, timeout) {
         onsuccess = onsuccess || oncheck.onsuccess;
         onfail = onfail || oncheck.onfail || function () {
-            window.QUnit.fail( 'timeout wait for timeout : ' + timeout + 'ms' );
+            window.QUnit.fail('timeout wait for timeout : ' + timeout + 'ms');
             start();
         };
         timeout = timeout || oncheck.timeout || 10000;
 
         oncheck = (typeof oncheck == 'function') ? oncheck : oncheck.oncheck;
-        var h1 = setInterval( function () {
-            if ( !oncheck() )
+        var h1 = setInterval(function () {
+            if (!oncheck())
                 return;
             else {
-                clearInterval( h1 );
-                clearTimeout( h2 );
+                clearInterval(h1);
+                clearTimeout(h2);
                 typeof onsuccess == "function" && onsuccess();
             }
-        }, 20 );
-        var h2 = setTimeout( function () {
-            clearInterval( h1 );
-            clearTimeout( h2 );
+        }, 20);
+        var h2 = setTimeout(function () {
+            clearInterval(h1);
+            clearTimeout(h2);
             onfail();
-        }, timeout );
+        }, timeout);
     },
 
     browser:(function () {
         var win = window;
 
-        var numberify = function ( s ) {
-            var c = 0;
-            return parseFloat( s.replace( /\./g, function () {
-                return (c++ == 1) ? '' : '.';
-            } ) );
-        },
+        var numberify = function (s) {
+                var c = 0;
+                return parseFloat(s.replace(/\./g, function () {
+                    return (c++ == 1) ? '' : '.';
+                }));
+            },
 
             nav = win && win.navigator,
 
@@ -1111,86 +1111,86 @@ UserAction = {
 
             m;
 
-        o.secure = href && (href.toLowerCase().indexOf( "https" ) === 0);
+        o.secure = href && (href.toLowerCase().indexOf("https") === 0);
 
-        if ( ua ) {
+        if (ua) {
 
-            if ( (/windows|win32/i).test( ua ) ) {
+            if ((/windows|win32/i).test(ua)) {
                 o.os = 'windows';
-            } else if ( (/macintosh/i).test( ua ) ) {
+            } else if ((/macintosh/i).test(ua)) {
                 o.os = 'macintosh';
-            } else if ( (/rhino/i).test( ua ) ) {
+            } else if ((/rhino/i).test(ua)) {
                 o.os = 'rhino';
             }
 
             // Modern KHTML browsers should qualify as Safari X-Grade
-            if ( (/KHTML/).test( ua ) ) {
+            if ((/KHTML/).test(ua)) {
                 o.webkit = 1;
             }
-            if ( window.external && /(\d+\.\d)/.test( external.max_version ) ) {
+            if (window.external && /(\d+\.\d)/.test(external.max_version)) {
 
-                o.maxthon = parseFloat( RegExp['\x241'] );
-                if ( /MSIE/.test( ua ) ) {
+                o.maxthon = parseFloat(RegExp['\x241']);
+                if (/MSIE/.test(ua)) {
                     o.maxthonIE = 1;
                     o.maxthon = 0;
                 }
 
             }
             // Modern WebKit browsers are at least X-Grade
-            m = ua.match( /AppleWebKit\/([^\s]*)/ );
-            if ( m && m[1] ) {
-                o.webkit = numberify( m[1] );
+            m = ua.match(/AppleWebKit\/([^\s]*)/);
+            if (m && m[1]) {
+                o.webkit = numberify(m[1]);
 
                 // Mobile browser check
-                if ( / Mobile\//.test( ua ) ) {
+                if (/ Mobile\//.test(ua)) {
                     o.mobile = "Apple"; // iPhone or iPod Touch
                 } else {
-                    m = ua.match( /NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/ );
-                    if ( m ) {
+                    m = ua.match(/NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/);
+                    if (m) {
                         o.mobile = m[0]; // Nokia N-series, Android, webOS,
                         // ex:
                         // NokiaN95
                     }
                 }
 
-                var m1 = ua.match( /Safari\/([^\s]*)/ );
-                if ( m1 && m1[1] ) // Safari
-                    o.safari = numberify( m1[1] );
-                m = ua.match( /Chrome\/([^\s]*)/ );
-                if ( o.safari && m && m[1] ) {
-                    o.chrome = numberify( m[1] ); // Chrome
+                var m1 = ua.match(/Safari\/([^\s]*)/);
+                if (m1 && m1[1]) // Safari
+                    o.safari = numberify(m1[1]);
+                m = ua.match(/Chrome\/([^\s]*)/);
+                if (o.safari && m && m[1]) {
+                    o.chrome = numberify(m[1]); // Chrome
                 } else {
-                    m = ua.match( /AdobeAIR\/([^\s]*)/ );
-                    if ( m ) {
+                    m = ua.match(/AdobeAIR\/([^\s]*)/);
+                    if (m) {
                         o.air = m[0]; // Adobe AIR 1.0 or better
                     }
                 }
             }
 
-            if ( !o.webkit ) { // not webkit
+            if (!o.webkit) { // not webkit
                 // @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316;
                 // fi; U;
                 // try get firefox and it's ver
                 // ssr)
-                m = ua.match( /Opera[\s\/]([^\s]*)/ );
-                if ( m && m[1] ) {
-                    m = ua.match( /Version[\s\/]([^\s]*)/ );
-                    o.opera = numberify( m[1] );
-                    m = ua.match( /Opera Mini[^;]*/ );
-                    if ( m ) {
+                m = ua.match(/Opera[\s\/]([^\s]*)/);
+                if (m && m[1]) {
+                    m = ua.match(/Version[\s\/]([^\s]*)/);
+                    o.opera = numberify(m[1]);
+                    m = ua.match(/Opera Mini[^;]*/);
+                    if (m) {
                         o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
                     }
                 } else { // not opera or webkit
-                    m = ua.match( /MSIE\s([^;]*)/ );
-                    if ( m && m[1] ) {
-                        o.ie = numberify( m[1] );
+                    m = ua.match(/MSIE\s([^;]*)/);
+                    if (m && m[1]) {
+                        o.ie = numberify(m[1]);
                     } else { // not opera, webkit, or ie
-                        m = ua.match( /Gecko\/([^\s]*)/ );
-                        if ( m ) {
+                        m = ua.match(/Gecko\/([^\s]*)/);
+                        if (m) {
                             o.gecko = 1; // Gecko detected, look for revision
-                            m = ua.match( /rv:([^\s\)]*)/ );
-                            if ( m && m[1] ) {
-                                o.gecko = numberify( m[1] );
+                            m = ua.match(/rv:([^\s\)]*)/);
+                            if (m && m[1]) {
+                                o.gecko = numberify(m[1]);
                             }
                         }
                     }
@@ -1199,8 +1199,7 @@ UserAction = {
         }
 
         return o;
-    }
-        )
+    })
         (),
 
     /**
@@ -1211,106 +1210,106 @@ UserAction = {
             list:[],
             start:function () {
                 var self = this;
-                $( this ).bind( 'next', function () {
-                    setTimeout( function () {// 避免太深的堆栈
-                        if ( self.list.length == 0 )
+                $(this).bind('next', function () {
+                    setTimeout(function () {// 避免太深的堆栈
+                        if (self.list.length == 0)
                             start();
                         else
                             self.list.shift()();
-                    }, 0 );
-                } );
+                    }, 0);
+                });
                 self.next();
             },
-            add:function ( func ) {
-                this.list.push( func );
+            add:function (func) {
+                this.list.push(func);
             },
-            next:function ( delay ) {
+            next:function (delay) {
                 var self = this;
-                if ( delay ) {
-                    setTimeout( function () {
-                        $( self ).trigger( 'next' );
-                    }, delay );
+                if (delay) {
+                    setTimeout(function () {
+                        $(self).trigger('next');
+                    }, delay);
                 } else
-                    $( this ).trigger( 'next' );
+                    $(this).trigger('next');
             }
         };
         return check;
     },
-    getHTML:function ( co ) {
-        var div = document.createElement( 'div' ), h;
-        if ( !co )
+    getHTML:function (co) {
+        var div = document.createElement('div'), h;
+        if (!co)
             return 'null';
-        div.appendChild( co.cloneNode( true ) );
+        div.appendChild(co.cloneNode(true));
         h = div.innerHTML.toLowerCase();
 
-        h = h.replace( /[\r\n\t\u200b\ufeff]/g, '' ); // Remove line feeds and tabs
-        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore
+        h = h.replace(/[\r\n\t\u200b\ufeff]/g, ''); // Remove line feeds and tabs
+        h = h.replace(/ (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"'); // Restore
         // attribs on IE
         return h;
     },
-    getChildHTML:function ( co ) {
+    getChildHTML:function (co) {
 
         var h = co.innerHTML.toLowerCase();
 
-        h = h.replace( /[\r\n\t\u200b\ufeff]/g, '' ); // Remove line feeds and tabs
-        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+        h = h.replace(/[\r\n\t\u200b\ufeff]/g, ''); // Remove line feeds and tabs
+        h = h.replace(/ (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"'); // Restore attribs on IE
 
-        return h.replace( /\u200B/g, '' );
+        return h.replace(/\u200B/g, '');
     },
-    getIndex:function ( node ) {
+    getIndex:function (node) {
         var childNodes = node.parentNode.childNodes, i = 0;
-        while ( childNodes[i] !== node )
+        while (childNodes[i] !== node)
             i++;
         return i;
     },
-    checkResult:function ( range, sc, ec, so, eo, collapsed, descript ) {
+    checkResult:function (range, sc, ec, so, eo, collapsed, descript) {
         descript = descript ? descript : '';
-        equal( range.collapsed, collapsed, "check collapsed --" + descript );
-        ok( range.startContainer === sc, "check startContainer--" + descript );
-        ok( range.endContainer === ec, "check endContainer--" + descript );
-        equal( range.startOffset, so, "check startOffset--" + descript );
-        equal( range.endOffset, eo, "check endOffset--" + descript );
+        equal(range.collapsed, collapsed, "check collapsed --" + descript);
+        ok(range.startContainer === sc, "check startContainer--" + descript);
+        ok(range.endContainer === ec, "check endContainer--" + descript);
+        equal(range.startOffset, so, "check startOffset--" + descript);
+        equal(range.endOffset, eo, "check endOffset--" + descript);
     },
-    isSameRange:function ( rangeA, rangeB, descript ) {
+    isSameRange:function (rangeA, rangeB, descript) {
         descript = descript ? descript : '';
-        equal( rangeA.collapsed, rangeB.collapsed, "check collapsed --" + descript );
-        ok( rangeA.document === rangeB.document, "check document--" + descript );
-        ok( rangeA.startContainer === rangeB.startContainer, "check startContainer--" + descript );
-        ok( rangeA.endContainer === rangeB.endContainer, "check endContainer--" + descript );
-        equal( rangeA.startOffset, rangeB.startOffset, "check startOffset--" + descript );
-        equal( rangeA.endOffset, rangeB.endOffset, "check endOffset--" + descript );
+        equal(rangeA.collapsed, rangeB.collapsed, "check collapsed --" + descript);
+        ok(rangeA.document === rangeB.document, "check document--" + descript);
+        ok(rangeA.startContainer === rangeB.startContainer, "check startContainer--" + descript);
+        ok(rangeA.endContainer === rangeB.endContainer, "check endContainer--" + descript);
+        equal(rangeA.startOffset, rangeB.startOffset, "check startOffset--" + descript);
+        equal(rangeA.endOffset, rangeB.endOffset, "check endOffset--" + descript);
     },
-    manualDeleteFillData:function ( node ) {
-            var childs = node.childNodes;
-            for ( var i = 0; i < childs.length; i++ ) {
-                var fillData = childs[i];
-                if ( (fillData.nodeType == 3) && ( fillData.data == domUtils.fillChar ) ) {
-                    domUtils.remove( fillData );
-                    fillData = null;
-                    
-                }
-                else
-                    this.manualDeleteFillData( fillData );
+    manualDeleteFillData:function (node) {
+        var childs = node.childNodes;
+        for (var i = 0; i < childs.length; i++) {
+            var fillData = childs[i];
+            if ((fillData.nodeType == 3) && ( fillData.data == domUtils.fillChar )) {
+                domUtils.remove(fillData);
+                fillData = null;
+
             }
+            else
+                this.manualDeleteFillData(fillData);
+        }
 
 
     },
-    cssStyleToDomStyle:function ( cssName ) {
-        var test = document.createElement( 'div' ).style,
+    cssStyleToDomStyle:function (cssName) {
+        var test = document.createElement('div').style,
             cssFloat = test.cssFloat != undefined ? 'cssFloat'
                 : test.styleFloat != undefined ? 'styleFloat'
                 : 'float',
             cache = { 'float':cssFloat };
 
-        function replacer( match ) {
-            return match.charAt( 1 ).toUpperCase();
+        function replacer(match) {
+            return match.charAt(1).toUpperCase();
         }
 
 //        return function( cssName ) {
-        return cache[cssName] || (cache[cssName] = cssName.replace( /-./g, replacer ) );
+        return cache[cssName] || (cache[cssName] = cssName.replace(/-./g, replacer) );
 //        };
     },
-    isSameStyle:function ( elementA, elementB ) {
+    isSameStyle:function (elementA, elementB) {
 //        var styleA = elementA.style.cssText,
 //            styleB = elementB.style.cssText;
 //        if ( this.browser.ie && this.browser.version == 6 ) {
@@ -1348,123 +1347,124 @@ UserAction = {
 //        }
 //        return !record.join( '' );
         function indexOf(array, item, at) {
-            for(var i=at||0,l = array.length;i<l;i++){
-                if(array[i] === item){
+            for (var i = at || 0, l = array.length; i < l; i++) {
+                if (array[i] === item) {
                     return i;
                 }
             }
             return -1;
         }
-        var styleA = elementA.style.cssText.replace(/( ?; ?)/g,';').replace(/( ?: ?)/g,':'),
-            styleB = elementB.style.cssText.replace(/( ?; ?)/g,';').replace(/( ?: ?)/g,':');
-        if(browser.opera){
+
+        var styleA = elementA.style.cssText.replace(/( ?; ?)/g, ';').replace(/( ?: ?)/g, ':'),
+            styleB = elementB.style.cssText.replace(/( ?; ?)/g, ';').replace(/( ?: ?)/g, ':');
+        if (browser.opera) {
             styleA = elementA.style;
             styleB = elementB.style;
-            if(styleA.length != styleB.length)
+            if (styleA.length != styleB.length)
                 return 0;
-            for(var p in styleA){
-                if(/^(\d+|csstext)$/i.test(p))
+            for (var p in styleA) {
+                if (/^(\d+|csstext)$/i.test(p))
                     continue;
-                if(styleA[p] != styleB[p])
+                if (styleA[p] != styleB[p])
                     return 0;
             }
             return 1;
         }
 
 
-        if(!styleA || !styleB){
-            return styleA == styleB ? 1: 0;
+        if (!styleA || !styleB) {
+            return styleA == styleB ? 1 : 0;
         }
         styleA = styleA.split(';');
         styleB = styleB.split(';');
 
-        if(styleA.length != styleB.length)
+        if (styleA.length != styleB.length)
             return 0;
-        for(var j =0;j<styleB.length;j++){
-            if(styleB[j].toLowerCase().indexOf("color")>-1&&styleB[j].toLowerCase().indexOf("rgb")>-1){
-                var color = this.formatColor(styleB[j].substr(styleB[j].indexOf("rgb"),styleB[j].length));
-                styleB[j] = styleB[j].replace(styleB[j].substr(styleB[j].indexOf("rgb"),styleB[j].length),color);
+        for (var j = 0; j < styleB.length; j++) {
+            if (styleB[j].toLowerCase().indexOf("color") > -1 && styleB[j].toLowerCase().indexOf("rgb") > -1) {
+                var color = this.formatColor(styleB[j].substr(styleB[j].indexOf("rgb"), styleB[j].length));
+                styleB[j] = styleB[j].replace(styleB[j].substr(styleB[j].indexOf("rgb"), styleB[j].length), color);
             }
         }
-        for(var i = 0,ci;ci=styleA[i++];){
-            if(ci.toLowerCase().indexOf("color")>-1&&ci.toLowerCase().indexOf("rgb")>-1){
-                var color = this.formatColor(ci.substr(ci.indexOf("rgb"),ci.length));
-                ci = ci.replace(ci.substr(ci.indexOf("rgb"),ci.length),color);
+        for (var i = 0, ci; ci = styleA[i++];) {
+            if (ci.toLowerCase().indexOf("color") > -1 && ci.toLowerCase().indexOf("rgb") > -1) {
+                var color = this.formatColor(ci.substr(ci.indexOf("rgb"), ci.length));
+                ci = ci.replace(ci.substr(ci.indexOf("rgb"), ci.length), color);
             }
-            if(indexOf(styleB,ci) == -1){
+            if (indexOf(styleB, ci) == -1) {
 
                 return 0;
-               
+
             }//styleA[0].substr(styleA[0].indexOf("rga"),styleA[0].length)
         }
         return 1;
     },
 
 
-	formatColor:function(color) {
-            var reg1 = /^\#[\da-f]{6}$/i,
-	        reg2 = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/,
-	        keyword = {
-	            black: '#000000',
-	            silver: '#c0c0c0',
-	            gray: '#808080',
-	            white: '#ffffff',
-	            maroon: '#800000',
-	            red: '#ff0000',
-	            purple: '#800080',
-	            fuchsia: '#ff00ff',
-	            green: '#008000',
-	            lime: '#00ff00',
-	            olive: '#808000',
-	            yellow: '#ffff0',
-	            navy: '#000080',
-	            blue: '#0000ff',
-	            teal: '#008080',
-	            aqua: '#00ffff'
-	        };
-	        if(reg1.test(color)) {
-	            // #RRGGBB 直接返回
-	            return color;
-	        } else if(reg2.test(color)) {
-	            // 非IE中的 rgb(0, 0, 0)
-	            for (var s, i=1, color="#"; i<4; i++) {
-	                s = parseInt(RegExp["\x24"+ i]).toString(16);
-	                color += ("00"+ s).substr(s.length);
-	            }
-	            return color;
-	        } else if(/^\#[\da-f]{3}$/.test(color)) {
-	            // 简写的颜色值: #F00
-	            var s1 = color.charAt(1),
-	                s2 = color.charAt(2),
-	                s3 = color.charAt(3);
-	            return "#"+ s1 + s1 + s2 + s2 + s3 + s3;
-	        }else if(keyword[color])
-	            return keyword[color];
+    formatColor:function (color) {
+        var reg1 = /^\#[\da-f]{6}$/i,
+            reg2 = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/,
+            keyword = {
+                black:'#000000',
+                silver:'#c0c0c0',
+                gray:'#808080',
+                white:'#ffffff',
+                maroon:'#800000',
+                red:'#ff0000',
+                purple:'#800080',
+                fuchsia:'#ff00ff',
+                green:'#008000',
+                lime:'#00ff00',
+                olive:'#808000',
+                yellow:'#ffff0',
+                navy:'#000080',
+                blue:'#0000ff',
+                teal:'#008080',
+                aqua:'#00ffff'
+            };
+        if (reg1.test(color)) {
+            // #RRGGBB 直接返回
+            return color;
+        } else if (reg2.test(color)) {
+            // 非IE中的 rgb(0, 0, 0)
+            for (var s, i = 1, color = "#"; i < 4; i++) {
+                s = parseInt(RegExp["\x24" + i]).toString(16);
+                color += ("00" + s).substr(s.length);
+            }
+            return color;
+        } else if (/^\#[\da-f]{3}$/.test(color)) {
+            // 简写的颜色值: #F00
+            var s1 = color.charAt(1),
+                s2 = color.charAt(2),
+                s3 = color.charAt(3);
+            return "#" + s1 + s1 + s2 + s2 + s3 + s3;
+        } else if (keyword[color])
+            return keyword[color];
 
-	        return "";
+        return "";
 
-	},
-    hasSameAttrs:function ( nodeA, nodeB ) {
-        if ( nodeA.tagName != nodeB.tagName )
+    },
+    hasSameAttrs:function (nodeA, nodeB) {
+        if (nodeA.tagName != nodeB.tagName)
             return 0;
         var thisAttribs = nodeA.attributes,
             otherAttribs = nodeB.attributes;
-        if ( thisAttribs.length != otherAttribs.length )
+        if (thisAttribs.length != otherAttribs.length)
             return 0;
-        if ( thisAttribs.length == 0 )
+        if (thisAttribs.length == 0)
             return 1;
         var attrA, attrB;
-        for ( var i = 0; attrA = thisAttribs[i++]; ) {
-            if ( attrA.nodeName == 'style' ) {
-                if ( this.isSameStyle( nodeA, nodeB ) ) {
+        for (var i = 0; attrA = thisAttribs[i++];) {
+            if (attrA.nodeName == 'style') {
+                if (this.isSameStyle(nodeA, nodeB)) {
                     continue
                 } else {
                     return 0;
                 }
             }
-            if ( !ua.browser.ie || attrA.specified ) {
+            if (!ua.browser.ie || attrA.specified) {
                 attrB = nodeB.attributes[attrA.nodeName];
-                if ( !attrB ) {
+                if (!attrB) {
                     return 0;
                 }
             }
@@ -1476,10 +1476,10 @@ UserAction = {
      *清除空Text节点
      */
 
-    clearWhiteNode:function(node){
-        for(var i=0;i<node.childNodes.length;i++){
+    clearWhiteNode:function (node) {
+        for (var i = 0; i < node.childNodes.length; i++) {
             var tmpNode = node.childNodes[i];
-            if(tmpNode.nodeType==3 && !tmpNode.length){
+            if (tmpNode.nodeType == 3 && !tmpNode.length) {
                 tmpNode.parentNode.removeChild(tmpNode);
                 i--;
             }
@@ -1489,70 +1489,70 @@ UserAction = {
      *检查两个节点（包含所有子节点）是否具有相同的属性
      */
     flag:true,
-    checkAllChildAttribs:function ( nodeA, nodeB ) {
+    checkAllChildAttribs:function (nodeA, nodeB) {
         var k = nodeA.childNodes.length;
-        if ( k != nodeB.childNodes.length ){
-            if(ua.browser.opera){
+        if (k != nodeB.childNodes.length) {
+            if (ua.browser.opera) {
                 this.clearWhiteNode(nodeA);
                 k = nodeA.childNodes.length;
-                if ( k != nodeB.childNodes.length )
+                if (k != nodeB.childNodes.length)
                     this.flag = false;
             }
             else
                 this.flag = false;
         }
-        if ( !this.flag )
+        if (!this.flag)
             return this.flag;
-        while ( k ) {
+        while (k) {
             var tmpNodeA = nodeA.childNodes[k - 1];
             var tmpNodeB = nodeB.childNodes[k - 1];
             k--;
 
-            if ( tmpNodeA.nodeType == 3 || tmpNodeB.nodeType == 3 || tmpNodeA.nodeType == 8 || tmpNodeB.nodeType == 8 )
+            if (tmpNodeA.nodeType == 3 || tmpNodeB.nodeType == 3 || tmpNodeA.nodeType == 8 || tmpNodeB.nodeType == 8)
                 continue;
-            if ( !this.hasSameAttrs( tmpNodeA, tmpNodeB ) ) {
+            if (!this.hasSameAttrs(tmpNodeA, tmpNodeB)) {
                 this.flag = false;
                 break;
 
             }
 
-            this.checkAllChildAttribs( tmpNodeA, tmpNodeB );
+            this.checkAllChildAttribs(tmpNodeA, tmpNodeB);
         }
         return this.flag;
     },
-    haveSameAllChildAttribs:function ( nodeA, nodeB ) {
+    haveSameAllChildAttribs:function (nodeA, nodeB) {
         this.flag = true;
-        return this.checkAllChildAttribs( nodeA, nodeB );
+        return this.checkAllChildAttribs(nodeA, nodeB);
     },
     /*查看传入的html是否与传入的元素ele具有相同的style*/
-    checkHTMLSameStyle:function ( html, doc, ele, descript ) {
-        var tagEle = doc.createElement( ele.tagName );
+    checkHTMLSameStyle:function (html, doc, ele, descript) {
+        var tagEle = doc.createElement(ele.tagName);
         tagEle.innerHTML = html;
         /*会有一些不可见字符，在比较前提前删掉*/
-        this.manualDeleteFillData( ele );
-        ok( this.haveSameAllChildAttribs( ele, tagEle ), descript );
+        this.manualDeleteFillData(ele);
+        ok(this.haveSameAllChildAttribs(ele, tagEle), descript);
 //        ok(this.equalsNode(ele.innerHMTL,html),descript);
     },
 
 
-    equalsNode:function ( na, nb ) {
-        function compare( nodeA, nodeB ) {
-            if ( nodeA.nodeType != nodeB.nodeType ) {
+    equalsNode:function (na, nb) {
+        function compare(nodeA, nodeB) {
+            if (nodeA.nodeType != nodeB.nodeType) {
                 return 0;
             }
-            if ( nodeA.nodeType == 3 ) {
+            if (nodeA.nodeType == 3) {
                 return  nodeA.nodeValue == nodeB.nodeValue
             }
-            if ( domUtils.isSameElement( nodeA, nodeB ) ) {
-                if ( !nodeA.firstChild && !nodeB.firstChild ) {
+            if (domUtils.isSameElement(nodeA, nodeB)) {
+                if (!nodeA.firstChild && !nodeB.firstChild) {
                     return 1;
                 }
-                if ( nodeA.firstChild && !nodeB.firstChild || !nodeA.firstChild && nodeB.firstChild ) {
+                if (nodeA.firstChild && !nodeB.firstChild || !nodeA.firstChild && nodeB.firstChild) {
                     return 0
                 }
-                for ( var i = 0, ai, bi; ai = nodeA.childNodes[i], bi = nodeB.childNodes[i++]; ) {
+                for (var i = 0, ai, bi; ai = nodeA.childNodes[i], bi = nodeB.childNodes[i++];) {
 
-                    if ( !compare( ai, bi ) ) {
+                    if (!compare(ai, bi)) {
                         return 0
                     }
                 }
@@ -1562,37 +1562,37 @@ UserAction = {
             }
         }
 
-        return compare( domUtils.createElement( document, 'div', {
+        return compare(domUtils.createElement(document, 'div', {
             'innerHTML':na
-        } ), domUtils.createElement( document, 'div', {
+        }), domUtils.createElement(document, 'div', {
             'innerHTML':nb
-        } ) );
+        }));
     },
 
 
     getSelectedText:function () {
-        if ( window.getSelection ) {
+        if (window.getSelection) {
             // This technique is the most likely to be standardized.
             // getSelection() returns a Selection object, which we do not document.
             return window.getSelection().toString();
         }
-        else if ( document.getSelection ) {
+        else if (document.getSelection) {
             // This is an older, simpler technique that returns a string
             return document.getSelection();
         }
-        else if ( document.selection ) {
+        else if (document.selection) {
             // This is the IE-specific technique.
             // We do not document the IE selection property or TextRange objects.
             return document.selection.createRange().text;
         }
     },
-    findPosition:function ( oElement ) {
+    findPosition:function (oElement) {
         var x2 = 0;
         var y2 = 0;
         var width = oElement.offsetWidth;
         var height = oElement.offsetHeight;
-        if ( typeof( oElement.offsetParent ) != 'undefined' ) {
-            for ( var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent ) {
+        if (typeof( oElement.offsetParent ) != 'undefined') {
+            for (var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent) {
                 posX += oElement.offsetLeft;
                 posY += oElement.offsetTop;
             }
@@ -1607,154 +1607,155 @@ UserAction = {
         }
     },
 
-    checkElementPath:function ( arr1, arr2, descript ) {
-        if ( !descript )
+    checkElementPath:function (arr1, arr2, descript) {
+        if (!descript)
             descript = '';
         var index = arr1.length;
-        if ( index != arr2.length )
-            ok( false, '路径深度不相同' );
+        if (index != arr2.length)
+            ok(false, '路径深度不相同');
         else {
 
-            while ( index > 0 )
-                equal( arr1[--index ], arr2[index ], descript + '---第' + index + '个元素' + arr1[index] );
+            while (index > 0)
+                equal(arr1[--index ], arr2[index ], descript + '---第' + index + '个元素' + arr1[index]);
         }
     },
     getBrowser:function () {
         var browser = "";
-        if ( this.browser.ie == 6 )
+        if (this.browser.ie == 6)
             browser = 'ie6';
-        if ( this.browser.ie == 7 )
+        if (this.browser.ie == 7)
             browser = 'ie7';
-        if ( this.browser.ie == 8 )
+        if (this.browser.ie == 8)
             browser = 'ie8';
-        if ( this.browser.ie == 9 )
+        if (this.browser.ie == 9)
             browser = 'ie9';
-        if ( this.browser.safari )
+        if (this.browser.safari)
             browser = 'safari';
-        if ( this.browser.firefox )
+        if (this.browser.firefox)
             browser = 'firefox';
-        if ( this.browser.chrome )
+        if (this.browser.chrome)
             browser = 'chrome';
-        if ( this.browser.maxthon ) {
+        if (this.browser.maxthon) {
             browser = 'maxthon';
         }
-        if ( this.browser.maxthonIE )
+        if (this.browser.maxthonIE)
             browser = 'maxIE';
-        if ( this.browser.opera )
+        if (this.browser.opera)
             browser = 'opera';
         return browser;
     },
-    getFloatStyle:function ( ele ) {
-        if ( this.browser.ie )
+    getFloatStyle:function (ele) {
+        if (this.browser.ie)
             return ele.style['styleFloat'];
         else
             return ele.style['cssFloat'];
     },
 
-    readTxt:function(name,f){
+    readTxt:function (name, f) {
         var args = {};
-        args['name']='./txt/'+name;
-        $.ajax( {
-            url: 'read.php',
+        args['name'] = './txt/' + name;
+        $.ajax({
+            url:'read.php',
             type:'post',
             data:args,
-            success:function ( msg ) {
+            success:function (msg) {
                 f(msg);
             },
-            error:function ( xhr, msg ) {
+            error:function (xhr, msg) {
                 f(null);
             }
-        } );
-    }
-    ,checkLowerCase:function(stringA,stringB){
-        if(!(stringA||stringB))
+        });
+    }, checkLowerCase:function (stringA, stringB) {
+        if (!(stringA || stringB))
             return true;
-        else if(!stringA||!stringB)
+        else if (!stringA || !stringB)
             return false;
-        else{
-            return stringA.toLowerCase()==stringB.toLowerCase();
+        else {
+            return stringA.toLowerCase() == stringB.toLowerCase();
         }
-    }
-    ,removeEndSemicolon:function(styleValue){
-        if(styleValue.length-1==styleValue.lastIndexOf(';'))
-             styleValue = styleValue.substring(0,styleValue.length-1);
+    }, removeEndSemicolon:function (styleValue) {
+        if (styleValue.length - 1 == styleValue.lastIndexOf(';'))
+            styleValue = styleValue.substring(0, styleValue.length - 1);
         return styleValue;
-    }
-    ,checkNodeStyle:function(nodeA ,nodeB){
-        var nodeAStyle = this.removeEndSemicolon(nodeA.getAttr("style").replace(/\s+/g,"")).split(";");
-        var nodeBStyle = this.removeEndSemicolon(nodeB.getAttr("style").replace(/\s+/g,"")).split(";");
+    }, checkNodeStyle:function (nodeA, nodeB) {
+        var nodeAStyle = this.removeEndSemicolon(nodeA.getAttr("style").replace(/\s+/g, "")).split(";");
+        var nodeBStyle = this.removeEndSemicolon(nodeB.getAttr("style").replace(/\s+/g, "")).split(";");
         var lengthA = nodeAStyle.length;
         var lengthB = nodeBStyle.length;
-        if(!(lengthA&&lengthB))
+        if (!(lengthA && lengthB))
             return true;
-        else if(lengthA!=lengthB)
+        else if (lengthA != lengthB)
             return false;
-        else{
-            for(var i=0;i<lengthA;i++){
-                if( nodeAStyle[i].match(/\w+\s*:/)){
-                    var styleName =  nodeAStyle[i].match(/\w+\s*:/)[0].replace(/\s*:/,"");
-                    if(nodeA.getStyle(styleName).toLowerCase().replace(/\s+/g,"")!=nodeB.getStyle(styleName).toLowerCase().replace(/\s+/g,""))
-                        return false ;
+        else {
+            for (var i = 0; i < lengthA; i++) {
+                if (nodeAStyle[i].match(/\w+\s*:/)) {
+                    var styleName = nodeAStyle[i].match(/\w+\s*:/)[0].replace(/\s*:/, "");
+                    if (nodeA.getStyle(styleName).toLowerCase().replace(/\s+/g, "") != nodeB.getStyle(styleName).toLowerCase().replace(/\s+/g, ""))
+                        return false;
                 }
             }
         }
         return true;
-    }
-    ,checkSameNodeAttrs:function(nodeA,nodeB){
-        var lengthA = Object.keys(nodeA.attrs).length;
-        var lengthB = Object.keys(nodeB.attrs).length;
-        if(!(lengthA&&lengthB))
+    }, getPropertyCount:function (o) {
+        var n, count = 0;
+        for (n in o) {
+            if (o.hasOwnProperty(n)) {
+                count++;
+            }
+        }
+        return count;
+    }, checkSameNodeAttrs:function (nodeA, nodeB) {
+        var lengthA = this.getPropertyCount(nodeA.attrs);
+        var lengthB = this.getPropertyCount(nodeB.attrs);
+        if (!(lengthA && lengthB))
             return true;
-        else if(lengthA!=lengthB)
+        else if (lengthA != lengthB)
             return false;
-        else{
-            for(var p in nodeA.attrs){
-                if(!nodeB.getAttr(p))
+        else {
+            for (var p in nodeA.attrs) {
+                if (!nodeB.getAttr(p))
                     return false;
-                else if(p.toLowerCase()=="style"){
-                    if(!this.checkNodeStyle(nodeA,nodeB))
+                else if (p.toLowerCase() == "style") {
+                    if (!this.checkNodeStyle(nodeA, nodeB))
                         return false;
                 }
-                else{
-                    if(!nodeA.getAttr(p).toLowerCase()==nodeB.getAttr(p).toLowerCase())
+                else {
+                    if (!nodeA.getAttr(p).toLowerCase() == nodeB.getAttr(p).toLowerCase())
                         return false;
                 }
             }
         }
         return true;
-    }
-    ,checkChildren:function(nodeA,nodeB){
-        if(!(nodeA.children||nodeB.children))
+    }, checkChildren:function (nodeA, nodeB) {
+        if (!(nodeA.children || nodeB.children))
             return true;
-        else if(!(nodeA.children&&nodeB.children))
-            return false ;
-        else if(nodeA.children.length!=nodeB.children.length)
+        else if (!(nodeA.children && nodeB.children))
             return false;
-        else{
+        else if (nodeA.children.length != nodeB.children.length)
+            return false;
+        else {
             var lengthA = nodeA.children.length;
-            for(var i = 0 ;i<lengthA;i++){
-                if(!this.checkSameNode(nodeA.children[i],nodeB.children[i]))
+            for (var i = 0; i < lengthA; i++) {
+                if (!this.checkSameNode(nodeA.children[i], nodeB.children[i]))
                     return false;
             }
         }
         return true;
-    }
-    ,checkSameNode:function(nodeA,nodeB){
-        if(!this.checkSameNodeAttrs(nodeA,nodeB))
+    }, checkSameNode:function (nodeA, nodeB) {
+        if (!this.checkSameNodeAttrs(nodeA, nodeB))
             return false;
-        else if(!this.checkChildren(nodeA,nodeB))
+        else if (!this.checkChildren(nodeA, nodeB))
             return false;
-        else if(nodeA.data!=nodeB.data)
+        else if (nodeA.data != nodeB.data)
             return false;
-        else if(!this.checkLowerCase(nodeA.tagName,nodeB.tagName))
+        else if (!this.checkLowerCase(nodeA.tagName, nodeB.tagName))
             return false;
-        else if(!this.checkLowerCase(nodeA.type,nodeB.type))
+        else if (!this.checkLowerCase(nodeA.type, nodeB.type))
             return false;
         else
             return true;
-    }
-    ,checkSameHtml:function(stringA,stringB,scholium){
-        ok(this.checkSameNode(UE.htmlparser(stringA),UE.htmlparser(stringB)),scholium);
+    }, checkSameHtml:function (stringA, stringB, scholium) {
+        ok(this.checkSameNode(UE.htmlparser(stringA), UE.htmlparser(stringB)), scholium);
     }
 };
 var ua = UserAction;
