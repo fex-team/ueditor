@@ -236,9 +236,9 @@ UE.plugins['undo'] = function () {
                 return;
             }
             if (me.undoManger.list.length == 0) {
-                me.fireEvent('contentchange');
+//                me.fireEvent('contentchange');
                 me.undoManger.save(true);
-                return;
+                //return;
             }
             clearTimeout(saveSceneTimer);
             saveSceneTimer = setTimeout(function(){
