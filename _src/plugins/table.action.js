@@ -119,7 +119,7 @@ UE.plugins['table'] = function () {
 
                 var ut = getUETableBySelected(me);
                 if (ut && ut.selectedTds.length) {
-                    me.fireEvent('saveScene');
+
                     if (ut.isFullCol()) {
                         me.execCommand('deletecol')
                     } else if (ut.isFullRow()) {
@@ -139,8 +139,9 @@ UE.plugins['table'] = function () {
                     if (table) {
                         range.setStart(table.rows[0].cells[0], 0).setCursor(false, true);
                     }
+                    me.fireEvent('saveScene');
                 }
-                me.fireEvent('saveScene');
+
             }
 
             if (keyCode == 46) {
