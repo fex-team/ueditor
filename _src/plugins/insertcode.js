@@ -51,9 +51,9 @@ UE.plugins['insertcode'] = function() {
                     var frag = rng.extractContents();
                     var div = me.document.createElement();
                     div.appendChild(frag);
-                    var code = '';
+
                     utils.each(UE.filterNode(UE.htmlparser(div.innerHTML),me.options.filterTxtRules).children,function(node){
-                        code += node.innerText() + '<br/>'
+                        code += (node.type == 'element' ? node.innerText() : node.data) + '<br/>'
                     });
                 }
                 me.execCommand('inserthtml','<pre id="coder"class="brush:'+lang+';toolbar:false">'+code+'</pre>',true);
