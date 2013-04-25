@@ -8,6 +8,7 @@
  */
 
 UE.plugins['undo'] = function () {
+    var saveSceneTimer;
     var me = this,
         maxUndoCount = me.options.maxUndoCount || 20,
         maxInputCount = me.options.maxInputCount || 20,
@@ -132,6 +133,7 @@ UE.plugins['undo'] = function () {
             }
         };
         this.save = function (notCompareRange,notSetCursor) {
+            clearTimeout(saveSceneTimer);
             var currentScene = this.getScene(notSetCursor),
                 lastScene = this.list[this.index];
             //内容相同位置相同不存
@@ -150,6 +152,7 @@ UE.plugins['undo'] = function () {
             this.clearKey();
             //跟新undo/redo状态
             this.update();
+
         };
         this.update = function () {
             this.hasRedo = !!this.list[this.index + 1];
@@ -219,30 +222,45 @@ UE.plugins['undo'] = function () {
         "Redo":"ctrl+89" //redo
 
     });
+    var isCollapsed = true;
     me.addListener('keydown', function (type, evt) {
+
+        var me = this;
         var keyCode = evt.keyCode || evt.which;
         if (!keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey) {
             if (inputType)
                 return;
-            if (me.undoManger.list.length == 0 || ((keyCode == 8 || keyCode == 46) && lastKeyCode != keyCode)) {
-                me.fireEvent('contentchange');
-                me.undoManger.save(true);
-                lastKeyCode = keyCode;
+            if(!me.selection.getRange().collapsed){
+                me.undoManger.save(false,true);
+                isCollapsed = false;
                 return;
             }
-            //trace:856
-            //修正第一次输入后，回退，再输入要到keycont>maxInputCount才能在回退的问题
-            if (me.undoManger.list.length == 2 && me.undoManger.index == 0 && keycont == 0) {
-                me.undoManger.list.splice(1, 1);
-                me.undoManger.update();
+            if (me.undoManger.list.length == 0) {
+                me.fireEvent('contentchange');
+                me.undoManger.save(true);
+                return;
             }
-            lastKeyCode = keyCode;
-            keycont++;
-            if (keycont >= maxInputCount || me.undoManger.mousedown) {
+            clearTimeout(saveSceneTimer);
+            saveSceneTimer = setTimeout(function(){
                 if (me.selection.getRange().collapsed)
                     me.fireEvent('contentchange');
                 me.undoManger.save(false,true);
-                me.undoManger.mousedown = false;
+                me.fireEvent('selectionchange');
+            },300);
+//            //trace:856
+//            //修正第一次输入后，回退，再输入要到keycont>maxInputCount才能在回退的问题
+//            if (me.undoManger.list.length == 2 && me.undoManger.index == 0 && keycont == 0) {
+//                me.undoManger.list.splice(1, 1);
+//                me.undoManger.update();
+//            }
+            lastKeyCode = keyCode;
+            keycont++;
+            if (keycont >= maxInputCount ) {
+
+                if (me.selection.getRange().collapsed)
+                    me.fireEvent('contentchange');
+                me.undoManger.save(false,true);
+                me.fireEvent('selectionchange');
             }
         }
     });
@@ -251,14 +269,15 @@ UE.plugins['undo'] = function () {
         if (!keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey) {
             if (inputType)
                 return;
-            if (me.undoManger.list.length == 1  ) {
-                me.undoManger.save(true);
+            if(!isCollapsed){
+                me.undoManger.save(false,true);
+                isCollapsed = true;
             }
 
 
         }
     });
-    me.addListener('mousedown',function(){
-        me.undoManger.mousedown = true;
-    })
+//    me.addListener('mousedown',function(){
+//        me.undoManger.mousedown = true;
+//    })
 };
