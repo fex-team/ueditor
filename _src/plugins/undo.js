@@ -201,8 +201,8 @@ UE.plugins['undo'] = function () {
     var keys = {
             //  /*Backspace*/ 8:1, /*Delete*/ 46:1,
             /*Shift*/ 16:1, /*Ctrl*/ 17:1, /*Alt*/ 18:1,
-            37:1, 38:1, 39:1, 40:1,
-            13:1 /*enter*/
+            37:1, 38:1, 39:1, 40:1
+
         },
         keycont = 0,
         lastKeyCode;
@@ -246,7 +246,7 @@ UE.plugins['undo'] = function () {
                     me.fireEvent('contentchange');
                 me.undoManger.save(false,true);
                 me.fireEvent('selectionchange');
-            },300);
+            },200);
 //            //trace:856
 //            //修正第一次输入后，回退，再输入要到keycont>maxInputCount才能在回退的问题
 //            if (me.undoManger.list.length == 2 && me.undoManger.index == 0 && keycont == 0) {
@@ -273,8 +273,6 @@ UE.plugins['undo'] = function () {
                 me.undoManger.save(false,true);
                 isCollapsed = true;
             }
-
-
         }
     });
 //    me.addListener('mousedown',function(){
