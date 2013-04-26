@@ -53,7 +53,8 @@ EventBase.prototype = {
      * @example
      * editor.fireEvent("selectionchange");
      */
-    fireEvent:function (types) {
+    fireEvent:function () {
+        var types = arguments[0];
         types = utils.trim(types).split(' ');
         for (var i = 0, ti; ti = types[i++];) {
             var listeners = getListener(this, ti),
