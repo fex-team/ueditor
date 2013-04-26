@@ -1023,6 +1023,7 @@ UE.plugins['table'] = function () {
             }
             hideDragLine(me);
             getDragLine(me, me.document);
+            me.fireEvent('saveScene');
             showDragLineAt(state, startTd);
             mousedown = true;
             //拖动开始
@@ -1055,6 +1056,7 @@ UE.plugins['table'] = function () {
         //拖拽状态下的mouseUP
         if ((!browser.ie || (browser.ie && browser.version > 7)) && onDrag && dragTd) {
             dragLine = me.document.getElementById('ue_tableDragLine');
+
             var dragTdPos = domUtils.getXY(dragTd),
                 dragLinePos = domUtils.getXY(dragLine);
             switch (onDrag) {
@@ -1070,6 +1072,7 @@ UE.plugins['table'] = function () {
             dragTd = null;
 
             hideDragLine(me);
+            me.fireEvent('saveScene');
             return;
         }
         //正常状态下的mouseup
