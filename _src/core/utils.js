@@ -209,7 +209,7 @@ var utils = UE.utils = {
      * UE.utils.unhtml(html,/[<>]/g)  ==>  &lt;body&gt;You say:"你好！Baidu & UEditor!"&lt;/body&gt;
      */
     unhtml:function (str, reg) {
-        return str ? str.replace(reg || /[&<">](?:(amp|lt|quot|gt);)?/g, function (a, b) {
+        return str ? str.replace(reg || /[&<">'](?:(amp|lt|quot|gt|#39);)?/g, function (a, b) {
             if (b) {
                 return a;
             } else {
@@ -217,7 +217,8 @@ var utils = UE.utils = {
                     '<':'&lt;',
                     '&':'&amp;',
                     '"':'&quot;',
-                    '>':'&gt;'
+                    '>':'&gt;',
+                    "'":'&#39;'
                 }[a]
             }
 
@@ -229,12 +230,13 @@ var utils = UE.utils = {
      * @grammar UE.utils.html(str)  => String   //详细参见<code><a href = '#unhtml'>unhtml</a></code>
      */
     html:function (str) {
-        return str ? str.replace(/&((g|l|quo)t|amp);/g, function (m) {
+        return str ? str.replace(/&((g|l|quo)t|amp|#39);/g, function (m) {
             return {
                 '&lt;':'<',
                 '&amp;':'&',
                 '&quot;':'"',
-                '&gt;':'>'
+                '&gt;':'>',
+                '&#39':"'"
             }[m]
         }) : '';
     },

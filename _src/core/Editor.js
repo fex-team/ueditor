@@ -435,7 +435,7 @@
          *     return false //编辑器没有内容 ，getContent直接返回空
          * })
          */
-        getContent: function (cmd, fn,notSetCursor,ignoreBlank) {
+        getContent: function (cmd, fn,notSetCursor,ignoreBlank,formatter) {
             var me = this;
             if (cmd && utils.isFunction(cmd)) {
                 fn = cmd;
@@ -448,7 +448,7 @@
             var root = UE.htmlparser(me.body.innerHTML,ignoreBlank);
             me.filterOutputRule(root);
             me.fireEvent('aftergetcontent', cmd);
-            return  root.toHtml();
+            return  root.toHtml(formatter);
         },
         /**
          * 取得完整的html代码，可以直接显示成完整的html文档

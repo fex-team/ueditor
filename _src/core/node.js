@@ -45,7 +45,7 @@
     uNode.createText = function (data) {
         return new UE.uNode({
             type:'text',
-            'data':data || ''
+            'data':utils.unhtml(data || '')
         })
     };
     function nodeToHtml(node, arr, formatter, current) {

@@ -116,7 +116,7 @@
                     me.iframe.style.cssText += 'position:absolute;left:-32768px;top:-32768px;';
 
 
-                    var content = me.hasContents() ? me.getContent(null,null,null,true) : '';
+                    var content = me.hasContents() ? me.getContent(null,null,null,true,true) : '';
 
                     sourceEditor = createSourceEditor(me.iframe.parentNode);
 
