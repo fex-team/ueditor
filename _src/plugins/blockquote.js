@@ -25,7 +25,6 @@ UE.plugins['blockquote'] = function(){
 
             if ( obj ) {
 
-
                     var start = range.startContainer,
                         startBlock = domUtils.isBlockElm(start) ? start : domUtils.findParent(start,function(node){return domUtils.isBlockElm(node)}),
 
@@ -37,7 +36,7 @@ UE.plugins['blockquote'] = function(){
                     endBlock = domUtils.findParentByTagName(endBlock,'li',true) || endBlock;
 
 
-                    if(startBlock.tagName == 'LI' || startBlock.tagName == 'TD' || startBlock === obj){
+                    if(startBlock.tagName == 'LI' || startBlock.tagName == 'TD' || startBlock === obj || domUtils.isBody(startBlock)){
                         domUtils.remove(obj,true);
                     }else{
                         domUtils.breakParent(startBlock,obj);
@@ -46,8 +45,8 @@ UE.plugins['blockquote'] = function(){
                     if(startBlock !== endBlock){
                         obj = domUtils.findParentByTagName(endBlock,'blockquote');
                         if(obj){
-                            if(endBlock.tagName == 'LI' || endBlock.tagName == 'TD'){
-                                domUtils.remove(obj,true);
+                            if(endBlock.tagName == 'LI' || endBlock.tagName == 'TD'|| domUtils.isBody(endBlock)){
+                                obj.parentNode && domUtils.remove(obj,true);
                             }else{
                                 domUtils.breakParent(endBlock,obj);
                             }
