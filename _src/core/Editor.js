@@ -414,7 +414,8 @@
                                 ) ||
                                 keyCode == RegExp.$1
                                 ) {
-                                me.execCommand(i, param);
+                                if (me.queryCommandState(i,param) != -1)
+                                    me.execCommand(i, param);
                                 domUtils.preventDefault(e);
                             }
                         }
