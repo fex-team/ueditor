@@ -17,7 +17,9 @@
                 oncancel: function (){},
                 onclose: function (t, ok){
                     return ok ? this.onok() : this.oncancel();
-                }
+                },
+                //是否控制dialog中的scroll事件， 默认为不阻止
+                holdScroll: false
             },options));
             this.initDialog();
         };
@@ -120,6 +122,7 @@
                      '<div id="##_buttons" class="%%-buttons">' + buff.join('') + '</div>' +
                     '</div>';
             }
+
             return '<div id="##" class="%%"><div class="%%-wrap"><div id="##_body" class="%%-body">' +
                 '<div class="%%-shadow"></div>' +
                 '<div id="##_titlebar" class="%%-titlebar">' +
@@ -161,6 +164,44 @@
                     }
                 });
             });
+
+            //hold住scroll事件，防止dialog的滚动影响页面
+            if( this.holdScroll ) {
+
+                if( !me.iframeUrl ) {
+                    domUtils.on( document.getElementById( me.id + "_iframe"), !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+                        domUtils.preventDefault(e);
+                    } );
+                } else {
+                    me.addListener('dialogafterreset', function(){
+                        window.setTimeout(function(){
+                            var iframeWindow = document.getElementById( me.id + "_iframe").contentWindow;
+
+                            if( browser.ie ) {
+
+                                var timer = window.setInterval(function(){
+
+                                    if( iframeWindow.document && iframeWindow.document.body ) {
+                                        window.clearInterval( timer );
+                                        timer = null;
+                                        domUtils.on( iframeWindow.document.body, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+                                            domUtils.preventDefault(e);
+                                        } );
+                                    }
+
+                                }, 100);
+
+                            } else {
+                                domUtils.on( iframeWindow, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+                                    domUtils.preventDefault(e);
+                                } );
+                            }
+
+                        }, 1);
+                    });
+                }
+
+            }
             this._hide();
         },
         mesureSize: function (){
@@ -199,6 +240,7 @@
         },
         reset: function (){
             this.getDom('content').innerHTML = this.getContentHtml();
+            this.fireEvent('dialogafterreset');
         },
         _show: function (){
             if (this._hidden) {
