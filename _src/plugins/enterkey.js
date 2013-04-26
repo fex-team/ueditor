@@ -74,9 +74,9 @@ UE.plugins['enterkey'] = function() {
 //            }
 
 
-            setTimeout(function() {
-                me.selection.getRange().scrollToView(me.autoHeightEnabled, me.autoHeightEnabled ? domUtils.getXY(me.iframe).y : 0);
-            }, 50);
+//            setTimeout(function() {
+//                me.selection.getRange().scrollToView(me.autoHeightEnabled, me.autoHeightEnabled ? domUtils.getXY(me.iframe).y : 0);
+//            }, 50);
 
         }
     });
@@ -88,9 +88,9 @@ UE.plugins['enterkey'] = function() {
                 domUtils.preventDefault(evt);
                 return;
             }
-            if (me.undoManger) {
-                me.undoManger.save();
-            }
+//            if (me.undoManger) {
+//                me.undoManger.save();
+//            }
             hTag = '';
 
 
