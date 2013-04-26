@@ -1126,7 +1126,17 @@ test( 'removeStyle--style不为空', function() {
     ok( ua.haveSameAllChildAttribs( div, div_new ), 'check removed style' );
 
 } );
+test( 'removeStyle--style不为空', function() {
+    var div = te.dom[2];
+    var domUtils = baidu.editor.dom.domUtils;
+    div.innerHTML = '<div name="div_name" style="border-left:1px solid #ccc"></div>';
+    domUtils.removeStyle( div.firstChild, 'border-left' );
+    var div_new = document.createElement( 'div' );
+    div_new.id = 'test';
+    div_new.innerHTML = '<div name="div_name" ></div>';
+    ok( ua.haveSameAllChildAttribs( div, div_new ), 'check removed style' );
 
+} );
 test( 'removeStyle--style为空', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
