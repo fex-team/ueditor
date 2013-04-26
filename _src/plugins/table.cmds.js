@@ -23,10 +23,10 @@
 
 
     UE.commands['inserttable'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getTableItemsByRange(this).table ? -1 : 0;
         },
-        execCommand:function (cmd, opt) {
+        execCommand: function (cmd, opt) {
             function createTable(opt, tableWidth, tdWidth) {
                 var html = [],
                     rowsNum = opt.numRows,
@@ -43,9 +43,9 @@
 
             if (!opt) {
                 opt = utils.extend({}, {
-                    numCols:this.options.defaultCols,
-                    numRows:this.options.defaultRows,
-                    tdvalign:this.options.tdvalign
+                    numCols: this.options.defaultCols,
+                    numRows: this.options.defaultRows,
+                    tdvalign: this.options.tdvalign
                 })
             }
 
@@ -65,10 +65,10 @@
     };
 
     UE.commands['insertparagraphbeforetable'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getTableItemsByRange(this).cell ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var table = getTableItemsByRange(this).table;
             if (table) {
                 var p = this.document.createElement("p");
@@ -80,18 +80,18 @@
     };
 
     UE.commands['deletetable'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var rng = this.selection.getRange();
             return domUtils.findParentByTagName(rng.startContainer, 'table', true) ? 0 : -1;
         },
-        execCommand:function (cmd, table) {
+        execCommand: function (cmd, table) {
             var rng = this.selection.getRange();
             table = table || domUtils.findParentByTagName(rng.startContainer, 'table', true);
             if (table) {
                 var next = table.nextSibling;
                 if (!next) {
                     next = domUtils.createElement(this.document, 'p', {
-                        'innerHTML':browser.ie ? domUtils.fillChar : '<br/>'
+                        'innerHTML': browser.ie ? domUtils.fillChar : '<br/>'
                     });
                     table.parentNode.insertBefore(next, table);
                 }
@@ -110,10 +110,10 @@
         }
     };
     UE.commands['cellalign'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getSelectedArr(this).length ? 0 : -1
         },
-        execCommand:function (cmd, align) {
+        execCommand: function (cmd, align) {
             var selectedTds = getSelectedArr(this);
             if (selectedTds.length) {
                 for (var i = 0, ci; ci = selectedTds[i++];) {
@@ -123,10 +123,10 @@
         }
     };
     UE.commands['cellvalign'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getSelectedArr(this).length ? 0 : -1;
         },
-        execCommand:function (cmd, valign) {
+        execCommand: function (cmd, valign) {
             var selectedTds = getSelectedArr(this);
             if (selectedTds.length) {
                 for (var i = 0, ci; ci = selectedTds[i++];) {
@@ -136,14 +136,14 @@
         }
     };
     UE.commands['insertcaption'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var table = getTableItemsByRange(this).table;
             if (table) {
                 return table.getElementsByTagName('caption').length == 0 ? 1 : -1;
             }
             return -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var table = getTableItemsByRange(this).table;
             if (table) {
                 var caption = this.document.createElement('caption');
@@ -156,7 +156,7 @@
         }
     };
     UE.commands['deletecaption'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var rng = this.selection.getRange(),
                 table = domUtils.findParentByTagName(rng.startContainer, 'table');
             if (table) {
@@ -164,7 +164,7 @@
             }
             return -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var rng = this.selection.getRange(),
                 table = domUtils.findParentByTagName(rng.startContainer, 'table');
             if (table) {
@@ -176,7 +176,7 @@
         }
     };
     UE.commands['inserttitle'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var table = getTableItemsByRange(this).table;
             if (table) {
                 var firstRow = table.rows[0];
@@ -184,7 +184,7 @@
             }
             return -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var table = getTableItemsByRange(this).table;
             if (table) {
                 getUETable(table).insertRow(0, 'th');
@@ -194,7 +194,7 @@
         }
     };
     UE.commands['deletetitle'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var table = getTableItemsByRange(this).table;
             if (table) {
                 var firstRow = table.rows[0];
@@ -202,7 +202,7 @@
             }
             return -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var table = getTableItemsByRange(this).table;
             if (table) {
                 domUtils.remove(table.rows[0])
@@ -213,7 +213,7 @@
     };
 
     UE.commands["mergeright"] = {
-        queryCommandState:function (cmd) {
+        queryCommandState: function (cmd) {
             var tableItems = getTableItemsByRange(this);
             if (!tableItems.cell) return -1;
             var ut = getUETable(tableItems.table);
@@ -225,7 +225,7 @@
             return (rightCellInfo.rowIndex == cellInfo.rowIndex
                 && rightCellInfo.rowSpan == cellInfo.rowSpan) ? 0 : -1;
         },
-        execCommand:function (cmd) {
+        execCommand: function (cmd) {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             var cell = getTableItemsByRange(this).cell,
@@ -235,7 +235,7 @@
         }
     };
     UE.commands["mergedown"] = {
-        queryCommandState:function (cmd) {
+        queryCommandState: function (cmd) {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             if (!cell || cell.tagName == "TH") return -1;
@@ -250,7 +250,7 @@
             return (downCellInfo.colIndex == cellInfo.colIndex
                 && downCellInfo.colSpan == cellInfo.colSpan) && tableItems.cell.tagName !== 'TH' ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             var cell = getTableItemsByRange(this).cell,
@@ -260,10 +260,10 @@
         }
     };
     UE.commands["mergecells"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getUETableBySelected(this) ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var ut = getUETableBySelected(this);
             if (ut && ut.selectedTds.length) {
                 var cell = ut.selectedTds[0];
@@ -281,12 +281,12 @@
         }
     };
     UE.commands["insertrow"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             return cell && cell.tagName == "TD" && getUETable(tableItems.table).rowsNum < this.options.maxRowNum ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             var tableItems = getTableItemsByRange(this),
@@ -304,17 +304,17 @@
                 }
             }
             rng.moveToBookmark(bk).select();
-            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
+            if (table.getAttribute("interlaced") === "enabled")this.fireEvent("interlacetable", table);
         }
     };
     //后插入行
     UE.commands["insertrownext"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             return cell && (cell.tagName == "TD") && getUETable(tableItems.table).rowsNum < this.options.maxRowNum ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             var tableItems = getTableItemsByRange(this),
@@ -332,17 +332,17 @@
                 }
             }
             rng.moveToBookmark(bk).select();
-            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
+            if (table.getAttribute("interlaced") === "enabled")this.fireEvent("interlacetable", table);
         }
     };
     UE.commands["deleterow"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var tableItems = getTableItemsByRange(this);
             if (!tableItems.cell) {
                 return -1;
             }
         },
-        execCommand:function () {
+        execCommand: function () {
             var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 cellsRange = ut.cellsRange,
@@ -372,16 +372,16 @@
                     if (newCell) rng.selectNodeContents(newCell).setCursor(false, true);
                 }
             }
-            if(table.getAttribute("interlaced")==="enabled")this.fireEvent("interlacetable",table);
+            if (table.getAttribute("interlaced") === "enabled")this.fireEvent("interlacetable", table);
         }
     };
     UE.commands["insertcol"] = {
-        queryCommandState:function (cmd) {
+        queryCommandState: function (cmd) {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             return cell && (cell.tagName == "TD" || cell.tagName == 'TH') && getUETable(tableItems.table).colsNum < this.options.maxColNum ? 0 : -1;
         },
-        execCommand:function (cmd) {
+        execCommand: function (cmd) {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             if (this.queryCommandState(cmd) == -1)return;
@@ -401,12 +401,12 @@
         }
     };
     UE.commands["insertcolnext"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             return cell && getUETable(tableItems.table).colsNum < this.options.maxColNum ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             var cell = getTableItemsByRange(this).cell,
@@ -426,11 +426,11 @@
     };
 
     UE.commands["deletecol"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var tableItems = getTableItemsByRange(this);
             if (!tableItems.cell) return -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 range = ut.cellsRange,
@@ -469,7 +469,7 @@
         }
     };
     UE.commands["splittocells"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             if (!cell) return -1;
@@ -477,7 +477,7 @@
             if (ut.selectedTds.length > 0) return -1;
             return cell && (cell.colSpan > 1 || cell.rowSpan > 1) ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             var cell = getTableItemsByRange(this).cell,
@@ -487,7 +487,7 @@
         }
     };
     UE.commands["splittorows"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             if (!cell) return -1;
@@ -495,7 +495,7 @@
             if (ut.selectedTds.length > 0) return -1;
             return cell && cell.rowSpan > 1 ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             var cell = getTableItemsByRange(this).cell,
@@ -505,7 +505,7 @@
         }
     };
     UE.commands["splittocols"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
             if (!cell) return -1;
@@ -513,7 +513,7 @@
             if (ut.selectedTds.length > 0) return -1;
             return cell && cell.colSpan > 1 ? 0 : -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var rng = this.selection.getRange(),
                 bk = rng.createBookmark(true);
             var cell = getTableItemsByRange(this).cell,
@@ -526,10 +526,10 @@
 
     UE.commands["adaptbytext"] =
         UE.commands["adaptbywindow"] = {
-            queryCommandState:function () {
+            queryCommandState: function () {
                 return getTableItemsByRange(this).table ? 0 : -1
             },
-            execCommand:function (cmd) {
+            execCommand: function (cmd) {
                 var tableItems = getTableItemsByRange(this),
                     table = tableItems.table;
                 if (table) {
@@ -548,12 +548,12 @@
 
     //平均分配各列
     UE.commands['averagedistributecol'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var ut = getUETableBySelected(this);
             if (!ut) return -1;
             return ut.isFullRow() || ut.isFullCol() ? 0 : -1;
         },
-        execCommand:function (cmd) {
+        execCommand: function (cmd) {
             var me = this,
                 ut = getUETableBySelected(me);
 
@@ -600,13 +600,13 @@
     };
     //平均分配各行
     UE.commands['averagedistributerow'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var ut = getUETableBySelected(this);
             if (!ut) return -1;
             if (ut.selectedTds && /th/ig.test(ut.selectedTds[0].tagName)) return -1;
             return ut.isFullRow() || ut.isFullCol() ? 0 : -1;
         },
-        execCommand:function (cmd) {
+        execCommand: function (cmd) {
             var me = this,
                 ut = getUETableBySelected(me);
 
@@ -667,10 +667,10 @@
 
     //单元格对齐方式
     UE.commands['cellalignment'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getTableItemsByRange(this).table ? 0 : -1
         },
-        execCommand:function (cmd, data) {
+        execCommand: function (cmd, data) {
             var me = this,
                 ut = getUETableBySelected(me);
 
@@ -694,28 +694,28 @@
          * 查询当前点击的单元格的对齐状态， 如果当前已经选择了多个单元格， 则会返回所有单元格经过统一协调过后的状态
          * @see UE.UETable.getTableCellAlignState
          */
-        queryCommandValue: function( cmd, targetNode ){
+        queryCommandValue: function (cmd, targetNode) {
 
-            if( !targetNode ) {
+            if (!targetNode) {
                 return null;
             }
 
             //激活菜单的单元格
-            var activeMenuCell = domUtils.findParentByTagName( targetNode, ['td', 'th'], true),
+            var activeMenuCell = domUtils.findParentByTagName(targetNode, ['td', 'th'], true),
                 temp = null;
 
-            if( !activeMenuCell ) {
+            if (!activeMenuCell) {
 
                 return null;
 
             } else {
 
                 //获取同时选中的其他单元格
-                var cells = UE.UETable.getUETable( activeMenuCell ).selectedTds;
+                var cells = UE.UETable.getUETable(activeMenuCell).selectedTds;
 
                 !cells.length && ( cells = activeMenuCell );
 
-                return UE.UETable.getTableCellAlignState( cells );
+                return UE.UETable.getTableCellAlignState(cells);
 
             }
 
@@ -723,10 +723,13 @@
     };
     //表格对齐方式
     UE.commands['tablealignment'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
+            if (browser.ie && browser.version < 8) {
+                return -1;
+            }
             return getTableItemsByRange(this).table ? 0 : -1
         },
-        execCommand:function (cmd, data) {
+        execCommand: function (cmd, data) {
             var me = this,
                 start = me.selection.getStart(),
                 table = start && domUtils.findParentByTagName(start, ["table"], true);
@@ -743,10 +746,10 @@
 
     //表格属性
     UE.commands['edittable'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getTableItemsByRange(this).table ? 0 : -1
         },
-        execCommand:function (cmd, color) {
+        execCommand: function (cmd, color) {
             var rng = this.selection.getRange(),
                 table = domUtils.findParentByTagName(rng.startContainer, 'table');
             if (table) {
@@ -762,10 +765,10 @@
     };
     //单元格属性
     UE.commands['edittd'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getTableItemsByRange(this).table ? 0 : -1
         },
-        execCommand:function (cmd, bkColor) {
+        execCommand: function (cmd, bkColor) {
             var me = this,
                 ut = getUETableBySelected(me);
 
@@ -783,7 +786,7 @@
         }
     };
     UE.commands['sorttable'] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             var me = this,
                 tableItems = getTableItemsByRange(me);
             if (!tableItems.cell) return -1;
@@ -794,7 +797,7 @@
             }
             return 0;
         },
-        execCommand:function (cmd, fn) {
+        execCommand: function (cmd, fn) {
             var me = this,
                 range = me.selection.getRange(),
                 bk = range.createBookmark(true),
@@ -808,19 +811,19 @@
     };
 
     UE.commands["enablesort"] = UE.commands["disablesort"] = {
-        queryCommandState:function () {
+        queryCommandState: function () {
             return getTableItemsByRange(this).table ? 0 : -1;
         },
-        execCommand:function (cmd) {
+        execCommand: function (cmd) {
             var table = getTableItemsByRange(this).table;
             table.setAttribute("data-sort", cmd == "enablesort" ? "sortEnabled" : "sortDisabled");
         }
     };
     UE.commands["settablebackground"] = {
-        queryCommandState:function () {
-            return getSelectedArr(this).length>1?0:-1;
+        queryCommandState: function () {
+            return getSelectedArr(this).length > 1 ? 0 : -1;
         },
-        execCommand:function (cmd, value) {
+        execCommand: function (cmd, value) {
             var table, cells, ut;
             cells = getSelectedArr(this);
             ut = getUETable(cells[0]);
@@ -829,15 +832,15 @@
     };
 
     UE.commands["cleartablebackground"] = {
-        queryCommandState:function(){
+        queryCommandState: function () {
             var cells = getSelectedArr(this);
-            if(!cells.length)return -1;
-            for(var i= 0,cell;cell = cells[i++];){
-                if(cell.style.backgroundColor!=="") return 0;
+            if (!cells.length)return -1;
+            for (var i = 0, cell; cell = cells[i++];) {
+                if (cell.style.backgroundColor !== "") return 0;
             }
             return -1;
         },
-        execCommand:function () {
+        execCommand: function () {
             var cells = getSelectedArr(this),
                 ut = getUETable(cells[0]);
             ut.removeBackground(cells);
@@ -845,26 +848,26 @@
     };
 
     UE.commands["interlacetable"] = UE.commands["uninterlacetable"] = {
-        queryCommandState:function(cmd){
+        queryCommandState: function (cmd) {
             var table = getTableItemsByRange(this).table;
-            if(!table) return -1;
+            if (!table) return -1;
             var interlaced = table.getAttribute("interlaced");
-            if(cmd =="interlacetable"){
+            if (cmd == "interlacetable") {
                 //TODO 待定
                 //是否需要待定，如果设置，则命令只能单次执行成功，但反射具备toggle效果；否则可以覆盖前次命令，但反射将不存在toggle效果
-                return (interlaced === "enabled") ? -1:0;
-            }else{
-                return (!interlaced||interlaced === "disabled") ? -1:0;
+                return (interlaced === "enabled") ? -1 : 0;
+            } else {
+                return (!interlaced || interlaced === "disabled") ? -1 : 0;
             }
         },
-        execCommand:function (cmd,classList) {
+        execCommand: function (cmd, classList) {
             var table = getTableItemsByRange(this).table;
-            if( cmd == "interlacetable" ){
-                table.setAttribute("interlaced","enabled");
-                this.fireEvent("interlacetable",table,classList);
-            }else{
-                table.setAttribute("interlaced","disabled");
-                this.fireEvent("uninterlacetable",table);
+            if (cmd == "interlacetable") {
+                table.setAttribute("interlaced", "enabled");
+                this.fireEvent("interlacetable", table, classList);
+            } else {
+                table.setAttribute("interlaced", "disabled");
+                this.fireEvent("uninterlacetable", table);
             }
         }
     };
@@ -889,10 +892,10 @@
 
     function getSelectedArr(editor) {
         var cell = getTableItemsByRange(editor).cell;
-        if(cell){
-            var  ut = getUETable(cell);
+        if (cell) {
+            var ut = getUETable(cell);
             return ut.selectedTds.length ? ut.selectedTds : [cell];
-        }else{
+        } else {
             return [];
         }
     }
