@@ -105,7 +105,7 @@ UE.plugins['undo'] = function () {
             }
 
             try{
-                new dom.Range(me.document).moveToAddress(scene.address).select();
+                new dom.Range(me.document).moveToAddress(scene.address).select(true);
             }catch(e){}
 
             this.update();
@@ -230,22 +230,34 @@ UE.plugins['undo'] = function () {
         if (!keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey) {
             if (inputType)
                 return;
+
             if(!me.selection.getRange().collapsed){
                 me.undoManger.save(false,true);
                 isCollapsed = false;
                 return;
             }
             if (me.undoManger.list.length == 0) {
-//                me.fireEvent('contentchange');
                 me.undoManger.save(true);
-                //return;
             }
             clearTimeout(saveSceneTimer);
+            function save(cont){
+
+                if (cont.selection.getRange().collapsed)
+                    cont.fireEvent('contentchange');
+                cont.undoManger.save(false,true);
+                cont.fireEvent('selectionchange');
+            }
             saveSceneTimer = setTimeout(function(){
-                if (me.selection.getRange().collapsed)
-                    me.fireEvent('contentchange');
-                me.undoManger.save(false,true);
-                me.fireEvent('selectionchange');
+                if(inputType){
+                    var interalTimer = setInterval(function(){
+                        if(!inputType){
+                            save(me);
+                            clearInterval(interalTimer)
+                        }
+                    },300)
+                    return;
+                }
+                save(me);
             },200);
 //            //trace:856
 //            //修正第一次输入后，回退，再输入要到keycont>maxInputCount才能在回退的问题
@@ -256,11 +268,7 @@ UE.plugins['undo'] = function () {
             lastKeyCode = keyCode;
             keycont++;
             if (keycont >= maxInputCount ) {
-
-                if (me.selection.getRange().collapsed)
-                    me.fireEvent('contentchange');
-                me.undoManger.save(false,true);
-                me.fireEvent('selectionchange');
+                save(me)
             }
         }
     });
