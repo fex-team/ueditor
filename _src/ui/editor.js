@@ -102,7 +102,8 @@
                             }),
                             range = editor.selection.getRange();
                         range.insertNode(span);
-                        pastePop.showAnchor(span);
+                        var tmp= getDomNode(span, 'firstChild', 'previousSibling');
+                        pastePop.showAnchor(tmp);
                         domUtils.remove(span);
                         delete editor.ui._isTransfer;
                         isPaste = false;
