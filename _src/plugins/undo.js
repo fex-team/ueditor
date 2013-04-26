@@ -35,17 +35,6 @@ UE.plugins['undo'] = function () {
         return 1;
     }
 
-    function adjustContent(cont) {
-        var specialAttr = /\b(?:href|src|name)="[^"]*?"/gi;
-        return cont.replace(specialAttr, '')
-            .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi, function (a, b, c) {
-                return b.toLowerCase() + '=' + c.replace(/['"]/g, '').toLowerCase()
-            })
-            .replace(/(<[\w\-]+)|([\w\-]+>)/gi, function (a, b, c) {
-                return (b || c).toLowerCase()
-            });
-    }
-
     function UndoManager() {
         this.list = [];
         this.index = 0;
