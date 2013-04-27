@@ -206,12 +206,22 @@ UE.commands['inserthtml'] = {
                         range.setStart(nextNode,0).collapse(true).shrinkBoundary()
                     }
                 }else{
-                    child.innerHTML = browser.ie ? domUtils.fillChar : '<br/>';
+
+                    try{
+                        child.innerHTML = browser.ie ? domUtils.fillChar : '<br/>';
+                    }catch(e){
+                        range.setStartBefore(child);
+                        domUtils.remove(child)
+                    }
+
                 }
 
             }
             //加上true因为在删除表情等时会删两次，第一次是删的fillData
-            range.select(true);
+            try{
+                range.select(true);
+            }catch(e){}
+
         }
 
 
