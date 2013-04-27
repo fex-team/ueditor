@@ -702,6 +702,7 @@
             //由于合并操作可以在任意时刻进行，所以无法通过鼠标位置等信息实时生成range，只能通过缓存实例中的cellsRange对象来访问
             var range = this.cellsRange,
                 leftTopCell = this.getCell(range.beginRowIndex, this.indexTable[range.beginRowIndex][range.beginColIndex].cellIndex);
+
             if (leftTopCell.tagName == "TH" && range.endRowIndex !== range.beginRowIndex) {
                 var index = this.indexTable,
                     info = this.getCellInfo(leftTopCell);
@@ -725,11 +726,19 @@
             if (leftTopCell.rowSpan == this.rowsNum && leftTopCell.colSpan != 1) {
                 leftTopCell.colSpan = 1;
             }
+
             if (leftTopCell.colSpan == this.colsNum && leftTopCell.rowSpan != 1) {
                 var rowIndex = leftTopCell.parentNode.rowIndex;
-                for (var i = 0; i < leftTopCell.rowSpan - 1; i++) {
-                    var row = this.table.rows[rowIndex + 1];
-                    row.parentNode.removeChild(row);
+                //解决IE下的表格操作问题
+                if( this.table.deleteRow ) {
+                    for (var i = rowIndex+ 1, curIndex=rowIndex+ 1, len=leftTopCell.rowSpan; i < len; i++) {
+                        this.table.deleteRow(curIndex);
+                    }
+                } else {
+                    for (var i = 0, len=leftTopCell.rowSpan - 1; i < len; i++) {
+                        var row = this.table.rows[rowIndex + 1];
+                        row.parentNode.removeChild(row);
+                    }
                 }
                 leftTopCell.rowSpan = 1;
             }

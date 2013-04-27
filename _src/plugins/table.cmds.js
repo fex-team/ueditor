@@ -267,7 +267,7 @@
             var ut = getUETableBySelected(this);
             if (ut && ut.selectedTds.length) {
                 var cell = ut.selectedTds[0];
-                getUETableBySelected(this).mergeRange();
+                ut.mergeRange();
                 var rng = this.selection.getRange();
                 if (domUtils.isEmptyBlock(cell)) {
                     rng.setStart(cell, 0).collapse(true)
