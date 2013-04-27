@@ -49,7 +49,7 @@ UE.plugins['insertcode'] = function() {
                     code = browser.ie?'&nbsp;':'<br/>';
                 }else{
                     var frag = rng.extractContents();
-                    var div = me.document.createElement();
+                    var div = me.document.createElement('div');
                     div.appendChild(frag);
 
                     utils.each(UE.filterNode(UE.htmlparser(div.innerHTML),me.options.filterTxtRules).children,function(node){
