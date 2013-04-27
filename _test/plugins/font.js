@@ -238,7 +238,6 @@ test( 'trace 819, 765：删除线和下划线互斥', function() {
     },50);
 } );
 
-
 /*trace 810*/
 test( 'trace 810：闭合时设置删除线会改变文本前景色', function() {
     if(!ua.browser.opera){
@@ -257,8 +256,7 @@ test( 'trace 810：闭合时设置删除线会改变文本前景色', function()
             /*ff下会自动加一个空的设置了style的span，比较时不作考虑*/
             if ( baidu.editor.dom.domUtils.isEmptyNode( editor.body.firstChild.lastChild ) && baidu.editor.browser.gecko )
                 editor.body.firstChild.removeChild( editor.body.firstChild.lastChild );
-            var color = ua.browser.ie&&ua.browser.ie<9 ? '' : 'color: rgb(255, 0, 0)';
-            var html = '<span style="color: rgb(153, 230, 0)">你好<span style="color: rgb(255, 0, 0)">hello</span></span><span style="color: rgb(153, 230, 0)"><span style="color: rgb(255, 0, 0)"><span style="text-decoration: line-through;' + color + '">hey</span></span></span>';
+            var html = '<span style="color: rgb(153, 230, 0)">你好<span style="color: rgb(255, 0, 0)">hello<span style="color: rgb(255, 0, 0); text-decoration: line-through;">hey</span></span></span>';
             ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '检查插入的删除线前景色是否正确' );
             div.parentNode.removeChild(div);
             start();
@@ -498,15 +496,16 @@ test( 'trace 3337：字符边框', function() {
     equal(editor.queryCommandState('fontborder'),'0');
     equal(editor.queryCommandValue('fontborder'),'','无反射值');
     editor.setContent( '<p><span style="color: red">欢</span>迎光临</p>' );
-    range.selectNode( editor.body.firstChild ).select();
+    range.setStart(editor.body.firstChild.firstChild,0).setEnd(editor.body.firstChild.lastChild,3).select();
     editor.execCommand( 'fontborder' );
-    var p1 = '<span style=\"border: 1px solid rgb(0, 0, 0);\"><span style=\"color: red; border: 1px solid rgb(0, 0, 0);\">欢</span><span style=\"border: 1px solid rgb(0, 0, 0);\">迎光临</span></span>';
-    var p2 = '<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\"><span style=\"color: red\">欢</span>迎光临</span>';
+    var p1 = '<span style=\"color: red; border: 1px solid rgb(0, 0, 0);\">欢</span><span style=\"border: 1px solid rgb(0, 0, 0);\">迎光临</span>';
+    var p2='<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; color: red; border-top: #000 1px solid; border-right: #000 1px solid\">欢</span><span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">迎光临</span>';
     if(ua.browser.ie)
         equal(ua.getChildHTML(editor.body.firstChild),p2,'查看添加了字符边框后的样式');
     else
         ua.checkHTMLSameStyle(p1,editor.document,editor.body.firstChild,'查看添加了字符边框后的样式');
 } );
+
 test( 'trace 3342：字符ab， 给a 加边框再给b加边框，边框效果错误', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -515,14 +514,15 @@ test( 'trace 3342：字符ab， 给a 加边框再给b加边框，边框效果错
     editor.execCommand( 'fontborder' );
     range.setStart(editor.body.firstChild.lastChild,0).setEnd(editor.body.firstChild.lastChild,2).select();
     editor.execCommand( 'fontborder' );
-    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
+//    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
     if(ua.browser.ie){
-        equal(ua.getChildHTML(editor.body.firstChild),"<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hell</span>e&nbsp;",'查看添加了字符边框后的样式');
+        equal(ua.getChildHTML(editor.body.firstChild),"<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hell</span>o",'查看添加了字符边框后的样式');
     }
     else{
-        ua.checkHTMLSameStyle('<span style="border: 1px solid rgb(0, 0, 0);">hell</span>e'+br,editor.document,editor.body.firstChild,'查看添加了字符边框后的样式');
+        equal(ua.getChildHTML(editor.body.firstChild),'<span style="border: 1px solid rgb(0, 0, 0);">hell</span>o','查看添加了字符边框后的样式');
     }
 } );
+
 test( 'trace 3096：单元格中改变字号', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
