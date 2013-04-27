@@ -6,7 +6,7 @@
 UE.plugins['insertcode'] = function() {
     var me = this;
     me.ready(function(){
-        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:5px;background:#f8f8f8;}',
+        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f8f8f8;}',
             me.document)
     });
     me.setOpt('insertcode',{

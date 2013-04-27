@@ -1172,7 +1172,7 @@
                     }
 
                 }else{
-                    firstIndex = isStart ? me.startOffset : me.endOffset
+                    firstIndex = isStart ? domUtils.isFillChar(node) ? 0 : me.startOffset  : me.endOffset
                 }
                 if(firstIndex < 0){
                     firstIndex = 0;
