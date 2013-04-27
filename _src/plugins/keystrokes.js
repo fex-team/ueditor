@@ -9,7 +9,14 @@ UE.plugins['keystrokes'] = function() {
             rng = me.selection.getRange();
 
         //处理全选的情况
-        if(!rng.collapsed && !(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey || keyCode == 9 )){
+        if(!rng.collapsed && !(evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey) && (keyCode >= 65 && keyCode <=90
+            || keyCode >= 48 && keyCode <= 57 ||
+            keyCode >= 96 && keyCode <= 111 || {
+                    13:1,
+                    8:1,
+                    46:1
+                }[keyCode])
+            ){
 
             var tmpNode = rng.startContainer;
             if(domUtils.isFillChar(tmpNode)){
@@ -36,8 +43,7 @@ UE.plugins['keystrokes'] = function() {
                         me.fireEvent('saveScene');
                         me.body.innerHTML = '<p>'+(browser.ie ? '' : '<br/>')+'</p>';
                         rng.setStart(me.body.firstChild,0).setCursor(false,true);
-                        browser.ie && me._selectionChange();
-                        domUtils.preventDefault(evt);
+                        me._selectionChange();
                         return;
                     }
                 }

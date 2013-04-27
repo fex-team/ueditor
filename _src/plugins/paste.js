@@ -138,6 +138,10 @@ UE.plugins['paste'] = function () {
             }
             html = {'html': root.toHtml()};
             me.fireEvent('beforepaste', html, root);
+            //抢了默认的粘贴，那后边的内容就不执行了，比如表格粘贴
+            if(!html.html){
+                return;
+            }
             root = UE.htmlparser(html.html);
             //如果开启了纯文本模式
             if (me.queryCommandState('pasteplain') === 1) {

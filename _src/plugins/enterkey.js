@@ -57,27 +57,6 @@ UE.plugins['enterkey'] = function() {
                 //没有站位符，会出现多行的问题
                 browser.opera &&  range.select();
             }
-//            if(browser.ie){
-//                range = me.selection.getRange();
-//                start = range.startContainer;
-//                while(start){
-//                    if(start.nodeType == 1 && start.tagName == 'P'){
-//                        break;
-//                    }
-//                    start = start.parentNode;
-//                }
-//                if(start && domUtils.isEmptyBlock(start)){
-//                    start.innerHTML = '&nbsp;';
-//                    var rng = me.selection.getRange();
-//                    rng.setStart(start,0).setCursor(false,true);
-//                }
-//            }
-
-
-            setTimeout(function() {
-                me.selection.getRange().scrollToView(me.autoHeightEnabled, me.autoHeightEnabled ? domUtils.getXY(me.iframe).y : 0);
-            }, 50);
-
         }
     });
 
@@ -88,9 +67,7 @@ UE.plugins['enterkey'] = function() {
                 domUtils.preventDefault(evt);
                 return;
             }
-            if (me.undoManger) {
-                me.undoManger.save();
-            }
+            me.fireEvent('saveScene',true,true);
             hTag = '';
 
 

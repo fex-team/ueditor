@@ -8,15 +8,14 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
     //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
 
     htmlstr = htmlstr.replace(reg, '');
-    if(!ignoreBlank){
-        htmlstr = htmlstr.replace(/\s*<\/?(\w+)\s*(?:[^>]*)>\s*/g, function(a,b){
+    htmlstr = htmlstr
+        .replace(new RegExp('[\\r\\t\\n'+(ignoreBlank?'':' ')+']*<\/?(\\w+)\\s*(?:[^>]*)>[\\r\\t\\n'+(ignoreBlank?'':' ')+']*','g'), function(a,b){
             //br暂时单独处理
             if(!/^br$/i.test(b) && (dtd.$inlineWithA[b]|| dtd.$empty[b])){
                 return a.replace(/[\t\r\n]+/,'');
             }
-            return a.replace(/^\s+/,'').replace(/\s+$/,'');
+            return a.replace(new RegExp('^[\\r\\t\\n'+(ignoreBlank?'':' ')+']+'),'').replace(new RegExp('[\\r\\t\\n'+(ignoreBlank?'':' ')+']+$'),'');
         });
-    }
 
 
     var uNode = UE.uNode,

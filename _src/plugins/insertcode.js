@@ -81,6 +81,9 @@ UE.plugins['insertcode'] = function() {
 
     me.addInputRule(function(root){
        utils.each(root.getNodesByTagName('pre'),function(pre){
+            if(pre.getNodesByTagName('br').length){
+                return;
+            }
             var code = pre.innerText().split(/\n/);
             pre.innerHTML('');
             utils.each(code,function(c){
@@ -119,7 +122,8 @@ UE.plugins['insertcode'] = function() {
         elementpath:1,
         highlightcode:1,
         insertcode:1,
-        inserthtml:1
+        inserthtml:1,
+        selectall:1
     };
     //将queyCommamndState重置
     var orgQuery = me.queryCommandState;
@@ -277,8 +281,6 @@ UE.plugins['insertcode'] = function() {
             var br = '',frag = me.document.createDocumentFragment();
             utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
                 if(node.type == 'element' && node.tagName == 'br'){
-                    br = me.document.createElement('br');
-                    frag.appendChild(br);
                     return;
                 }
                 var html = node.type == 'element' ? node.innerText() : node.getData();
@@ -286,7 +288,9 @@ UE.plugins['insertcode'] = function() {
                 br = me.document.createElement('br');
                 frag.appendChild(br);
             });
-            rng.insertNode(frag).setStartAfter(br).setCursor(false,true);
+            rng.insertNode(frag).setStartBefore(br);
+            domUtils.remove(br);
+            rng.setCursor(false,true);
             return true;
         }
     });

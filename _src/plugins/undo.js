@@ -14,7 +14,7 @@ UE.plugins['undo'] = function () {
         maxInputCount = me.options.maxInputCount || 20,
         fillchar = new RegExp(domUtils.fillChar + '|<\/hr>', 'gi');// ie会产生多余的</hr>
 
-
+    var orgState = me.options.autoClearEmptyNode;
     function compareAddr(indexA, indexB) {
         if (indexA.length != indexB.length)
             return 0;
@@ -35,17 +35,6 @@ UE.plugins['undo'] = function () {
         return 1;
     }
 
-    function adjustContent(cont) {
-        var specialAttr = /\b(?:href|src|name)="[^"]*?"/gi;
-        return cont.replace(specialAttr, '')
-            .replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi, function (a, b, c) {
-                return b.toLowerCase() + '=' + c.replace(/['"]/g, '').toLowerCase()
-            })
-            .replace(/(<[\w\-]+)|([\w\-]+>)/gi, function (a, b, c) {
-                return (b || c).toLowerCase()
-            });
-    }
-
     function UndoManager() {
         this.list = [];
         this.index = 0;
@@ -53,15 +42,6 @@ UE.plugins['undo'] = function () {
         this.hasRedo = false;
         this.undo = function () {
             if (this.hasUndo) {
-//                var currentScene = this.getScene(),
-//                    lastScene = this.list[this.index];
-//                //有可能引起undo/redo丢场景
-////                    lastContent = adjustContent(lastScene.content),
-////                    currentContent = adjustContent(currentScene.content);
-//
-////                if (lastContent != currentContent) {
-////                    this.save();
-////                }
                 if (!this.list[this.index - 1] && this.list.length == 1) {
                     this.reset();
                     return;
@@ -88,9 +68,12 @@ UE.plugins['undo'] = function () {
         };
 
         this.restore = function () {
+            var me = this.editor;
             var scene = this.list[this.index];
             var root = UE.htmlparser(scene.content.replace(fillchar, ''));
+            me.options.autoClearEmptyNode = false;
             me.filterInputRule(root);
+            me.options.autoClearEmptyNode = orgState;
             //trace:873
             //去掉展位符
             me.document.body.innerHTML = root.toHtml();
@@ -105,7 +88,8 @@ UE.plugins['undo'] = function () {
             }
 
             try{
-                new dom.Range(me.document).moveToAddress(scene.address).select();
+                var rng = new dom.Range(me.document).moveToAddress(scene.address);
+                rng.select(domUtils.isBody(rng.startContainer));
             }catch(e){}
 
             this.update();
@@ -115,12 +99,15 @@ UE.plugins['undo'] = function () {
         };
 
         this.getScene = function (notSetCursor) {
+            var me = this.editor;
             var rng = me.selection.getRange(),
                 restoreAddress = rng.createAddress(),
                 rngAddress = rng.createAddress(false,true);
             me.fireEvent('beforegetscene');
             var root = UE.htmlparser(me.body.innerHTML.replace(fillchar, ''),true);
+            me.options.autoClearEmptyNode = false;
             me.filterOutputRule(root);
+            me.options.autoClearEmptyNode = orgState;
             var cont = root.toHtml();
             browser.ie && (cont = cont.replace(/>&nbsp;</g, '><').replace(/\s*</g, '<').replace(/>\s*/g, '>'));
             me.fireEvent('aftergetscene');
@@ -172,12 +159,14 @@ UE.plugins['undo'] = function () {
     }
 
     me.undoManger = new UndoManager();
+    me.undoManger.editor = me;
     function saveScene() {
         this.undoManger.save();
     }
 
     me.addListener('saveScene', function () {
-        me.undoManger.save();
+        var args = Array.prototype.splice.call(arguments,1);
+        this.undoManger.save.apply(this.undoManger,args);
     });
 
     me.addListener('beforeexeccommand', saveScene);
@@ -185,15 +174,15 @@ UE.plugins['undo'] = function () {
 
     me.addListener('reset', function (type, exclude) {
         if (!exclude) {
-            me.undoManger.reset();
+            this.undoManger.reset();
         }
     });
     me.commands['redo'] = me.commands['undo'] = {
         execCommand:function (cmdName) {
-            me.undoManger[cmdName]();
+            this.undoManger[cmdName]();
         },
         queryCommandState:function (cmdName) {
-            return me.undoManger['has' + (cmdName.toLowerCase() == 'undo' ? 'Undo' : 'Redo')] ? 0 : -1;
+            return this.undoManger['has' + (cmdName.toLowerCase() == 'undo' ? 'Undo' : 'Redo')] ? 0 : -1;
         },
         notNeedUndo:1
     };
@@ -209,10 +198,10 @@ UE.plugins['undo'] = function () {
     //输入法状态下不计算字符数
     var inputType = false;
     me.addListener('ready', function () {
-        domUtils.on(me.body, 'compositionstart', function () {
+        domUtils.on(this.body, 'compositionstart', function () {
             inputType = true;
         });
-        domUtils.on(me.body, 'compositionend', function () {
+        domUtils.on(this.body, 'compositionend', function () {
             inputType = false;
         })
     });
@@ -230,37 +219,40 @@ UE.plugins['undo'] = function () {
         if (!keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey) {
             if (inputType)
                 return;
+
             if(!me.selection.getRange().collapsed){
                 me.undoManger.save(false,true);
                 isCollapsed = false;
                 return;
             }
             if (me.undoManger.list.length == 0) {
-//                me.fireEvent('contentchange');
                 me.undoManger.save(true);
-                //return;
             }
             clearTimeout(saveSceneTimer);
+            function save(cont){
+
+                if (cont.selection.getRange().collapsed)
+                    cont.fireEvent('contentchange');
+                cont.undoManger.save(false,true);
+                cont.fireEvent('selectionchange');
+            }
             saveSceneTimer = setTimeout(function(){
-                if (me.selection.getRange().collapsed)
-                    me.fireEvent('contentchange');
-                me.undoManger.save(false,true);
-                me.fireEvent('selectionchange');
+                if(inputType){
+                    var interalTimer = setInterval(function(){
+                        if(!inputType){
+                            save(me);
+                            clearInterval(interalTimer)
+                        }
+                    },300)
+                    return;
+                }
+                save(me);
             },200);
-//            //trace:856
-//            //修正第一次输入后，回退，再输入要到keycont>maxInputCount才能在回退的问题
-//            if (me.undoManger.list.length == 2 && me.undoManger.index == 0 && keycont == 0) {
-//                me.undoManger.list.splice(1, 1);
-//                me.undoManger.update();
-//            }
+
             lastKeyCode = keyCode;
             keycont++;
             if (keycont >= maxInputCount ) {
-
-                if (me.selection.getRange().collapsed)
-                    me.fireEvent('contentchange');
-                me.undoManger.save(false,true);
-                me.fireEvent('selectionchange');
+                save(me)
             }
         }
     });
@@ -270,12 +262,10 @@ UE.plugins['undo'] = function () {
             if (inputType)
                 return;
             if(!isCollapsed){
-                me.undoManger.save(false,true);
+                this.undoManger.save(false,true);
                 isCollapsed = true;
             }
         }
     });
-//    me.addListener('mousedown',function(){
-//        me.undoManger.mousedown = true;
-//    })
+
 };
