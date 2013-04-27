@@ -162,7 +162,55 @@ UE.plugins['paste'] = function () {
     me.addListener('pasteTransfer', function (cmd, plainType) {
         if (address && txtContent && htmlContent && txtContent != htmlContent) {
             var range = me.selection.getRange();
-            range.moveToAddress(address, true).deleteContents();
+            range.moveToAddress(address, true);
+            if (!range.collapsed) {
+
+                while (!domUtils.isBody(range.startContainer)
+                    ) {
+                    var start = range.startContainer;
+                    if(start.nodeType == 1){
+                        start = start.childNodes[range.startOffset];
+                        if(!start){
+                            range.setStartBefore(range.startContainer);
+                            continue;
+                        }
+                        var pre = start.previousSibling;
+
+                        if(pre && pre.nodeType == 3 && new RegExp('^[\n\r\t '+domUtils.fillChar+']*$').test(pre.nodeValue)){
+                            range.setStartBefore(pre)
+                        }
+                    }
+                    if(range.startOffset == 0){
+                        range.setStartBefore(range.startContainer);
+                    }else{
+                        break;
+                    }
+
+                }
+                while (!domUtils.isBody(range.endContainer)
+                    ) {
+                    var end = range.endContainer;
+                    if(end.nodeType == 1){
+                        end = end.childNodes[range.endOffset];
+                        if(!end){
+                            range.setEndAfter(range.endContainer);
+                            continue;
+                        }
+                        var next = end.nextSibling;
+                        if(next && next.nodeType == 3 && new RegExp('^[\n\r\t'+domUtils.fillChar+']*$').test(next.nodeValue)){
+                            range.setEndAfter(next)
+                        }
+                    }
+                    if(range.endOffset == range.endContainer.childNodes.length){
+                        range.setEndAfter(range.endContainer);
+                    }else{
+                        break;
+                    }
+
+                }
+
+            }
+            range.deleteContents();
             range.select(true);
             me.__hasEnterExecCommand = true;
             var html = htmlContent;
