@@ -93,26 +93,26 @@ test( 'trace1183：选中列表中添加引用，再去掉引用', function () {
 test( 'trace 3298：对段落添加引用和去除引用', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<p><strong><em>hello1</em></strong></p><p>hello2 world</p>' );
+    editor.setContent( '<p><strong><em>hello1</em></strong></p><p>hello2  world</p>' );
     var body = editor.body;
     range.setStart( body.firstChild, 0 ).setEnd( body.lastChild, 1 ).select();      /*不闭合添加引用*/
     editor.execCommand( 'blockquote' );
-    equal( ua.getChildHTML( body ), '<blockquote><p><strong><em>hello1</em></strong></p><p>hello2&nbsp;world</p></blockquote>', '不闭合添加引用' );
+    equal( ua.getChildHTML( body ), '<blockquote><p><strong><em>hello1</em></strong></p><p>hello2 &nbsp;world</p></blockquote>', '不闭合添加引用' );
     equal( editor.queryCommandState( 'blockquote' ), 1, '引用高亮' );
 
     range.setStart( body.firstChild.lastChild, 0 ).collapse( true ).select();       /*闭合去除引用*/
     editor.execCommand( 'blockquote' );
-    equal( ua.getChildHTML( body ), '<blockquote><p><strong><em>hello1</em></strong></p></blockquote><p>hello2&nbsp;world</p>', '闭合去除引用' );
+    equal( ua.getChildHTML( body ), '<blockquote><p><strong><em>hello1</em></strong></p></blockquote><p>hello2 &nbsp;world</p>', '闭合去除引用' );
     equal( editor.queryCommandState( 'blockquote' ), 0, '引用不高亮' );
 
     range.setStart( body.firstChild, 0 ).setEnd( body.lastChild, 1 ).select();      /*非闭合去除引用*/
     editor.execCommand( 'blockquote' );
-    equal( ua.getChildHTML( body ), '<p><strong><em>hello1</em></strong></p><p>hello2&nbsp;world</p>' );
+    equal( ua.getChildHTML( body ), '<p><strong><em>hello1</em></strong></p><p>hello2 &nbsp;world</p>' );
     equal( editor.queryCommandState( 'blockquote' ), 0, '非闭合去除引用后，引用不高亮' );
 
     range.setStart( body.lastChild, 0 ).collapse( true ).select();                  /*闭合添加引用*/
     editor.execCommand( 'blockquote' );
-    equal( ua.getChildHTML( body ), '<p><strong><em>hello1</em></strong></p><blockquote><p>hello2&nbsp;world</p></blockquote>', '闭合添加引用 ' );
+    equal( ua.getChildHTML( body ), '<p><strong><em>hello1</em></strong></p><blockquote><p>hello2 &nbsp;world</p></blockquote>', '闭合添加引用 ' );
 } );
 
 /*trace 3285*/
