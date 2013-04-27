@@ -206,6 +206,7 @@
                                 editor:editor,
                                 className:'edui-for-' + cmd,
                                 title:title,
+                                holdScroll: cmd === 'insertimage',
                                 closeDialog:editor.getLang("closeDialog")
                             }, type == 'ok' ? {
                                 buttons:[

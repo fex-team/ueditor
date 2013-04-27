@@ -15,13 +15,19 @@
     function getPara(me){
         var opt = me.editor.options.autotypeset,
             cont = me.getDom(),
+            editorId = me.editor.uid,
+            inputType = null,
+            attrName = null,
             ipts = domUtils.getElementsByTagName(cont,"input");
         for(var i=ipts.length-1,ipt;ipt=ipts[i--];){
-            if(ipt.getAttribute("type")=="checkbox"){
-                var attrName = ipt.getAttribute("name");
+
+            inputType = ipt.getAttribute("type");
+
+            if(inputType=="checkbox"){
+                attrName = ipt.getAttribute("name");
                 opt[attrName] && delete opt[attrName];
                 if(ipt.checked){
-                    var attrValue = document.getElementById(attrName+"Value");
+                    var attrValue = document.getElementById( attrName+"Value" + editorId );
                     if(attrValue){
                         if(/input/ig.test(attrValue.tagName)){
                             opt[attrName] = attrValue.value;
@@ -45,6 +51,7 @@
             var attr = si.getAttribute('name');
             opt[attr] = opt[attr] ? si.value : '';
         }
+
         me.editor.options.autotypeset = opt;
     }
     AutoTypeSetButton.prototype = {
@@ -70,6 +77,7 @@
                 if(flag)return;
                 var cont = this.getDom(),
                     btn = cont.getElementsByTagName('button')[0];
+
                 btn.onclick = function(){
                     getPara(popupUI);
                     me.editor.execCommand('autotypeset');
