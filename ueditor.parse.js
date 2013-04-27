@@ -215,6 +215,14 @@ function uParse(selector,opt){
                 content = tmpNode;
             }
 
+            function fillNode(nodes){
+                _each(nodes,function(node){
+                    if(!node.firstChild){
+                        node.innerHTML = '&nbsp;'
+                    }
+                })
+
+            }
             function checkList(nodes){
                 var customCss = [],
                     customStyle = {
@@ -336,7 +344,13 @@ function uParse(selector,opt){
                         });
                     }
 
-                }
+
+
+                },
+                'td':fillNode,
+                'th':fillNode,
+                'caption':fillNode
+
             };
             //�Ȳ���Ĭ�ϵ�����
 
