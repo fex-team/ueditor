@@ -120,7 +120,7 @@ test('在列表中，跨行选中，输入tab键',function(){
         range.setStart( editor.body.firstChild.firstChild.firstChild.firstChild,1 ).setEnd(editor.body.firstChild.childNodes[1].firstChild.firstChild,1 ).select();
         ua.keydown(editor.body,{'keyCode':9});
         setTimeout(function(){
-            equal(te.obj[0].undoManger.list.length,1,'undoManger.index');
+            equal(te.obj[0].undoManger.index,1,'undoManger.index');
             ua.manualDeleteFillData(te.obj[0].body);
             equal(te.obj[0].body.firstChild.tagName.toLowerCase(),'ol','外面套了一层ol');
             equal(te.obj[0].body.firstChild.childNodes.length,2,'');

@@ -474,6 +474,7 @@ test( 'trace 721：预先设置下划线和字体颜色，再输入文本，查�
 } );
 
 test( 'trace 3337：字符边框', function() {
+    if(ua.browser.opera)return;
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );

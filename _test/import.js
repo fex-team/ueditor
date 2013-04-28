@@ -63,7 +63,7 @@
 ///import plugins/keystrokes;
 ///import plugins/fiximgclick;
 ///import plugins/autolink;
-///import plugins/highlightcode;
+///import plugins/insertcode;
 ///import plugins/list;
 ///import plugins/convertcase;
 ///import plugins/spechars;
