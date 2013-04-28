@@ -239,7 +239,8 @@
 
         //,imagePopup:true      //图片操作的浮层开关，默认打开
 
-        //,initialStyle:''//编辑器内部样式,可以用来改变字体等
+        //如果自定义，最好给p标签如下的行高，要不输入中文时，会有跳动感
+        //,initialStyle:'p{line-height:1em}'//编辑器层级的基数,可以用来改变字体等
 
         //,autoSyncData:true //自动同步编辑器要提交的数据
         //,emotionLocalization:false //是否开启表情本地化，默认关闭。若要开启请确保emotion文件夹下包含官网提供的images表情文件夹
