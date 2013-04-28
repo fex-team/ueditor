@@ -13,7 +13,9 @@ UE.plugins['undo'] = function () {
         maxUndoCount = me.options.maxUndoCount || 20,
         maxInputCount = me.options.maxInputCount || 20,
         fillchar = new RegExp(domUtils.fillChar + '|<\/hr>', 'gi');// ie会产生多余的</hr>
-
+    var noNeedFillCharTags = {
+        ol:1,ul:1,table:1,tbody:1,tr:1,body:1
+    };
     var orgState = me.options.autoClearEmptyNode;
     function compareAddr(indexA, indexB) {
         if (indexA.length != indexB.length)
@@ -89,7 +91,7 @@ UE.plugins['undo'] = function () {
 
             try{
                 var rng = new dom.Range(me.document).moveToAddress(scene.address);
-                rng.select(domUtils.isBody(rng.startContainer));
+                rng.select(noNeedFillCharTags[rng.startContainer.nodeName.toLowerCase()]);
             }catch(e){}
 
             this.update();
@@ -112,7 +114,7 @@ UE.plugins['undo'] = function () {
             browser.ie && (cont = cont.replace(/>&nbsp;</g, '><').replace(/\s*</g, '<').replace(/>\s*/g, '>'));
             me.fireEvent('aftergetscene');
             try{
-               !notSetCursor && rng.moveToAddress(restoreAddress).select(true);
+               !notSetCursor && rng.moveToAddress(restoreAddress).select(noNeedFillCharTags[rng.startContainer.nodeName.toLowerCase()]);
             }catch(e){}
             return {
                 address:rngAddress,

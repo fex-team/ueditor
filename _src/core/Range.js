@@ -1138,15 +1138,12 @@
 
                 if(ignoreTxt){
                     if(node.nodeType == 3){
-                        var tmpNode = node;
-                        while(tmpNode = tmpNode.previousSibling){
-                            if(tmpNode.nodeType == 3){
-                                firstIndex += tmpNode.nodeValue.replace(fillCharReg,'').length;
-                            }else{
-                                break;
-                            }
+                        var tmpNode = node.previousSibling;
+                        while(tmpNode && tmpNode.nodeType == 3){
+                            firstIndex += tmpNode.nodeValue.replace(fillCharReg,'').length;
+                            tmpNode = tmpNode.previousSibling;
                         }
-                        firstIndex +=  (isStart ? me.startOffset : me.endOffset) - (fillCharReg.test(node.nodeValue) ? 1 : 0 )
+                        firstIndex +=  (isStart ? me.startOffset : me.endOffset)// - (fillCharReg.test(node.nodeValue) ? 1 : 0 )
                     }else{
                         node =  node.childNodes[ isStart ? me.startOffset : me.endOffset];
                         if(node){
