@@ -262,20 +262,10 @@
                 geckoSel.removeAllRanges();
             }
             this._initEvents();
-            if (options.initialContent) {
-                if (options.autoClearinitialContent) {
-                    var oldExecCommand = me.execCommand;
-                    me.execCommand = function () {
-                        me.fireEvent('firstBeforeExecCommand');
-                        return oldExecCommand.apply(me, arguments);
-                    };
-                    this._setDefaultContent(options.initialContent);
-                } else
-                    this.setContent(options.initialContent, false, true);
-            }
             //为form提交提供一个隐藏的textarea
             for (var form = this.iframe.parentNode; !domUtils.isBody(form); form = form.parentNode) {
                 if (form.tagName == 'FORM') {
+                    me.form = form;
                     if(me.options.autoSyncData){
                         domUtils.on(me.window,'blur',function(){
                             setValue(form,me);
@@ -288,6 +278,18 @@
                     break;
                 }
             }
+            if (options.initialContent) {
+                if (options.autoClearinitialContent) {
+                    var oldExecCommand = me.execCommand;
+                    me.execCommand = function () {
+                        me.fireEvent('firstBeforeExecCommand');
+                        return oldExecCommand.apply(me, arguments);
+                    };
+                    this._setDefaultContent(options.initialContent);
+                } else
+                    this.setContent(options.initialContent, false, true);
+            }
+
             //编辑器不能为空内容
             if (domUtils.isEmptyNode(me.body)) {
                 me.body.innerHTML = '<p>' + (browser.ie ? '' : '<br/>') + '</p>';
@@ -571,6 +573,9 @@
             var geckoSel;
             if (browser.gecko && (geckoSel = this.selection.getNative())) {
                 geckoSel.removeAllRanges();
+            }
+            if(me.options.autoSyncData){
+                setValue(me.form,me);
             }
         },
 

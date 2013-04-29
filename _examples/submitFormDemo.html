@@ -24,39 +24,32 @@
         <script type="text/plain" id="myEditor" name="myEditor">
             <p>欢迎使用UEditor！</p>
         </script>
-        <input type="submit" value="Form内部可以直接提交">
+        <input type="submit" value="通过input的submit提交">
     </form>
-    <button onclick="document.getElementById('form').submit()">Form外部直接提交会失败</button>
-    <input type="button" value="先点我一下同步内容，左边的哥们才能生效" onclick="editor_a.sync()" />
+   <p>
+       从1.2.6开始，会自动同步数据无需再手动调用sync方法
+       <button onclick="document.getElementById('form').submit()">通过js调用submit提交</button>
 
-    <p>=====================================华丽的分隔线=====================================</p>
-
-    <form id="form1" method="post" target="_blank">
-    <textarea id="myEditor1" name="myEditor1">这里的内容将会和html，body等标签一块提交</textarea>
-        </form>
-    <button onclick="document.getElementById('form1').submit()">Form外部提交</button>
+   </p>
 
     <script type="text/javascript">
-
-        var editor_a = UE.getEditor('myEditor');
-        var editor_a1 = UE.getEditor('myEditor1',{
-            allHtmlEnabled:true
-        });
+        var editor_a = UE.getEditor('myEditor',{initialFrameHeight:500});
 
         //--自动切换提交地址----
         var doc=document,
             version=editor_a.options.imageUrl||"php",
-            form=doc.getElementById("form"),
-            form1=doc.getElementById("form1");
+            form=doc.getElementById("form");
 
         if(version.match(/php/)){
-            form1.action=form.action="../php/getContent.php";
+            form.action="../php/getContent.php";
         }else if(version.match(/net/)){
-            form1.action=form.action="../net/getContent.ashx";
+            form.action="../net/getContent.ashx";
         }else if(version.match(/jsp/)){
-            form1.action=form.action="../jsp/getContent.jsp";
+            form.action="../jsp/getContent.jsp";
         }
         //-----
+
+
     </script>
 
 </body>
