@@ -133,7 +133,8 @@
                     $title.html('带格式的纯文本内容');
                     break;
                 case '当前选中的文本内容':
-                    content = ue.selection.getText();
+                    ue.selection.getRange().select();
+                    content =  ue.selection.getText()
                     $title.html('当前选中的文本内容');
             }
             $content.html('').append($('<pre></pre>')
