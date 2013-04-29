@@ -144,6 +144,8 @@ div.edui-box {
     -webkit-box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
     -moz-box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
     box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
 }
 
 .edui-default .edui-editor-toolbarboxouter {
