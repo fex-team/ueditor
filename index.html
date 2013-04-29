@@ -1,82 +1,156 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh">
 <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Ueditor : 注重编辑体验的富文本编辑器" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <script type="text/javascript" src="ueditor.config.js"></script>
-    <script type="text/javascript" src="ueditor.all.min.js"></script>
-    <title>Ueditor</title>
+    <meta charset="utf-8">
+    <title>UEditor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="web editor">
+    <meta name="author" content="campaign">
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/prettify.js"></script>
+    <script src="ueditor.config.js"></script>
+    <script src="ueditor.all.min.js"></script>
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div id="header_wrap" class="outer">
-    <header class="inner">
-        <a id="forkme_banner" href="https://github.com/campaign/ueditor/tree/dev-1.2.6">View on GitHub</a>
-
-        <h1 id="project_title">Ueditor</h1>
-        <h2 id="project_tagline">注重编辑体验的富文本编辑器</h2>
-        <section id="downloads">
-            <a class="zip_download_link" href="https://github.com/campaign/ueditor/archive/dev-1.2.6.zip">Download this project as a .zip file</a>
-        </section>
-    </header>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="#">UEditor</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="#">DEMO</a></li>
+                    <li><a target="_blank" href="http://www.ueditorbbs.com">论坛</a></li>
+                    <li><a target="_blank" href="http://www.ueditorbbs.com/forum.php?mod=forumdisplay&fid=48">技术文档</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
 </div>
 
-<!-- MAIN CONTENT -->
-<div id="main_content_wrap" class="outer">
-    <section id="main_content" class="inner">
-        <h1>ueditor富文本编辑器</h1><h2>1.2.6 测试版本 demo展示</h2>
+<div class="container">
 
-        <hr>
-    </section>
-    <section id="main_content" class="inner">
-        <h2>升级列表</h2>
-        <ol>
-            <li>
-                优化了编辑器路径的设置，可以不用手动设置路径，自动识别相关路径，解决路径设置繁琐的问题
-            </li>
-            <li>
-                重写了过滤粘贴机制，采用黑白名单，可以书写符合自己需求的过滤规则，可以完全定义标签的属性，甚至是style上的某个属性及其数值 </li>
-            <li>
-                优化了拖拽机制，处理浮动图片拖拽不能跟指定的某行对齐</li>
-            <li>
-                添加了字体边框</li>
-            <li>
-                优化了backspace/del键的操作</li>
-            <li>
-                优化了编辑器的宽高设置</li>
+    <!-- Main hero unit for a primary marketing message or call to action -->
+    <div class="hero-unit">
+        <h1>UEditor富文本编辑器</h1>
+        <p>UEditor是一款功能丰富且注重编辑体验的Web编辑器</p>
+        <p><a href="https://github.com/campaign/ueditor/archive/dev-1.2.6.zip" class="btn btn-primary btn-large">下载1.2.6测试版</a></p>
+    </div>
+    <div class="page-header">
+        <h1>UEditor 1.2.6 测试版展示<small>  最新更新时间4.30日</small></h1>
+    </div>
 
-            <li><span style="color:red">重写了代码高亮，插入代码支持tab和回车支持跟上一行对齐</span></li>
-        </ol>
-        <hr>
-        <h3><span style="color:red">demo不支持任何上传功能，亲们</span></h3>
-        <h3><span style="color:red">最新更新时间4.25日</span></h3>
-    </section>
+    <h3 class="text-info">1.2.6主要更新内容</h3>
+    <ol>
+        <li>
+            优化了编辑器路径的设置，可以不用手动设置路径，自动识别相关路径，解决路径设置繁琐的问题
+        </li>
+        <li>
+            重写了过滤粘贴机制，采用黑白名单，可以书写符合自己需求的过滤规则，可以完全定义标签的属性，甚至是style上的某个属性及其数值 </li>
+        <li>
+            优化了拖拽机制，处理浮动图片拖拽不能跟指定的某行对齐</li>
+        <li>
+            添加了字体边框</li>
+        <li>
+            优化了backspace/del键的操作</li>
+        <li>
+            优化了编辑器的宽高设置</li>
+        <li>
+            优化了undo/redo操作</li>
+        <li class="text-error">重写了代码高亮，插入代码支持tab和回车支持跟上一行对齐</li>
+    </ol>
+    <hr>
+    <h6 class="text-error text-right">demo展示不支持文件上传等操作</h6>
+    <script style="width:100%;height:400px;" type="text/plain" id="ueditor"></script>
 
-    <script style="width:1000px;height:400px;margin:0 auto" type="text/plain" id="ueditor"></script>
-    <script>
-        UE.getEditor('ueditor')
-    </script>
-</div>
 
-<!-- FOOTER  -->
-<div id="footer_wrap" class="outer">
-    <footer class="inner">
-        <p class="copyright">Ueditor maintained by <a href="https://github.com/campaign">campaign</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+    <hr>
+    <h3>常用功能</h3>
+    <div class="btn-toolbar">
+        <div class="btn-group dropup">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                获得内容
+                <span class="caret"></span>
+            </a>
+            <ul id='getcontentlist' class="dropdown-menu">
+                <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">完整html内容</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">纯文本内容</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">带格式的纯文本内容</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">当前选中的文本内容</a></li>
+            </ul>
+
+        </div>
+        <div id="contentebled"class="btn-group" data-toggle="buttons-radio">
+            <button class="btn" title="禁用编辑"><i class="icon-ban-circle"></i></button>
+            <button class="btn active" title="允许编辑" ><i class="icon-pencil"></i></button>
+        </div>
+    </div>
+    <div id="getcontentmodal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Modal header</h3>
+        </div>
+        <div class="modal-body">
+            <p>One fine body…</p>
+        </div>
+    </div>
+    <footer>
+        <p>&copy;  Campaign</p>
     </footer>
-</div>
 
-
-<script type="text/javascript">
-    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fa69413817ea738e035780d916d1d0f15' type='text/javascript'%3E%3C/script%3E"));
+</div> <!-- /container -->
+<script>
+    $(function(){
+        var ue = UE.getEditor('ueditor');
+        $('#getcontentlist a').click(function(){
+            var $this = $(this),
+                $content = $('#getcontentmodal .modal-body'),
+                $title = $('#getcontentmodal h3');
+            var content= '';
+            switch($this.text()){
+                case '完整html内容' :
+                    content = UE.utils.unhtml(UE.htmlparser(ue.getContent()).toHtml(true));
+                    $title.html('完整html内容');
+                    break;
+                case '纯文本内容' :
+                    content = ue.getContentTxt();
+                    $title.html('纯文本内容');
+                    break;
+                case '带格式的纯文本内容' :
+                    content = ue.getPlainTxt();
+                    $title.html('带格式的纯文本内容');
+                    break;
+                case '当前选中的文本内容':
+                    content = ue.selection.getText();
+                    $title.html('当前选中的文本内容');
+            }
+            $content.html('').append($('<pre></pre>')
+                    .addClass('prettyprint linenums')
+                    .html(content));
+            prettyPrint();
+        });
+        $('#contentebled button').click(function(){
+            switch($(this).text()){
+                case '禁用编辑':
+                    ue.setDisabled();
+                    break;
+                case '允许编辑':
+                    ue.setEnabled();
+            }
+        })
+    })
 </script>
-
 </body>
 </html>
