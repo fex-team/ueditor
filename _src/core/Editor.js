@@ -575,7 +575,7 @@
                 geckoSel.removeAllRanges();
             }
             if(me.options.autoSyncData){
-                setValue(me.form,me);
+                me.form && setValue(me.form,me);
             }
         },
 
