@@ -117,7 +117,7 @@ UE.plugins['paste'] = function () {
 
             //过滤word粘贴过来的冗余属性
             html = UE.filterWord(html);
-            var root = UE.htmlparser(html, true);
+            var root = UE.htmlparser(html);
             //如果给了过滤规则就先进行过滤
             if (me.options.filterRules) {
                 UE.filterNode(root, me.options.filterRules);

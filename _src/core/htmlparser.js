@@ -4,14 +4,16 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
     var re_tag = /<(?:(?:\/([^>]+)>)|(?:!--([\S|\s]*?)-->)|(?:([^\s\/>]+)\s*((?:(?:"[^"]*")|(?:'[^']*')|[^"'<>])*)\/?>))/g,
         re_attr = /([\w\-:.]+)(?:(?:\s*=\s*(?:(?:"([^"]*)")|(?:'([^']*)')|([^\s>]+)))|(?=\s|$))/g;
 
-    var reg = new RegExp(domUtils.fillChar, 'g');
     //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
-
-    htmlstr = htmlstr.replace(reg, '');
+    var allowEmptyTags = {
+        b:1,code:1,i:1,u:1,strike:1,s:1,tt:1,strong:1,q:1,samp:1,em:1,span:1,
+        sub:1,img:1,sup:1,font:1,big:1,small:1,iframe:1,a:1
+    };
     htmlstr = htmlstr
+        .replace(new RegExp(domUtils.fillChar, 'g'), '')
         .replace(new RegExp('[\\r\\t\\n'+(ignoreBlank?'':' ')+']*<\/?(\\w+)\\s*(?:[^>]*)>[\\r\\t\\n'+(ignoreBlank?'':' ')+']*','g'), function(a,b){
             //br暂时单独处理
-            if(!/^br$/i.test(b) && (dtd.$inlineWithA[b]|| dtd.$empty[b])){
+            if(b && allowEmptyTags[b.toLowerCase()]){
                 return a.replace(/[\t\r\n]+/,'');
             }
             return a.replace(new RegExp('^[\\r\\t\\n'+(ignoreBlank?'':' ')+']+'),'').replace(new RegExp('[\\r\\t\\n'+(ignoreBlank?'':' ')+']+$'),'');

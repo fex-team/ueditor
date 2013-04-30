@@ -110,6 +110,9 @@ UE.plugins['defaultfilter'] = function () {
                 }
 
             }
+            if(node.type == 'comment'){
+                node.parentNode.removeChild(node);
+            }
         })
 
     });
