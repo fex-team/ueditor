@@ -345,7 +345,18 @@
     Dropdown.prototype = {
 
         constructor: Dropdown
+        ,hide : function(){
 
+            var $this = $(this);
+
+            if ($this.is('.disabled, :disabled')) return
+
+            var $parent = getParent($this);
+
+            $parent.removeClass('open');
+
+            return false
+        }
         , toggle: function (e) {
             var $this = $(this)
                 , $parent
