@@ -109,6 +109,17 @@
                         <li><a href="#" data-toggle="modal" data-target="#filtermodal">纯文本过滤规则</a></li>
                     </ul>
                 </li>
+                <li class="divider-vertical"></li>
+                <li  class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        设置内容
+                        <span class="caret"></span>
+                    </a>
+                    <ul id='setContent' class="dropdown-menu" role="menu" >
+                        <li ><a href="#" data-toggle="modal" data-target="#setcontentmodal">覆盖整个内容</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#setcontentmodal">在当前位置插入</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
@@ -125,6 +136,18 @@
         </div>
         <div class="modal-body">
             <p>One fine body…</p>
+        </div>
+    </div>
+    <div id="setcontentmodal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Modal header</h3>
+        </div>
+        <div class="modal-body">
+            <textarea style="width:97%;height:300px" ></textarea>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary writecontent" >写入内容</a>
         </div>
     </div>
 
@@ -153,126 +176,7 @@
 <script>
     $(function(){
         var ue = UE.getEditor('ueditor');
-        var filterRules = {
-            span:function(node){
-                if(/Wingdings|Symbol/.test(node.getStyle('font-family'))){
-                    return true;
-                }else{
-                    node.parentNode.removeChild(node,true)
-                }
-            },
-            p: function(node){
-                var listTag;
-                if(node.getAttr('class') == 'MsoListParagraph'){
-                    listTag = 'MsoListParagraph'
-                }
-                node.setAttr();
-                if(listTag){
-                    node.setAttr('class','MsoListParagraph')
-                }
-                if(!node.firstChild()){
-                    node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
-                }
-            },
-            div: function (node) {
-                var tmpNode, p = UE.uNode.createElement('p');
-                while (tmpNode = node.firstChild()) {
-                    if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
-                        p.appendChild(tmpNode);
-                    } else {
-                        if (p.firstChild()) {
-                            node.parentNode.insertBefore(p, node);
-                            p = UE.uNode.createElement('p');
-                        } else {
-                            node.parentNode.insertBefore(tmpNode, node);
-                        }
-                    }
-                }
-                if (p.firstChild()) {
-                    node.parentNode.insertBefore(p, node);
-                }
-                node.parentNode.removeChild(node);
-            },
-            //$:{}表示不保留任何属性
-            br: {$: {}},
-            a: function (node) {
-                if(!node.firstChild()){
-                    node.parentNode.removeChild(node);
-                    return;
-                }
-                node.setAttr();
-                node.setAttr('href', '#')
-            },
-            strong: {$: {}},
-            b:function(node){
-                node.tagName = 'strong'
-            },
-            i:function(node){
-                node.tagName = 'em'
-            },
-            em: {$: {}},
-            img: function (node) {
-                var src = node.getAttr('src');
-                node.setAttr();
-                node.setAttr({'src':src})
-            },
-            ol:{$: {}},
-            ul: {$: {}},
 
-            dl:function(node){
-                node.tagName = 'ul';
-                node.setAttr()
-            },
-            dt:function(node){
-                node.tagName = 'li';
-                node.setAttr()
-            },
-            dd:function(node){
-                node.tagName = 'li';
-                node.setAttr()
-            },
-            li: function (node) {
-
-                var className = node.getAttr('class');
-                if (!className || !/list\-/.test(className)) {
-                    node.setAttr()
-                }
-                var tmpNodes = node.getNodesByTagName('ol ul');
-                UE.utils.each(tmpNodes,function(n){
-                    node.parentNode.insertAfter(n,node);
-
-                })
-
-            },
-            table: function (node) {
-                UE.utils.each(node.getNodesByTagName('table'), function (t) {
-                    UE.utils.each(t.getNodesByTagName('tr'), function (tr) {
-                        var p = UE.uNode.createElement('p'), child, html = [];
-                        while (child = tr.firstChild()) {
-                            html.push(child.innerHTML());
-                            tr.removeChild(child);
-                        }
-                        p.innerHTML(html.join('&nbsp;&nbsp;'));
-                        t.parentNode.insertBefore(p, t);
-                    })
-                    t.parentNode.removeChild(t)
-                });
-                var val = node.getAttr('width');
-                node.setAttr();
-                if (val) {
-                    node.setAttr('width', val);
-                }
-            },
-            tbody: {$: {}},
-            caption: {$: {}},
-            th: {$: {}},
-            td: {$: {valign: 1, align: 1,rowspan:1,colspan:1,width:1,height:1}},
-            tr: {$: {}},
-            h3: {$: {}},
-            h2: {$: {}},
-            //黑名单，以下标签及其子节点都会被过滤掉
-            '-': 'script style meta iframe embed object'
-        };
         $('#getcontentlist a').click(function(){
             var $this = $(this),
                     $content = $('#getcontentmodal .modal-body'),
@@ -311,7 +215,7 @@
                     ue.setEnabled();
             }
         });
-        $('#filterRules li').click(function(evt){
+        $('#filterRules li').click(function(){
             var $this = $(this),
                     $content = $('#filtermodal .modal-body .content'),
                     $title = $('#filtermodal h3'),
@@ -321,16 +225,139 @@
                 case '不过滤' :
                     $content.html('<p>不做任何过滤操作</p>')
                     $title.html('不过滤');
-                    filterRules = filterRules;
+                    filterRules =null;
                     break;
                 case '百度百科过滤规则' :
                     $content.html('<ol><li>去掉了标签的属性，只保留必要的，比如src,href等</li><li>div会转换成p标签，嵌套div层级会变成1层</li> <li>删除了script style meta iframe embed object等标签</li></ol>')
                     $title.html('百度百科过滤规则');
-                    filterRules = null;
+                    filterRules =  {
+                        span:function(node){
+                            if(/Wingdings|Symbol/.test(node.getStyle('font-family'))){
+                                return true;
+                            }else{
+                                node.parentNode.removeChild(node,true)
+                            }
+                        },
+                        p: function(node){
+                            var listTag;
+                            if(node.getAttr('class') == 'MsoListParagraph'){
+                                listTag = 'MsoListParagraph'
+                            }
+                            node.setAttr();
+                            if(listTag){
+                                node.setAttr('class','MsoListParagraph')
+                            }
+                            if(!node.firstChild()){
+                                node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
+                            }
+                        },
+                        div: function (node) {
+                            var tmpNode, p = UE.uNode.createElement('p');
+                            while (tmpNode = node.firstChild()) {
+                                if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
+                                    p.appendChild(tmpNode);
+                                } else {
+                                    if (p.firstChild()) {
+                                        node.parentNode.insertBefore(p, node);
+                                        p = UE.uNode.createElement('p');
+                                    } else {
+                                        node.parentNode.insertBefore(tmpNode, node);
+                                    }
+                                }
+                            }
+                            if (p.firstChild()) {
+                                node.parentNode.insertBefore(p, node);
+                            }
+                            node.parentNode.removeChild(node);
+                        },
+                        //$:{}表示不保留任何属性
+                        br: {$: {}},
+                        a: function (node) {
+                            if(!node.firstChild()){
+                                node.parentNode.removeChild(node);
+                                return;
+                            }
+                            node.setAttr();
+                            node.setAttr('href', '#')
+                        },
+                        strong: {$: {}},
+                        b:function(node){
+                            node.tagName = 'strong'
+                        },
+                        i:function(node){
+                            node.tagName = 'em'
+                        },
+                        em: {$: {}},
+                        img: function (node) {
+                            var src = node.getAttr('src');
+                            node.setAttr();
+                            node.setAttr({'src':src})
+                        },
+                        ol:{$: {}},
+                        ul: {$: {}},
+
+                        dl:function(node){
+                            node.tagName = 'ul';
+                            node.setAttr()
+                        },
+                        dt:function(node){
+                            node.tagName = 'li';
+                            node.setAttr()
+                        },
+                        dd:function(node){
+                            node.tagName = 'li';
+                            node.setAttr()
+                        },
+                        li: function (node) {
+
+                            var className = node.getAttr('class');
+                            if (!className || !/list\-/.test(className)) {
+                                node.setAttr()
+                            }
+                            var tmpNodes = node.getNodesByTagName('ol ul');
+                            UE.utils.each(tmpNodes,function(n){
+                                node.parentNode.insertAfter(n,node);
+
+                            })
+
+                        },
+                        table: function (node) {
+                            UE.utils.each(node.getNodesByTagName('table'), function (t) {
+                                UE.utils.each(t.getNodesByTagName('tr'), function (tr) {
+                                    var p = UE.uNode.createElement('p'), child, html = [];
+                                    while (child = tr.firstChild()) {
+                                        html.push(child.innerHTML());
+                                        tr.removeChild(child);
+                                    }
+                                    p.innerHTML(html.join('&nbsp;&nbsp;'));
+                                    t.parentNode.insertBefore(p, t);
+                                })
+                                t.parentNode.removeChild(t)
+                            });
+                            var val = node.getAttr('width');
+                            node.setAttr();
+                            if (val) {
+                                node.setAttr('width', val);
+                            }
+                        },
+                        tbody: {$: {}},
+                        caption: {$: {}},
+                        th: {$: {}},
+                        td: {$: {valign: 1, align: 1,rowspan:1,colspan:1,width:1,height:1}},
+                        tr: {$: {}},
+                        h3: {$: {}},
+                        h2: {$: {}},
+                        //黑名单，以下标签及其子节点都会被过滤掉
+                        '-': 'script style meta iframe embed object'
+                    };
                     break;
                 case '纯文本过滤规则' :
                     $content.html('<p>只保留文本内容和段落格式</p>')
                     $title.html('纯文本过滤规则');
+                    function transP(node){
+                        node.tagName = 'p';
+                        node.setStyle();
+                    }
                     filterRules = {
                         //直接删除及其字节点内容
                         '-' : 'script style object iframe embed input select',
@@ -389,9 +416,33 @@
                     }
                     break;
             }
-            debugger
             $this.addClass('active');
-            ue.options.filterRules = filterRules
+            ue.options.filterRules = filterRules;
+        });
+        var setType = 0, $content = $('#setcontentmodal textarea');
+         $('#setContent li').click(function(){
+             var $this = $(this),
+
+                 $title = $('#setcontentmodal h3');
+
+             switch($this.text()){
+                 case '覆盖整个内容' :
+                     $title.html('覆盖整个内容');
+                     setType = 0;
+                     break;
+                 case '在当前位置插入' :
+                     $title.html('在当前位置插入');
+                     setType = 1;
+             }
+
+         })
+        $('#setcontentmodal .writecontent').click(function(){
+            if(!setType){
+                ue.setContent($content.val())
+            }else{
+                ue.execCommand('inserthtml',$content.val())
+            }
+            $('#setcontentmodal').modal('hide')
         })
     })
 </script>
