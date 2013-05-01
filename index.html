@@ -69,6 +69,8 @@
             优化了编辑器的宽高设置</li>
         <li>
             优化了undo/redo操作</li>
+        <li>
+            增加了输入数字“1.内容”回车会变成列表</li>
         <li class="text-error">重写了代码高亮，插入代码支持tab和回车支持跟上一行对齐</li>
     </ol>
     <hr>
@@ -169,14 +171,20 @@
         </div>
     </div>
     <footer>
-        <p>&copy;  Campaign</p>
+        <p>&copy;  战毅</p>
     </footer>
 
 </div> <!-- /container -->
 <script>
     $(function(){
         var ue = UE.getEditor('ueditor');
+        ue.ready(function(){
 
+            this.addListener('mousedown',function(){
+
+                $('.dropdown-menu').dropdown('hide')
+            })
+        })
         $('#getcontentlist a').click(function(){
             var $this = $(this),
                     $content = $('#getcontentmodal .modal-body'),
@@ -204,7 +212,7 @@
                     .addClass('prettyprint linenums')
                     .html(content));
             prettyPrint();
-
+            $('#getcontentmodal').modal('show')
         });
         $('#contentebled button').click(function(){
             switch($(this).attr('title')){
@@ -417,6 +425,7 @@
                     break;
             }
             $this.addClass('active');
+            $('#filtermodal').modal('show');
             ue.options.filterRules = filterRules;
         });
         var setType = 0, $content = $('#setcontentmodal textarea');
@@ -434,7 +443,7 @@
                      $title.html('在当前位置插入');
                      setType = 1;
              }
-
+             $('#setcontentmodal').modal('show')
          })
         $('#setcontentmodal .writecontent').click(function(){
             if(!setType){
