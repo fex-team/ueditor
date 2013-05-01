@@ -47,7 +47,7 @@ div.edui-box {
     clear: both;
 }
 
-* html div.edui-box {
+ * html div.edui-box {
     display: inline !important;
 }
 
