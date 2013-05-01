@@ -72,32 +72,52 @@
         <li class="text-error">重写了代码高亮，插入代码支持tab和回车支持跟上一行对齐</li>
     </ol>
     <hr>
+
+
+    <h3>常用功能</h3>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <ul class="nav">
+                <li  class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        获得内容
+                        <span class="caret"></span>
+                    </a>
+                    <ul id='getcontentlist' class="dropdown-menu"  >
+                        <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">完整html内容</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">纯文本内容</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">带格式的纯文本内容</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">当前选中的文本内容</a></li>
+                    </ul>
+                </li>
+                <li class="divider-vertical"></li>
+                <li  >
+                    <div id="contentebled" class="btn-group" data-toggle="buttons-radio">
+                        <button class="btn" title="禁用编辑"><i class="icon-ban-circle"></i></button>
+                        <button class="btn active" title="允许编辑" ><i class="icon-pencil"></i></button>
+                    </div>
+                </li>
+                <li class="divider-vertical"></li>
+                <li  class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        定制过滤规则
+                        <span class="caret"></span>
+                    </a>
+                    <ul id='filterRules' class="dropdown-menu" role="menu" >
+                        <li class="active"><a href="#" data-toggle="modal" data-target="#filtermodal">不过滤</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#filtermodal">百度百科过滤规则</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#filtermodal">纯文本过滤规则</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <h6 class="text-error text-right">demo展示不支持文件上传等操作</h6>
     <script style="width:100%;height:400px;" type="text/plain" id="ueditor"></script>
 
 
     <hr>
-    <h3>常用功能</h3>
-    <div class="btn-toolbar">
-        <div class="btn-group dropup">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                获得内容
-                <span class="caret"></span>
-            </a>
-            <ul id='getcontentlist' class="dropdown-menu">
-                <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">完整html内容</a></li>
-                <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">纯文本内容</a></li>
-                <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">带格式的纯文本内容</a></li>
-                <li><a href="#" data-toggle="modal" data-target="#getcontentmodal">当前选中的文本内容</a></li>
-            </ul>
-
-        </div>
-        <div id="contentebled"class="btn-group" data-toggle="buttons-radio">
-            <button class="btn" title="禁用编辑"><i class="icon-ban-circle"></i></button>
-            <button class="btn active" title="允许编辑" ><i class="icon-pencil"></i></button>
-        </div>
-        <button class="btn btn-warning" title="开启过滤" data-toggle="modal" data-target="#filtermodal">过滤</button>
-    </div>
     <div id="getcontentmodal" class="modal hide fade">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -107,15 +127,21 @@
             <p>One fine body…</p>
         </div>
     </div>
+
     <div id="filtermodal" class="modal hide fade">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>定制版过滤</h3>
+            <h3>过滤规则</h3>
         </div>
         <div class="modal-body">
-            <ol>
+           <div class="content">
+               <ol>
+                   <li>去掉了标签的属性，只保留必要的，比如src,href等</li>
+                   <li>div会转换成p标签，嵌套div层级会变成1层</li>
+                   <li>删除了script style meta iframe embed object等标签</li>
+               </ol>
+           </div>
 
-            </ol>
             <p class="alert alert-info ">在尝试一下粘贴吧，会发现不同哦</p>
         </div>
     </div>
@@ -127,10 +153,130 @@
 <script>
     $(function(){
         var ue = UE.getEditor('ueditor');
+        var filterRules = {
+            span:function(node){
+                if(/Wingdings|Symbol/.test(node.getStyle('font-family'))){
+                    return true;
+                }else{
+                    node.parentNode.removeChild(node,true)
+                }
+            },
+            p: function(node){
+                var listTag;
+                if(node.getAttr('class') == 'MsoListParagraph'){
+                    listTag = 'MsoListParagraph'
+                }
+                node.setAttr();
+                if(listTag){
+                    node.setAttr('class','MsoListParagraph')
+                }
+                if(!node.firstChild()){
+                    node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
+                }
+            },
+            div: function (node) {
+                var tmpNode, p = UE.uNode.createElement('p');
+                while (tmpNode = node.firstChild()) {
+                    if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
+                        p.appendChild(tmpNode);
+                    } else {
+                        if (p.firstChild()) {
+                            node.parentNode.insertBefore(p, node);
+                            p = UE.uNode.createElement('p');
+                        } else {
+                            node.parentNode.insertBefore(tmpNode, node);
+                        }
+                    }
+                }
+                if (p.firstChild()) {
+                    node.parentNode.insertBefore(p, node);
+                }
+                node.parentNode.removeChild(node);
+            },
+            //$:{}表示不保留任何属性
+            br: {$: {}},
+            a: function (node) {
+                if(!node.firstChild()){
+                    node.parentNode.removeChild(node);
+                    return;
+                }
+                node.setAttr();
+                node.setAttr('href', '#')
+            },
+            strong: {$: {}},
+            b:function(node){
+                node.tagName = 'strong'
+            },
+            i:function(node){
+                node.tagName = 'em'
+            },
+            em: {$: {}},
+            img: function (node) {
+                var src = node.getAttr('src');
+                node.setAttr();
+                node.setAttr({'src':src})
+            },
+            ol:{$: {}},
+            ul: {$: {}},
+
+            dl:function(node){
+                node.tagName = 'ul';
+                node.setAttr()
+            },
+            dt:function(node){
+                node.tagName = 'li';
+                node.setAttr()
+            },
+            dd:function(node){
+                node.tagName = 'li';
+                node.setAttr()
+            },
+            li: function (node) {
+
+                var className = node.getAttr('class');
+                if (!className || !/list\-/.test(className)) {
+                    node.setAttr()
+                }
+                var tmpNodes = node.getNodesByTagName('ol ul');
+                UE.utils.each(tmpNodes,function(n){
+                    node.parentNode.insertAfter(n,node);
+
+                })
+
+            },
+            table: function (node) {
+                UE.utils.each(node.getNodesByTagName('table'), function (t) {
+                    UE.utils.each(t.getNodesByTagName('tr'), function (tr) {
+                        var p = UE.uNode.createElement('p'), child, html = [];
+                        while (child = tr.firstChild()) {
+                            html.push(child.innerHTML());
+                            tr.removeChild(child);
+                        }
+                        p.innerHTML(html.join('&nbsp;&nbsp;'));
+                        t.parentNode.insertBefore(p, t);
+                    })
+                    t.parentNode.removeChild(t)
+                });
+                var val = node.getAttr('width');
+                node.setAttr();
+                if (val) {
+                    node.setAttr('width', val);
+                }
+            },
+            tbody: {$: {}},
+            caption: {$: {}},
+            th: {$: {}},
+            td: {$: {valign: 1, align: 1,rowspan:1,colspan:1,width:1,height:1}},
+            tr: {$: {}},
+            h3: {$: {}},
+            h2: {$: {}},
+            //黑名单，以下标签及其子节点都会被过滤掉
+            '-': 'script style meta iframe embed object'
+        };
         $('#getcontentlist a').click(function(){
             var $this = $(this),
-                $content = $('#getcontentmodal .modal-body'),
-                $title = $('#getcontentmodal h3');
+                    $content = $('#getcontentmodal .modal-body'),
+                    $title = $('#getcontentmodal h3');
             var content= '';
             switch($this.text()){
                 case '完整html内容' :
@@ -154,6 +300,7 @@
                     .addClass('prettyprint linenums')
                     .html(content));
             prettyPrint();
+
         });
         $('#contentebled button').click(function(){
             switch($(this).attr('title')){
@@ -163,6 +310,31 @@
                 case '允许编辑':
                     ue.setEnabled();
             }
+        });
+        $('#filterRules li').click(function(evt){
+            var $this = $(this),
+                    $content = $('#filtermodal .modal-body .content'),
+                    $title = $('#filtermodal h3'),
+                    filterRules = null;
+            $('#filterRules li').removeClass('active');
+            switch($this.text()){
+                case '不过滤' :
+                    $content.html('<p>不做任何过滤操作</p>')
+                    $title.html('不过滤');
+                    filterRules = filterRules;
+                    break;
+                case '百度百科过滤规则' :
+                    $content.html('<ol><li>去掉了标签的属性，只保留必要的，比如src,href等</li><li>div会转换成p标签，嵌套div层级会变成1层</li> <li>删除了script style meta iframe embed object等标签</li></ol>')
+                    $title.html('百度百科过滤规则');
+                    filterRules = null;
+                    break;
+                case '纯文本过滤规则' :
+                    $content.html('<p>只保留文本内容和段落格式</p>')
+                    $title.html('纯文本过滤规则');
+
+                    break;
+            }
+            $this.addClass('active');
         })
     })
 </script>
