@@ -50,7 +50,7 @@
 ///import plugins/delete;
 ///import plugins/snapscreen;
 ///import plugins/print;
-
+///import plugins/dragdrop;
 ///import plugins/searchreplace;
 ///import plugins/formatmatch;
 ///import plugins/basestyle;

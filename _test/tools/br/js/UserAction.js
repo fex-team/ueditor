@@ -320,6 +320,7 @@ UserAction = {
                 case "mouseenter":// 非标准支持，仅为测试提供，该项仅IE下work
                 case "mouseleave":
                 case "contextmenu":
+                case "dragend":
                 case "blur":
                     break;
                 default:
@@ -637,6 +638,19 @@ UserAction = {
      */
     contextmenu:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
         this.fireMouseEvent(target, "contextmenu", options);
+    },
+    /**
+     * Simulates a dragend on a particular element.
+     *
+     * @param {HTMLElement}
+     *            target The element to show dragend.
+     * @param {Object}
+     *            options Additional event options (use DOM standard names).
+     * @method dragend
+     * @static
+     */
+    dragend:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
+        this.fireMouseEvent(target, "dragend", options);
     },
     /**
      * Simulates a blur on a particular element.
