@@ -1,14 +1,13 @@
 module("core.Editor");
-test( "autoSyncData:true,textarea容器", function() {
+test( "autoSyncData:true,textarea容器(由setcontent触发的)", function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     div.innerHTML = '<form id="form" method="post" target="_blank"><textarea id="myEditor" name="myEditor">这里的内容将会和html，body等标签一块提交</textarea></form>';
     var editor_a = UE.getEditor('myEditor');
     equal(document.getElementById('form').childNodes.length,1,'form里只有一个子节点');
     stop();
     editor_a.ready(function(){
-        editor_a.setContent( '<p>设置内容autoSyncData 1<br/></p>' );
         equal(document.getElementById('form').childNodes.length,2,'form里有2个子节点');
-        ua.blur(editor_a.window);
+        editor_a.setContent('<p>设置内容autoSyncData 1<br/></p>');
         setTimeout(function(){
             var form  = document.getElementById('form');
             equal(form.childNodes.length,2,'失去焦点,form里多了textarea');
@@ -18,19 +17,19 @@ test( "autoSyncData:true,textarea容器", function() {
             editor_a.destroy();
             div.parentNode.removeChild(div);
             start();
-
         },100);
     });
 } );
-test( "autoSyncData:true", function() {
+test( "autoSyncData:true（由blur触发的）", function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
-   div.innerHTML = '<form id="form" method="post" ><script type="text/plain" id="myEditor" name="myEditor"> <p>欢迎使用UEditor！</p></script></form>';
+   div.innerHTML = '<form id="form" method="post" ><script type="text/plain" id="myEditor" name="myEditor"></script></form>';
     var editor_a = UE.getEditor('myEditor');
     stop();
     editor_a.ready(function(){
-        editor_a.setContent( '<p>设置内容autoSyncData 2<br/></p>' );
-        equal(document.getElementById('form').childNodes.length,1,'本来没有textarea，form里只有一个子节点');
-        ua.blur(editor_a.window);
+        editor_a.body.innerHTML = '<p>设置内容autoSyncData 2<br/></p>';
+        equal(document.getElementsByTagName('textarea').length,0,'内容空没有textarea');
+        ua.blur(editor_a.body);
+        stop();
         setTimeout(function(){
             var form  = document.getElementById('form');
             equal(form.childNodes.length,2,'失去焦点,form里多了textarea');
@@ -39,7 +38,6 @@ test( "autoSyncData:true", function() {
             editor_a.destroy();
             form.parentNode.removeChild(form);
             start();
-
         },100);
     });
 } );
@@ -47,15 +45,17 @@ test( "autoSyncData:true", function() {
 
 test( "hide,show", function() {
     var editor = te.obj[1];
+    equal(editor.body.getElementsByTagName('span').length,0,'初始没有书签');
     editor.hide();
     setTimeout(function(){
         equal($(te.dom[0]).css('display'),'none','隐藏编辑器');
-        equal(editor.body.firstChild.firstChild.tagName.toLowerCase(),'span','插入书签');
-        ok(/_baidu_bookmark_start/.test(editor.body.firstChild.firstChild.id),'书签');
+        equal(editor.body.getElementsByTagName('span').length,1,'插入书签');
+        ok(/_baidu_bookmark_start/.test(editor.body.getElementsByTagName('span')[0].id),'书签');
         editor.show();
         setTimeout(function(){
             equal($(te.dom[0]).css('display'),'block','显示编辑器');
-            equal(ua.getChildHTML(editor.body),'<p>欢迎使用ueditor!</p>','删除书签');
+            var br =ua.browser.ie?'':'<br>';
+            equal(ua.getChildHTML(editor.body),'<p>'+br+'</p>','删除书签');
             start();
         },50);
     },50);
@@ -137,7 +137,9 @@ test( "render-- options", function() {
         editor.render( div );
         /*会自动用p标签包围*/
         var space = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
-        equal( ua.getChildHTML( editor.body ), '<p><span class="span">xxx</span></p><div>xxx<p>'+space+'</p></div>', 'check initialContent' );
+//        equal( ua.getChildHTML( editor.body ), '<p><span class="span">xxx</span></p><div>xxx<p>'+space+'</p></div>', 'check initialContent' );
+        //策略变化，自1.2.6，div 标签都会被过滤
+        equal( ua.getChildHTML( editor.body ), '<p><span class="span">xxx</span></p><p>xxx</p><p>'+space+'</p>', 'check initialContent' );
         te.dom.push( div );
         start();
     },50);
@@ -167,7 +169,7 @@ test("getContent--转换空格，nbsp与空格相间显示", function() {
     editor.focus();
     var innerHTML = '<div> x  x   x&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;  &nbsp;</div>';
     editor.setContent(innerHTML);
-    equal(editor.getContent(), '<div> x &nbsp;x &nbsp; x &nbsp; &nbsp;x &nbsp; &nbsp; </div>', "转换空格，nbsp与空格相间显示");
+    equal(editor.getContent(), '<p>x &nbsp;x &nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp; &nbsp;&nbsp;</p>', "转换空格，nbsp与空格相间显示，原nbsp不变");
 });
 
 test('getContent--参数为函数', function() {
@@ -445,9 +447,9 @@ test("hasContents--有参数", function() {
 test('trace 1964 getPlainTxt--得到有格式的编辑器的纯文本内容', function() {
     var editor = te.obj[1];
     editor.focus();
-    editor.setContent('<p>&nbsp;</p><p>&nbsp; hell\no<br/>hello</p><div>hello</div>');
+    editor.setContent('<p>&nbsp;</p><p>&nbsp; hell\no<br/>hello</p>');
 
-    equal(editor.getPlainTxt(), "\n  hello\nhello\nhello\n", '得到编辑器的纯文本内容，但会保留段落格式');
+    equal(editor.getPlainTxt(), "\n  hello\nhello\n", '得到编辑器的纯文本内容，但会保留段落格式');
 
 });
 
@@ -464,7 +466,7 @@ test('2个实例采用2个配置文件', function() {
     var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = '../../ueditor.config.js';
+    script.src = '../../editor_config.js';
     head.appendChild(script);
     stop();
     expect(6);
@@ -474,10 +476,10 @@ test('2个实例采用2个配置文件', function() {
         var editor2 = new baidu.editor.Editor(UEDITOR_CONFIG2);
         var div1 = document.body.appendChild(document.createElement('div'));
         var div2 = document.body.appendChild(document.createElement('div'));
-        editor2.render(div2);
         editor1.render(div1);
+        editor2.render(div2);
+        equal(div1.style.height, '0px', '编辑器不设高度，高度为0px');
         equal(div2.style.height, '400px', '自定义div高度为400px');
-        equal(div1.style.height, '320px', '自定义div高度为320px');
         var html = UEDITOR_CONFIG2.initialContent;
         ua.checkHTMLSameStyle(html, editor2.document, editor2.body.firstChild, '初始内容为自定制的');
         equal(editor2.options.enterTag, 'br', 'enterTag is br');
