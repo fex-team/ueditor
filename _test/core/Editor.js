@@ -21,25 +21,28 @@ test( "autoSyncData:true,textarea容器(由setcontent触发的)", function() {
     });
 } );
 test( "autoSyncData:true（由blur触发的）", function() {
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-   div.innerHTML = '<form id="form" method="post" ><script type="text/plain" id="myEditor" name="myEditor"></script></form>';
-    var editor_a = UE.getEditor('myEditor');
-    stop();
-    editor_a.ready(function(){
-        editor_a.body.innerHTML = '<p>设置内容autoSyncData 2<br/></p>';
-        equal(document.getElementsByTagName('textarea').length,0,'内容空没有textarea');
-        ua.blur(editor_a.body);
+    //todo ie8里事件触发有问题，暂用手动测
+    if(ua.browser.ie>8||!ua.browser.ie){
+        var div = document.body.appendChild( document.createElement( 'div' ) );
+       div.innerHTML = '<form id="form" method="post" ><script type="text/plain" id="myEditor" name="myEditor"></script></form>';
+        var editor_a = UE.getEditor('myEditor');
         stop();
-        setTimeout(function(){
-            var form  = document.getElementById('form');
-            equal(form.childNodes.length,2,'失去焦点,form里多了textarea');
-            equal(form.lastChild.tagName.toLowerCase(),'textarea','失去焦点,form里多了textarea');
-            equal(form.lastChild.value,'<p>设置内容autoSyncData 2<br/></p>','textarea内容正确');
-            editor_a.destroy();
-            form.parentNode.removeChild(form);
-            start();
-        },100);
-    });
+        editor_a.ready(function(){
+            editor_a.body.innerHTML = '<p>设置内容autoSyncData 2<br/></p>';
+            equal(document.getElementsByTagName('textarea').length,0,'内容空没有textarea');
+            ua.blur(editor_a.body);
+            stop();
+            setTimeout(function(){
+                var form  = document.getElementById('form');
+                equal(form.childNodes.length,2,'失去焦点,form里多了textarea');
+                equal(form.lastChild.tagName.toLowerCase(),'textarea','失去焦点,form里多了textarea');
+                equal(form.lastChild.value,'<p>设置内容autoSyncData 2<br/></p>','textarea内容正确');
+                editor_a.destroy();
+                form.parentNode.removeChild(form);
+                start();
+            },100);
+        });
+    }
 } );
 
 
