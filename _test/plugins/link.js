@@ -121,30 +121,31 @@ test( '去除表格中的链接', function () {
 //} );
 
 test( '添加链接--表格第一个单元格没有超链接', function () {
-    var editor = te.obj[0];
-    var range = te.obj[1];
-    editor.setContent( '<table><tbody><tr><td></td><td><a href="www.google.com">google</a></td></tbody></table>' );
-    var body = editor.body;
-    setTimeout(function(){
-        var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
-        var ut = editor.getUETable(editor.body.firstChild);
-        var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
-        ut.setSelected(cellsRange);
+    if(!ua.browser.ie){//TODO 1.2.6
+        var editor = te.obj[0];
+        var range = te.obj[1];
+        editor.setContent( '<table><tbody><tr><td></td><td><a href="www.google.com">google</a></td></tbody></table>' );
+        setTimeout(function(){
+            var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+            var ut = editor.getUETable(editor.body.firstChild);
+            var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
+            ut.setSelected(cellsRange);
 //        range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
 //        range.selectNode( body.firstChild ).select();
 //        var tds = body.firstChild.getElementsByTagName( 'td' );
 //        editor.currentSelectedArr = [tds[0], tds[1]];
-        editor.execCommand( 'link', {href:'www.baidu.com'} );
-        range = editor.selection.getRange();
-        equal( ua.getChildHTML( trs[0].cells[1] ), '<a href="www.baidu.com">google</a>', 'a标签的地址被修改了' );
-        equal( ua.getChildHTML( trs[0].cells[0] ), '<a href="www.baidu.com">www.baidu.com</a>', 'td 1 被添加了超链接' );
-        if ( !baidu.editor.browser.gecko )
-            ua.checkResult( range, trs[0].cells[0].firstChild.firstChild, trs[0].cells[0].firstChild.firstChild, 0, 0, true, 'check link result' );
-        else
-            ua.checkResult( range, trs[0].cells[0].firstChild, trs[0].cells[0].firstChild, 0, 0, true, 'check link result' );
-        start();
-    },50);
-    stop();
+            editor.execCommand( 'link', {href:'www.baidu.com'} );
+            range = editor.selection.getRange();
+            equal( ua.getChildHTML( trs[0].cells[1] ), '<a href="www.baidu.com">google</a>', 'a标签的地址被修改了' );
+            equal( ua.getChildHTML( trs[0].cells[0] ), '<a href="www.baidu.com">www.baidu.com</a>', 'td 1 被添加了超链接' );
+            if ( !baidu.editor.browser.gecko )
+                ua.checkResult( range, trs[0].cells[0].firstChild.firstChild, trs[0].cells[0].firstChild.firstChild, 0, 0, true, 'check link result' );
+            else
+                ua.checkResult( range, trs[0].cells[0].firstChild, trs[0].cells[0].firstChild, 0, 0, true, 'check link result' );
+            start();
+        },50);
+        stop();
+    }
 } );
 
 test( '光标在超链接中间去除超链接', function () {

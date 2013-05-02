@@ -10,7 +10,7 @@ UE.plugins['defaultfilter'] = function () {
         //进行默认的处理
         root.traversal(function (node) {
             if (node.type == 'element') {
-                if (me.options.autoClearEmptyNode && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && (!node.attrs || utils.isEmptyObject(node.attrs))) {
+                if (!dtd.$cdata[node.tagName] && me.options.autoClearEmptyNode && dtd.$inline[node.tagName] && !dtd.$empty[node.tagName] && (!node.attrs || utils.isEmptyObject(node.attrs))) {
                     if (!node.firstChild()) node.parentNode.removeChild(node);
                     else if (node.tagName == 'span' && (!node.attrs || utils.isEmptyObject(node.attrs))) {
                         node.parentNode.removeChild(node, true)
@@ -20,6 +20,7 @@ UE.plugins['defaultfilter'] = function () {
                 switch (node.tagName) {
                     case 'style':
                     case 'script':
+                        debugger
                         node.setAttr({
                             cdata_tag: node.tagName,
                             cdata_data: encodeURIComponent(node.innerText() || '')

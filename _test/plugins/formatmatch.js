@@ -48,30 +48,30 @@ test( 'trace 971:有格式文字刷自己', function () {
     }, 50 );
     stop();
 } );
-
-test( 'trace 1553:居中的标题自己刷自己', function () {
-    var editor = te.obj[0];
-    var range = te.obj[1];
-    editor.setContent( '<h2 style="text-align:center">欢迎使用UEditor编辑器</h2>' );
-    setTimeout( function () {
-        var body = editor.body;
-        var text = body.firstChild.firstChild;
-        range.setStart( text, 2 ).setEnd( text, 4 ).select();
-        editor.addListener( 'mouseup', function () {
-            if ( (ua.browser.gecko && ua.browser.gecko < 2)||ua.browser.ie ==9)
-                equal( editor.getContent(), '<h2 style="text-align:center;" >欢迎使用UEditor编辑器</h2>' );
-            else
-                equal( editor.getContent(), '<h2 style="text-align:center" >欢迎使用UEditor编辑器</h2>' );
-        } );
-        editor.execCommand( 'formatmatch' );
-        range.setStart( text, 5 ).setEnd( text, 6 ).select();
-        ua.mouseup( editor.body );
-        setTimeout( function () {
-            start();
-        }, 500 );
-    }, 50 );
-    stop();
-} );
+//TODO 1.2.6
+//test( 'trace 1553:居中的标题自己刷自己', function () {
+//    var editor = te.obj[0];
+//    var range = te.obj[1];
+//    editor.setContent( '<h2 style="text-align:center">欢迎使用UEditor编辑器</h2>' );
+//    setTimeout( function () {
+//        var body = editor.body;
+//        var text = body.firstChild.firstChild;
+//        range.setStart( text, 2 ).setEnd( text, 4 ).select();
+//        editor.addListener( 'mouseup', function () {
+//            if ( (ua.browser.gecko && ua.browser.gecko < 2)||ua.browser.ie ==9)
+//                equal( editor.getContent(), '<h2 style="text-align:center;" >欢迎使用UEditor编辑器</h2>' );
+//            else
+//                equal( editor.getContent(), '<h2 style="text-align:center" >欢迎使用UEditor编辑器</h2>' );
+//        } );
+//        editor.execCommand( 'formatmatch' );
+//        range.setStart( text, 5 ).setEnd( text, 6 ).select();
+//        ua.mouseup( editor.body );
+//        setTimeout( function () {
+//            start();
+//        }, 500 );
+//    }, 50 );
+//    stop();
+//} );
 
 /*trace:969*/
 test( '格式刷的状态反射：非闭合区间', function () {
