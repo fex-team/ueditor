@@ -10,11 +10,8 @@ test( '拖拽图像不会把p切开', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
-    editor.setContent( '<p>hel</p><p>lo<br></p>' );
-    range.setStart( body, 1 ).collapse( 1 ).select();
-    editor.execCommand( 'insertimage', {src:'http://img.baidu.com/hi/jx2/j_0001.gif', width:50, height:51} );
+    body.innerHTML = '<p>hel</p><img src="http://img.baidu.com/hi/jx2/j_0001.gif" width="50" height="51" _src="http://img.baidu.com/hi/jx2/j_0001.gif" style="float: right;"><p>lo<br></p>';
     range.selectNode(body.childNodes[1]).select();
-    editor.execCommand( 'imagefloat', 'right' );
     equal(body.childNodes.length,3,'img在两个p之间');
     equal(body.firstChild.tagName.toLowerCase(),"p",'img在两个p之间');
     equal(body.childNodes[1].tagName.toLowerCase(),"img",'img在两个p之间');
