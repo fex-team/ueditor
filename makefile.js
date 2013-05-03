@@ -3,6 +3,8 @@ var fs = require('fs'),
     jsp = require('uglify-js').parser,
     pro = require('uglify-js').uglify;
 
+
+
 //压缩js
 var jslist = fs.readFileSync('_examples/editor_api.js','utf8');
 jslist = jslist.match(/\[([^\]]+)\]/)[1].match(/'[^']+'/g);
@@ -14,19 +16,19 @@ for(var i= 0,ci;ci=jslist[i++];){
 content = '(function(){\n' + content.join('\n').replace('_css','css') + '})()';
 var ast = jsp.parse(content);
 
-fs.writeFileSync('deploy/ueditor.all.js',pro.gen_code(ast,{beautify:true}));
-console.log('deplay/ueditor.all.js create success');
+fs.writeFileSync('ueditor.all.js',pro.gen_code(ast,{beautify:true}));
+console.log('ueditor.all.js create success');
 new compressor.minify({
     type: 'gcc',
-    fileIn: 'deploy/ueditor.all.js',
-    fileOut: 'deploy/ueditor.all.min.js',
+    fileIn: 'ueditor.all.js',
+    fileOut: 'ueditor.all.min.js',
     callback: function(err){
         if(err && /java/.test(err.toString())){
             console.log('no java environment found,use uglifyjs for compression');
             new compressor.minify({
                 type: 'uglifyjs',
-                fileIn: 'deploy/ueditor.all.js',
-                fileOut: 'deploy/ueditor.all.min.js',
+                fileIn: 'ueditor.all.js',
+                fileOut: 'ueditor.all.min.js',
                 callback: function(err){
                     console.log('ueditor.all.min.js create success');
                 }
