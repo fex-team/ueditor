@@ -125,9 +125,21 @@
             </ul>
         </div>
     </div>
-
+    <ul class="nav nav-tabs" id="editortab">
+        <li class="active"><a href="#full">全部</a></li>
+        <li><a href="#standard">标准</a></li>
+    </ul>
     <h6 class="text-error text-right">demo展示不支持文件上传等操作</h6>
-    <script style="width:100%;height:400px;" type="text/plain" id="ueditor"></script>
+    <div class="tab-content">
+        <div class="tab-pane active" id="full">
+            <script style="width:100%;height:400px;" type="text/plain" id="ueditor"></script>
+        </div>
+        <div class="tab-pane" id="standard">
+            <script style="width:100%;height:400px;" type="text/plain" id="standardeditor"></script>
+        </div>
+    </div>
+
+
 
 
     <hr>
@@ -178,12 +190,31 @@
 <script>
     $(function(){
         var ue = UE.getEditor('ueditor');
+        var standard = UE.getEditor('standardeditor',{
+            toolbars:[
+                ['fullscreen', 'source', '|', 'undo', 'redo', '|',
+                    'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','|',
+                    '|',
+                  'paragraph', 'fontfamily', 'fontsize', '|',
+                  '|',
+                    'justifyleft', 'justifycenter', 'justifyright',  '|',
+                    'link', 'unlink',
+                    'insertimage', 'emotion',
+                 '|',
+                    'inserttable']
+            ],
+            elementPathEnabled:false
+        });
         ue.ready(function(){
 
             this.addListener('mousedown',function(){
 
                 $('.dropdown-menu').dropdown('hide')
             })
+        });
+        $('#editortab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
         })
         $('#getcontentlist a').click(function(){
             var $this = $(this),
