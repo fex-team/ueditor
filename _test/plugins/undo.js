@@ -237,7 +237,6 @@ test( 'trace 718 合并单元格后,删除列,再撤销,再删除列', function 
         var tds = editor.body.firstChild.getElementsByTagName( 'td' );
         editor.execCommand( 'mergecells' );
         ok( tds[5].colSpan == 2 && tds[5].rowSpan == 2, '对一个4*4的表格，选择中间的4格单元格，合并成一个' );
-
         //光标定位在合并后的大单元格中，点击删除列按钮
         range.setStart( tds[5], 0 ).collapse( true ).select();
         editor.execCommand( 'deletecol' );
@@ -247,7 +246,7 @@ test( 'trace 718 合并单元格后,删除列,再撤销,再删除列', function 
         equal( editor.body.firstChild.getElementsByTagName( 'tr' )[0].childNodes.length, 4, '撤销后，表格剩四列' );
         //再次点击删除列按钮
         //TODO 1.2.6
-        if(!ua.browser.gecko){
+        if(!ua.browser.gecko && !ua.browser.ie){
             range.setStart( tds[5], 0 ).collapse( true ).select();
             editor.execCommand( 'deletecol' );
             equal( editor.body.firstChild.getElementsByTagName( 'tr' )[0].childNodes.length, 3, '再次点击删除列，表格剩三列' );
@@ -341,7 +340,7 @@ test('undo--redo',function(){
 //    var an=editor.body.firstChild.firstChild.getAttribute('anchorname');
 //    equal(cs,'anchorclass','锚点class');
 //    equal(an,'hello','锚点name');
-    var br = (ua.browser.ie)?'&nbsp;':'<br>';
+    var br = (ua.browser.ie)?'':'<br>';
     if(ua.browser.ie)
         equal(ua.getChildHTML(editor.body),'<p><img class=\"anchorclass\" anchorname=\"hello\">'+br+'</p>','');
     else

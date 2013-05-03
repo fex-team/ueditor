@@ -486,7 +486,7 @@ test( 'trace 3337：字符边框', function() {
     range.insertNode( editor.document.createTextNode( 'hello' ) );
     ua.manualDeleteFillData( editor.body );
     var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
-    if(ua.browser.ie){
+    if(ua.browser.ie && ua.browser.ie<9){
         equal(editor.queryCommandValue('fontborder'),'#000 1px solid','检查反射值');
         equal(ua.getChildHTML(editor.body.firstChild),"<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hello</span>&nbsp;",'查看添加了字符边框后的样式');
     }
@@ -503,7 +503,7 @@ test( 'trace 3337：字符边框', function() {
     editor.execCommand( 'fontborder' );
     var p1 = '<span style=\"color: red; border: 1px solid rgb(0, 0, 0);\">欢</span><span style=\"border: 1px solid rgb(0, 0, 0);\">迎光临</span>';
     var p2='<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; color: red; border-top: #000 1px solid; border-right: #000 1px solid\">欢</span><span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">迎光临</span>';
-    if(ua.browser.ie)
+    if(ua.browser.ie && ua.browser.ie<9)
         equal(ua.getChildHTML(editor.body.firstChild),p2,'查看添加了字符边框后的样式');
     else
         ua.checkHTMLSameStyle(p1,editor.document,editor.body.firstChild,'查看添加了字符边框后的样式');
@@ -518,7 +518,7 @@ test( 'trace 3342：字符ab， 给a 加边框再给b加边框，边框效果错
     range.setStart(editor.body.firstChild.lastChild,0).setEnd(editor.body.firstChild.lastChild,2).select();
     editor.execCommand( 'fontborder' );
 //    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
-    if(ua.browser.ie){
+    if(ua.browser.ie && ua.browser.ie<9){
         equal(ua.getChildHTML(editor.body.firstChild),"<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hell</span>o",'查看添加了字符边框后的样式');
     }
     else{
@@ -547,4 +547,19 @@ test( '转换font标签', function () {
     editor.setContent( '<font style="color:red"><u>x</u></font>' );
     html = '<span style="color:red"><span style="text-decoration:underline;">x</span></span>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
+} );
+
+test( '转换script标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<script type="text/javascript">ueditor</script>' );
+    var html = '<div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
+    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换script标签');
+} );
+
+test( '转换style标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<style type="text/css"></style>' );
+    var html = '<div type="text/css"></div>';
+    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
+    equal(html,editor.body.innerHTML);
 } );

@@ -640,6 +640,7 @@ test('trace 3126：1.2.5+列表重构新增标签，tab键',function(){
 test('trace 3132：单行列表backspace',function(){
     /*实际操作没问题，取range时会在将文本节点分为两个节点，后退操作无法实现*/
     if((ua.browser.safari && !ua.browser.chrome))return 0;
+    if(ua.browser.ie == 9)return 0;//TODO 1.2.6
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<ol><li><br></li></ol>');

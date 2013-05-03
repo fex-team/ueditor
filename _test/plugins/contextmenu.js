@@ -38,10 +38,10 @@ test( '基本右键菜单', function() {
         equal(menuparagraphBody.childNodes.length,4,'检查submenu的menuitems数量');
         equal(menutableBody.parentNode.parentNode.parentNode.style.display,'none','显示table submenu,检查submenu的display值:""');
         /*trace 3038*/
-        if(!ua.browser.ie){
-            equal(menutableBody.childNodes.length,1,'只有插入表格选项');
-        }else{
+        if(ua.browser.ie && ua.browser.ie<9){
             equal(menutableBody.childNodes.length,2,'ie有一条分隔线');
+        }else{
+            equal(menutableBody.childNodes.length,1,'只有插入表格选项');
         }
         innerText = lang["justifyleft" ]+lang["justifyright" ]+lang["justifycenter" ]+lang[ "justifyjustify" ];
         if(browser.gecko){
