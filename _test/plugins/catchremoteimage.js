@@ -12,8 +12,9 @@ test( '成功远程图片抓取', function () {
     setTimeout(function(){
         var div = document.body.appendChild( document.createElement( 'div' ) );
         editor.render( div );
-        var body = editor.body;
-        setTimeout(function(){
+
+        editor.ready(function(){
+            var body = editor.body;
             editor.setContent( '<p><img src="http://www.baidu.com/img/baidu_sylogo1.gif"><img src="http://news.baidu.com/resource/img/logo_news_137_46.png"></p>' );
             editor.fireEvent( "catchRemoteImage" );
             var count = 0;
@@ -36,7 +37,7 @@ test( '成功远程图片抓取', function () {
             }, 100 );
             te.dom.push( div );
          },50);
-    },50);
+    });
 } );
 
 //test( '失败远程图片抓取', function () {
