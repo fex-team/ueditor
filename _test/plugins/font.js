@@ -548,3 +548,18 @@ test( '转换font标签', function () {
     html = '<span style="color:red"><span style="text-decoration:underline;">x</span></span>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
 } );
+
+test( '转换script标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<script type="text/javascript">ueditor</script>' );
+    var html = '<div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
+    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换script标签');
+} );
+
+test( '转换style标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<style type="text/css"></style>' );
+    var html = '<div type="text/css"></div>';
+    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
+    equal(html,editor.body.innerHTML);
+} );
