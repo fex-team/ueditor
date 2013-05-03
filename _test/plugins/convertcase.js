@@ -68,6 +68,7 @@ test('非闭合选择----字符串包括大写跟小写',function(){
     stop();
 });
 test('非闭合选择----字符串包括换行跟空格',function(){
+    if(ua.browser.ie == 9)return ;//TODO 1.2.6
     var editor=te.obj[0];
     var range=te.obj[1];
     var body=editor.body;
