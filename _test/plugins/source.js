@@ -24,7 +24,6 @@ test( 'chrome删除后切换源码再切换回来，光标没了', function() {
     equal( range.startContainer.nodeType, 1, '光标定位在p里' );
     equal( range.startContainer.tagName.toLowerCase(), 'p', 'startContainer为p' );
     te.dom.push( div );
-    start();
 } );
 //TODO 1.2.6
 /*trace 986*/
@@ -59,19 +58,23 @@ test( 'chrome删除后切换源码再切换回来，光标没了', function() {
 test( '切换源码，源码中多处空行', function () {
     var editor = te.obj[0];
     editor.setContent( '<p>hello<a href="http://www.baidu.com/">baidu</a></p>' );
-    setTimeout( function () {
-        editor.execCommand( 'source' );
-        setTimeout( function () {
-            editor.execCommand( 'source' );
-            start();
-        }, 100 );
-    }, 100 );
     stop();
+    setTimeout( function () {
+        editor.execCommand('source');
+        setTimeout(function () {
+            editor.execCommand('source');
+            setTimeout(function () {
+                var html = editor.getContent();
+                equal(html, '<p>hello<a href="http://www.baidu.com/" >baidu</a></p>');
+                start();
+            }, 100);
+        }, 100);
+    }, 100);
+
     //    var html = '<p>\nhello<a href="http://www.baidu.com/">\n\tbaidu\n</a>\n</p>';
     //无奈的验证，有不可见字符
     //多余不可见字符的的bug已经修改了，现在用例字符串长度：53
-    var html = editor.getContent();
-    equal( html, '<p>hello<a href="http://www.baidu.com/" >baidu</a></p>' );
+
     // ok(html.length>=58&&html.length<=60,'切换源码不会多空行');
 } );
 
@@ -82,17 +85,19 @@ test( '设置源码内容没有p标签，切换源码后会自动添加', functi
     setTimeout( function () {
         editor.execCommand( 'source' );
         setTimeout( function () {
-            editor.execCommand( 'source' );
-            setTimeout( function () {
-                editor.execCommand( 'source' );
-                var childs = editor.body.childNodes;
-                ok( childs.length, 3, '3个p' );
-                for ( var index = 0; index < 3; index++ ) {
-                    equal( childs[0].tagName.toLowerCase(), 'p', '第' + index + '个孩子为p' );
-                }
-                start();
-            }, 100 );
-        }, 100 );
+            editor.execCommand('source');
+            setTimeout(function () {
+                editor.execCommand('source');
+                setTimeout(function () {
+                    var childs = editor.body.childNodes;
+                    ok(childs.length, 3, '3个p');
+                    for (var index = 0; index < 3; index++) {
+                        equal(childs[0].tagName.toLowerCase(), 'p', '第' + index + '个孩子为p');
+                    }
+                    start();
+                }, 100);
+            }, 100);
+        }, 100);
     }, 100 );
     stop();
 } );

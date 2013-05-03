@@ -1567,7 +1567,7 @@ test('range.createAddress,range.moveAddress',function(){
     div.appendChild(document.createTextNode(domUtils.fillChar));
     div.appendChild(document.createTextNode('aaa'));
     //空节点有占位
-    addr = rng.setStart(div.firstChild.nextSibling,1).collapse(true).createAddress(false,true);
+    addr = rng.setStart(div.firstChild.nextSibling,0).collapse(true).createAddress(false,true);
     div.innerHTML = 'aaaaaa';
     rng1.moveToAddress(addr);
     rng.setStart(div.firstChild,3).collapse(true);
@@ -1580,7 +1580,5 @@ test('equals',function(){
     div.innerHTML = '<b>xxxx</b>';
     rng.setStart(div.firstChild,0).collapse(true);
     var rng2 = rng.cloneRange();
-
     ok(rng.equals(rng2))
-
 });
