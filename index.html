@@ -19,6 +19,7 @@
             padding-top: 60px;
             padding-bottom: 40px;
         }
+
     </style>
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
 </head>
@@ -131,11 +132,11 @@
     </ul>
     <h6 class="text-error text-right">demo展示不支持文件上传等操作</h6>
     <div class="tab-content">
-        <div class="tab-pane active" id="full">
-            <script style="width:100%;height:400px;" type="text/plain" id="ueditor"></script>
+        <div class="tab-pane active" id="full" >
+            <script style="width:99%;height:400px;" type="text/plain" id="fulleditor"></script>
         </div>
         <div class="tab-pane" id="standard">
-            <script style="width:100%;height:400px;" type="text/plain" id="standardeditor"></script>
+            <script style="width:99%;height:400px;" type="text/plain" id="standardeditor"></script>
         </div>
     </div>
 
@@ -189,12 +190,18 @@
 </div> <!-- /container -->
 <script>
     $(function(){
-        var ue = UE.getEditor('ueditor');
-        var standard = UE.getEditor('standardeditor',{
+        var activeEditor =  UE.getEditor('fulleditor');
+        activeEditor.ready(function(){
+
+            this.addListener('mousedown',function(){
+
+                $('.dropdown-menu').dropdown('hide')
+            })
+        });
+        UE.getEditor('standardeditor',{
             toolbars:[
                 ['fullscreen', 'source', '|', 'undo', 'redo', '|',
                     'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','|',
-                    '|',
                   'paragraph', 'fontfamily', 'fontsize', '|',
                   '|',
                     'justifyleft', 'justifycenter', 'justifyright',  '|',
@@ -204,17 +211,28 @@
                     'inserttable']
             ],
             elementPathEnabled:false
-        });
-        ue.ready(function(){
+        }).ready(function(){
 
-            this.addListener('mousedown',function(){
+                    this.addListener('mousedown',function(){
 
-                $('.dropdown-menu').dropdown('hide')
-            })
-        });
+                        $('.dropdown-menu').dropdown('hide')
+                    })
+                });
+
+        function getActiveEditor(){
+            return activeEditor;
+        }
+
+
         $('#editortab a').click(function (e) {
+            var $this = $(this);
+
             e.preventDefault();
-            $(this).tab('show');
+            activeEditor = UE.getEditor($this.attr('href').replace(/#/,'') + 'editor')
+            $this.tab('show');
+
+
+
         })
         $('#getcontentlist a').click(function(){
             var $this = $(this),
@@ -227,16 +245,16 @@
                     $title.html('完整html内容');
                     break;
                 case '纯文本内容' :
-                    content = ue.getContentTxt();
+                    content = activeEditor.getContentTxt();
                     $title.html('纯文本内容');
                     break;
                 case '带格式的纯文本内容' :
-                    content = ue.getPlainTxt();
+                    content = activeEditor.getPlainTxt();
                     $title.html('带格式的纯文本内容');
                     break;
                 case '当前选中的文本内容':
-                    ue.selection.getRange().select();
-                    content =  ue.selection.getText()
+                    activeEditor.selection.getRange().select();
+                    content =  activeEditor.selection.getText()
                     $title.html('当前选中的文本内容');
             }
             $content.html('').append($('<pre></pre>')
@@ -248,10 +266,10 @@
         $('#contentebled button').click(function(){
             switch($(this).attr('title')){
                 case '禁用编辑':
-                    ue.setDisabled();
+                    activeEditor.setDisabled();
                     break;
                 case '允许编辑':
-                    ue.setEnabled();
+                    activeEditor.setEnabled();
             }
         });
         $('#filterRules li').click(function(){
@@ -457,7 +475,7 @@
             }
             $this.addClass('active');
             $('#filtermodal').modal('show');
-            ue.options.filterRules = filterRules;
+            activeEditor.options.filterRules = filterRules;
         });
         var setType = 0, $content = $('#setcontentmodal textarea');
          $('#setContent li').click(function(){
@@ -476,11 +494,12 @@
              }
              $('#setcontentmodal').modal('show')
          })
-        $('#setcontentmodal .writecontent').click(function(){
+        $('#setcontentmodal .writecontent').click(function(e){
+            e.preventDefault();
             if(!setType){
-                ue.setContent($content.val())
+                activeEditor.setContent($content.val())
             }else{
-                ue.execCommand('inserthtml',$content.val())
+                activeEditor.execCommand('inserthtml',$content.val())
             }
             $('#setcontentmodal').modal('hide')
         })
