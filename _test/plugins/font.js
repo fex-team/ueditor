@@ -587,14 +587,16 @@ test( '转换script标签', function () {
 test( '转换style标签:style data不为空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css">sdf</style>' );
-    var html = '<p><br></p><div type="text/css" cdata_tag="style" cdata_data="sdf"></div>';
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" cdata_data="sdf"></div>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
     ua.checkSameHtml(html,editor.body.innerHTML);
 } );
 test( '转换style标签:style data不空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css"></style>' );
-    var html = '<p><br></p><div type="text/css" cdata_tag="style" ></div>';
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" ></div>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
     ua.checkSameHtml(html,editor.body.innerHTML);
 } );
