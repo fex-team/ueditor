@@ -259,7 +259,7 @@ UE.plugins['font'] = function() {
                                          range.setStartBefore(text);
 
                                     }
-                                    span.style.cssText += ';' + style + ':' + value;
+                                    span && (span.style.cssText += ';' + style + ':' + value);
                                     range.collapse(true).select();
 
 
