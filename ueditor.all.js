@@ -15606,6 +15606,12 @@
                         editor.ui.render(holder);
                         var opt = editor.options;
                         editor.container = editor.ui.getDom();
+                        var parents = domUtils.findParents(holder,true);
+                        var displays = [];
+                        for(var i = 0 ,ci;ci=parents[i];i++){
+                            displays[i] = ci.style.display;
+                            ci.style.display = 'block'
+                        }
                         if (opt.initialFrameWidth) {
                             opt.minFrameWidth = opt.initialFrameWidth;
                         } else {
@@ -15615,6 +15621,9 @@
                             opt.minFrameHeight = opt.initialFrameHeight;
                         } else {
                             opt.initialFrameHeight = opt.minFrameHeight = holder.offsetHeight;
+                        }
+                        for(var i = 0 ,ci;ci=parents[i];i++){
+                            ci.style.display =  displays[i]
                         }
                         if (holder.style.height) {
                             holder.style.height = "";
