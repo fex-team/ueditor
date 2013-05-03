@@ -235,7 +235,7 @@ test( 'trace 3100 表格名称中tab键', function() {
         equal(editor.body.getElementsByTagName('tr').length,3,'不会增加表格行数量');
         equal(editor.body.getElementsByTagName('tr')[0].cells.length,3,'不会增加表格列数量');
         equal(editor.selection.getRange().collapsed,true,'检查光标');
-        if(ua.browser.ie != 8) //ie8下会导致堆栈溢出，奇葩的bug，以后不溢出再检查ie8
+        if(!ua.browser.ie) //ie8下会导致堆栈溢出，奇葩的bug，以后不溢出再检查ie8
             equal(editor.selection.getRange().startContainer,te.obj[0].body.getElementsByTagName('td')[0],'检查光标');
         start();
     },50);
@@ -243,6 +243,7 @@ test( 'trace 3100 表格名称中tab键', function() {
 
 /*trace 3059*/
 test('trace 3059 表格右浮动',function(){
+    if(!ua.browser.ie)return;
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );
@@ -250,7 +251,7 @@ test('trace 3059 表格右浮动',function(){
     editor.execCommand( 'inserttable');
     ua.manualDeleteFillData( editor.body );
     var tds = te.obj[0].body.getElementsByTagName('td');
-    ua.dblclick(tds[0],{clientX:199,clientY:100});
+    ua.dblclick(tds[0],{clientX:80,clientY:100});
     stop();
     setTimeout(function(){
         tds = editor.body.firstChild.getElementsByTagName( 'td' );
@@ -258,7 +259,7 @@ test('trace 3059 表格右浮动',function(){
         range.setStart( tds[0], 0 ).collapse( true ).select();
         editor.execCommand( 'tablealignment', ['float','right'] );
         var table = te.obj[0].body.getElementsByTagName('table')[0];
-        equal( table.style['float']||table.style['FLOAT'], 'right', '表格右浮动' );
+        equal( table.style['cssText'], 'float: right;', '表格右浮动' );
         start();
     },50);
 });
