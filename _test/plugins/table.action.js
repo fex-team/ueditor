@@ -243,7 +243,7 @@ test( 'trace 3100 表格名称中tab键', function() {
 
 /*trace 3059*/
 test('trace 3059 表格右浮动',function(){
-    if(!ua.browser.ie)return;
+    if(ua.browser.ie)return;//TODO 1.2.6
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );

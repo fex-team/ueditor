@@ -26,7 +26,9 @@ test( '空格', function () {
     stop();
     setTimeout(function(){
         editor.setContent('           \ufeff\u200B\t\t    \n\n\t\n\b\t\n\b\u200B\t\t\n\n    ');
-        if(ua.browser.ie!=6)
+        if(ua.browser.ie)
+            equal( editor.getContentLength(true),23,'清空后编辑器中23个空格');
+        else
             equal( editor.getContentLength(true),22,'清空后编辑器中22个空格');
         div.parentNode.removeChild(div);
         start();
