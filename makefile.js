@@ -24,7 +24,20 @@ fs.readFile('_examples/editor_api.js','utf8',function(err,data){
                 fileIn: 'ueditor.all.js',
                 fileOut: 'ueditor.all.min.js',
                 callback: function(err){
-                    console.log('ueditor.all.min.js 生成成功');
+                    if(err && /java/.test(err.toString())){
+                        console.log('没有java环境，使用uglifyjs作为压缩工具');
+                        new compressor.minify({
+                            type: 'uglifyjs',
+                            fileIn: 'ueditor.all.js',
+                            fileOut: 'ueditor.all.min.js',
+                            callback: function(err){
+                                console.log('ueditor.all.min.js 生成成功');
+                            }
+                        });
+                    }else{
+                        console.log('ueditor.all.min.js 生成成功');
+                    }
+
                 }
             });
         });
