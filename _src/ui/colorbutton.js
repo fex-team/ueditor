@@ -25,18 +25,9 @@
                     },
                     onpicknocolor: function (t, color){
                         me._onPickNoColor(color);
-                    },
-                    onchangeheight:function(){
-                        var color = this.getPreview().style.backgroundColor,
-                            popbody = me.popup.getDom("body");
-                        domUtils.setStyle(popbody,"height",me.popup.getDom("content").offsetHeight+"px");
-                        me.setColor(color);
                     }
                 }),
-                editor:me.editor,
-                onhide:function(){
-                    this.content.toggleAdv(1);
-                }
+                editor:me.editor
             });
             this.initSplitButton();
         },
@@ -45,7 +36,7 @@
             this._SplitButton_postRender();
             this.getDom('button_body').appendChild(
                 uiUtils.createElementByHtml('<div id="' + this.id + '_colorlump" class="edui-colorlump"></div>')
-                );
+            );
             this.getDom().className += ' edui-colorbutton';
         },
         setColor: function (color){
