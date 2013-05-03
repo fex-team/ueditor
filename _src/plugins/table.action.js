@@ -557,9 +557,10 @@ UE.plugins['table'] = function () {
             if(!table) return;
             var me = this,
                 rows = table.rows,
+                classList = me.options.classList,
                 len = rows.length;
             for(var i = 0;i<len;i++){
-                rows[i].className = "";
+                domUtils.removeClasses( rows[i], classList );
             }
         });
 
