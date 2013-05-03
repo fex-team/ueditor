@@ -20,7 +20,6 @@ UE.plugins['defaultfilter'] = function () {
                 switch (node.tagName) {
                     case 'style':
                     case 'script':
-                        debugger
                         node.setAttr({
                             cdata_tag: node.tagName,
                             cdata_data: encodeURIComponent(node.innerText() || '')
@@ -69,6 +68,9 @@ UE.plugins['defaultfilter'] = function () {
                         }
                         break;
                     case 'div':
+                        if(node.getAttr('cdata_tag')){
+                            break;
+                        }
                         //针对代码这里不处理插入代码的div
                         val = node.getAttr('class');
                         if(val && /^line number\d+/.test(val)){

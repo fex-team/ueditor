@@ -530,13 +530,15 @@
             me.body.innerHTML = (isAppendTo ? me.body.innerHTML : '') + html;
 
 
-
+            function isCdataDiv(node){
+                return  node.tagName == 'DIV' && node.getAttribute('cdata_tag');
+            }
             //给文本或者inline节点套p标签
             if (me.options.enterTag == 'p') {
 
                 var child = this.body.firstChild, tmpNode;
                 if (!child || child.nodeType == 1 &&
-                    (dtd.$cdata[child.tagName] ||
+                    (dtd.$cdata[child.tagName] || isCdataDiv(child) ||
                         domUtils.isCustomeNode(child)
                         )
                     && child === this.body.lastChild) {

@@ -53,7 +53,7 @@ UE.plugins['insertcode'] = function() {
                     div.appendChild(frag);
 
                     utils.each(UE.filterNode(UE.htmlparser(div.innerHTML),me.options.filterTxtRules).children,function(node){
-                        code += (node.type == 'element' ? node.innerText() : node.data) + '<br/>'
+                        code += (node.type == 'element' ? (dtd.$empty[node.tagName] ?  '' : node.innerText()) : node.data) + '<br/>'
                     });
                 }
                 me.execCommand('inserthtml','<pre id="coder"class="brush:'+lang+';toolbar:false">'+code+'</pre>',true);
