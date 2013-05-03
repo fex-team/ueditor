@@ -168,9 +168,9 @@ test( '只有结束标签的情况', function() {
 test( '开始标签与后面文本的空格过滤，其他不过滤inline节点之间的空格，过滤block节点之间的空格', function () {
     /*inline节点之间的空格要留着*/
     var root = UE.htmlparser('<a href="www.baidu.com">baidu</a> <a> hello </a>');
-    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<a href="www.baidu.com">baidu</a>&nbsp;<a>&nbsp;hello&nbsp;</a>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<a href="www.baidu.com">baidu</a> <a> hello </a>');
     root = UE.htmlparser('<span> <span> hello </span></span> <span> he llo2<span> hello </span> </span>');
-    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<span>&nbsp;<span>&nbsp;hello&nbsp;</span></span>&nbsp;<span>&nbsp;he&nbsp;llo2<span>&nbsp;hello&nbsp;</span>&nbsp;</span>' );
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<span> <span> hello </span></span> <span> he llo2<span> hello </span> </span>' );
     /*block节点之间的空格不要留着     这个太纠结，不必了。会把ol拆开，后面的变成ul*/
 //        html = '<ol>   <li> li_test </li> <li> li test2 </li> </ol> ';
 //        node = serialize.parseHTML( html );
