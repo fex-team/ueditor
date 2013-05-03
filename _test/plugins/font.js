@@ -570,6 +570,7 @@ test( '转换font标签', function () {
     var editor = te.obj[0];
     editor.setContent( '<font size="16" color="red"><b><i>x</i></b></font>' );
     var html = '<p><span style="font-size:16px;color:red" ><strong><em>x</em></strong></span></p>';
+    debugger
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换font标签');
     editor.setContent( '<font style="color:red"><u>x</u></font>' );
     html = '<span style="color:red"><span style="text-decoration:underline;">x</span></span>';
@@ -579,21 +580,21 @@ test( '转换font标签', function () {
 test( '转换script标签', function () {
     var editor = te.obj[0];
     editor.setContent( '<script type="text/javascript">ueditor</script>' );
-    var html = '<div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
+    var html = '<p><br></p><div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换script标签');
 } );
 
 test( '转换style标签:style data不为空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css">sdf</style>' );
-    var html = '<div type="text/css" cdata_tag="style" cdata_data="sdf"></div>';
+    var html = '<p><br></p><div type="text/css" cdata_tag="style" cdata_data="sdf"></div>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
     ua.checkSameHtml(html,editor.body.innerHTML);
 } );
 test( '转换style标签:style data不空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css"></style>' );
-    var html = '<div type="text/css" cdata_tag="style" cdata_data=""></div>';
+    var html = '<p><br></p><div type="text/css" cdata_tag="style" ></div>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
     ua.checkSameHtml(html,editor.body.innerHTML);
 } );
