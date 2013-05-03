@@ -20,7 +20,6 @@ UE.plugins['defaultfilter'] = function () {
                 switch (node.tagName) {
                     case 'style':
                     case 'script':
-                        debugger
                         node.setAttr({
                             cdata_tag: node.tagName,
                             cdata_data: encodeURIComponent(node.innerText() || '')
