@@ -303,7 +303,7 @@ test('在font,b,i标签中输入，会自动转换标签 ',function(){
         setTimeout(function(){
             editor.execCommand( 'source' );
             equal(editor.body.firstChild.firstChild.tagName.toLowerCase(),'span','font转换成span');
-            if(ua.browser.gecko || (ua.browser.ie && ua.browser.ie<9))
+            if(ua.browser.gecko || ua.browser.ie)
                 equal($(editor.body.firstChild.firstChild).css('font-size'),'3px','检查style');
             else
                 equal($(editor.body.firstChild.firstChild).css('font-size'),'12px','检查style');
