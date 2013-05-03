@@ -206,7 +206,7 @@ test( '两个列表，将下面的合并上去', function() {
 //    equal( ua.getChildHTML( editor.body ), '<ol class=" list-paddingleft-2" ><li><p>hello3</p></li></ol><ol class=" list-paddingleft-2" ><li><p>hello1</p></li><li><p>hello2</p></li></ol>', '3个li子节点' );
 } );
 
-test( '列表下的文本合并到列表中', function () {
+test( 'trace 3293：列表下的文本合并到列表中', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
