@@ -14,7 +14,7 @@ test( '背景', function() {
         setTimeout(function(){
             var headHtml = [];
             editor.fireEvent('getAllHtml',headHtml);
-            if(ua.browser.ie<9){
+            if(ua.browser.ie && ua.browser.ie<9){
                 equal(editor.body.style.backgroundColor,'#d7e3bc','检查body背景色');
             }else{
                 equal(editor.body.style.backgroundColor,'rgb(215, 227, 188)','检查body背景色');

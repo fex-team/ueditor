@@ -243,7 +243,7 @@ test( 'trace 3100 表格名称中tab键', function() {
 
 /*trace 3059*/
 test('trace 3059 表格右浮动',function(){
-    if(!ua.browser.ie)return;
+    if(ua.browser.ie)return;//TODO 1.2.6
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );
@@ -251,7 +251,7 @@ test('trace 3059 表格右浮动',function(){
     editor.execCommand( 'inserttable');
     ua.manualDeleteFillData( editor.body );
     var tds = te.obj[0].body.getElementsByTagName('td');
-    ua.dblclick(tds[0],{clientX:80,clientY:100});
+    ua.dblclick(tds[0],{clientX:199,clientY:100});
     stop();
     setTimeout(function(){
         tds = editor.body.firstChild.getElementsByTagName( 'td' );
