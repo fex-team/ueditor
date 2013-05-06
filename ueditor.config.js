@@ -427,6 +427,8 @@
         //,autoFloatEnabled:true
         //浮动时工具栏距离浏览器顶部的高度，用于某些具有固定头部的页面
         //,topOffset:30
+        //编辑器底部距离工具栏高度(如果参数大于等于编辑器高度，则设置无效)
+        //,toolbarTopOffset:400
 
         //indentValue
         //首行缩进距离,默认是2em
