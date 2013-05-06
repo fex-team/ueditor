@@ -181,6 +181,7 @@
         tmpCell.style.borderTopColor = cell.style.borderBottomColor;
         tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
         flag && domUtils.addClass(cell, "selectTdClass");
+        domUtils.removeAttributes(tmpCell,'width height');
         return tmpCell;
     }
 
@@ -758,6 +759,7 @@
                     cell = this.cloneCell(sourceCell, true);
                     this.setCellContent(cell);
                     cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
+
                     row.appendChild(cell);
                 }
             } else {
@@ -771,7 +773,9 @@
                         cell.rowSpan = cellInfo.rowSpan + 1;
                     } else {
                         cell = this.cloneCell(sourceCell, true);
+
                         this.setCellContent(cell);
+
                         row.appendChild(cell);
                     }
                 }

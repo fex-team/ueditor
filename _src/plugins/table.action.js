@@ -1099,7 +1099,7 @@ UE.plugins['table'] = function () {
                 domUtils.remove(line)
             }
             me.fireEvent('saveScene');
-            me.document.appendChild(line);
+            line && me.document.appendChild(line);
             return;
         }
         //正常状态下的mouseup
