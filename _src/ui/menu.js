@@ -11,11 +11,6 @@
         Stateful = baidu.editor.ui.Stateful,
         CellAlignPicker = baidu.editor.ui.CellAlignPicker,
 
-        /**
-         * 新增了一个初始化参数 sourceEvent
-         * @param sourceEvent 触发当前菜单的浏览器原生事件
-         * @update 2013/4/3 hancong03@baidu.com
-         */
         Menu = baidu.editor.ui.Menu = function (options) {
             this.initOptions(options);
             this.initMenu();
@@ -135,11 +130,10 @@
         this.Stateful_init();
         if (this.subMenu && !(this.subMenu instanceof Menu)) {
             if (options.className && options.className.indexOf("aligntd") != -1) {
-                var me = this,
-                    eventTarget = this.menu && ( this.menu.sourceEvent.target || this.menu.sourceEvent.srcElement );
+                var me = this;
 
                 //获取单元格对齐初始状态
-                this.subMenu.selected = this.editor.queryCommandValue( 'cellalignment', eventTarget );
+                this.subMenu.selected = this.editor.queryCommandValue( 'cellalignment' );
 
                 this.subMenu = new Popup({
                     content:new CellAlignPicker(this.subMenu),
