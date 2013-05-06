@@ -87,7 +87,7 @@
             attrhtml = attrhtml.join(' ');
         }
         arr.push('<' + node.tagName +
-            (attrhtml ? ' ' + attrhtml + ' ' : '') +
+            (attrhtml ? ' ' + attrhtml  : '') +
             (dtd.$empty[node.tagName] ? '\/' : '' ) + '>'
         );
         //插入新行
@@ -398,7 +398,7 @@
         },
         setStyle:function (name, val) {
             function exec(name, val) {
-                var reg = new RegExp(name + ':([^;]+);?', 'gi');
+                var reg = new RegExp(name + ':([^;]+;?)', 'gi');
                 cssStyle = cssStyle.replace(reg, '');
                 if (val) {
                     cssStyle = name + ':' + utils.unhtml(val) + ';' + cssStyle

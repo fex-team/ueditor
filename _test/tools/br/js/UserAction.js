@@ -1727,7 +1727,9 @@ UserAction = {
             return false;
         else {
             for (var p in nodeA.attrs) {
-                if (!nodeB.getAttr(p))
+                if(!nodeB.getAttr(p)&&!nodeA.getAttr(p))
+                    return true;
+                else if (!nodeB.getAttr(p)||!nodeA.getAttr(p))
                     return false;
                 else if (p.toLowerCase() == "style") {
                     if (!this.checkNodeStyle(nodeA, nodeB))

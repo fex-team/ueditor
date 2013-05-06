@@ -704,15 +704,24 @@
                     var opt = editor.options;
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    if(opt.initialFrameWidth){
-                        opt.minFrameWidth = opt.initialFrameWidth
-                    }else{
+                    var parents = domUtils.findParents(holder,true);
+                    var displays = [];
+                    for(var i = 0 ,ci;ci=parents[i];i++){
+                        displays[i] = ci.style.display;
+                        ci.style.display = 'block'
+                    }
+                    if (opt.initialFrameWidth) {
+                        opt.minFrameWidth = opt.initialFrameWidth;
+                    } else {
                         opt.minFrameWidth = opt.initialFrameWidth = holder.offsetWidth;
                     }
-                    if(opt.initialFrameHeight){
-                        opt.minFrameHeight = opt.initialFrameHeight
-                    }else{
+                    if (opt.initialFrameHeight) {
+                        opt.minFrameHeight = opt.initialFrameHeight;
+                    } else {
                         opt.initialFrameHeight = opt.minFrameHeight = holder.offsetHeight;
+                    }
+                    for(var i = 0 ,ci;ci=parents[i];i++){
+                        ci.style.display =  displays[i]
                     }
                     //编辑器最外容器设置了高度，会导致，编辑器不占位
                     //todo 先去掉，没有找到原因
