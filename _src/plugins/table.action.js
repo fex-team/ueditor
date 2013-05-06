@@ -422,10 +422,15 @@ UE.plugins['table'] = function () {
                         }
                     }
                 });
+                table.onmouseover = function () {
+                    me.fireEvent('tablemouseover', table);
+                };
                 table.onmousemove = function () {
+                    me.fireEvent('tablemousemove', table);
                     me.options.tableDragable && toggleDragButton(true, this, me);
                 };
                 table.onmouseout = function () {
+                    me.fireEvent('tablemouseout', table);
                     toggleDraggableState(me, false, "", null);
                     hideDragLine(me);
                 };
