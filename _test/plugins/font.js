@@ -52,8 +52,10 @@ test( 'underline and linethrough', function() {
             editor.execCommand( 'strikethrough' );
             var html = 'hello<a href="http://www.baidu.com/" _href=\"http://www.baidu.com/\" style="text-decoration: line-through" >baidu</a>test';
             ua.checkHTMLSameStyle( html, editor.document, body.firstChild, 'check results' );
-            div.parentNode.removeChild(div);
-            start();
+            setTimeout(function(){
+                div.parentNode.removeChild(div);
+                start();
+            }, 50);
         },50);
     },50);
 } );
@@ -105,8 +107,10 @@ test( 'trace 937：为第一个有样式的字加删除线', function() {
         var p1 = editor.document.createElement( 'p' );
         p1.innerHTML = '<span style="color:red;text-decoration:line-through">欢</span><span style="text-decoration:line-through">迎光临</span>';
         ok( ua.haveSameAllChildAttribs( editor.body.firstChild, p1 ), '查看添加了下划线后的样式' );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function () {
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
     },50);
 } );
 
@@ -134,8 +138,10 @@ test( 'trace 918：字体的状态反射', function() {
         if(ua.browser.opera)
             txt='\"楷体\"';
         equal( editor.queryCommandValue( 'fontfamily' ), txt, '检查字体的状态反射' );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function () {
+            div.parentNode.removeChild(div);
+            start();
+        },50);
     },50);
 } );
 
@@ -153,8 +159,10 @@ test( ' 选中文本设置前景色为默认', function() {
         ua.checkHTMLSameStyle( '<span style="color:rgb(255, 0, 0)">hello</span>', editor.document, editor.body.firstChild, '文本的前景色设为红色' );
         editor.execCommand( 'forecolor', 'default' );
         equal( ua.getChildHTML( editor.body ), '<p>hello</p>', '设置字体颜色为默认颜色' );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function () {
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
     },50);
 } );
 
@@ -204,8 +212,10 @@ test( 'trace 823：设置前景色后设置删除线', function() {
         var p1 = editor.document.createElement( 'p' );
         p1.innerHTML = '<span style="color: rgb(153, 230, 0)"><span style="color: rgb(153, 230, 0); text-decoration: line-through; ">你好</span><span style="color: rgb(255, 0, 0); text-decoration: line-through; ">hello</span></span>';
         ok( ua.haveSameAllChildAttribs( editor.body.firstChild, p1 ), '检查加入删除线后的样式' );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function(){
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
     },50);
 } );
 
@@ -233,8 +243,10 @@ test( 'trace 819, 765：删除线和下划线互斥', function() {
         editor.execCommand( 'underline' );
         p1.innerHTML = '<span style="text-decoration: underline">你好</span>';
         ok( ua.haveSameAllChildAttribs( editor.body.firstChild, p1 ), '下划线，和删除线互斥' );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function(){
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
     },50);
 } );
 
@@ -291,8 +303,10 @@ test( 'trace 809：闭合时改变前景色和删除线，再输入文本', func
             if ( baidu.editor.dom.domUtils.isEmptyNode( editor.body.firstChild.lastChild ) && baidu.editor.browser.gecko )
                 editor.body.firstChild.removeChild( editor.body.firstChild.lastChild );
             ok( ua.haveSameAllChildAttribs( editor.body.firstChild, p1 ), '检查新输入的文本下划线和颜色是否正确' );
-            div.parentNode.removeChild(div);
-            start();
+            setTimeout(function(){
+                div.parentNode.removeChild(div);
+                start();
+            }, 50);
         },50);
     }
 } );
@@ -317,8 +331,10 @@ test( 'trace 805：切换删除线和下划线，前景色没了', function() {
         var p1 = editor.document.createElement( 'p' );
         p1.innerHTML = '<strong><span style="color: rgb(255, 0, 0); text-decoration: line-through; ">你好</span></strong><strong><span style="color: rgb(255, 0, 0); ">早安</span></strong>';
         ok( ua.haveSameAllChildAttribs( editor.body.firstChild, p1 ), '查看前景色是不是还在' );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function () {
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
     },50);
 } );
 
@@ -344,8 +360,10 @@ test( 'trace 802：为设置了字体的文本添加删除线', function() {
         if(ua.browser.opera)
             txt='\"隶书\"';
         equal( editor.queryCommandValue( 'fontfamily' ), txt );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function () {
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
     },50);
 } );
 
@@ -389,8 +407,10 @@ test( '设置超链接前景色再清除颜色', function() {
         editor.execCommand( 'forecolor', 'default' );
         var html = '<span style="background-color: rgb(0, 255, 0);">hello</span><a href="www.baidu.com" _href=\"www.baidu.com\" style="text-decoration: underline;"><span style="background-color: rgb(0, 255, 0);">baidu</span></a>';
         ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '清除前景色' );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function () {
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
     },50);
 } );
 
@@ -420,8 +440,11 @@ test( '对表格中的文本添加颜色和下划线', function() {
             equal( trs[1].firstChild.getAttribute( 'colspan' ), 2, 'colspan为2' );
             equal( editor.queryCommandState( 'underline' ), true, '状态是underline' );
             equal( editor.queryCommandState( 'forecolor' ), 0, '非underline和line-through返回0' );
-            div.parentNode.removeChild(div);
-            start();
+            setTimeout(function () {
+                div.parentNode.removeChild(div);
+
+                start();
+            }, 50);
         },50);
     },50);
 } );
@@ -445,8 +468,10 @@ test( 'trace 740：设置左右字为红色，修改部分字颜色为蓝色，�
         editor.execCommand( 'fontfamily', ' 楷体, 楷体_GB2312, SimKai; ' );
         var html = '<span style="color: rgb(255, 0, 0); "><span style="color: rgb(255, 0, 0); font-family: 楷体, 楷体_GB2312, SimKai; ">你好</span><span style="color: rgb(0, 255, 0); font-family: 楷体, 楷体_GB2312, SimKai; ">早安</span></span>';
         ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '查看字体和颜色是否正确' );
-        div.parentNode.removeChild(div);
-        start();
+        setTimeout(function () {
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
     },50);
 } );
 
@@ -469,9 +494,11 @@ test( 'trace 721：预先设置下划线和字体颜色，再输入文本，查�
             ua.manualDeleteFillData( editor.body );
             var html = '<span style="text-decoration:underline;color:rgb(255,0,0)">hello</span><br>';
             ua.checkHTMLSameStyle( html, editor.document, editor.body.firstChild, '查看下划线颜色是否与字体颜色一致' );
-            div.parentNode.removeChild(div);
-            start();
-        },50);
+            setTimeout(function(){
+                div.parentNode.removeChild(div);
+                start();
+            }, 50);
+        }, 50);
     }
 } );
 
@@ -486,7 +513,7 @@ test( 'trace 3337：字符边框', function() {
     range.insertNode( editor.document.createTextNode( 'hello' ) );
     ua.manualDeleteFillData( editor.body );
     var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
-    if(ua.browser.ie && ua.browser.ie<9){
+    if(ua.browser.ie&&ua.browser.ie<9){
         equal(editor.queryCommandValue('fontborder'),'#000 1px solid','检查反射值');
         equal(ua.getChildHTML(editor.body.firstChild),"<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hello</span>&nbsp;",'查看添加了字符边框后的样式');
     }
@@ -503,7 +530,7 @@ test( 'trace 3337：字符边框', function() {
     editor.execCommand( 'fontborder' );
     var p1 = '<span style=\"color: red; border: 1px solid rgb(0, 0, 0);\">欢</span><span style=\"border: 1px solid rgb(0, 0, 0);\">迎光临</span>';
     var p2='<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; color: red; border-top: #000 1px solid; border-right: #000 1px solid\">欢</span><span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">迎光临</span>';
-    if(ua.browser.ie && ua.browser.ie<9)
+    if(ua.browser.ie&&ua.browser.ie<9)
         equal(ua.getChildHTML(editor.body.firstChild),p2,'查看添加了字符边框后的样式');
     else
         ua.checkHTMLSameStyle(p1,editor.document,editor.body.firstChild,'查看添加了字符边框后的样式');
@@ -518,7 +545,7 @@ test( 'trace 3342：字符ab， 给a 加边框再给b加边框，边框效果错
     range.setStart(editor.body.firstChild.lastChild,0).setEnd(editor.body.firstChild.lastChild,2).select();
     editor.execCommand( 'fontborder' );
 //    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
-    if(ua.browser.ie && ua.browser.ie<9){
+    if(ua.browser.ie&&ua.browser.ie<9){
         equal(ua.getChildHTML(editor.body.firstChild),"<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hell</span>o",'查看添加了字符边框后的样式');
     }
     else{
@@ -543,6 +570,7 @@ test( '转换font标签', function () {
     var editor = te.obj[0];
     editor.setContent( '<font size="16" color="red"><b><i>x</i></b></font>' );
     var html = '<p><span style="font-size:16px;color:red" ><strong><em>x</em></strong></span></p>';
+    debugger
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换font标签');
     editor.setContent( '<font style="color:red"><u>x</u></font>' );
     html = '<span style="color:red"><span style="text-decoration:underline;">x</span></span>';
@@ -552,14 +580,23 @@ test( '转换font标签', function () {
 test( '转换script标签', function () {
     var editor = te.obj[0];
     editor.setContent( '<script type="text/javascript">ueditor</script>' );
-    var html = '<div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
+    var html = '<p><br></p><div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换script标签');
 } );
 
-test( '转换style标签', function () {
+test( '转换style标签:style data不为空', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<style type="text/css">sdf</style>' );
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" cdata_data="sdf"></div>';
+    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
+    ua.checkSameHtml(html,editor.body.innerHTML);
+} );
+test( '转换style标签:style data不空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css"></style>' );
-    var html = '<div type="text/css"></div>';
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" ></div>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
-    equal(html,editor.body.innerHTML);
+    ua.checkSameHtml(html,editor.body.innerHTML);
 } );

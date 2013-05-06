@@ -15,35 +15,37 @@ test( '表格', function () {
     var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
     setTimeout(function(){
         editor.render( div );
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent( '<table><tbody><tr><td>hello1</td><td><strong>strongText</strong>hello2<span style="text-decoration: underline">spanText</span></td></tr></tbody></table>' );
-        var body = editor.body;
-        /*选中整个表格*/
-        range.selectNode( body.firstChild ).select();
-        var eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td'], '选中整个表格' );
-        /*在单元格中单击*/
-        var tds = body.getElementsByTagName( 'td' );
-        range.setStart( tds[0].firstChild, 0 ).collapse( true ).select();
-        ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td'], '在单元格中单击' );
-        /*在单元格中的加粗文本中单击*/
-        ua.manualDeleteFillData( editor.body );
-        range.setStart( tds[1].firstChild.firstChild, 1 ).collapse( true ).select();
-        eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td', 'strong'], '在单元格中的加粗文本中单击' );
-        /*在单元格中的下划线文本中单击*/
-        ua.manualDeleteFillData( editor.body );
-        range.setStart( tds[1].lastChild.firstChild, 1 ).collapse( true ).select();
-        eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body','table', 'tbody', 'tr', 'td', 'span'], '在单元格中的下划线文本中单击' );
-        /*选中有下划线的文本*/
-        ua.manualDeleteFillData( editor.body );
-        range.setStart( tds[1].lastChild.lastChild, 1 ).setEnd( tds[1].lastChild.lastChild, 4 ).select();
-        eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body','table', 'tbody', 'tr', 'td', 'span'], '选中有下划线的文本' );
-        div.parentNode.removeChild(div);
-        start();
-    },20);
+        editor.ready(function(){
+            var range = new baidu.editor.dom.Range( editor.document );
+            editor.setContent( '<table><tbody><tr><td>hello1</td><td><strong>strongText</strong>hello2<span style="text-decoration: underline">spanText</span></td></tr></tbody></table>' );
+            var body = editor.body;
+            /*选中整个表格*/
+            range.selectNode( body.firstChild ).select();
+            var eles = editor.queryCommandValue( 'elementpath' );
+            ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td'], '选中整个表格' );
+            /*在单元格中单击*/
+            var tds = body.getElementsByTagName( 'td' );
+            range.setStart( tds[0].firstChild, 0 ).collapse( true ).select();
+            ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td'], '在单元格中单击' );
+            /*在单元格中的加粗文本中单击*/
+            ua.manualDeleteFillData( editor.body );
+            range.setStart( tds[1].firstChild.firstChild, 1 ).collapse( true ).select();
+            eles = editor.queryCommandValue( 'elementpath' );
+            ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td', 'strong'], '在单元格中的加粗文本中单击' );
+            /*在单元格中的下划线文本中单击*/
+            ua.manualDeleteFillData( editor.body );
+            range.setStart( tds[1].lastChild.firstChild, 1 ).collapse( true ).select();
+            eles = editor.queryCommandValue( 'elementpath' );
+            ua.checkElementPath( eles, ['body','table', 'tbody', 'tr', 'td', 'span'], '在单元格中的下划线文本中单击' );
+            /*选中有下划线的文本*/
+            ua.manualDeleteFillData( editor.body );
+            range.setStart( tds[1].lastChild.lastChild, 1 ).setEnd( tds[1].lastChild.lastChild, 4 ).select();
+            eles = editor.queryCommandValue('elementpath');
+            ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td', 'span'], '选中有下划线的文本');
+            div.parentNode.removeChild(div);
+            start();
+        });
+    }, 20);
     stop();
 } );
 
@@ -118,25 +120,27 @@ test( 'trace 1539:列表', function () {
     var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
     stop();
     setTimeout(function(){
-        editor.render( div );
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent( '<ol><li>hello1</li><li>hello2<br><table><tbody><tr><td>hello3</td></tr></tbody></table></li></ol>' );
-        var body = editor.body;
-        /*选中所有列表*/
-        range.selectNode( body.firstChild ).select();
-        var eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body', 'ol', 'li', 'p'], '选中整个列表' );
-        /*选中列表中的表格*/
-        range.selectNode( body.firstChild.getElementsByTagName( 'table' )[0] ).select();
-        eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body', 'ol', 'li','table', 'tbody', 'tr', 'td'], '选中列表中的表格' );
-        /*选中列表中的br*/
-        range.setStart(body.firstChild.firstChild.nextSibling.firstChild.firstChild,6).collapse(true).select();
-        eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body','ol','li','p'], '选中列表中的br' );
-        div.parentNode.removeChild(div);
-        start();
-    },20);
+        editor.render(div);
+        editor.ready(function () {
+            var range = new baidu.editor.dom.Range(editor.document);
+            editor.setContent('<ol><li>hello1</li><li>hello2<br><table><tbody><tr><td>hello3</td></tr></tbody></table></li></ol>');
+            var body = editor.body;
+            /*选中所有列表*/
+            range.selectNode(body.firstChild).select();
+            var eles = editor.queryCommandValue('elementpath');
+            ua.checkElementPath(eles, ['body', 'ol', 'li', 'p'], '选中整个列表');
+            /*选中列表中的表格*/
+            range.selectNode(body.firstChild.getElementsByTagName('table')[0]).select();
+            eles = editor.queryCommandValue('elementpath');
+            ua.checkElementPath(eles, ['body', 'ol', 'li', 'table', 'tbody', 'tr', 'td'], '选中列表中的表格');
+            /*选中列表中的br*/
+            range.setStart(body.firstChild.firstChild.nextSibling.firstChild.firstChild, 6).collapse(true).select();
+            eles = editor.queryCommandValue('elementpath');
+            ua.checkElementPath(eles, ['body', 'ol', 'li', 'p'], '选中列表中的br');
+            div.parentNode.removeChild(div);
+            start();
+        });
+    }, 20);
 } );
 
 test( '文本和超链接', function () {
@@ -144,8 +148,8 @@ test( '文本和超链接', function () {
     var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
     editor.render( div );
     stop();
-    setTimeout(function(){
-    var range = new baidu.editor.dom.Range( editor.document );
+    editor.ready(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<div><p>hello<a>a_link</a></p></div>' );
         var body = editor.body;
         /*选中文本hello*/
@@ -158,7 +162,7 @@ test( '文本和超链接', function () {
         ua.checkElementPath( eles, ['body', 'p', 'a'], '选中文本' );
         div.parentNode.removeChild(div);
         start();
-    },20);
+    });
 } );
 
 //在版本1.2中，如果没有setTimeout在FF（3.6和9都是）中range会出错，其他浏览器没问题
@@ -167,7 +171,7 @@ test( '图片', function () {
     var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
     editor.render( div );
     stop();
-    setTimeout( function () {
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<div><p>hello<img /></p></div>' );
         var body = editor.body;
@@ -179,7 +183,7 @@ test( '图片', function () {
             div.parentNode.removeChild(div);
             start();
         }, 20 )
-    },20)
+    });
 } );
 
 test( '锚点', function () {
@@ -187,7 +191,7 @@ test( '锚点', function () {
     var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
     editor.render( div );
     stop();
-    setTimeout( function () {
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<div><p>hello<img anchorname="hello" class="anchorclass"></p></div>' );
         var body = editor.body;
@@ -199,7 +203,7 @@ test( '锚点', function () {
             div.parentNode.removeChild(div);
             start();
         }, 20 )
-    },20)
+    });
 } );
 
 test( '文本', function () {
@@ -207,7 +211,7 @@ test( '文本', function () {
     var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
     editor.render( div );
     stop();
-    setTimeout( function () {
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( 'hello' );
         var body = editor.body;
@@ -219,7 +223,7 @@ test( '文本', function () {
             div.parentNode.removeChild(div);
             start();
         }, 20 )
-    },20)
+    });
 } );
 
 test( '表格和文本', function () {
@@ -228,7 +232,7 @@ test( '表格和文本', function () {
     editor.render( div );
     var body = editor.body;
     stop();
-    setTimeout( function () {
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         range.setStart(body.firstChild.firstChild,2).collapse(true).select();
         editor.execCommand('inserttable');
@@ -247,5 +251,5 @@ test( '表格和文本', function () {
             div.parentNode.removeChild(div);
             start();
         }, 20 )
-    },20)
+    });
 } );

@@ -178,13 +178,15 @@ test('trace 3047 全屏插入表格',function(){
         editor.ui.setFullScreen(!editor.ui.isFullScreen());
         editor.execCommand('inserttable');
         var width1 = editor.body.getElementsByTagName('td')[0].width;
-        setTimeout(function(){
+        setTimeout(function () {
             editor.ui.setFullScreen(!editor.ui.isFullScreen());
-            var width2 = editor.body.getElementsByTagName('td')[0].width;
-            ok((width1-width2)>100,'页面宽度自适应');
-            div.parentNode.removeChild(div);
-            start();
-        },50);
+            setTimeout(function () {
+                var width2 = editor.body.getElementsByTagName('td')[0].width;
+                ok((width1 - width2) > 100, '页面宽度自适应');
+                div.parentNode.removeChild(div);
+                start();
+            }, 50);
+        }, 50);
     });
 });
 

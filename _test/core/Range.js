@@ -1580,7 +1580,5 @@ test('equals',function(){
     div.innerHTML = '<b>xxxx</b>';
     rng.setStart(div.firstChild,0).collapse(true);
     var rng2 = rng.cloneRange();
-
     ok(rng.equals(rng2))
-
 });
