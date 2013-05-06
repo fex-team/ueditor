@@ -150,10 +150,15 @@ test( 'setStyle', function() {
     equals(node.getAttr('style'),undefined,'清空样式');
     node.setStyle('border','<script>alert("")</script>');
     equals(node.getAttr('style'),"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;",'脚本');
-    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\" ><div></div></div>','脚本转html');
+    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\"><div></div></div>','脚本转html');
     node.innerHTML('<div>asdfasdf<b>sdf</b></div>');
     node.removeChild(node.firstChild(),true);
-    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\" >asdfasdf<b>sdf</b></div>','移除子节点');
+    equals(node.toHtml(),'<div style=\"border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;;\">asdfasdf<b>sdf</b></div>','移除子节点');
+    node.innerHTML('<div style="border:1px solid #ccc;color:#ccc"></div>');
+    node.firstChild().setStyle('border');
+    equals(node.firstChild().toHtml(),'<div style="color:#ccc"></div>','删除分号');
+    node.innerHTML('<div style="border:1px solid #ccc;color:#ccc" dfasdfas="sdfsdf" sdfsdf="sdfsdfs" ></div>');
+    equals(node.firstChild().toHtml(),'<div style="border:1px solid #ccc;color:#ccc" dfasdfas="sdfsdf" sdfsdf="sdfsdfs"></div>');
 });
 
 test( 'getIndex', function() {
