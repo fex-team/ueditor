@@ -6,7 +6,51 @@
  * To change this template use File | Settings | File Templates.
  */
 module( 'plugins.defaultfilter' );
-
+test( '转换a标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<a href="http://elearning.baidu.com/url/RepositoryEntry/68616197" target="_blank">' );
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var html = '<p><a href="http://elearning.baidu.com/url/RepositoryEntry/68616197" target="_blank" _href="http://elearning.baidu.com/url/RepositoryEntry/68616197"></a></p>';
+    ua.checkSameHtml(html,editor.body.innerHTML,'转换a标签');
+} );
+test( '转换img标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" />' );
+    var html = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" _src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" /></p>';
+    ua.checkSameHtml(html,editor.body.innerHTML,'转换img标签');
+} );
+test( '删span中的white-space标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<span style=" display: block; white-space: nowrap " >sadfsadf</span>' );
+    var html = '<p><span style=" display: block; ">sadfsadf</span></p>';
+    ua.checkSameHtml(html,editor.body.innerHTML,'删span中的white-space标签');
+} );
+test( '删p中的margin|padding标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<p style="margin-left: 1em; list-style: none;" >hello</p>' );
+    var html = '<p style="list-style: none;">hello</p>';
+    ua.checkSameHtml(html,editor.body.innerHTML,'删p中的margin|padding标签');
+} );
+test( '给空p加br', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<p style="list-style: none;" ></p>' );
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var html = '<p style="list-style: none;">'+br+'</p>';
+    ua.checkSameHtml(html,editor.body.innerHTML,'给空p加br');
+} );
+test( '删div', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<div class="socore" ><div class="sooption" style="padding: 1px;" ><p>视频</p></div></div>' );
+    var html = '<p>视频</p>';
+    ua.checkSameHtml(html,editor.body.innerHTML,'删div');
+} );
+test( 'li', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<li style="margin: 0px 0px 0px 6px;" ><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name"  >天<i class="i-arrow-down"></i></a></li>' );
+    var html = '<ul style="" class=" list-paddingleft-2"><li><p><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name" _href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao">天<em class="i-arrow-down"></em></a></p></li></ul>';
+    ua.checkSameHtml(html,editor.body.innerHTML,'li');
+} );
+//<li style="margin: 0px 0px 0px 6px;" ><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name"  >pistachio天<i class="i-arrow-down"></i></a></li>
 //TODO 现在在过滤机制里面去除无用的标签
 test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function() {
     var editor = new UE.Editor({autoClearEmptyNode:true,'autoFloatEnabled':false});
@@ -86,10 +130,33 @@ test("getContent--不去除无用的空标签:autoClearEmptyNode==false", functi
 test("getContent--转换空格，nbsp与空格相间显示", function() {
     var editor = te.obj[0];
     var div = te.dom[0];
-    editor.render(div);
     editor.focus();
     //策略改变,原nbsp不做处理,类似:'<p> d </p>'中的空格会被过滤
     var innerHTML = '<div>x  x   x &nbsp;x&nbsp;&nbsp;  &nbsp;</div>';
     editor.setContent(innerHTML);
     equal(editor.getContent(), '<p>x &nbsp;x &nbsp; x &nbsp;x&nbsp;&nbsp; &nbsp;&nbsp;</p>', "转换空格，nbsp与空格相间显示");
 });
+test( '转换script标签', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<script type="text/javascript">ueditor</script>' );
+    var html = '<p><br></p><div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
+    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换script标签');
+} );
+
+test( '转换style标签:style data不为空', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<style type="text/css">sdf</style>' );
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" cdata_data="sdf"></div>';
+    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
+    ua.checkSameHtml(html,editor.body.innerHTML);
+} );
+test( '转换style标签:style data不空', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<style type="text/css"></style>' );
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" ></div>';
+    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
+    ua.checkSameHtml(html,editor.body.innerHTML);
+} );
+//ue.setContent('<a href="http://elearning.baidu.com/url/RepositoryEntry/68616197" target="_blank">');
