@@ -422,10 +422,15 @@ UE.plugins['table'] = function () {
                         }
                     }
                 });
+                table.onmouseover = function () {
+                    me.fireEvent('tablemouseover', table);
+                };
                 table.onmousemove = function () {
+                    me.fireEvent('tablemousemove', table);
                     me.options.tableDragable && toggleDragButton(true, this, me);
                 };
                 table.onmouseout = function () {
+                    me.fireEvent('tablemouseout', table);
                     toggleDraggableState(me, false, "", null);
                     hideDragLine(me);
                 };
@@ -555,8 +560,16 @@ UE.plugins['table'] = function () {
                 getClass = function(list,index,repeat){
                     return list[index] ? list[index] : repeat ? list[index % list.length]: "";
                 };
-            for(var i = 0;i<len;i++){
-                rows[i].className = getClass( classList|| me.options.classList,i,true);
+
+            var index = 0,
+                classIndex = 0;
+
+            if( me.queryCommandState( "inserttitle" ) === -1 ) {
+                index = 1;
+            }
+
+            for(;index<len;index++, classIndex++){
+                rows[index].className = getClass( classList|| me.options.classList,classIndex,true);
             }
         });
         me.addListener("uninterlacetable",function(type,table){
