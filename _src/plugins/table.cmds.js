@@ -694,15 +694,13 @@
          * 查询当前点击的单元格的对齐状态， 如果当前已经选择了多个单元格， 则会返回所有单元格经过统一协调过后的状态
          * @see UE.UETable.getTableCellAlignState
          */
-        queryCommandValue: function (cmd, targetNode) {
+        queryCommandValue: function (cmd) {
 
-            if (!targetNode) {
-                return null;
+            var activeMenuCell = getTableItemsByRange( this).cell;
+
+            if( !activeMenuCell ) {
+                activeMenuCell = getSelectedArr(this)[0];
             }
-
-            //激活菜单的单元格
-            var activeMenuCell = domUtils.findParentByTagName(targetNode, ['td', 'th'], true),
-                temp = null;
 
             if (!activeMenuCell) {
 
