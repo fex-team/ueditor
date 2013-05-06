@@ -13,3 +13,6 @@
 【insertcode】
 【表格】
 【基本操作】
+【getEditor】
+【粘贴】
+
