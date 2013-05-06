@@ -488,8 +488,7 @@ UE.plugins['contextmenu'] = function () {
 
         menu = new UE.ui.Menu( {
             items:contextItems,
-            editor:me,
-            sourceEvent: evt
+            editor:me
         } );
         menu.render();
         menu.showAt( offset );
