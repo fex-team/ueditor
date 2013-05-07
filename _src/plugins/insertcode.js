@@ -279,6 +279,9 @@ UE.plugins['insertcode'] = function() {
             rng = me.selection.getRange(),
             pre = domUtils.findParentByTagName(rng.startContainer,'pre',true);
         if(pre){
+            if(!rng.collapsed){
+                rng.deleteContents()
+            }
             var br = '',frag = me.document.createDocumentFragment();
             utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
                 if(node.type == 'element' && node.tagName == 'br'){
