@@ -44,7 +44,10 @@
         };
         //注册一个触发命令的事件，同学们可以在任意地放绑定触发此命令的事件
         me.addListener( 'click', function () {
-            me.execCommand( "addborder" );
+            setTimeout(function(){
+                me.execCommand( "addborder" );
+            })
+
         } );
     };
     var editor_a = UE.getEditor('myEditor' );

@@ -185,6 +185,7 @@
             caption:"insertcaption deletecaption",
             sorttable:"enablesort disablesort"
         };
+        editor.fireEvent('saveScene');
         for(var i in checks){
             var cmds = checks[i].split(" "),
                 input = $G("J_" + i);
@@ -194,9 +195,11 @@
                 editor.queryCommandState(cmds[1])!=-1 &&editor.execCommand(cmds[1]);
             }
         }
+
         editor.execCommand("edittable", tone.value);
         autoSizeContent.checked ?editor.execCommand('adaptbytext') : "";
         autoSizePage.checked ? editor.execCommand("adaptbywindow") : "";
+        editor.fireEvent('saveScene');
 
         editor.__hasEnterExecCommand = false;
     };

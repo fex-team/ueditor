@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-<p>尝试粘贴内容近来，这里边不能粘贴任何inlined的样式，不能有iframe,style,script,embed等标签，表格不能嵌套</p>
+<p>尝试粘贴内容近来，这里边不能粘贴任何inline的样式，不能有iframe,style,script,embed等标签，表格不能嵌套</p>
 <div>
     <script id="editor" type="text/plain" style="width:500px;height:500px"></script>
 </div>
@@ -70,27 +70,27 @@
                 },
                 //$:{}表示不保留任何属性
                 br: {$: {}},
-                a: function (node) {
-                    if(!node.firstChild()){
-                        node.parentNode.removeChild(node);
-                        return;
-                    }
-                    node.setAttr();
-                    node.setAttr('href', '#')
-                },
-                strong: {$: {}},
-                b:function(node){
-                    node.tagName = 'strong'
-                },
-                i:function(node){
-                    node.tagName = 'em'
-                },
-                em: {$: {}},
-                img: function (node) {
-                    var src = node.getAttr('src');
-                    node.setAttr();
-                    node.setAttr({'src':src})
-                },
+//                a: function (node) {
+//                    if(!node.firstChild()){
+//                        node.parentNode.removeChild(node);
+//                        return;
+//                    }
+//                    node.setAttr();
+//                    node.setAttr('href', '#')
+//                },
+//                strong: {$: {}},
+//                b:function(node){
+//                    node.tagName = 'strong'
+//                },
+//                i:function(node){
+//                    node.tagName = 'em'
+//                },
+//                em: {$: {}},
+//                img: function (node) {
+//                    var src = node.getAttr('src');
+//                    node.setAttr();
+//                    node.setAttr({'src':src})
+//                },
                 ol:{$: {}},
                 ul: {$: {}},
 

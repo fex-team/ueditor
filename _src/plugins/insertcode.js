@@ -294,5 +294,14 @@ UE.plugins['insertcode'] = function() {
             return true;
         }
     });
-
+    //方向键的处理
+    me.addListener('keyup',function(cmd,evt){
+        var me = this,keyCode = evt.keyCode || evt.which;
+        if(keyCode == 40){
+            var rng = me.selection.getRange();
+            if(rng.collapsed && domUtils.findParentByTagName(rng.startContainer,'pre',true)){
+                me.execCommand('insertparagraph')
+            }
+        }
+    })
 };
