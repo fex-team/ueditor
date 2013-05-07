@@ -110,6 +110,14 @@ UE.plugins['defaultfilter'] = function () {
                         UE.utils.each(tmpNodes, function (n) {
                             node.parentNode.insertAfter(n, node);
                         });
+                        break;
+                    case 'td':
+                    case 'th':
+                    case 'caption':
+                        if(!node.children && !node.children.length){
+
+                            node.appendChild(browser.ie ? UE.uNode.createText(' ') : UE.uNode.createElement('br'))
+                        }
                 }
 
             }
@@ -158,6 +166,7 @@ UE.plugins['defaultfilter'] = function () {
                                 '_src': ''
                             })
                         }
+
                 }
             }
 

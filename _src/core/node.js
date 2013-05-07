@@ -91,9 +91,12 @@
             (dtd.$empty[node.tagName] ? '\/' : '' ) + '>'
         );
         //插入新行
-        if (formatter  &&  !dtd.$inlineWithA[node.tagName]) {
-            current = insertLine(arr, current, true);
-            insertIndent(arr, current)
+        if (formatter  &&  !dtd.$inlineWithA[node.tagName] && node.tagName != 'pre') {
+            if(node.children && node.children.length){
+                current = insertLine(arr, current, true);
+                insertIndent(arr, current)
+            }
+
         }
         if (node.children && node.children.length) {
             for (var i = 0, ci; ci = node.children[i++];) {
@@ -105,9 +108,12 @@
             }
         }
         if (!dtd.$empty[node.tagName]) {
-            if (formatter && !dtd.$inlineWithA[node.tagName]) {
-                current = insertLine(arr, current);
-                insertIndent(arr, current)
+            if (formatter && !dtd.$inlineWithA[node.tagName]  && node.tagName != 'pre') {
+
+                if(node.children && node.children.length){
+                    current = insertLine(arr, current);
+                    insertIndent(arr, current)
+                }
             }
             arr.push('<\/' + node.tagName + '>');
         }
