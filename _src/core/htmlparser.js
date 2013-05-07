@@ -14,9 +14,9 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
         .replace(new RegExp('[\\r\\t\\n'+(ignoreBlank?'':' ')+']*<\/?(\\w+)\\s*(?:[^>]*)>[\\r\\t\\n'+(ignoreBlank?'':' ')+']*','g'), function(a,b){
             //br暂时单独处理
             if(b && allowEmptyTags[b.toLowerCase()]){
-                return a.replace(/(^[\t\n\r]+)|([\t\n\r]+$)/g,'');
+                return a.replace(/(^[\n\r]+)|([\n\r]+$)/g,'');
             }
-            return a.replace(new RegExp('^[\\r\\t\\n'+(ignoreBlank?'':' ')+']+'),'').replace(new RegExp('[\\r\\t\\n'+(ignoreBlank?'':' ')+']+$'),'');
+            return a.replace(new RegExp('^[\\r\\n'+(ignoreBlank?'':' ')+']+'),'').replace(new RegExp('[\\r\\n'+(ignoreBlank?'':' ')+']+$'),'');
         });
 
 

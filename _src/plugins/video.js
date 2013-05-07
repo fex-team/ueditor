@@ -17,25 +17,23 @@ UE.plugins['video'] = function (){
      * @param toEmbed 是否以flash代替显示
      * @param addParagraph  是否需要添加P 标签
      */
-    function creatInsertStr(url,width,height,align,toEmbed,addParagraph){
+    function creatInsertStr(url,width,height,id,align,toEmbed){
         return  !toEmbed ?
-                (addParagraph? ('<p '+ (align && align !="none" ? ( align == "center"? ' style="text-align:center;" ':' style="float:"'+ align ) : '') + '>'): '') +
-                '<img align="'+align+'" width="'+ width +'" height="' + height + '" _url="'+url+'" class="edui-faked-video"' +
-                ' src="' + me.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" style="background:url('+me.options.UEDITOR_HOME_URL+'themes/default/images/videologo.gif) no-repeat center center; border:1px solid gray;" />' +
-                (addParagraph?'</p>':'')
+
+                '<img ' + (id ? 'id="' + id+'"' : '') + ' width="'+ width +'" height="' + height + '" _url="'+url+'" class="edui-faked-video"'  +
+                ' src="' + me.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif" style="background:url('+me.options.UEDITOR_HOME_URL+'themes/default/images/videologo.gif) no-repeat center center; border:1px solid gray;'+(align ? 'float:' + align + ';': '')+'" />'
+
                 :
                 '<embed type="application/x-shockwave-flash" class="edui-faked-video" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
-                ' src="' + url + '" width="' + width  + '" height="' + height  + '" align="' + align + '"' +
-                ( align && align !="none" ? ' style= "'+ ( align == "center"? "display:block;":" float: "+ align )  + '"' :'' ) +
+                ' src="' + url + '" width="' + width  + '" height="' + height  + '"'  + (align ? ' style="float:' + align + '"': '') +
                 ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" >';
     }
 
     function switchImgAndEmbed(root,img2embed){
         utils.each(root.getNodesByTagName(img2embed ? 'img' : 'embed'),function(node){
             if(node.getAttr('class') == 'edui-faked-video'){
-                var align = node.getStyle('float');
-                align = align == 'none' ? (node.getAttr('align')||'') : align;
-                var html = creatInsertStr( img2embed ? node.getAttr('_url') : node.getAttr('src'),node.getAttr('width'),node.getAttr('height'),align,img2embed);
+
+                var html = creatInsertStr( img2embed ? node.getAttr('_url') : node.getAttr('src'),node.getAttr('width'),node.getAttr('height'),null,node.getStyle('float') || '',img2embed);
                 node.parentNode.replaceChild(UE.uNode.createElement(html),node)
             }
         })
@@ -51,12 +49,19 @@ UE.plugins['video'] = function (){
     me.commands["insertvideo"] = {
         execCommand: function (cmd, videoObjs){
             videoObjs = utils.isArray(videoObjs)?videoObjs:[videoObjs];
-            var html = [];
+            var html = [],id = 'tmpVedio';
             for(var i=0,vi,len = videoObjs.length;i<len;i++){
                  vi = videoObjs[i];
-                 html.push(creatInsertStr( vi.url, vi.width || 420,  vi.height || 280, vi.align||"none",false,true));
+                 html.push(creatInsertStr( vi.url, vi.width || 420,  vi.height || 280, id + i,null,false));
             }
             me.execCommand("inserthtml",html.join(""),true);
+            var rng = this.selection.getRange();
+            for(var i= 0,len=videoObjs.length;i<len;i++){
+                var img = this.document.getElementById('tmpVedio'+i);
+                domUtils.removeAttributes(img,'id');
+                rng.selectNode(img).select();
+                me.execCommand('imagefloat',videoObjs[i].align)
+            }
         },
         queryCommandState : function(){
             var img = me.selection.getRange().getClosedNode(),

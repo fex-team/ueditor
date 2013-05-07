@@ -395,7 +395,7 @@
             if (!cssStyle) {
                 return ''
             }
-            var reg = new RegExp(name + ':([^;]+)');
+            var reg = new RegExp(name + ':([^;]+)','i');
             var match = cssStyle.match(reg);
             if (match && match[0]) {
                 return match[1]

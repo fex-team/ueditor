@@ -117,7 +117,7 @@ UE.plugins['paste'] = function () {
 
             //过滤word粘贴过来的冗余属性
             html = UE.filterWord(html);
-            var root = UE.htmlparser(html);
+            var root = UE.htmlparser(html,true);
             //如果给了过滤规则就先进行过滤
             if (me.options.filterRules) {
                 UE.filterNode(root, me.options.filterRules);
@@ -142,7 +142,7 @@ UE.plugins['paste'] = function () {
             if(!html.html){
                 return;
             }
-            root = UE.htmlparser(html.html);
+            root = UE.htmlparser(html.html,true);
             //如果开启了纯文本模式
             if (me.queryCommandState('pasteplain') === 1) {
                 me.execCommand('insertHtml', UE.filterNode(root, me.options.filterTxtRules).toHtml(), true);
