@@ -333,7 +333,7 @@ UE.plugins['list'] = function () {
             }
 
             var style = domUtils.getStyle(node, 'list-style-type');
-            node.style.cssText = style ? 'list-style-type:' + style : '';
+            style && (node.style.cssText = 'list-style-type:' + style);
             node.className = utils.trim(node.className.replace(/list-paddingleft-\w+/,'')) + ' list-paddingleft-' + type;
             utils.each(domUtils.getElementsByTagName(node,'li'),function(li){
                 li.style.cssText && (li.style.cssText = '');
