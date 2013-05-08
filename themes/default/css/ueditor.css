@@ -157,7 +157,6 @@ div.edui-box {
     background: -o-linear-gradient(top,  #eeeeee 0%,#eeeeee 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(top,  #eeeeee 0%,#eeeeee 100%); /* IE10+ */
     background: linear-gradient(to bottom,  #eeeeee 0%,#eeeeee 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
     border-top-left-radius:10px;
     border-top-right-radius:10px;
     -webkit-box-shadow:0 0 4px rgba(0, 0, 0, 0.1);
