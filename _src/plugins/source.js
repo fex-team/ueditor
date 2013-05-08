@@ -116,7 +116,31 @@
                     me.iframe.style.cssText += 'position:absolute;left:-32768px;top:-32768px;';
 
 
-                    var content = me.hasContents() ? me.getContent(null,null,null,true,true) : '';
+                    me.fireEvent('beforegetcontent');
+                    var root = UE.htmlparser(me.body.innerHTML,true);
+                    me.filterOutputRule(root);
+                    root.traversal(function (node) {
+                        if (node.type == 'element') {
+                            switch (node.tagName) {
+                                case 'td':
+                                case 'th':
+                                case 'caption':
+                                if(node.children && node.children.length == 1){
+                                    if(node.firstChild().tagName == 'br' ){
+                                        node.removeChild(node.firstChild())
+                                    }
+                                };
+                                break;
+                                case 'pre':
+                                    node.innerText(node.innerText().replace(/&nbsp;/g,' '))
+
+                            }
+                        }
+                    });
+
+                    me.fireEvent('aftergetcontent');
+
+                    var content = root.toHtml(true);
 
                     sourceEditor = createSourceEditor(me.iframe.parentNode);
 

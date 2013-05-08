@@ -435,7 +435,7 @@
                     editor.iframe.parentNode.style.width = this._bakEditorContaninerWidth + 'px';
                     window.scrollTo(0, this._bakScrollTop);
                 }
-                if (baidu.editor.browser.gecko) {
+                if (baidu.editor.browser.gecko && editor.body.contentEditable === 'true') {
                     var input = document.createElement('input');
                     document.body.appendChild(input);
                     editor.body.contentEditable = false;
@@ -449,8 +449,11 @@
                         }, 0)
                     }, 0)
                 }
-                this.editor.fireEvent('fullscreenchanged', fullscreen);
-                this.triggerLayout();
+                if(editor.body.contentEditable === 'true'){
+                    this.editor.fireEvent('fullscreenchanged', fullscreen);
+                    this.triggerLayout();
+                }
+
             }
         },
         _updateFullScreen:function () {

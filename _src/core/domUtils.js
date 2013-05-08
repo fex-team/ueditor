@@ -1000,6 +1000,9 @@ var domUtils = dom.domUtils = {
      */
     setStyle:function (element, name, value) {
         element.style[utils.cssStyleToDomStyle(name)] = value;
+        if(!utils.trim(element.style.cssText)){
+            this.removeAttributes(element,'style')
+        }
     },
     /**
      * 为元素element设置样式属性值
