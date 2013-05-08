@@ -99,13 +99,14 @@ UE.plugins['insertcode'] = function() {
             var code = '';
             utils.each(pre.children,function(n){
                if(n.type == 'text'){
-                   code += n.data;
+                   code += n.data.replace(/[ ]/g,'&nbsp;');
                }else{
                    code  += '\n'
                }
 
             });
-            pre.innerText(code)
+
+            pre.innerText(code.replace(/(&nbsp;)+$/,''))
         })
     });
     //不需要判断highlight的command列表
@@ -278,6 +279,9 @@ UE.plugins['insertcode'] = function() {
             rng = me.selection.getRange(),
             pre = domUtils.findParentByTagName(rng.startContainer,'pre',true);
         if(pre){
+            if(!rng.collapsed){
+                rng.deleteContents()
+            }
             var br = '',frag = me.document.createDocumentFragment();
             utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
                 if(node.type == 'element' && node.tagName == 'br'){
@@ -295,12 +299,20 @@ UE.plugins['insertcode'] = function() {
         }
     });
     //方向键的处理
-    me.addListener('keyup',function(cmd,evt){
+    me.addListener('keydown',function(cmd,evt){
         var me = this,keyCode = evt.keyCode || evt.which;
         if(keyCode == 40){
-            var rng = me.selection.getRange();
-            if(rng.collapsed && domUtils.findParentByTagName(rng.startContainer,'pre',true)){
-                me.execCommand('insertparagraph')
+            var rng = me.selection.getRange(),pre,start = rng.startContainer;
+            if(rng.collapsed && (pre = domUtils.findParentByTagName(rng.startContainer,'pre',true)) && !pre.nextSibling){
+                var last = pre.lastChild
+                while(last && last.nodeName == 'BR'){
+                    last = last.previousSibling;
+                }
+                if(last === start || rng.startContainer === pre && rng.startOffset == pre.childNodes.length){
+                    me.execCommand('insertparagraph');
+                    domUtils.preventDefault(evt)
+                }
+
             }
         }
     })

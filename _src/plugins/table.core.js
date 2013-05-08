@@ -164,7 +164,7 @@
         return tdOrTable.ueTable;
     };
 
-    UETable.cloneCell = function(cell,ignoreMerge){
+    UETable.cloneCell = function(cell,ignoreMerge,ignoreWidth){
         if (!cell || utils.isString(cell)) {
             return this.table.ownerDocument.createElement(cell || 'td');
         }
@@ -181,6 +181,7 @@
         tmpCell.style.borderTopColor = cell.style.borderBottomColor;
         tmpCell.style.borderTopWidth = cell.style.borderBottomWidth;
         flag && domUtils.addClass(cell, "selectTdClass");
+        ignoreWidth && domUtils.removeAttributes(tmpCell,'width height');
         return tmpCell;
     }
 
@@ -755,9 +756,10 @@
             //首行直接插入,无需考虑部分单元格被rowspan的情况
             if (rowIndex == 0 || rowIndex == this.rowsNum) {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
-                    cell = this.cloneCell(sourceCell, true);
+                    cell = this.cloneCell(sourceCell, true,true);
                     this.setCellContent(cell);
                     cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
+
                     row.appendChild(cell);
                 }
             } else {
@@ -770,8 +772,10 @@
                         cell = this.getCell(cellInfo.rowIndex, cellInfo.cellIndex);
                         cell.rowSpan = cellInfo.rowSpan + 1;
                     } else {
-                        cell = this.cloneCell(sourceCell, true);
+                        cell = this.cloneCell(sourceCell, true,true);
+
                         this.setCellContent(cell);
+
                         row.appendChild(cell);
                     }
                 }

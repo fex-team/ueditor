@@ -30,8 +30,10 @@ UE.plugins['searchreplace'] = function(){
                 },true);
 
             if(browser.ie){
+                me.focus();
                 while(1){
                     var tmpRange;
+
                     nativeRange = me.document.selection.createRange();
                     tmpRange = nativeRange.duplicate();
                     tmpRange.moveToElementText(me.document.body);
@@ -96,7 +98,16 @@ UE.plugins['searchreplace'] = function(){
                             me.selection.getRange().select();
 
                         }
-                        nativeRange = w.getSelection().getRangeAt(0);
+                        var nativeSel = w.getSelection();
+                        if(!nativeSel.rangeCount){
+                            nativeRange = me.document.createRange();
+                            nativeRange.setStart(me.body,0);
+                            nativeRange.collapse(true);
+                            nativeSel.addRange(nativeRange);
+                        }else{
+                            nativeRange = nativeSel.getRangeAt(0);
+                        }
+
                         if(opt.hasOwnProperty("replaceStr")){
                             nativeRange.collapse(opt.dir == 1 ? true : false);
                         }

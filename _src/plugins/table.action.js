@@ -509,6 +509,11 @@ UE.plugins['table'] = function () {
                                 }
                             }
                             if (h == 'h') {
+                                var line;
+                                while (line = me.document.getElementById('ue_tableDragLine')) {
+                                    domUtils.remove(line)
+                                }
+                                me.fireEvent('saveScene',true);
                                 var ut = getUETable(target),
                                     cells = ut.getSameEndPosCells(target, "x"),
                                     table = ut.table;
@@ -522,6 +527,7 @@ UE.plugins['table'] = function () {
                                         cell.setAttribute("width", width);
                                     })
                                     table.setAttribute("width", table.offsetWidth);
+                                    me.fireEvent('saveScene',true);
                                 })
 
                             }
@@ -554,8 +560,16 @@ UE.plugins['table'] = function () {
                 getClass = function(list,index,repeat){
                     return list[index] ? list[index] : repeat ? list[index % list.length]: "";
                 };
-            for(var i = 0;i<len;i++){
-                rows[i].className = getClass( classList|| me.options.classList,i,true);
+
+            var index = 0,
+                classIndex = 0;
+
+            if( me.queryCommandState( "inserttitle" ) === -1 ) {
+                index = 1;
+            }
+
+            for(;index<len;index++, classIndex++){
+                rows[index].className = getClass( classList|| me.options.classList,classIndex,true);
             }
         });
         me.addListener("uninterlacetable",function(type,table){
@@ -1028,8 +1042,12 @@ UE.plugins['table'] = function () {
                 startTd = getUETable(startTd).getPreviewCell(startTd, state == 'v');
             }
             hideDragLine(me);
-            getDragLine(me, me.document);
+            var line;
+            while (line = me.document.getElementById('ue_tableDragLine')) {
+                domUtils.remove(line)
+            }
             me.fireEvent('saveScene');
+            getDragLine(me, me.document);
             showDragLineAt(state, startTd);
             mousedown = true;
             //拖动开始
@@ -1076,9 +1094,12 @@ UE.plugins['table'] = function () {
             }
             onDrag = "";
             dragTd = null;
-
-            hideDragLine(me);
+            var line;
+            while (line = me.document.getElementById('ue_tableDragLine')) {
+                domUtils.remove(line)
+            }
             me.fireEvent('saveScene');
+            line && me.document.appendChild(line);
             return;
         }
         //正常状态下的mouseup

@@ -448,7 +448,7 @@ UE.plugins['list'] = function () {
                 li = domUtils.findParentByTagName(rng.startContainer,'li',true);
             if(parent && !li){
                 var html = parent.innerHTML.replace(new RegExp(domUtils.fillChar, 'g'),'');
-                if(/^\s*1\s*\./.test(html)){
+                if(/^\s*1\s*\.[^\d]/.test(html)){
                     parent.innerHTML = html.replace(/^\s*1\s*\./,'');
                     rng.setStartAtLast(parent).collapse(true).select();
                     me.__hasEnterExecCommand = true;
