@@ -170,10 +170,10 @@ UE.plugins['list'] = function () {
 
     }
 
-    me.addListener('beforepaste',function(type,html,root){
+    me.addListener('beforepaste',function(type,html){
         var me = this,
             rng = me.selection.getRange(),li;
-
+        var root = UE.htmlparser(html.html,true);
         if(li = domUtils.findParentByTagName(rng.startContainer,'li',true)){
             var list = li.parentNode,tagName = list.tagName == 'OL' ? 'ul':'ol';
             utils.each(root.getNodesByTagName(tagName),function(n){
@@ -333,7 +333,7 @@ UE.plugins['list'] = function () {
             }
 
             var style = domUtils.getStyle(node, 'list-style-type');
-            node.style.cssText = style ? 'list-style-type:' + style : '';
+            style && (node.style.cssText = 'list-style-type:' + style);
             node.className = utils.trim(node.className.replace(/list-paddingleft-\w+/,'')) + ' list-paddingleft-' + type;
             utils.each(domUtils.getElementsByTagName(node,'li'),function(li){
                 li.style.cssText && (li.style.cssText = '');
@@ -446,7 +446,7 @@ UE.plugins['list'] = function () {
             var rng = me.selection.getRange(),
                 parent = domUtils.findParent(rng.startContainer,function(node){return domUtils.isBlockElm(node)},true),
                 li = domUtils.findParentByTagName(rng.startContainer,'li',true);
-            if(parent && !li){
+            if(parent && parent.tagName != 'PRE' && !li){
                 var html = parent.innerHTML.replace(new RegExp(domUtils.fillChar, 'g'),'');
                 if(/^\s*1\s*\.[^\d]/.test(html)){
                     parent.innerHTML = html.replace(/^\s*1\s*\./,'');

@@ -10,25 +10,28 @@ UE.plugins['snapscreen'] = function(){
     var me = this,
         doc,
         snapplugin;
-    me.addListener("ready",function(){
-        var container = me.container;
-        doc = container.ownerDocument || container.document;
-        snapplugin = doc.createElement("object");
-        try{snapplugin.type = "application/x-pluginbaidusnap";}catch(e){
-            return;
-        };
-        snapplugin.style.cssText = "position:absolute;left:-9999px;";
-        snapplugin.setAttribute("width","0");
-        snapplugin.setAttribute("height","0");
-        container.appendChild(snapplugin);
+
+    me.setOpt({
+        snapscreenServerPort: 80                                    //屏幕截图的server端端口
+        ,snapscreenImgAlign: ''                                //截图的图片默认的排版方式
     });
     me.commands['snapscreen'] = {
         execCommand: function(){
             var me = this,lang = me.getLang("snapScreen_plugin");
-            me.setOpt({
-                  snapscreenServerPort: 80                                    //屏幕截图的server端端口
-                 ,snapscreenImgAlign: ''                                //截图的图片默认的排版方式
-           });
+            if(!snapplugin){
+                var container = me.container;
+                doc = container.ownerDocument || container.document;
+                snapplugin = doc.createElement("object");
+                try{snapplugin.type = "application/x-pluginbaidusnap";}catch(e){
+                    return;
+                };
+                snapplugin.style.cssText = "position:absolute;left:-9999px;";
+                snapplugin.setAttribute("width","0");
+                snapplugin.setAttribute("height","0");
+                container.appendChild(snapplugin);
+            }
+
+
            var editorOptions = me.options;
 
             var onSuccess = function(rs){
@@ -56,9 +59,13 @@ UE.plugins['snapscreen'] = function(){
                 alert(lang.uploadErrorMsg);
             };
             try{
+                var port = editorOptions.snapscreenServerPort+"" || "80";
                 editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.split( editorOptions.snapscreenHost );
                 editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl[1] || editorOptions.snapscreenServerUrl[0];
-                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, editorOptions.snapscreenServerPort.toString());
+                if( editorOptions.snapscreenServerUrl.indexOf(":"+port) === 0 ) {
+                    editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.substring( port.length+1 );
+                }
+                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, port);
                 onSuccess(ret);
             }catch(e){
                 me.ui._dialogs['snapscreenDialog'].open();

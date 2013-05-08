@@ -60,7 +60,8 @@ UE.plugins['autotypeset'] = function(){
                 return 0;
             }
 
-            return notEmpty ? !domUtils.isEmptyBlock(node) : domUtils.isEmptyBlock(node);
+            return notEmpty ? !domUtils.isEmptyBlock(node) : domUtils.isEmptyBlock(node,new RegExp('[\\s'+domUtils.fillChar
+                +']','g'));
         }
     }
 

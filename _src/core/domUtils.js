@@ -1174,8 +1174,8 @@ var domUtils = dom.domUtils = {
         }
         return flag && !domUtils.isBody(tmpRange.startContainer) ? 1 : 0;
     },
-    isEmptyBlock:function (node) {
-        var reg = new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
+    isEmptyBlock:function (node,reg) {
+        reg = reg || new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
         if (node[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length > 0) {
             return 0;
         }
