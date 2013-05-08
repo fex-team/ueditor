@@ -66,7 +66,7 @@
         me.setOpt({
             isShow: true,
             initialContent: '',
-            initialStyle:'p{line-height:1em}',
+            initialStyle:'',
             autoClearinitialContent: false,
             iframeCssUrl: me.options.UEDITOR_HOME_URL + 'themes/iframe.css',
             textarea: 'editorValue',

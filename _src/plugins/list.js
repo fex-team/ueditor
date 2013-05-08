@@ -446,7 +446,7 @@ UE.plugins['list'] = function () {
             var rng = me.selection.getRange(),
                 parent = domUtils.findParent(rng.startContainer,function(node){return domUtils.isBlockElm(node)},true),
                 li = domUtils.findParentByTagName(rng.startContainer,'li',true);
-            if(parent && !li){
+            if(parent && parent.tagName != 'PRE' && !li){
                 var html = parent.innerHTML.replace(new RegExp(domUtils.fillChar, 'g'),'');
                 if(/^\s*1\s*\.[^\d]/.test(html)){
                     parent.innerHTML = html.replace(/^\s*1\s*\./,'');
