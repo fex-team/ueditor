@@ -56,6 +56,8 @@ UE.plugins['enterkey'] = function() {
                 }
                 //没有站位符，会出现多行的问题
                 browser.opera &&  range.select();
+            }else{
+                me.fireEvent('saveScene',true,true)
             }
         }
     });
