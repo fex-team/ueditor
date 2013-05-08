@@ -3,7 +3,6 @@ UE.plugins['dragdrop'] = function (){
     var me = this;
     me.ready(function(){
         domUtils.on(this.body,'dragend',function(){
-
             var rng = me.selection.getRange();
             var node = rng.getClosedNode()||me.selection.getStart();
 
@@ -36,6 +35,7 @@ UE.plugins['dragdrop'] = function (){
                     }
                     rng.selectNode(node).select();
                     me.fireEvent('saveScene');
+
                 }
 
             }
@@ -44,7 +44,7 @@ UE.plugins['dragdrop'] = function (){
     });
     me.addListener('keyup', function(type, evt) {
         var keyCode = evt.keyCode || evt.which;
-        if (keyCode == 13) {//??
+        if (keyCode == 13) {
             var rng = me.selection.getRange(),node;
             if(node = domUtils.findParentByTagName(rng.startContainer,'p',true)){
                 if(domUtils.getComputedStyle(node,'text-align') == 'center'){

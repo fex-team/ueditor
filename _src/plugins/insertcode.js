@@ -46,7 +46,7 @@ UE.plugins['insertcode'] = function() {
             }else{
                 var code = '';
                 if(rng.collapsed){
-                    code = browser.ie?'&nbsp;':'<br/>';
+                    code = browser.ie? (browser.version > 8 ? '' : '&nbsp;'):'<br/>';
                 }else{
                     var frag = rng.extractContents();
                     var div = me.document.createElement('div');
@@ -106,7 +106,7 @@ UE.plugins['insertcode'] = function() {
 
             });
 
-            pre.innerText(code.replace(/(&nbsp;)+$/,''))
+            pre.innerText(code.replace(/(&nbsp;|\n)+$/,''))
         })
     });
     //不需要判断highlight的command列表
@@ -144,7 +144,7 @@ UE.plugins['insertcode'] = function() {
             if(!rng.collapsed){
                rng.deleteContents();
             }
-            if(!browser.ie){
+            if(!browser.ie ){
                 var tmpNode = me.document.createElement('br'),pre;
                 rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true);
                 var next = tmpNode.nextSibling;
@@ -183,37 +183,43 @@ UE.plugins['insertcode'] = function() {
                 }
                 rng.collapse(true).select(true);
             }else{
-                var tmpNode = me.document.createElement('br');
-                rng.insertNode(tmpNode).setStartAfter(tmpNode);
-                pre = tmpNode.previousSibling;
-                var tmp;
-                while(pre ){
-                    tmp = pre;
-                    pre = pre.previousSibling;
-                    if(!pre || pre.nodeName == 'BR'){
-                        pre = tmp;
-                        break;
+                if(browser.version > 8){
+                    var txt = me.document.createTextNode('\n');
+                    rng.insertNode(txt).setStartAfter(txt).collapse(true).select()
+                }else{
+                    var tmpNode = me.document.createElement('br');
+                    rng.insertNode(tmpNode).setStartAfter(tmpNode);
+                    pre = tmpNode.previousSibling;
+                    var tmp;
+                    while(pre ){
+                        tmp = pre;
+                        pre = pre.previousSibling;
+                        if(!pre || pre.nodeName == 'BR'){
+                            pre = tmp;
+                            break;
+                        }
                     }
-                }
-                if(pre){
-                    var str = '';
-                    while(pre && pre.nodeName != 'BR' &&  new RegExp('^[ '+domUtils.fillChar+']*$').test(pre.nodeValue)){
-                        str += pre.nodeValue;
-                        pre = pre.nextSibling;
-                    }
-                    if(pre.nodeName != 'BR'){
-                        var match = pre.nodeValue.match(new RegExp('^([ '+domUtils.fillChar+']+)'));
-                        if(match && match[1]){
-                            str += match[1]
+                    if(pre){
+                        var str = '';
+                        while(pre && pre.nodeName != 'BR' &&  new RegExp('^[ '+domUtils.fillChar+']*$').test(pre.nodeValue)){
+                            str += pre.nodeValue;
+                            pre = pre.nextSibling;
+                        }
+                        if(pre.nodeName != 'BR'){
+                            var match = pre.nodeValue.match(new RegExp('^([ '+domUtils.fillChar+']+)'));
+                            if(match && match[1]){
+                                str += match[1]
+                            }
+
                         }
 
-                    }
-                    if(str){
                         str = me.document.createTextNode(str);
                         rng.insertNode(str).setStartAfter(str);
                     }
+                    rng.collapse(true).select(true);
                 }
-                rng.collapse(true).select(true);
+
+
             }
             me.fireEvent('saveScene');
             return true;
@@ -282,19 +288,32 @@ UE.plugins['insertcode'] = function() {
             if(!rng.collapsed){
                 rng.deleteContents()
             }
-            var br = '',frag = me.document.createDocumentFragment();
-            utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
-                if(node.type == 'element' && node.tagName == 'br'){
-                    return;
-                }
-                var html = node.type == 'element' ? node.innerText() : node.getData();
-                frag.appendChild(me.document.createTextNode(utils.html(html.replace(/&nbsp;/g,' '))));
-                br = me.document.createElement('br');
-                frag.appendChild(br);
-            });
-            rng.insertNode(frag).setStartBefore(br);
-            domUtils.remove(br);
-            rng.setCursor(false,true);
+            if(!browser.ie || browser.version > 8){
+                var htmlstr = [];
+                utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
+
+                    htmlstr.push(node.type == 'element' ? dtd.$empty[node.tagName] ? '' : node.innerText() : node.getData())
+
+
+                });
+                var tmpNode = me.document.createTextNode(utils.html(htmlstr.join('\n').replace(/&nbsp;/g,' ')));
+                rng.insertNode(tmpNode).setStartAfter(tmpNode).setCursor();
+            }else{
+                var br = '',frag = me.document.createDocumentFragment();
+                utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
+                    if(node.type == 'element' && node.tagName == 'br'){
+                        return;
+                    }
+                    var html = node.type == 'element' ? node.innerText() : node.getData();
+                    frag.appendChild(me.document.createTextNode(utils.html(html.replace(/&nbsp;/g,' '))));
+                    br = me.document.createElement('br');
+                    frag.appendChild(br);
+                });
+                rng.insertNode(frag).setStartBefore(br);
+                domUtils.remove(br);
+                rng.setCursor(false,true);
+            }
+
             return true;
         }
     });
