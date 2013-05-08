@@ -151,6 +151,7 @@ UE.I18N['zh-cn'] = {
         'copy':"复制(Ctrl + c)",
         'copymsg':"请使用 'Ctrl + c'执行复制操作",
         'paste':"粘贴(Ctrl + v)",
+         'pastemsg':"请使用 'Ctrl + v'执行复制操作",
         'highlightcode':'插入代码'
     },
 
