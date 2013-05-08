@@ -81,9 +81,17 @@ UE.plugins['insertcode'] = function() {
 
     me.addInputRule(function(root){
        utils.each(root.getNodesByTagName('pre'),function(pre){
-            if(pre.getNodesByTagName('br').length){
-                return;
+           var brs = pre.getNodesByTagName('br');
+           if(brs.length){
+               browser.ie && browser.version > 8 && utils.each(brs,function(br){
+                   var txt = UE.uNode.createText('\n');
+                   br.parentNode.insertBefore(txt,br);
+                   br.parentNode.removeChild(br);
+               });
+               return;
             }
+           if(browser.ie && browser.version > 8)
+                return;
             var code = pre.innerText().split(/\n/);
             pre.innerHTML('');
             utils.each(code,function(c){
@@ -288,7 +296,7 @@ UE.plugins['insertcode'] = function() {
             if(!rng.collapsed){
                 rng.deleteContents()
             }
-            if(!browser.ie || browser.version > 8){
+            if(browser.ie && browser.version > 8){
                 var htmlstr = [];
                 utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
 
