@@ -170,10 +170,10 @@ UE.plugins['list'] = function () {
 
     }
 
-    me.addListener('beforepaste',function(type,html,root){
+    me.addListener('beforepaste',function(type,html){
         var me = this,
             rng = me.selection.getRange(),li;
-
+        var root = UE.htmlparser(html.html,true);
         if(li = domUtils.findParentByTagName(rng.startContainer,'li',true)){
             var list = li.parentNode,tagName = list.tagName == 'OL' ? 'ul':'ol';
             utils.each(root.getNodesByTagName(tagName),function(n){
