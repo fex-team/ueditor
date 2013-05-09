@@ -155,8 +155,9 @@
             } else {
                 textarea.style.display = ''
             }
-            textarea.style.width = container.offsetWidth + 'px';
-            textarea.style.height = container.offsetHeight + 'px';
+
+            textarea.style.width = me.iframe.offsetWidth + 'px';
+            textarea.style.height = me.iframe.offsetHeight + 'px';
             textarea.value = me.getContent();
             textarea.id = me.key;
             container.innerHTML = '';
