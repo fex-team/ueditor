@@ -17,6 +17,5 @@ test( '输入超链接后回车', function() {
     var range = new baidu.editor.dom.Range( editor.document );
     range.setStart(editor.body.firstChild.firstChild,1).collapse(true).select();
     editor.execCommand('autosubmit');
-//    debugger;
     equal(editor.textarea.value,'<p>欢迎使用ueditor</p>','');
 } );

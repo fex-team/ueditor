@@ -570,7 +570,6 @@ test( '转换font标签', function () {
     var editor = te.obj[0];
     editor.setContent( '<font size="16" color="red"><b><i>x</i></b></font>' );
     var html = '<p><span style="font-size:16px;color:red" ><strong><em>x</em></strong></span></p>';
-    debugger
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换font标签');
     editor.setContent( '<font style="color:red"><u>x</u></font>' );
     html = '<span style="color:red"><span style="text-decoration:underline;">x</span></span>';

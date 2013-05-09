@@ -143,7 +143,6 @@ test( '空格&nbsp;', function() {
 //        equal( ua.getChildHTML( editor.body ), "<p dir=\"rtl\"></p><p>xx</p>", "directionrtl" );
 //        editor.currentSelectedArr=[editor.body.lastChild];
 //        editor.execCommand('directionality', 'ltr');
-//        debugger
 //        equal( ua.getChildHTML( editor.body ), "<p dir=\"rtl\"></p><p dir=\"ltr\">xx</p>", "directionltr" );
 //    }
 //    else{

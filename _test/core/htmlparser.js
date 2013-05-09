@@ -13,14 +13,14 @@ test( '普通标签处理', function() {
     root = UE.htmlparser('<i>sdf<b>sdfsdsd</b>fsdfsf</i>');
     equals(root.toHtml(),'<i>sdf<b>sdfsdsd</b>fsdfsf</i>','多个普通标签');
     root = UE.htmlparser('<i dsf="sdf" sdf="wewe" readonly >sdf</i>');
-    equals(root.toHtml(),'<i dsf="sdf" sdf="wewe" readonly >sdf</i>','添加属性的标签');
+    ua.checkSameHtml(root.toHtml(),'<i dsf="sdf" sdf="wewe" readonly=\"\" >sdf</i>','添加属性的标签');
     root = UE.htmlparser('<img src="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" width="553" height="275" />');
-    equals(root.toHtml(),'<img src="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" width="553" height="275" />','img标签');
+    ua.checkSameHtml(root.toHtml(),'<img src="file:///C:/DOCUME~1/DONGYA~1/LOCALS~1/Temp/msohtmlclip1/01/clip_image002.jpg" width="553" height="275" />','img标签');
 });
 
 test( '特殊标签处理', function() {
     var root = UE.htmlparser('<i dsf="sdf" sdf="wewe" readonly >sd<!--fasdf-->f</i>');
-    equals(root.toHtml(),'<i dsf="sdf" sdf="wewe" readonly >sd<!--fasdf-->f</i>','包含注释');
+    ua.checkSameHtml(root.toHtml(),'<i dsf="sdf" sdf="wewe" readonly=\"\" >sd<!--fasdf-->f</i>','包含注释');
     root = UE.htmlparser('<script type="text/javascript" charset="utf-8" src="editor_api.js"></script>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<script type="text/javascript" charset="utf-8" src="editor_api.js"></script>','script标签');
     root = UE.htmlparser('<table width="960"><tbody><tr><td width="939" valign="top"><br></td></tr></tbody></table><p><br></p>');
@@ -139,11 +139,11 @@ test( '补全不完整li', function() {
 
 test( '属性引号问题', function() {
     var root = UE.htmlparser('<img width=200 height=200 />');
-    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200"/>');
     root = UE.htmlparser("<img width='200' height='200' />");
-    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200"/>');
     root = UE.htmlparser('<img width="200" height="200" />');
-    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200"/>');
 });
 
 test( '大小写', function() {
@@ -152,7 +152,7 @@ test( '大小写', function() {
     root = UE.htmlparser('<OL><LI><em><u>sdf<LI>sdfsdf</OL>');
     equals(root.toHtml().replace(/[ ]+>/g,'>'),'<ol><li><em><u>sdf</u></em></li><li>sdfsdf</li></ol>','补全u，em');
     root = UE.htmlparser('<IMG width=200 height=200 />');
-    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200" />');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<img width="200" height="200"/>');
 });
 
 test( '裸字', function() {

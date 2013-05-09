@@ -25,7 +25,6 @@ test('全部替换',function(){
 //    var range = te.obj[1];
 //    editor.setContent('<p>hello回来</p>');
 //    range.setStart(editor.body.firstChild,0).collapse(true).select();
-//    debugger;
 //   /*searchreplace文件里是一个闭包，闭包中有一个全局变量currentRange，在上一次用例执行结束后仍然会保存这个值，导致下一次用例受影响*/
 //    editor.execCommand('searchreplace',{searchStr:'hello',replaceStr:'hello啊',all:true});
 //    ua.manualDeleteFillData(editor.body);
@@ -79,5 +78,5 @@ test('全部替换内容为空',function(){
     editor.setContent('<p>欢迎回来 欢迎啊</p>');
     editor.execCommand('searchreplace',{searchStr:'欢迎',replaceStr:'',all:true});
     ua.manualDeleteFillData(editor.body);
-    equal(editor.body.firstChild.innerHTML,'回来&nbsp;啊');
+    equal(editor.body.firstChild.innerHTML,'回来 啊');
 });

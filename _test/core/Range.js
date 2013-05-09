@@ -1458,10 +1458,8 @@ test('b节点取range',function(){
                 ua.checkResult(range, editor.body.firstChild.lastChild.previousSibling, editor.body.firstChild.lastChild.previousSibling, 0, 0, true, '节点后--check range');
 
             range.setStart(editor.body.firstChild.firstChild.nextSibling,0).collapse(1)
-//            debugger
             range.select();
             range = editor.selection.getRange();
-//            debugger
             if(ua.browser.webkit )
                 ua.checkResult(range, editor.body.firstChild.firstChild.nextSibling.firstChild, editor.body.firstChild.firstChild.nextSibling.firstChild, 1, 1, true, '节点内文本节点前--check range');
             else if(ua.browser.ie)

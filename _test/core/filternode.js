@@ -107,7 +107,7 @@ test( '标签替换过滤', function() {
             node.parentNode.removeChild(node,node.innerText())
         }
     });
-    equals(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><img src="http://img.baidu.com/hi/jx2/j_0020.gif" /><table>aldkfj<tbody><tr>adf &nbsp; &nbsp;</tr><tr><td>lkj</td></tr></tbody></table></div>','th按文本内容替换，保留img部分属性');
+    ua.checkSameHtml(node.toHtml().replace(/[ ]+>/g,'>'),'<div id="aa"><img src="http://img.baidu.com/hi/jx2/j_0020.gif" /><table>aldkfj<tbody><tr>adf &nbsp; &nbsp;</tr><tr><td>lkj</td></tr></tbody></table></div>','th按文本内容替换，保留img部分属性');
 });
 
 test( '保留标签全部属性', function() {
@@ -149,7 +149,7 @@ test( '特殊规则过滤', function() {
 test( '只有white list--滤除属性', function () {
     var uNode = UE.uNode;
     var node = uNode.createElement('<div id="aa"><p>sdf</p><i>sdf</i></div>');
-    node.innerHTML('<table></table>hellotable<!--hello--><p><div class="div_class" id="div_id" name="div_name">hellodiv<span style="color:red;font-size:12px" ><p>hellospan</span><!--hello--></p></div></p><span style="color:red;font-size:12px" >hellospan</span>');
+    node.innerHTML('<table></table>hellotable<!--hello--><p><div class="div_class" id="div_id" name="div_name">hellodiv</div></p><span style="color:red;font-size:12px" >hellospan</span>');
     UE.filterNode(node,{
         div:{
             $:{
@@ -160,7 +160,7 @@ test( '只有white list--滤除属性', function () {
         table:{},
         span:{}
     });
-    equals(node.toHtml().replace(/[ ]+>/g,'>'), '<div id="aa"><table></table>hellotable<!--hello--><div id="div_id" class="div_class">hellodivhellospan<!--hello--></div><span style="color:red;font-size:12px" >hellospan</span></div>', '滤除属性');
+    ua.checkSameHtml(node.toHtml().replace(/[ ]+>/g,'>'), '<div id="aa"><table></table>hellotable<div id="div_id" class="div_class">hellodiv</div><span style="color:red;font-size:12px" >hellospan</span></div>', '滤除属性');
 } );
 
 test( '只有black list', function () {

@@ -76,9 +76,9 @@ test('非闭合选择----字符串包括换行跟空格',function(){
     setTimeout(function(){
         range.setStart(body.firstChild.firstChild,0).setEnd(body.firstChild.lastChild,6).select();
         editor.execCommand("touppercase");
-        equal(editor.getContent(),"<p>HELLO1<br/>HELLO2</p>","非闭合--包含大小写--up");
+        equal(editor.getContent(),"<p>HELLO1<br/> HELLO2</p>","非闭合--包含大小写--up");
         editor.execCommand("tolowercase");
-        equal(editor.getContent(),"<p>hello1<br/>hello2</p>","非闭合--包含大小写--low");
+        equal(editor.getContent(),"<p>hello1<br/> hello2</p>","非闭合--包含大小写--low");
         start();
     },50);
     stop();

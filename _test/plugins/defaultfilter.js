@@ -18,12 +18,15 @@ test( '转换img标签', function () {
     editor.setContent( '<img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" />' );
     var html = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" _src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" /></p>';
     ua.checkSameHtml(html,editor.body.innerHTML,'转换img标签');
+    equals(editor.body.innerHTML,html);
 } );
 test( '删span中的white-space标签', function () {
-    var editor = te.obj[0];
-    editor.setContent( '<span style=" display: block; white-space: nowrap " >sadfsadf</span>' );
-    var html = '<p><span style=" display: block; ">sadfsadf</span></p>';
-    ua.checkSameHtml(html,editor.body.innerHTML,'删span中的white-space标签');
+    if(ua.browser.webkit){
+        var editor = te.obj[0];
+        editor.setContent( '<span style=" display: block; white-space: nowrap " >sadfsadf</span>' );
+        var html = '<p><span style=" display: block; ">sadfsadf</span></p>';
+        ua.checkSameHtml(html,editor.body.innerHTML,'删span中的white-space标签');
+    }
 } );
 test( '删p中的margin|padding标签', function () {
     var editor = te.obj[0];
@@ -47,7 +50,7 @@ test( '删div', function () {
 test( 'li', function () {
     var editor = te.obj[0];
     editor.setContent( '<li style="margin: 0px 0px 0px 6px;" ><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name"  >天<i class="i-arrow-down"></i></a></li>' );
-    var html = '<ul style="" class=" list-paddingleft-2"><li><p><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name" _href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao">天<em class="i-arrow-down"></em></a></p></li></ul>';
+    var html = '<ul class=" list-paddingleft-2"><li><p><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name" _href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao">天<em class="i-arrow-down"></em></a></p></li></ul>';
     ua.checkSameHtml(html,editor.body.innerHTML,'li');
 } );
 //<li style="margin: 0px 0px 0px 6px;" ><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name"  >pistachio天<i class="i-arrow-down"></i></a></li>

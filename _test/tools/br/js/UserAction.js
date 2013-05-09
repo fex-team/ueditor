@@ -1736,7 +1736,7 @@ UserAction = {
                         return false;
                 }
                 else {
-                    if (!nodeA.getAttr(p).toLowerCase() == nodeB.getAttr(p).toLowerCase())
+                    if (nodeA.getAttr(p).toLowerCase() != nodeB.getAttr(p).toLowerCase())
                         return false;
                 }
             }

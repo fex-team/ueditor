@@ -369,7 +369,6 @@ test('tab键',function(){
 //    var lis;
 //    editor.setContent('<ol><li><p>hello1</p></li><li><p>hello2</p></li></ol>');
 //    ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
-//    debugger
 //    ua.cut(editor.body);
 //});
 
