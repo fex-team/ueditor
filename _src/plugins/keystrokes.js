@@ -100,7 +100,7 @@ UE.plugins['keystrokes'] = function() {
                 'table':1
             };
             //处理组件里的tab按下事件
-            if(me.fireEvent('tabkeydown')){
+            if(me.fireEvent('tabkeydown',evt)){
                 domUtils.preventDefault(evt);
                 return;
             }
