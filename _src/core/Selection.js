@@ -145,7 +145,7 @@
         getNative:function () {
             var doc = this.document;
             try {
-                return !doc ? null : ie ? doc.selection : domUtils.getWindow( doc ).getSelection();
+                return !doc ? null : (ie && browser.version < 9  ? doc.selection : domUtils.getWindow( doc ).getSelection());
             } catch ( e ) {
                 return null;
             }
@@ -238,7 +238,7 @@
                 return this._cachedRange;
             }
             var range = new baidu.editor.dom.Range( me.document );
-            if ( ie ) {
+            if ( ie && browser.version < 9) {
                 var nativeRange = me.getIERange();
                 if ( nativeRange ) {
                     //备份的_bakIERange可能已经实效了，dom树发生了变化比如从源码模式切回来，所以try一下，实效就放到body开始位置
