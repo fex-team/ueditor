@@ -17,7 +17,7 @@ test( '转换img标签', function () {
     var editor = te.obj[0];
     editor.setContent( '<img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" />' );
 //    var html = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" _src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" /></p>';
-    equals(editor.body.getElementsByTagName('img')[0].getAttribute('_src'),"http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif");
+    equal(editor.body.getElementsByTagName('img')[0].getAttribute('_src'),"http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif");
 } );
 test( '删span中的white-space标签', function () {
     if(ua.browser.webkit){
@@ -38,7 +38,7 @@ test( '给空p加br', function () {
     editor.setContent( '<p style="list-style: none;" ></p>' );
     var br = ua.browser.ie?'&nbsp;':'<br>';
 //    var html = '<p style="list-style: none;">'+br+'</p>';
-    equals(editor.body.firstChild.innerHTML,br)
+    equal(editor.body.firstChild.innerHTML,br)
 } );
 test( '删div', function () {
     var editor = te.obj[0];
