@@ -6,7 +6,7 @@
 UE.plugins['insertcode'] = function() {
     var me = this;
     me.ready(function(){
-        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f8f8f8;}',
+        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f8f8f8;line-height:1.5}',
             me.document)
     });
     me.setOpt('insertcode',{
@@ -53,13 +53,42 @@ UE.plugins['insertcode'] = function() {
                     div.appendChild(frag);
 
                     utils.each(UE.filterNode(UE.htmlparser(div.innerHTML),me.options.filterTxtRules).children,function(node){
-                        code += (node.type == 'element' ? (dtd.$empty[node.tagName] ?  '' : node.innerText()) : node.data) + '<br/>'
+                        if(browser.ie && browser.version > 8){
+
+                            if(node.type == 'element'){
+                                if(node.tagName == 'br'){
+                                    code += '\n'
+                                }else if(!dtd.$empty[node.tagName]){
+                                    code += node.innerText()
+                                }
+                            }else{
+                                code += node.data;
+                            }
+                            if(!/\n$/.test(code)){
+                                if(!node.nextSibling())
+                                    return;
+                                code += '\n'
+                            }
+                        }else{
+                            code += (node.type == 'element' ? (dtd.$empty[node.tagName] ?  '' : node.innerText()) : node.data);
+                            if(!/br\/?\s*>$/.test(code)){
+                                if(!node.nextSibling())
+                                    return;
+                                code += '<br>'
+                            }
+                        }
+
                     });
                 }
                 me.execCommand('inserthtml','<pre id="coder"class="brush:'+lang+';toolbar:false">'+code+'</pre>',true);
                 pre = me.document.getElementById('coder');
                 domUtils.removeAttributes(pre,'id');
-                me.selection.getRange().setStart(pre,0).setCursor(false,true);
+                var rng = me.selection.getRange();
+                if(domUtils.isEmptyBlock(pre)){
+                    rng.setStart(pre,0).setCursor(false,true)
+                }else{
+                    rng.selectNodeContents(pre).select()
+                }
             }
 
 
@@ -142,7 +171,7 @@ UE.plugins['insertcode'] = function() {
         if(!me.notNeedCodeQuery[cmd.toLowerCase()] && me.selection && me.queryCommandValue('insertcode')){
             return -1;
         }
-        return orgQuery.apply(this,arguments)
+        return UE.Editor.prototype.queryCommandState.apply(this,arguments)
     };
     me.addListener('beforeenterkeydown',function(){
         var rng = me.selection.getRange();
@@ -192,11 +221,31 @@ UE.plugins['insertcode'] = function() {
                 rng.collapse(true).select(true);
             }else{
                 if(browser.version > 8){
+
                     var txt = me.document.createTextNode('\n');
-                    rng.insertNode(txt).setStartAfter(txt).collapse(true).select()
+                    var start = rng.startContainer;
+                    if(rng.startOffset == 0){
+                        var preNode = start.previousSibling;
+                        if(preNode){
+                            rng.insertNode(txt);
+                            var fillchar = me.document.createTextNode(' ');
+                            rng.setStartAfter(txt).insertNode(fillchar).setStart(fillchar,0).collapse(true).select(true)
+                        }
+                    }else{
+                        rng.insertNode(txt).setStartAfter(txt);
+                        var fillchar = me.document.createTextNode(' ');
+                        start = rng.startContainer.childNodes[rng.startOffset];
+                        if(start && !/^\n/.test(start.nodeValue)){
+                            rng.setStartBefore(txt)
+                        }
+                        rng.insertNode(fillchar).setStart(fillchar,0).collapse(true).select(true)
+                    }
+
                 }else{
                     var tmpNode = me.document.createElement('br');
-                    rng.insertNode(tmpNode).setStartAfter(tmpNode);
+                    rng.insertNode(tmpNode);
+                    rng.insertNode(me.document.createTextNode(domUtils.fillChar));
+                    rng.setStartAfter(tmpNode);
                     pre = tmpNode.previousSibling;
                     var tmp;
                     while(pre ){
@@ -224,7 +273,7 @@ UE.plugins['insertcode'] = function() {
                         str = me.document.createTextNode(str);
                         rng.insertNode(str).setStartAfter(str);
                     }
-                    rng.collapse(true).select(true);
+                    rng.collapse(true).select();
                 }
 
 
@@ -296,30 +345,75 @@ UE.plugins['insertcode'] = function() {
             if(!rng.collapsed){
                 rng.deleteContents()
             }
+            var htmlstr = '';
             if(browser.ie && browser.version > 8){
-                var htmlstr = [];
+
                 utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
-
-                    htmlstr.push(node.type == 'element' ? dtd.$empty[node.tagName] ? '' : node.innerText() : node.getData())
-
-
-                });
-                var tmpNode = me.document.createTextNode(utils.html(htmlstr.join('\n').replace(/&nbsp;/g,' ')));
-                rng.insertNode(tmpNode).setStartAfter(tmpNode).setCursor();
-            }else{
-                var br = '',frag = me.document.createDocumentFragment();
-                utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
-                    if(node.type == 'element' && node.tagName == 'br'){
-                        return;
+                    if(node.type =='element'){
+                        if(node.tagName == 'br'){
+                            htmlstr += '\n'
+                        }else if(!dtd.$empty[node.tagName]){
+                            utils.each(node.children,function(cn){
+                                if(cn.type =='element'){
+                                    if(cn.tagName == 'br'){
+                                        htmlstr += '\n'
+                                    }else if(!dtd.$empty[node.tagName]){
+                                        htmlstr += cn.innerText();
+                                    }
+                                }else{
+                                    htmlstr += cn.data
+                                }
+                            })
+                            if(!/\n$/.test(htmlstr)){
+                                htmlstr += '\n';
+                            }
+                        }
+                    }else{
+                        htmlstr += node.data + '\n'
                     }
-                    var html = node.type == 'element' ? node.innerText() : node.getData();
-                    frag.appendChild(me.document.createTextNode(utils.html(html.replace(/&nbsp;/g,' '))));
-                    br = me.document.createElement('br');
-                    frag.appendChild(br);
+                    if(!node.nextSibling() && /\n$/.test(htmlstr)){
+                        htmlstr = htmlstr.replace(/\n$/,'');
+                    }
                 });
-                rng.insertNode(frag).setStartBefore(br);
-                domUtils.remove(br);
-                rng.setCursor(false,true);
+                var tmpNode = me.document.createTextNode(utils.html(htmlstr.replace(/&nbsp;/g,' ')));
+                rng.insertNode(tmpNode).selectNode(tmpNode).select();
+            }else{
+                var frag = me.document.createDocumentFragment();
+
+                utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
+                    if(node.type =='element'){
+                        if(node.tagName == 'br'){
+                            frag.appendChild(me.document.createElement('br'))
+                        }else if(!dtd.$empty[node.tagName]){
+                            utils.each(node.children,function(cn){
+                                if(cn.type =='element'){
+                                    if(cn.tagName == 'br'){
+
+                                        frag.appendChild(me.document.createElement('br'))
+                                    }else if(!dtd.$empty[node.tagName]){
+                                        frag.appendChild(me.document.createTextNode(utils.html(cn.innerText().replace(/&nbsp;/g,' '))));
+
+                                    }
+                                }else{
+                                    frag.appendChild(me.document.createTextNode(utils.html( cn.data.replace(/&nbsp;/g,' '))));
+
+                                }
+                            })
+                            if(frag.lastChild.nodeName != 'BR'){
+                                frag.appendChild(me.document.createElement('br'))
+                            }
+                        }
+                    }else{
+                        frag.appendChild(me.document.createTextNode(utils.html( node.data.replace(/&nbsp;/g,' '))));
+                    }
+                    if(!node.nextSibling() && frag.lastChild.nodeName == 'BR'){
+                       frag.removeChild(frag.lastChild)
+                    }
+
+
+                });
+                rng.insertNode(frag).select();
+
             }
 
             return true;

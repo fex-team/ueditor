@@ -19,10 +19,10 @@
             return  {container:parent, offset:0};
         }
         var siblings = parent.children,
-                child,
-                testRange = range.duplicate(),
-                startIndex = 0, endIndex = siblings.length - 1, index = -1,
-                distance;
+            child,
+            testRange = range.duplicate(),
+            startIndex = 0, endIndex = siblings.length - 1, index = -1,
+            distance;
         while ( startIndex <= endIndex ) {
             index = Math.floor( (startIndex + endIndex) / 2 );
             child = siblings[index];
@@ -58,8 +58,8 @@
         distance = testRange.text.replace( /(\r\n|\r)/g, '\n' ).length;
         if ( !distance ) {
             return  dtd.$empty[child.tagName] || dtd.$nonChild[child.tagName] ?
-                {container:parent, offset:getIndex( child ) + (position > 0 ? 0 : 1)} :
-                {container:child, offset:position > 0 ? 0 : child.childNodes.length}
+            {container:parent, offset:getIndex( child ) + (position > 0 ? 0 : 1)} :
+            {container:child, offset:position > 0 ? 0 : child.childNodes.length}
         }
         while ( distance > 0 ) {
             try {
@@ -102,7 +102,7 @@
         var ieRange;
         //ie下有可能报错
         try {
-                ieRange = sel.getNative().createRange();
+            ieRange = sel.getNative().createRange();
         } catch ( e ) {
             return null;
         }
@@ -145,7 +145,7 @@
         getNative:function () {
             var doc = this.document;
             try {
-                return !doc ? null : (ie && browser.version < 9  ? doc.selection : domUtils.getWindow( doc ).getSelection());
+                return !doc ? null : ie ? doc.selection : domUtils.getWindow( doc ).getSelection();
             } catch ( e ) {
                 return null;
             }
@@ -221,7 +221,7 @@
             var me = this;
             function optimze( range ) {
                 var child = me.document.body.firstChild,
-                        collapsed = range.collapsed;
+                    collapsed = range.collapsed;
                 while ( child && child.firstChild ) {
                     range.setStart( child, 0 );
                     child = child.firstChild;
@@ -238,7 +238,7 @@
                 return this._cachedRange;
             }
             var range = new baidu.editor.dom.Range( me.document );
-            if ( ie && browser.version < 9) {
+            if ( ie ) {
                 var nativeRange = me.getIERange();
                 if ( nativeRange ) {
                     //备份的_bakIERange可能已经实效了，dom树发生了变化比如从源码模式切回来，所以try一下，实效就放到body开始位置
@@ -283,8 +283,8 @@
                 return this._cachedStartElement;
             }
             var range = ie ? this.getIERange() : this.getRange(),
-                    tmpRange,
-                    start, tmp, parent;
+                tmpRange,
+                start, tmp, parent;
             if ( ie ) {
                 if ( !range ) {
                     //todo 给第一个值可能会有问题
