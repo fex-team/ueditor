@@ -15,7 +15,7 @@ UE.plugins['blockquote'] = function(){
     var me = this;
     function getObj(editor){
         return domUtils.filterNodeList(editor.selection.getStartElementPath(),'blockquote');
-    };
+    }
     me.commands['blockquote'] = {
         execCommand : function( cmdName, attrs ) {
             var range = this.selection.getRange(),
