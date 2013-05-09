@@ -9,11 +9,11 @@ var video = {};
 
 (function(){
     video.init = function(){
-        switchTab("videoTab");
+       // switchTab("videoTab");
         createAlignButton( ["videoFloat"] );
         addUrlChangeListener($G("videoUrl"));
         addOkListener();
-        addSearchListener();
+
 
         //编辑视频时初始化相关信息
         (function(){
@@ -40,9 +40,9 @@ var video = {};
                 case "video":
                     return insertSingle();
                     break;
-                case "videoSearch":
-                    return insertSearch("searchList");
-                    break;
+//                case "videoSearch":
+//                    return insertSearch("searchList");
+//                    break;
             }
         };
         dialog.oncancel = function(){
@@ -365,36 +365,6 @@ var video = {};
             o.setAttribute( "selected", "true" );
             o.style.cssText = "filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;border:2px solid blue;";
         }
-    }
-
-    /**
-     * 视频搜索相关注册事件
-     */
-    function addSearchListener(){
-        domUtils.on($G("videoSearchBtn"),"click",getMovie);
-        domUtils.on($G( "videoSearchTxt" ),"click",function () {
-            if ( this.value == lang.static.videoSearchTxt.value ) {
-                this.value = "";
-            }
-            this.setAttribute("hasClick","true");
-            selectTxt(this);
-        });
-        $G( "videoSearchTxt" ).onkeyup = function(){
-            this.setAttribute("hasClick","true");
-            this.onkeyup = null;
-        };
-        domUtils.on($G( "videoSearchReset" ),"click",function () {
-            var txt = $G( "videoSearchTxt" );
-            txt.value = "";
-            selectTxt(txt);
-            $G( "searchList" ).innerHTML = "";
-        });
-        domUtils.on($G( "videoType" ),"change", getMovie);
-        domUtils.on($G( "videoSearchTxt" ), "keyup", function ( evt ) {
-            if ( evt.keyCode == 13 ) {
-                getMovie();
-            }
-        } )
     }
 
 

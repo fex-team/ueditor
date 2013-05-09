@@ -12,7 +12,7 @@
     <div id="videoTab">
         <div id="tabHeads" class="tabhead">
             <span tabSrc="video" class="focus"><var id="lang_tab_insertV"></var></span>
-            <span tabSrc="videoSearch"><var id="lang_tab_searchV"></var></span>
+            
         </div>
         <div id="tabBodys" class="tabbody">
             <div id="video" class="panel">
@@ -32,27 +32,27 @@
                   </fieldset>
                </div>
             </div>
-            <div id="videoSearch" class="panel" style="display: none">
-                <table style="margin-top: 5px;">
-                    <tr>
-                        <td><input id="videoSearchTxt"  type="text" /></td>
-                        <td>
-                            <select id="videoType">
-                                <option value="0"></option>
-                                <option value="29"></option>
-                                <option value="1"></option>
-                                <option value="5"></option>
-                                <option value="15"></option>
-                                <option value="21"></option>
-                                <option value="31"></option>
-                            </select>
-                        </td>
-                        <td><input id="videoSearchBtn" type="button"/></td>
-                        <td><input id="videoSearchReset" type="button" /></td>
-                    </tr>
-                </table>
-                <div id="searchList"></div>
-            </div>
+            <!--<div id="videoSearch" class="panel" style="display: none">-->
+                <!--<table style="margin-top: 5px;">-->
+                    <!--<tr>-->
+                        <!--<td><input id="videoSearchTxt"  type="text" /></td>-->
+                        <!--<td>-->
+                            <!--<select id="videoType">-->
+                                <!--<option value="0"></option>-->
+                                <!--<option value="29"></option>-->
+                                <!--<option value="1"></option>-->
+                                <!--<option value="5"></option>-->
+                                <!--<option value="15"></option>-->
+                                <!--<option value="21"></option>-->
+                                <!--<option value="31"></option>-->
+                            <!--</select>-->
+                        <!--</td>-->
+                        <!--<td><input id="videoSearchBtn" type="button"/></td>-->
+                        <!--<td><input id="videoSearchReset" type="button" /></td>-->
+                    <!--</tr>-->
+                <!--</table>-->
+                <!--<div id="searchList"></div>-->
+            <!--</div>-->
         </div>
     </div>
 </div>

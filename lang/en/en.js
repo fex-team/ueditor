@@ -8,7 +8,7 @@
 UE.I18N['en'] = {
     'labelMap':{
         'anchor':'Anchor', 'undo':'Undo', 'redo':'Redo', 'bold':'Bold', 'indent':'Indent', 'snapscreen':'SnapScreen',
-        'italic':'Italic', 'underline':'Underline', 'strikethrough':'Strikethrough', 'subscript':'SubScript',
+        'italic':'Italic', 'underline':'Underline', 'strikethrough':'Strikethrough', 'subscript':'SubScript','fontborder':'text border',
         'superscript':'SuperScript', 'formatmatch':'Format Match', 'source':'Source', 'blockquote':'BlockQuote',
         'pasteplain':'PastePlain', 'selectall':'SelectAll', 'print':'Print', 'preview':'Preview',
         'horizontal':'Horizontal', 'removeformat':'RemoveFormat', 'time':'Time', 'date':'Date',
@@ -460,7 +460,7 @@ UE.I18N['en'] = {
     insertvideo:{
         'static':{
             lang_tab_insertV:"Video",
-            lang_tab_searchV:"Search",
+//            lang_tab_searchV:"Search",
             lang_video_url:" URL ",
             lang_video_size:"Video Size",
             lang_videoW:"Width",
@@ -499,7 +499,7 @@ UE.I18N['en'] = {
             'lang_insertCaption':'Add table header row',
             'lang_insertTitle':'Add table title row',
             'lang_tableSize':'Automatically adjust table size',
-            'lang_autoSizeContent':'Adaptive by form text',
+                'lang_autoSizeContent':'Adaptive by form text',
             'lang_autoSizePage':'Page width adaptive',
             'lang_example':'Example',
             'lang_borderStyle':'Table Border',

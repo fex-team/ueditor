@@ -8,7 +8,7 @@
 UE.I18N['zh-cn'] = {
     'labelMap':{
         'anchor':'锚点', 'undo':'撤销', 'redo':'重做', 'bold':'加粗', 'indent':'首行缩进', 'snapscreen':'截图',
-        'italic':'斜体', 'underline':'下划线', 'strikethrough':'删除线', 'subscript':'下标',
+        'italic':'斜体', 'underline':'下划线', 'strikethrough':'删除线', 'subscript':'下标','fontborder':'字符边框',
         'superscript':'上标', 'formatmatch':'格式刷', 'source':'源代码', 'blockquote':'引用',
         'pasteplain':'纯文本粘贴模式', 'selectall':'全选', 'print':'打印', 'preview':'预览',
         'horizontal':'分隔线', 'removeformat':'清除格式', 'time':'时间', 'date':'日期',
@@ -151,6 +151,7 @@ UE.I18N['zh-cn'] = {
         'copy':"复制(Ctrl + c)",
         'copymsg':"请使用 'Ctrl + c'执行复制操作",
         'paste':"粘贴(Ctrl + v)",
+         'pastemsg':"请使用 'Ctrl + v'执行复制操作",
         'highlightcode':'插入代码'
     },
 
@@ -441,7 +442,7 @@ UE.I18N['zh-cn'] = {
     'insertvideo':{
         'static':{
             lang_tab_insertV:"插入视频",
-            lang_tab_searchV:"搜索视频",
+//            lang_tab_searchV:"搜索视频",
             lang_video_url:"视频网址",
             lang_video_size:"视频尺寸",
             lang_videoW:"宽度",
