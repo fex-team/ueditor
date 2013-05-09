@@ -69,7 +69,7 @@ test('非闭合选择----字符串包括大写跟小写',function(){
 });
 test('非闭合选择----字符串包括换行跟空格',function(){
     if(ua.browser.ie == 9)return ;//TODO 1.2.6
-    if(ua.browser.ie == 8)return ;//TODO 1.2.6
+    if(ua.browser.ie == 8)return ;//TODO 1.2.6 PUBLICGE-3402
     var editor=te.obj[0];
     var range=te.obj[1];
     var body=editor.body;
