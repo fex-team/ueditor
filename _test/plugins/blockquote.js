@@ -18,7 +18,6 @@ module( "plugins.blockquote" );
 //                //firefox竟然要多触发一次。。什么乱七八糟的bug啊
 //                //if ( ua.getBrowser() == "firefox" )
 //                //te.presskey( "enter", "" );
-//                debugger;
 //                editor.focus();
 //                te.presskey( "enter", "" );
 //                setTimeout( function () {

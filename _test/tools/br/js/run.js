@@ -52,7 +52,6 @@ function run( kiss, runnext ) {
 
         }
         wb.kissnode.removeClass( 'running_case' );
-      //  debugger
         /*
          * ext_qunit.js的_d方法会触发done事件
          * top.$(wbkiss).trigger('done', [ new Date().getTime(), args ]); new Date().getTime()指向a参数，args指向b参数

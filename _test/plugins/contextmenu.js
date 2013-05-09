@@ -467,7 +467,6 @@ test( '表格右键菜单', function() {
 ////    var range = new baidu.editor.dom.Range( editor.document );
 ////    stop();
 ////    setTimeout(function(){
-////        debugger
 ////        editor.execCommand('inserttable');
 ////        var tds = editor.body.getElementsByTagName('td');
 ////        var ut = editor.getUETable(editor.body.firstChild);
@@ -498,7 +497,6 @@ test( '表格右键菜单', function() {
 ////        ua.contextmenu(editor.body.firstChild);
 ////        var menutableBody = document.getElementsByClassName("edui-menu-body")[0];
 ////        lang = editor.getLang( "contextMenu" );
-////        debugger
 ////        ua.click(menutableBody.childNodes[12]);
 ////        var iframe  = document.getElementsByTagName('iframe');
 ////        setTimeout(function (){
