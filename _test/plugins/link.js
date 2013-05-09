@@ -29,7 +29,7 @@ test( '在超链接前加一个超链接', function () {
     range.selectNode( editor.body.firstChild.firstChild ).select();
     editor.execCommand( 'link', {href:'http://www.google.com/'} );
     ua.manualDeleteFillData( editor.body );
-    equal( editor.getContent(), '<p><a href="http://www.google.com/" >hello</a><a href="http://www.baidu.com/" >baidu</a></p>' );
+    equal( editor.getContent(), '<p><a href="http://www.google.com/">hello</a><a href="http://www.baidu.com/">baidu</a></p>' );
 } );
 
 /*trace 798*/

@@ -79,5 +79,5 @@ test('全部替换内容为空',function(){
     editor.setContent('<p>欢迎回来 欢迎啊</p>');
     editor.execCommand('searchreplace',{searchStr:'欢迎',replaceStr:'',all:true});
     ua.manualDeleteFillData(editor.body);
-    equal(editor.body.firstChild.innerHTML,'回来&nbsp;啊');
+    equal(editor.body.firstChild.innerHTML,'回来 啊');
 });

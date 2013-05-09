@@ -7,7 +7,7 @@ test( 'trace 860:对包含超链接的段落清除样式', function () {
     editor.setContent( '<p><span style="color:red">hello</span><a href="http://www.baidu.com/" style="font-size: 16pt;">baidu</a></p>' );
     range.setStart( editor.body.firstChild.firstChild.nextSibling.firstChild, 2 ).collapse( true ).select();
     editor.execCommand( 'removeformat' );
-    equal( editor.getContent(), '<p>hello<a href="http://www.baidu.com/" >baidu</a></p>', '对包含超链接的段落去除样式' );
+    equal( editor.getContent(), '<p>hello<a href="http://www.baidu.com/">baidu</a></p>', '对包含超链接的段落去除样式' );
 } );
 
 /*trace 800*/

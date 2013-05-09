@@ -65,7 +65,7 @@ test( '切换源码，源码中多处空行', function () {
             editor.execCommand('source');
             setTimeout(function () {
                 var html = editor.getContent();
-                equal(html, '<p>hello<a href="http://www.baidu.com/" >baidu</a></p>');
+                equal(html, '<p>hello<a href="http://www.baidu.com/">baidu</a></p>');
                 start();
             }, 100);
         }, 100);
@@ -149,7 +149,7 @@ test( 'trace 1734 range的更新/特殊符号的转换', function () {
                 editor.execCommand( 'source' );
                 setTimeout( function () {
                     editor.execCommand( 'source' );
-                    equal( editor.getContent(), "<p>&#39;<img src=\"http://nsclick.baidu.com/u.gif?&amp;asdf=&quot;sdf&amp;asdfasdfs;asdf\" /></p>" );
+                    equal( editor.getContent(), "<p>&#39;<img src=\"http://nsclick.baidu.com/u.gif?&amp;asdf=&quot;sdf&amp;asdfasdfs;asdf\"/></p>" );
                     start();
                 }, 100 );
             }, 100 );
@@ -237,7 +237,7 @@ test( '不以http://开头的超链接绝对路径网址', function () {
         editor.execCommand( 'source' );
         setTimeout( function () {
             editor.execCommand( 'source' );
-            equal( editor.getContent(), '<p><a href="www.baidu.com" >绝对路径网址</a></p>' );
+            equal( editor.getContent(), '<p><a href="www.baidu.com">绝对路径网址</a></p>' );
             start();
         }, 100 );
     }, 100 );
