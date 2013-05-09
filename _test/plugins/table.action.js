@@ -185,7 +185,7 @@ test('trace 3047 全屏插入表格',function(){
                 ok((width1 - width2) > 50, '页面宽度自适应');
                 div.parentNode.removeChild(div);
                 start();
-            }, 200);
+            }, 500);
         }, 200);
     });
 });
