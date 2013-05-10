@@ -815,7 +815,12 @@
     };
     UE.commands["settablebackground"] = {
         queryCommandState: function () {
-            return getSelectedArr(this).length > 1 ? 0 : -1;
+            var selecteds = getSelectedArr(this);
+
+            if( selecteds.length && selecteds[0].tagName.toLowerCase() === 'td' ) {
+                return 0;
+            }
+            return -1;
         },
         execCommand: function (cmd, value) {
             var table, cells, ut;
