@@ -175,20 +175,20 @@ UE.plugins['contextmenu'] = function () {
                     ]
                 },
                 {
-                    group:"表格排序",
+                    group:lang.tablesort,
                     icon:'tablesort',
                     subMenu:[
                         {
-                            label:"逆序当前",
+                            label:lang.reversecurrent,
                             cmdName:'sorttable',
                             value:1
                         },
                         {
-                            label:"按ASCII字符升序",
+                            label:lang.orderbyasc,
                             cmdName:'sorttable'
                         },
                         {
-                            label:"按ASCII字符降序",
+                            label:lang.reversebyasc,
                             cmdName:'sorttable',
                             exec:function(){
                                 this.execCommand("sorttable",function(td1,td2){
@@ -199,7 +199,7 @@ UE.plugins['contextmenu'] = function () {
                             }
                         },
                         {
-                            label:"按数值大小升序",
+                            label:lang.orderbynum,
                             cmdName:'sorttable',
                             exec:function(){
                                 this.execCommand("sorttable",function(td1,td2){
@@ -212,7 +212,7 @@ UE.plugins['contextmenu'] = function () {
                             }
                         },
                         {
-                            label:"按数值大小降序",
+                            label:lang.reversebynum,
                             cmdName:'sorttable',
                             exec:function(){
                                 this.execCommand("sorttable",function(td1,td2){
@@ -227,46 +227,46 @@ UE.plugins['contextmenu'] = function () {
                     ]
                 },
                 {
-                    group:"边框底纹",
+                    group:lang.borderbk,
                     icon:'borderBack',
                     subMenu:[
                         {
-                            label:"表格隔行变色",
+                            label:lang.setcolor,
                             cmdName:"interlacetable",
                             exec:function(){
                                 this.execCommand("interlacetable");
                             }
                         },
                         {
-                            label:"取消表格隔行变色",
+                            label:lang.unsetcolor,
                             cmdName:"uninterlacetable",
                             exec:function(){
                                 this.execCommand("uninterlacetable");
                             }
                         },
                         {
-                            label:"选区背景隔行",
+                            label:lang.setbackground,
                             cmdName:"settablebackground",
                             exec:function(){
                                 this.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]});
                             }
                         },
                         {
-                            label:"取消选区背景",
+                            label:lang.unsetbackground,
                             cmdName:"cleartablebackground",
                             exec:function(){
                                 this.execCommand("cleartablebackground");
                             }
                         },
                         {
-                            label:"红蓝相间",
+                            label:lang.redandblue,
                             cmdName:"settablebackground",
                             exec:function(){
                                 this.execCommand("settablebackground",{repeat:true,colorList:["red","blue"]});
                             }
                         },
                         {
-                            label:"三色渐变",
+                            label:lang.threecolorgradient,
                             cmdName:"settablebackground",
                             exec:function(){
                                 this.execCommand("settablebackground",{repeat:true,colorList:["#aaa","#bbb","#ccc"]});
@@ -324,19 +324,19 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'tablealignment',
                             className: 'left',
                             label:lang.tableleft,
-                            value:['float','left']
+                            value:"left"
                         },
                         {
                             cmdName:'tablealignment',
                             className: 'center',
                             label:lang.tablecenter,
-                            value:['margin','0 auto']
+                            value:"center"
                         },
                         {
                             cmdName:'tablealignment',
                             className: 'right',
                             label:lang.tableright,
-                            value:['float','right']
+                            value:"right"
                         }
                     ]
                 },
@@ -436,9 +436,9 @@ UE.plugins['contextmenu'] = function () {
                                 case "aligntable":
                                     return me.getLang("contextMenu.aligntable");
                                 case "tablesort":
-                                    return "表格排序";
+                                    return lang.tablesort;
                                 case "borderBack":
-                                    return "边框底纹";
+                                    return lang.borderbk;
                                 default :
                                     return '';
                             }

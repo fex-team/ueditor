@@ -1063,8 +1063,8 @@ test( 'getComputedStyle-border', function() {
 //修复ie下的一个bug，如果在body上强制设了字体大小，h1的字体大小就会继承body的字体，而没有办法取到真是的字体大小
 test( 'getComputedStyle-在body上设置字体大小', function() {
     var domUtils = baidu.editor.dom.domUtils;
-    var editor = new baidu.editor.Editor();
-    var div = te.dom[2];
+    var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
+    var div = document.body.appendChild( document.createElement( 'div' ) );
     editor.render( div );
     var body = editor.body;
     var range = new baidu.editor.dom.Range( editor.document );
