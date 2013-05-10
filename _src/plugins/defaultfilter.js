@@ -114,7 +114,7 @@ UE.plugins['defaultfilter'] = function () {
                     case 'td':
                     case 'th':
                     case 'caption':
-                        if(!node.children && !node.children.length){
+                        if(!node.children || !node.children.length){
 
                             node.appendChild(browser.ie ? UE.uNode.createText(' ') : UE.uNode.createElement('br'))
                         }
