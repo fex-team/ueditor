@@ -318,18 +318,18 @@ function uParse(selector,opt){
                             _each(nodes,function(pi){
                                 if(/brush/i.test(pi.className)){
                                     SyntaxHighlighter.highlight(pi);
-//                                    var tables = document.getElementsByTagName('table');
-//                                    for(var t= 0,ti;ti=tables[t++];){
-//                                        if(/SyntaxHighlighter/i.test(ti.className)){
-//                                            var tds = ti.getElementsByTagName('td');
-//                                            for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
-//                                                ri = tds[1].firstChild.childNodes[i];
-//                                                if(ri){
-//                                                    ri.style.height = li.style.height = ri.offsetHeight + 'px';
-//                                                }
-//                                            }
-//                                        }
-//                                    }
+                                    var tables = document.getElementsByTagName('table');
+                                    for(var t= 0,ti;ti=tables[t++];){
+                                        if(/SyntaxHighlighter/i.test(ti.className)){
+                                            var tds = ti.getElementsByTagName('td');
+                                            for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
+                                                ri = tds[1].firstChild.childNodes[i];
+                                                if(ri){
+                                                    ri.style.height = li.style.height = ri.offsetHeight + 'px';
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             });
                         });

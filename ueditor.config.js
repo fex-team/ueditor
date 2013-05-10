@@ -161,10 +161,10 @@
         ,imageManagerPath:URL + "php/"                                    //图片修正地址，同imagePath
 
         //屏幕截图配置区
-        ,snapscreenHost: '127.0.0.1'                                  //屏幕截图的server端文件所在的网站地址或者ip，请不要加http://
+        ,snapscreenHost: location.hostname                                 //屏幕截图的server端文件所在的网站地址或者ip，请不要加http://
         ,snapscreenServerUrl: URL +"php/imageUp.php" //屏幕截图的server端保存程序，UEditor的范例代码为“URL +"server/upload/php/snapImgUp.php"”
         ,snapscreenPath: URL + "php/"
-        //,snapscreenServerPort: 80                                    //屏幕截图的server端端口
+        ,snapscreenServerPort: location.port                                   //屏幕截图的server端端口
         //,snapscreenImgAlign: ''                                //截图的图片默认的排版方式
 
         //word转存配置区
@@ -239,7 +239,8 @@
 
         //,imagePopup:true      //图片操作的浮层开关，默认打开
 
-        //,initialStyle:''//编辑器内部样式,可以用来改变字体等
+        //如果自定义，最好给p标签如下的行高，要不输入中文时，会有跳动感
+        //,initialStyle:'p{line-height:1em}'//编辑器层级的基数,可以用来改变字体等
 
         //,autoSyncData:true //自动同步编辑器要提交的数据
         //,emotionLocalization:false //是否开启表情本地化，默认关闭。若要开启请确保emotion文件夹下包含官网提供的images表情文件夹
@@ -426,6 +427,8 @@
         //,autoFloatEnabled:true
         //浮动时工具栏距离浏览器顶部的高度，用于某些具有固定头部的页面
         //,topOffset:30
+        //编辑器底部距离工具栏高度(如果参数大于等于编辑器高度，则设置无效)
+        //,toolbarTopOffset:400
 
         //indentValue
         //首行缩进距离,默认是2em
