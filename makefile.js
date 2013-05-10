@@ -1,6 +1,5 @@
 var fs = require('fs'),
-    compressor = require('node-minify'),
-    utils = require('util');
+    compressor = require('node-minify');
 
 
 function copy(src,dst,excludeFn){
@@ -66,15 +65,18 @@ function move(src,dst){
 }
 
 function del(path){
+
     if(fs.statSync(path).isDirectory()){
         fs.readdirSync(path).forEach(function(subpath){
             subpath = path + '/' + subpath;
             if(fs.statSync(subpath).isFile()){
-                fs.unlinkSync(subpath)
+                try{
+                    fs.unlinkSync(subpath)
+                }catch(e){}
             }else{
                 del(subpath)
             }
-        })
+        });
         fs.rmdirSync(path)
     }
 }
@@ -126,7 +128,7 @@ function addtheme(){
         theme = content.match(/theme\s*=\s*([^#\n\r\t]+)/)[1].replace(/\s*/g,'');
     copy('themes/' + theme,'ueditor/themes/' + theme,function(name){
         return /^_/.test(name)
-    })
+    });
 
     del('themes/default/css')
 }
@@ -215,5 +217,3 @@ function addParse(){
 function addThirdParty(){
     copy('third-party','ueditor/third-party')
 }
-debugger
-del('ueditor/themes')
