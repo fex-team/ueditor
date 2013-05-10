@@ -99,6 +99,8 @@ addServerLang();
 mergeCss();
 ////添加样式
 addtheme();
+///添加语言
+addFrontLang();
 ////合并js
 mergeJs();
 ////添加dialog
@@ -216,4 +218,7 @@ function addParse(){
 }
 function addThirdParty(){
     copy('third-party','ueditor/third-party')
+}
+function addFrontLang(){
+    copy('lang','ueditor/lang')
 }
