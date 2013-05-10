@@ -161,7 +161,7 @@ UE.I18N['en'] = {
         'borderbk':'Border shading',
         'setcolor':'interlaced color',
         'unsetcolor':'Cancel interlacedcolor',
-        'setbackground':'Bk interlaced',
+        'setbackground':'Background interlaced',
         'unsetbackground':'Cancel Bk interlaced',
         'redandblue':'Blue and red',
         'threecolorgradient':'Three-color gradient',
