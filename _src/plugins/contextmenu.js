@@ -324,19 +324,19 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'tablealignment',
                             className: 'left',
                             label:lang.tableleft,
-                            value:['float','left']
+                            value:"left"
                         },
                         {
                             cmdName:'tablealignment',
                             className: 'center',
                             label:lang.tablecenter,
-                            value:['margin','0 auto']
+                            value:"center"
                         },
                         {
                             cmdName:'tablealignment',
                             className: 'right',
                             label:lang.tableright,
-                            value:['float','right']
+                            value:"right"
                         }
                     ]
                 },

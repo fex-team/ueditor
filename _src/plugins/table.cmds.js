@@ -727,17 +727,13 @@
             }
             return getTableItemsByRange(this).table ? 0 : -1
         },
-        execCommand: function (cmd, data) {
+        execCommand: function (cmd, value) {
             var me = this,
                 start = me.selection.getStart(),
                 table = start && domUtils.findParentByTagName(start, ["table"], true);
 
             if (table) {
-                var obj = {};
-                obj[data[0]] = data[1];
-                table.style[utils.cssStyleToDomStyle("float")] = "";
-                table.style.margin = "";
-                domUtils.setStyles(table, obj);
+               table.setAttribute("align",value);
             }
         }
     };
