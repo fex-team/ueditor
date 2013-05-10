@@ -12,8 +12,10 @@ UE.plugins['snapscreen'] = function(){
         snapplugin;
 
     me.setOpt({
-        snapscreenServerPort: 80                                    //屏幕截图的server端端口
+        snapscreenServerPort: location.port                                    //屏幕截图的server端端口
         ,snapscreenImgAlign: ''                                //截图的图片默认的排版方式
+        ,snapscreenHost: location.hostname                                 //屏幕截图的server端文件所在的网站地址或者ip，请不要加http://
+
     });
     me.commands['snapscreen'] = {
         execCommand: function(){
@@ -59,7 +61,7 @@ UE.plugins['snapscreen'] = function(){
                 alert(lang.uploadErrorMsg);
             };
             try{
-                var port = editorOptions.snapscreenServerPort+"" || "80";
+                var port = editorOptions.snapscreenServerPort + '';
                 editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.split( editorOptions.snapscreenHost );
                 editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl[1] || editorOptions.snapscreenServerUrl[0];
                 if( editorOptions.snapscreenServerUrl.indexOf(":"+port) === 0 ) {

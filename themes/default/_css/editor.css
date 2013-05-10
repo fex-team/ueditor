@@ -121,10 +121,10 @@
 }
 
 .edui-default .edui-bubble .edui-shadow {
-    box-shadow: 1px 1px 3px #818181;
-    -webkit-box-shadow: 2px 2px 3px #818181;
-    -moz-box-shadow: 2px 2px 3px #818181;
-    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '2', MakeShadow = 'true', ShadowOpacity = '0.5');
+    /*box-shadow: 1px 1px 3px #818181;*/
+    /*-webkit-box-shadow: 2px 2px 3px #818181;*/
+    /*-moz-box-shadow: 2px 2px 3px #818181;*/
+    /*filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '2', MakeShadow = 'true', ShadowOpacity = '0.5');*/
 }
 
 .edui-default .edui-editor-toolbarmsg {
