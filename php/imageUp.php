@@ -1,4 +1,6 @@
 <?php
+	
+
     /**
      * Created by JetBrains PhpStorm.
      * User: taoqili
@@ -7,6 +9,7 @@
      */
     header("Content-Type: text/html; charset=utf-8");
     error_reporting(E_ERROR | E_WARNING);
+    date_default_timezone_set("Asia/chongqing");
     include "Uploader.class.php";
     //上传图片框中的描述表单名称，
     $title = htmlspecialchars($_POST['pictitle'], ENT_QUOTES);

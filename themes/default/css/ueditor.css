@@ -252,10 +252,10 @@ div.edui-box {
 }
 
 .edui-default .edui-bubble .edui-shadow {
-    box-shadow: 1px 1px 3px #818181;
-    -webkit-box-shadow: 2px 2px 3px #818181;
-    -moz-box-shadow: 2px 2px 3px #818181;
-    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '2', MakeShadow = 'true', ShadowOpacity = '0.5');
+    /*box-shadow: 1px 1px 3px #818181;*/
+    /*-webkit-box-shadow: 2px 2px 3px #818181;*/
+    /*-moz-box-shadow: 2px 2px 3px #818181;*/
+    /*filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '2', MakeShadow = 'true', ShadowOpacity = '0.5');*/
 }
 
 .edui-default .edui-editor-toolbarmsg {
@@ -1012,6 +1012,8 @@ div.edui-box {
 /* 弹出菜单 */
 .edui-default .edui-popup {
     z-index: 3000;
+    background-color: #ffffff;
+
 }
 
 .edui-default .edui-popup .edui-shadow {
@@ -1019,25 +1021,24 @@ div.edui-box {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
+}
+
+.edui-default .edui-popup-content {
+    border:1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, 0.2);
     *border-right-width: 2px;
     *border-bottom-width: 2px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
-    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding;
     background-clip: padding-box;
-}
-
-.edui-default .edui-popup-content {
-
     padding: 5px;
+    background:#ffffff;
 }
 
 .edui-default .edui-popup .edui-bordereraser {

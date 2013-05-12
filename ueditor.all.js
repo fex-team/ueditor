@@ -6262,12 +6262,12 @@
                     }
                     if (pre) {
                         var str = "";
-                        while (pre && pre.nodeName != "BR" && (new RegExp("^[ " + domUtils.fillChar + "]*$")).test(pre.nodeValue)) {
+                        while (pre && pre.nodeName != "BR" && (new RegExp("^[\\s" + domUtils.fillChar + "]*$")).test(pre.nodeValue)) {
                             str += pre.nodeValue;
                             pre = pre.nextSibling;
                         }
                         if (pre.nodeName != "BR") {
-                            var match = pre.nodeValue.match(new RegExp("^([ " + domUtils.fillChar + "]+)"));
+                            var match = pre.nodeValue.match(new RegExp("^([\\s" + domUtils.fillChar + "]+)"));
                             if (match && match[1]) {
                                 str += match[1];
                             }
@@ -12601,8 +12601,9 @@
     UE.plugins["snapscreen"] = function() {
         var me = this, doc, snapplugin;
         me.setOpt({
-            snapscreenServerPort: 80,
-            snapscreenImgAlign: ""
+            snapscreenServerPort: location.port,
+            snapscreenImgAlign: "",
+            snapscreenHost: location.hostname
         });
         me.commands["snapscreen"] = {
             execCommand: function() {
@@ -12644,7 +12645,7 @@
                     alert(lang.uploadErrorMsg);
                 };
                 try {
-                    var port = editorOptions.snapscreenServerPort + "" || "80";
+                    var port = editorOptions.snapscreenServerPort + "";
                     editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.split(editorOptions.snapscreenHost);
                     editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl[1] || editorOptions.snapscreenServerUrl[0];
                     if (editorOptions.snapscreenServerUrl.indexOf(":" + port) === 0) {
