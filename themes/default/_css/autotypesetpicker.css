@@ -1,0 +1,21 @@
+/*自动排版弹出菜单*/
+.edui-default .edui-autotypesetpicker .edui-autotypesetpicker-body {
+    font-size: 12px;
+    margin-bottom: 3px;
+    clear: both;
+}
+
+.edui-default .edui-autotypesetpicker-body table {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+.edui-default .edui-autotypesetpicker-body td {
+    font-size: 12px;
+    word-wrap:break-word;
+}
+
+.edui-default .edui-autotypesetpicker-body td input {
+    margin: 3px 3px 3px 4px;
+    *margin: 1px 0 0 0;
+}

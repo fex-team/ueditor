@@ -1,0 +1,119 @@
+/* 颜色弹出菜单 */
+.edui-default .edui-colorpicker-topbar {
+    height: 27px;
+    width: 200px;
+    /*border-bottom: 1px gray dashed;*/
+}
+
+.edui-default .edui-colorpicker-preview {
+    height: 20px;
+    border: 1px inset black;
+    margin-left: 1px;
+    width: 128px;
+    float: left;
+}
+
+.edui-default .edui-colorpicker-nocolor {
+    float: right;
+    margin-right: 1px;
+    font-size: 12px;
+    line-height: 14px;
+    height: 14px;
+    border: 1px solid #333;
+    padding: 3px 5px;
+    cursor: pointer;
+}
+
+.edui-default .edui-colorpicker-tablefirstrow {
+    height: 30px;
+}
+
+.edui-default .edui-colorpicker-colorcell {
+    width: 14px;
+    height: 14px;
+    display: block;
+    margin: 0;
+    cursor: pointer;
+}
+
+.edui-default .edui-colorpicker-colorcell:hover {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+}
+.edui-default .edui-colorpicker-advbtn{
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    height:20px;
+}
+.arrow_down{
+    background: white url('../images/arrow_down.png') no-repeat center;
+}
+.arrow_up{
+    background: white url('../images/arrow_up.png') no-repeat center;
+}
+/*高级的样式*/
+.edui-colorpicker-adv{
+    position: relative;
+    overflow: hidden;
+    height: 180px;
+    display: none;
+}
+.edui-colorpicker-plant, .edui-colorpicker-hue {
+    border: solid 1px #666;
+}
+.edui-colorpicker-pad {
+    width: 150px;
+    height: 150px;
+    left: 14px;
+    top: 13px;
+    position: absolute;
+    background: red;
+    overflow: hidden;
+    cursor: crosshair;
+}
+.edui-colorpicker-cover{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background: url("../images/tangram-colorpicker.png") -160px -200px;
+}
+.edui-colorpicker-padDot{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    overflow: hidden;
+    background: url(../images/tangram-colorpicker.png) 0px -200px repeat-x;
+    z-index: 1000;
+
+}
+.edui-colorpicker-sliderMain {
+    position: absolute;
+    left: 171px;
+    top: 13px;
+    width: 19px;
+    height: 152px;
+    background: url(../images/tangram-colorpicker.png) -179px -12px no-repeat;
+
+}
+.edui-colorpicker-slider {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.edui-colorpicker-thumb{
+    position: absolute;
+    top: 0;
+    cursor: pointer;
+    height: 3px;
+    left: -1px;
+    right: -1px;
+    border: 1px solid black;
+    background: white;
+    opacity: .8;
+}
