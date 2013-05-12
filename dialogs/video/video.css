@@ -1,0 +1,59 @@
+@charset "utf-8";
+.wrapper{ width: 570px;_width:575px;margin: 10px auto; zoom:1;position: relative}
+.tabbody{height:335px;}
+.panel { position: absolute;width:100%; height:100%;background: #fff;}
+.panel table td{vertical-align: middle;}
+#videoUrl {
+    width: 490px;
+    height: 21px;
+    line-height: 21px;
+    margin: 8px 5px;
+    background: #FFF;
+    border: 1px solid #d7d7d7;
+}
+#videoSearchTxt{margin-left:15px;background: #FFF;width:200px;height:21px;line-height:21px;border: 1px solid #d7d7d7;}
+#searchList{width: 570px;overflow: auto;zoom:1;height: 270px;}
+#searchList div{float: left;width: 120px;height: 135px;margin: 5px 15px;}
+#searchList img{margin: 2px 8px;cursor: pointer;border: 2px solid #fff} /*不用缩略图*/
+#searchList p{margin-left: 10px;}
+#videoType{
+    width: 65px;
+    height: 23px;
+    line-height: 22px;
+    border: 1px solid #d7d7d7;
+}
+#videoSearchBtn,#videoSearchReset{
+    /*width: 80px;*/
+    height: 25px;
+    line-height: 25px;
+    background: #eee;
+    border: 1px solid #d7d7d7;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+
+
+#preview{width: 420px; margin-left: 10px; _margin-left:5px; height: 280px;background-color: #ddd;float: left}
+#videoInfo {width: 120px;float: left;margin-left: 10px;_margin-left:7px;}
+fieldset{
+    border: 1px solid #ddd;
+    padding-left: 5px;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    width: 115px;
+}
+fieldset legend{font-weight: bold;}
+fieldset p{line-height: 30px;}
+fieldset input.txt{
+    width: 65px;
+    height: 21px;
+    line-height: 21px;
+    margin: 8px 5px;
+    background: #FFF;
+    border: 1px solid #d7d7d7;
+}
+label.url{font-weight: bold;margin-left: 5px;color: #06c;}
+#videoFloat div{cursor:pointer;opacity: 0.5;filter: alpha(opacity = 50);margin:9px;_margin:5px;width:38px;height:36px;float:left;}
+#videoFloat .focus{opacity: 1;filter: alpha(opacity = 100)}
+span.view{display: inline-block;width: 30px;float: right;cursor: pointer;color: blue}

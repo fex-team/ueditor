@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<style>
+/* Common report properties.
+ * 
+ * Properties will be applied to all elements, 
+ */
+* {
+	font-family: Verdana, Tahoma, Arial;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 12px;
+	padding : 0px;
+	margin : 0px;
+}
+
+a {
+	text-decoration:underline;
+	cursor: pointer;
+}
+
+/*
+ * Body properties
+ */
+body {
+	background-color : white;
+	margin-bottom : 13px;
+}
+
+p.wait {
+	font-family : Times;
+	font-size : 18px;
+	font-weight : bold;
+	padding : 5px;
+	/*text-align : center;*/
+}
+
+
+/**
+ * This propertie for all table in report
+ */
+table {
+	margin-left  : 11px;
+	margin-right : 11px;
+}
+
+/*
+ * 
+ */
+ table.report_caption{
+	margin-left  : auto;
+	margin-right : auto;
+	width:90%;
+ }
+table.report_caption tr td {
+	font-family: &#x5FAE;&#x8F6F;&#x96C5;&#x9ED1;,&#x9ED1;&#x4F53;,Arial;
+	font-size: 28px;
+	color: #5E7FA0;
+	width: 627px;
+	text-align:     center;    
+	vertical-align: bottom;
+	padding: 10px 15px 20px 8px;
+}
+
+/*  ------------------------------table_wide---------------------------------- */
+table.table_wide{
+	width:100%;
+	margin-left  : auto;
+	margin-right : auto;
+}
+/* common cell */
+table.table_wide tr th{
+    color: #333333;
+    background: #F1F1F1;
+    padding: 6px 10px 6px 10px;
+    border-left   : solid 1px #F7F7F7;
+    border-top    : solid 1px #FFFFFF;
+    border-right  : solid 1px #E4E4E4;
+    border-bottom : solid 1px #E4E4E4;
+    word-wrap	  : break-word;
+	width:70px;
+}
+
+table.table_wide tr td{
+   // color: #333333;
+    //background: #F1F1F1;
+    padding: 6px 10px 6px 10px;
+    border-left   : solid 1px #F7F7F7;
+    border-top    : solid 1px #FFFFFF;
+    border-right  : solid 1px #E4E4E4;
+    border-bottom : solid 1px #E4E4E4;
+    word-wrap	  : break-word;
+}
+
+/* header cell */
+table.table_wide tr.header td{
+    vertical-align : top;
+    font-size: 12px;
+    font-weight: bold;
+    color: #FFFFFF;
+    background: #9FB3CC;
+    border-right : solid 1px #809BB8;
+    border-left  : solid 1px #A9BFD7;
+    border-top : solid 1px #A9BFD7;
+    border-bottom : solid 1px #809BB8;
+    padding: 5px 12px 5px 12px;
+}
+
+table.caption td.result_PASS {
+   background : #9FB3CC;
+}
+
+
+
+/* ----------------------------caption---------------------------------*/
+
+table.caption {
+    //padding-left : 0px;
+    //padding-bottom : 0px;
+	width:100%;
+	margin-left  : auto;
+	margin-right : auto;
+}
+
+table.caption td.text {
+    //color: #366B61;
+    word-wrap : break-word;
+    height: 20px;
+    border-style : none;
+    padding : 6px 12px 6px 12px;
+    margin : 0px;
+}
+
+table.caption td.more {
+    color: #37597E;
+    background: white;
+    word-wrap	  : break-word;
+    height: 20px;
+    border-style : none dashed dashed dashed;
+    border-width : 1px;
+    padding : 0px 12px 0px 12px;
+    margin : 0px;
+}
+table.caption td a{
+	font: small-caps 400 10pt;
+}
+/*  ------------------------------pair_1---------------------------------- */
+table.pair_1 {
+    margin-top : 10px;
+	width:90%;
+	margin-left  : auto;
+	margin-right : auto;
+}
+
+table.pair_1 tr td.name {
+    font-weight: bold;
+    color: #333333;
+    text-align: left;
+    padding-bottom : 10px;
+	width:140px;
+}
+
+table.pair_1 tr td.value {
+    color: #333333;
+    padding-left: 2px;
+    padding-bottom : 10px;
+}
+
+
+/*  ---------------------------------caption_1----------------------------- */
+table.caption_1{
+	width:90%;
+	margin-left:auto;
+	margin-right:auto;
+}
+/*  -------------------------------separator_line--------------------------- */
+table.separator_line{
+	width : 90%;
+	margin-left  : auto;
+	margin-right : auto;
+}
+table.separator_line td {
+    height : 1px;
+    //width : 652px;
+	width : 700px;
+    background : #9FB3CC;
+    margin : 0;
+    padding : 0;
+    border-style : none;
+}
+
+/*  ------------------------------------note-------------------------------- */
+table.note tr.header td {
+    padding-top: 10px;
+    font-weight: bold;
+}
+
+table.note tr.text td {
+    padding-bottom: 6px;
+
+    font-family: Verdana, Tahoma, Arial;
+    font-size:11px;
+}
+</style>
+<title>JsHunter Check Report</title>
+
+<script type="text/javascript">
+
+function togglediv(divid,value){
+	if(divid && document.getElementById(divid))
+	{
+		if(value != "null")
+			document.getElementById(divid).style.display=value;
+		else
+			document.getElementById(divid).style.display="";
+	}
+}
+function showdiv(id){
+	var allcases = document.body.getElementsByTagName("div");
+	for(i = 1 ; i<allcases.length-2 ; i++){
+		togglediv("suite_"+i,"none");
+	}
+	togglediv("summary","none");
+	togglediv(id,"null");
+}
+function hidesuccess(suiteid){
+	var id = suiteid.substring(suiteid.lastIndexOf('_')+1);
+	var allcases = document.body.getElementsByTagName("table");
+	var re = new RegExp("case_"+id+"_[0-9]*_pass","i");
+	for (i=0; i<allcases.length ; i++ )
+	{
+		if (allcases[i].id.match(re)&&(document.getElementById(allcases[i].id).style.display!="none"))
+		{
+			document.getElementById(allcases[i].id).style.display="none";
+		}
+	}
+	return false;
+}
+function showall(suiteid){
+	var id = suiteid.substring(suiteid.lastIndexOf('_')+1);
+	var allcases = document.body.getElementsByTagName("table");
+	var re = new RegExp("case_"+id+"_[0-9]*_pass","i");
+	for (i=0; i<allcases.length ; i++ )
+	{
+		if (allcases[i].id.match(re)&&(document.getElementById(allcases[i].id).style.display=="none"))
+		{
+			document.getElementById(allcases[i].id).style.display="";
+		}
+	}
+	return false;
+}
+function toggle(id)
+{
+	document.getElementById(id).style.display = document.getElementById(id).style.display == "none" ? "":"none";
+	return false;
+}
+function openwindow(title, id, type)
+{
+	var content;
+	if(type=="text/html")
+	{
+		OpenWindow=window.open("", id, "height=768, width=1024,toolbar=no,scrollbars=yes,menubar=no,resizable=yes");
+		content = document.getElementById(id).value;
+		OpenWindow.document.write(content);
+		OpenWindow.document.close();
+	}
+	else
+	{
+		OpenWindow=window.open("", id, "height=600, width=800,toolbar=no,scrollbars=yes,menubar=no,resizable=yes");
+		content = document.getElementById(id).innerHTML;
+		OpenWindow.document.write("<TITLE>" + title + "</TITLE>");
+		OpenWindow.document.write("<BODY BGCOLOR=#ffffff>");
+		OpenWindow.document.write("<pre>" + content + "</pre>");
+		OpenWindow.document.write("</BODY>");
+		OpenWindow.document.write("</HTML>");
+		OpenWindow.document.close();
+	}
+}
+</script>
+
+</head>
+<body>
+	<table class="report_caption">
+		<tr>
+			<td>JSHunter Report</td>
+		</tr>
+	</table>
+	<table class="separator_line" cellspacing="0"><tr><td></td></tr></table>
+	<!--	SUMMARY		-->
+	<div id="summary" style="display:block;">
+		<table class="separator_line" cellspacing="0"><tr><td></td></tr></table>
+		
+		<table cellspacing="0" class="pair_1">
+			<tr>
+				<td class="name">TOTAL PROBLEM:</td>
+				<td class="value">{$pnumber}</td>
+			</tr>
+			<tr>
+				<td class="name">IGNORED:</td>
+				<td class="value">{$ignumber}</td>
+			</tr>
+			<tr>
+				<td class="name">ERROR:</td>
+				<td class="value">{$errnumber}</td>
+			</tr>
+			<tr>
+				<td class="name">WARNING:</td>
+				<td class="value">{$warnumber}</td>
+			</tr>
+			<tr>
+				<td class="name">DATA TIME:</td>
+				<td class="value">{$timeData}</td>
+			</tr>
+		</table>
+		<table class="separator_line" cellspacing="0"><tr><td></td></tr></table>
+		<p>&nbsp;</p>
+	</div>
+	<div style="width:90%;margin-left:auto;margin-right:auto;">
+	[---to be replace 1---]
+	</div>
+</body>
+</html>

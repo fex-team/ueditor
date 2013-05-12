@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>使用jquery的完整demo</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js" charset=""></script>
+    <script type="text/javascript" charset="utf-8" src="../ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+    <script>
+        $(function(){
+            UE.getEditor('myEditor');
+            $('#btn').click(function(){
+                //手动提交需要手动同步编辑器数据
+                UE.getEditor('myEditor').sync();
+                $('#form')[0].submit();
+            })
+            //--自动切换提交地址----
+            var version = UE.getEditor('myEditor').options.imageUrl||"php",
+                    form=$('#form')[0];
+
+
+            if(version.match(/php/)){
+                form.action="../php/getContent.php";
+            }else if(version.match(/net/)){
+                form.action="../net/getContent.ashx";
+            }else if(version.match(/jsp/)){
+                form.action="../jsp/getContent.jsp";
+            }
+
+        })
+    </script>
+</head>
+<body>
+<form id="form" method="post" target="_blank">
+    <script type="text/plain" id="myEditor" name="myEditor">
+        <p>欢迎使用UEditor！</p>
+    </script>
+    <input type="button" id="btn" value="提交数据">
+</form>
+</body>
+</html>

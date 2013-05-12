@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script src="../ueditor.parse.js" type="text/javascript"></script>
+    <script>
+        // 语法
+        // uParse(selector,[option])
+        /*
+            selector支持
+            id,class,tagName
+         */
+        /*
+            目前支持的参数
+            option:
+            highlightJsUrl 代码高亮相关js的路径 如果展示有代码高亮，必须给定该属性
+            highlightCssUrl 代码高亮相关css的路径 如果展示有代码高亮，必须给定该属性
+            liiconpath 自定义列表样式的图标路径，可以不给定，默认'http://bs.baidu.com/listicon/',
+            listDefaultPaddingLeft : 自定义列表样式的左边宽度 默认'20',
+            customRule 可以传入你自己的处理规则函数，函数第一个参数是容器节点
+         */
+
+        uParse('.content',{
+            'highlightJsUrl':'../third-party/SyntaxHighlighter/shCore.js',
+            'highlightCssUrl':'../third-party/SyntaxHighlighter/shCoreDefault.css'
+        })
+    </script>
+    <title></title>
+</head>
+<body>
+    <h1>解析编辑的内容</h1>
+    <div class="content" style="width:200px">
+        <ol class="custom_cn2 list-paddingleft-1"><li class="list-cn-3-1 list-cn2-paddingleft-1"><p>这里可以书写，编辑器的初始内容</p></li></ol><ul class="custom_dash list-paddingleft-1"><li class="list-dash list-dash-paddingleft"><p>sdfas</p></li></ul><ol class="custom_cn2 list-paddingleft-1"><ol style="list-style-type: decimal; " class=" list-paddingleft-3"><li><p>dfas</p></li></ol><li class="list-cn-3-1 list-cn2-paddingleft-1"><p>dfa</p></li><ol style="list-style-type: decimal; " class=" list-paddingleft-3"><li><p>sdfadf</p></li></ol></ol>
+        <p>
+            这里可以书写，编辑器的初始内容
+        </p>
+        <pre class="brush:js;toolbar:false;">
+               moveToBookmark:function (bookmark) {
+            var start = bookmark.id ? this.document.getElementById(bookmark.start) : bookmark.start,
+                end = bookmark.end && bookmark.id ? this.document.getElementById(bookmark.end) : bookmark.end;
+            this.setStartBefore(start);
+            domUtils.remove(start);
+            if (end) {
+                this.setEndBefore(end);
+                domUtils.remove(end);
+            } else {
+                this.collapse(true);
+            }
+            return this;
+        },
+        </pre>
+                <p>
+                    <br />
+                </p>
+    </div>
+    <div id="content" class="content">
+        <table width="960">
+            <caption>
+                sdf<br />
+            </caption>
+            <tbody>
+            <tr>
+                <th valign="null">
+                    sdf<br />
+                </th>
+                <th valign="null">
+                    sdf<br />
+                </th>
+                <th valign="null">
+                    <br />
+                </th>
+                <th valign="null">
+                    <br />
+                </th>
+                <th valign="null">
+                    <br />
+                </th>
+                <th valign="null">
+                    <br />
+                </th>
+                <th valign="null">
+                    <br />
+                </th>
+            </tr>
+            <tr>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+                <td width="116" valign="top">
+                    <br />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <textarea class="content">asdfasdfasdfasdfasdfadsfa</textarea>
+</body>
+
+
+</html>

@@ -1,0 +1,156 @@
+<p>
+    <p class="MsoNormal" style="mso-para-;margin-left:1.0gd;">
+        <p class="MsoNormal">
+            <span lang="EN-US"> </span>
+        </p>
+        <table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" style="border-top-style:none;border-right-style:none;border-bottom-style:none;border-left-style:none;">
+            <tr>
+                <td>
+
+
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+
+
+                                </td>
+                                <td width="189" valign="top" style="width:189px;border:solid #000 1px;mso-border-alt:solid #000 1px;padding:0cm 7px 0cm 7px">
+
+
+                                    <p class="MsoNormal">
+                                        欢迎使用<span lang="EN-US">ueditor!
+                                            <o:p>
+                                            </o:p></span>
+                                    </p>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </td>
+                <td width="189" valign="top" style="width:189px;border:solid #000 1px;border-left:none;mso-border-left-alt:solid #000 1px;mso-border-alt:solid #000 1px;padding:0cm 7px 0cm 7px">
+
+
+                    <p class="MsoNormal">
+                        <span lang="EN-US"> </span>
+                    </p>
+
+                </td>
+            </tr>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td width="189" valign="top" style="width:189px;border:solid #000 1px;border-left:none;mso-border-left-alt:solid #000 1px;mso-border-alt:solid #000 1px;padding:0cm 7px 0cm 7px">
+
+
+                        <p class="MsoNormal">
+                            <span lang="EN-US"> </span>
+                        </p>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+
+
+                    </td>
+                    <td width="189" valign="top" style="width:189px;border:solid #000 1px;border-top:none;mso-border-top-alt:solid #000 1px;mso-border-alt:solid #000 1px;padding:0cm 7px 0cm 7px">
+
+
+                        <p class="MsoNormal">
+                            <span lang="EN-US"> </span>
+                        </p>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td width="189" valign="top" style="width:189px;border-top:none;border-left:none;border-bottom:solid #000 1px;border-right:solid #000 1px;mso-border-top-alt:solid #000 1px;mso-border-left-alt:solid #000 1px;mso-border-alt:solid #000 1px;padding:0cm 7px 0cm 7px">
+
+
+                        <p class="MsoNormal">
+                            <span lang="EN-US"> </span>
+                        </p>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td width="189" valign="top" style="width:189px;border-top:none;border-left:none;border-bottom:solid #000 1px;border-right:solid #000 1px;mso-border-top-alt:solid #000 1px;mso-border-left-alt:solid #000 1px;mso-border-alt:solid #000 1px;padding:0cm 7px 0cm 7px">
+
+
+                        <p class="MsoNormal">
+                            欢迎使用<span lang="EN-US">ueditor!
+                                <o:p>
+                                </o:p></span>
+                        </p>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="MsoNormal">
+            <span lang="EN-US"><!--[if gte vml 1]><v:shapetype id="_x0000_t75"
+ coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe"
+ filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/></v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:275.25pt;
+ height:109.5pt;mso-wrap-style:square;mso-position-horizontal-relative:page;
+ mso-position-vertical-relative:page'>
+ <v:imagedata src="file:///C:\DOCUME~1\lisisi01\LOCALS~1\Temp\msohtmlclip1\01\clip_image001.png"
+  o:title=""/></v:shape><![endif]--><!--[if !vml]--><img width="367" height="146" src="file:///C:/DOCUME~1/lisisi01/LOCALS~1/Temp/msohtmlclip1/01/clip_image001.png" v:shapes="_x0000_i1025" /><!--[endif]-->
+                <o:p>
+                </o:p></span>
+        </p><span lang="EN-US" style="font-size:14px;mso-bidi-font-size:15px;font-family:&quot;calibri&quot;,&quot;sans-serif&quot;;mso-fareast-font-family:宋体;mso-bidi-font-family:黑体;mso-font-kerning:1px;mso-ansi-language:en-us;mso-fareast-language:zh-cn;mso-bidi-language:ar-sa"><a href="file:///C:/Documents%20and%20Settings/lisisi01/%E6%A1%8C%E9%9D%A2/www.baidu.com">www.baidu.com</a></span><br />
+    </p>
+</p>

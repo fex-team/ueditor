@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>重置编辑器</title>
+    <script type="text/javascript" charset="utf-8" src="../ueditor.config.js"></script>
+    <!--使用版-->
+    <!--<script type="text/javascript" charset="utf-8" src="../ueditor.all.js"></script>-->
+
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+    <style type="text/css">
+        #simple {
+            width: 1000px;
+            border: 1px solid #ddd;
+        }
+
+    </style>
+</head>
+<body>
+    <h2>重置编辑器和销毁编辑器示例</h2>
+    <div class="content" id="simple"></div>
+    <p><input type="button" onclick="simple()" value="重置编辑器内部参数"><span id="txt"></span></p>
+    <p><input id="destroy" type="button" onclick="destroy()" value="销毁编辑器"></p>
+    <script type="text/javascript" charset="utf-8">
+        var editor = UE.getEditor('simple');
+        function simple() {
+            if(editor){
+                editor.setContent("编辑器内部变量已经被重置!");
+                editor.reset();
+            }
+        }
+        function destroy(){
+            editor.destroy();
+            editor = null;
+            clearInterval(timer);
+            var button = document.getElementById("destroy");
+
+            button.value = "重新渲染";
+            button.onclick = function(){
+                editor = UE.getEditor('simple');
+                this.value="销毁编辑器";
+                this.onclick = destroy;
+                timer = setInterval( setMsg, 100 );
+            }
+        }
+        function setMsg() {
+            if(editor && editor.undoManger){
+                document.getElementById( "txt" ).innerHTML = "编辑器当前保存了 <span style='color: red'> " + editor.undoManger.list.length + " </span>次操作";
+            }
+        }
+        var timer = setInterval( setMsg, 100 );
+    </script>
+</body>
+</html>

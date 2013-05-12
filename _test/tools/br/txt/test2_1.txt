@@ -1,0 +1,57 @@
+<p>
+    <p class="p0" style="margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:16px;">欢迎使用ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <p class="p0" style="margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:16px;font-family:黑体;">欢迎使用ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;黑体&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;楷体_gb2312&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;楷体_gb2312&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <p class="p0" style="margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:16px;font-family:calibri;">欢迎使用<font face="Calibri">ueditor!</font></span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <h1 style="margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:29px;font-family:calibri;">欢迎使用<font face="Calibri">ueditor! </font></span><span style="font-size:29px;">
+            <o:p>
+            </o:p></span>
+    </h1>
+    <p class="p0" style="margin-bottom:0px;margin-top:0px;">
+        <span style="font-weight:bold;text-decoration:underline;font-style:italic;font-size:16px;vertical-align:super;">欢迎</span><span style="font-weight:bold;text-decoration:underline;font-style:italic;font-size:16px;vertical-align:sub;">使用</span><span style="font-weight:bold;text-decoration:line-through;font-style:italic;font-size:16px;">ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;font-weight:bold;text-decoration:line-through ;font-style:italic;font-size:14px;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-weight:bold;text-decoration:underline ;font-style:italic;font-size:14px;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <p class="p0" style="margin-bottom:0px;margin-top:0px;">
+        <span style="color:#0000ff;font-size:16px;background-image:initial;background-attachment:initial;background-origin:initial;background-clip:initial;background-color:#ffff00;background-position:initial initial;background-repeat:initial initial;">欢迎使用ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;color:#0000ff;font-size:14px;background:#ffff00;mso-highlight:#ffff00;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;color:#0000ff;font-size:14px;background:#ffff00;mso-highlight:#ffff00;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <p class="p0" style="text-align:center;margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:16px;">欢迎使用ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <p class="p0" style="text-indent:28px;margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:16px;">一、</span><span style="font-size:16px;">欢迎使用ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <p class="p0" style="text-indent:28px;margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:16px;">二、</span><span style="font-size:16px;">欢迎使用ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <p class="p0" style="text-indent:-28px;margin-left:28px;margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:16px;font-family:wingdings;">l </span><span style="font-size:16px;">欢迎使用ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+    <p class="p0" style="text-indent:-28px;margin-left:28px;margin-bottom:0px;margin-top:0px;">
+        <span style="font-size:16px;font-family:wingdings;">l </span><span style="font-size:16px;">欢迎使用ueditor!</span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;"> </span><span style="mso-spacerun:&#39;yes&#39;;font-size:14px;font-family:&#39;calibri&#39;;">
+            <o:p>
+            </o:p></span>
+    </p>
+</p>
