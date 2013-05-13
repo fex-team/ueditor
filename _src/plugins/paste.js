@@ -1,7 +1,6 @@
 ///import core
 ///import plugins/inserthtml.js
 ///import plugins/undo.js
-///import plugins/serialize.js
 ///commands 粘贴
 ///commandsName  PastePlain
 ///commandsTitle  纯文本粘贴模式

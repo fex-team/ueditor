@@ -1,5 +1,4 @@
 ///import core
-///import plugins/serialize.js
 ///import plugins/undo.js
 ///commands 查看源码
 ///commandsName  Source

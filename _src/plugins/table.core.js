@@ -31,8 +31,8 @@
         })
     };
     UETable.isEmptyBlock = function (node) {
-        var reg = new RegExp(domUtils.fillChar, 'g');
-        if (node[browser.ie ? 'innerText' : 'textContent'].replace(/^\s*$/, '').replace(reg, '').length > 0) {
+        var  reg = new RegExp('^[\\s' + domUtils.fillChar + ']*$', 'g');
+        if (node[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length > 0) {
             return 0;
         }
         for (var i in dtd.$isNotEmpty) if (dtd.$isNotEmpty.hasOwnProperty(i)) {
