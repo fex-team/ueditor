@@ -1,5 +1,8 @@
 var fs = require('fs'),
-    compressor = require('node-minify');
+    compressor = require('node-minify'),
+    severLang = '',
+    encoding = '';
+
 
 
 function copy(src,dst,excludeFn){
@@ -121,8 +124,8 @@ function createDeployDir(){
 
 function addServerLang(){
     var content = getConfigCont();
-    var lang = content.match(/server\.lang\s*=\s*([^#\n\r\t]+)/)[1].replace(/\s*/g,'');
-    copy(lang,'ueditor/'+lang)
+    severLang = content.match(/server\.lang\s*=\s*([^#\n\r\t]+)/)[1].replace(/\s*/g,'');
+    copy(severLang,'ueditor/'+severLang)
 }
 
 function addtheme(){
@@ -131,6 +134,7 @@ function addtheme(){
     copy('themes/' + theme,'ueditor/themes/' + theme,function(name){
         return /^_/.test(name)
     });
+    copy('themes/iframe.css','ueditor/themes/iframe.css');
 
     del('themes/default/css')
 }
@@ -211,7 +215,16 @@ function addDialogs(){
     copy('dialogs','ueditor/dialogs')
 }
 function addConfig(){
-    copy('ueditor.config.js','ueditor/ueditor.config.js')
+    var content = fs.readFileSync('ueditor.config.js','utf8');
+    switch(severLang){
+        case 'net':
+            content = content.replace(/\.php/g,'.ashx').replace(/php\//g,'net\/');
+            break;
+        case 'jsp':
+            content = content.replace(/\.php/g,'.jsp').replace(/php\//g,'jsp\/');
+    }
+    fs.writeFileSync('ueditor/ueditor.config.js',content);
+
 }
 function addParse(){
     copy('ueditor.parse.js','ueditor/ueditor.parse.js')
