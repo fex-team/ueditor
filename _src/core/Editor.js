@@ -596,6 +596,7 @@
                 } else {
                     rng.select(true);
                 }
+                this.fireEvent('focus');
             } catch (e) {
             }
         },
