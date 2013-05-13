@@ -27,12 +27,13 @@ test( '删span中的white-space标签', function () {
         ua.checkSameHtml(html,editor.body.innerHTML,'删span中的white-space标签');
     }
 } );
-test( '删p中的margin|padding标签', function () {
-    var editor = te.obj[0];
-    editor.setContent( '<p style="margin-left: 1em; list-style: none;" >hello</p>' );
-    var html = '<p style="list-style: none;">hello</p>';
-    ua.checkSameHtml(html,editor.body.innerHTML,'删p中的margin|padding标签');
-} );
+//TODO 1.2.6
+//test( '删p中的margin|padding标签', function () {
+//    var editor = te.obj[0];
+//    editor.setContent( '<p style="margin-left: 1em; list-style: none;" >hello</p>' );
+//    var html = '<p style="list-style: none;">hello</p>';
+//    ua.checkSameHtml(html,editor.body.innerHTML,'删p中的margin|padding标签');
+//} );
 test( '给空p加br', function () {
     var editor = te.obj[0];
     editor.setContent( '<p style="list-style: none;" ></p>' );

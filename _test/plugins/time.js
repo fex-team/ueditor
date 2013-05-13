@@ -43,7 +43,7 @@ test( '表格插入时间和日期', function () {
         sec = (sec < 10) ? ('0' + sec) : sec;
         editor.execCommand( 'time' );
         ua.manualDeleteFillData(td[0]);
-        equal( td[0].innerHTML, h + ':' + min + ':' + sec);
+        equal( td[0].innerHTML, h + ':' + min + ':' + sec+(ua.browser.ie==9?' ':''));
         /*选中一段内容插入日期*/
         range.setStart( td[1], 0 ).collapse( 1 ).select();
         var year = date.getFullYear();

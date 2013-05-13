@@ -168,7 +168,7 @@ test( 'trace 3022 表格名称中backspace、ctrl+z、enter', function() {
 
 /*trace 3047*/
 test('trace 3047 全屏插入表格',function(){
-    if(ua.browser.firefox)return;//TODO 1.2.6
+    if(ua.browser.gecko)return;//TODO 1.2.6
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     var editor = te.obj[2];
@@ -260,9 +260,9 @@ test('trace 3059 表格右浮动',function(){
         tds = editor.body.firstChild.getElementsByTagName( 'td' );
         ok(tds[0].width<10, '第一列宽度变小' );
         range.setStart( tds[0], 0 ).collapse( true ).select();
-        editor.execCommand( 'tablealignment', ['float','right'] );
+        editor.execCommand( 'tablealignment', 'right');
         var table = te.obj[0].body.getElementsByTagName('table')[0];
-        equal( table.style['cssText'], 'float: right;', '表格右浮动' );
+        equal( table.align, 'right', '表格右浮动' );
         start();
     },50);
 });

@@ -160,9 +160,9 @@ test('修改table屬性', function () {
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols:2, numRows:3});
     range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-    editor.execCommand('tablealignment', ['margin', '0 auto']);
+    editor.execCommand('tablealignment', 'center');
     var table = editor.body.getElementsByTagName('table')[0];
-    equal(table.style.margin, '0px auto', '对齐方式居中');
+    equal(table.align, 'center', '对齐方式居中');
     range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
     editor.execCommand('edittable', '#ff0000');
     ua.manualDeleteFillData(editor.body);
