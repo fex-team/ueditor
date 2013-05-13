@@ -159,7 +159,18 @@
                     };
                 } else {
                     me.iframe.style.cssText = bakCssText;
+                    var allowEmptyTags = {
+                        b:1,code:1,i:1,u:1,strike:1,s:1,tt:1,strong:1,q:1,samp:1,em:1,span:1,
+                        sub:1,img:1,sup:1,font:1,big:1,small:1,iframe:1,a:1,pre:1
+                    };
                     var cont = sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
+                    cont = cont.replace(/[\r\t\n ]*<\/?(\w+)\s*(?:[^>]*)>[\r\t\n ]*/g, function(a,b){
+                        //br暂时单独处理
+                        if(b && allowEmptyTags[b.toLowerCase()]){
+                            return a.replace(/(^[\n\r]+)|([\n\r]+$)/g,'');
+                        }
+                        return a.replace(/^[\r\n\t ]+/,'').replace(/[\r\n\t ]+$/,'');
+                    });
                     me.setContent(cont);
                     sourceEditor.dispose();
                     sourceEditor = null;
