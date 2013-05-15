@@ -7,8 +7,8 @@
         var div = document.body.appendChild( document.createElement( 'div' ) );
         div.id = 'test1';
         var utils = baidu.editor.utils;
-        var editor = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':false});
-        editor.render( div );
+//        var editor = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':false});
+//        editor.render( div );
 
         var iframe = document.createElement( 'iframe' );
         document.body.appendChild( iframe );
@@ -25,7 +25,7 @@
             te.dom.push( iframe );
             te.dom.push( div_dom);
             te.obj.push( utils );
-            te.obj.push( editor );
+//            te.obj.push( editor );
             te.obj.push( range );
             te.obj.push( domUtils );
 //        },50);

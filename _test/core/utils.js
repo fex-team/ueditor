@@ -164,6 +164,25 @@ test( "extend--false", function () {
     obj2.fun();
     equal( obj2.n, null, "obj2 n null" );
 } );
+test( "extend支持多个覆盖，默认最后一个如果为boolean就是覆盖相同属性否", function () {
+    var utils = te.obj[0];
+    var obj1 = {a:3, b:"str", fun:function () {
+        ok( true, "fun" );
+    }, n:null};
+    var obj2 = {a:2, c:1};
+    var obj3 = {a:4,b:3};
+    utils.extend(obj3,obj2,obj1);
+    equals(obj3.a,3);
+    equals(obj3.b,'str');
+    obj3 =  {a:4,b:3};
+    utils.extend(obj3,obj2,obj1,true);
+    equals(obj3.a,4);
+    utils.extend(obj3,obj2,obj1,false);
+    equals(obj3.a,3);
+    equals(utils.isFunction(obj3.fun),true)
+
+} );
+
 test( 'indexOf', function () {
     var utils = te.obj[0];
     var s = [ 1, 2, 3, 4, 5 ];

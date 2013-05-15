@@ -2,17 +2,20 @@
     //所有ui的基类
     var _widget = function(){};
     _widget.prototype = {
-        on : function (){
-
+        on : function (ev,cb){
+            this.root().on(ev, $.proxy(cb, this));
+            return this;
         },
-        off : function(){
-            alert('widget');
+        off : function(ev,cb){
+            this.root().off(ev, $.proxy(cb, this));
+            return this;
         },
-        trigger : function(){
-
+        trigger : function(ev,data){
+            this.root().trigger(ev, data);
+            return this;
         },
-        root : function(){
-            return this.root;
+        root : function($el){
+            return this._$el = $el || this._$el;
         },
         destroy : function(){
 

@@ -86,30 +86,5 @@
 ///import plugins/background;
 ///import plugins/music;
 
-///import ui/ui;
+///import ui/widget;
 ///import ui/uiutils;
-///import ui/uibase;
-///import ui/toolbar;
-///import ui/editor;
-///import ui/editorui;
-///import ui/stateful;
-///import ui/button;
-///import ui/splitbutton;
-///import ui/popup;
-///import ui/colorpicker;
-///import ui/colorbutton;
-///import ui/cellalignpicker;
-///import ui/pastepicker;
-///import ui/menu;
-///import ui/menubutton;
-///import ui/multiMenu;
-///import ui/combox;
-///import ui/colorpicker;
-///import ui/mask;
-///import ui/dialog;
-///import ui/separator;
-///import ui/tablepicker;
-///import ui/tablebutton;
-///import ui/autotypesetpicker;
-///import ui/autotypesetbutton;
-
