@@ -73,6 +73,18 @@ body{margin-top: 20px;font: 13px Arial,sans-serif;}
 .btn .icon-lineheight {
     background-position: 0 -119px
 }
-.btn .icon-redo{
-    background-position: 0 -100px;
+.btn .icon-insertorderedlist {
+    background-position: 0 -98px
+}
+.btn .icon-insertunorderedlist {
+    background-position: 0 -77px
+}
+.btn .icon-indent-left {
+    background-position: 0 -370px
+}
+.btn .icon-indent-right {
+    background-position: 0 -394px
+}
+.btn .icon-removeformat {
+    background-position: 0 -184px
 }
