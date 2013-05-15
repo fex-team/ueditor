@@ -6,13 +6,13 @@
 
         },
         off : function(){
-            alert('widget');
+
         },
         trigger : function(){
 
         },
-        root : function(){
-            return this.root;
+        root : function($el){
+            return this._$el = $el || this._$el;
         },
         destroy : function(){
 
