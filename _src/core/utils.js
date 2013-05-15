@@ -55,10 +55,14 @@ var utils = UE.utils = {
      * @grammar UE.utils.extend(target,source,true)  ==> Object  //保留扩展
      */
     extend:function (t, s, b) {
-        if (s) {
-            for (var k in s) {
-                if (!b || !t.hasOwnProperty(k)) {
-                    t[k] = s[k];
+        var a = arguments,
+            notCover = this.isBoolean(a[a.length-1]) ? a[a.length-1] : false,
+            len = this.isBoolean(a[a.length-1]) ? a.length-1: a.length;
+        for (var i = 1; i < len; i++) {
+            var x = a[i];
+            for (var k in x) {
+                if (!notCover || !t.hasOwnProperty(k)) {
+                    t[k] = x[k];
                 }
             }
         }
@@ -608,7 +612,7 @@ var utils = UE.utils = {
  * @name isNumber
  * @grammar UE.utils.isNumber(obj)  => true|false
  */
-utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object'], function (v) {
+utils.each(['String', 'Function', 'Boolean','Array', 'Number', 'RegExp', 'Object'], function (v) {
     UE.utils['is' + v] = function (obj) {
         return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
     }
