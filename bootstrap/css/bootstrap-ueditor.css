@@ -1,27 +1,44 @@
-body{margin-top: 20px;font: 13px Arial,sans-serif;}
+body{margin-top: 20px;font-size: 12px;}
+
+.edui-editor{
+    width: 1200px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
 /*text toolbar
 */
-.navbar{
-    margin-bottom: 5px;
+.text-toolbar a{
+    color:#333;
 }
 .navbar-inner{
-    background-color: #fff;
-    background-image: none;
     border: none;
     box-shadow: none;
-    min-height:30px;
+    padding:5px 10px;
+    border-bottom: 1px solid #d4d4d4;
+    min-height: 30px;
 }
-.navbar .nav > li > a{
-    padding: 5px 7px;
+.nav{
+    margin-bottom: 0;
 }
-
 /*tool toolbar
 */
-.btn-toolbar {
-    padding: 0 44px;
-}
+.btn-toolbar{
+    margin: 0;
+    padding:5px 10px;
+    border-bottom: 1px solid #d4d4d4;
 
+    background-color: #f0f0f0;
+    background-image: -moz-linear-gradient(top,#fdfdfd,#ddd);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#fdfdfd),to(#ddd));
+    background-image: -webkit-linear-gradient(top,#fdfdfd,#ddd);
+    background-image: -o-linear-gradient(top,#fdfdfd,#ddd);
+    background-image: linear-gradient(to bottom,#fdfdfd,#ddd);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffdfdfd',endColorstr='#ffdddddd',GradientType=0);
+    zoom: 1;
+}
 
 /*tool toolbar icon
 */

@@ -31,26 +31,15 @@
 </head>
 
 <body>
-<div class="navbar">
+<div class="edui-editor">
+
+<div class="text-toolbar">
     <div class="navbar-inner">
-        <ul class="nav">
+        <ul class="nav nav-pills">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">文件</a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                     <li><a tabindex="-1" href="#">新建</a></li>
-                    <li><a tabindex="-1" href="#">打开</a></li>
-                    <li><a tabindex="-1" href="#">重命名</a></li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">语言</a>
-                        <ul class="dropdown-menu">
-                            <li><a tabindex="-1" href="#">中文</a></li>
-                            <li><a tabindex="-1" href="#">中文</a></li>
-                            <li><a tabindex="-1" href="#">中文</a></li>
-                            <li><a tabindex="-1" href="#">中文</a></li>
-                        </ul>
-                    </li>
-                    <li class="divider"></li>
-                    <li><a tabindex="-1" href="#">页面设置</a></li>
                     <li><a tabindex="-1" href="#">打印</a></li>
                 </ul>
             </li>
@@ -59,14 +48,31 @@
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                     <li><a tabindex="-1" href="#">撤销</a></li>
                     <li><a tabindex="-1" href="#">重做</a></li>
+                    <li class="divider"></li>
+                    <li><a tabindex="-1" href="#">剪切</a></li>
+                    <li><a tabindex="-1" href="#">复制</a></li>
+                    <li><a tabindex="-1" href="#">粘贴</a></li>
+                    <li class="divider"></li>
                     <li><a tabindex="-1" href="#">全选</a></li>
                     <li class="divider"></li>
+                    <li><a tabindex="-1" href="#">查找替换</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">插入</a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a tabindex="-1" href="#">视屏</a></li>
+                    <li><a tabindex="-1" href="#">图片</a></li>
+                    <li><a tabindex="-1" href="#">超链接</a></li>
+                    <li class="divider"></li>
+                    <li><a tabindex="-1" href="#">特殊字符</a></li>
+                    <li><a tabindex="-1" href="#">锚点</a></li>
                     <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">网络剪贴板</a>
+                        <a tabindex="-1" href="#">时间</a>
                         <ul class="dropdown-menu">
-                            <li><a tabindex="-1" href="#">网络剪贴版帮助</a></li>
-                            <li><a tabindex="-1" href="#">网络剪贴版帮助</a></li>
-                            <li><a tabindex="-1" href="#">网络剪贴版帮助</a></li>
+                            <li><a tabindex="-1" href="#">哈哈</a></li>
+                            <li><a tabindex="-1" href="#">呵呵</a></li>
+                            <li><a tabindex="-1" href="#">嘿嘿</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -74,26 +80,53 @@
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看</a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a tabindex="-1" href="#">打印样式</a></li>
-                    <li><a tabindex="-1" href="#">简洁控件</a></li>
+                    <li><a tabindex="-1" href="#">预览</a></li>
                     <li><a tabindex="-1" href="#">全屏</a></li>
                 </ul>
             </li>
+
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">插入</a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">格式</a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a tabindex="-1" href="#">图片</a></li>
-                    <li><a tabindex="-1" href="#">链接</a></li>
+                    <li><a tabindex="-1" href="#">加粗</a></li>
+                    <li><a tabindex="-1" href="#">加斜</a></li>
                     <li><a tabindex="-1" href="#">等式</a></li>
+                    <li class="divider"></li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">格式化</a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="-1" href="#">标题</a></li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">对齐</a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="#">居左</a></li>
+                                    <li><a tabindex="-1" href="#">居中</a></li>
+                                    <li><a tabindex="-1" href="#">居右</a></li>
+                                    <li><a tabindex="-1" href="#">两端对齐</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a tabindex="-1" href="#">清除格式</a></li>
                 </ul>
             </li>
-            <li><a href="#about">格式</a></li>
-            <li><a href="#about">工具</a></li>
-            <li><a href="#about">表格</a></li>
-            <li><a href="#about">帮助</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">表格</a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a tabindex="-1" href="#">插入表格</a></li>
+                    <li class="disabled"><a tabindex="-1" href="#">表格属性</a></li>
+                    <li class="disabled"><a tabindex="-1" href="#">删除表格</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#">帮助</a>
+            </li>
         </ul>
     </div>
 </div>
+
 
 <div class="btn-toolbar">
 
@@ -232,6 +265,13 @@
         </button>
     </div>
 </div>
+
+
+<div contenteditable="true" style="height:300px;">
+
+</div>
+</div>
+
 
 
 <script src="jquery.js"></script>
