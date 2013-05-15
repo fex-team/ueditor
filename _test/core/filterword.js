@@ -34,4 +34,8 @@ test( "wps word", function () {
         });
     });
 } );
-
+test( "word 补充 ", function () {
+    var str = '<p style="horiz-align:center;vert-align:center;mso-foreground:red;mso-default-height:5.0pt;mso-default-width:3.0pt;text-line-through:single;mso-zero-height:yes"></p>';
+    var txt = '<p style="text-align:center;vertical-align:center;color:red;min-height:7px;min-width:4px;text-decoration:line-through;display:none"></p>';
+    ua.checkSameHtml(UE.filterWord(str),txt,'word 补充');
+});

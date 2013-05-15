@@ -85,7 +85,7 @@
 ///import plugins/template;
 ///import plugins/background;
 ///import plugins/music;
-
+///import plugins/video;
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;
