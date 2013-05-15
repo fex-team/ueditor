@@ -20,11 +20,23 @@
 <body>
 <script>
     var btn = UE.ui.button({
-        icon : 'bold'
-    })
+        icon : 'bold',
+        click : function(){
+            alert(this.guid)
+        }
+    });
     $(document.body).append(btn.root());
-    debugger
-    btn.disabled(false).active(true)
+
+    btn.disabled(false).on('click',function(){
+        alert(this.guid)
+    })
+    var btn2 = UE.ui.button({
+        icon : 'bold',
+        click : function(){
+            alert(this.guid)
+        }
+    });
+    $(document.body).append(btn2.root());
 </script>
 </body>
 </html>

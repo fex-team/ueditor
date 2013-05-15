@@ -1,5 +1,5 @@
 //button 类
-UE.ui.define('button',{
+UE.ui.define('dropmenu',{
     tpl : '<button class="btn" type="button"><i class="icon-{{icon}}"></i>{{text}}</button>',
     init : function(options){
         var html = utils.parseTmpl(this.tpl,options);
