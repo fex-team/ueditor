@@ -5,9 +5,11 @@
     var paths  = [
             'editor.js',
             'core/browser.js',
-            'core/utils.js'
+            'core/utils.js',
 
-
+            'ui/widget.js',
+            'ui/uiutils.js',
+            'ui/button.js'
 
         ],
         baseURL = '../_src/';

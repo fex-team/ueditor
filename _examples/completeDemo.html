@@ -8,6 +8,9 @@
     <!--开发版-->
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
+    <script src="../jquery.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"/>
     <style type="text/css">
         .clear {
             clear: both;
@@ -15,107 +18,13 @@
     </style>
 </head>
 <body>
-<button class="btn btn-mini" type="button">Mini button</button>
 <script>
-
-    (function(){
-        //所有ui的基类
-        var _widget = function(){};
-        _widget.prototype = {
-            on : function (){
-
-            },
-            off : function(){
-                alert('widget');
-            },
-            trigger : function(){
-
-            },
-            root : function(){
-                return this.root;
-            },
-            destroy : function(){
-
-            }
-        };
-        function _createClass(Class,properties,supperClass){
-            Class.prototype = utils.extend(
-                    utils.clone(properties,{}),
-                    (UE.ui[supperClass]||_widget).prototype,
-                    true
-            );
-            return Class
-        }
-        var _guid = 1;
-        UE.ui = {
-            define : function(className,properties,supperClass){
-                var Class = UE.ui[className] = _createClass(function(options){
-                                var _obj = function(){};
-                                utils.extend(_obj.prototype,Class.prototype,{
-                                            guid : className + _guid++,
-                                            widgetName : className}
-                                )
-                                var obj = new _obj;
-                                obj.init && obj.init(options);
-                                return obj;
-                            },
-                            properties,supperClass);
-
-            }
-        }
-    })();
-    UE.ui.define('toolbar',{
-        getId:function(){
-            return this.guid;
-        },
-        on : function(){
-            alert('toolbar');
-        }
-
+    var btn = UE.ui.button({
+        icon : 'bold'
     })
-    UE.ui.define('button',{
-
-        on : function(){
-            alert(this.guid)
-        },
-        init : function(){
-            alert('new Button')
-        }
-    },'toolbar')
-
-    function parseTmpl(tmplate,data){
-        var cont = [],reg = /\{\{([^}]+)\}\}/,match;
-        function _compile(str,obj){
-            while(match = reg.exec(str)){
-                cont.push(str.slice(0,match.index));
-                var val = obj[match[1]];
-                if(utils.isArray(val)){
-                    var subreg = new RegExp('\\{\\{\\/'+match[1]+'\\}\\}'),
-                        submatch = subreg.exec(str),
-                        substr = str.slice(match.index + match[0].length,submatch.index);
-                    for(var i= 0,ci;ci=val[i++];){
-                        _compile(substr,ci)
-                    }
-                    str = str.slice(submatch.index + submatch[0].length)
-                }else{
-                    cont.push(val||'');
-                    str = str.slice(match.index + match[0].length)
-                }
-            }
-            if(str){
-                cont.push(str)
-            }
-        }
-        _compile(tmplate,data);
-        return  cont.join('')
-    }
+    $(document.body).append(btn.root());
     debugger
-    alert(parseTmpl('sdfasdf{{text}}sdf{{list}}{{a}}a{{b}}s{{/list}}{{text}}dfas',{text:1,list:[
-        {a : '#',
-            b: '#'},  {a : '#',
-            b: '#'}
-
-    ]}))
+    btn.disabled(false).active(true)
 </script>
 </body>
 </html>
