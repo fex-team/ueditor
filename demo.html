@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>UEditor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="web editor">
+    <meta name="author" content="campaign">
+
+    <!-- Le styles -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+
+    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ueditor.css">
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+
+</head>
+
+<body>
+<div class="navbar">
+    <div class="navbar-inner">
+        <ul class="nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">文件</a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a tabindex="-1" href="#">新建</a></li>
+                    <li><a tabindex="-1" href="#">打开</a></li>
+                    <li><a tabindex="-1" href="#">重命名</a></li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">语言</a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="-1" href="#">中文</a></li>
+                            <li><a tabindex="-1" href="#">中文</a></li>
+                            <li><a tabindex="-1" href="#">中文</a></li>
+                            <li><a tabindex="-1" href="#">中文</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a tabindex="-1" href="#">页面设置</a></li>
+                    <li><a tabindex="-1" href="#">打印</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">修改</a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a tabindex="-1" href="#">撤销</a></li>
+                    <li><a tabindex="-1" href="#">重做</a></li>
+                    <li><a tabindex="-1" href="#">全选</a></li>
+                    <li class="divider"></li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">网络剪贴板</a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="-1" href="#">网络剪贴版帮助</a></li>
+                            <li><a tabindex="-1" href="#">网络剪贴版帮助</a></li>
+                            <li><a tabindex="-1" href="#">网络剪贴版帮助</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">查看</a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a tabindex="-1" href="#">打印样式</a></li>
+                    <li><a tabindex="-1" href="#">简洁控件</a></li>
+                    <li><a tabindex="-1" href="#">全屏</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">插入</a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a tabindex="-1" href="#">图片</a></li>
+                    <li><a tabindex="-1" href="#">链接</a></li>
+                    <li><a tabindex="-1" href="#">等式</a></li>
+                </ul>
+            </li>
+            <li><a href="#about">格式</a></li>
+            <li><a href="#about">工具</a></li>
+            <li><a href="#about">表格</a></li>
+            <li><a href="#about">帮助</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="btn-toolbar">
+
+    <div class="btn-group">
+        <button class="btn" data-original-title="打印"><i class="icon-print"></i></button>
+        <button class="btn" data-original-title="撤销"><i class="icon-undo"></i></button>
+        <button class="btn" data-original-title="重做"><i class="icon-redo"></i></button>
+        <button class="btn" data-original-title="打印刷"><i class="icon-formatmatch"></i></button>
+    </div>
+
+
+    <div class="btn-group">
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-original-title="样式">普通文本 <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#">普通文本</a></li>
+            <li class="divider"></li>
+            <li><a href="#">标题</a></li>
+            <li class="divider"></li>
+            <li><a href="#">副标题</a></li>
+            <li class="divider"></li>
+            <li><a href="#">标题1</a></li>
+            <li class="divider"></li>
+            <li><a href="#">标题2</a></li>
+            <li class="divider"></li>
+            <li><a href="#">标题3</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">选项</a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="#">保存为我的默认样式</a></li>
+                    <li><a tabindex="-1" href="#">使用我的默认样式</a></li>
+                    <li><a tabindex="-1" href="#">重置样式</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-original-title="字体">
+            Arial
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">普通文本</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Arial</a></li>
+            <li><a href="#">Comic Sans MS</a></li>
+            <li><a href="#">Courier New</a></li>
+            <li><a href="#">Georgia</a></li>
+            <li><a href="#">Impact</a></li>
+            <li><a href="#">Times New Roman</a></li>
+            <li><a href="#">Trebuchet MS</a></li>
+        </ul>
+    </div>
+
+
+    <div class="btn-group">
+        <button class="btn">8</button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-original-title="字号">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">8</a></li>
+            <li><a href="#">9</a></li>
+            <li><a href="#">10</a></li>
+            <li><a href="#">11</a></li>
+            <li><a href="#">12</a></li>
+            <li><a href="#">13</a></li>
+            <li><a href="#">14</a></li>
+            <li><a href="#">15</a></li>
+            <li><a href="#">16</a></li>
+            <li><a href="#">17</a></li>
+            <li><a href="#">18</a></li>
+        </ul>
+    </div>
+
+
+    <div class="btn-group">
+        <button class="btn" data-original-title="粗体"><i class="icon-bold"></i></button>
+        <button class="btn" data-original-title="斜体"><i class="icon-italic"></i></button>
+        <button class="btn" data-original-title="下划线"><i class="icon-underline"></i></button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-original-title="文本颜色">
+            <i class="icon-fontcolor"></i>
+            <span class="caret"></span></button>
+        <div class="dropdown-menu">
+        </div>
+
+    </div>
+
+    <div class="btn-group">
+        <button class="btn" data-original-title="插入链接"><i class="icon-link"></i></button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-original-title="文本背景颜色">
+            <i class="icon-backcolor"></i>
+            <span class="caret"></span>
+        </button>
+        <div class="dropdown-menu">
+        </div>
+    </div>
+
+
+
+    <div class="btn-group">
+        <button class="btn"  data-original-title="左对齐"><i class="icon-align-left"></i></button>
+        <button class="btn" data-original-title="居中对齐"><i class="icon-align-center"></i></button>
+        <button class="btn" data-original-title="右对齐"><i class="icon-align-right"></i></button>
+        <button class="btn" data-original-title="两端对齐"><i class="icon-align-justify"></i></button>
+    </div>
+
+
+    <div class="btn-group">
+        <button class="btn dropdown-toggle" data-toggle="dropdown" data-original-title="行间距">
+            <i class="icon-lineheight "></i>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">1.0</a></li>
+            <li><a href="#">1.15</a></li>
+            <li><a href="#">1.5</a></li>
+            <li><a href="#">2.0</a></li>
+            <li class="divider"></li>
+            <li><a href="#">添加段落前间距</a></li>
+            <li><a href="#">添加段落后间距</a></li>
+        </ul>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn" data-original-title="编号列表"><i class="icon-insertorderedlist "></i></button>
+        <button class="btn" data-original-title="项目编号列表"><i class="icon-insertunorderedlist"></i></button>
+        <button class="btn" data-original-title="减少缩进"><i class="icon-indent-left"></i></button>
+        <button class="btn" data-original-title="增加缩进"><i class="icon-indent-right"></i></button>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn" data-original-title="清除格式">
+            <i class="icon-removeformat"></i>
+        </button>
+    </div>
+</div>
+
+
+<script src="jquery.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
+
+<!--[if lte IE 6]>
+<script type="text/javascript" src="bootstrap/js/bootstrap-ie.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    (function ($) {
+        $(document).ready(function() {
+            if ($.isFunction($.bootstrapIE6)) $.bootstrapIE6($(document));
+        });
+    })(jQuery);
+
+    $('button[data-original-title]').tooltip({
+        container:'body',
+        placement:"bottom"
+    });
+
+</script>
+
+</body>
+</html>
