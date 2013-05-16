@@ -280,7 +280,92 @@ test('删除行', function () {
     editor.execCommand("deleterow");
     equal(table.rows.length, 1, "在合并的单元格中删除行后，表格变成了一行");
 });
-
+test('sorttable', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<table width="1310"><tbody><tr><td width="634" valign="top">1</td><td width="634" valign="top"></td></tr><tr><td width="634" valign="top">2</td><td width="634" valign="top"></td></tr></tbody></table>');
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0], 0).collapse(1).select();
+    editor.execCommand('sorttable',1);
+    ua.manualDeleteFillData(editor.body);
+    var tds = editor.body.getElementsByTagName('td');
+    equal(tds[0].innerHTML,2,'');
+    equal(tds[2].innerHTML,1,'');
+});
+test('enablesort,disablesort', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<table width="1310"><tbody><tr><td width="634" valign="top">1</td><td width="634" valign="top"></td></tr><tr><td width="634" valign="top">2</td><td width="634" valign="top"></td></tr></tbody></table>');
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0], 0).collapse(1).select();
+    editor.execCommand('enablesort');
+    stop();
+    setTimeout(function(){
+        equal(editor.body.firstChild.attributes['data-sort'].nodeValue,'sortEnabled','sortEnabled');
+        editor.execCommand('disablesort');
+        setTimeout(function(){
+            equal(editor.body.firstChild.attributes['data-sort'].nodeValue,'sortDisabled','sortDisabled');
+            start();
+        },20);
+    },20);
+});
+test('settablebackground', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:2,numRows:2} );
+    var tds = editor.body.firstChild.getElementsByTagName('td');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(tds[0], tds[2]);
+    ut.setSelected(cellsRange);
+    range.setStart(tds[0], 0).collapse(true).select();
+    editor.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]});
+    stop();
+    setTimeout(function(){
+        var br = ua.browser.ie?'':'<br>';
+        var html_1 = '<td width="210" valign="top" class=" selectTdClass" style="background-color: rgb(187, 187, 187);">'+br+'</td><td width="210" valign="top">'+br+'</td>';
+        var html_2 = '<td width="210" valign="top" class=" selectTdClass" style="background-color: rgb(204, 204, 204);">'+br+'</td><td width="210" valign="top">'+br+'</td>';
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        ua.checkSameHtml(trs[0].innerHTML,html_1,'选区隔行变色');
+        ua.checkSameHtml(trs[1].innerHTML,html_2,'选区隔行变色');
+       range.setStart(tds[0], 0).collapse(true).select();
+        editor.execCommand('cleartablebackground');
+        setTimeout(function(){
+            html_1 = '<td width="210" valign="top" class=" selectTdClass" style="">'+br+'</td><td width="210" valign="top">'+br+'</td>';
+            trs = editor.body.firstChild.getElementsByTagName('tr');
+            ua.checkSameHtml(trs[0].innerHTML,html_1,'取消选区隔行变色');
+            ua.checkSameHtml(trs[1].innerHTML,html_1,'取消选区隔行变色');
+//            equal(editor.body.firstChild.attributes['data-sort'].nodeValue,'sortDisabled','sortDisabled');
+            start();
+        },20);
+    },20);
+});
+test('interlacetable', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p></p>');
+    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+    editor.execCommand('inserttable', {numCols:2, numRows:2});
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0], 0).collapse(1).select();
+    editor.execCommand('interlacetable');
+    stop();
+    setTimeout(function () {
+        equal(editor.body.firstChild.attributes['interlaced'].nodeValue, 'enabled', '');
+        equal(editor.body.getElementsByTagName('tr')[0].className, 'ue-table-interlace-color-single', '');
+        equal(editor.body.getElementsByTagName('tr')[1].className, 'ue-table-interlace-color-double', '');
+        tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).collapse(1).select();
+        editor.execCommand('uninterlacetable');
+        setTimeout(function () {
+            equal(editor.body.firstChild.attributes['interlaced'].nodeValue, 'disabled', '');
+            equal(editor.body.getElementsByTagName('tr')[0].className, '', '');
+            start();
+        }, 20);
+    }, 20);
+});
+//
 /*trace 750，1308*/
 //test( 'trace1308：前插入行的样式和原先不同', function() {
 //    var editor = te.obj[0];
@@ -584,7 +669,51 @@ test('单元格对齐方式-vAlign', function () {
     equal(tds[0].vAlign, 'middle', '第一个单元格居中对齐');
     equal(tds[2].vAlign, 'middle', '第二个单元格居中对齐');
 });
+test('adaptbytext，adaptbywindow', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p></p>');
+    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+    editor.execCommand('inserttable', {numCols:2, numRows:2});
+    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+    ok((parseInt(editor.body.firstChild.width)-editor.body.offsetWidth/2)>0,'默认按窗口计算宽度');//数值不具体计算了
+    editor.execCommand('adaptbytext');//parseInt
+    stop();
+    setTimeout(function(){
+        equal(editor.body.firstChild.width,'','按内容自适应')
+        editor.execCommand('adaptbywindow');
+        setTimeout(function(){
+            ok((parseInt(editor.body.firstChild.width)-editor.body.offsetWidth/2)>0,'默认按窗口计算宽度');
+            start();
+        },20);
+    },20);
 
+});
+test('deletetitle', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:2, numRows:2});
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],0).collapse(true).select();
+    editor.execCommand('inserttitle');
+    stop();
+    setTimeout(function(){
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        equal(trs.length,3,'表格增加一行');
+        for(var i = 0; i< trs[0].childNodes.length;i++){
+            equal(trs[0].childNodes[i].tagName.toLowerCase(),'th','增加的th');
+        }
+        range.setStart(tds[0],0).collapse(true).select();
+        editor.execCommand('deletetitle');
+        setTimeout(function(){
+            equal(editor.body.firstChild.getElementsByTagName('tr').length,2,'表格减少一行');
+            equal(editor.body.firstChild.getElementsByTagName('tr')[0].firstChild.tagName.toLowerCase(),'td','第一行不是标题');
+            start();
+        },20);
+    },20);
+});
 /*trace 3222*/
 test('trace 3222：在合并后的单元格中按tab键', function () {
     var editor = te.obj[0];

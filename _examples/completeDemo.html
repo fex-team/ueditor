@@ -17,8 +17,8 @@
     </style>
 </head>
 <body>
-<div>
-    <script id="editor" type="text/plain" style="width:1024px;height:500px">
+<div id="editor">
+    <script  type="text/plain" style="width:1024px;height:500px">
     </script>
 </div>
 
@@ -57,7 +57,7 @@
 <script type="text/javascript">
 
     //实例化编辑器
-    var ue = UE.getEditor('editor');
+    var ue = UE.getEditor('editor',{sourceEditorFirst:true});
 
     function insertHtml() {
         var value = prompt('插入html代码', '');
