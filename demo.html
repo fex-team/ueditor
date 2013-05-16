@@ -20,6 +20,7 @@
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ueditor.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ueditor.css">
 
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -31,7 +32,7 @@
 </head>
 
 <body>
-<div class="edui-editor">
+<div class="container">
 
 <div class="text-toolbar">
     <div class="navbar-inner">
@@ -121,7 +122,7 @@
             </li>
 
             <li>
-                <a href="#">帮助</a>
+                <a href="#help" data-toggle="modal">帮助</a>
             </li>
         </ul>
     </div>
@@ -211,9 +212,9 @@
         <button class="btn dropdown-toggle" data-toggle="dropdown" data-original-title="文本颜色">
             <i class="icon-fontcolor"></i>
             <span class="caret"></span></button>
-        <div class="dropdown-menu">
-        </div>
+            <div class="dropdown-menu">
 
+            </div>
     </div>
 
     <div class="btn-group">
@@ -267,10 +268,46 @@
 </div>
 
 
-<div contenteditable="true" style="height:300px;">
+<div contenteditable="true" style="height:300px;"></div>
+
+<div class="bottombar">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    <ul class="breadcrumb">
+                    <li><a href="#">body</a> <span class="divider">>></span></li>
+                    <li><a href="#">p</a> <span class="divider">>></span></li>
+                    <li><a href="#">em</a> <span class="divider">>></span></li>
+                    </ul>
+                </td>
+                <td class="text-right">当前已输入27个字符, 您还可以输入9973个字符。</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 </div>
+
+<div class="fixed-layer">
+
+    <!-- help -->
+    <div id="help" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">帮助</h3>
+        </div>
+        <div class="modal-body">
+            <iframe height="100%" width="100%" frameborder="0" src="dialogs/help/help.html"></iframe>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+            <button class="btn btn-primary">确认</button>
+        </div>
+    </div>
+
 </div>
+
 
 
 
@@ -292,6 +329,10 @@
         placement:"bottom"
     });
 
+    $('.modal').modal({
+        show:false,
+        keyboard: true
+    })
 </script>
 
 </body>

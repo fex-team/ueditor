@@ -1,0 +1,79 @@
+/*ueidtor新增样式
+*/
+
+body{margin-top: 20px;font-size: 12px;}
+
+
+.container{
+    width: 1200px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/*tool toolbar icon
+*/
+.btn i{
+    background-image: url('../img/glyphicons-halflings-ueditor.png');
+}
+.btn .icon-print{
+    background-position: 0 -212px;
+}
+.btn .icon-undo{
+    background-position: 0 -412px
+}
+.btn .icon-redo{
+    background-position: 0 -35px
+}
+.btn .icon-formatmatch{
+    background-position: 0 -157px
+}
+.btn .icon-bold{
+    background-position: 0 -237px
+}
+.btn .icon-italic{
+    background-position: 0 -260px
+}
+.btn .icon-underline{
+    background-position: 0 2px
+}
+.btn .icon-fontcolor{
+    background-position: 0 -17px
+}
+.btn .icon-link{
+    background-position: 0 -137px
+}
+.btn .icon-backcolor{
+    background-position: 0 -53px
+}
+.btn .icon-align-left{
+    background-position: 0 -284px
+}
+.btn .icon-align-center{
+    background-position: 0 -305px
+}
+.btn .icon-align-right{
+    background-position: 0 -284px
+}
+.btn .icon-align-justify{
+    background-position: 0 -305px
+}
+.btn .icon-lineheight {
+    background-position: 0 -119px
+}
+.btn .icon-insertorderedlist {
+    background-position: 0 -98px
+}
+.btn .icon-insertunorderedlist {
+    background-position: 0 -77px
+}
+.btn .icon-indent-left {
+    background-position: 0 -370px
+}
+.btn .icon-indent-right {
+    background-position: 0 -394px
+}
+.btn .icon-removeformat {
+    background-position: 0 -184px
+}
+
