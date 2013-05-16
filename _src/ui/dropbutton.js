@@ -7,6 +7,9 @@ UE.ui.define('dropbutton',{
             dropmenu = UE.ui.dropmenu({'list':options.list});
         btn.on('click',function(evt){
             if(!btn.disabled()){
+                if(!dropmenu.root().parent().length){
+                    btn.root().parent().append(dropmenu.root())
+                }
                 me.show();
                 evt.stopPropagation();
             }
