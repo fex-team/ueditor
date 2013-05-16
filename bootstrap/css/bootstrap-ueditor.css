@@ -54,3 +54,9 @@
 .table td.text-right{
     text-align: right;
 }
+
+/*splitbutton*/
+.splitbutton{
+    padding-left:4px;
+    padding-right:4px;
+}

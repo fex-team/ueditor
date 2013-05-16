@@ -1,9 +1,18 @@
 //button 类
 UE.ui.define('button',{
-    tpl : '<button class="btn" type="button"><i class="icon-{{icon}}"></i>{{text}}</button>',
+    tpl : '<button class="btn" ><i class="icon-{{icon}}"></i>{{text}}</button>',
     init : function(options){
-        var html = utils.parseTmpl(this.tpl,options);
-        this.root($(html));
+        this.root($('<button class="btn" ></button>'));
+        if(options.icon){
+            this.root().append($('<i class="icon-'+options.icon+'"></i>'))
+        }
+        if(options.text){
+            this.root().append(options.text)
+        }
+        if(options.caret){
+            this.root().append($('<span class="caret"></span>'))
+        }
+
         if(options.click){
             var me = this;
             me.root().click(function(evt){

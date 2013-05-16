@@ -1,11 +1,11 @@
 //dropmenu 类
 UE.ui.define('dropmenu',{
-    menu:'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" >' +
+    list:'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" >' +
             '{{list}}<li class="{{active}} {{disabled}}" data-value="{{value}}"><a href="#" tabindex="-1" >{{text}}</a></li>{{/list}}' +
         '</ul>',
 
     init : function(options){
-        var html = utils.parseTmpl(this.menu,options,function(data,cont){
+        var html = utils.parseTmpl(this.list,options,function(data,cont){
                 if(utils.isString(data)){
                     cont.push('<li class="divider"></li>');
                     return true;
@@ -15,6 +15,7 @@ UE.ui.define('dropmenu',{
         options.click && $root.children('li[class!="divider disabled dropdown-submenu"]').click(function(evt){
             options.click.call(me,evt)
         })
+
     },
     disabled : function(cb){
         $('ul > li[class!=divider]',this.root()).each(function(){

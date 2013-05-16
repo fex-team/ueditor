@@ -19,6 +19,15 @@
         },
         destroy : function(){
 
+        },
+        data : function(key,val){
+            if(val !== undefined){
+                this.root().data(key,val);
+                return this;
+            }else{
+                return this.root().data(key)
+            }
+
         }
     };
 

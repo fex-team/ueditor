@@ -10,8 +10,9 @@
             'ui/widget.js',
             'ui/uiutils.js',
             'ui/button.js',
-            'ui/dropmenu.js'
-
+            'ui/dropmenu.js',
+            'ui/splitbutton.js',
+            'ui/dropbutton.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

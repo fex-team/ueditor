@@ -11,6 +11,7 @@
     <script src="../jquery.js"></script>
     <script src="../bootstrap/js/bootstrap.js"></script>
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"/>
+    <link href="../bootstrap/css/bootstrap-ueditor.css" rel="stylesheet"/>
     <style type="text/css">
         .clear {
             clear: both;
@@ -18,53 +19,32 @@
     </style>
 </head>
 <body>
-<div class="dropmenu">
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"><li class="active" data-value="h1"><a href="#" tabindex="-1"><h1>fasdfas</h1></a></li><li class="divider"></li><li class="dropdown-submenu"><a>sdfasdfa</a><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"><li class=" " data-value="h1"><a href="#" tabindex="-1"><h1>fasdfas</h1></a></li><li class="divider"></li><li class="active " data-value="h2"><a href="#" tabindex="-1"><h2>sdfsdf</h2></a></li></ul></li><li class="" data-value="h2"><a href="#" tabindex="-1"><h2>sdfsdf</h2></a></li></ul>
+    <div id="container" style="width:1000px;height:300px;position:absolute;top:200px;left:200px;">
+        <div class="btn-group">
 
-</div><script>
-    var btn = UE.ui.button({
-        icon : 'bold',
-        click : function(){
-            alert(this.guid)
-        }
-    });
-    $(document.body).append(btn.root());
-
-    btn.disabled(false).on('click',function(){
-        alert(this.guid)
-    })
-    var btn2 = UE.ui.button({
-        icon : 'bold',
-        click : function(){
-            alert(this.guid)
-        }
-    });
-    $(document.body).append(btn2.root());
-
-    var dropmenu = UE.ui.dropmenu({
-        titletext:'sdf',
-        titletype : 'splitbutton',
+        </div>
+    </div>
+<script>
+    $('#container').append(UE.ui.splitbutton({
+        text:'test',
         list:[
-            {text : '<h1>fasdfas</h1>',value:'h1'},
-            'divider',
-            {text:'<h2>sdfsdf</h2>',value:'h2',active:'active'}
-        ],
-        click : function(){
-            alert(this.val())
-        }
-    })
-    $(document.body).append(dropmenu.root());
-    dropmenu.val('h1');
-    alert(dropmenu.val())
-
-    dropmenu.addSubmenu(UE.ui.dropmenu({
-        titletype:'submenu',
-        list:[
-            {text : '<h1>fasdfas</h1>',value:'h1'},
-            'divider',
-            {text:'<h2>sdfsdf</h2>',value:'h2',active:'active'}
+            {text:'sdfsd',value:'sdfsdf'},
+            {text:'sdfsd',value:'sdfsdf'},
+            {text:'sdfsd',value:'sdfsdf'}
         ]
-    }),1)
+    }).root());
+    var button = UE.ui.button({text:'sdfsd',caret:true});
+
+    var drpbtn = UE.ui.dropbutton({text:'sdfsd',caret:true, list:[
+        {text:'sdfsd',value:'sdfsdf'},
+        {text:'sdfsd',value:'sdfsdf'},
+        {text:'sdfsd',value:'sdfsdf'}
+    ]});
+    drpbtn.data('dropmenu').root().appendTo($('#container :first'))
+    $('#container :first')
+            .append(UE.ui.button({text:'sdfsd'}).root())
+            .append(UE.ui.button({icon:'bold'}).root())
+            .append(drpbtn.root())
 </script>
 </body>
 </html>
