@@ -274,7 +274,24 @@ test( "isEmptyObject", function () {
     equal( true, utils.isEmptyObject( [] ) );
     equal( true, utils.isEmptyObject( "" ) );
 } );
-
+//dong
+test( "fixColor", function () {
+    var utils = te.obj[0];
+    equal( '#953734', utils.fixColor("color", 'rgb(149, 55, 52)' ),'fixColor' );
+} );
+test( "sort", function () {
+    var utils = te.obj[0];
+    same( ["a", "df", "sdf", "asdf"], utils.sort(['a','asdf','df','sdf'], function(a,b){
+        if(a.length> b.length)
+            return 1;
+        else return 0;
+    }),'sort' );
+} );
+test( "domReady", function () {
+    var utils = te.obj[0];
+    expect(1);
+    utils.domReady(function(){ok(1,'domReady')});
+} );
 test( '4个padding属性', function () {
 //    var css = 'padding-bottom:0px; margin:0px 0px 20px; padding-left:0px; padding-right:4px; padding-top:0px';
     /*上下相同，左右相同*/
