@@ -1,5 +1,18 @@
 module('plugins.searchreplace');
 
+test('trace 3381：查找',function(){
+    if(ua.browser.opera)
+        return;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p>hello啊</p>');
+    range.setStart(editor.body.firstChild,0).collapse(true).select();
+    editor.execCommand('searchreplace',{searchStr:'啊'});
+    ua.manualDeleteFillData(editor.body);
+    equal(editor.body.firstChild.innerHTML,'hello啊');
+    equal(editor.selection.getRange().collapsed,false,'检查选区:不闭合为找到');
+});
+
 /*trace 974,先替换再撤销再全部替换，则不会替换
  * ie下会出现的bug*/
 test('全部替换',function(){

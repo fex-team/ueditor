@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 module( 'plugins.dragdrop' );
-test( '拖拽图像不会把p切开', function () {
+test( 'trace 3385：拖拽图像不会把p切开', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;

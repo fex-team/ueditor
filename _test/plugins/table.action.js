@@ -267,6 +267,33 @@ test('trace 3059 表格右浮动',function(){
     },50);
 });
 
+test('trace 3378：拖拽后tab，不影响表格样式',function(){
+    if (browser.ie && browser.version < 8) return;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable');
+    ua.manualDeleteFillData( editor.body );
+    var tds = te.obj[0].body.getElementsByTagName('td');
+    var width1 = tds[1].width;
+    ua.mousemove(tds[1],{clientX:199,clientY:100});
+    ua.mousedown(tds[1],{clientX:199,clientY:100});
+    setTimeout(function(){
+        ua.mousemove(tds[1],{clientX:299,clientY:100});
+        ua.mouseup(tds[1],{clientX:299,clientY:100});
+        var width2 = tds[1].width;
+        ok(width2-width1>50,'拖拽后单元格宽度改变');
+        range.setStart( tds[24], 0 ).collapse( true ).select();
+        ua.keydown(editor.body,{'keyCode':9});
+        setTimeout(function(){
+            equal(tds[1].width,width2,'tab键不影响单元格宽度');
+            start();
+        },20);
+    },20);
+    stop();
+});
+
 //超时，暂时注掉
 //test('表格粘贴',function(){
 //    var div = document.body.appendChild(document.createElement('div'));
