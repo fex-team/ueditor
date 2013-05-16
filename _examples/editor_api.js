@@ -12,7 +12,8 @@
             'ui/button.js',
             'ui/dropmenu.js',
             'ui/splitbutton.js',
-            'ui/dropbutton.js'
+            'ui/dropbutton.js',
+            'ui/popup.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

@@ -4,11 +4,11 @@ UE.ui.define('dropbutton',{
     init : function(options){
         var me = this,
             btn = UE.ui.button(options),
-            dropmenu = UE.ui.dropmenu({'list':options.list});
+            dropcont = options.cont ? UE.ui.popup(options) : UE.ui.dropmenu({'list':options.list});
         btn.on('click',function(evt){
             if(!btn.disabled()){
-                if(!dropmenu.root().parent().length){
-                    btn.root().parent().append(dropmenu.root())
+                if(!dropcont.root().parent().length){
+                    btn.root().parent().append(dropcont.root())
                 }
                 me.show();
                 evt.stopPropagation();
@@ -16,15 +16,15 @@ UE.ui.define('dropbutton',{
         });
 
         this.root(btn.root());
-        this.data('btn',btn).data('dropmenu',dropmenu);
+        this.data('btn',btn).data('dropcont',dropcont);
         $(document).click(function(){
             me.hide()
         })
     },
     show:function(){
-        var $dropmenu = this.data('dropmenu').root(),
+        var $dropcont = this.data('dropcont').root(),
             offset = this.root().position();
-        $dropmenu.css({
+        $dropcont.css({
             'display':'block',
             'top':offset.top + this.root().outerHeight(),
             'left':offset.left
@@ -32,8 +32,8 @@ UE.ui.define('dropbutton',{
 
     },
     hide : function(){
-        var $dropmenu = this.data('dropmenu').root();
-        $dropmenu.css({
+        var $dropcont = this.data('dropcont').root();
+        $dropcont.css({
             'display':'none'
         })
     },
