@@ -9,7 +9,8 @@
 
             'ui/widget.js',
             'ui/uiutils.js',
-            'ui/button.js'
+            'ui/button.js',
+            'ui/dropmenu.js'
 
         ],
         baseURL = '../_src/';
