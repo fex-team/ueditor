@@ -37,6 +37,34 @@
         }
     });
     $(document.body).append(btn2.root());
+
+    var dropmenu = UE.ui.dropmenu({
+        title:'aaa',
+        list:[
+            {text : '<h1>fasdfas</h1>',value:'h1'},
+            'divider',
+            {text:'<h2>sdfsdf</h2>',value:'h2',active:'active'}
+        ],
+        click : function(){
+
+        }
+    })
+    $(document.body).append($('<div class="dropdown"></div>').append(dropmenu.root()));
+    dropmenu.val('h1');
+    alert(dropmenu.val())
+
+    dropmenu.addSubmenu(UE.ui.dropmenu({
+        'title':'dd',
+        list:[
+            {text : '<h1>fasdfas</h1>',value:'h1'},
+            'divider',
+            {text:'<h2>sdfsdf</h2>',value:'h2',active:'active'}
+        ],
+        click : function(){
+            debugger
+            alert(this.val())
+        }
+    }),1)
 </script>
 </body>
 </html>
