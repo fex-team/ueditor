@@ -18,7 +18,10 @@
     </style>
 </head>
 <body>
-<script>
+<div class="dropmenu">
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"><li class="active" data-value="h1"><a href="#" tabindex="-1"><h1>fasdfas</h1></a></li><li class="divider"></li><li class="dropdown-submenu"><a>sdfasdfa</a><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"><li class=" " data-value="h1"><a href="#" tabindex="-1"><h1>fasdfas</h1></a></li><li class="divider"></li><li class="active " data-value="h2"><a href="#" tabindex="-1"><h2>sdfsdf</h2></a></li></ul></li><li class="" data-value="h2"><a href="#" tabindex="-1"><h2>sdfsdf</h2></a></li></ul>
+
+</div><script>
     var btn = UE.ui.button({
         icon : 'bold',
         click : function(){
@@ -39,31 +42,28 @@
     $(document.body).append(btn2.root());
 
     var dropmenu = UE.ui.dropmenu({
-        title:'aaa',
+        titletext:'sdf',
+        titletype : 'splitbutton',
         list:[
             {text : '<h1>fasdfas</h1>',value:'h1'},
             'divider',
             {text:'<h2>sdfsdf</h2>',value:'h2',active:'active'}
         ],
         click : function(){
-
+            alert(this.val())
         }
     })
-    $(document.body).append($('<div class="dropdown"></div>').append(dropmenu.root()));
+    $(document.body).append(dropmenu.root());
     dropmenu.val('h1');
     alert(dropmenu.val())
 
     dropmenu.addSubmenu(UE.ui.dropmenu({
-        'title':'dd',
+        titletype:'submenu',
         list:[
             {text : '<h1>fasdfas</h1>',value:'h1'},
             'divider',
             {text:'<h2>sdfsdf</h2>',value:'h2',active:'active'}
-        ],
-        click : function(){
-            debugger
-            alert(this.val())
-        }
+        ]
     }),1)
 </script>
 </body>
