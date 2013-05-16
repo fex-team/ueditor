@@ -1,11 +1,11 @@
-//button 类
+//dropmenu 类
 UE.ui.define('dropmenu',{
-    tpl : '<a class="dropdown-toggle" data-toggle="dropdown" href="#">{{title}}<span class="caret"></span></a>' +
-        '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" >' +
-            '{{list}}<li class="{{active}}" data-value="{{value}}"><a href="#" tabindex="-1" >{{text}}</a></li>{{/list}}</ul>',
+    menu:'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" >' +
+            '{{list}}<li class="{{active}} {{disabled}}" data-value="{{value}}"><a href="#" tabindex="-1" >{{text}}</a></li>{{/list}}' +
+        '</ul>',
+
     init : function(options){
-        var me = this,
-            html = utils.parseTmpl(this.tpl,options,function(data,cont){
+        var html = utils.parseTmpl(this.menu,options,function(data,cont){
                 if(utils.isString(data)){
                     cont.push('<li class="divider"></li>');
                     return true;
@@ -17,7 +17,7 @@ UE.ui.define('dropmenu',{
         })
     },
     disabled : function(cb){
-        this.root().children('li[class!=divider]').each(function(){
+        $('ul > li[class!=divider]',this.root()).each(function(){
             var $el = $(this);
             if(cb === true){
                 $el.addClass('disabled')
@@ -32,7 +32,8 @@ UE.ui.define('dropmenu',{
     },
     val:function(val){
         var currentVal;
-        this.root().children('li[class!=divider]').each(function(){
+
+        $('ul > li[class!=divider]',this.root()).each(function(){
             var $el = $(this);
             if(val === undefined){
                 if($el.hasClass('active')){
@@ -51,7 +52,7 @@ UE.ui.define('dropmenu',{
     },
     addSubmenu:function(menu,index){
         index = index || 0;
-        this.root().children('li[class!=divider]').each(function(i,l){
+        $('ul > li[class!=divider]',this.root()).each(function(i,l){
             if(index == i){
                 $('<li class="dropdown-submenu"></li>').append(menu.root()).insertBefore($(l));
                 return false;
