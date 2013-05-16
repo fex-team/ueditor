@@ -316,3 +316,54 @@ test('在font,b,i标签中输入，会自动转换标签 ',function(){
 //    }
 });
 
+test( 'trace 3334:img和a之间不会产生多余空格', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<p><img src="http://img.baidu.com/hi/jx2/j_0001.gif" /><a href="http://www.baidu.com">http://www.baidu.com</a></p>' );
+    setTimeout( function () {
+        editor.execCommand( 'source' );
+        setTimeout( function () {
+            editor.execCommand( 'source' );
+            setTimeout( function () {
+                editor.execCommand( 'source' );
+                ua.manualDeleteFillData(editor.body);
+                var html = '<p><img src="http://img.baidu.com/hi/jx2/j_0001.gif" _src=\"http://img.baidu.com/hi/jx2/j_0001.gif\"><a href=\"http://www.baidu.com\" _href=\"http://www.baidu.com\">http://www.baidu.com</a></p>';
+                ua.checkSameHtml( editor.body.innerHTML.toLowerCase(), html, '查看img和a之间是否会产生多余空格' );
+                start();
+            }, 20 );
+        }, 20 );
+    }, 20 );
+    stop();
+} );
+
+test( 'trace 3334:table中td不会产生多余空格', function () {
+    var editor = te.obj[0];
+    editor.execCommand('inserttable');
+    var br = baidu.editor.browser.ie ? '' : '<br>';
+    setTimeout( function () {
+        editor.execCommand( 'source' );
+        setTimeout( function () {
+            editor.execCommand( 'source' );
+            ua.manualDeleteFillData(editor.body);
+            equal(editor.body.getElementsByTagName('table').length,1,'有1个table');
+            equal(editor.body.getElementsByTagName('tr').length,5,'有5个tr');
+            equal(editor.body.getElementsByTagName('td').length,25,'有25个td');
+            equal(editor.body.getElementsByTagName('td')[12].innerHTML,br,'不会产生多余空格');
+            start();
+        }, 20 );
+    }, 20 );
+    stop();
+} );
+
+test( 'trace 3349：带颜色的span切到源码再切回，不会丢失span', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<p><span style="color: rgb(255, 0, 0);"></span><br></p>' );
+    setTimeout( function () {
+        editor.execCommand( 'source' );
+        setTimeout( function () {
+            editor.execCommand( 'source' );
+            ua.checkSameHtml( editor.body.innerHTML, '<p><span style="color: rgb(255, 0, 0);"></span><br></p>' );
+            start();
+        }, 20 );
+    }, 20 );
+    stop();
+} );
