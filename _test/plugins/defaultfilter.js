@@ -162,4 +162,28 @@ test( '转换style标签:style data不空', function () {
     ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
     ua.checkSameHtml(html,editor.body.innerHTML);
 } );
+test( 'div出编辑器转换', function () {
+    var editor = te.obj[0];
+    var str =  '<script type="text/javascript">ueditor</script>' ;
+    var html = '<div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
+    editor.body.innerHTML = html;
+    editor.execCommand( 'source' );
+    stop();
+    setTimeout(function(){
+        equal(editor.getContent(),str,'div出编辑器转换');
+        start();
+    },20);
+} );
+test( 'img出编辑器转换', function () {
+    var editor = te.obj[0];
+    var str = ua.browser.ie? '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px currentColor;"/></p>':'<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;"/></p>' ;
+    var html = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" _src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" /></p>';
+    editor.body.innerHTML = html;
+    editor.execCommand( 'source' );
+    stop();
+    setTimeout(function(){
+        ua.checkSameHtml(editor.getContent(),str,'img出编辑器转换');
+        start();
+    },20);
+} );
 //ue.setContent('<a href="http://elearning.baidu.com/url/RepositoryEntry/68616197" target="_blank">');
