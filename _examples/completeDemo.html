@@ -6,12 +6,13 @@
 
 
     <!--开发版-->
-    <script type="text/javascript" charset="utf-8" src="editor_api.js">
-    </script>
+
     <script src="../jquery.js"></script>
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"/>
     <link href="../bootstrap/css/bootstrap-ueditor.css" rel="stylesheet"/>
     <link href="../bootstrap/css/ueditor.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8" src="editor_api.js">
+    </script>
     <style type="text/css">
         .clear {
             clear: both;
@@ -19,33 +20,39 @@
     </style>
 </head>
 <body>
-    <div id="container" style="width:1000px;height:300px;position:absolute;top:200px;left:200px;">
-        <div class="btn-group">
+<div id="container" style="width:1000px;height:300px;position:absolute;top:200px;left:200px;">
+    <div class="btn-group">
 
-        </div>
     </div>
+</div>
 <script>
-    $('#container').append(UE.ui.splitbutton({
-        text:'test',
-        list:[
-            {text:'sdfsd',value:'sdfsdf'},
-            {text:'sdfsd',value:'sdfsdf'},
-            {text:'sdfsd',value:'sdfsdf'}
-        ]
-    }).root());
-    var button = UE.ui.button({text:'sdfsd',caret:true});
+    $.splitbutton({
+        text: 'test', icon: 'bold',
+        data: [
+            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
+            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
+            {divider:1},
+            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
+        ],menuclick:function(evt,val,$li){
+            alert(val);
+            alert($li[0])
+        }
+    }).appendTo($('#container'));
 
-    var drpbtn = UE.ui.dropbutton({text:'sdfsd',caret:true, list:[
-        {text:'sdfsd',value:'sdfsdf'},
-        {text:'sdfsd',value:'sdfsdf'},
-        {text:'sdfsd',value:'sdfsdf'}
-    ]});
-    var drpbtn1 = UE.ui.dropbutton({text:'23232',caret:true,cont:'<div style="width:200px;height:300px;"></div>'});
+    $.button({text: 'sdfsd',click:function(evt){
+        alert(evt)
+    }}).appendTo($('.btn-group :first'));
 
-    $('#container :first')
-            .append(UE.ui.button({text:'sdfsd'}).root())
-            .append(UE.ui.button({icon:'bold'}).root())
-            .append(drpbtn.root()).append(drpbtn1.root())
+
+    var state = $.button({text: 'sdfsdf', icon: 'bold', caret: 1}).appendTo($('.btn-group :first')).button('disabled', 1);
+
+    $.dropmenu({ data: [
+        {label: 'sdfsd', value: 'sdfsdf'},
+        {label: 'sdfsd', value: 'sdfsdf'},
+        {label: 'sdfsd', value: 'sdfsdf'}
+    ]}).dropmenu('attach', $.button({icon: 'bold', caret: 1}).appendTo($('.btn-group :first')))
+
+
 
     /*color picker*/
     var colpic=UE.ui.colorpicker()

@@ -1,4 +1,4 @@
-(function(){
+(function($){
     //所有ui的基类
     var _widget = function(){};
     _widget.prototype = {
@@ -15,7 +15,7 @@
             return this;
         },
         root : function($el){
-            return this._$el = $el || this._$el;
+            return this._$el || (this._$el = $el);
         },
         destroy : function(){
 
@@ -27,32 +27,63 @@
             }else{
                 return this.root().data(key)
             }
-
         }
     };
 
     function _createClass(Class,properties,supperClass){
-        Class.prototype = utils.extend(
-            utils.clone(properties,{}),
+        Class.prototype = $.extend2(
+            $.extend({},properties),
             (UE.ui[supperClass]||_widget).prototype,
             true
         );
         return Class
     }
     var _guid = 1;
+    function mergeToJQ(Class,className){
+        $[className] = Class;
+        $.fn[className] = function(opt){
+            var result,args =Array.prototype.slice.call(arguments,1);
+
+            this.each(function(i,el){
+                var $this = $(el);
+                var obj = $this.data(className);
+                if(!obj){
+                    Class(!opt || !$.isPlainObject(opt) ? {} : opt,$this);
+                    obj = $this.data(className);
+                }
+                if($.type(opt) == 'string'){
+                    if(opt == 'this'){
+                        result = obj;
+                    }else{
+                        result  = obj[opt].apply(obj,args);
+                        if ( result !== obj && result !== undefined) {
+                            return false;
+                        }
+                        result = null;
+                    }
+
+                }
+            });
+
+            return result !== null ? result : this;
+        }
+    }
     UE.ui = {
         define : function(className,properties,supperClass){
-            var Class = UE.ui[className] = _createClass(function(options){
+            var Class = UE.ui[className] = _createClass(function(options,$el){
                     var _obj = function(){};
-                    utils.extend2(_obj.prototype,Class.prototype,{
+                    $.extend(_obj.prototype,Class.prototype,{
                             guid : className + _guid++,
                             widgetName : className}
                     );
                     var obj = new _obj;
-                    obj.init && obj.init(options);
-                    return obj;
+                    $el && obj.root($el);
+                    obj.init && obj.init($.extend2(options,obj.default||{},true));
+                    obj.root().data(className,obj);
+                    return obj.root();
                 },
                 properties,supperClass);
+            mergeToJQ(Class,className);
         }
     }
-})();
+})(jQuery);
