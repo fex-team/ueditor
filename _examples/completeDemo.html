@@ -55,8 +55,8 @@
 
 
     /*color picker*/
-    var colpic=$.colorpicker().appendTo($('#container'));
-    colpic.on("pickcolor",function(type,value){
+    var $colpic=$.colorpicker().appendTo($('#container'));
+    $colpic.on("pickcolor",function(type,value){
         alert(value)
     })
 
