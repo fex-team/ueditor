@@ -41,16 +41,16 @@ UE.ui.define('colorpicker', {
         me.root($(me.tpl));
 
         me.root().find("table")
-            .mouseover(function (e) {
+            .on("mouseover",function (e) {
                 var color = e.target.getAttribute('data-color');
                 if (color) {
                     me.root().find(".colorpicker-preview").css("background-color", color);
                 }
             })
-            .mouseout(function () {
+            .on("mouseout",function () {
                 me.root().find(".colorpicker-preview").css("background-color", "");
             })
-            .click(function (e) {
+            .on("click",function (e) {
                 var color = e.target.getAttribute('data-color');
                 if (color) {
                     me.trigger('pickcolor', color);
