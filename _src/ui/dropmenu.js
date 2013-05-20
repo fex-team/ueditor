@@ -44,8 +44,7 @@ UE.ui.define('dropmenu',{
     },
     val:function(val){
         var currentVal;
-
-        $('ul > li[class!=divider]',this.root()).each(function(){
+        $('ul > li[class!=divider disabled dropdown-submenu]',this.root()).each(function(){
             var $el = $(this);
             if(val === undefined){
                 if($el.hasClass('active')){
@@ -55,23 +54,26 @@ UE.ui.define('dropmenu',{
             }else{
                 $el.toggleClass('active',$el.data('value') == val)
             }
-
         });
         if(val === undefined){
             return currentVal
         }
     },
-    attach : function($obj){
+    attachTo : function($obj){
         var me = this;
         if(!$obj.data('dropmenu')){
-            me.root().appendTo(document.body);
-            $obj.on('click',function(evt){
-                me.show($obj);
-                evt.stopPropagation()
-            });
+            if(!$.contains(document.body,me.root()[0])){
+                me.root().appendTo(document.body);
+            }
             $obj.data('dropmenu',me.root());
-            $(document.body).click(function(){
-                me.hide()
+            $obj.on('click',function(evt){
+                if($obj.trigger('beforeclick') === false){
+                    return;
+                }
+                me.show($obj)
+            });
+            me.register('click',$obj,function(evt){
+               me.hide()
             })
         }
     },
