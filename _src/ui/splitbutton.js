@@ -1,17 +1,24 @@
 //splitbutton 类
 UE.ui.define('splitbutton',{
-    tpl :'<div class="btn-group"><button class="btn">{{text}}</button>'+
-            '<button class="btn splitbutton" data-original-title="{{tooltip}}">'+
+    tmpl :'<div class="btn-group"><button class="btn"><%=text%></button>'+
+            '<button class="btn splitbutton dropdown-toggle" <%if(tooltip){%>data-original-title="<%=tooltip%>"<%}%>>'+
                 '<span class="caret"><\/span>'+
             '</button>'+
         '</div>',
+    default:{
+        text:'',
+        tooltip:'',
+        btnclick:function(){},
+        menuclick:function(){}
+
+    },
     init : function(options){
-        var html = utils.parseTmpl(this.tpl,options);
-        this.root($(html));
-        if(options.list){
-            var me = this;
-            me.data('dropmenu',UE.ui.dropmenu({'list':options.list}));
-            me.root().append(me.data('dropmenu').root());
+        var me = this;
+        me.root( $($.parseTmpl(this.tmpl,options)));
+        if(options.data){
+
+            me.data('dropmenu',$.dropmenu({'data':options.data,click:options.menuclick}));
+            me.root().append(me.data('dropmenu'));
             me.root().find('.splitbutton').click(function(evt){
                 me.toggle();
                 evt.stopPropagation();

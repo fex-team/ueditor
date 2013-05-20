@@ -1,35 +1,46 @@
 //dropmenu 类
 UE.ui.define('dropmenu',{
-    list:'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" >' +
-            '{{list}}<li class="{{active}} {{disabled}}" data-value="{{value}}"><a href="#" tabindex="-1" >{{text}}</a></li>{{/list}}' +
+    tmpl:'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" >' +
+            '<%for(var i=0,ci;ci=data[i++];){%>'+
+                '<%if(ci.divider){%><li class="divider"></li><%}else{%>' +
+                '<li <%if(ci.active||ci.disabled){%>class="<%= ci.active|| \'\' %> <%=ci.disabled||\'\' %>" <%}%> data-value="<%= ci.value%>">' +
+                    '<a href="#" tabindex="-1" ><%= ci.label%></a>' +
+                '</li><%}%>' +
+            '<%}%>' +
         '</ul>',
+    default:{
+        data:[],
+        click:function(){}
+    },
 
     init : function(options){
-        var html = utils.parseTmpl(this.list,options,function(data,cont){
-                if(utils.isString(data)){
-                    cont.push('<li class="divider"></li>');
-                    return true;
-                }
-            }),
-            $root = this.root($(html));
-        options.click && $root.children('li[class!="divider disabled dropdown-submenu"]').click(function(evt){
-            options.click.call(me,evt)
+        var me = this;
+        this.root($($.parseTmpl(this.tmpl, options))).on('click','li[class!="disabled divider dropdown-submenu"]',function(evt){
+            $.proxy(options.click,me,evt,$(this).data('value'),$(this))()
         })
 
+    },
+    show : function($obj){
+        this.root().css($.extend({display:'block'},$obj ? {
+            top : $obj.offset().top + $obj.outerHeight(),
+            left : $obj.offset().left
+        }:{}))
+    },
+    hide : function(){
+        this.root().css('display','none');
     },
     disabled : function(cb){
         $('ul > li[class!=divider]',this.root()).each(function(){
             var $el = $(this);
             if(cb === true){
                 $el.addClass('disabled')
-            }else if(utils.isFunction(cb)){
+            }else if($.isFunction(cb)){
                 $el.toggleClass('disabled',cb(li))
             }else{
                 $el.removeClass('disabled')
             }
 
         });
-        return this;
     },
     val:function(val){
         var currentVal;
@@ -49,7 +60,20 @@ UE.ui.define('dropmenu',{
         if(val === undefined){
             return currentVal
         }
-        return this;
+    },
+    attach : function($obj){
+        var me = this;
+        if(!$obj.data('dropmenu')){
+            me.root().appendTo(document.body);
+            $obj.on('click',function(evt){
+                me.show($obj);
+                evt.stopPropagation()
+            });
+            $obj.data('dropmenu',me.root());
+            $(document.body).click(function(){
+                me.hide()
+            })
+        }
     },
     addSubmenu:function(menu,index){
         index = index || 0;

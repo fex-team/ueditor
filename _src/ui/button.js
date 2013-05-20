@@ -1,26 +1,19 @@
 //button 类
 UE.ui.define('button',{
-    tpl : '<button class="btn" ><i class="icon-{{icon}}"></i>{{text}}</button>',
+    tpl :  '<button class="btn" >' +
+        '<% if(icon) {%><i class="icon-<%=icon%>"></i><% }; %><%=text%>'+
+        '<% if(caret) {%><span class="caret"></span><% };%></button>',
+    default:{
+        text:'',
+        icon:'',
+        caret:false,
+        click:function(){}
+    },
     init : function(options){
-        this.root($('<button class="btn" ></button>'));
-        if(options.icon){
-            this.root().append($('<i class="icon-'+options.icon+'"></i>'))
-        }
-        if(options.text){
-            this.root().append(options.text)
-        }
-        if(options.caret){
-            this.root().append($('<span class="caret"></span>'))
-        }
-
-        if(options.click){
-            var me = this;
-            me.root().click(function(evt){
-                if(!me.disabled()){
-                    options.click.apply(me,evt)
-                }
-            })
-        }
+        var me = this;
+        me.root($($.parseTmpl(me.tpl,options))).click(function(evt){
+            !me.disabled() && $.proxy(options.click,me,evt)()
+        });
     },
     disabled : function(state){
         if(state === undefined){
