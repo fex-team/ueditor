@@ -9,9 +9,9 @@
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
     <script src="../jquery.js"></script>
-    <script src="../bootstrap/js/bootstrap.js"></script>
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"/>
     <link href="../bootstrap/css/bootstrap-ueditor.css" rel="stylesheet"/>
+    <link href="../bootstrap/css/ueditor.css" rel="stylesheet"/>
     <style type="text/css">
         .clear {
             clear: both;
@@ -46,6 +46,14 @@
             .append(UE.ui.button({text:'sdfsd'}).root())
             .append(UE.ui.button({icon:'bold'}).root())
             .append(drpbtn.root()).append(drpbtn1.root())
+
+    /*color picker*/
+    var colpic=UE.ui.colorpicker()
+    colpic.on("pickcolor",function(type,value){
+        alert(value)
+    })
+    $('#container').append(colpic.root())
+
 </script>
 </body>
 </html>
