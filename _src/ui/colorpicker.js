@@ -1,4 +1,4 @@
-//button 类
+//colorpicker 类
 UE.ui.define('colorpicker', {
     tpl: (function () {
         var COLORS = (
