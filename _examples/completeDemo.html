@@ -8,9 +8,9 @@
     <!--开发版-->
 
     <script src="../jquery.js"></script>
-    <!--<script src="../bootstrap/js/bootstrap.js"></script>-->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"/>
     <link href="../bootstrap/css/bootstrap-ueditor.css" rel="stylesheet"/>
+    <link href="../bootstrap/css/ueditor.css" rel="stylesheet"/>
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
     <style type="text/css">
@@ -77,6 +77,14 @@
 //        {label: 'sdfsd', value: 'sdfsdf'}
 //    ]}).dropmenu('attach', $.button({icon: 'bold', caret: 1}).appendTo($('.btn-group :first')))
 
+
+
+    /*color picker*/
+    var colpic=UE.ui.colorpicker()
+    colpic.on("pickcolor",function(type,value){
+        alert(value)
+    })
+    $('#container').append(colpic.root())
 
 </script>
 </body>
