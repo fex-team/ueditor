@@ -1,6 +1,6 @@
 module( 'plugins.insertcode' );
 
-test( 'trace 3355：不闭合选区插入代码', function() {
+test( 'trace 3343：插入代码中有空行', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
