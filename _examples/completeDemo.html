@@ -55,11 +55,10 @@
 
 
     /*color picker*/
-    var colpic=UE.ui.colorpicker()
+    var colpic=$.colorpicker().appendTo($('#container'));
     colpic.on("pickcolor",function(type,value){
         alert(value)
     })
-    $('#container').append(colpic.root())
 
 </script>
 </body>
