@@ -52,11 +52,16 @@
                     obj = $this.data(className);
                 }
                 if($.type(opt) == 'string'){
-                    result  = obj[opt].apply(obj,args);
-                    if ( result !== obj && result !== undefined) {
-                        return false;
+                    if(opt == 'this'){
+                        result = obj;
+                    }else{
+                        result  = obj[opt].apply(obj,args);
+                        if ( result !== obj && result !== undefined) {
+                            return false;
+                        }
+                        result = null;
                     }
-                    result = null;
+
                 }
             });
 
