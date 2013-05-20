@@ -1,5 +1,6 @@
 (function($){
     //所有ui的基类
+    var _eventHandler = [];
     var _widget = function(){};
     _widget.prototype = {
         on : function (ev,cb){
@@ -27,6 +28,13 @@
             }else{
                 return this.root().data(key)
             }
+        },
+        register:function(eventName,$el,fn){
+            _eventHandler.push({
+                'evtname':eventName,
+                '$el':$el,
+                handler: $.proxy(fn,$el)
+            })
         }
     };
 
@@ -86,4 +94,14 @@
             mergeToJQ(Class,className);
         }
     }
+
+    $(function(){
+        $(document).on('click mouseup mousedown dblclick',function(evt){
+            $.each(_eventHandler,function(i,obj){
+                if(obj.evtname == evt.type && obj.$el[0] !== evt.target &&  !$.contains(obj.$el[0],evt.target)){
+                    obj.handler(evt);
+                }
+            })
+        })
+    })
 })(jQuery);
