@@ -6,12 +6,13 @@
 
 
     <!--开发版-->
-    <script type="text/javascript" charset="utf-8" src="editor_api.js">
-    </script>
+
     <script src="../jquery.js"></script>
-    <script src="../bootstrap/js/bootstrap.js"></script>
+    <!--<script src="../bootstrap/js/bootstrap.js"></script>-->
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"/>
     <link href="../bootstrap/css/bootstrap-ueditor.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8" src="editor_api.js">
+    </script>
     <style type="text/css">
         .clear {
             clear: both;
@@ -19,47 +20,39 @@
     </style>
 </head>
 <body>
-    <div id="container" style="width:1000px;height:300px;position:absolute;top:200px;left:200px;">
-        <div class="btn-group">
+<div id="container" style="width:1000px;height:300px;position:absolute;top:200px;left:200px;">
+    <div class="btn-group">
 
-        </div>
     </div>
+</div>
 <script>
-    $('#container').append(UE.ui.splitbutton({
-        text:'test',
-        list:[
-            {text:'sdfsd',value:'sdfsdf'},
-            {text:'sdfsd',value:'sdfsdf'},
-            {text:'sdfsd',value:'sdfsdf'}
-        ]
-    }).root());
-    var button = UE.ui.button({text:'sdfsd',caret:true});
+    $.splitbutton({
+        text: 'test', icon: 'bold',
+        data: [
+            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
+            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
+            {divider:1},
+            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
+        ],menuclick:function(evt,val,$li){
+            alert(val);
+            alert($li[0])
+        }
+    }).appendTo($('#container'));
 
-    var drpbtn = UE.ui.dropbutton({text:'sdfsd',caret:true, list:[
-        {text:'sdfsd',value:'sdfsdf'},
-        {text:'sdfsd',value:'sdfsdf'},
-        {text:'sdfsd',value:'sdfsdf'}
-    ]});
-    var drpbtn1 = UE.ui.dropbutton({text:'23232',caret:true,cont:'<div style="width:200px;height:300px;"></div>'});
+    $.button({text: 'sdfsd',click:function(evt){
+        alert(evt)
+    }}).appendTo($('.btn-group :first'));
 
-    $('#container :first')
-            .append(UE.ui.button({text:'sdfsd'}).root())
-            .append(UE.ui.button({icon:'bold'}).root())
-            .append(drpbtn.root()).append(drpbtn1.root())
-    var tmp = '<button class="btn" >' +
-            '<% if(icon) {%><i class="icon-<%=icon%>"></i><% } %><%text%>'+
-            '<% if(caret) {%><span class="caret"></span><% }%></button>'
-    function parse(str, data) {
-        var tmpl = 'var __p=[],print=function(){__p.push.apply(__p,arguments);};' + 'with(obj||{}){__p.push(\'' + str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g, function(match, code) {
-            return "'," + code.replace(/\\'/g, "'") + ",'";
-        }).replace(/<%([\s\S]+?)%>/g, function(match, code) {
-                    return "');" + code.replace(/\\'/g, "'").replace(/[\r\n\t]/g, ' ') + "__p.push('";
-                }).replace(/\r/g, '\\r').replace(/\n/g, '\\n').replace(/\t/g, '\\t') + "');}return __p.join('');";
-        var func = new Function('obj', tmpl);
-        return data ? func(data) : func;
-    }
-    debugger
-    var s = parse(tmp,{})
+
+    var state = $.button({text: 'sdfsdf', icon: 'bold', caret: 1}).appendTo($('.btn-group :first')).button('disabled', 1);
+
+    $.dropmenu({ data: [
+        {label: 'sdfsd', value: 'sdfsdf'},
+        {label: 'sdfsd', value: 'sdfsdf'},
+        {label: 'sdfsd', value: 'sdfsdf'}
+    ]}).dropmenu('attach', $.button({icon: 'bold', caret: 1}).appendTo($('.btn-group :first')))
+
+
 </script>
 </body>
 </html>

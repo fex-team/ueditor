@@ -6,9 +6,8 @@
             'editor.js',
             'core/browser.js',
             'core/utils.js',
-
             'ui/widget.js',
-            'ui/uiutils.js',
+            'ui/jq.extend.js',
             'ui/button.js',
             'ui/dropmenu.js',
             'ui/splitbutton.js',
