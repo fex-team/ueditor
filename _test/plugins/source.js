@@ -1,22 +1,22 @@
 module( 'plugins.source' );
-test('初始化进入源码模式',function(){
-    if(ua.browser.ie>0 && ua.browser.ie<8)
-        return 0;
-    var div = document.createElement('div');
-    document.body.appendChild(div);
-    div.id = 'e';
-    debugger
-    var editor = UE.getEditor('e');//,{sourceEditorFirst:true}
-    stop();
-//    editor.ready(function(){
-//        setTimeout(function(){
-//            debugger
-////            equal(editor.queryCommandState('source'),1,'源码高亮');
-//            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
-//////            start();
-//        },100);
-//    });
-});
+//test('初始化进入源码模式',function(){
+//    if(ua.browser.ie>0 && ua.browser.ie<8)
+//        return 0;
+//    var div = document.createElement('div');
+//    document.body.appendChild(div);
+//    div.id = 'e';
+//    debugger
+//    var editor = UE.getEditor('e');//,{sourceEditorFirst:true}
+//    stop();
+////    editor.ready(function(){
+////        setTimeout(function(){
+////            debugger
+//////            equal(editor.queryCommandState('source'),1,'源码高亮');
+////            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
+////////            start();
+////        },100);
+////    });
+//});
 test( 'chrome删除后切换源码再切换回来，光标没了', function() {
     //opera 取不到range值
     if(ua.browser.opera) return 0;
@@ -293,22 +293,22 @@ test( 'trace 1727:插入超链接后再插入空格，空格不能被删除', fu
 //    stop();
 //} );
 //TODO 1.2.6
-test('初始化进入源码模式',function(){
-    if(ua.browser.ie>0 && ua.browser.ie<8)
-        return 0;
-    var div = document.createElement('div');
-    document.body.appendChild(div);
-    var editor = UE.getEditor(div);//,{sourceEditorFirst:true}
-    stop();
-    editor.ready(function(){
-        setTimeout(function(){
-//            equal(editor.queryCommandState('source'),1,'源码高亮');
-            debugger
-            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
-////            start();
-        },100);
-    });
-});
+//test('初始化进入源码模式',function(){
+//    if(ua.browser.ie>0 && ua.browser.ie<8)
+//        return 0;
+//    var div = document.createElement('div');
+//    document.body.appendChild(div);
+//    var editor = UE.getEditor(div);//,{sourceEditorFirst:true}
+//    stop();
+//    editor.ready(function(){
+//        setTimeout(function(){
+////            equal(editor.queryCommandState('source'),1,'源码高亮');
+//            debugger
+//            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
+//////            start();
+//        },100);
+//    });
+//});
 
 test('在font,b,i标签中输入，会自动转换标签 ',function(){
 //    if(!ua.browser.gecko){
