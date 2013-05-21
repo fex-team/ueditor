@@ -539,3 +539,17 @@ test('绑定事件',function(){
         },100);
     });
 });
+////.fireMouseEvent(target, "contextmenu", options);
+//test('dragover',function(){
+//    var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
+//    var div = document.body.appendChild(document.createElement('div'));
+//    editor.render(div);
+//    editor.ready(function(){
+//        editor.focus();
+//        ua.fireMouseEvent(document.body, "dragover");
+//        setTimeout(function(){
+//            expect(5);
+//            start();
+//        },100);
+//    });
+//});
