@@ -13,6 +13,9 @@ body{margin-top: 20px;font-size: 12px;}
 
 /*color picker
 */
+.colorpicker {
+    margin: 10px;
+}
 .colorpicker .colorpicker-topbar{
     height: 27px;
     width: 200px;
