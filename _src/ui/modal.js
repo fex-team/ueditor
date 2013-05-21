@@ -55,7 +55,7 @@ UE.ui.define('modal', {
 
             me.root().addClass('in')
 
-            me.trigger('shown')
+            me.root().focus().trigger('shown')
 
         })
     },
