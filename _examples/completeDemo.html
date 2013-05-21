@@ -103,6 +103,7 @@
                 caret:true
             }).appendTo($('.btn-group :first')))
 
+
     /*modal*/
     var $modal=$.modal({
         title:"帮助",
@@ -111,22 +112,26 @@
         backdrop:true,//"static",
         show: true,
         keyboard: true
-    }).appendTo($('#container'));
+    }).appendTo($('#container'))
+        .on("show",function(){
+        })
+        .on("shown",function(){
+
+        })
+        .on("hide",function(){
+
+        })
+        .on("hidden",function(){
+
+        })
+        .on("ok",function(){
+
+        });
 
     $.button({text: 'sdfsd',click:function(evt){
         $modal.modal("toggle");
     }}).appendTo($('.btn-group :first'));
 
-    $modal.on("show",function(){
-    })
-    $modal.on("shown",function(){
-    })
-    $modal.on("hide",function(){
-    })
-    $modal.on("hidden",function(){
-    })
-    $modal.on("ok",function(){
-    })
 </script>
 </body>
 </html>
