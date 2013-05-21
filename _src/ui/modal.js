@@ -38,7 +38,7 @@ UE.ui.define('modal', {
     show: function () {
         var me = this
 
-        me.root().trigger("show")
+        me.trigger("show")
 
         if (me.isShown) return
 
@@ -55,14 +55,14 @@ UE.ui.define('modal', {
 
             me.root().addClass('in')
 
-            me.root().focus().trigger('shown')
+            me.trigger('shown')
 
         })
     },
     hide: function (e) {
         var me = this
 
-        me.root().trigger("hide")
+        me.trigger("hide")
 
         if (!me.isShown) return
 
@@ -89,7 +89,7 @@ UE.ui.define('modal', {
         me.root().hide()
         me.backdrop(function () {
             me.removeBackdrop()
-            me.root().trigger('hidden')
+            me.trigger('hidden')
         })
     },
     removeBackdrop: function () {
@@ -118,7 +118,7 @@ UE.ui.define('modal', {
     },
     ok: function () {
         var me = this
-        me.root().trigger("ok")
+        me.trigger("ok")
         me.hide()
     }
 });
