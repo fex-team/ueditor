@@ -55,8 +55,6 @@ UE.ui.define('modal', {
 
             me.root().addClass('in')
 
-            me.enforceFocus()
-
             me.root().focus().trigger('shown')
 
         })
@@ -72,19 +70,9 @@ UE.ui.define('modal', {
 
         me.escape()
 
-        $(document).off('focus')
-
         me.root().removeClass('in')
 
         me.hideModal()
-    },
-    enforceFocus: function () {
-        var me = this
-        $(document).on('focus', function (e) {
-            if (me.root()[0] !== e.target && !me.root().has(e.target).length) {
-                me.root().focus()
-            }
-        })
     },
     escape: function () {
         var me = this;
