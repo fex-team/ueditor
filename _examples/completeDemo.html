@@ -81,7 +81,7 @@
 
     /*color picker*/
     $.colorpicker().appendTo($('#container')).on("pickcolor",function(type,value){
-        debugger
+        alert(this)
     }).colorpicker('attachTo', $.button({
                 text:'color',
                 caret:true
