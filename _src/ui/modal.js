@@ -97,20 +97,21 @@ UE.ui.define('modal', {
         this.$backdrop = null
     },
     backdrop: function (callback) {
-        if (this.isShown && this.options.backdrop) {
-            this.$backdrop = $('<div class="modal-backdrop" />')
+        var me=this;
+        if (me.isShown && me.options.backdrop) {
+            me.$backdrop = $('<div class="modal-backdrop" />')
                 .appendTo(document.body)
 
-            this.$backdrop.click(
-                this.options.backdrop == 'static' ?
-                    $.proxy(this.root()[0].focus, this.root()[0])
-                    : $.proxy(this.hide, this)
+            me.$backdrop.click(
+                me.options.backdrop == 'static' ?
+                    $.proxy(me.root()[0].focus, me.root()[0])
+                    : $.proxy(me.hide, me)
             )
 
-            this.$backdrop.addClass('in')
+            me.$backdrop.addClass('in')
 
-        } else if (!this.isShown && this.$backdrop) {
-            this.$backdrop.removeClass('in')
+        } else if (!me.isShown && me.$backdrop) {
+            me.$backdrop.removeClass('in')
         }
 
         callback && callback()
