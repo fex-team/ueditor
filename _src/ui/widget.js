@@ -44,6 +44,7 @@
             (UE.ui[supperClass]||_widget).prototype,
             true
         );
+        Class.prototype.supper =  (UE.ui[supperClass]||_widget).prototype;
         return Class
     }
     var _guid = 1;
@@ -91,6 +92,7 @@
                     return obj.root();
                 },
                 properties,supperClass);
+
             mergeToJQ(Class,className);
         }
     }
