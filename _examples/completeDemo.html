@@ -80,10 +80,12 @@
 
 
     /*color picker*/
-    var $colpic=$.colorpicker().appendTo($('#container'));
-    $colpic.on("pickcolor",function(type,value){
-        alert(value)
-    })
+    $.colorpicker().appendTo($('#container')).on("pickcolor",function(type,value){
+        debugger
+    }).colorpicker('attachTo', $.button({
+                text:'color',
+                caret:true
+            }).appendTo($('.btn-group :first')))
 
 </script>
 </body>
