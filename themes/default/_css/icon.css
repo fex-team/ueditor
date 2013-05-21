@@ -1,72 +1,7 @@
-/*ueidtor新增样式
-*/
-
-body{margin-top: 20px;font-size: 12px;}
-
-
-.container{
-    width: 1200px;
-    margin: 0 auto;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/*color picker
-*/
-.colorpicker {
-    margin: 10px;
-}
-.colorpicker .colorpicker-topbar{
-    height: 27px;
-    width: 200px;
-    overflow: hidden;
-}
-.colorpicker .colorpicker-topbar .colorpicker-preview{
-    height: 20px;
-    border: 1px inset black;
-    margin-left: 1px;
-    width: 128px;
-    float: left;
-}
-.colorpicker .colorpicker-topbar .colorpicker-nocolor{
-    float: right;
-    margin-right: 1px;
-    font-size: 12px;
-    line-height: 14px;
-    height: 14px;
-    border: 1px solid #333;
-    padding: 3px 5px;
-    cursor: pointer;
-}
-.colorpicker table{
-    border-collapse: collapse;
-    border-spacing: 2px;
-}
-.colorpicker tr.colorpicker-firstrow{
-    height: 30px;
-}
-.colorpicker table td{
-    padding: 0 2px;
-}
-.colorpicker table td .colorpicker-colorcell{
-    display: block;
-    text-decoration: none;
-    color: black;
-    width: 14px;
-    height: 14px;
-    margin: 0;
-    cursor: pointer;
-}
-
-
-
-
-
-
 /*tool toolbar icon
 */
 .btn i{
-    background-image: url('../img/glyphicons-halflings-ueditor.png');
+    background-image: url('../images/icons.png');
 }
 .btn .icon-print{
     background-position: 0 -212px;
@@ -128,4 +63,3 @@ body{margin-top: 20px;font-size: 12px;}
 .btn .icon-removeformat {
     background-position: 0 -184px
 }
-
