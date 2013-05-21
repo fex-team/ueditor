@@ -1,8 +1,7 @@
-/*为bootstrap打的补丁样式
+/*bootstrap ueditor 补丁样式
 */
 
-/*text toolbar
-*/
+/*text toolbar*/
 .navbar-inner{
     border: none;
     box-shadow: none;

@@ -1,3 +1,6 @@
+/*bootstrap ueditor  补丁样式*/
+@import "bootstrap-ueditor.css";
+
 /*编辑器样式*/
 @import "editor.css";
 
