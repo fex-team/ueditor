@@ -43,6 +43,7 @@ UE.ui.define('colorpicker', {
         me.root().find("table")
             .on("mouseover",function (e) {
                 var color = e.target.getAttribute('data-color');
+
                 if (color) {
                     me.root().find(".colorpicker-preview").css("background-color", color);
                 }
@@ -52,6 +53,7 @@ UE.ui.define('colorpicker', {
             })
             .on("click",function (e) {
                 var color = e.target.getAttribute('data-color');
+
                 if (color) {
                     me.trigger('pickcolor', color);
                 }

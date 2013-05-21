@@ -86,8 +86,8 @@ UE.ui.define('modal', {
     },
     hideModal: function () {
         var me = this
-        this.root().hide()
-        this.backdrop(function () {
+        me.root().hide()
+        me.backdrop(function () {
             me.removeBackdrop()
             me.root().trigger('hidden')
         })
