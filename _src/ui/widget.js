@@ -95,7 +95,7 @@
 
             mergeToJQ(Class,className);
         }
-    }
+    };
 
     $(function(){
         $(document).on('click mouseup mousedown dblclick',function(evt){

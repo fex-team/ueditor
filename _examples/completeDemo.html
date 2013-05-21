@@ -35,9 +35,23 @@
             {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
         ]
     }).dropmenu('attachTo', $.button({
-                text:'test',
-                caret:true
-            }).appendTo($('.btn-group :first')))
+        text:'test1',
+        caret:true
+    }).appendTo($('.btn-group :first'))).dropmenu('addSubmenu','2级菜单', $.dropmenu({
+        data:[
+            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
+            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
+            {divider:1},
+            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
+        ]
+    }).dropmenu('addSubmenu','3级菜单', $.dropmenu({
+                        data:[
+                            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
+                            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
+                            {divider:1},
+                            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
+                        ]
+                    })),2)
 
     $.dropmenu({
         data:[

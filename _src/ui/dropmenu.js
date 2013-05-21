@@ -77,18 +77,13 @@ UE.ui.define('dropmenu',{
             })
         }
     },
-    addSubmenu:function(menu,index){
+    addSubmenu:function(label,menu,index){
         index = index || 0;
-        $('ul > li[class!=divider]',this.root()).each(function(i,l){
+        $('li[class!=divider]',this.root()).each(function(i,l){
             if(index == i){
-                $('<li class="dropdown-submenu"></li>').append(menu.root()).insertBefore($(l));
+                $('<li class="dropdown-submenu"><a tabindex="-1" href="#">'+label+'</a></li>').append(menu).insertBefore($(l));
                 return false;
             }
         });
-
-        if(!menu.root().parent()){
-            $('<li class="dropdown-submenu"></li>').append(menu.root()).insertAfter(this.root().children(':last'));
-        }
-        return menu;
     }
 });
