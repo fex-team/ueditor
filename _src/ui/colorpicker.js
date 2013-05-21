@@ -35,10 +35,9 @@ UE.ui.define('colorpicker', {
         html += '</tr></table></div>';
         return html;
     })(),
-    init: function () {
+    init: function (options) {
         var me = this;
-
-        me.root($(me.tpl));
+        me.root($($.parseTmpl(me.supper.mergeTpl(me.tpl),options || {})));
 
         me.root().find("table")
             .on("mouseover",function (e) {
@@ -57,4 +56,4 @@ UE.ui.define('colorpicker', {
                 }
             });
     }
-});
+}, 'popup');
