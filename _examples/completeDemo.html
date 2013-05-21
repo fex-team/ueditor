@@ -51,7 +51,9 @@
                             {divider:1},
                             {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
                         ]
-                    })),2)
+                    })),2).on('beforeshow',function(){
+               alert(this)
+            })
 
     $.dropmenu({
         data:[

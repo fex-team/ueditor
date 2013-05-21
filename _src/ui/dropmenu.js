@@ -21,10 +21,11 @@ UE.ui.define('dropmenu',{
 
     },
     show : function($obj){
-        this.root().css($.extend({display:'block'},$obj ? {
-            top : $obj.offset().top + $obj.outerHeight(),
-            left : $obj.offset().left
-        }:{}))
+        this.trigger('beforeshow')
+            .root().css($.extend({display:'block'},$obj ? {
+                top : $obj.offset().top + $obj.outerHeight(),
+                left : $obj.offset().left
+            }:{}))
     },
     hide : function(){
         this.root().css('display','none');
