@@ -1,10 +1,11 @@
 //button 类
 UE.ui.define('button',{
-    tpl :  '<button class="btn" data-original-title="<%=text%>">' +
+    tpl :  '<button class="btn" data-original-title="<%=title%>">' +
         '<% if(icon) {%><i class="icon-<%=icon%>"></i><% }; %><%=text%>'+
         '<% if(caret) {%><span class="caret"></span><% };%></button>',
     default:{
         text:'',
+        title:'',
         icon:'',
         caret:false,
         click:function(){}

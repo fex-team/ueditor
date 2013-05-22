@@ -4,38 +4,48 @@ UE.ui.define('tooltip', {
     default: {
     },
     init: function (options) {
-        var me=this;
-        me.root($($.parseTmpl(me.tpl, options||{})));
+        var me = this;
+        me.root($($.parseTmpl(me.tpl, options || {})));
     },
-    enter:function(){
-    },
-    leave:function(){
+    setContent: function () {
+        var me = this;
+        var $obj = me.root().data("target");
+        if (!me.root().data("title")) {
+            me.root().data("title", $obj.attr("data-original-title"));
+        }
 
+        me.root().find('.tooltip-inner')['text'](me.root().data("title"))
     },
-    setContent:function(){
+    setPos: function () {
+        var me = this;
+        var $obj = me.root().data("target");
 
+        me.root().css($.extend({display: 'block'}, $obj ? {
+            top: $obj.offset().top + $obj.outerHeight(),
+            left: $obj.offset().left + (($obj.outerWidth() - me.root().outerWidth()) / 2)
+        } : {}))
     },
-    hasContent:function(){
-
+    show: function () {
+        var me = this;
+        me.setContent();
+        me.setPos();
+        me.root().addClass("in bottom")
     },
-    getTitle:function(){
-
+    hide: function () {
+        var me = this;
+        me.root().removeClass("in bottom")
     },
-    show:function(){
-
-    },
-    hide:function(){
-
-    },
-    attachTo:function($obj){
+    attachTo: function ($obj) {
         var me = this;
         if (!$obj.data('tooltip')) {
             if (!$.contains(document.body, me.root()[0])) {
                 me.root().appendTo(document.body);
             }
             $obj.data('tooltip', me.root());
-            $obj.on('mouseenter',  $.proxy(this.enter, this))
-                .on('mouseleave', $.proxy(this.leave, this));
+            $obj.on('mouseenter', $.proxy(this.show, this))
+                .on('mouseleave', $.proxy(this.hide, this));
+
+            me.root().data("target", $obj);
         }
     }
 });
