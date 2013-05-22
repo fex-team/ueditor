@@ -10,7 +10,7 @@ UE.ui.define('tooltip', {
     setContent: function () {
         var me = this;
         var $obj = me.root().data("target");
-        if (me.root().data("title")) {
+        if (!me.root().data("title")) {
             me.root().data("title", $obj.attr("data-original-title"));
         }
 
