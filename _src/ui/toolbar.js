@@ -20,35 +20,5 @@ UE.ui.define('toolbar',{
         $(document).click(function(){
             me.hide()
         })
-    },
-    show:function(){
-        var $dropcont = this.data('dropcont').root(),
-            offset = this.root().position();
-        $dropcont.css({
-            'display':'block',
-            'top':offset.top + this.root().outerHeight(),
-            'left':offset.left
-        })
-
-    },
-    hide : function(){
-        var $dropcont = this.data('dropcont').root();
-        $dropcont.css({
-            'display':'none'
-        })
-    },
-    disabled : function(state){
-        if(state === undefined){
-            return this.root().hasClass('disabled')
-        }
-        this.root().toggleClass('disabled',state);
-        return this;
-    },
-    active:function(state){
-        if(state === undefined){
-            return this.root().hasClass('active')
-        }
-        this.root().toggleClass('active',state);
-        return this;
     }
 });
