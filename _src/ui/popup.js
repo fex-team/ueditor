@@ -6,8 +6,8 @@ UE.ui.define('popup',{
     },
     show : function($obj){
         this.root().css($.extend({display:'block'},$obj ? {
-            top : $obj.position().top + $obj.outerHeight(),
-            left : $obj.position().left
+            top : $obj.offset().top + $obj.outerHeight(),
+            left : $obj.offset().left
         }:{}))
     },
     hide : function(){

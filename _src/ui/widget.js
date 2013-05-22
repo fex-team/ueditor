@@ -12,8 +12,7 @@
             return this;
         },
         trigger : function(ev,data){
-            this.root().trigger(ev, data);
-            return this;
+            return  this.root().trigger(ev, data) === false ? false : this;
         },
         root : function($el){
             return this._$el || (this._$el = $el);

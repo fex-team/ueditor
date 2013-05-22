@@ -21,17 +21,20 @@ UE.ui.define('dropmenu',{
 
     },
     show : function($obj){
-        this.trigger('beforeshow')
-            .root().css($.extend({display:'block'},$obj ? {
+        if(this.trigger('beforeshow') === false){
+            return;
+        }else{
+            this.root().css($.extend({display:'block'},$obj ? {
                 top : $obj.offset().top + $obj.outerHeight(),
                 left : $obj.offset().left
             }:{}))
+        }
     },
     hide : function(){
         this.root().css('display','none');
     },
     disabled : function(cb){
-        $('ul > li[class!=divider]',this.root()).each(function(){
+        $('li[class!=divider]',this.root()).each(function(){
             var $el = $(this);
             if(cb === true){
                 $el.addClass('disabled')
@@ -45,7 +48,7 @@ UE.ui.define('dropmenu',{
     },
     val:function(val){
         var currentVal;
-        $('ul > li[class!=divider disabled dropdown-submenu]',this.root()).each(function(){
+        $('li[class!="divider disabled dropdown-submenu"]',this.root()).each(function(){
             var $el = $(this);
             if(val === undefined){
                 if($el.hasClass('active')){
@@ -68,9 +71,7 @@ UE.ui.define('dropmenu',{
             }
             $obj.data('dropmenu',me.root());
             $obj.on('click',function(evt){
-                if($obj.trigger('beforeclick') === false){
-                    return;
-                }
+
                 me.show($obj)
             });
             me.register('click',$obj,function(evt){
