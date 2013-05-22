@@ -26,7 +26,7 @@ UE.ui.define('modal', {
     init: function (options) {
         var me = this;
 
-        me.root($($.parseTmpl(me.tpl, options)));
+        me.root($($.parseTmpl(me.tpl, options||{})));
 
         me.root().data("options", options);
 
