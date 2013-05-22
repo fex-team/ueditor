@@ -55,7 +55,7 @@ UE.ui.define('modal', {
 
         })
     },
-    hide: function (e) {
+    hide: function () {
         var me = this
 
         me.trigger("hide")
