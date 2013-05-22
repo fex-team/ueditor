@@ -8,11 +8,12 @@
             'core/utils.js',
             'ui/widget.js',
             'ui/jq.extend.js',
+            'ui/popup.js',
             'ui/button.js',
             'ui/dropmenu.js',
             'ui/splitbutton.js',
             'ui/dropbutton.js',
-            'ui/popup.js',
+
             'ui/colorpicker.js'
         ],
         baseURL = '../_src/';

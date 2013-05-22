@@ -30,5 +30,5 @@ UE.ui.define('popup',{
                 me.hide()
             })
         }
-    },
+    }
 });
