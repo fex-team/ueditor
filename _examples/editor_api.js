@@ -9,12 +9,12 @@
             'ui/widget.js',
             'ui/jq.extend.js',
             'ui/button.js',
+            'ui/popup.js',
             'ui/dropmenu.js',
             'ui/splitbutton.js',
-            'ui/dropbutton.js',
-            'ui/popup.js',
             'ui/colorpicker.js',
-            'ui/modal.js'
+            'ui/modal.js',
+            'ui/toolbar.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

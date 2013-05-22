@@ -125,6 +125,8 @@ UE.ui.define('modal', {
                 }
                 me.toggle();
             });
+
+            me.root().data($obj.data('widgetName'),$obj)
         }
     },
     ok: function () {

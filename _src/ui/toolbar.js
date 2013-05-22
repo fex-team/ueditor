@@ -1,24 +1,72 @@
 //toolbar 类
-UE.ui.define('toolbar',{
+(function () {
 
-    init : function(options){
-        var me = this,
-            btn = UE.ui.button(options),
-            dropcont = options.cont ? UE.ui.popup(options) : UE.ui.dropmenu({'list':options.list});
-        btn.on('click',function(evt){
-            if(!btn.disabled()){
-                if(!dropcont.root().parent().length){
-                    btn.root().parent().append(dropcont.root())
-                }
-                me.show();
-                evt.stopPropagation();
+    UE.ui.define('toolbar', {
+        tpl: '<div class="booteditor container">' +
+            '<div class="text-toolbar">' +
+            '<div class="navbar-inner">' +
+            '<ul class="nav nav-pills">' +
+            '</ul>' +
+            '</div>' +
+            '</div>' +
+            '<div class="btn-toolbar"></div>' +
+            '<div class="editor-body"></div>' +
+            '<div class="state-toolbar"></div>' +
+            '</div>',
+        textmenutpl: '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=label%></a></li>',
+        btngrouptpl:'<div class="btn-group"></div>',
+        init: function (options) {
+
+            var $root = this.root($($.parseTmpl(this.tpl, options)));
+            this.data('txtToolbar', $root.find('.nav-pills'))
+                .data('btnToolbar', $root.find('.btn-toolbar'))
+                .data('editorbody', $root.find('.editor-body'))
+                .data('stateToolbar', $root.find('.state-toolbar'))
+        },
+        appendToTxt: function (label, menu) {
+            var data = [];
+            if ($.type(label) == 'string') {
+                data.push({
+                    'label': label,
+                    'menu': menu
+                })
+            } else {
+                data = label;
             }
-        });
+            var me = this;
+            $.each(data, function (i, obj) {
+                var $label = $($.parseTmpl(me.textmenutpl, obj));
+                obj.menu.dropmenu('attachTo', $label.find('a'));
+                me.data('txtToolbar').append($label);
+            })
+        },
+        delFromTxt: function() {
 
-        this.root(btn.root());
-        this.data('btn',btn).data('dropcont',dropcont);
-        $(document).click(function(){
-            me.hide()
-        })
-    }
-});
+        },
+        appendToBtn: function(data) {
+            var me = this,$cont = me.data('btnToolbar');
+            if($.isArray(data)){
+                $.each(data,function(i,group){
+                    var $groupcont = $(me.btngrouptpl);
+                    $.each(group,function(i,btn){
+                        if(btn.data('button')){
+                            $groupcont.append(btn)
+                        }else{
+                            $groupcont = btn;
+                            return false;
+                        }
+                    });
+                    $cont.append($groupcont)
+                })
+            }else{
+                if(data.data('button')){
+                    data = $(me.btngrouptpl).append(data)
+                }
+                $cont.append(data)
+            }
+        },
+        appendToState: function () {
+
+        }
+    });
+})();

@@ -28,7 +28,9 @@ UE.ui.define('popup',{
             });
             me.register('click',$obj,function(evt){
                 me.hide()
-            })
+            });
+
+            me.root().data($obj.data('widgetName'),$obj)
         }
     }
 });

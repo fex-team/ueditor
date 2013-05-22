@@ -1,6 +1,7 @@
-.container{
-    width: 1200px;
+ .booteditor .container{
+
     margin: 0 auto;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+

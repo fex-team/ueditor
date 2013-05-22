@@ -71,12 +71,13 @@ UE.ui.define('dropmenu',{
             }
             $obj.data('dropmenu',me.root());
             $obj.on('click',function(evt){
-
                 me.show($obj)
             });
             me.register('click',$obj,function(evt){
                me.hide()
-            })
+            });
+
+            me.root().data($obj.data('widgetName'),$obj)
         }
     },
     addSubmenu:function(label,menu,index){

@@ -16,117 +16,117 @@
         .clear {
             clear: both;
         }
+        .booteditor .editor-body{
+            width:1000px;
+            height:400px;
+        }
     </style>
 </head>
 <body>
-<div id="container" style="width:1000px;height:300px;position:absolute;top:200px;left:200px;">
-    <div class="btn-group">
-    </div>
-</div>
 <script>
-
-
-    $.dropmenu({
-        data:[
-            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-            {divider:1},
-            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-        ]
-    }).dropmenu('attachTo', $.button({
-        text:'test1',
-        caret:true
-    }).appendTo($('.btn-group :first'))).dropmenu('addSubmenu','2级菜单', $.dropmenu({
-        data:[
-            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-            {divider:1},
-            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-        ]
-    }).dropmenu('addSubmenu','3级菜单', $.dropmenu({
+    var textmenu = [
+        {
+            'label':'文件',
+            'menu':
+                    $.dropmenu({
                         data:[
                             {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
                             {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
                             {divider:1},
                             {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
                         ]
-                    })),2).on('beforeshow',function(){
-               alert(this)
+                    }).dropmenu('addSubmenu','2级菜单', $.dropmenu({
+                                data:[
+                                    {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
+                                    {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
+                                    {divider:1},
+                                    {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
+                                ]
+                            }).dropmenu('addSubmenu','3级菜单', $.dropmenu({
+                                        data:[
+                                            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
+                                            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
+                                            {divider:1},
+                                            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
+                                        ]
+                                    })),2).on('beforeshow',function(){
+                                alert(this)
+                            })
+        },
+        {
+            'label':'文件',
+            'menu':  $.dropmenu({
+                data:[
+                    {label:'sdfsdfsd', value: 'sdfsdf1'},
+                    {label:'sdfsdfsd',value: 'sdfsdf2'},
+                    {divider:1},
+                    {label:'sdfsdfs', value: 'sdfsdf3'}
+                ]
             })
-
-    $.dropmenu({
-        data:[
-            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-            {divider:1},
-            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-        ]
-    }).dropmenu('attachTo', $.button({
-                text:'test',
-                caret:true
-            }).appendTo($('.btn-group :first')))
-//    $.splitbutton({
-//        text: 'test', icon: 'bold',
-//        data: [
-//            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-//            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-//            {divider:1},
-//            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-//        ],menuclick:function(evt,val,$li){
-//            alert(val);
-//            alert($li[0])
-//        }
-//    }).appendTo($('#container'))
-
-
-//    $.button({text: 'sdfsd',click:function(evt){
-//        alert(evt)
-//    }}).appendTo($('.btn-group :first'));
-//
-//
-//    var state = $.button({text: 'sdfsdf', icon: 'bold', caret: 1}).appendTo($('.btn-group :first')).button('disabled', 1);
-//
-//    $.dropmenu({ data: [
-//        {label: 'sdfsd', value: 'sdfsdf'},
-//        {label: 'sdfsd', value: 'sdfsdf'},
-//        {label: 'sdfsd', value: 'sdfsdf'}
-//    ]}).dropmenu('attach', $.button({icon: 'bold', caret: 1}).appendTo($('.btn-group :first')))
-
-
-
-    /*color picker*/
-    $.colorpicker().on("pickcolor",function (type, value) {
-        alert(this)
-    }).colorpicker('attachTo', $.button({
-                text: 'color',
-                caret: true
-            }).appendTo($('.btn-group :first')))
-
-
-    /*modal*/
-    var $modal = $.modal({
-        title: "帮助",
-        url: "#",
-        nook: false,
-        backdrop: true,//"static",
-        show: true,
-        keyboard: true
-    }).modal("attachTo", $.button({text: 'sdfsd'}).appendTo($('.btn-group :first')) )
-            .on("show", function () {
+        }, {
+            'label':'文件',
+            'menu':  $.dropmenu({
+                data:[
+                    {label:'sdfsdfsd', value: 'sdfsdf1'},
+                    {label:'sdfsdfsd',value: 'sdfsdf2'},
+                    {divider:1},
+                    {label:'sdfsdfs', value: 'sdfsdf3'}
+                ]
             })
-            .on("shown", function () {
-
+        }, {
+            'label':'文件',
+            'menu':  $.dropmenu({
+                data:[
+                    {label:'sdfsdfsd', value: 'sdfsdf1'},
+                    {label:'sdfsdfsd',value: 'sdfsdf2'},
+                    {divider:1},
+                    {label:'sdfsdfs', value: 'sdfsdf3'}
+                ]
             })
-            .on("hide", function () {
+        }
+    ];
+    var btnData = [
+        [ $.button({
+            icon:'bold'
+        }), $.button({
+            icon:'italic'
+        }), $.button({
+            icon:'underline'
+        })],
+        [$.button({
+            icon:'undo'
+        }), $.button({
+            icon:'redo'
+        })
+        ],[
+            $.colorpicker().on("pickcolor",function (type, value) {
+                alert(this)
+            }).colorpicker('attachTo', $.button({
+                        text: 'color',
+                        caret: true
+                    })).data('button'),
+            $.modal({
+                title: "帮助",
+                url: "#",
+                nook: false,
+                backdrop: true,//"static",
+                show: true,
+                keyboard: true
+            }).modal("attachTo", $.button({text: 'sdfsd'})).data('button')
 
-            })
-            .on("hidden", function () {
-
-            })
-            .on("ok", function () {
-
-            });
-
+            ],[
+            $.dropmenu({
+                data:[
+                    {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
+                    {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
+                    {divider:1},
+                    {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
+                ]
+            }).dropmenu('attachTo', $.splitbutton({text:'字号'})).data('splitbutton')
+            ]
+        ];
+    $.toolbar().appendTo(document.body).toolbar('appendToTxt',textmenu)
+            .toolbar('appendToBtn',btnData)
 
 </script>
 </body>

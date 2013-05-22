@@ -86,8 +86,8 @@
                     );
                     var obj = new _obj;
                     $el && obj.root($el);
-                    obj.init && obj.init($.extend2(options,obj.default||{},true));
-                    obj.root().data(className,obj);
+                    obj.init && obj.init($.extend2(options||{},obj.default||{},true));
+                    obj.root().data(className,obj).data('widgetName',className);
                     return obj.root();
                 },
                 properties,supperClass);
