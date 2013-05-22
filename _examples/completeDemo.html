@@ -102,7 +102,7 @@
 
 
     /*color picker*/
-    $.colorpicker().appendTo($('#container')).on("pickcolor",function(type,value){
+    $.colorpicker().on("pickcolor",function(type,value){
         alert(this)
     }).colorpicker('attachTo', $.button({
                 text:'color',
