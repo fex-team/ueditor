@@ -37,15 +37,23 @@ UE.ui.define('tooltip', {
     },
     attachTo: function ($obj) {
         var me = this;
+
         if (!$obj.data('tooltip')) {
             if (!$.contains(document.body, me.root()[0])) {
                 me.root().appendTo(document.body);
             }
-            $obj.data('tooltip', me.root());
-            $obj.on('mouseenter', $.proxy(this.show, this))
-                .on('mouseleave', $.proxy(this.hide, this));
+            if ($.type($obj) === "string") {
+                $obj = $($obj);
+            }
+            $obj.each(function () {
+                this.data('tooltip', me.root());
+                this.on('mouseenter', $.proxy(this.show, this))
+                    .on('mouseleave', $.proxy(this.hide, this));
 
-            me.root().data("target", $obj);
+                me.root().data("target", param);
+            });
+
         }
+
     }
 });
