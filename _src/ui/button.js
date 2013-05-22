@@ -1,33 +1,34 @@
 //button 类
-UE.ui.define('button',{
-    tpl :  '<button class="btn" data-original-title="<%=title%>">' +
-        '<% if(icon) {%><i class="icon-<%=icon%>"></i><% }; %><%=text%>'+
+UE.ui.define('button', {
+    tpl: '<button class="btn" <% if(title) {%> data-original-title="<%=title%>" <%};%>> ' +
+        '<% if(icon) {%><i class="icon-<%=icon%>"></i><% }; %><%=text%>' +
         '<% if(caret) {%><span class="caret"></span><% };%></button>',
-    default:{
-        text:'',
-        title:'',
-        icon:'',
-        caret:false,
-        click:function(){}
+    default: {
+        text: '',
+        title: '',
+        icon: '',
+        caret: false,
+        click: function () {
+        }
     },
-    init : function(options){
+    init: function (options) {
         var me = this;
-        me.root($($.parseTmpl(me.tpl,options))).click(function(evt){
-            !me.disabled() && $.proxy(options.click,me,evt)()
+        me.root($($.parseTmpl(me.tpl, options))).click(function (evt) {
+            !me.disabled() && $.proxy(options.click, me, evt)()
         });
     },
-    disabled : function(state){
-        if(state === undefined){
+    disabled: function (state) {
+        if (state === undefined) {
             return this.root().hasClass('disabled')
         }
-        this.root().toggleClass('disabled',state);
+        this.root().toggleClass('disabled', state);
         return this;
     },
-    active:function(state){
-        if(state === undefined){
+    active: function (state) {
+        if (state === undefined) {
             return this.root().hasClass('active')
         }
-        this.root().toggleClass('active',state);
+        this.root().toggleClass('active', state);
         return this;
     }
 });

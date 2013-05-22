@@ -7,28 +7,25 @@ UE.ui.define('tooltip', {
         var me = this;
         me.root($($.parseTmpl(me.tpl, options || {})));
     },
-    setContent: function () {
-        var me = this;
-        var $obj = me.root().data("target");
-        if (!me.root().data("title")) {
-            me.root().data("title", $obj.attr("data-original-title"));
-        }
+    content: function (e) {
+        var me = this,
+            title = $(e.currentTarget).attr("data-original-title");
 
-        me.root().find('.tooltip-inner')['text'](me.root().data("title"))
+        me.root().find('.tooltip-inner')['text'](title);
     },
-    setPos: function () {
-        var me = this;
-        var $obj = me.root().data("target");
+    position: function (e) {
+        var me = this,
+            $obj = $(e.currentTarget);
 
         me.root().css($.extend({display: 'block'}, $obj ? {
             top: $obj.offset().top + $obj.outerHeight(),
             left: $obj.offset().left + (($obj.outerWidth() - me.root().outerWidth()) / 2)
         } : {}))
     },
-    show: function () {
+    show: function (e) {
         var me = this;
-        me.setContent();
-        me.setPos();
+        me.content(e);
+        me.position(e);
         me.root().addClass("in bottom")
     },
     hide: function () {
@@ -38,32 +35,31 @@ UE.ui.define('tooltip', {
     attachTo: function ($obj) {
         var me = this;
 
-        if (!$obj.data('tooltip')) {
+        function tmp($obj) {
+            var me = this;
+
             if (!$.contains(document.body, me.root()[0])) {
                 me.root().appendTo(document.body);
             }
 
-            $obj.each(function () {
-                this.data('tooltip', me.root());
-                this.on('mouseenter', $.proxy(this.show, this))
-                    .on('mouseleave', $.proxy(this.hide, this));
+            me.data('tooltip', me.root());
 
-                me.root().data("target", $obj);
+            $obj.each(function () {
+                if ($(this).attr("data-original-title")) {
+                    $(this).on('mouseenter', $.proxy(me.show, me))
+                        .on('mouseleave', $.proxy(me.hide, me));
+                }
             });
 
         }
 
-        if($.type($obj) === "string"){
+        if ($.type($obj) === "string") {
             $obj = $($obj);
-
-            $obj.each(function () {
-                this.data('tooltip', me.root());
-                this.on('mouseenter', $.proxy(this.show, this))
-                    .on('mouseleave', $.proxy(this.hide, this));
-
-                me.root().data("target", param);
-            });
+            tmp.call(me, $obj);
+        } else {
+            if (!$obj.data('tooltip')) {
+                tmp.call(me, $obj);
+            }
         }
-
     }
 });

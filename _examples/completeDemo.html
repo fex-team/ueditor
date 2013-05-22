@@ -88,10 +88,13 @@
     ];
     var btnData = [
         [ $.button({
+            title:"加粗",
             icon:'bold'
         }), $.button({
+            title:"加斜",
             icon:'italic'
         }), $.button({
+            title:"下划线",
             icon:'underline'
         })],
         [$.button({
@@ -128,6 +131,8 @@
         ];
     $.toolbar().appendTo(document.body).toolbar('appendToTxt',textmenu)
             .toolbar('appendToBtn',btnData)
+
+    $.tooltip("attachTo","button[data-original-title]")
 
 </script>
 </body>
