@@ -176,7 +176,7 @@ test( 'div出编辑器转换', function () {
 } );
 test( 'img出编辑器转换', function () {
     var editor = te.obj[0];
-    var str = ua.browser.ie? '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px currentColor;"/></p>':'<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;"/></p>' ;
+    var str = ua.browser.ie? '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px currentColor;"/></p>':'<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px"+ua.browser.ie<9?" currentColor":""+";"/></p>' ;
     var html = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" _src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" /></p>';
     editor.body.innerHTML = html;
     editor.execCommand( 'source' );
