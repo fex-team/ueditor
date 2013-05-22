@@ -65,19 +65,25 @@
     }).dropmenu('attachTo', $.button({
                 text:'test',
                 caret:true
-            }).appendTo($('.btn-group :first')))
-//    $.splitbutton({
-//        text: 'test', icon: 'bold',
-//        data: [
-//            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-//            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-//            {divider:1},
-//            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-//        ],menuclick:function(evt,val,$li){
-//            alert(val);
-//            alert($li[0])
-//        }
-//    }).appendTo($('#container'))
+            }).appendTo($('.btn-group :first')));
+
+
+    $.dropmenu({
+        data:[
+            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
+            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
+            {divider:1},
+            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
+        ],
+        click : function(evt,val,$el){
+            $el.parent().dropmenu('val',val);
+        }
+    }).dropmenu('val','sdfsdf2').dropmenu('attachTo', $.splitbutton({
+                text: 'test', icon: 'bold',
+                click:function(){
+                    //alert(this.data('dropmenu').dropmenu('val'));
+                }
+            }).appendTo($('#container')))
 
 
 //    $.button({text: 'sdfsd',click:function(evt){
