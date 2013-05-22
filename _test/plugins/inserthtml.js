@@ -147,6 +147,7 @@ test( '刘表中插入img', function() {
     stop();
     setTimeout(function(){
         equal(lis.length,1,'列表长度没有变化');
+        ua.manualDeleteFillData(lis[0]);
         equal(lis[0].firstChild.tagName.toLowerCase(),'img','列表中插入img');
         equal(lis[0].firstChild.attributes['src'].nodeValue,'http://img.baidu.com/hi/jx2/j_0001.gif','列表中插入img');
         start();
