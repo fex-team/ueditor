@@ -24,6 +24,7 @@
 </head>
 <body>
 <script>
+
     var textmenu = [
         {
             'label':'文件',
@@ -99,12 +100,12 @@
             icon:'redo'
         })
         ],[
-            $.colorpicker().on("pickcolor",function (type, value) {
-                alert(this)
-            }).colorpicker('attachTo', $.button({
+            $.colorpicker('attachTo', $.button({
                         text: 'color',
                         caret: true
-                    })).data('button'),
+                    })).on("pickcolor",function (type, value) {
+                        alert(this)
+                    }).data('button'),
             $.modal({
                 title: "帮助",
                 url: "#",
@@ -112,7 +113,7 @@
                 backdrop: true,//"static",
                 show: true,
                 keyboard: true
-            }).modal("attachTo", $.button({text: 'sdfsd'})).data('button')
+            }).modal("attachTo", $.button({text: 'sdfsd',title:'sdfsdfsdf'})).data('button')
 
             ],[
             $.dropmenu({
@@ -128,7 +129,6 @@
     $.toolbar().appendTo(document.body).toolbar('appendToTxt',textmenu)
             .toolbar('appendToBtn',btnData)
 
-    $.tooltip().tooltip("attachTo", $.button({text: '吃饭',title:"哈哈"}).appendTo($('.btn-group :first')))
 </script>
 </body>
 </html>

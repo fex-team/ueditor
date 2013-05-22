@@ -85,10 +85,16 @@
                             widgetName : className}
                     );
                     var obj = new _obj;
-                    $el && obj.root($el);
-                    obj.init && obj.init($.extend2(options||{},obj.default||{},true));
-                    obj.root().data(className,obj).data('widgetName',className);
-                    return obj.root();
+                    if($.type(options) == 'string'){
+                        obj.init && obj.init({});
+                        return obj.root().data(className,obj).data('widgetName',className)[className].apply(obj.root(),arguments)
+                    }else{
+                        $el && obj.root($el);
+                        obj.init && obj.init($.extend2(options||{},obj.default||{},true));
+                        obj.root().data(className,obj).data('widgetName',className);
+                        return obj.root();
+                    }
+
                 },
                 properties,supperClass);
 

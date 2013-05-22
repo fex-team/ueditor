@@ -9,6 +9,7 @@
             'ui/widget.js',
             'ui/jq.extend.js',
             'ui/button.js',
+            'ui/toolbar.js',
             'ui/dropmenu.js',
             'ui/splitbutton.js',
             'ui/popup.js',
