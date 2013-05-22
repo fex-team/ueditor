@@ -13,8 +13,9 @@
             'ui/splitbutton.js',
             'ui/dropbutton.js',
             'ui/popup.js',
+            'ui/modal.js',
             'ui/colorpicker.js',
-            'ui/modal.js'
+            'ui/tooltip.js',
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {
