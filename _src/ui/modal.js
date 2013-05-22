@@ -113,6 +113,21 @@ UE.ui.define('modal', {
         callback && callback()
 
     },
+    attachTo:function($obj){
+        var me = this;
+        if(!$obj.data('modal')){
+            if(!$.contains(document.body,me.root()[0])){
+                me.root().appendTo(document.body);
+            }
+            $obj.data('modal',me.root());
+            $obj.on('click',function(){
+                if($obj.trigger('beforeclick') === false){
+                    return;
+                }
+                me.toggle()
+            });
+        }
+    },
     ok: function () {
         var me = this
         me.trigger("ok")
