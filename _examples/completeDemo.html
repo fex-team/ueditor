@@ -128,6 +128,7 @@
     $.toolbar().appendTo(document.body).toolbar('appendToTxt',textmenu)
             .toolbar('appendToBtn',btnData)
 
+    $.tooltip().tooltip("attachTo", $.button({text: '吃饭',title:"哈哈"}).appendTo($('.btn-group :first')))
 </script>
 </body>
 </html>

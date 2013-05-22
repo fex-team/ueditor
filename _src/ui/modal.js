@@ -1,4 +1,4 @@
-/*modal  类*/
+/*modal 类*/
 UE.ui.define('modal', {
     tpl: '<div id="help" class="modal hide" tabindex="-1" >' +
         '<div class="modal-header">' +
@@ -26,7 +26,7 @@ UE.ui.define('modal', {
     init: function (options) {
         var me = this;
 
-        me.root($($.parseTmpl(me.tpl, options)));
+        me.root($($.parseTmpl(me.tpl, options||{})));
 
         me.root().data("options", options);
 
