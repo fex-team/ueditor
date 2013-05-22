@@ -47,10 +47,6 @@ UE.ui.define('modal', {
         me.escape()
 
         me.backdrop(function () {
-            if (!me.root().parent().length) {
-                me.root().appendTo(document.body) //don't move modals dom position
-            }
-
             me.root().show()
 
             me.root().addClass('in')
