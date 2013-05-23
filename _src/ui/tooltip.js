@@ -1,8 +1,6 @@
 /*tooltip 类*/
 UE.ui.define('tooltip', {
     tpl: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-    default: {
-    },
     init: function (options) {
         var me = this;
         me.root($($.parseTmpl(me.tpl, options || {})));
@@ -53,8 +51,8 @@ UE.ui.define('tooltip', {
 
         }
 
-        if ($.type($obj) === "string") {
-            $obj = $($obj);
+        if ($.type($obj) === "undefined") {
+            $obj = $("button[data-original-title]");
             tmp.call(me, $obj);
         } else {
             if (!$obj.data('tooltip')) {

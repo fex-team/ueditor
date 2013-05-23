@@ -121,7 +121,7 @@
                 keyboard: true
             }).eduimodal("attachTo", $.eduibutton({text: 'sdfsd',title:'sdfsdfsdf'})).edui().data('$mergeObj')
 
-            ],[
+        ],[
             $.eduisplitbutton({text:'字号'}).eduisplitbutton('mergeWith',$.eduidropmenu({
                 data:[
                     {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
@@ -130,12 +130,12 @@
                     {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
                 ]
             }))
-            ]
-        ];
+        ]
+    ];
     $.eduitoolbar().appendTo(document.body).eduitoolbar('appendToTxt',textmenu)
             .eduitoolbar('appendToBtn',btnData)
 
-
+    $.eduitooltip("attachTo")
 </script>
 </body>
 </html>
