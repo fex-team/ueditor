@@ -1,8 +1,6 @@
 /*tooltip 类*/
 UE.ui.define('tooltip', {
     tpl: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-    default: {
-    },
     init: function (options) {
         var me = this;
         me.root($($.parseTmpl(me.tpl, options || {})));
