@@ -28,23 +28,23 @@ UE.ui.define('modal', {
 
         me.root($($.parseTmpl(me.tpl, options||{})));
 
-        me.root().data("options", options);
+        me.data("options", options);
 
         me.root().delegate('[data-hide="modal"]', 'click', $.proxy(me.hide, me));
         me.root().delegate('[data-ok="modal"]', 'click', $.proxy(me.ok, me));
     },
     toggle: function () {
         var me = this;
-        return me[!me.root().data("isShown") ? 'show' : 'hide']();
+        return me[!me.data("isShown") ? 'show' : 'hide']();
     },
     show: function () {
         var me = this;
 
         me.trigger("show");
 
-        if (me.root().data("isShown")) return;
+        if (me.data("isShown")) return;
 
-        me.root().data("isShown", true);
+        me.data("isShown", true);
 
         me.escape();
 
@@ -59,9 +59,9 @@ UE.ui.define('modal', {
 
         me.trigger("hide");
 
-        if (!me.root().data("isShown")) return;
+        if (!me.data("isShown")) return;
 
-        me.root().data("isShown", false);
+        me.data("isShown", false);
 
         me.escape();
 
@@ -71,11 +71,11 @@ UE.ui.define('modal', {
     },
     escape: function () {
         var me = this;
-        if (me.root().data("isShown") && me.root().data("options").keyboard) {
+        if (me.data("isShown") && me.data("options").keyboard) {
             me.root().on('keyup', function (e) {
                 e.which == 27 && me.hide();
             })
-        } else if (!me.root().data("isShown")) {
+        } else if (!me.data("isShown")) {
             me.root().off('keyup');
         }
     },
@@ -93,19 +93,19 @@ UE.ui.define('modal', {
     },
     backdrop: function (callback) {
         var me = this;
-        if (me.root().data("isShown") && me.root().data("options").backdrop) {
+        if (me.data("isShown") && me.data("options").backdrop) {
             me.$backdrop = $('<div class="modal-backdrop" />')
                 .appendTo(document.body);
 
             me.$backdrop.click(
-                me.root().data("options").backdrop == 'static' ?
+                me.data("options").backdrop == 'static' ?
                     $.proxy(me.root()[0].focus, me.root()[0])
                     : $.proxy(me.hide, me)
             )
 
             me.$backdrop.addClass('in');
 
-        } else if (!me.root().data("isShown") && me.$backdrop) {
+        } else if (!me.data("isShown") && me.$backdrop) {
             me.$backdrop.removeClass('in');
         }
 
@@ -126,7 +126,7 @@ UE.ui.define('modal', {
                 me.toggle();
             });
 
-            me.root().data($obj.data('widgetName'),$obj)
+            me.data($obj.data('widgetName'),$obj)
         }
     },
     ok: function () {
