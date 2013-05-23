@@ -1,6 +1,6 @@
 //colorpicker 类
 UE.ui.define('colorpicker', {
-    tpl: (function () {
+    tpl: function (opt) {
         var COLORS = (
             'ffffff,000000,eeece1,1f497d,4f81bd,c0504d,9bbb59,8064a2,4bacc6,f79646,' +
                 'f2f2f2,7f7f7f,ddd9c3,c6d9f0,dbe5f1,f2dcdb,ebf1dd,e5e0ec,dbeef3,fdeada,' +
@@ -13,15 +13,15 @@ UE.ui.define('colorpicker', {
         var html = '<div class="colorpicker">' +
             '<div class="colorpicker-topbar">' +
             '<div class="colorpicker-preview"></div>' +
-            '<div class="colorpicker-nocolor">清空颜色</div>' +
+            '<div class="colorpicker-nocolor">'+opt.lang_clearColor+'</div>' +
             '</div>' +
             '<table>' +
-            '<tr><td colspan="10">主题颜色</td> </tr>' +
+            '<tr><td colspan="10">'+opt.lang_themeColor+'</td> </tr>' +
             '<tr class="colorpicker-firstrow" >';
 
         for (var i = 0; i < COLORS.length; i++) {
             if (i && i % 10 === 0) {
-                html += '</tr>' + (i == 60 ? '<tr><td colspan="10">标准颜色</td></tr>' : '') + '<tr' + (i == 60 ? ' class="colorpicker-firstrow"' : '') + '>';
+                html += '</tr>' + (i == 60 ? '<tr><td colspan="10">'+opt.lang_standardColor+'</td></tr>' : '') + '<tr' + (i == 60 ? ' class="colorpicker-firstrow"' : '') + '>';
             }
             html += i < 70 ? '<td><a title="' + COLORS[i] + '" class="colorpicker-colorcell"' +
                 ' data-color="#' + COLORS[i] + '"' +
@@ -34,10 +34,10 @@ UE.ui.define('colorpicker', {
         }
         html += '</tr></table></div>';
         return html;
-    })(),
+    },
     init: function (options) {
         var me = this;
-        me.root($($.parseTmpl(me.supper.mergeTpl(me.tpl),options || {})));
+        me.root($($.parseTmpl(me.supper.mergeTpl(me.tpl(options)),options)));
 
         me.root().find("table")
             .on("mouseover",function (e) {

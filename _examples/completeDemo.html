@@ -106,7 +106,11 @@
 
         ],[
 
-            $.eduicolorpicker('attachTo', $.eduibutton({
+            $.eduicolorpicker({
+                lang_clearColor:"清空颜色",
+                lang_themeColor:"主题颜色",
+                lang_standardColor:"标准颜色"
+            }).eduicolorpicker('attachTo', $.eduibutton({
                         text: 'color',
                         caret: true
                     })).on("pickcolor",function (type, value) {
