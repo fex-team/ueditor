@@ -23,10 +23,15 @@ UE.ui.define('splitbutton',{
                         $dropmenu && $dropmenu.dropmenu('hide')
                     })
                 }
-
             }
         })
-
+        return me;
+    },
+    wrapclick:function(fn,evt){
+        if(!this.disabled()){
+            $.proxy(fn,this,evt)()
+        }
+        return this;
     },
     disabled : function(state){
         if(state === undefined){
@@ -41,5 +46,21 @@ UE.ui.define('splitbutton',{
         }
         this.root().toggleClass('active',state).find('.btn:first').toggleClass('active',state);
         return this;
+    },
+    mergeWith:function($obj){
+        var me = this;
+        me.data('$mergeObj',$obj);
+        $obj.edui().data('$mergeObj',me.root());
+        if(!$.contains(document.body,$obj[0])){
+            $obj.appendTo(document.body);
+        }
+        me.root().on('click','.splitbutton',function(){
+            me.wrapclick(function(){
+                $obj.edui().show(me.root());
+            })
+        });
+        me.register('click',me.root().find('.splitbutton'),function(evt){
+            $obj.hide()
+        });
     }
 });

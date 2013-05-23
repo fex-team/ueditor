@@ -2,6 +2,7 @@
     //所有ui的基类
     var _eventHandler = [];
     var _widget = function(){};
+    var _prefix = 'edui';
     _widget.prototype = {
         on : function (ev,cb){
             this.root().on(ev, $.proxy(cb, this));
@@ -22,10 +23,10 @@
         },
         data : function(key,val){
             if(val !== undefined){
-                this.root().data(key,val);
+                this.root().data(_prefix + key,val);
                 return this;
             }else{
-                return this.root().data(key)
+                return this.root().data(_prefix + key)
             }
         },
         register:function(eventName,$el,fn){
@@ -35,6 +36,11 @@
                 handler: $.proxy(fn,$el)
             })
         }
+    };
+
+    //从jq实例上拿到绑定的widget实例
+    $.fn.edui = function(obj){
+        return obj ? this.data('eduiwidget',obj) : this.data('eduiwidget');
     };
 
     function _createClass(Class,properties,supperClass){
@@ -48,16 +54,16 @@
     }
     var _guid = 1;
     function mergeToJQ(Class,className){
-        $[className] = Class;
-        $.fn[className] = function(opt){
-            var result,args =Array.prototype.slice.call(arguments,1);
+        $[_prefix + className] = Class;
+        $.fn[_prefix + className] = function(opt){
+            var result,args = Array.prototype.slice.call(arguments,1);
 
             this.each(function(i,el){
                 var $this = $(el);
-                var obj = $this.data(className);
+                var obj = $this.edui();
                 if(!obj){
                     Class(!opt || !$.isPlainObject(opt) ? {} : opt,$this);
-                    obj = $this.data(className);
+                    $this.edui(obj)
                 }
                 if($.type(opt) == 'string'){
                     if(opt == 'this'){
@@ -82,17 +88,18 @@
                     var _obj = function(){};
                     $.extend(_obj.prototype,Class.prototype,{
                             guid : className + _guid++,
-                            widgetName : className}
+                            widgetName : className
+                        }
                     );
                     var obj = new _obj;
                     if($.type(options) == 'string'){
                         obj.init && obj.init({});
-                        return obj.root().data(className,obj).data('widgetName',className)[className].apply(obj.root(),arguments)
+                        obj.root().edui(obj);
+                        return obj.root()[_prefix +className].apply(obj.root(),arguments)
                     }else{
                         $el && obj.root($el);
                         obj.init && obj.init($.extend2(options||{},obj.default||{},true));
-                        obj.root().data(className,obj).data('widgetName',className);
-                        return obj.root();
+                        return obj.root().edui(obj);
                     }
 
                 },

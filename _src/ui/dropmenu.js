@@ -64,20 +64,19 @@ UE.ui.define('dropmenu',{
         }
     },
     attachTo : function($obj){
-        var me = this;
-        if(!$obj.data('dropmenu')){
+        var me = this
+        if(!$obj.data('$mergeObj')){
             if(!$.contains(document.body,me.root()[0])){
                 me.root().appendTo(document.body);
             }
-            $obj.data('dropmenu',me.root());
+            $obj.data('$mergeObj',me.root());
             $obj.on('click',function(evt){
                 me.show($obj)
             });
             me.register('click',$obj,function(evt){
                me.hide()
             });
-
-            me.root().data($obj.data('widgetName'),$obj)
+            me.data('$mergeObj',$obj)
         }
     },
     addSubmenu:function(label,menu,index){

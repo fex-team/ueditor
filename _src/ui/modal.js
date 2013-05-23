@@ -28,7 +28,7 @@ UE.ui.define('modal', {
 
         me.root($($.parseTmpl(me.tpl, options||{})));
 
-        me.root().data("options", options);
+        me.data("options", options);
 
         me.root().delegate('[data-hide="modal"]', 'click', $.proxy(me.hide, me));
         me.root().delegate('[data-ok="modal"]', 'click', $.proxy(me.ok, me));
@@ -113,20 +113,19 @@ UE.ui.define('modal', {
 
     },
     attachTo: function ($obj) {
-        var me = this;
-        if (!$obj.data('modal')) {
-            if (!$.contains(document.body, me.root()[0])) {
+        var me = this
+        if(!$obj.data('$mergeObj')){
+            if(!$.contains(document.body,me.root()[0])){
                 me.root().appendTo(document.body);
             }
-            $obj.data('modal', me.root());
-            $obj.on('click', function () {
-                if ($obj.trigger('beforeclick') === false) {
-                    return;
-                }
-                me.toggle();
+            $obj.data('$mergeObj',me.root());
+            $obj.on('click',function(evt){
+                me.show($obj)
             });
-
-            me.root().data($obj.data('widgetName'),$obj)
+            me.register('click',$obj,function(evt){
+                me.hide()
+            });
+            me.data('$mergeObj',$obj)
         }
     },
     ok: function () {

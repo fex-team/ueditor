@@ -8,14 +8,20 @@ UE.ui.define('button', {
         title: '',
         icon: '',
         caret: false,
-        click: function () {
-        }
+        click: function () {}
     },
     init: function (options) {
         var me = this;
         me.root($($.parseTmpl(me.tpl, options))).click(function (evt) {
-            !me.disabled() && $.proxy(options.click, me, evt)()
+            me.wrapclick(options.click,evt)
         });
+        return me;
+    },
+    wrapclick:function(fn,evt){
+        if(!this.disabled()){
+            $.proxy(fn,this,evt)()
+        }
+        return this;
     },
     disabled: function (state) {
         if (state === undefined) {
@@ -30,5 +36,20 @@ UE.ui.define('button', {
         }
         this.root().toggleClass('active', state);
         return this;
+    },
+    mergeWith:function($obj){
+        var me = this;
+        me.data('$mergeObj',$obj);
+        $obj.edui().data('$mergeObj',me.root());
+        if(!$.contains(document.body,$obj[0])){
+            $obj.appendTo(document.body);
+        }
+        me.on('click',function(){
+            me.wrapclick(function(){
+                $obj.edui().show(me.root());
+            })
+        }).register('click',me.root(),function(evt){
+            $obj.hide()
+        });
     }
 });

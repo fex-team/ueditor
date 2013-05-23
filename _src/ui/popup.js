@@ -14,23 +14,19 @@ UE.ui.define('popup',{
         this.root().css('display','none');
     },
     attachTo : function($obj){
-        var me = this;
-        if(!$obj.data('popup')){
+        var me = this
+        if(!$obj.data('$mergeObj')){
             if(!$.contains(document.body,me.root()[0])){
                 me.root().appendTo(document.body);
             }
-            $obj.data('popup',me.root());
+            $obj.data('$mergeObj',me.root());
             $obj.on('click',function(evt){
-                if($obj.trigger('beforeclick') === false){
-                    return;
-                }
                 me.show($obj)
             });
             me.register('click',$obj,function(evt){
                 me.hide()
             });
-
-            me.root().data($obj.data('widgetName'),$obj)
+            me.data('$mergeObj',$obj)
         }
     }
 });

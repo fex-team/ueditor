@@ -36,7 +36,7 @@
             var me = this;
             $.each(data, function (i, obj) {
                 var $label = $($.parseTmpl(me.textmenutpl, obj));
-                obj.menu.dropmenu('attachTo', $label.find('a'));
+                obj.menu.eduidropmenu('attachTo', $label.find('a'));
                 me.data('txtToolbar').append($label);
             })
         },
@@ -49,7 +49,7 @@
                 $.each(data,function(i,group){
                     var $groupcont = $(me.btngrouptpl);
                     $.each(group,function(i,btn){
-                        if(btn.data('button')){
+                        if(btn.edui().widgetName == 'button'){
                             $groupcont.append(btn)
                         }else{
                             $groupcont = btn;
@@ -59,7 +59,7 @@
                     $cont.append($groupcont)
                 })
             }else{
-                if(data.data('button')){
+                if(data.edui().widgetName == 'button'){
                     data = $(me.btngrouptpl).append(data)
                 }
                 $cont.append(data)
