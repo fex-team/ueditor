@@ -119,11 +119,8 @@ UE.ui.define('modal', {
                 me.root().appendTo(document.body);
             }
             $obj.data('$mergeObj',me.root());
-            $obj.on('click',function(evt){
-                me.show($obj)
-            });
-            me.register('click',$obj,function(evt){
-                me.hide()
+            $obj.on('click',function(){
+                me.toggle($obj)
             });
             me.data('$mergeObj',$obj)
         }
