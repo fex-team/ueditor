@@ -53,8 +53,8 @@ UE.ui.define('tooltip', {
 
         }
 
-        if ($.type($obj) === "string") {
-            $obj = $($obj);
+        if ($.type($obj) === "undefined") {
+            $obj = $("button[data-original-title]");
             tmp.call(me, $obj);
         } else {
             if (!$obj.data('tooltip')) {
