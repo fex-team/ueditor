@@ -182,7 +182,56 @@
             if (utils.isString(container)) {
                 container = document.getElementById(container);
             }
+
+
+            domUtils.addClass(holder, "edui-" + editor.options.theme);
+
             if (container) {
+                this.options.textarea = container.getAttribute('name') || '';
+                if (/script|textarea/ig.test(container.tagName)) {
+                    var newDiv = document.createElement('div');
+                    container.parentNode.insertBefore(newDiv, container);
+                    this.options.initialContent = container.value || container.innerHTML;
+                    container.className && (newDiv.className = container.className);
+                    container.style.cssText && (newDiv.style.cssText = container.style.cssText);
+                    if (/textarea/i.test(container.tagName)) {
+                        editor.textarea = container;
+                        container.style.display = 'none';
+                    } else {
+                        container.parentNode.removeChild(container);
+                        container.id && (newDiv.id = container.id);
+                    }
+                    container = newDiv;
+                    container.innerHTML = '';
+                }
+                domUtils.addClass(container, "edui-" + editor.options.theme);
+                var parents = domUtils.findParents(container,true);
+                var displays = [];
+                for(var i = 0 ,ci;ci=parents[i];i++){
+                    displays[i] = ci.style.display;
+                    ci.style.display = 'block'
+                }
+                if (options.initialFrameWidth) {
+                    options.minFrameWidth = options.initialFrameWidth;
+                } else {
+                    options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
+                }
+                if (options.initialFrameHeight) {
+                    options.minFrameHeight = options.initialFrameHeight;
+                } else {
+                    options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
+                }
+                for(var i = 0 ,ci;ci=parents[i];i++){
+                    ci.style.display =  displays[i]
+                }
+                //编辑器最外容器设置了高度，会导致，编辑器不占位
+                //todo 先去掉，没有找到原因
+                if(container.style.height){
+                    container.style.height = ''
+                }
+                container.style.width = options.initialFrameWidth+ 'px';
+                container.style.height = options.initialFrameHeight + 'px';
+                container.style.zIndex = options.zIndex;
                 var useBodyAsViewport = ie && browser.version < 9,
                     html = ( ie && browser.version < 9 ? '' : '<!DOCTYPE html>') +
                         '<html xmlns=\'http://www.w3.org/1999/xhtml\'' + (!useBodyAsViewport ? ' class=\'view\'' : '') + '><head>' +
@@ -208,20 +257,6 @@
                             'document.write("' + html + '");document.close();}())'
                     }));
                 } else {
-
-                    if(options.initialFrameWidth){
-                        options.minFrameWidth = options.initialFrameWidth
-                    }else{
-                        options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
-                    }
-                    if(options.initialFrameHeight){
-                        options.minFrameHeight = options.initialFrameHeight
-                    }else{
-                        options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
-                    }
-                    container.style.width = options.initialFrameWidth+ 'px';
-                    container.style.height = options.initialFrameHeight + 'px';
-                    container.style.zIndex = options.zIndex;
                     container.innerHTML = '<iframe id="' + 'ueditor_' + this.uid + '"' + 'width="100%" height="100%" scroll="no" frameborder="0" ></iframe>';
                     var doc = container.firstChild.contentWindow.document;
                     //去掉了原来的判断!browser.webkit，因为会导致onload注册的事件不触发
