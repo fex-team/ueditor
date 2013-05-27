@@ -6,6 +6,9 @@
 
 (function () {
     var _editorUI = {};
+    function parseMenu(data){
+
+    }
     utils.extend(UE, {
         registerUI: function (name, fn) {
             utils.each(name.split(/\s+/), function (uiname) {
