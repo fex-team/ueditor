@@ -17,7 +17,22 @@ UE.ui.define('dropmenu',{
         var me = this;
         this.root($($.parseTmpl(this.tmpl, options))).on('click','li[class!="disabled divider dropdown-submenu"]',function(evt){
             $.proxy(options.click,me,evt,$(this).data('value'),$(this))()
-        })
+        }).find('li').each(function(i,el){
+                var $this = $(this);
+                if(!$this.hasClass("disabled divider dropdown-submenu")){
+                    var data = options.data[i];
+                    if(data.click){
+                        $this.click(function(evt){
+                            $.proxy(data.click,el)(evt,data,me.root)
+                        })
+                    }
+                    if(data.over){
+                        $this.mouseover(function(evt){
+                            $.proxy(data.over,el)(evt,data,me.root)
+                        })
+                    }
+                }
+            })
 
     },
     show : function($obj){
