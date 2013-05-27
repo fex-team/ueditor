@@ -15,22 +15,22 @@ UE.ui.define('dropmenu',{
 
     init : function(options){
         var me = this;
+        var eventName = {
+            click:1,
+            mouseover:1,
+            mouseout:1
+        };
         this.root($($.parseTmpl(this.tmpl, options))).on('click','li[class!="disabled divider dropdown-submenu"]',function(evt){
             $.proxy(options.click,me,evt,$(this).data('value'),$(this))()
         }).find('li').each(function(i,el){
                 var $this = $(this);
                 if(!$this.hasClass("disabled divider dropdown-submenu")){
                     var data = options.data[i];
-                    if(data.click){
-                        $this.click(function(evt){
-                            $.proxy(data.click,el)(evt,data,me.root)
+                    $.each(eventName,function(k){
+                        data[k] &&   $this[k](function(evt){
+                            $.proxy(data[k],el)(evt,data,me.root)
                         })
-                    }
-                    if(data.over){
-                        $this.mouseover(function(evt){
-                            $.proxy(data.over,el)(evt,data,me.root)
-                        })
-                    }
+                    })
                 }
             })
 
