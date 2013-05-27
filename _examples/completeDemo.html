@@ -23,7 +23,31 @@
     </style>
 </head>
 <body>
+
+<div id="myTab">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#1">1</a></li>
+        <li><a href="#2">2</a></li>
+        <li><a href="#4">3</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane  active" id="1">
+            1
+        </div>
+        <div class="tab-pane" id="2">
+            2
+        </div>
+        <div class="tab-pane" id="3">
+            3
+        </div>
+        <div class="tab-pane" id="4">
+            4
+        </div>
+    </div>
+</div>
+
 <script>
+
 
     var textmenu = [
         {
@@ -142,6 +166,18 @@
             .eduitoolbar('appendToBtn',btnData)
 
     $.eduitooltip("attachTo")
+
+
+
+
+    /*tab*/
+    var $tab=$.eduitab({selector:"#myTab"});
+    $tab.on("shown",function(){
+        alert("shown")
+    })
+    $tab.on("show",function(){
+        alert("show")
+    })
 </script>
 </body>
 </html>

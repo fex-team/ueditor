@@ -16,6 +16,7 @@
             'ui/colorpicker.js',
             'ui/modal.js',
             'ui/tooltip.js',
+            'ui/tab.js',
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {
