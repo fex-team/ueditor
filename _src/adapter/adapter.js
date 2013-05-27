@@ -5,7 +5,8 @@
  */
 
 (function () {
-    var _editorUI = {};
+    var _editorUI = {},
+        _editors = {};
     function parseMenu(data){
 
     }
@@ -26,6 +27,7 @@
             return ac;
         },
         getEditor: function (id, options) {
+            var editor = _editors[id] || new UE.Editor(options);
 
         },
         createUI: function (editor) {
