@@ -5,9 +5,11 @@
  */
 
 (function(){
-    UE.registerUI = function(){
-
+    var _editorUI = {};
+    UE.registerUI = function(name,fn){
+        _editorUI[name] = fn;
     }
+
 })();
 
 
