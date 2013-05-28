@@ -12,7 +12,6 @@ UE.ui.define('dropmenu',{
         data:[],
         click:function(){}
     },
-
     init : function(options){
         var me = this;
         var eventName = {
@@ -34,19 +33,6 @@ UE.ui.define('dropmenu',{
                 }
             })
 
-    },
-    show : function($obj){
-        if(this.trigger('beforeshow') === false){
-            return;
-        }else{
-            this.root().css($.extend({display:'block'},$obj ? {
-                top : $obj.offset().top + $obj.outerHeight(),
-                left : $obj.offset().left
-            }:{}))
-        }
-    },
-    hide : function(){
-        this.root().css('display','none');
     },
     disabled : function(cb){
         $('li[class!=divider]',this.root()).each(function(){
@@ -78,22 +64,6 @@ UE.ui.define('dropmenu',{
             return currentVal
         }
     },
-    attachTo : function($obj){
-        var me = this
-        if(!$obj.data('$mergeObj')){
-            if(!$.contains(document.body,me.root()[0])){
-                me.root().appendTo(document.body);
-            }
-            $obj.data('$mergeObj',me.root());
-            $obj.on('click',function(evt){
-                me.show($obj)
-            });
-            me.register('click',$obj,function(evt){
-               me.hide()
-            });
-            me.data('$mergeObj',$obj)
-        }
-    },
     addSubmenu:function(label,menu,index){
         index = index || 0;
         $('li[class!=divider]',this.root()).each(function(i,l){
@@ -103,4 +73,4 @@ UE.ui.define('dropmenu',{
             }
         });
     }
-});
+},'menu');

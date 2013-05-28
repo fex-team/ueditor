@@ -177,14 +177,12 @@
          * @grammar editor.render(containerId);    //可以指定一个容器ID
          * @grammar editor.render(containerDom);   //也可以直接指定容器对象
          */
-        render: function (container,holder) {
+        render: function (container) {
             var me = this, options = me.options;
             if (utils.isString(container)) {
                 container = document.getElementById(container);
             }
 
-
-            domUtils.addClass(holder, "edui-" + editor.options.theme);
 
             if (container) {
                 this.options.textarea = container.getAttribute('name') || '';
@@ -204,7 +202,7 @@
                     container = newDiv;
                     container.innerHTML = '';
                 }
-                domUtils.addClass(container, "edui-" + editor.options.theme);
+                domUtils.addClass(container, "edui-" + options.theme);
                 var parents = domUtils.findParents(container,true);
                 var displays = [];
                 for(var i = 0 ,ci;ci=parents[i];i++){
@@ -265,7 +263,9 @@
                     doc.close();
                     me._setup(doc);
                 }
+
                 container.style.overflow = 'hidden';
+
             }
         },
         /**

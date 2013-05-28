@@ -32,7 +32,7 @@
         register:function(eventName,$el,fn){
             _eventHandler.push({
                 'evtname':eventName,
-                '$el':$el,
+                '$els': $.isArray($el) ? $el : [$el],
                 handler: $.proxy(fn,$el)
             })
         }
@@ -98,7 +98,7 @@
                         return obj.root()[_prefix +className].apply(obj.root(),arguments)
                     }else{
                         $el && obj.root($el);
-                        obj.init && obj.init($.extend2(options||{},obj.default||{},true));
+                        obj.init && obj.init(!options || $.isPlainObject(options) ? $.extend2(options||{},obj.default||{},true) : options);
                         return obj.root().edui(obj);
                     }
 
@@ -110,10 +110,14 @@
     };
 
     $(function(){
-        $(document).on('click mouseup mousedown dblclick',function(evt){
+        $(document).on('click mouseup mousedown dblclickc mouseover',function(evt){
             $.each(_eventHandler,function(i,obj){
-                if(obj.evtname == evt.type && obj.$el[0] !== evt.target &&  !$.contains(obj.$el[0],evt.target)){
-                    obj.handler(evt);
+                if(obj.evtname == evt.type){
+                    $.each(obj.$els,function(i,$el){
+                        if($el[0] !== evt.target  && !$.contains($el[0],evt.target)){
+                            obj.handler(evt);
+                        }
+                    })
                 }
             })
         })

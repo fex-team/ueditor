@@ -1,27 +1,28 @@
 //toolbar 类
 (function () {
-
     UE.ui.define('toolbar', {
-        tpl: '<div class="booteditor container">' +
-            '<div class="text-toolbar">' +
+        tpl: '<div class="toolbar"><div class="text-toolbar">' +
             '<div class="navbar-inner">' +
             '<ul class="nav nav-pills">' +
             '</ul>' +
             '</div>' +
             '</div>' +
-            '<div class="btn-toolbar"></div>' +
-            '<div class="editor-body"></div>' +
-            '<div class="state-toolbar"></div>' +
-            '</div>',
-        textmenutpl: '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=label%></a></li>',
+            '<div class="btn-toolbar"></div></div>'
+          ,
+        textmenutpl: '<li class="dropdown"><a href="#" class="dropdown-toggle"><%=label%></a></li>',
         btngrouptpl:'<div class="btn-group"></div>',
-        init: function (options) {
+        init: function () {
+            var $root = this.root($(this.tpl));
+            this.data('$txtToolbar', $root.find('.nav-pills'))
+                .data('$btnToolbar', $root.find('.btn-toolbar'))
 
-            var $root = this.root($($.parseTmpl(this.tpl, options)));
-            this.data('txtToolbar', $root.find('.nav-pills'))
-                .data('btnToolbar', $root.find('.btn-toolbar'))
-                .data('editorbody', $root.find('.editor-body'))
-                .data('stateToolbar', $root.find('.state-toolbar'))
+        },
+        createTextItem : function(label){
+            return $($.parseTmpl(this.textmenutpl,{'label':label}))
+        },
+        appendToTextmenu : function($item){
+           this.data('$txtToolbar').append($item);
+            return $item;
         },
         appendToTxt: function (label, menu) {
             var data = [];
