@@ -14,7 +14,7 @@ UE.ui.define('tab', {
         }
     },
     show: function (e) {
-        var me=this,
+        var me = this,
             $cur = $(e.target),
             $ul = $cur.closest('ul'),
             selector,
@@ -25,7 +25,9 @@ UE.ui.define('tab', {
         selector = $cur.attr('href');
         selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '');
 
-        if ($cur.parent('li').hasClass('active')) return;
+        var $tmp = $cur.parent('li');
+
+        if (!$tmp.length || $tmp.hasClass('active')) return;
 
         previous = $ul.find('.active:last a')[0];
 
