@@ -1,5 +1,22 @@
 module( 'plugins.source' );
-
+//test('初始化进入源码模式',function(){
+//    if(ua.browser.ie>0 && ua.browser.ie<8)
+//        return 0;
+//    var div = document.createElement('div');
+//    document.body.appendChild(div);
+//    div.id = 'e';
+//    debugger
+//    var editor = UE.getEditor('e');//,{sourceEditorFirst:true}
+//    stop();
+////    editor.ready(function(){
+////        setTimeout(function(){
+////            debugger
+//////            equal(editor.queryCommandState('source'),1,'源码高亮');
+////            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
+////////            start();
+////        },100);
+////    });
+//});
 test( 'chrome删除后切换源码再切换回来，光标没了', function() {
     //opera 取不到range值
     if(ua.browser.opera) return 0;
@@ -279,17 +296,17 @@ test( 'trace 1727:插入超链接后再插入空格，空格不能被删除', fu
 //test('初始化进入源码模式',function(){
 //    if(ua.browser.ie>0 && ua.browser.ie<8)
 //        return 0;
-//    var editor = new UE.ui.Editor({autoFloatEnabled:false,sourceEditorFirst:true});
 //    var div = document.createElement('div');
 //    document.body.appendChild(div);
-//    editor.render(div);
+//    var editor = UE.getEditor(div);//,{sourceEditorFirst:true}
 //    stop();
 //    editor.ready(function(){
 //        setTimeout(function(){
-//            equal(editor.queryCommandState('source'),1,'源码高亮');
+////            equal(editor.queryCommandState('source'),1,'源码高亮');
+//            debugger
 //            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
-//            start();
-//        },50);
+//////            start();
+//        },100);
 //    });
 //});
 
@@ -316,3 +333,54 @@ test('在font,b,i标签中输入，会自动转换标签 ',function(){
 //    }
 });
 
+test( 'trace 3334:img和a之间不会产生多余空格', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<p><img src="http://img.baidu.com/hi/jx2/j_0001.gif" /><a href="http://www.baidu.com">http://www.baidu.com</a></p>' );
+    setTimeout( function () {
+        editor.execCommand( 'source' );
+        setTimeout( function () {
+            editor.execCommand( 'source' );
+            setTimeout( function () {
+                editor.execCommand( 'source' );
+                ua.manualDeleteFillData(editor.body);
+                var html = '<p><img src="http://img.baidu.com/hi/jx2/j_0001.gif" _src=\"http://img.baidu.com/hi/jx2/j_0001.gif\"><a href=\"http://www.baidu.com\" _href=\"http://www.baidu.com\">http://www.baidu.com</a></p>';
+                ua.checkSameHtml( editor.body.innerHTML.toLowerCase(), html, '查看img和a之间是否会产生多余空格' );
+                start();
+            }, 20 );
+        }, 20 );
+    }, 20 );
+    stop();
+} );
+
+test( 'trace 3334:table中td不会产生多余空格', function () {
+    var editor = te.obj[0];
+    editor.execCommand('inserttable');
+    var br = baidu.editor.browser.ie ? '' : '<br>';
+    setTimeout( function () {
+        editor.execCommand( 'source' );
+        setTimeout( function () {
+            editor.execCommand( 'source' );
+            ua.manualDeleteFillData(editor.body);
+            equal(editor.body.getElementsByTagName('table').length,1,'有1个table');
+            equal(editor.body.getElementsByTagName('tr').length,5,'有5个tr');
+            equal(editor.body.getElementsByTagName('td').length,25,'有25个td');
+            equal(editor.body.getElementsByTagName('td')[12].innerHTML,br,'不会产生多余空格');
+            start();
+        }, 20 );
+    }, 20 );
+    stop();
+} );
+
+test( 'trace 3349：带颜色的span切到源码再切回，不会丢失span', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<p><span style="color: rgb(255, 0, 0);"></span><br></p>' );
+    setTimeout( function () {
+        editor.execCommand( 'source' );
+        setTimeout( function () {
+            editor.execCommand( 'source' );
+            ua.checkSameHtml( editor.body.innerHTML, '<p><span style="color: rgb(255, 0, 0);"></span><br></p>' );
+            start();
+        }, 20 );
+    }, 20 );
+    stop();
+} );

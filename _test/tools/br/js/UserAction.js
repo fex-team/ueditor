@@ -1692,8 +1692,8 @@ UserAction = {
             styleValue = styleValue.substring(0, styleValue.length - 1);
         return styleValue;
     }, checkNodeStyle:function (nodeA, nodeB) {
-        var nodeAStyle = this.removeEndSemicolon(nodeA.getAttr("style").replace(/\s+/g, "")).split(";");
-        var nodeBStyle = this.removeEndSemicolon(nodeB.getAttr("style").replace(/\s+/g, "")).split(";");
+        var nodeAStyle = this.removeEndSemicolon(nodeA.getAttr("style").replace(/\s+/g, "")).replace(/&quot;/g,'').split(";");
+        var nodeBStyle = this.removeEndSemicolon(nodeB.getAttr("style").replace(/\s+/g, "")).replace(/&quot;/g,'').split(";");
         var lengthA = nodeAStyle.length;
         var lengthB = nodeBStyle.length;
         if (!(lengthA && lengthB))
@@ -1704,6 +1704,8 @@ UserAction = {
             for (var i = 0; i < lengthA; i++) {
                 if (nodeAStyle[i].match(/\w+\s*:/)) {
                     var styleName = nodeAStyle[i].match(/\w+\s*:/)[0].replace(/\s*:/, "");
+                    nodeA.attrs.style = nodeA.attrs.style.replace(/&quot;/g,'');
+                    nodeB.attrs.style = nodeB.attrs.style.replace(/&quot;/g,'');
                     if (nodeA.getStyle(styleName).toLowerCase().replace(/\s+/g, "") != nodeB.getStyle(styleName).toLowerCase().replace(/\s+/g, ""))
                         return false;
                 }
@@ -1718,30 +1720,40 @@ UserAction = {
             }
         }
         return count;
-    }, checkSameNodeAttrs:function (nodeA, nodeB) {
-        var lengthA = this.getPropertyCount(nodeA.attrs);
-        var lengthB = this.getPropertyCount(nodeB.attrs);
-        if (!(lengthA && lengthB))
-            return true;
-        else if (lengthA != lengthB)
-            return false;
-        else {
-            for (var p in nodeA.attrs) {
-                if(!nodeB.getAttr(p)&&!nodeA.getAttr(p))
-                    return true;
-                else if (!nodeB.getAttr(p)||!nodeA.getAttr(p))
-                    return false;
-                else if (p.toLowerCase() == "style") {
-                    if (!this.checkNodeStyle(nodeA, nodeB))
+    },formHref:function(str){
+        if(str.lastIndexOf('/')== str.length-1){
+            str = str.substring(0,str.length-1);
+        }
+        return str;
+    },checkSameNodeAttrs:function (nodeA, nodeB) {
+            var lengthA = this.getPropertyCount(nodeA.attrs);
+            var lengthB = this.getPropertyCount(nodeB.attrs);
+            if (!(lengthA && lengthB))
+                return true;
+            else if (lengthA != lengthB)
+                return false;
+            else {
+                for (var p in nodeA.attrs) {
+                    if(!nodeB.getAttr(p)&&!nodeA.getAttr(p))
+                        return true;
+                    else if (!nodeB.getAttr(p)||!nodeA.getAttr(p))
                         return false;
-                }
-                else {
-                    if (nodeA.getAttr(p).toLowerCase() != nodeB.getAttr(p).toLowerCase())
-                        return false;
+                    else if (p.toLowerCase() == "style") {
+                        if (!this.checkNodeStyle(nodeA, nodeB))
+                            return false;
+                    }
+                    else if(p.toLowerCase() == "href"){
+                        if (this.formHref(nodeA.getAttr(p).toLowerCase()) != this.formHref(nodeB.getAttr(p).toLowerCase()))
+                            return false;
+                    }
+                    else {
+                        if (nodeA.getAttr(p).toLowerCase() != nodeB.getAttr(p).toLowerCase())
+                            return false;
+                    }
                 }
             }
-        }
-        return true;
+            return true;
+
     }, checkChildren:function (nodeA, nodeB) {
         if (!(nodeA.children || nodeB.children))
             return true;

@@ -8,3 +8,4 @@ UEditor is based on open source BSD license , allowing free use and redistributi
 
 
 email:ueditor@baidu.com
+bbs:www.ueditorbbs.com

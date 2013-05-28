@@ -23,6 +23,9 @@
     background-color: #ffe69f;
     padding: 0;
     border: 1px solid #dcac6c;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
 }
 
 .edui-default .edui-toolbar .edui-button .edui-state-active .edui-button-wrap {

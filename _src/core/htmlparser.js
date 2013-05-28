@@ -9,15 +9,17 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
         b:1,code:1,i:1,u:1,strike:1,s:1,tt:1,strong:1,q:1,samp:1,em:1,span:1,
         sub:1,img:1,sup:1,font:1,big:1,small:1,iframe:1,a:1,br:1,pre:1
     };
-    htmlstr = htmlstr
-        .replace(new RegExp(domUtils.fillChar, 'g'), '')
-        .replace(new RegExp('[\\r\\t\\n'+(ignoreBlank?'':' ')+']*<\/?(\\w+)\\s*(?:[^>]*)>[\\r\\t\\n'+(ignoreBlank?'':' ')+']*','g'), function(a,b){
+    htmlstr = htmlstr.replace(new RegExp(domUtils.fillChar, 'g'), '');
+    if(!ignoreBlank){
+        htmlstr = htmlstr.replace(new RegExp('[\\r\\t\\n'+(ignoreBlank?'':' ')+']*<\/?(\\w+)\\s*(?:[^>]*)>[\\r\\t\\n'+(ignoreBlank?'':' ')+']*','g'), function(a,b){
             //br暂时单独处理
             if(b && allowEmptyTags[b.toLowerCase()]){
                 return a.replace(/(^[\n\r]+)|([\n\r]+$)/g,'');
             }
             return a.replace(new RegExp('^[\\r\\n'+(ignoreBlank?'':' ')+']+'),'').replace(new RegExp('[\\r\\n'+(ignoreBlank?'':' ')+']+$'),'');
         });
+    }
+
 
 
     var uNode = UE.uNode,

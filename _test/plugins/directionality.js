@@ -133,23 +133,19 @@ test( '空格&nbsp;', function() {
     stop();
 } );
 
-//test('body&&currentSelectedArr',function(){
-//    var editor=te.obj[0];
-//    var range=te.obj[1];
-//    editor.setContent('<p>xx</p>');
-//    range.setStart(editor.body,0).collapse(1).select();
-//    editor.execCommand('directionality', 'rtl');
-//    if(!ua.browser.ie){
-//        equal( ua.getChildHTML( editor.body ), "<p dir=\"rtl\"></p><p>xx</p>", "directionrtl" );
-//        editor.currentSelectedArr=[editor.body.lastChild];
-//        editor.execCommand('directionality', 'ltr');
-//        equal( ua.getChildHTML( editor.body ), "<p dir=\"rtl\"></p><p dir=\"ltr\">xx</p>", "directionltr" );
-//    }
-//    else{
-//        equal( ua.getChildHTML( editor.body ), "<p dir=\"rtl\">xx</p>", "directionrtl" );
-//        editor.currentSelectedArr=[editor.body.lastChild];
-//        editor.execCommand('directionality', 'ltr');
-//        equal( ua.getChildHTML( editor.body ), "<p dir=\"ltr\">xx</p>", "directionltr" );
-//    }
-//
-//})
+test('body',function(){
+    var editor=te.obj[0];
+    var range=te.obj[1];
+    editor.setContent('<p>xx</p>');
+    range.setStart(editor.body,0).collapse(1).select();
+    editor.execCommand('directionality', 'rtl');
+    if(!ua.browser.ie){
+        equal( ua.getChildHTML( editor.body ), "<p dir=\"rtl\"></p><p>xx</p>", "directionrtl" );
+
+    }
+    else{
+        equal( ua.getChildHTML( editor.body ), "<p dir=\"rtl\">xx</p>", "directionrtl" );
+
+    }
+
+})

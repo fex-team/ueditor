@@ -44,8 +44,24 @@ test( "autoSyncData:true（由blur触发的）", function() {
         });
     }
 } );
-
-
+test( "sync", function() {
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+    div.innerHTML = '<form id="form" method="post" target="_blank"><textarea id="myEditor" name="myEditor">这里的内容将会和html，body等标签一块提交</textarea></form>';
+    var editor_a = UE.getEditor('myEditor');
+    stop();
+    editor_a.ready(function(){
+        editor_a.body.innerHTML = '<p>hello</p>';
+        editor_a.sync("form");
+        setTimeout(function(){
+            var form  = document.getElementById('form');
+            equal(form.lastChild.value,'<p>hello</p>','同步内容正确');
+            div = form.parentNode;
+            editor_a.destroy();
+            div.parentNode.removeChild(div);
+            start();
+        },100);
+    });
+} );
 test( "hide,show", function() {
     var editor = te.obj[1];
     equal(editor.body.getElementsByTagName('span').length,0,'初始没有书签');
@@ -448,6 +464,7 @@ test("hasContents--有参数", function() {
 //} );
 
 test('trace 1964 getPlainTxt--得到有格式的编辑器的纯文本内容', function() {
+    if(ua.browser.ie>0&&ua.browser.ie<9)return ;//TODO 1.2.6
     var editor = te.obj[1];
     editor.focus();
     editor.setContent('<p>&nbsp;</p><p>&nbsp; hell\no<br/>hello</p>');
@@ -462,6 +479,12 @@ test('getContentTxt--文本前后的空格,&nbs p转成空格', function() {
     editor.setContent('&nbsp;&nbsp;你 好&nbsp;&nbsp; ');
     equal(editor.getContentTxt(), '  你 好   ');
     equal(editor.getContentTxt().length, 8, '8个字符，空格不被过滤');
+});
+test('getAllHtml', function() {
+    var editor = te.obj[1];
+    editor.focus();
+    var html = editor.getAllHtml();
+    ok( /iframe.css/.test( html), '引入样式');
 });
 
 
@@ -516,3 +539,17 @@ test('绑定事件',function(){
         },100);
     });
 });
+////.fireMouseEvent(target, "contextmenu", options);
+//test('dragover',function(){
+//    var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
+//    var div = document.body.appendChild(document.createElement('div'));
+//    editor.render(div);
+//    editor.ready(function(){
+//        editor.focus();
+//        ua.fireMouseEvent(document.body, "dragover");
+//        setTimeout(function(){
+//            expect(5);
+//            start();
+//        },100);
+//    });
+//});

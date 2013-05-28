@@ -7,12 +7,12 @@
 .edui-default .edui-dialog-wrap {
     margin-right: 6px;
     margin-bottom: 6px;
-    border: 1px solid #c6c6c6;
 }
 
 .edui-default .edui-dialog-body {
     position: relative;
-    background-color: white;
+
+    padding:2px 0 0 2px;
     _zoom: 1;
 }
 
@@ -23,11 +23,20 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: black;
-    box-shadow: 3px 3px 5px #818181;
-    -webkit-box-shadow: 3px 3px 5px #818181;
-    -moz-box-shadow: 3px 3px 5px #818181;
-    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius = '3', MakeShadow = 'true', ShadowOpacity = '0.5');
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
 }
 
 .edui-default .edui-dialog-foot {
