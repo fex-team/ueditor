@@ -21,12 +21,16 @@
             'ui/jq.extend.js',
             'ui/button.js',
             'ui/toolbar.js',
+            'ui/menu.js',
             'ui/dropmenu.js',
+            'ui/contextmenu.js',
             'ui/splitbutton.js',
             'ui/popup.js',
             'ui/colorpicker.js',
             'ui/modal.js',
             'ui/tooltip.js',
+            'adapter/adapter.js',
+
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

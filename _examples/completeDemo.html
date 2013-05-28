@@ -10,138 +10,62 @@
     <script src="../jquery.js"></script>
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"/>
     <link href="../themes/default/_css/ueditor.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8" src="../ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
-    <style type="text/css">
-        .clear {
-            clear: both;
-        }
-        .booteditor .editor-body{
-            width:1000px;
-            height:400px;
-        }
-    </style>
+
 </head>
 <body>
+    <div id="editor" style="height:500px;width:1000px"></div>
 <script>
-
-    var textmenu = [
-        {
-            'label':'文件',
-            'menu':
-                    $.eduidropmenu({
-                        data:[
-                            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-                            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-                            {divider:1},
-                            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-                        ]
-                    }).eduidropmenu('addSubmenu','2级菜单', $.eduidropmenu({
-                                data:[
-                                    {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-                                    {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-                                    {divider:1},
-                                    {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-                                ]
-                            }).eduidropmenu('addSubmenu','3级菜单', $.eduidropmenu({
-                                        data:[
-                                            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-                                            {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-                                            {divider:1},
-                                            {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-                                        ]
-                                    })),2).on('beforeshow',function(){
-                                alert(this)
-                            })
-        },
-        {
-            'label':'文件',
-            'menu':  $.eduidropmenu({
-                data:[
-                    {label:'sdfsdfsd', value: 'sdfsdf1'},
-                    {label:'sdfsdfsd',value: 'sdfsdf2'},
-                    {divider:1},
-                    {label:'sdfsdfs', value: 'sdfsdf3'}
-                ]
-            })
-        }, {
-            'label':'文件',
-            'menu':  $.eduidropmenu({
-                data:[
-                    {label:'sdfsdfsd', value: 'sdfsdf1'},
-                    {label:'sdfsdfsd',value: 'sdfsdf2'},
-                    {divider:1},
-                    {label:'sdfsdfs', value: 'sdfsdf3'}
-                ]
-            })
-        }, {
-            'label':'文件',
-            'menu':  $.eduidropmenu({
-                data:[
-                    {label:'sdfsdfsd', value: 'sdfsdf1'},
-                    {label:'sdfsdfsd',value: 'sdfsdf2'},
-                    {divider:1},
-                    {label:'sdfsdfs', value: 'sdfsdf3'}
-                ]
-            })
-        }
-    ];
-
-    var btnData = [
-        [ $.eduibutton({
-            title:"加粗",
-            icon:'bold'
-        }), $.eduibutton({
-            title:"加斜",
-            icon:'italic'
-        }), $.eduibutton({
-            title:"下划线",
-            icon:'underline'
-        })],
-        [$.eduibutton({
-            icon:'undo'
-        }), $.eduibutton({
-            icon:'redo'
-        })
-
-        ],[
-
-            $.eduicolorpicker({
-                lang_clearColor:"清空颜色",
-                lang_themeColor:"主题颜色",
-                lang_standardColor:"标准颜色"
-            }).eduicolorpicker('attachTo', $.eduibutton({
-                        text: 'color',
-                        caret: true
-                    })).on("pickcolor",function (type, value) {
-                        alert(this)
-                    }).edui().data('$mergeObj'),
-            $.eduimodal({
-                lang_title: "帮助",
-                lang_hideButton:"关闭",
-                lang_okButton:"确认",
-                url: "#",
-                nook: false,
-                backdrop: true,//"static",
-                show: true,
-                keyboard: true
-            }).eduimodal("attachTo", $.eduibutton({text: 'sdfsd',title:'sdfsdfsdf'})).edui().data('$mergeObj')
-
-        ],[
-            $.eduisplitbutton({text:'字号'}).eduisplitbutton('mergeWith',$.eduidropmenu({
-                data:[
-                    {label:'<h1>sdfsdf</h1>', value: 'sdfsdf1'},
-                    {label:'<h1>sdfsdf</h1>',value: 'sdfsdf2'},
-                    {divider:1},
-                    {label:'<h1>sdfsdf</h1>', value: 'sdfsdf3'}
-                ]
-            }))
+    UE.getEditor('editor',{
+        menulist:[
+            {label:'文件',data:[
+                {label:'sdf',exec:'bold'},
+                {label:'232',exec:function(editor,data){
+                    console.log(editor)
+                },query:function(editor,data,li){
+                    return -1
+                }},
+                {label:'sdf',data:[
+                    {label:'sdf',exec:'bold'},
+                    {label:'232',exec:function(editor,data){
+                        console.log(editor)
+                    },query:function(editor,data){
+                        console.log(editor)
+                    }},
+                    {label:'sdf',data:[
+                        {label:'sdf',exec:'bold'},
+                        {label:'232',exec:function(editor,data){
+                            console.log(editor)
+                        },query:function(editor,data){
+                            console.log(editor)
+                        }}
+                    ]}
+                ]}
+            ]},
+            {label:'文件',data:[
+                {label:'sdf',exec:'bold'},
+                {label:'232',exec:function(editor,data){
+                    console.log(editor)
+                },query:function(editor,data){
+                    console.log(editor)
+                }},
+                {label:'sdf',data:[
+                    {label:'sdf',exec:'bold'},
+                    {label:'232',exec:function(editor,data){
+                        console.log(editor)
+                    },query:function(editor,data){
+                        console.log(editor)
+                    }}
+                ]}
+            ]}
+        ],toolbar:[
+            'bold italic',
+            'redo undo'
         ]
-    ];
-    $.eduitoolbar().appendTo(document.body).eduitoolbar('appendToTxt',textmenu)
-            .eduitoolbar('appendToBtn',btnData)
+    })
 
-    $.eduitooltip("attachTo")
 </script>
 </body>
 </html>
