@@ -4,8 +4,8 @@
 /*编辑器样式*/
 @import "editor.css";
 
-/*按钮图标*/
-@import "icon.css";
+/*按钮图标
+@import "icon.css";*/
 
 /*颜色下拉菜单*/
 @import "colorpicker.css";

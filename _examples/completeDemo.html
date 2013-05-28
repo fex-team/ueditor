@@ -8,8 +8,18 @@
     <!--开发版-->
 
     <script src="../jquery.js"></script>
-    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet"/>
+    <link href="../bootstrap/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"/>
     <link href="../themes/default/_css/ueditor.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+    <!--[if IE 7]>
+      <link rel="stylesheet" href="../font-awesome/css/font-awesome-ie7.min.css">
+    <![endif]-->
+    <style>
+    .btn [class^="icon-"]
+    {
+        font-weight: bold;
+    }
+    </style>
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
     <style type="text/css">
@@ -123,7 +133,7 @@
         [$.eduibutton({
             icon:'undo'
         }), $.eduibutton({
-            icon:'redo'
+            icon:'repeat'
         })
 
         ],[
