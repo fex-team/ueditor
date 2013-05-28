@@ -29,8 +29,8 @@
             'ui/colorpicker.js',
             'ui/modal.js',
             'ui/tooltip.js',
-            'adapter/adapter.js',
-
+            'ui/tab.js',
+            'adapter/adapter.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {
