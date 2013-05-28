@@ -83,12 +83,14 @@
             editor.addListener("afterpaste", function () {
                 if(editor.queryCommandState('pasteplain'))
                     return;
-                pastePop = new baidu.editor.ui.Popup({
-                    content:new baidu.editor.ui.PastePicker({editor:editor}),
-                    editor:editor,
-                    className:'edui-wordpastepop'
-                });
-                pastePop.render();
+                if(baidu.editor.ui.PastePicker){
+                    pastePop = new baidu.editor.ui.Popup({
+                        content:new baidu.editor.ui.PastePicker({editor:editor}),
+                        editor:editor,
+                        className:'edui-wordpastepop'
+                    });
+                    pastePop.render();
+                }
                 isPaste = true;
             });
 
