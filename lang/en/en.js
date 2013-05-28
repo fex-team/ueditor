@@ -393,7 +393,7 @@ UE.I18N['en'] = {
         'static':{
             'lang_input_about':'About',
             'lang_input_shortcuts':'Shortcuts',
-            'lang_input_version':'Version:1.2.5',
+            'lang_input_version':'Version:1.2.6',
             'lang_input_introduction':"UEditor is developed by Baidu Co.ltd.  It is lightweight, customizable , focusing on user experience and etc. , UEditor is based on open source BSD license , allowing free use and redistribution.",
             'lang_Txt_shortcuts':'Shortcuts',
             'lang_Txt_func':'Function',
