@@ -2,14 +2,21 @@ UE.registerUI('bold italic redo undo source underline strikethrough superscript 
     'pagebreak deletetable insertrow deleterow removeformat cleardoc selectall formatmatch pasteplain ' +
     'insertparagraphbeforetable insertrow deleterow insertcol deletecol mergecells mergeright mergedown splittocells ' +
     'splittorows splittocols unlink date time horizontal blockquote indent touppercase tolowercase snapscreen print preview',
-    function(editor,name) {
+    function(name) {
+        var me = this;
         var $btn = $.eduibutton({
-            icon : name
+            icon : name,
+            click : function(){
+                debugger
+                me.execCommand(name)
+            }
         });
-        editor.addListener('selectionchange',function(){
+        this.addListener('selectionchange',function(){
             var state = this.queryCommandState();
             $btn.disabled(state == -1).active(state == 1)
-        })
+        });
+
+        return $btn;
     }
 );
 

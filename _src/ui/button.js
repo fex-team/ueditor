@@ -8,7 +8,7 @@ UE.ui.define('button', {
         title: '',
         icon: '',
         caret: false,
-        click: function () {}
+        click: function(){}
     },
     init: function (options) {
         var me = this;

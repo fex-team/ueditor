@@ -17,6 +17,7 @@
             'core/node.js',
             'core/htmlparser.js',
             'core/filternode.js',
+            'plugins/basestyle.js',
             'ui/widget.js',
             'ui/jq.extend.js',
             'ui/button.js',
@@ -30,7 +31,8 @@
             'ui/modal.js',
             'ui/tooltip.js',
             'ui/tab.js',
-            'adapter/adapter.js'
+            'adapter/adapter.js',
+            'adapter/button.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

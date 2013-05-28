@@ -93,8 +93,14 @@
             }
 
             if (options.toolbar) {
-                $.each(options.toolbar,function(i,group){
 
+                $.each(options.toolbar,function(i,groupstr){
+                    var btngroup = [];
+                    $.each(groupstr.split(/\s+/),function(index,name){
+                        var fn = _editorUI[name.toLowerCase()];
+                        fn && btngroup.push($.proxy(fn,editor,name.toLowerCase())());
+                    });
+                    toolbar.appendToBtnmenu(btngroup);
                 })
 
             } else {

@@ -24,8 +24,22 @@
            this.data('$txtToolbar').append($item);
             return $item;
         },
-        appendToBtnmenu : function(btn){
+        appendToBtnmenu : function(data){
+            var me = this,$cont = me.data('$btnToolbar');
+            var $groupcont = $(me.btngrouptpl);
+            if(!$.isArray(data)){
+                data = [data];
+            }
+            $.each(data,function(i,btn){
+                if(btn.edui().widgetName == 'btn'){
+                    $groupcont.append(btn)
+                }else{
+                    $groupcont = btn;
+                    return false
+                }
 
+            });
+            $cont.append($groupcont)
         },
         appendToBtn: function(data) {
             var me = this,$cont = me.data('$btnToolbar');
