@@ -24,28 +24,11 @@
            this.data('$txtToolbar').append($item);
             return $item;
         },
-        appendToTxt: function (label, menu) {
-            var data = [];
-            if ($.type(label) == 'string') {
-                data.push({
-                    'label': label,
-                    'menu': menu
-                })
-            } else {
-                data = label;
-            }
-            var me = this;
-            $.each(data, function (i, obj) {
-                var $label = $($.parseTmpl(me.textmenutpl, obj));
-                obj.menu.eduidropmenu('attachTo', $label.find('a'));
-                me.data('txtToolbar').append($label);
-            })
-        },
-        delFromTxt: function() {
+        appendToBtnmenu : function(btn){
 
         },
         appendToBtn: function(data) {
-            var me = this,$cont = me.data('btnToolbar');
+            var me = this,$cont = me.data('$btnToolbar');
             if($.isArray(data)){
                 $.each(data,function(i,group){
                     var $groupcont = $(me.btngrouptpl);
