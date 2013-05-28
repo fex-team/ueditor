@@ -93,6 +93,9 @@
             }
 
             if (options.toolbar) {
+                $.each(options.toolbar,function(i,group){
+
+                })
 
             } else {
                 $toolbar.find('.btn-toolbar').remove()
