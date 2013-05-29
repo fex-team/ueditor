@@ -59,19 +59,23 @@
         },
         createEditor: function (id, opt) {
             var editor = new UE.Editor(opt);
-            var $container = this.createUI('#' + id, editor);
-            editor.ready(function(){
-                this.addListener('click',function(){
-                    $container.find('.dropdown-menu').each(function(){
-                        $(this).edui().hide()
+            editor.langIsReady ? $.proxy(renderUI,this) : editor.addListener("langReady", $.proxy(renderUI,this));
+            function renderUI(){
+                var $container = this.createUI('#' + id, editor);
+                editor.ready(function(){
+                    this.addListener('click',function(){
+                        $container.find('.dropdown-menu').each(function(){
+                            $(this).edui().hide()
+                        })
                     })
-                })
-            });
-            editor.render(id);
-            $container.css({
-                width: $(editor.iframe).width()
-            });
-            editor.container = $container.get();
+                });
+                editor.render(id);
+                $container.css({
+                    width: $(editor.iframe).width()
+                });
+                editor.container = $container.get();
+            }
+
 
         },
         createUI: function (id, editor) {

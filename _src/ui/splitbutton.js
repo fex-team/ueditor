@@ -1,8 +1,8 @@
 //splitbutton 类
 ///import button
 UE.ui.define('splitbutton',{
-    tpl :'<div class="btn-group"><button class="btn"><%=text%></button>'+
-            '<button class="btn splitbutton dropdown-toggle" <%if(tooltip){%>data-original-title="<%=tooltip%>"<%}%>>'+
+    tpl :'<div class="splitbutton"><button class="btn"><%if(icon){%><i class="icon-<%=icon%>"></i><%}%><%if(text){%><%=text%><%}%></button>'+
+            '<button class="btn dropdown-toggle" <%if(tooltip){%>data-original-title="<%=tooltip%>"<%}%>>'+
                 '<span class="caret"><\/span>'+
             '</button>'+
         '</div>',
@@ -18,13 +18,9 @@ UE.ui.define('splitbutton',{
             if(!me.disabled()){
                 if(evt.target === evt.target.parentNode.firstChild){
                     $.proxy(options.click,me)();
-                    var $dropmenu = $(this).data('dropmenu');
-                    setTimeout(function(){
-                        $dropmenu && $dropmenu.dropmenu('hide')
-                    })
                 }
             }
-        })
+        });
         return me;
     },
     wrapclick:function(fn,evt){
@@ -54,12 +50,12 @@ UE.ui.define('splitbutton',{
         if(!$.contains(document.body,$obj[0])){
             $obj.appendTo(document.body);
         }
-        me.root().on('click','.splitbutton',function(){
+        me.root().on('click','.dropdown-toggle',function(){
             me.wrapclick(function(){
                 $obj.edui().show(me.root());
             })
         });
-        me.register('click',me.root().find('.splitbutton'),function(evt){
+        me.register('click',me.root().find('.dropdown-toggle'),function(evt){
             $obj.hide()
         });
     }

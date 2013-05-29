@@ -1,5 +1,11 @@
 //dropmenu 类
 UE.ui.define('contextmenu',{
+    tmpl:'<a tabindex="-1" href="#"><%if(icon){%><i class="icon-<%=icon%>"></i>&nbsp;<%}%><%=label%><%if(shortkey){%><span class="muted item-right"><%=shortkey%><%}%></span></a>',
+    defaultItem:{
+        icon:'',
+        label:'',
+        shortkey:''
+    },
     init : function(data){
         var me = this;
         var $root = this.root($('<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" ></ul>'));
@@ -11,7 +17,7 @@ UE.ui.define('contextmenu',{
                 if(v.data){
                     $('<li class="dropdown-submenu"><a tabindex="-1" href="#">'+ v.label+'</a></li>').appendTo($root).data('submenu-data', v.data);
                 }else{
-                    $('<li><a href="#" tabindex="-1" >'+ v.label +'</a></li>').appendTo($root).data('exec', v.exec).data('query', v.query);
+                    $('<li><a href="#" tabindex="-1" >'+ $.parseTmpl(me.tmpl, $.extend2(v,me.defaultItem,true)) +'</a></li>').appendTo($root).data('exec', v.exec).data('query', v.query);
                 }
 
             }

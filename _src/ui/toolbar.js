@@ -30,14 +30,13 @@
             if(!$.isArray(data)){
                 data = [data];
             }
-            $.each(data,function(i,btn){
-                if(btn.edui().widgetName == 'btn'){
-                    $groupcont.append(btn)
-                }else{
-                    $groupcont = btn;
-                    return false
-                }
-
+            $.each(data,function(i,$btn){
+//                if($btn.edui().widgetName == 'button'){
+//                    $groupcont.append($btn)
+//                }else{
+//                    $cont.append($btn);
+//                }
+                $groupcont.append($btn)
             });
             $cont.append($groupcont)
         },

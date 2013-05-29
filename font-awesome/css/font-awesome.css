@@ -441,7 +441,7 @@ ul.icons-ul > li .icon-li {
 .icon-play-circle:before {
   content: "\f01d";
 }
-.icon-repeat:before,
+.icon-redo:before,
 .icon-rotate-right:before {
   content: "\f01e";
 }
@@ -509,16 +509,16 @@ ul.icons-ul > li .icon-li {
 .icon-text-width:before {
   content: "\f035";
 }
-.icon-align-left:before {
+.icon-justifyleft:before {
   content: "\f036";
 }
-.icon-align-center:before {
+.icon-justifycenter:before {
   content: "\f037";
 }
-.icon-align-right:before {
+.icon-justifyright:before {
   content: "\f038";
 }
-.icon-align-justify:before {
+.icon-justifyjustify:before {
   content: "\f039";
 }
 .icon-list:before {
@@ -891,10 +891,10 @@ ul.icons-ul > li .icon-li {
 .icon-reorder:before {
   content: "\f0c9";
 }
-.icon-list-ul:before {
+.icon-insertunorderedlist:before {
   content: "\f0ca";
 }
-.icon-list-ol:before {
+.icon-insertorderedlist:before {
   content: "\f0cb";
 }
 .icon-strikethrough:before {
