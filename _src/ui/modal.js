@@ -119,7 +119,7 @@ UE.ui.define('modal', {
         var me = this
         if(!$obj.data('$mergeObj')){
             if(!$.contains(document.body,me.root()[0])){
-                me.root().appendTo(document.body);
+                me.root().appendTo($obj);
             }
             $obj.data('$mergeObj',me.root());
             $obj.on('click',function(){

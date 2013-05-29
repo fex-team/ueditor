@@ -42,11 +42,11 @@ UE.ui.define('button', {
         me.data('$mergeObj',$obj);
         $obj.edui().data('$mergeObj',me.root());
         if(!$.contains(document.body,$obj[0])){
-            $obj.appendTo(document.body);
+            $obj.appendTo(me.root());
         }
         me.on('click',function(){
             me.wrapclick(function(){
-                $obj.edui().show(me.root());
+                $obj.edui().show();
             })
         }).register('click',me.root(),function(evt){
             $obj.hide()

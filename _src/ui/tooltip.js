@@ -37,7 +37,7 @@ UE.ui.define('tooltip', {
             var me = this;
 
             if (!$.contains(document.body, me.root()[0])) {
-                me.root().appendTo(document.body);
+                me.root().appendTo($obj);
             }
 
             me.data('tooltip', me.root());
