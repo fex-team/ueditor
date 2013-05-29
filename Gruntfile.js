@@ -51,7 +51,7 @@ module.exports = function(grunt) {
       //添加后台语言
       server_lang: {
         files: [
-          {expand: true, cwd: './', src: ['<%= pkg.lang %>/**'], dest: '<%= pkg.dest %>'}
+          {expand: true, cwd: './', src: ['<%= pkg.server_lang %>/**'], dest: '<%= pkg.dest %>'}
         ]
       },
       //添加语言
@@ -155,8 +155,8 @@ module.exports = function(grunt) {
         newcap: true,
         noarg: true,
         sub: true,
-        undef: true,
-        unused: true,
+        undef: false,
+        unused: false,
         boss: true,
         eqnull: true,
         browser: true,
@@ -166,22 +166,29 @@ module.exports = function(grunt) {
       },
       gruntfile: {
         src: 'Gruntfile.js'
-      },
-      lib_test: {
-        src: ['lib/**/*.js', 'test/**/*.js']
       }
     },
-    qunit: {
-      files: ['test/**/*.html']
-    },
+    
     watch: {
       gruntfile: {
         files: '<%= jshint.gruntfile.src %>',
         tasks: ['jshint:gruntfile']
       },
-      lib_test: {
-        files: '<%= jshint.lib_test.src %>',
-        tasks: ['jshint:lib_test', 'qunit']
+      js: {
+        files: ['*.js', '!Gruntfile.js', '_src/**/**'],
+        tasks: ['concat:ueditorjs', 'uglify']
+      },
+      themes: {
+        files: ['themes/**/**'],
+        tasks: ['concat:ueditorcss', 'cssmin', 'copy:theme']
+      },
+      front_lang: {
+        files: ['lang/**/**'],
+        tasks: ['copy:front_lang']
+      },
+      third_party: {
+        files: ['third-party/**/**'],
+        tasks: ['copy:third_party']
       }
     }
   });
