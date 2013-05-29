@@ -28,11 +28,13 @@
             'ui/splitbutton.js',
             'ui/popup.js',
             'ui/colorpicker.js',
+            'ui/tablepicker.js',
             'ui/modal.js',
             'ui/tooltip.js',
             'ui/tab.js',
             'adapter/adapter.js',
-            'adapter/button.js'
+            'adapter/button.js',
+            'adapter/tablepicker.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

@@ -59,10 +59,21 @@
                         console.log(editor)
                     }}
                 ]}
+            ]}, {label:'插入',data:[
+                {label:'表格',exec:function(editor,data, menuItem){
+
+                    $.eduitablepicker().eduitablepicker( "attachTo", $( menuItem[0] )).on('select', function( evt, row, col ){
+                        alert( row + ' , ' + col )
+                    });
+
+                },query:function(editor,data,li){
+                    return 0;
+                }}
             ]}
         ],toolbar:[
             'bold italic',
-            'redo undo'
+            'redo undo',
+            'inserttable'
         ]
     })
 

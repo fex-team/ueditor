@@ -1,0 +1,49 @@
+/* --------------- tablepicker start --------------- */
+
+.edui-tablepicker-createbox {
+    padding: 5px;
+}
+
+.edui-tablepicker-panel {
+    width: 180px;
+    height: 180px;
+    overflow: hidden;
+}
+
+.edui-tablepicker-selected-box {
+    background: url(../images/tablepicker/sel.png);
+}
+
+.edui-tablepicker-controller {
+    position: relative;
+    top: 0;
+    left: 0;
+    background: url(../images/tablepicker/unsel.png);
+    z-index: 2;
+}
+
+.edui-tablepicker-label {
+    padding: 5px;
+    text-align: center;
+}
+
+.edui-tablepicker-createbox table {
+    position: absolute;
+    top: 0;
+    left: 0;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: none;
+}
+
+.edui-tablepicker-createbox td, .edui-tablepicker-createbox th {
+    width: 16px;
+    height: 16px;
+    border: none;
+}
+
+.edui-tablepicker-createbox .sel {
+    background: cadetblue;
+}
+
+/* --------------- tablepicker end --------------- */
