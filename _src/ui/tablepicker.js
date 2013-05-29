@@ -84,38 +84,9 @@
             this.initEvent();
 
         },
-//        attachTo: function ( $btn ) {
-//
-//            var me = this;
-//
-//            if( !$btn.data( '$mergeObj' ) ){
-//
-//                this.data( '$mergeObj', $btn );
-//
-//                $['eduipopup'].prototype.attachTo.call( this, $btn );
-//
-//                this.initEvent();
-//
-//                $btn.data( '$mergeObj', this.root() );
-//
-//                if( this.data('options').mode === 'menu' ) {
-//
-//                    $btn.on( 'mouseover', function(){
-//
-//                        me.show();
-//
-//                    } );
-//
-//                }
-//
-//            }
-//        },
         initEvent: function(){
 
-            var _self = this,
-                options = this.data('options'),
-                $container = this.data('$container'),
-                $selectedBox = this.data('$selectedBox');
+            var _self = this;
 
             this.root().delegate("td", "mousemove", function(){
 
@@ -129,12 +100,16 @@
             /**
              * 行列确认
              */
-            this.root().delegate("td", "click", function(){
+            this.root().delegate("td", "click", function( evt ){
 
                 var rowIndex = this.parentNode.rowIndex + 1,
                     colIndex = this.cellIndex + 1;
 
+                _self.hide();
+
                 _self.trigger( 'select', [ rowIndex, colIndex ] );
+
+                return false;
 
             });
 
