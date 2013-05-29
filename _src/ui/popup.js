@@ -17,6 +17,7 @@ UE.ui.define('popup',{
     },
     hide : function(){
         this.root().css('display','none');
+        this.trigger('afterhide')
     },
     attachTo : function($obj){
         var me = this
