@@ -18,7 +18,7 @@ UE.registerUI('insertorderedlist insertunorderedlist',
         });
 
         var $dropmenu = $.eduidropmenu({'data':data,click:function(evt,val){
-            $dropmenu.edui().hide()
+            $dropmenu.edui().hide();
             me.execCommand(name,val);
         }});
         $dropmenu.edui().on('beforeshow',function(){

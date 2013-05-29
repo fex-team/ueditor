@@ -17,7 +17,7 @@ UE.ui.define('contextmenu',{
                 if(v.data){
                     $('<li class="dropdown-submenu"><a tabindex="-1" href="#">'+ v.label+'</a></li>').appendTo($root).data('submenu-data', v.data);
                 }else{
-                    $('<li><a href="#" tabindex="-1" >'+ $.parseTmpl(me.tmpl, $.extend2(v,me.defaultItem,true)) +'</a></li>').appendTo($root).data('exec', v.exec).data('query', v.query);
+                    $('<li>'+ $.parseTmpl(me.tmpl, $.extend2(v,me.defaultItem,true)) +'</li>').appendTo($root).data('exec', v.exec).data('query', v.query);
                 }
 
             }
