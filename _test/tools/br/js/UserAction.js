@@ -79,6 +79,7 @@ UserAction = {
         if (typeof type == 'string') {
             type = type.toLowerCase();
             switch (type) {
+                case "cut":
                 case "keyup":
                 case "keydown":
                 case "keypress":
@@ -719,6 +720,20 @@ UserAction = {
             options.cancelable, options.view, options.ctrlKey,
             options.altKey, options.shiftKey, options.metaKey,
             options.keyCode, options.charCode);
+    },
+
+    /**
+     * Simulates a cut event on a particular element.
+     *
+     * @param {HTMLElement}
+        *            target The element to act on.
+     * @param {Object}
+        *            options Additional event options (use DOM standard names).
+     * @method cut
+     * @static
+     */
+    cut:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
+        this.fireKeyEvent("cut", target, options);
     },
 
     /**

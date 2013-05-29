@@ -11,6 +11,135 @@ module( "plugins.list" );
  *
  * */
 
+test('回车将p转成列表',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var br = ua.browser.ie?'':'<br>';
+    editor.setContent('<p>1. 2</p>');
+    range.setStart(editor.body.firstChild,0).collapse(true).select();
+    ua.keydown(editor.body,{keyCode:13});
+    ua.checkSameHtml(ua.getChildHTML(editor.body),'<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p> 2</p></li><li><p>'+br+'</p></li></ol>','回车将p转成列表');
+});
+
+//todo bug3418
+test('ol标签嵌套',function(){
+    var editor = te.obj[0];
+    editor.setContent('<ol class="custom_num list-paddingleft-1"><li class="list-num-1-1 list-num-paddingleft-1"><p>a</p></li><ol class="custom_num list-paddingleft-1"><li class="list-num-1-1 list-num-paddingleft-1"><p>b</p></li></ol></ol>');
+    ua.checkSameHtml(editor.body.innerHTML,'<ol class=\"custom_num list-paddingleft-1\"><li class=\"list-num-1-1 list-num-paddingleft-1\"><p>a</p></li><ol class=\"custom_num1 list-paddingleft-2\"><li class=\"list-num-2-1 list-num1-paddingleft-1\"><p>b</p></li></ol></ol>');
+});
+
+test('li内添加p标签',function(){
+    var editor = te.obj[0];
+    editor.setContent('<ol><li>asd<p>asd</p></li></ol>');
+    ua.manualDeleteFillData(editor.body);
+    ua.checkSameHtml(editor.body.innerHTML,'<ol class=\" list-paddingleft-2\"><li><p>asd</p><p>asd</p></li></ol>','添加p标签');
+});
+
+test('p转成列表',function(){
+    var editor = te.obj[0];
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    editor.setContent('<p class="MsoListParagraph">1.a</p><ol><li>b</li></ol>');
+    ua.manualDeleteFillData(editor.body);
+    ua.checkSameHtml(editor.body.innerHTML,'<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p>a</p></li><li><p>b</p></li></ol>','p转成有序列表');
+    editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">abc</span></p>');
+    ua.manualDeleteFillData(editor.body);
+    ua.checkSameHtml(editor.body.innerHTML,'<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p>'+br+'</p></li></ul>','p转成无序列表');
+//todo bug3417
+//    editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">n</span></p>');
+//    ua.manualDeleteFillData(editor.body);
+//    ua.checkSameHtml(editor.body.innerHTML,'<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p><br></p></li></ul>','p转成无序列表');
+});
+
+test('列表复制粘贴',function(){
+    var editor = te.obj[0];
+    editor.setContent('<ol class="custom_num2 list-paddingleft-1"><li class="list-num-3-1 list-num2-paddingleft-1">a</li><li>b</li></ol><ul><li>a</li><li>b</li></ul>');
+    ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    var html ={html:editor.body.innerHTML};
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+//    range.setStart(editor.body,1).collapse(true).select();
+//    editor.fireEvent("paste");
+//    ua.manualDeleteFillData(editor.body);
+//    equal(editor.body.innerHTML,'<p><br></p>','编辑器清空');
+    editor.setContent('<ol><li>a</li><li>b</li></ol><ul><li>a</li><li>b</li></ul>');
+    ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    html ={html:editor.body.innerHTML};
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+    editor.setContent('<ol><ol><li>a</li><li>b</li></ol><ul><li>a</li><li>b</li></ul></ol>');
+    ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    html ={html:editor.body.innerHTML};
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+    editor.setContent('<ol class="custom_cn1 list-paddingleft-1"><ol><li>a</li><li>b</li></ol><ul><li>a</li><li>b</li></ul></ol>');
+    ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    html ={html:editor.body.innerHTML};
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+});
+
+//TODO trace-3416 此处只为提高覆盖率
+test('剪切列表',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<ol><li><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif"/><br/></p></li><li></li></ol>');
+    range.setStart(editor.body.firstChild.lastChild,0).collapse(true).select();
+    ua.cut(editor.body);
+    stop();
+    setTimeout(function(){
+        ua.manualDeleteFillData(editor.body);
+        var br = ua.browser.ie?'':'<br>';
+        ua.checkSameHtml(editor.body.innerHTML,'<p>'+br+'</p>','编辑器清空');
+        editor.setContent('<ol><li><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif"/><br/></p></li><li></li></ol><p>asdf</p>');
+        range.setStart(editor.body.firstChild.lastChild,0).collapse(true).select();
+        ua.cut(editor.body);
+        setTimeout(function(){
+            ua.manualDeleteFillData(editor.body);
+            ua.checkSameHtml(editor.body.innerHTML,'<p>asdf</p>','列表删除');
+            editor.setContent('<a href="http://www.baidu.com">www.baidu.com</a><ol><li><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif"/><br/></p></li><li></li></ol>');
+            range.setStart(editor.body.firstChild.nextSibling.lastChild,0).collapse(true).select();
+            ua.cut(editor.body);
+            setTimeout(function(){
+                ua.manualDeleteFillData(editor.body);
+                ua.checkSameHtml(editor.body.innerHTML,'<p><a href=\"http://www.baidu.com\" _href=\"http://www.baidu.com\">www.baidu.com</a></p>','列表删除');
+                start();
+            },20);
+        },20);
+    },20);
+});
+
+test( '修改列表再删除列表', function () {
+    if((ua.browser.safari && !ua.browser.chrome))return 0;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var br = baidu.editor.browser.ie ? "" : "<br>";
+    editor.setContent( '<ol>hello1</ol>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse(true).select();
+    editor.execCommand( 'insertorderedlist','cn2' );
+    ua.manualDeleteFillData(editor.body);
+    equal( editor.body.firstChild.tagName.toLowerCase(), 'ol', '查询列表的类型' );
+    equal( ua.getChildHTML( editor.body.firstChild ), '<li class=\"list-cn-3-1 list-cn2-paddingleft-1\"><p>hello1</p></li>');
+    range.setStart(editor.body.lastChild,0).setEnd(editor.body.lastChild,1).select();
+    editor.execCommand( 'insertorderedlist','cn2' );
+    ua.manualDeleteFillData(editor.body);
+    ua.checkSameHtml(editor.body.innerHTML, '<p>hello1</p>' );
+} );
+
+test('列表内没有列表标号的项后退',function(){
+    if(ua.browser.safari)return;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var lis;
+    var br = ua.browser.ie?'<br>':'<br>';
+    editor.setContent('<ol><li><p>hello</p><p><a href="http://www.baidu.com">www.baidu.com</a></p></li></ol>');
+    range.setStart(editor.body.firstChild.firstChild.lastChild.lastChild,0).collapse(true).select();
+    ua.manualDeleteFillData(editor.body);
+    ua.keydown(editor.body,{keyCode:8});
+    lis = editor.body.getElementsByTagName('li');
+    equal(lis.length,'1','列表长度不变');
+    ua.checkSameHtml(ua.getChildHTML(editor.body),'<ol class=" list-paddingleft-2"><li><p>hello</p></li></ol><p><a href="http://www.baidu.com" _href="http://www.baidu.com">www.baidu.com</a></p>','p在列表外');
+});
+
 test( '多个p，选中其中几个变为列表', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -361,16 +490,6 @@ test('tab键',function(){
     var str='<li><p>hello1</p></li><ol style="list-style-type: lower-alpha;" class=" list-paddingleft-2" ><ol style="list-style-type: lower-roman;" class=" list-paddingleft-2" ><li><p>hello2</p></li></ol></ol>';
     ua.checkSameHtml(str,editor.body.firstChild.innerHTML.toLowerCase(),'有序列表---tab键');
 });
-
-/*没有对列表剪切进行特殊处理*/
-//test('剪切列表',function(){
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    var lis;
-//    editor.setContent('<ol><li><p>hello1</p></li><li><p>hello2</p></li></ol>');
-//    ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
-//    ua.cut(editor.body);
-//});
 
 test( '回车后产生新的li-选区闭合', function () {
     var editor = te.obj[0];
