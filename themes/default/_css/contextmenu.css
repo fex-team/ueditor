@@ -1,3 +1,13 @@
 .item-right{
     float:right
 }
+
+.dropdown-menu > li > a {
+    padding: 3px 10px;
+}
+
+.dropdown-menu > li > a > em {
+    display: inline-block;
+    *zoom: 1;
+    width: 25px;
+}

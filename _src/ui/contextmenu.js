@@ -1,6 +1,6 @@
 //dropmenu 类
 UE.ui.define('contextmenu',{
-    tmpl:'<a tabindex="-1" href="#"><%if(icon){%><i class="icon-<%=icon%>"></i>&nbsp;<%}%><%=label%><%if(shortkey){%><span class="muted item-right"><%=shortkey%><%}%></span></a>',
+    tmpl:'<a tabindex="-1" href="#"><em><%if(icon){%><i class="icon-<%=icon%>"></i><%}%></em><%=label%><%if(shortkey){%><span class="muted item-right"><%=shortkey%><%}%></span></a>',
     defaultItem:{
         icon:'',
         label:'',

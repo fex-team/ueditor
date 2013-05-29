@@ -81,33 +81,35 @@
 
             me.data( 'options', options );
 
+            this.initEvent();
+
         },
-        attachTo: function ( $btn ) {
-
-            var me = this;
-
-            if( !$btn.data( '$mergeObj' ) ){
-
-                this.data( '$mergeObj', $btn );
-
-                $['eduipopup'].prototype.attachTo.call( this, $btn );
-
-                this.initEvent();
-
-                $btn.data( '$mergeObj', this.root() );
-
-                if( this.data('options').mode === 'menu' ) {
-
-                    $btn.on( 'mouseover', function(){
-
-                        me.show();
-
-                    } );
-
-                }
-
-            }
-        },
+//        attachTo: function ( $btn ) {
+//
+//            var me = this;
+//
+//            if( !$btn.data( '$mergeObj' ) ){
+//
+//                this.data( '$mergeObj', $btn );
+//
+//                $['eduipopup'].prototype.attachTo.call( this, $btn );
+//
+//                this.initEvent();
+//
+//                $btn.data( '$mergeObj', this.root() );
+//
+//                if( this.data('options').mode === 'menu' ) {
+//
+//                    $btn.on( 'mouseover', function(){
+//
+//                        me.show();
+//
+//                    } );
+//
+//                }
+//
+//            }
+//        },
         initEvent: function(){
 
             var _self = this,
@@ -133,6 +135,15 @@
                     colIndex = this.cellIndex + 1;
 
                 _self.trigger( 'select', [ rowIndex, colIndex ] );
+
+            });
+
+            /**
+             * 重置
+             */
+            this.on("afterhide", function(){
+
+                this.reset();
 
             });
 
@@ -229,27 +240,23 @@
 
             this.data('label').innerHTML = '';
         },
-        show: function(){
-
-            var $target = this.data('$mergeObj') || null,
-                offset = null;
-
-            if( !$target ) {
-                throw new Error('tablepicker show error, invalid target object');
-            }
-
-            offset = $target.offset();
-
-            this.root().css( $.extend( {display:'block'},  {
-                top : offset.top,
-                left : offset.left + $target.outerWidth()
-            } ) );
-
-        },
-        hide: function() {
-            $.eduipopup.prototype.hide.apply( this, arguments );
-            this.reset();
-        }
+//        show: function(){
+//
+//            var $target = this.data('$mergeObj') || null,
+//                offset = null;
+//
+//            if( !$target ) {
+//                throw new Error('tablepicker show error, invalid target object');
+//            }
+//
+//            offset = $target.offset();
+//
+//            this.root().css( $.extend( {display:'block'},  {
+//                top : offset.top,
+//                left : offset.left + $target.outerWidth()
+//            } ) );
+//
+//        }
 
     }, 'popup');
 
