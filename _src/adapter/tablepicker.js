@@ -9,6 +9,7 @@ UE.registerUI('inserttable',
      *                  menu => 返回一个eduitablepicker对象
      */
     function( name, mode ) {
+
         var me = this;
 
         //querycommand
@@ -24,7 +25,7 @@ UE.registerUI('inserttable',
 
             return $.eduibutton({
                 icon : 'table',
-                click : function(){
+                click : function() {
 
                     var btnWidget = this;
 
@@ -43,7 +44,6 @@ UE.registerUI('inserttable',
 
                 }
             });
-
         }
 
     }

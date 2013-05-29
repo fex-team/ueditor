@@ -14,11 +14,9 @@ UE.ui.define('splitbutton',{
     init : function(options){
         var me = this;
         me.root( $($.parseTmpl(me.tpl,options)));
-        me.root().first().click(function(evt){
+        me.root().find('button:first').click(function(evt){
             if(!me.disabled()){
-                if(evt.target === evt.target.parentNode.firstChild){
-                    $.proxy(options.click,me)();
-                }
+                $.proxy(options.click,me)();
             }
         });
         return me;
@@ -48,11 +46,11 @@ UE.ui.define('splitbutton',{
         me.data('$mergeObj',$obj);
         $obj.edui().data('$mergeObj',me.root());
         if(!$.contains(document.body,$obj[0])){
-            $obj.appendTo(document.body);
+            $obj.appendTo(me.root());
         }
         me.root().on('click','.dropdown-toggle',function(){
             me.wrapclick(function(){
-                $obj.edui().show(me.root());
+                $obj.edui().show();
             })
         });
         me.register('click',me.root().find('.dropdown-toggle'),function(evt){

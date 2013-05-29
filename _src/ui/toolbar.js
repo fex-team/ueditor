@@ -31,11 +31,6 @@
                 data = [data];
             }
             $.each(data,function(i,$btn){
-//                if($btn.edui().widgetName == 'button'){
-//                    $groupcont.append($btn)
-//                }else{
-//                    $cont.append($btn);
-//                }
                 $groupcont.append($btn)
             });
             $cont.append($groupcont)
