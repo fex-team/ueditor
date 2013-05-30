@@ -7,8 +7,16 @@
     padding: 3px 10px;
 }
 
-.dropdown-menu > li > a > em {
+.dropdown-menu > li > a > .edui-contextmenu-icon {
     display: inline-block;
     *zoom: 1;
     width: 25px;
+}
+
+.dropdown-menu .dropdown-submenu > a {
+    padding-right: 10px;
+}
+
+.dropdown-submenu > a:after {
+    margin-right: 0;
 }

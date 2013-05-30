@@ -10,20 +10,27 @@ UE.registerUI('inserttable',
      */
     function( name, mode ) {
 
-        var me = this;
+        var me = this,
+            $btn = null;
 
         //querycommand
         this.addListener('selectionchange',function(){
             var state = this.queryCommandState( name );
-            $btn.edui().disabled(state == -1).active(state == 1)
+            $btn.edui().disabled( state == -1 ).active( state == 1 );
         });
 
         //对象创建
         if( mode === 'menu' ) {
 
+            $.eduitablepicker({
+                mode: mode
+            }).on('select', function( evt, row, col ){
+                alert( row + ' , ' + col )
+            });
+
         } else if( !mode || mode === 'button' ) {
 
-            return $.eduibutton({
+            return $btn = $.eduibutton({
                 icon : 'table',
                 click : function() {
 
