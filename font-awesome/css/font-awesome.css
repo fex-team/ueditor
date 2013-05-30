@@ -1140,9 +1140,7 @@ ul.icons-ul > li .icon-li {
   content: "\f12a";
 }
 
-.icon-eraser:before {
-  content: "\f12d";
-}
+
 .icon-puzzle-piece:before {
   content: "\f12e";
 }
@@ -1288,4 +1286,10 @@ ul.icons-ul > li .icon-li {
 }
 .icon-video:before {
     content: "\f008";
+}
+.icon-removeformat:before {
+    content: "\f12d";
+}
+.icon-source:before {
+    content: "\f0f6";
 }

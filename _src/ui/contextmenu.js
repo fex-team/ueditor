@@ -31,7 +31,7 @@ UE.ui.define('contextmenu',{
                     $this.data('submenu-data','').data('submenu',$.eduicontextmenu(subdata).appendTo($root));
                 }
                 var $submenu = $this.data('submenu');
-                $submenu.edui().show($this,'right','position',3,2);
+                $submenu.edui().show($this,'right','position',5,2);
                 $root.data('activesubmenu',$submenu);
             }else{
                 var sub = $root.data('activesubmenu');

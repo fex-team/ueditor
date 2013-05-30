@@ -80,6 +80,8 @@
                     width: $(editor.iframe).width()
                 });
                 editor.container = $container.get();
+                //添加tooltip;
+                $.eduitooltip('attachTo');
                 $container.find('a').click(function(evt){
                     evt.preventDefault()
                 })

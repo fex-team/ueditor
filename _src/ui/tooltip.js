@@ -16,13 +16,14 @@ UE.ui.define('tooltip', {
             $obj = $(e.currentTarget);
 
         me.root().css($.extend({display: 'block'}, $obj ? {
-            top: $obj.offset().top + $obj.outerHeight(),
-            left: $obj.offset().left + (($obj.outerWidth() - me.root().outerWidth()) / 2)
+            top:  $obj.outerHeight(),
+            left: (($obj.outerWidth() - me.root().outerWidth()) / 2)
         } : {}))
     },
     show: function (e) {
         var me = this;
         me.content(e);
+        me.root().appendTo($(e.currentTarget));
         me.position(e);
         me.root().addClass("in bottom")
     },
@@ -44,16 +45,19 @@ UE.ui.define('tooltip', {
 
             $obj.each(function () {
                 if ($(this).attr("data-original-title")) {
-                    $(this).on('mouseenter', $.proxy(me.show, me))
-                        .on('mouseleave', $.proxy(me.hide, me));
+                    $(this).on('mouseenter', $.proxy(me.show,  me))
+                       .on('mouseleave click', $.proxy(me.hide, me))
+
                 }
             });
 
         }
 
         if ($.type($obj) === "undefined") {
-            $obj = $("button[data-original-title]");
-            tmp.call(me, $obj);
+            $("[data-original-title]").each(function(i,el){
+                tmp.call(me, $(el));
+            })
+
         } else {
             if (!$obj.data('tooltip')) {
                 tmp.call(me, $obj);

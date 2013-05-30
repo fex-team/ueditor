@@ -7,7 +7,8 @@ UE.registerUI('insertorderedlist insertunorderedlist ',
             click : function(){
 
                 me.execCommand(name,$dropmenu.edui().val())
-            }
+            },
+            title : this.getLang('labelMap')[name] || ''
         });
         var data = [];
         $.each(me.options[name],function(key,value){
