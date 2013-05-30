@@ -1,6 +1,9 @@
 /*bootstrap ueditor  补丁样式*/
 @import "bootstrap-ueditor.css";
 
+/*通用基础样式*/
+@import "common.css";
+
     /*编辑器样式*/
 @import "editor.css";
 
@@ -12,6 +15,7 @@
 
 @import "contextmenu.css";
 
+@import "button.css";
 
 @import "splitbutton.css";
 
