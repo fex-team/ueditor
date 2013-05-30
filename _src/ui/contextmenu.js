@@ -54,6 +54,7 @@ UE.ui.define('contextmenu',{
                 var query = $(li).data('query');
                 $(li)[query && query($(li)) == -1 ?'addClass':'removeClass']('disabled');
             })
-        })
+        });
+
     }
 },'menu');

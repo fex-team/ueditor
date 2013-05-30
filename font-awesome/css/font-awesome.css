@@ -357,12 +357,7 @@ ul.icons-ul > li .icon-li {
 .icon-glass:before {
   content: "\f000";
 }
-.icon-music:before {
-  content: "\f001";
-}
-.icon-searchreplace:before {
-  content: "\f002";
-}
+
 .icon-envelope:before {
   content: "\f003";
 }
@@ -378,9 +373,7 @@ ul.icons-ul > li .icon-li {
 .icon-user:before {
   content: "\f007";
 }
-.icon-film:before {
-  content: "\f008";
-}
+
 .icon-th-large:before {
   content: "\f009";
 }
@@ -497,12 +490,7 @@ ul.icons-ul > li .icon-li {
 .icon-font:before {
   content: "\f031";
 }
-.icon-bold:before {
-  content: "\f032";
-}
-.icon-italic:before {
-  content: "\f033";
-}
+
 .icon-text-height:before {
   content: "\f034";
 }
@@ -533,9 +521,7 @@ ul.icons-ul > li .icon-li {
 .icon-facetime-video:before {
   content: "\f03d";
 }
-.icon-picture:before {
-  content: "\f03e";
-}
+
 .icon-pencil:before {
   content: "\f040";
 }
@@ -891,21 +877,7 @@ ul.icons-ul > li .icon-li {
 .icon-reorder:before {
   content: "\f0c9";
 }
-.icon-insertunorderedlist:before {
-  content: "\f0ca";
-}
-.icon-insertorderedlist:before {
-  content: "\f0cb";
-}
-.icon-strikethrough:before {
-  content: "\f0cc";
-}
-.icon-underline:before {
-  content: "\f0cd";
-}
-.icon-table:before {
-  content: "\f0ce";
-}
+
 .icon-magic:before {
   content: "\f0d0";
 }
@@ -1167,12 +1139,7 @@ ul.icons-ul > li .icon-li {
 .icon-exclamation:before {
   content: "\f12a";
 }
-.icon-superscript:before {
-  content: "\f12b";
-}
-.icon-subscript:before {
-  content: "\f12c";
-}
+
 .icon-eraser:before {
   content: "\f12d";
 }
@@ -1265,4 +1232,60 @@ ul.icons-ul > li .icon-li {
 }
 .icon-share-sign:before {
   content: "\f14d";
+}
+
+/*ueditor icon*/
+.icon-music:before {
+    content: "\f001";
+}
+.icon-searchreplace:before {
+    content: "\f002";
+}
+.icon-undo:before{
+    content: "\f0e2";
+}
+.icon-redo:before{
+    content: "\f01e";
+}
+.icon-bold:before {
+    content: "\f032";
+}
+.icon-italic:before {
+    content: "\f033";
+}
+.icon-justifycenter:before {
+    content: "\f037";
+}
+.icon-justifyright:before {
+    content: "\f038";
+}
+.icon-justifyjustify:before {
+    content: "\f039";
+}
+.icon-image:before {
+    content: "\f03e";
+}
+.icon-superscript:before {
+    content: "\f12b";
+}
+.icon-subscript:before {
+    content: "\f12c";
+}
+.icon-insertunorderedlist:before {
+    content: "\f0ca";
+}
+.icon-insertorderedlist:before {
+    content: "\f0cb";
+}
+.icon-strikethrough:before {
+    content: "\f0cc";
+}
+.icon-underline:before {
+    content: "\f0cd";
+}
+.icon-table:before {
+    content: "\f0ce";
+}
+.icon-video:before {
+    content: "\f008";
 }

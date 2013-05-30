@@ -95,10 +95,16 @@
                     if($.type(options) == 'string'){
                         obj.init && obj.init({});
                         obj.root().edui(obj);
+                        obj.root().find('a').click(function(evt){
+                            evt.preventDefault()
+                        });
                         return obj.root()[_prefix +className].apply(obj.root(),arguments)
                     }else{
                         $el && obj.root($el);
                         obj.init && obj.init(!options || $.isPlainObject(options) ? $.extend2(options||{},obj.default||{},true) : options);
+                        obj.root().find('a').click(function(evt){
+                            evt.preventDefault()
+                        });
                         return obj.root().edui(obj);
                     }
 

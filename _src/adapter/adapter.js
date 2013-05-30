@@ -80,6 +80,9 @@
                     width: $(editor.iframe).width()
                 });
                 editor.container = $container.get();
+                $container.find('a').click(function(evt){
+                    evt.preventDefault()
+                })
             }
 
 
