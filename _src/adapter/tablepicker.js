@@ -22,6 +22,12 @@ UE.registerUI('inserttable',
         //对象创建
         if( mode === 'menu' ) {
 
+            $.eduitablepicker({
+                mode: mode
+            }).on('select', function( evt, row, col ){
+                alert( row + ' , ' + col )
+            });
+
         } else if( !mode || mode === 'button' ) {
 
             return $btn = $.eduibutton({
