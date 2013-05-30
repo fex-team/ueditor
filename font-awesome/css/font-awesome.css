@@ -360,7 +360,7 @@ ul.icons-ul > li .icon-li {
 .icon-music:before {
   content: "\f001";
 }
-.icon-search:before {
+.icon-searchreplace:before {
   content: "\f002";
 }
 .icon-envelope:before {

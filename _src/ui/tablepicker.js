@@ -109,7 +109,7 @@
 
                 _self.trigger( 'select', [ rowIndex, colIndex ] );
 
-                return false;
+
 
             });
 
@@ -214,7 +214,7 @@
             });
 
             this.data('label').innerHTML = '';
-        },
+        }
 //        show: function(){
 //
 //            var $target = this.data('$mergeObj') || null,

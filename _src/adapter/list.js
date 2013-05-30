@@ -1,4 +1,4 @@
-UE.registerUI('insertorderedlist insertunorderedlist',
+UE.registerUI('insertorderedlist insertunorderedlist ',
     function(name) {
         var me = this;
         var $btn = $.eduisplitbutton({

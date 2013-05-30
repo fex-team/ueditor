@@ -23,19 +23,15 @@
         menulist:[
             {label:'文件',data:[
                 {label:'新建',exec:function(){}},
-                {label:'打印',icon:'print',shortkey:'ctrl+n',exec:'print'},
-                {label:'编辑',data:[
-                    {label:'新建',exec:function(){
-
-                    }},
-                    {label:'打印',icon:'print',shortkey:'ctrl+n',exec:'print'},
-                ]}
+                {label:'打印',icon:'print',shortkey:'ctrl+n',exec:'print'}
             ]},
             {label:'编辑',data:[
-                {label:'新建',exec:function(){
-
-                }},
-                {label:'打印',icon:'print',shortkey:'ctrl+n',exec:'print'},
+                {label:'撤销',exec:'undo',icon:'undo',shortkey:'ctrl+z'},
+                {label:'回退',exec:'redo',icon:'redo',shortkey:'ctrl+y'},
+                {divider:1},
+                {label:'全选',exec:'selectall',shortkey:'ctrl+a'},
+                {divider:1},
+                {label:'查找和替换',exec:'searchreplace',icon:'searchreplace',shortkey:'ctrl+shift+r'}
             ]},{label:'文件',data:[
                 {label:'新建',exec:function(){
 

@@ -1,5 +1,6 @@
 .item-right{
-    float:right
+    float:right;
+    margin-left:20px;
 }
 
 .dropdown-menu > li > a {

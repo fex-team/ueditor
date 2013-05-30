@@ -15,7 +15,7 @@ UE.ui.define('contextmenu',{
                 $root.append($('<li class="divider"></li>'));
             }else{
                 if(v.data){
-                    $('<li class="dropdown-submenu"><a tabindex="-1" href="#">'+ v.label+'</a></li>').appendTo($root).data('submenu-data', v.data);
+                    $('<li class="dropdown-submenu"><a tabindex="-1" href="#"><em></em>'+ v.label+'</a></li>').appendTo($root).data('submenu-data', v.data);
                 }else{
                     $('<li>'+ $.parseTmpl(me.tmpl, $.extend2(v,me.defaultItem,true)) +'</li>').appendTo($root).data('exec', v.exec).data('query', v.query);
                 }
