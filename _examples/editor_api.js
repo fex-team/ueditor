@@ -31,13 +31,15 @@
             'ui/popup.js',
             'ui/colorpicker.js',
             'ui/tablepicker.js',
+            'ui/combobox.js',
             'ui/modal.js',
             'ui/tooltip.js',
             'ui/tab.js',
             'adapter/adapter.js',
             'adapter/button.js',
             'adapter/list.js',
-            'adapter/tablepicker.js'
+            'adapter/tablepicker.js',
+            'adapter/font.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

@@ -1,6 +1,6 @@
 //dropmenu 类
 UE.ui.define('contextmenu',{
-    tmpl:'<a tabindex="-1" href="#"><em><%if(icon){%><i class="icon-<%=icon%>"></i><%}%></em><%=label%><%if(shortkey){%><span class="muted item-right"><%=shortkey%><%}%></span></a>',
+    tmpl:'<a tabindex="-1" href="#"><em class="edui-contextmenu-icon"><%if(icon){%><i class="icon-<%=icon%>"></i><%}%></em><%=label%><%if(shortkey){%><span class="muted item-right"><%=shortkey%><%}%></span></a>',
     defaultItem:{
         icon:'',
         label:'',
@@ -15,7 +15,7 @@ UE.ui.define('contextmenu',{
                 $root.append($('<li class="divider"></li>'));
             }else{
                 if(v.data){
-                    $('<li class="dropdown-submenu"><a tabindex="-1" href="#">'+ v.label+'</a></li>').appendTo($root).data('submenu-data', v.data);
+                    $('<li class="dropdown-submenu"><a tabindex="-1" href="#"><em class="edui-contextmenu-icon"></em>'+ v.label+'</a></li>').appendTo($root).data('submenu-data', v.data);
                 }else{
                     $('<li>'+ $.parseTmpl(me.tmpl, $.extend2(v,me.defaultItem,true)) +'</li>').appendTo($root).data('exec', v.exec).data('query', v.query);
                 }
