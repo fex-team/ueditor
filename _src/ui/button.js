@@ -1,7 +1,7 @@
 //button 类
 UE.ui.define('button', {
     tpl: '<button class="btn" <% if(title) {%> data-original-title="<%=title%>" <%};%>> ' +
-        '<% if(icon) {%><i class="icon-<%=icon%>"></i><% }; %><%=text%>' +
+        '<% if(icon) {%><i class="icon-<%=icon%>"></i><% }; %><%if(text) {%><span class="edui-button-label"><%=text%></span><%}%>' +
         '<% if(caret) {%><span class="caret"></span><% };%></button>',
     default: {
         text: '',
@@ -22,6 +22,14 @@ UE.ui.define('button', {
             $.proxy(fn,this,evt)()
         }
         return this;
+    },
+    label: function( text ){
+        if( text === undefined ) {
+            return this.root().find('.edui-button-label').text();
+        } else {
+            this.root().find('.edui-button-label').text( text );
+            return this;
+        }
     },
     disabled: function (state) {
         if (state === undefined) {

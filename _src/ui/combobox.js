@@ -8,13 +8,40 @@
 
 (function(){
 
-    var widgetName = 'combobox';
+    var widgetName = 'combobox',
+        itemClassName = 'edui-combobox-item',
+        stackItemClassName = 'edui-combobox-stack-item';
 
     UE.ui.define( widgetName, ( function(){
 
         return {
-            tpl: function(){
-                return '<ul class="dropdown-menu edui-combobox-menu" role="menu" aria-labelledby="dropdownMenu"><li><a href="#"><em><i class="icon-ok"></i></em>没什么</a></li></ul>';
+            tpl: function( options ){
+
+                return '<ul class="dropdown-menu edui-combobox-menu" role="menu" aria-labelledby="dropdownMenu">' +
+                        '<%for( var i=0, len=recordStack.length; i<len; i++ ){%>' +
+                        '<li class="' + stackItemClassName + '" data-stack-item-index="<%=mapping[recordStack[i]]%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=recordStack[i]%></span></a></li>' +
+                        '<%}%>' +
+                        '<%if(recordStack.length){%>' +
+                        '<li class="divider edui-combobox-stack-separator"></li>' +
+                        '<%} else {%>' +
+                        '<li class="divider edui-combobox-stack-separator edui-common-dis-none"></li>' +
+                        '<%}%>' +
+                        '<%for( var i=0, len=items.length; i<len; i++){%>' +
+                        '<li class="' + itemClassName + '" data-item-index="<%=i%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=items[i]%></span></a></li>' +
+                        '<%}%>' +
+                        '</ul>';
+
+            },
+            default: {
+                //按钮初始文字
+                label: '',
+                //记录栈初始列表
+                recordStack: [],
+                //可用项列表
+                items: [],
+                itemCount: 0,
+                //自动记录
+                autoRecord: true
             },
             init: function( options ){
 
@@ -22,24 +49,175 @@
 
                 var btnWidget = $.eduibutton({
                     caret: true,
-                    text: '正常文本',
+                    text: options.label,
                     click: $.proxy( me.open, me )
                 });
+
+                options.itemCount = options.items.length;
+
+                $.extend( options, createItemMapping( options.recordStack, options.items ) );
 
                 me.root( $( $.parseTmpl( me.tpl(options), options ) ) );
 
                 me.attachTo( btnWidget );
 
+                this.data( 'options', options );
                 this.data( 'box', btnWidget );
 
+                this.initEvent();
+
             },
-            getbox: function(){
+            box: function(){
                 return this.data( 'box' );
             },
             open: function(){
                 this.show();
+            },
+            close: function(){
+                this.hide();
+            },
+            initEvent: function(){
+
+                var me = this;
+
+                this.root().delegate('li', 'click', function(){
+
+                    var $li = $(this),
+                        index = $li.hasClass( itemClassName ) ? $li.attr('data-item-index') : $li.attr('data-stack-item-index');
+
+                    me.selectItem( index );
+                    me.close();
+
+                    return false;
+
+                });
+
+            },
+            selectItem: function( index ){
+
+                var itemCount = this.data('options').itemCount,
+                    currentItem = null,
+                    selector = null;
+
+                if( itemCount == 0 ) {
+                    return null;
+                }
+
+                if( index < 0 ) {
+
+                    index = itemCount + index % itemCount;
+
+                } else if ( index >= itemCount ) {
+
+                    index = itemCount-1;
+
+                }
+
+                selector = '.'+itemClassName+':eq('+ index +')';
+
+                currentItem = this.root().find( selector );
+
+                if( currentItem.length ) {
+
+                    //更改按钮标签内容
+                    this.box().eduibutton('label', currentItem.find(".edui-combobox-label").text() );
+                    this.selectByItemNode( currentItem[0] );
+
+                }
+
+                return currentItem[0];
+
+                return null;
+
+            },
+            selectByItemNode: function( itemNode ){
+
+                if( !itemNode ) {
+                    return null;
+                }
+
+                var $itemNode = $(itemNode);
+
+                this.root().find('.edui-combobox-checked').removeClass('edui-combobox-checked');
+                $itemNode.find('.edui-combobox-checkbox').addClass('edui-combobox-checked');
+
+                if( this.data('options').autoRecord ) {
+                    selectRecordItem.call( this, itemNode );
+                }
+
+                return itemNode;
+
             }
         };
+
+        function createItemMapping( stackItem, items ) {
+
+            var temp = {},
+                result = {
+                    recordStack: [],
+                    mapping: {}
+                };
+
+            $.each( items, function( index, item ){
+                temp[ item ] = index;
+            } );
+
+            $.each( stackItem, function( index, item ){
+
+                if( temp[ item ] !== undefined ) {
+                    result.recordStack.push( item );
+                    result.mapping[ item ] = temp[ item ];
+                }
+
+            } );
+
+            return result;
+
+        }
+
+        function showStackSeparator() {
+
+            this.root().find(".edui-combobox-stack-separator").removeClass("edui-common-dis-none");
+
+        }
+
+        function selectRecordItem( itemNode ) {
+
+            var index = $(itemNode).attr('data-item-index'),
+                me = this,
+                $stackItem = null,
+                selector = null;
+
+            if( !$.isNumeric( index ) ) {
+                return null;
+            }
+
+            showStackSeparator.call( this );
+
+            selector = '.' + stackItemClassName + '[data-stack-item-index="'+ index +'"]';
+
+            $stackItem = this.root().find( selector );
+
+            if( $stackItem.length ) {
+
+                $stackItem.insertBefore( $stackItem.parent().children()[0] );
+                $stackItem.find('.edui-combobox-checkbox').addClass('edui-combobox-checked');
+
+            } else {
+
+                var stackItemTpl = '<li class="' + stackItemClassName + '" data-stack-item-index="<%=recordStackIndex%>"><a href="#"><em class="edui-combobox-checkbox edui-combobox-checked"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=recordStackLabel%></span></a></li>';
+                    $newStackItem = $( $.parseTmpl( stackItemTpl , {
+                        recordStackIndex: index,
+                        recordStackLabel: me.data('options').items[ index ]
+                    } ) );
+
+                $newStackItem.insertBefore( this.root().children().first() );
+
+            }
+
+            return null;
+
+        }
 
     } )(), 'menu' );
 
