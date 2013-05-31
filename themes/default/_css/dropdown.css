@@ -2,6 +2,15 @@
     font-size:14px;
 }
 
-.dropmenu-menu h1{
-    margin:0;
+.edui-dropmenu-checkbox {
+    display: inline-block;
+    *zoom: 1;
+    width: 25px;
+    height: 20px;
+    line-height: 20px;
+    visibility: hidden;
+}
+
+.edui-dropmenu-checked {
+    visibility: visible;
 }

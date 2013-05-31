@@ -20,3 +20,12 @@
 .dropdown-submenu > a:after {
     margin-right: 0;
 }
+
+.dropdown-menu > li > a h1,
+.dropdown-menu > li > a h2,
+.dropdown-menu > li > a h3,
+.dropdown-menu > li > a h4,
+.dropdown-menu > li > a h5,
+.dropdown-menu > li > a h6{
+    display:inline
+}
