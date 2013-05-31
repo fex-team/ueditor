@@ -19,6 +19,7 @@ UE.ui.define('button', {
     },
     wrapclick:function(fn,evt){
         if(!this.disabled()){
+            this.root().trigger('wrapclick');
             $.proxy(fn,this,evt)()
         }
         return this;

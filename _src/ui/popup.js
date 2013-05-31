@@ -26,7 +26,7 @@ UE.ui.define('popup',{
                 me.root().appendTo($obj[0].tagName == 'BUTTON'? $obj.parent():$obj);
             }
             $obj.data('$mergeObj',me.root());
-            $obj.on('click',function(evt){
+            $obj.on('wrapclick',function(evt){
                 me.show()
             });
             me.register('click',$obj,function(evt){

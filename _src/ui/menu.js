@@ -18,7 +18,7 @@ UE.ui.define('menu',{
         var me = this;
         if(!$obj.data('$mergeObj')){
             $obj.data('$mergeObj',me.root());
-            $obj.on('click',function(evt){
+            $obj.on('wrapclick',function(evt){
                 if(!$.contains(document,me.root()[0])){
                     me.root().appendTo($obj)
                 }
