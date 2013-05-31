@@ -1,0 +1,23 @@
+.edui-elementpath > li {
+    display: inline-block;
+    *display: inline;
+    text-shadow: 0 1px 0 #ffffff;
+    *zoom: 1;
+}
+
+.edui-elementpath > li > .divider {
+    padding: 0 5px;
+    color: #ccc;
+}
+
+.edui-elementpath > .active {
+    color: #999999;
+}
+
+.edui-elementpath{
+    margin: 0 0 0 10px;
+}
+
+.edui-elementpath a{
+    text-decoration: none;
+}
