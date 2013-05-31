@@ -18,7 +18,10 @@
 
         },
         createTextItem : function(label){
-            return $($.parseTmpl(this.textmenutpl,{'label':label}))
+
+            return $($.parseTmpl(this.textmenutpl,{'label':label})).click(function(){
+                $(this).trigger('wrapclick')
+            })
         },
         appendToTextmenu : function($item){
            this.data('$txtToolbar').append($item);
