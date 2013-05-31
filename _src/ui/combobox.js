@@ -40,6 +40,7 @@
                 //可用项列表
                 items: [],
                 itemCount: 0,
+		//item对应的值列表
                 value: [],
                 //自动记录
                 autoRecord: true,
