@@ -40,6 +40,7 @@
                 //可用项列表
                 items: [],
                 itemCount: 0,
+                value: [],
                 //自动记录
                 autoRecord: true,
                 //最多记录条数
@@ -61,8 +62,6 @@
                 options.itemCount = options.items.length;
 
                 $.extend( options, createItemMapping( options.recordStack, options.items ) );
-
-                console.log(options.itemStyles[0])
 
                 me.root( $( $.parseTmpl( me.tpl(options), options ) ) );
 
@@ -91,6 +90,12 @@
 
                     var $li = $(this),
                         index = $li.hasClass( itemClassName ) ? $li.attr('data-item-index') : $li.attr('data-stack-item-index');
+
+                    me.trigger('comboboxselect', {
+                        index: index,
+                        label: $li.find(".edui-combobox-label").text(),
+                        value: me.data('options').value[ index ]
+                    } );
 
                     me.selectItem( index );
                     me.close();
@@ -130,11 +135,32 @@
                     this.box().eduibutton('label', currentItem.find(".edui-combobox-label").text() );
                     this.selectByItemNode( currentItem[0] );
 
+                    return currentItem[0];
+
                 }
 
-                return currentItem[0];
-
                 return null;
+
+            },
+            selectItemByLabel: function( label ){
+
+                var itemMapping = this.data('options').itemMapping,
+                    index = null;
+
+                label = $.isArray( label ) ? label : [ label ];
+
+                for( var i = 0, len = label.length; i<len; i++ ) {
+
+                    index = itemMapping[ label[i] ];
+
+                    if( index !== undefined ) {
+
+                        this.selectItem( index );
+                        break;
+
+                    }
+
+                }
 
             },
             selectByItemNode: function( itemNode ){
@@ -197,12 +223,14 @@
                 tempItems = [];
 
             options.itemStyles = [];
+            options.value = [];
 
             for( var i = 0, len = fontFamily.length; i < len; i++ ) {
 
                 temp = fontFamily[ i ].val;
                 tempItems.push( temp.split(/\s*,\s*/)[0] );
                 options.itemStyles.push('font-family: ' + temp);
+                options.value.push( temp );
 
             }
 
@@ -217,6 +245,7 @@
                 tempItems = [];
 
             options.itemStyles = [];
+            options.value = [];
 
             for( var i = 0, len = fontSize.length; i < len; i++ ) {
 
@@ -226,6 +255,7 @@
 
             }
 
+            options.value = options.items;
             options.items = tempItems;
 
         }
@@ -251,6 +281,8 @@
             $.each( items, function( index, item ){
                 temp[ item ] = index;
             } );
+
+            result.itemMapping = temp;
 
             $.each( stackItem, function( index, item ){
 

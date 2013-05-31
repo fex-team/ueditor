@@ -42,7 +42,10 @@ UE.registerUI('inserttable',
                         tablePickerWidget = $.eduitablepicker({
                             mode: mode
                         }).eduitablepicker( "attachTo", btnWidget.root() ).on('select', function( evt, row, col ){
-                            alert( row + ' , ' + col )
+                            me.execCommand('inserttable', {
+                                numRows: row,
+                                numCols: col
+                            });
                         }).edui();
                         btnWidget.data( 'tablepicker', tablePickerWidget );
                     }

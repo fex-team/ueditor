@@ -21,6 +21,9 @@
             'plugins/inserthtml.js',
             'plugins/list.js',
             'plugins/font.js',
+            'plugins/table.core.js',
+            'plugins/table.cmds.js',
+            'plugins/table.action.js',
             'ui/widget.js',
             'ui/jq.extend.js',
             'ui/button.js',
@@ -41,7 +44,9 @@
             'adapter/list.js',
             'adapter/tablepicker.js',
             'adapter/fontfamily.js',
-            'adapter/fontsize.js'
+            'adapter/fontsize.js',
+            'adapter/forecolor.js',
+            'adapter/backcolor.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {
