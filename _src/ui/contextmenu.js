@@ -15,7 +15,7 @@ UE.ui.define('contextmenu',{
                 $root.append($('<li class="divider"></li>'));
             }else{
                 if(v.data){
-                    $('<li class="dropdown-submenu"><a tabindex="-1" href="#"><em class="edui-contextmenu-icon"></em>'+ v.label+'</a></li>').appendTo($root).data('submenu-data', v.data);
+                    $('<li class="dropdown-submenu"><em class="edui-contextmenu-icon"></em><a tabindex="-1" href="#"><em class="edui-contextmenu-icon"></em>'+ v.label+'</a></li>').appendTo($root).data('submenu-data', v.data);
                 }else{
                     $('<li>'+ $.parseTmpl(me.tmpl, $.extend2(v,me.defaultItem,true)) +'</li>').appendTo($root).data('exec', v.exec).data('query', v.query);
                 }
@@ -31,7 +31,7 @@ UE.ui.define('contextmenu',{
                     $this.data('submenu-data','').data('submenu',$.eduicontextmenu(subdata).appendTo($root));
                 }
                 var $submenu = $this.data('submenu');
-                $submenu.edui().show($this,'right','position',3,2);
+                $submenu.edui().show($this,'right','position',5,2);
                 $root.data('activesubmenu',$submenu);
             }else{
                 var sub = $root.data('activesubmenu');
@@ -54,6 +54,7 @@ UE.ui.define('contextmenu',{
                 var query = $(li).data('query');
                 $(li)[query && query($(li)) == -1 ?'addClass':'removeClass']('disabled');
             })
-        })
+        });
+
     }
 },'menu');

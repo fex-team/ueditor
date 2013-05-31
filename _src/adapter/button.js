@@ -14,8 +14,10 @@ UE.registerUI('bold italic redo undo source underline strikethrough superscript 
                     name = 'justify'
                 }
                 me.execCommand(name,para)
-            }
+            },
+            title: this.getLang('labelMap')[name] || ''
         });
+
         this.addListener('selectionchange',function(){
             //排版定制
             if(/^justify/.test(name)){

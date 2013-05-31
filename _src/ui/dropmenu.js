@@ -4,7 +4,7 @@ UE.ui.define('dropmenu',{
             '<%for(var i=0,ci;ci=data[i++];){%>'+
                 '<%if(ci.divider){%><li class="divider"></li><%}else{%>' +
                 '<li <%if(ci.active||ci.disabled){%>class="<%= ci.active|| \'\' %> <%=ci.disabled||\'\' %>" <%}%> data-value="<%= ci.value%>">' +
-                    '<a href="#" tabindex="-1" ><%= ci.label%></a>' +
+                    '<a href="#" tabindex="-1" ><em class="edui-dropmenu-checkbox"><i class="icon-ok"></i></em><%= ci.label%></a>' +
                 '</li><%}%>' +
             '<%}%>' +
         '</ul>',
@@ -52,12 +52,12 @@ UE.ui.define('dropmenu',{
         $('li[class!="divider disabled dropdown-submenu"]',this.root()).each(function(){
             var $el = $(this);
             if(val === undefined){
-                if($el.hasClass('active')){
+                if($el.find('em.edui-dropmenu-checked').length){
                     currentVal =  $el.data('value');
                     return false
                 }
             }else{
-                $el.toggleClass('active',$el.data('value') == val)
+                $el.find('em').toggleClass('edui-dropmenu-checked',$el.data('value') == val)
             }
         });
         if(val === undefined){

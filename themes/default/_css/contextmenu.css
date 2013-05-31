@@ -1,10 +1,11 @@
 .item-right{
-    float:right
+    float:right;
+    margin-left:20px;
 }
 
-.dropdown-menu > li > a {
-    padding: 3px 10px;
-}
+/*.dropdown-menu > li > a {*/
+    /*padding: 3px 10px;*/
+/*}*/
 
 .dropdown-menu > li > a > .edui-contextmenu-icon {
     display: inline-block;

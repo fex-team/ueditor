@@ -14,22 +14,28 @@
                 if (v.data) {
                     parseData(v.data, editor);
                 } else {
-                    if ($.type(v.exec) == 'string') {
-                        var command = v.exec;
-                        v.exec = function () {
-                            editor.execCommand(command)
-                        };
-                        if (!v.query) {
-                            v.query = function () {
-                                editor.queryCommandState(command)
+                    if(v.widget && _editorUI[v.widget]) {
+                        var widget = $.proxy(_editorUI[v.widget],editor, v.widget,'menu');
+
+                    }else{
+                        if ($.type(v.exec) == 'string') {
+                            var command = v.exec;
+                            v.exec = function () {
+                                editor.execCommand(command)
+                            };
+                            if (!v.query) {
+                                v.query = function () {
+                                    editor.queryCommandState(command)
+                                }
                             }
+                        } else {
+                            var fn = v.exec;
+                            v.exec = $.proxy(fn, null, editor, v);
+                            var queryfn = v.query;
+                            v.query = $.proxy(queryfn, null, editor, v);
                         }
-                    } else {
-                        var fn = v.exec;
-                        v.exec = $.proxy(fn, null, editor, v);
-                        var queryfn = v.query;
-                        v.query = $.proxy(queryfn, null, editor, v);
                     }
+
                 }
 
             }
@@ -74,6 +80,11 @@
                     width: $(editor.iframe).width()
                 });
                 editor.container = $container.get();
+                //添加tooltip;
+                $.eduitooltip('attachTo');
+                $container.find('a').click(function(evt){
+                    evt.preventDefault()
+                })
             }
 
 

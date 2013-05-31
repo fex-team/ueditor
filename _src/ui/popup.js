@@ -23,7 +23,7 @@ UE.ui.define('popup',{
         var me = this
         if(!$obj.data('$mergeObj')){
             if(!$.contains(document.body,me.root()[0])){
-                me.root().appendTo($obj);
+                me.root().appendTo($obj[0].tagName == 'BUTTON'? $obj.parent():$obj);
             }
             $obj.data('$mergeObj',me.root());
             $obj.on('click',function(evt){
