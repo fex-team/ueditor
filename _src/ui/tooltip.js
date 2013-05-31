@@ -25,11 +25,11 @@ UE.ui.define('tooltip', {
         me.content(e);
         me.root().appendTo($(e.currentTarget));
         me.position(e);
-        me.root().addClass("in bottom")
+        me.root().css('display','block').addClass("in bottom")
     },
     hide: function () {
         var me = this;
-        me.root().removeClass("in bottom")
+        me.root().removeClass("in bottom").css('display','none')
     },
     attachTo: function ($obj) {
         var me = this;
