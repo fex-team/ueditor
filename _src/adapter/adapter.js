@@ -49,6 +49,13 @@
                 _editorUI[uiname] = fn;
             })
         },
+        getUI:function(editor,name){
+            var arg = Array.prototype.slice.call(arguments,1);
+            if(_editorUI[name]){
+                return $.proxy(_editorUI[name],editor,name)()
+            }
+            return null;
+        },
         getActiveEditor: function () {
             var ac;
             utils.each(UE.instants, function (editor) {
@@ -93,9 +100,18 @@
             var $editorCont = $(id),
                 $container = $('<div class="edui-container"><div class="editor-body"></div></div>').insertBefore($editorCont);
             $container.find('.editor-body').append($editorCont).before(this.createToolbar(editor.options, editor));
+
+            if(editor.options.elementpath || editor.options.wordCount){
+                var $bottombar = $('<div class="bottombar"></div>');
+                $container.append($bottombar);
+            }
+            if(editor.options.elementpath){
+                $bottombar.append(this.getUI(editor,'elementpath'));
+            }
             return $container;
         },
         createToolbar: function (options, editor) {
+            var me = this;
             var $toolbar = $.eduitoolbar(), toolbar = $toolbar.edui();
             //创建下来菜单列表
 
@@ -112,8 +128,9 @@
                 $.each(options.toolbar,function(i,groupstr){
                     var btngroup = [];
                     $.each(groupstr.split(/\s+/),function(index,name){
-                        var fn = _editorUI[name.toLowerCase()];
-                        fn && btngroup.push($.proxy(fn,editor,name.toLowerCase())());
+                        var ui = me.getUI(editor,name);
+
+                        ui && btngroup.push(ui);
                     });
                     toolbar.appendToBtnmenu(btngroup);
                 })

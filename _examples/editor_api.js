@@ -35,11 +35,13 @@
             'ui/modal.js',
             'ui/tooltip.js',
             'ui/tab.js',
+            'ui/elementpath.js',
             'adapter/adapter.js',
             'adapter/button.js',
             'adapter/list.js',
             'adapter/tablepicker.js',
-            'adapter/font.js'
+            'adapter/font.js',
+            'adapter/elementpath.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {
