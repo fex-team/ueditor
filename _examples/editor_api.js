@@ -40,7 +40,8 @@
             'adapter/button.js',
             'adapter/list.js',
             'adapter/tablepicker.js',
-            'adapter/fontfamily.js'
+            'adapter/fontfamily.js',
+            'adapter/fontsize.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

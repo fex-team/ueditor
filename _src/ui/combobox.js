@@ -19,7 +19,7 @@
 
                 return  '<ul class="dropdown-menu edui-combobox-menu" role="menu" aria-labelledby="dropdownMenu">' +
                         '<%for( var i=0, len=recordStack.length; i<len; i++ ){%>' +
-                        '<li class="' + stackItemClassName + '" style="<%=itemStyles[i]%>" data-stack-item-index="<%=mapping[recordStack[i]]%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=recordStack[i]%></span></a></li>' +
+                        '<li class="' + stackItemClassName + '" data-stack-item-index="<%=mapping[recordStack[i]]%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label" style="<%=itemStyles[i]%>"><%=recordStack[i]%></span></a></li>' +
                         '<%}%>' +
                         '<%if(recordStack.length){%>' +
                         '<li class="divider edui-combobox-stack-separator"></li>' +
@@ -27,7 +27,7 @@
                         '<li class="divider edui-combobox-stack-separator edui-common-dis-none"></li>' +
                         '<%}%>' +
                         '<%for( var i=0, len=items.length; i<len; i++){%>' +
-                        '<li class="' + itemClassName + '" style="<%=itemStyles[i]%>" data-item-index="<%=i%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=items[i]%></span></a></li>' +
+                        '<li class="' + itemClassName + '" data-item-index="<%=i%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label" style="<%=itemStyles[i]%>"><%=items[i]%></span></a></li>' +
                         '<%}%>' +
                         '</ul>';
 
@@ -61,6 +61,8 @@
                 options.itemCount = options.items.length;
 
                 $.extend( options, createItemMapping( options.recordStack, options.items ) );
+
+                console.log(options.itemStyles[0])
 
                 me.root( $( $.parseTmpl( me.tpl(options), options ) ) );
 
@@ -174,8 +176,13 @@
             switch( options.mode ) {
                 case 'fontFamily':
                     //字体参数适配
-                    fontAdaptation( options );
+                    fontFamilyAdaptation( options );
                     break;
+                case 'fontsize':
+                    fontSizeAdaption( options );
+                    break;
+                default:
+                    commonAdaptation( options );
 
             }
 
@@ -183,7 +190,7 @@
 
         }
 
-        function fontAdaptation( options ) {
+        function fontFamilyAdaptation( options ) {
 
             var fontFamily = options.items,
                 temp = null,
@@ -200,6 +207,36 @@
             }
 
             options.items = tempItems;
+
+        }
+
+        function fontSizeAdaption( options ) {
+
+            var fontSize = options.items,
+                temp = null,
+                tempItems = [];
+
+            options.itemStyles = [];
+
+            for( var i = 0, len = fontSize.length; i < len; i++ ) {
+
+                temp = fontSize[ i ];
+                tempItems.push( temp );
+                options.itemStyles.push('font-size: ' + temp +'px');
+
+            }
+
+            options.items = tempItems;
+
+        }
+
+        function commonAdaptation( options ) {
+
+            options.itemStyles = [];
+
+            for( var i = 0, len = options.items.length; i < len; i++ ) {
+                options.itemStyles.push('');
+            }
 
         }
 
@@ -258,10 +295,11 @@
 
             } else {
 
-                var stackItemTpl = '<li class="' + stackItemClassName + '" style="'+ itemNode.style.cssText +'" data-stack-item-index="<%=recordStackIndex%>"><a href="#"><em class="edui-combobox-checkbox edui-combobox-checked"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=recordStackLabel%></span></a></li>';
+                var stackItemTpl = '<li class="' + stackItemClassName + '" data-stack-item-index="<%=recordStackIndex%>"><a href="#"><em class="edui-combobox-checkbox edui-combobox-checked"><i class="icon-ok"></i></em><span class="edui-combobox-label" style="<%=style%>"><%=recordStackLabel%></span></a></li>';
                     $newStackItem = $( $.parseTmpl( stackItemTpl , {
                         recordStackIndex: index,
-                        recordStackLabel: me.data('options').items[ index ]
+                        recordStackLabel: me.data('options').items[ index ],
+                        style: me.data('options').itemStyles[index]
                     } ) );
 
                 $newStackItem.insertBefore( this.root().children().first() );
