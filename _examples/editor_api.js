@@ -20,6 +20,7 @@
             'plugins/basestyle.js',
             'plugins/inserthtml.js',
             'plugins/list.js',
+            'plugins/font.js',
             'ui/widget.js',
             'ui/jq.extend.js',
             'ui/button.js',
@@ -39,7 +40,7 @@
             'adapter/button.js',
             'adapter/list.js',
             'adapter/tablepicker.js',
-            'adapter/font.js'
+            'adapter/fontfamily.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {
