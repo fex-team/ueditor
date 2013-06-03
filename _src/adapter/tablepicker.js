@@ -19,39 +19,31 @@ UE.registerUI('inserttable',
             $btn.edui().disabled( state == -1 ).active( state == 1 );
         });
 
-        //对象创建
-        if( mode === 'menu' ) {
-
-            $.eduitablepicker({
-                mode: mode
-            }).on('select', function( evt, row, col ){
-                alert( row + ' , ' + col )
-            });
-
-        } else if( !mode || mode === 'button' ) {
-
-            return $btn = $.eduibutton({
-                icon : 'table',
-                click : function() {
-
-                    var btnWidget = this;
-
-                    tablePickerWidget = btnWidget.data( 'tablepicker' );
-
-                    if( !tablePickerWidget ) {
-                        tablePickerWidget = $.eduitablepicker({
-                            mode: mode
-                        }).eduitablepicker( "attachTo", btnWidget.root() ).on('select', function( evt, row, col ){
+        return mode === 'menu' ? $.eduitablepicker({
+                        mode: mode
+                    }).on('select', function( evt, row, col ){
                             alert( row + ' , ' + col )
-                        }).edui();
-                        btnWidget.data( 'tablepicker', tablePickerWidget );
-                    }
+                }) :  ($btn = $.eduibutton({
+                        icon : 'inserttable',
+                        click : function() {
 
-                    tablePickerWidget.show();
+                            var btnWidget = this;
 
-                }
-            });
-        }
+                            tablePickerWidget = btnWidget.data( 'tablepicker' );
+
+                            if( !tablePickerWidget ) {
+                                tablePickerWidget = $.eduitablepicker({
+                                    mode: mode
+                                }).eduitablepicker( "attachTo", btnWidget.root() ).on('select', function( evt, row, col ){
+                                        alert( row + ' , ' + col )
+                                    }).edui();
+                                btnWidget.data( 'tablepicker', tablePickerWidget );
+                            }
+
+                            tablePickerWidget.show();
+
+                        }
+                    }))
 
     }
 

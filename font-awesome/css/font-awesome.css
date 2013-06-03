@@ -1281,7 +1281,7 @@ ul.icons-ul > li .icon-li {
 .icon-underline:before {
     content: "\f0cd";
 }
-.icon-table:before {
+.icon-inserttable:before {
     content: "\f0ce";
 }
 .icon-video:before {

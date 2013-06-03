@@ -8,10 +8,16 @@
  * @param   {String}   cmdName     print打印编辑器内容
  * @author zhanyi
  */
-UE.commands['print'] = {
-    execCommand : function(){
-        this.window.print();
-    },
-    notNeedUndo : 1
+UE.plugins['print'] = function(){
+    var me = this;
+    me.commands['print'] = {
+        execCommand : function(){
+            this.window.print();
+        },
+        notNeedUndo : 1
+    };
+    //快捷键
+    me.addshortcutkey({
+        "print" : "ctrl+" //手动提交
+    });
 };
-

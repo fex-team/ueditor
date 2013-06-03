@@ -23,7 +23,7 @@
         menulist:[
             {label:'文件',data:[
                 {label:'新建',exec:function(){}},
-                {label:'打印',icon:'print',shortkey:'ctrl+n',exec:'print'}
+                {label:'打印',icon:'print',shortkey:'ctrl+p',exec:'print'}
             ]},
             {label:'编辑',data:[
                 {label:'撤销',exec:'undo',icon:'undo',shortkey:'ctrl+z'},
@@ -39,7 +39,9 @@
                 {divider:1},
                 {label:'链接',exec:function(){},icon:'link',shortkey:'ctrl+k'},
                 {divider:1},
-                {label:'插入代码',exec:function(){},icon:'code',data:[
+                {label:'插入代码',exec:function(editor,name){
+
+                },icon:'code',data:[
                     {label:'ActionScript3',exec:function(){}},
                     {label:'C/C++',exec:function(){}},
                     {label:'Bash/Shell',exec:function(){}},
@@ -71,7 +73,7 @@
                 {divider:1},
                 {label:'清除格式',exec:'removeformat',shortkey:'ctrl+shift+t',icon:'removeformat'}
             ]},{label:'表格',data:[
-                {label:'粗体',exec:'bold',icon:'bold',shortkey:'ctrl+b'},
+                {label:'插入表格',icon:'inserttable',shortkey:'ctrl+shift+t',widget:'inserttable'},
                 {label:'斜体',exec:'italic',icon:'italic',shortkey:'ctrl+i'},
                 {label:'下划线',exec:'underline',icon:'underline',shortkey:'ctrl+u'},
                 {label:'删除线',exec:'strikethrough',icon:'strikethrough',shortkey:'ctrl+s'},

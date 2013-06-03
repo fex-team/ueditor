@@ -19,6 +19,7 @@
             'core/filternode.js',
             'plugins/basestyle.js',
             'plugins/inserthtml.js',
+            'plugins/print.js',
             'plugins/list.js',
             'ui/widget.js',
             'ui/jq.extend.js',

@@ -14,19 +14,19 @@
                 if (v.data) {
                     parseData(v.data, editor);
                 } else {
+                    var command;
                     if(v.widget && _editorUI[v.widget]) {
-                        var widget = $.proxy(_editorUI[v.widget],editor, v.widget,'menu');
-
+                        v.widget = $.proxy(_editorUI[v.widget],editor, v.widget,'menu')();
+                        if($.type(v.query) == 'string'){
+                            command = v.query;
+                            v.query = $.proxy(function(name){this.queryCommandState(name)},editor,command);
+                        }
                     }else{
                         if ($.type(v.exec) == 'string') {
-                            var command = v.exec;
-                            v.exec = function () {
-                                editor.execCommand(command)
-                            };
+                            command = v.exec;
+                            v.exec = $.proxy(function(name){this.execCommand(name)},editor,command);
                             if (!v.query) {
-                                v.query = function () {
-                                    editor.queryCommandState(command)
-                                }
+                                v.query = $.proxy(function(name){this.queryCommandState(name)},editor,command);
                             }
                         } else {
                             var fn = v.exec;
@@ -38,6 +38,9 @@
 
                 }
 
+            }
+            if(v.shortkey){
+                v.shortkey = v.shortkey.toUpperCase()
             }
         });
         return data;
