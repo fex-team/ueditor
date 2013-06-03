@@ -1,0 +1,67 @@
+{
+  "name": "ubuild",
+  "version": "0.0.1",
+  "project": "ueditor",
+  "projectVersion": "2.0.0",
+  "projectInfo": {
+    "scripts": {
+      "src": {
+        "root": "../_src/",
+        "files": [
+          "editor.js",
+          "core/browser.js",
+          "core/utils.js",
+          "core/EventBase.js",
+          "core/dtd.js",
+          "core/domUtils.js",
+          "core/Range.js",
+          "core/Selection.js",
+          "core/Editor.js",
+          "core/ajax.js",
+          "core/filterword.js",
+          "core/node.js",
+          "core/htmlparser.js",
+          "core/filternode.js",
+          "plugins/basestyle.js",
+          "plugins/inserthtml.js",
+          "plugins/list.js",
+          "plugins/font.js",
+          "plugins/table.core.js",
+          "plugins/table.cmds.js",
+          "plugins/table.action.js",
+          "ui/widget.js",
+          "ui/jq.extend.js",
+          "ui/button.js",
+          "ui/toolbar.js",
+          "ui/menu.js",
+          "ui/dropmenu.js",
+          "ui/contextmenu.js",
+          "ui/splitbutton.js",
+          "ui/popup.js",
+          "ui/colorpicker.js",
+          "ui/tablepicker.js",
+          "ui/combobox.js",
+          "ui/modal.js",
+          "ui/tooltip.js",
+          "ui/tab.js",
+          "adapter/adapter.js",
+          "adapter/button.js",
+          "adapter/list.js",
+          "adapter/tablepicker.js",
+          "adapter/fontfamily.js",
+          "adapter/fontsize.js",
+          "adapter/forecolor.js",
+          "adapter/backcolor.js"
+        ]
+      },
+      "dest": "../output/"
+    }
+  },
+  "devDependencies": {
+    "grunt": "~0.4",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-less": "~0.5.2",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-uglify": "~0.2.2"
+  }
+}
