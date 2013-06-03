@@ -7,14 +7,69 @@
  */
 module( "plugins.keystrokes" );
 
+test('跨节点输入tab键',function(){
+    var editor = te.obj[0];
+    editor.setContent( '<h1>hello<br></h1><p>he<img src="http://img.baidu.com/hi/jx2/j_0015.gif" />oll</p>' );
+    var range = te.obj[1];
+    setTimeout(function(){
+        range.setStart( editor.body.lastChild.firstChild,0 ).setEnd(editor.body.lastChild.firstChild.nextSibling,1).select();
+        ua.keydown(editor.body,{'keyCode':9});
+        ua.keyup(editor.body,{'keyCode':9});
+        setTimeout(function(){
+            equal(te.obj[0].undoManger.list.length,2,'');
+            var html = '<h1>hello<br></h1><p>&nbsp;&nbsp;&nbsp;&nbsp;he<img src=\"http://img.baidu.com/hi/jx2/j_0015.gif\" _src=\"http://img.baidu.com/hi/jx2/j_0015.gif\">oll</p>';
+            equal(ua.getChildHTML(te.obj[0].body),html,'跨节点输入tab键');
+            start();
+        },20);
+    },20);
+    stop();
+});
+
+test('删除块元素，块元素在后',function(){
+    var editor = te.obj[0];
+    editor.setContent( '<h1>hello<br></h1><h2><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /></h2>' );
+    var range = te.obj[1];
+    setTimeout(function(){
+        range.setStart( editor.body.lastChild.lastChild,0 ).setEnd(editor.body.lastChild.lastChild,1).select();
+        ua.keydown(editor.body,{'keyCode':8});
+        ua.keyup(editor.body,{'keyCode':8});
+        setTimeout(function(){
+            equal(te.obj[0].undoManger.index,1,'');
+            var html = '<h1>hello<br></h1>';
+            if(!ua.browser.opera)
+                equal(ua.getChildHTML(te.obj[0].body),html,'删除块元素');
+            start();
+        },20);
+    },20);
+    stop();
+});
+
+test('删除块元素，块元素在前',function(){
+    var editor = te.obj[0];
+    editor.setContent( '<h2><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /></h2><h1>hello<br></h1>' );
+    var range = te.obj[1];
+    setTimeout(function(){
+        range.setStart( editor.body.firstChild,0 ).setEnd(editor.body.firstChild,1).select();
+        ua.keydown(editor.body,{'keyCode':8});
+        ua.keyup(editor.body,{'keyCode':8});
+        setTimeout(function(){
+            equal(te.obj[0].undoManger.index,1,'');
+            var html = '<h1>hello<br></h1>';
+            equal(ua.getChildHTML(te.obj[0].body),html,'删除块元素');
+            start();
+        },20);
+    },20);
+    stop();
+});
+
 test('trace 2747 普通情况,选中一个节点，输入tab键',function(){
-    if(ua.browser.opera) return 0;
     var editor = te.obj[0];
     editor.setContent( '<h1>hello<br></h1><p>he<img src="http://img.baidu.com/hi/jx2/j_0015.gif" />oll</p>' );
     var range = te.obj[1];
     setTimeout(function(){
         range.setStart( editor.body.lastChild,1 ).setEnd(editor.body.lastChild,2).select();
         ua.keydown(editor.body,{'keyCode':9});
+        ua.keyup(editor.body,{'keyCode':9});
         setTimeout(function(){
             equal(te.obj[0].undoManger.list.length,1,'');
             var html = '<h1>hello<br></h1><p>he&nbsp;&nbsp;&nbsp;&nbsp;oll</p>';
@@ -32,6 +87,7 @@ test('trace 2746 删除自闭合标签',function(){
     setTimeout(function(){
         range.setStart( editor.body.lastChild,1 ).setEnd(editor.body.lastChild,2).select();
         ua.keydown(editor.body,{'keyCode':8});
+        ua.keyup(editor.body,{'keyCode':8});
         setTimeout(function(){
             equal(te.obj[0].undoManger.index,1,'');
             var html = '<h1>hello<br></h1><p>heoll</p>';
@@ -50,6 +106,7 @@ test('全选后，退格，剩下空p',function(){
     editor.execCommand( 'bold' );
     editor.execCommand('selectall');
     ua.keydown(editor.body,{'keyCode':8});
+    ua.keyup(editor.body,{'keyCode':8});
     stop();
     setTimeout(function(){
         var br = ua.browser.ie?'':'<br>';
@@ -82,6 +139,7 @@ test('在列表中，跨行选中第2，3行，输入tab键',function(){
     setTimeout(function(){
         range.setStart( editor.body.childNodes[0].childNodes[1].firstChild.firstChild,1 ).setEnd(editor.body.childNodes[0].childNodes[2].firstChild.firstChild,1 ).select();
         ua.keydown(editor.body,{'keyCode':9});
+        ua.keyup(editor.body,{'keyCode':9});
         setTimeout(function(){
             ua.manualDeleteFillData(te.obj[0].body);
             equal(te.obj[0].body.firstChild.tagName.toLowerCase(),'ol','原列表');
@@ -104,6 +162,7 @@ test('在h1内输入del',function(){
     setTimeout(function(){
         range.setStart(editor.body.childNodes[0],0).collapse(true).select(true);
         ua.keydown(te.obj[0].body,{'keyCode':46});
+        ua.keyup(te.obj[0].body,{'keyCode':46});
         setTimeout(function(){
             equal(ua.getChildHTML(te.obj[0].body),'<h1><br></h1><p>hello</p>','在h1内输入del');
             start();
@@ -119,6 +178,7 @@ test('在列表中，跨行选中，输入tab键',function(){
     setTimeout(function(){
         range.setStart( editor.body.firstChild.firstChild.firstChild.firstChild,1 ).setEnd(editor.body.firstChild.childNodes[1].firstChild.firstChild,1 ).select();
         ua.keydown(editor.body,{'keyCode':9});
+        ua.keyup(editor.body,{'keyCode':9});
         setTimeout(function(){
             equal(te.obj[0].undoManger.index,1,'undoManger.index');
             ua.manualDeleteFillData(te.obj[0].body);
@@ -140,6 +200,7 @@ test(' 光标定位到列表前，输入tab键',function(){
     setTimeout(function(){
         range.setStart( editor.body.firstChild.firstChild.firstChild,0 ).collapse(true).select();
         ua.keydown(editor.body,{'keyCode':9});
+        ua.keyup(editor.body,{'keyCode':9});
         setTimeout(function(){
             equal(te.obj[0].undoManger.list.length,1,'undoManger.index');
             ua.manualDeleteFillData(te.obj[0].body);
@@ -163,6 +224,7 @@ test( '删除inline的标签', function() {
         var strong = editor.body.firstChild.firstChild;
         range.selectNode( strong ).select();
         ua.keydown(editor.body,{'keyCode':8});
+        ua.keyup(editor.body,{'keyCode':8});
         setTimeout(function(){
             ua.manualDeleteFillData( editor.body );
             equal( editor.body.firstChild.tagName.toLowerCase(), 'p', 'strong 以及子inline节点都被删除' );
@@ -185,6 +247,7 @@ test( '跨行选择2个块元素', function() {
         var body = editor.body;
         range.setStart( body.firstChild, 0 ).setEnd( body.lastChild,1 ).select();
         ua.keydown(editor.body,{'keyCode':8});
+        ua.keyup(editor.body,{'keyCode':8});
         setTimeout(function(){
             ua.manualDeleteFillData( editor.body );
             range = editor.selection.getRange();
