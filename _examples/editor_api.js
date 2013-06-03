@@ -23,7 +23,6 @@
             'plugins/list.js',
             'plugins/font.js',
             'ui/widget.js',
-            'ui/jq.extend.js',
             'ui/button.js',
             'ui/toolbar.js',
             'ui/menu.js',
