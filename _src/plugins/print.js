@@ -18,6 +18,6 @@ UE.plugins['print'] = function(){
     };
     //快捷键
     me.addshortcutkey({
-        "print" : "ctrl+" //手动提交
+        "print" : "ctrl+80" //ctrl+p
     });
 };
