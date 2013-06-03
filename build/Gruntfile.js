@@ -59,7 +59,9 @@ module.exports = function( grunt ){
         },
         less: {
             'build': {
-
+                files: {
+                    '<%= meta.pkg.projectInfo.styles.dest %><%= meta.pkg.project %>.css': '<%= meta.pkg.projectInfo.styles.src.files %>'
+                }
             }
         }
 
@@ -74,6 +76,6 @@ module.exports = function( grunt ){
         }
     }
 
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('default', ['concat', 'uglify', 'less']);
 
 };

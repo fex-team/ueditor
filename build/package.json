@@ -55,6 +55,12 @@
         ]
       },
       "dest": "../output/"
+    },
+    "styles": {
+        "src": {
+            "files": "../themes/default/less/**/*.less"
+        },
+        "dest": "../output/"
     }
   },
   "devDependencies": {
