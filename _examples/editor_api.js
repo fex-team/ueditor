@@ -41,7 +41,10 @@
             'adapter/button.js',
             'adapter/list.js',
             'adapter/tablepicker.js',
-            'adapter/font.js',
+            'adapter/fontfamily.js',
+            'adapter/fontsize.js',
+            'adapter/forecolor.js',
+            'adapter/backcolor.js'
             'adapter/elementpath.js'
         ],
         baseURL = '../_src/';

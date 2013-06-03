@@ -20,30 +20,34 @@ UE.registerUI('inserttable',
         });
 
         return mode === 'menu' ? $.eduitablepicker({
+            mode: mode
+        }).on('select', function( evt, row, col ){
+                alert( row + ' , ' + col )
+            }) :  ($btn = $.eduibutton({
+            icon : 'inserttable',
+            click : function() {
+
+                var btnWidget = this;
+
+                tablePickerWidget = btnWidget.data( 'tablepicker' );
+
+                if( !tablePickerWidget ) {
+                    tablePickerWidget = $.eduitablepicker({
                         mode: mode
-                    }).on('select', function( evt, row, col ){
-                            alert( row + ' , ' + col )
-                }) :  ($btn = $.eduibutton({
-                        icon : 'inserttable',
-                        click : function() {
+                    }).eduitablepicker( "attachTo", btnWidget.root() ).on('select', function( evt, row, col ){
+                            me.execCommand('inserttable', {
+                                numRows: row,
+                                numCols: col
+                            });
+                        }).edui();
+                    btnWidget.data( 'tablepicker', tablePickerWidget );
+                }
 
-                            var btnWidget = this;
+                tablePickerWidget.show();
 
-                            tablePickerWidget = btnWidget.data( 'tablepicker' );
+            }
+        }))
 
-                            if( !tablePickerWidget ) {
-                                tablePickerWidget = $.eduitablepicker({
-                                    mode: mode
-                                }).eduitablepicker( "attachTo", btnWidget.root() ).on('select', function( evt, row, col ){
-                                        alert( row + ' , ' + col )
-                                    }).edui();
-                                btnWidget.data( 'tablepicker', tablePickerWidget );
-                            }
-
-                            tablePickerWidget.show();
-
-                        }
-                    }))
 
     }
 

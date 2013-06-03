@@ -17,9 +17,9 @@
         return {
             tpl: function( options ){
 
-                return '<ul class="dropdown-menu edui-combobox-menu" role="menu" aria-labelledby="dropdownMenu">' +
+                return  '<ul class="dropdown-menu edui-combobox-menu" role="menu" aria-labelledby="dropdownMenu">' +
                         '<%for( var i=0, len=recordStack.length; i<len; i++ ){%>' +
-                        '<li class="' + stackItemClassName + '" data-stack-item-index="<%=mapping[recordStack[i]]%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=recordStack[i]%></span></a></li>' +
+                        '<li class="' + stackItemClassName + '" data-stack-item-index="<%=mapping[recordStack[i]]%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label" style="<%=itemStyles[i]%>"><%=recordStack[i]%></span></a></li>' +
                         '<%}%>' +
                         '<%if(recordStack.length){%>' +
                         '<li class="divider edui-combobox-stack-separator"></li>' +
@@ -27,7 +27,7 @@
                         '<li class="divider edui-combobox-stack-separator edui-common-dis-none"></li>' +
                         '<%}%>' +
                         '<%for( var i=0, len=items.length; i<len; i++){%>' +
-                        '<li class="' + itemClassName + '" data-item-index="<%=i%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=items[i]%></span></a></li>' +
+                        '<li class="' + itemClassName + '" data-item-index="<%=i%>"><a href="#"><em class="edui-combobox-checkbox"><i class="icon-ok"></i></em><span class="edui-combobox-label" style="<%=itemStyles[i]%>"><%=items[i]%></span></a></li>' +
                         '<%}%>' +
                         '</ul>';
 
@@ -40,8 +40,12 @@
                 //可用项列表
                 items: [],
                 itemCount: 0,
+		//item对应的值列表
+                value: [],
                 //自动记录
-                autoRecord: true
+                autoRecord: true,
+                //最多记录条数
+                recordCount: 5
             },
             init: function( options ){
 
@@ -52,6 +56,9 @@
                     text: options.label,
                     click: $.proxy( me.open, me )
                 });
+
+                //参数适配转换一下
+                optionAdaptation( options );
 
                 options.itemCount = options.items.length;
 
@@ -84,6 +91,12 @@
 
                     var $li = $(this),
                         index = $li.hasClass( itemClassName ) ? $li.attr('data-item-index') : $li.attr('data-stack-item-index');
+
+                    me.trigger('comboboxselect', {
+                        index: index,
+                        label: $li.find(".edui-combobox-label").text(),
+                        value: me.data('options').value[ index ]
+                    } );
 
                     me.selectItem( index );
                     me.close();
@@ -123,11 +136,32 @@
                     this.box().eduibutton('label', currentItem.find(".edui-combobox-label").text() );
                     this.selectByItemNode( currentItem[0] );
 
+                    return currentItem[0];
+
                 }
 
-                return currentItem[0];
-
                 return null;
+
+            },
+            selectItemByLabel: function( label ){
+
+                var itemMapping = this.data('options').itemMapping,
+                    index = null;
+
+                label = $.isArray( label ) ? label : [ label ];
+
+                for( var i = 0, len = label.length; i<len; i++ ) {
+
+                    index = itemMapping[ label[i] ];
+
+                    if( index !== undefined ) {
+
+                        this.selectItem( index );
+                        break;
+
+                    }
+
+                }
 
             },
             selectByItemNode: function( itemNode ){
@@ -147,8 +181,95 @@
 
                 return itemNode;
 
+            },
+            //更新记录区域
+            updaterecordArea: function(){
+
+                var $recordItems = this.root().find('.'+stackItemClassName);
+
+                if( $recordItems.length > this.data('options').recordCount ) {
+
+                    for( var i = $recordItems.length - 1, len = this.data('options').recordCount; i >= len; i-- ) {
+                        $( $recordItems.get( i ) ).remove();
+                    }
+
+                }
+
             }
         };
+
+        function optionAdaptation( options ) {
+
+            switch( options.mode ) {
+                case 'fontFamily':
+                    //字体参数适配
+                    fontFamilyAdaptation( options );
+                    break;
+                case 'fontsize':
+                    fontSizeAdaption( options );
+                    break;
+                default:
+                    commonAdaptation( options );
+
+            }
+
+            return options;
+
+        }
+
+        function fontFamilyAdaptation( options ) {
+
+            var fontFamily = options.items,
+                temp = null,
+                tempItems = [];
+
+            options.itemStyles = [];
+            options.value = [];
+
+            for( var i = 0, len = fontFamily.length; i < len; i++ ) {
+
+                temp = fontFamily[ i ].val;
+                tempItems.push( temp.split(/\s*,\s*/)[0] );
+                options.itemStyles.push('font-family: ' + temp);
+                options.value.push( temp );
+
+            }
+
+            options.items = tempItems;
+
+        }
+
+        function fontSizeAdaption( options ) {
+
+            var fontSize = options.items,
+                temp = null,
+                tempItems = [];
+
+            options.itemStyles = [];
+            options.value = [];
+
+            for( var i = 0, len = fontSize.length; i < len; i++ ) {
+
+                temp = fontSize[ i ];
+                tempItems.push( temp );
+                options.itemStyles.push('font-size: ' + temp +'px');
+
+            }
+
+            options.value = options.items;
+            options.items = tempItems;
+
+        }
+
+        function commonAdaptation( options ) {
+
+            options.itemStyles = [];
+
+            for( var i = 0, len = options.items.length; i < len; i++ ) {
+                options.itemStyles.push('');
+            }
+
+        }
 
         function createItemMapping( stackItem, items ) {
 
@@ -161,6 +282,8 @@
             $.each( items, function( index, item ){
                 temp[ item ] = index;
             } );
+
+            result.itemMapping = temp;
 
             $.each( stackItem, function( index, item ){
 
@@ -205,13 +328,16 @@
 
             } else {
 
-                var stackItemTpl = '<li class="' + stackItemClassName + '" data-stack-item-index="<%=recordStackIndex%>"><a href="#"><em class="edui-combobox-checkbox edui-combobox-checked"><i class="icon-ok"></i></em><span class="edui-combobox-label"><%=recordStackLabel%></span></a></li>';
+                var stackItemTpl = '<li class="' + stackItemClassName + '" data-stack-item-index="<%=recordStackIndex%>"><a href="#"><em class="edui-combobox-checkbox edui-combobox-checked"><i class="icon-ok"></i></em><span class="edui-combobox-label" style="<%=style%>"><%=recordStackLabel%></span></a></li>';
                     $newStackItem = $( $.parseTmpl( stackItemTpl , {
                         recordStackIndex: index,
-                        recordStackLabel: me.data('options').items[ index ]
+                        recordStackLabel: me.data('options').items[ index ],
+                        style: me.data('options').itemStyles[index]
                     } ) );
 
                 $newStackItem.insertBefore( this.root().children().first() );
+
+                this.updaterecordArea();
 
             }
 
