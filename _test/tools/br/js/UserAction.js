@@ -79,6 +79,7 @@ UserAction = {
         if (typeof type == 'string') {
             type = type.toLowerCase();
             switch (type) {
+                case "paste":
                 case "cut":
                 case "keyup":
                 case "keydown":
@@ -734,6 +735,20 @@ UserAction = {
      */
     cut:function (target /* :HTMLElement */, options /* :Object */) /* :Void */ {
         this.fireKeyEvent("cut", target, options);
+    },
+
+    /**
+     * Simulates a paste event on a particular element.
+     *
+     * @param {HTMLElement}
+        *            target The element to act on.
+     * @param {Object}
+        *            options Additional event options (use DOM standard names).
+     * @method paste
+     * @static
+     */
+    paste:function ( target /* :HTMLElement */, options /* :Object */ ) /* :Void */ {
+        this.fireKeyEvent( "paste", target, options );
     },
 
     /**
