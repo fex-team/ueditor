@@ -21,6 +21,7 @@
             'plugins/inserthtml.js',
             'plugins/print.js',
             'plugins/list.js',
+            'plugins/font.js',
             'ui/widget.js',
             'ui/jq.extend.js',
             'ui/button.js',
