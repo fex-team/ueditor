@@ -18,7 +18,7 @@
     "grunt-contrib-clean": "~0.4.1",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-connect": "~0.3.0",
-    "grunt-recess": "~0.3.3"
-    "grunt": "~0.4.1",
+    "grunt-recess": "~0.3.3",
+    "grunt": "~0.4.1"
   }
 }

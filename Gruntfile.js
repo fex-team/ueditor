@@ -133,12 +133,10 @@ module.exports = function(grunt) {
       dist: {
         options: {
             compile: true,
-            compress: true
+            compress:true
         },
         files: {
-            '<%= build_dest %>/themes/default/css/<%= pkg.name %>.min.css': [
-                'themes/default/_css/<%= pkg.name %>.less'
-            ]
+            '<%= build_dest %>/themes/default/css/<%= pkg.name %>.min.css': ['themes/default/_css/ueditor.less']
         }
       }
     },
