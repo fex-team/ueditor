@@ -41,6 +41,35 @@ module( 'plugins.enterkey' );
 //        },50);
 //    },50);
 //} );
+//test( 'br做回车,选区非闭合', function () {
+//    te.dom[0].parentNode.removeChild(te.dom[0]);
+//    var div2 = document.body.appendChild( document.createElement( 'div' ) );
+//    $( div2 ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+//    te.dom.push(div2);
+//    baidu.editor.plugins.table = function(){};
+//    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','autoFloatEnabled':false,'enterTag':'br'});
+//    te.obj.push(editor);
+//    editor.render(div2);
+//    stop();
+//    editor.ready(function(){
+//        var range = new baidu.editor.dom.Range( editor.document );
+//        te.obj.push(range);
+//        editor.setContent('<p>hello1</p><p>hello2</p>' );
+//
+//        setTimeout(function(){
+//            te.obj[4].setStart(editor.body.firstChild,0).setEnd(editor.body.lastChild,1).select();
+//            ua.keydown(editor.body,{'keyCode':13});
+//            setTimeout(function(){
+//                ua.manualDeleteFillData(te.obj[3].body);
+//                var html = 'h<br>lo';
+//                equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
+//                te.dom[1].parentNode.removeChild(te.dom[1]);
+//                start();
+//            },50);
+//        },50);
+//    });
+//} );
+
 test( 'br做回车,选区非闭合', function () {
     te.dom[0].parentNode.removeChild(te.dom[0]);
     var div2 = document.body.appendChild( document.createElement( 'div' ) );
@@ -55,20 +84,50 @@ test( 'br做回车,选区非闭合', function () {
         var range = new baidu.editor.dom.Range( editor.document );
         te.obj.push(range);
         editor.setContent('<p>hello</p>' );
-
+        te.obj[4].setStart(editor.body.firstChild.firstChild,1).setEnd(editor.body.firstChild.firstChild,3).select();
+        ua.keydown(editor.body,{'keyCode':13});
         setTimeout(function(){
-            te.obj[4].setStart(editor.body.firstChild.firstChild,1).setEnd(editor.body.firstChild.firstChild,3).select();
+            ua.manualDeleteFillData(te.obj[3].body);
+            var html = 'h<br>lo';
+            equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
+            editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><a href="http://www.baidu.com"></a></p>' );
+            te.obj[4].setStart( editor.body.lastChild,0 ).setEnd(editor.body.lastChild,1).select();
             ua.keydown(editor.body,{'keyCode':13});
             setTimeout(function(){
                 ua.manualDeleteFillData(te.obj[3].body);
-                var html = 'h<br>lo';
+                var html = 'hello<br>';
                 equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
-                te.dom[1].parentNode.removeChild(te.dom[1]);
-                start();
-            },50);
-        },50);
+                editor.setContent('<h1>hello<br></h1><p>he<img src="http://img.baidu.com/hi/jx2/j_0015.gif" />oll</p>' );
+                te.obj[4].setStart( editor.body.lastChild,1 ).setEnd(editor.body.lastChild,2).select();
+                ua.keydown(editor.body,{'keyCode':13});
+                setTimeout(function(){
+                    ua.manualDeleteFillData(te.obj[3].body);
+                    var html = 'hello<br>';
+                    equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
+                    editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><br></p>' );
+                    te.obj[4].setStart( editor.body.lastChild,0 ).setEnd(editor.body.lastChild,1).select();
+                    ua.keydown(editor.body,{'keyCode':13});
+                    setTimeout(function(){
+                        ua.manualDeleteFillData(te.obj[3].body);
+                        var html = 'hello<br>';
+                        equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
+                        editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><a href="http://www.baidu.com">www.baidu.com</a></p>' );
+                        te.obj[4].setStart( editor.body.lastChild,0 ).setEnd(editor.body.lastChild,1).select();
+                        ua.keydown(editor.body,{'keyCode':13});
+                        setTimeout(function(){
+                            ua.manualDeleteFillData(te.obj[3].body);
+                            var html = 'hello<br>';
+                            equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
+                            te.dom[1].parentNode.removeChild(te.dom[1]);
+                            start();
+                        },20);
+                    },20);
+                },20);
+            },20);
+        },20);
     });
 } );
+
 test( 'br做回车，选区闭合', function () {
     te.dom[0].parentNode.removeChild(te.dom[0]);
     var div2 = document.body.appendChild( document.createElement( 'div' ) );
@@ -113,7 +172,6 @@ test( 'br做回车，选区闭合,在节点尾部输入回车，要插入2个br'
         var range = new baidu.editor.dom.Range(editor.document);
         te.obj.push(range);
         editor.setContent('<p>hello</p>');
-
         setTimeout(function () {
             te.obj[4].setStart(editor.body.firstChild.firstChild, 5).collapse(true).select();
             ua.keydown(editor.body, {'keyCode':13});
@@ -137,12 +195,7 @@ test( 'table首行中回车', function () {
         ua.keydown(editor.body,{'keyCode':13});
         stop();
         setTimeout(function(){
-//            if(ua.browser.opera || (ua.browser.safari && !ua.browser.chrome)){
             equal(ua.getChildHTML(te.obj[0].body.firstChild),'<br>','加入p');//opera中，由原生方法实现p标签
-//            }
-//            else{
-//                equal(ua.getChildHTML(te.obj[0].body.firstChild),'<br>','加入p');
-//            }
             start();
         },20);
     }
@@ -161,22 +214,22 @@ test( '去除_moz_dirty', function () {
         }, 20 );
         stop();
     }
-
 } );
+
 ///*不作处理chrome会产生div*/
 test( 'chrome删除div', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
     if(ua.browser.chrome){
-        editor.setContent( '<h1>一级标题</h1><div><br/></div>' );
+        editor.body.innerHTML = '<h1>一级标题</h1><div><br/></div>';
         range.setStart( body.firstChild.firstChild, 4 ).collapse( 1 ).select();
         ua.keydown(editor.body,{'keyCode':13});
         range.selectNode(body.lastChild).select();
         var index = editor.undoManger.index;
         var br = ua.browser.ie ? '' : '<br>';
         ua.keyup(editor.body,{'keyCode':13});
-        equal(editor.undoManger.list.length,1,'保存现场');
+        equal(editor.undoManger.list.length,2,'保存现场');
         setTimeout( function () {
             equal( body.childNodes.length, 2, '2个子节点' );
             equal(body.lastChild.tagName.toLowerCase(),'p','div转成p');
