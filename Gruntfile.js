@@ -46,7 +46,13 @@ module.exports = function(grunt) {
 
       //添加font-awesome
       'font-awesome/**', 
-      '!font-awesome/less/**'
+      '!font-awesome/less/**',
+
+      //jq
+      'jquery.js',
+
+      //案例
+      'completeDemo.html'
     ],
     //copy静态文件
     copy: {
@@ -59,6 +65,15 @@ module.exports = function(grunt) {
         files: [
             {expand: true, src: ['<%= copy_files %>'], dest: '<%= dev_dest %>'}
         ]
+      }
+    },
+
+    //编译_src/ui/tpl 目录
+    hogan: {
+      tpl: {
+        templates : '_src/ui/tpl/*.mustache',
+        output : '_src/ui/tpl.js',
+        binderName: 'hulk'
       }
     },
 
@@ -84,6 +99,7 @@ module.exports = function(grunt) {
         "_src/plugins/table.core.js",
         "_src/plugins/table.cmds.js",
         "_src/plugins/table.action.js",
+        "_src/ui/tpl.js",
         "_src/ui/widget.js",
         "_src/ui/jq.extend.js",
         "_src/ui/button.js",
@@ -157,7 +173,7 @@ module.exports = function(grunt) {
         server: {
           options: {
             port: 9000,
-            base: './',
+            base: 'build',
             keepalive: true
           }
         }
@@ -215,6 +231,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-recess');
+  grunt.loadNpmTasks('grunt-hogan');
 
   // Default task.
   grunt.registerTask('dev', ['clean:dev', 'copy:dev', 'concat:dev', 'recess']);
