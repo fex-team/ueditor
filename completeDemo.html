@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>完整demo</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+
+    <!--开发版-->
+
+    <script src="jquery.js"></script>
+    <script src="//cdnjs.bootcss.com/ajax/libs/hogan.js/2.0.0/hogan.js"></script>
+    <link href="bootstrap/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"/>
+    <link href="../themes/default/css/ueditor.min.css" rel="stylesheet"/>
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8" src="ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="ueditor.all.js">
+    </script>
+
+</head>
+<body>
+<div id="editor" style="height:500px;width:1000px"></div>
+<script>
+    UE.getEditor('editor',{
+        menulist:[
+            {label:'文件',data:[
+                {label:'新建',exec:function(){}},
+                {label:'打印',icon:'print',shortkey:'ctrl+p',exec:'print'}
+            ]},
+            {label:'编辑',data:[
+                {label:'撤销',exec:'undo',icon:'undo',shortkey:'ctrl+z'},
+                {label:'回退',exec:'redo',icon:'redo',shortkey:'ctrl+y'},
+                {divider:1},
+                {label:'全选',exec:'selectall',shortkey:'ctrl+a'},
+                {divider:1},
+                {label:'查找和替换',exec:'searchreplace',icon:'searchreplace',shortkey:'ctrl+shift+r'}
+            ]},{label:'插入',data:[
+                {label:'图片',exec:function(){},icon:'image'},
+                {label:'视频',exec:function(){},icon:'video'},
+                {label:'音乐',exec:function(){},icon:'music'},
+                {divider:1},
+                {label:'链接',exec:function(){},icon:'link',shortkey:'ctrl+k'},
+                {divider:1},
+                {label:'插入代码',exec:function(editor,name){
+
+                },icon:'code',data:[
+                    {label:'ActionScript3',exec:function(){}},
+                    {label:'C/C++',exec:function(){}},
+                    {label:'Bash/Shell',exec:function(){}},
+                    {label:'CodeFunction',exec:function(){}},
+                    {label:'C#',exec:function(){}},
+                    {label:'Delphi',exec:function(){}},
+                    {label:'Diff',exec:function(){}}
+                ]},
+            ]},{label:'显示',data:[
+                {label:'预览',exec:'preview',shortkey:'ctrl+shift+p'},
+                {label:'全屏',exec:'fullscreen',icon:'fullscreen',shortkey:'ctrl+shift+f'}
+            ]},{label:'格式',data:[
+                {label:'粗体',exec:'bold',icon:'bold',shortkey:'ctrl+b'},
+                {label:'斜体',exec:'italic',icon:'italic',shortkey:'ctrl+i'},
+                {label:'下划线',exec:'underline',icon:'underline',shortkey:'ctrl+u'},
+                {label:'删除线',exec:'strikethrough',icon:'strikethrough',shortkey:'ctrl+s'},
+                {label:'上标',exec:'superscript',icon:'superscript',shortkey:'ctrl+.'},
+                {label:'下标',exec:'subscript',icon:'subscript',shortkey:'ctrl+,'},
+                {label:'字体边框',exec:'fontborder',shortkey:'ctrl+shift+b'},
+                {divider:1},
+                {label:'段落',data:[
+                    {label:'<h1>H1</h1>',exec:'bold'},
+                    {label:'<h2>H2</h2>',exec:'bold'},
+                    {label:'<h3>H3</h3>',exec:'bold'},
+                    {label:'<h4>H4</h4>',exec:'bold'},
+                    {label:'<h5>H5</h5>',exec:'bold'},
+                    {label:'<h6>H6</h6>',exec:'bold'}
+                ]},
+                {divider:1},
+                {label:'清除格式',exec:'removeformat',shortkey:'ctrl+shift+t',icon:'removeformat'}
+            ]},{label:'表格',data:[
+                {label:'插入表格',icon:'inserttable',shortkey:'ctrl+shift+t',widget:'inserttable'},
+                {label:'斜体',exec:'italic',icon:'italic',shortkey:'ctrl+i'},
+                {label:'下划线',exec:'underline',icon:'underline',shortkey:'ctrl+u'},
+                {label:'删除线',exec:'strikethrough',icon:'strikethrough',shortkey:'ctrl+s'},
+                {label:'上标',exec:'superscript',icon:'superscript',shortkey:'ctrl+.'},
+                {label:'下标',exec:'subscript',icon:'subscript',shortkey:'ctrl+,'},
+                {label:'字体边框',exec:'fontborder',shortkey:'ctrl+shift+b'},
+                {divider:1},
+                {label:'段落',data:[
+                    {label:'<h1>H1</h1>',exec:'bold'},
+                    {label:'<h2>H2</h2>',exec:'bold'},
+                    {label:'<h3>H3</h3>',exec:'bold'},
+                    {label:'<h4>H4</h4>',exec:'bold'},
+                    {label:'<h5>H5</h5>',exec:'bold'},
+                    {label:'<h6>H6</h6>',exec:'bold'}
+                ]},
+                {divider:1},
+                {label:'清除格式',exec:'removeformat',shortkey:'ctrl+shift+t',icon:'removeformat'}
+            ]},{label:'帮助',data:[
+                {label:'粗体',exec:'bold',icon:'bold',shortkey:'ctrl+b'},
+                {label:'斜体',exec:'italic',icon:'italic',shortkey:'ctrl+i'},
+                {label:'下划线',exec:'underline',icon:'underline',shortkey:'ctrl+u'},
+                {label:'删除线',exec:'strikethrough',icon:'strikethrough',shortkey:'ctrl+s'},
+                {label:'上标',exec:'superscript',icon:'superscript',shortkey:'ctrl+.'},
+                {label:'下标',exec:'subscript',icon:'subscript',shortkey:'ctrl+,'},
+                {label:'字体边框',exec:'fontborder',shortkey:'ctrl+shift+b'},
+                {divider:1},
+                {label:'段落',data:[
+                    {label:'<h1>H1</h1>',exec:'bold'},
+                    {label:'<h2>H2</h2>',exec:'bold'},
+                    {label:'<h3>H3</h3>',exec:'bold'},
+                    {label:'<h4>H4</h4>',exec:'bold'},
+                    {label:'<h5>H5</h5>',exec:'bold'},
+                    {label:'<h6>H6</h6>',exec:'bold'}
+                ]},
+                {divider:1},
+                {label:'清除格式',exec:'removeformat',shortkey:'ctrl+shift+t',icon:'removeformat'}
+            ]}
+        ],toolbar:[
+                'source',
+            'redo undo',
+            'bold italic underline',
+            'justifyleft justifycenter justifyright justifyjustify',
+            'insertorderedlist insertunorderedlist',
+            'inserttable',
+            'forecolor',
+            'fontfamily fontsize'
+        ], 'insertorderedlist':{
+            'decimal':'1,2,3...',
+            'lower-alpha':'a,b,c...',
+            'lower-roman':'i,ii,iii...',
+            'upper-alpha':'A,B,C...',
+            'upper-roman':'I,II,III...'
+        },
+        'insertunorderedlist':{
+            'circle':'○ 大圆圈',
+            'disc':'● 小黑点',
+            'square':'■ 小方块 '
+        },elementpath:true
+    })
+
+</script>
+</body>
+</html>

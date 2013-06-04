@@ -1,8 +1,5 @@
 //button 类
 UE.ui.define('button', {
-    tpl: '<button class="btn" <% if(title) {%> data-original-title="<%=title%>" <%};%>> ' +
-        '<% if(icon) {%><i class="icon-<%=icon%>"></i><% }; %><%if(text) {%><span class="edui-button-label"><%=text%></span><%}%>' +
-        '<% if(caret) {%><span class="caret"></span><% };%></button>',
     default: {
         text: '',
         title: '',
@@ -12,7 +9,7 @@ UE.ui.define('button', {
     },
     init: function (options) {
         var me = this;
-        me.root($($.parseTmpl(me.tpl, options))).click(function (evt) {
+        me.root($(templates['btn'].render(options))).click(function (evt) {
             me.wrapclick(options.click,evt)
         });
         return me;
