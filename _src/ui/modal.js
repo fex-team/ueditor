@@ -1,20 +1,5 @@
 /*modal 类*/
 UE.ui.define('modal', {
-    tpl: '<div id="help" class="modal hide" tabindex="-1" >' +
-        '<div class="modal-header">' +
-        '<button type="button" class="close" data-hide="modal">×</button>' +
-        '<h3><%=lang_title%></h3>' +
-        '</div>' +
-        '<div class="modal-body">' +
-        '<iframe height="100%" width="100%" frameborder="0" src="<%=url%>"></iframe>' +
-        ' </div>' +
-        '<% if(!nook) {%>' +
-        '<div class="modal-footer">' +
-        '<button class="btn" data-hide="modal"><%=lang_hideButton%></button>' +
-        '<button class="btn btn-primary" data-ok="modal"><%=lang_okButton%></button>' +
-        '</div>' +
-        '<%}%>' +
-        '</div>',
     default: {
         lang_title: "",
         lang_hideButton:"",
@@ -29,7 +14,7 @@ UE.ui.define('modal', {
     init: function (options) {
         var me = this;
 
-        me.root($($.parseTmpl(me.tpl, options||{})));
+        me.root($(templates['modal'](options||{})));
 
         me.data("options", options);
 
