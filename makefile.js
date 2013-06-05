@@ -1,13 +1,26 @@
 var fs = require('fs'),
     compressor = require('node-minify'),
     severLang = '',
-    encoding = '';
+    encoding = '',
+    iconv = require('iconv-lite');
 
+function writeFile(dst,src){
+    var buf;
+    if(encoding != 'utf-8' && /\.(jsp|ashx|php|html|js|css|java|cs)$/.test(src)){
 
+        buf = fs.readFileSync(src,'utf-8');
+        if(!/\.(ashx)$/.test(src))
+            buf = buf.replace(/utf\-?8/gi,encoding);
+        if(!/\.config/.test(src))
+            buf = iconv.encode(buf,encoding);
+
+    }else{
+        buf = fs.readFileSync(src);
+    }
+    fs.writeFileSync(dst, buf);
+}
 
 function copy(src,dst,excludeFn){
-
-
     if(fs.statSync(src).isDirectory()){
 
         var dstlist = dst.split('/'),tmpPath = '';
@@ -26,19 +39,18 @@ function copy(src,dst,excludeFn){
             if(fs.statSync(tsrc).isDirectory()){
                 copy(tsrc,tdst)
             }else{
-                fs.writeFileSync(tdst,fs.readFileSync(tsrc))
+                writeFile(tdst,tsrc)
             }
         })
     }else{
-        fs.writeFileSync(dst,fs.readFileSync(src))
+        writeFile(dst,src)
     }
 
 }
 function move(src,dst){
-
     if(!fs.statSync(src).isDirectory()){
+        writeFile(dst,src);
 
-        fs.writeFileSync(dst,fs.readFileSync(src));
         fs.unlinkSync(src);
     }else{
         var dstlist = dst.split('/'),tmpPath = '';
@@ -59,7 +71,7 @@ function move(src,dst){
                 if(fs.statSync(tsrc).isDirectory()){
                     move(tsrc,tdst)
                 }else{
-                    fs.writeFileSync(tdst,fs.readFileSync(tsrc))
+                    writeFile(tdst,tsrc);
                     fs.unlinkSync(tsrc);
                 }
             }
@@ -88,7 +100,7 @@ function del(path){
 var getConfigCont = function(){
     var content;
     return function(){
-        return content || (content = fs.readFileSync('makefile.config','utf8'))
+        return content || (content = fs.readFileSync('makefile.config','utf-8'))
     }
 }();
 
@@ -96,8 +108,12 @@ var getConfigCont = function(){
 /**********main********/
 ////创建部署目录
 createDeployDir();
+//得到输入编码
+getEncoding();
 ////添加后台语言
 addServerLang();
+////添加dialog
+addDialogs();
 ////合并css
 mergeCss();
 ////添加样式
@@ -106,8 +122,7 @@ addtheme();
 addFrontLang();
 ////合并js
 mergeJs();
-////添加dialog
-addDialogs();
+
 ////添加config.js
 addConfig();
 ////添加parse.js
@@ -122,6 +137,10 @@ function createDeployDir(){
         fs.mkdirSync('ueditor',0755);
 }
 
+function getEncoding(){
+    var content = getConfigCont();
+    encoding = content.match(/encoding\s*=\s*([^#\n\r\t]+)/)[1].replace(/\s*/g,'');
+}
 function addServerLang(){
     var content = getConfigCont();
     severLang = content.match(/server\.lang\s*=\s*([^#\n\r\t]+)/)[1].replace(/\s*/g,'');
@@ -141,11 +160,11 @@ function addtheme(){
 
 function mergeCss(){
     var content = [];
-    var csslist = fs.readFileSync('themes/default/_css/ueditor.css','utf8');
+    var csslist = fs.readFileSync('themes/default/_css/ueditor.css','utf-8');
     csslist = csslist.match(/\"([^\"]+)\"/g);
     for(var i= 0,ci;ci=csslist[i++];){
         console.log(ci.replace(/['"]/g,''));
-        content.push(fs.readFileSync('themes/default/_css/' + ci.replace(/['"]/g,''),'utf8'));
+        content.push(fs.readFileSync('themes/default/_css/' + ci.replace(/['"]/g,''),'utf-8'));
     }
     if(!fs.existsSync('themes/default/css')){
         fs.mkdirSync('themes/default/css',0755);
@@ -158,6 +177,7 @@ function mergeCss(){
         fileOut: 'themes/default/css/ueditor.min.css',
         callback: function(err){
             console.log('ueditor.min.css compress success');
+
         }
     });
 
@@ -165,12 +185,12 @@ function mergeCss(){
 
 function mergeJs(){
 
-    var jslist = fs.readFileSync('_examples/editor_api.js','utf8');
+    var jslist = fs.readFileSync('_examples/editor_api.js','utf-8');
     jslist = jslist.match(/\[([^\]]+)\]/)[1].match(/'[^']+'/g);
     var content = [];
     for(var i= 0,ci;ci=jslist[i++];){
         console.log(ci.replace(/['"]/g,''));
-        content.push(fs.readFileSync('_src/' + ci.replace(/['"]/g,''),'utf8'));
+        content.push(fs.readFileSync('_src/' + ci.replace(/['"]/g,''),'utf-8'));
     }
     //前后封装
     content = '(function(){\n' + content.join('\n').replace('_css','css') + '})()';
@@ -212,10 +232,11 @@ function mergeJs(){
 }
 
 function addDialogs(){
-    copy('dialogs','ueditor/dialogs')
+    copy('dialogs','ueditor/dialogs');
+
 }
 function addConfig(){
-    var content = fs.readFileSync('ueditor.config.js','utf8');
+    var content = fs.readFileSync('ueditor.config.js','utf-8');
     switch(severLang){
         case 'net':
             content = content.replace(/\.php/g,'.ashx').replace(/php\//g,'net\/');
@@ -223,7 +244,10 @@ function addConfig(){
         case 'jsp':
             content = content.replace(/\.php/g,'.jsp').replace(/php\//g,'jsp\/');
     }
-    fs.writeFileSync('ueditor/ueditor.config.js',content);
+    if(encoding != 'utf-8'){
+        content = content.replace(/utf\-?8/gi,encoding);
+    }
+    fs.writeFileSync('ueditor/ueditor.config.js',iconv.encode(content,encoding));
 
 }
 function addParse(){
