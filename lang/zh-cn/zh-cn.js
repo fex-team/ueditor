@@ -135,7 +135,7 @@ UE.I18N['zh-cn'] = {
         'insertcol':"左插入列",
         'insertrownext':'后插入行',
         'insertcolnext':'右插入列',
-        insertcaption:'插入表格名称',
+        'insertcaption':'插入表格名称',
         'deletecaption':'删除表格名称',
         'inserttitle':'插入表格标题行',
         'deletetitle':'删除表格标题行',
