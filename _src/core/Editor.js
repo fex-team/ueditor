@@ -219,8 +219,8 @@
                     }else{
                         options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
                     }
-                    container.style.width = options.initialFrameWidth+ 'px';
-                    container.style.height = options.initialFrameHeight + 'px';
+                    container.style.width = options.initialFrameWidth + (/%$/.test(options.initialFrameWidth) ? '' : 'px');
+                    container.style.height = options.initialFrameHeight + (/%$/.test(options.initialFrameHeight) ? '' : 'px');
                     container.style.zIndex = options.zIndex;
                     container.innerHTML = '<iframe id="' + 'ueditor_' + this.uid + '"' + 'width="100%" height="100%" scroll="no" frameborder="0" ></iframe>';
                     var doc = container.firstChild.contentWindow.document;
