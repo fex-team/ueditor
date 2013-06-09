@@ -110,8 +110,26 @@ test( '表格右键菜单', function() {
     stop();
 } );
 
+test( '右键全选', function() {
+    var editor = te.obj[0];
+    editor.setContent('asdfg');
+    ua.contextmenu(editor.body);
+    var lang = editor.getLang( "contextMenu" );
+    var menuBody = document.getElementsByClassName("edui-menu-body")[0];
+    equal(te.obj[0].selection.getRange().collapsed,true,'检查选区--闭合');
+    ua.click(menuBody.childNodes[0]);
+    setTimeout(function(){
+        equal(te.obj[0].selection.getRange().collapsed,false,'检查选区--非闭合');
+        var menuDiv = document.getElementById("edui_fixedlayer");
+        menuDiv.parentNode.removeChild(menuDiv);
+        start();
+    },50);
+    stop();
+} );
+
 /*trace 3210*/
 test( 'trace 3210：添加单元格背景色', function() {
+    if(ua.browser.ie==9)return;
     var editor = te.obj[2];
     var div = document.body.appendChild( document.createElement( 'div' ) );
     var lang = editor.getLang( "contextMenu" );
@@ -137,17 +155,21 @@ test( 'trace 3210：添加单元格背景色', function() {
         lang = editor.getLang( "contextMenu" );
         ua.click(menutable.childNodes[12]);
         var iframe = document.getElementsByTagName('iframe');
-        var iframe1;
-        if(ua.browser.ie)
-            iframe1 = iframe[iframe.length-2];
-        else
-            iframe1 = iframe[iframe.length-1];
+        var i = iframe.length-1;
+        for(var iframe1 in iframe){
+            if(iframe[i].id.indexOf('edui')!=-1){
+                iframe1 = iframe[i];
+                break;
+            }else{
+                i--;
+            }
+        }
         setTimeout(function (){
             iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
             var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittd edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
             ua.click(buttonBody);
             equal(tds[2].style.backgroundColor,'','背景色不变');
-            if(ua.browser.ie)
+            if(ua.browser.ie == 8)
             {
                 equal(tds[0].style.backgroundColor,'#ff0000','背景色不变');
                 equal(tds[6].style.backgroundColor,'#ff0000','背景色不变');
@@ -160,7 +182,7 @@ test( 'trace 3210：添加单元格背景色', function() {
                 setTimeout(function() {
                     editor.execCommand('source');
                     equal(tds[2].style.backgroundColor,'','背景色不变');
-                    if(ua.browser.ie)
+                    if(ua.browser.ie == 8)
                     {
                         equal(tds[0].style.backgroundColor,'#ff0000','背景色不变');
                         equal(tds[6].style.backgroundColor,'#ff0000','背景色不变');
@@ -174,8 +196,8 @@ test( 'trace 3210：添加单元格背景色', function() {
                         div.parentNode.removeChild(div);
                         start();
                     },20);
-                },20);
-            },20);
+                },100);
+            },100);
         },500);
     },500);
 } );
@@ -242,7 +264,7 @@ test( 'trace 3044：表格名称中右键', function() {
         setTimeout(function (){
             lang = editor.getLang( "contextMenu" );
             menutableBody = document.getElementsByClassName("edui-menu-body")[1];
-            if(ua.browser.ie)
+            if(ua.browser.ie == 8)
             {
                 equal(menutableBody.childNodes.length,7,'7个子项目,其中有2条分隔线');
             }else{
@@ -409,7 +431,7 @@ test( '选区背景隔行', function() {
         ua.click(menutableBody.childNodes[1]);
         ut.clearSelected();
         trs = editor.body.getElementsByTagName('tr');
-        if(ua.browser.ie)
+        if(ua.browser.ie == 8)
         {
             equal(trs[0].cells[0].style.backgroundColor,'#bbb','第一行');
             equal(trs[1].cells[1].style.backgroundColor,'#ccc','第二行');
@@ -489,7 +511,7 @@ test( '三色渐变', function() {
         ua.click(menutable.childNodes[3]);
         ut.clearSelected();
         tds = editor.body.getElementsByTagName('td');
-        if(ua.browser.ie){
+        if(ua.browser.ie == 8){
             equal(tds[0].style.backgroundColor,'#aaa','第一行');
             equal(tds[6].style.backgroundColor,'#bbb','第二行');
             equal(tds[11].style.backgroundColor,'#ccc','第二行');
@@ -655,6 +677,7 @@ test( '表格逆序当前', function() {
 
 /*trace 3088*/
 test( 'trace 3088：检查表格属性', function() {
+    if(ua.browser.ie==9)return;
     var editor = te.obj[2];
     var div = document.body.appendChild( document.createElement( 'div' ) );
     var lang = editor.getLang( "contextMenu" );
@@ -683,12 +706,16 @@ test( 'trace 3088：检查表格属性', function() {
         }
         lang = editor.getLang( "contextMenu" );
         var iframe  = document.getElementsByTagName('iframe');
-        var iframe1;
         setTimeout(function (){
-            if(ua.browser.ie)
-                iframe1 = iframe[iframe.length-2];
-            else
-                iframe1 = iframe[iframe.length-1];
+            var i = iframe.length-1;
+            for(var iframe1 in iframe){
+                if(iframe[i].id.indexOf('edui')!=-1){
+                    iframe1 = iframe[i];
+                    break;
+                }else{
+                    i--;
+                }
+            }
             equal(iframe1.contentDocument.getElementById('J_title').checked,false,'无标题行');
             equal(iframe1.contentDocument.getElementById('J_caption').checked,true,'有名称');
             range.setStart( editor.body.getElementsByTagName('td')[0], 0 ).collapse( true ).select();
@@ -704,10 +731,15 @@ test( 'trace 3088：检查表格属性', function() {
             ua.click(menutable.childNodes[14]);
             iframe  = document.getElementsByTagName('iframe');
             setTimeout(function (){
-                if(ua.browser.ie)
-                    iframe1 = iframe[iframe.length-2];
-                else
-                    iframe1 = iframe[iframe.length-1];
+                i = iframe.length-1;
+                for(var iframe1 in iframe){
+                    if(iframe[i].id.indexOf('edui')!=-1){
+                        iframe1 = iframe[i];
+                        break;
+                    }else{
+                        i--;
+                    }
+                }
                 equal(iframe1.contentDocument.getElementById('J_title').checked,false,'无标题行');
                 equal(iframe1.contentDocument.getElementById('J_caption').checked,true,'有名称');
                 setTimeout(function(){
@@ -723,6 +755,7 @@ test( 'trace 3088：检查表格属性', function() {
 
 /*trace 3099*/
 test( 'trace 3099：清除边框颜色', function() {
+    if(ua.browser.ie==9)return;
     var editor = te.obj[2];
     var div = document.body.appendChild( document.createElement( 'div' ) );
     var lang = editor.getLang( "contextMenu" );
@@ -744,17 +777,21 @@ test( 'trace 3099：清除边框颜色', function() {
         lang = editor.getLang( "contextMenu" );
         ua.click(menutable.childNodes[14]);
         var iframe  = document.getElementsByTagName('iframe');
-        var iframe1;
         setTimeout(function (){
-            if(ua.browser.ie)
-                iframe1 = iframe[iframe.length-3];
-            else
-                iframe1 = iframe[iframe.length-1];
+            var i = iframe.length-1;
+            for(var iframe1 in iframe){
+                if(iframe[i].id.indexOf('edui')!=-1){
+                    iframe1 = iframe[i];
+                    break;
+                }else{
+                    i--;
+                }
+            }
             iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
             var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
             ua.click(buttonBody);
             tds = editor.body.getElementsByTagName('td');
-            if(ua.browser.ie)
+            if(ua.browser.ie == 8)
                 equal(tds[0].style.borderColor,'#ff0000','边框颜色设置为红色');
             else{
                 equal(tds[0].style.borderColor,'rgb(255, 0, 0)','边框颜色设置为红色');
@@ -774,10 +811,15 @@ test( 'trace 3099：清除边框颜色', function() {
 
             iframe  = document.getElementsByTagName('iframe');
             setTimeout(function (){
-                if(ua.browser.ie)
-                    iframe1 = iframe[iframe.length-3];
-                else
-                    iframe1 = iframe[iframe.length-1];
+                i = iframe.length-1;
+                for(var iframe1 in iframe){
+                    if(iframe[i].id.indexOf('edui')!=-1){
+                        iframe1 = iframe[i];
+                        break;
+                    }else{
+                        i--;
+                    }
+                }
                 ua.click(iframe1.contentDocument.getElementById('J_tone'));
                 var div_nocolor = document.getElementsByClassName('edui-colorpicker-nocolor');
                 ua.click(div_nocolor[0]);

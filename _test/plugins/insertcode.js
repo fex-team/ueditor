@@ -1,12 +1,12 @@
 module( 'plugins.insertcode' );
 
 test( 'trace 3343：插入代码中有空行', function() {
+    if(ua.browser.ie==9)return;
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent('');
+    editor.setContent('hello');
+    ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
     editor.execCommand('insertcode','Java');
-    range.setStart(editor.body.firstChild,0).collapse(true).select();
-    range.insertNode( editor.document.createTextNode( 'hello' ) );
     range.setStart(editor.body.firstChild,0).collapse(true).select();
     ua.keydown(editor.body,{'keyCode':13});
     range.setStart(editor.body.firstChild,0).collapse(true).select();
@@ -15,11 +15,11 @@ test( 'trace 3343：插入代码中有空行', function() {
     range.insertNode( editor.document.createTextNode( 'hello' ) );
     var br = ua.browser.ie?'':'<br>';
     if(ua.browser.ie)
-        ua.checkSameHtml(editor.body.innerHTML,'<PRE class=brush:Java;toolbar:false>​<BR>hello​​<BR>​​&nbsp;hello</PRE><P>&nbsp;</P>','插入代码');
+        ua.checkSameHtml(editor.body.innerHTML,'<PRE class=brush:Java;toolbar:false>​<BR>hello​​<BR>​​hello</PRE><P></P>','插入代码');
     else if(ua.browser.gecko)
-        ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre>','插入代码');
+        ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:Java;toolbar:false">hello<br><br>hello</pre>','插入代码');
     else
-        ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre><p>'+br+'</p>','插入代码');
+        ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:Java;toolbar:false">hello<br><br>hello</pre><p>'+br+'</p>','插入代码');
     stop();
     setTimeout(function() {
         editor.execCommand('source');
@@ -27,7 +27,7 @@ test( 'trace 3343：插入代码中有空行', function() {
             editor.execCommand('source');
             var br = ua.browser.ie?'':'<br>';
             if(ua.browser.ie)
-                ua.checkSameHtml(editor.body.innerHTML,"<PRE class=brush:Java;toolbar:false>hello<BR> hello<BR></PRE><P>&nbsp;</P>",'样式不变');
+                ua.checkSameHtml(editor.body.innerHTML,"<PRE class=brush:Java;toolbar:false>hello<BR>hello<BR></PRE><P>&nbsp;</P>",'样式不变');
             else if(ua.browser.gecko)
                 ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre>','样式不变');
             else
@@ -58,6 +58,8 @@ test( 'trace 3395：插入代码为空时，清空编辑器', function() {
     var br = ua.browser.ie?'&nbsp;':'<br>';
     if(ua.browser.gecko)
         ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:html;toolbar:false">'+br+'</pre>','检查插入了html');
+    else if(ua.browser.ie==9)
+        ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:html;toolbar:false"></pre><p>'+br+'</p>','检查插入了html');
     else
         ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:html;toolbar:false">'+br+'</pre><p>'+br+'</p>','检查插入了html');
     range.setStart(editor.body.firstChild,0).collapse(true).select();
@@ -69,6 +71,7 @@ test( 'trace 3395：插入代码为空时，清空编辑器', function() {
 });
 
 test( 'trace 3396：多次切换源码，不会产生空行', function() {
+    if(ua.browser.ie==9)return;
     var editor = te.obj[0];
     editor.setContent('<p>&lt;body&gt;</p><p>&lt;/body&gt;</p>');
     ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
