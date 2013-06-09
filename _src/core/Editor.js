@@ -41,7 +41,15 @@
             (editor.options.allHtmlEnabled ? editor.getAllHtml() : editor.getContent(null, null, true)) :
             ''
     }
+    function loadPlugins(me){
+        //初始化插件
+        for (var pi in UE.plugins) {
+            UE.plugins[pi].call(me);
+        }
+        me.langIsReady = true;
 
+        me.fireEvent("langReady");
+    }
     /**
      * UEditor编辑器类
      * @name Editor
@@ -88,21 +96,19 @@
             tableNativeEditInFF: false,
             autoSyncData : true
         });
+        if(!utils.isEmptyObject(UE.I18N)){
+            loadPlugins(this)
+        }else{
+            utils.loadFile(document, {
+                src: me.options.langPath + me.options.lang + "/" + me.options.lang + ".js",
+                tag: "script",
+                type: "text/javascript",
+                defer: "defer"
+            }, function () {
+                loadPlugins(this)
+            });
+        }
 
-        utils.loadFile(document, {
-            src: me.options.langPath + me.options.lang + "/" + me.options.lang + ".js",
-            tag: "script",
-            type: "text/javascript",
-            defer: "defer"
-        }, function () {
-            //初始化插件
-            for (var pi in UE.plugins) {
-                UE.plugins[pi].call(me);
-            }
-            me.langIsReady = true;
-
-            me.fireEvent("langReady");
-        });
         UE.instants['ueditorInstant' + me.uid] = me;
     };
     Editor.prototype = {
