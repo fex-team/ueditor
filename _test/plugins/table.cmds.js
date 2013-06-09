@@ -508,13 +508,20 @@ test('settablebackground', function () {
         var br = ua.browser.ie?'':'<br>';
         var html_1 = '<td width="210" valign="top" class=" selectTdClass" style="background-color: rgb(187, 187, 187);">'+br+'</td><td width="210" valign="top">'+br+'</td>';
         var html_2 = '<td width="210" valign="top" class=" selectTdClass" style="background-color: rgb(204, 204, 204);">'+br+'</td><td width="210" valign="top">'+br+'</td>';
+        if(ua.browser.ie==8)
+        {
+            html_1 = '<td width="217" valign="top" class=" selectTdClass" style="background-color: #bbb">'+br+'</td><td width="217" valign="top">'+br+'</td>';
+            html_2 = '<td width="217" valign="top" class=" selectTdClass" style="background-color: #ccc">'+br+'</td><td width="217" valign="top">'+br+'</td>';
+        }
         var trs = editor.body.firstChild.getElementsByTagName('tr');
         ua.checkSameHtml(trs[0].innerHTML,html_1,'选区隔行变色');
         ua.checkSameHtml(trs[1].innerHTML,html_2,'选区隔行变色');
-       range.setStart(tds[0], 0).collapse(true).select();
+        range.setStart(tds[0], 0).collapse(true).select();
         editor.execCommand('cleartablebackground');
         setTimeout(function(){
             html_1 = '<td width="210" valign="top" class=" selectTdClass" style="">'+br+'</td><td width="210" valign="top">'+br+'</td>';
+            if(ua.browser.ie==8)
+                html_1 = '<td width="217" valign="top" class=" selectTdClass">'+br+'</td><td width="217" valign="top">'+br+'</td>';
             trs = editor.body.firstChild.getElementsByTagName('tr');
             ua.checkSameHtml(trs[0].innerHTML,html_1,'取消选区隔行变色');
             ua.checkSameHtml(trs[1].innerHTML,html_1,'取消选区隔行变色');
