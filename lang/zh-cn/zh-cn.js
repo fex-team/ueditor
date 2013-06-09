@@ -431,6 +431,8 @@ UE.I18N['zh-cn'] = {
             lang_search1:"查找",
             lang_search2:"查找",
             lang_replace:"替换",
+            lang_searchReg:'支持正则表达式，添加前后斜杠标示为正则表达式，例如“/表达式/”',
+            lang_searchReg1:'支持正则表达式，添加前后斜杠标示为正则表达式，例如“/表达式/”',
             lang_case_sensitive1:"区分大小写",
             lang_case_sensitive2:"区分大小写",
             nextFindBtn:{value:"下一个"},
