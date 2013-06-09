@@ -97,7 +97,7 @@
             autoSyncData : true
         });
         if(!utils.isEmptyObject(UE.I18N)){
-            loadPlugins(this)
+            loadPlugins(me)
         }else{
             utils.loadFile(document, {
                 src: me.options.langPath + me.options.lang + "/" + me.options.lang + ".js",
@@ -105,7 +105,7 @@
                 type: "text/javascript",
                 defer: "defer"
             }, function () {
-                loadPlugins(this)
+                loadPlugins(me)
             });
         }
 
