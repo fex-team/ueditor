@@ -3,9 +3,11 @@
 
 UE.plugins['defaultfilter'] = function () {
     var me = this;
+    me.setOpt('allowDivTransToP',true);
     //默认的过滤处理
     //进入编辑器的内容处理
     me.addInputRule(function (root) {
+        var allowDivTransToP = this.options.allowDivTransToP;
         var val;
         //进行默认的处理
         root.traversal(function (node) {
@@ -74,6 +76,9 @@ UE.plugins['defaultfilter'] = function () {
                         //针对代码这里不处理插入代码的div
                         val = node.getAttr('class');
                         if(val && /^line number\d+/.test(val)){
+                            break;
+                        }
+                        if(!allowDivTransToP){
                             break;
                         }
                         var tmpNode, p = UE.uNode.createElement('p');
