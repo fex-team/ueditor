@@ -189,53 +189,44 @@
                 container = document.getElementById(container);
             }
             if (container) {
-                var useBodyAsViewport = ie && browser.version < 9,
-                    html = ( ie && browser.version < 9 ? '' : '<!DOCTYPE html>') +
-                        '<html xmlns=\'http://www.w3.org/1999/xhtml\'' + (!useBodyAsViewport ? ' class=\'view\'' : '') + '><head>' +
-                        ( options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
+                if(options.initialFrameWidth){
+                    options.minFrameWidth = options.initialFrameWidth
+                }else{
+                    options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
+                }
+                if(options.initialFrameHeight){
+                    options.minFrameHeight = options.initialFrameHeight
+                }else{
+                    options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
+                }
+                container.style.width = options.initialFrameWidth+ (/%$/.test(options.initialFrameWidth) ? '' : 'px');
+                container.style.height = options.initialFrameHeight + (/%$/.test(options.initialFrameHeight) ? '' : 'px');
+                container.style.zIndex = options.zIndex;
+
+                var html = ( ie && browser.version < 9  ? '' : '<!DOCTYPE html>') +
+                        '<html xmlns=\'http://www.w3.org/1999/xhtml\' class=\'view\' ><head>' +
                         '<style type=\'text/css\'>' +
                         //设置四周的留边
-                        '.view{padding:0;word-wrap:break-word;cursor:text;height:100%;}\n' +
+                        '.view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n' +
                         //设置默认字体和字号
                         //font-family不能呢随便改，在safari下fillchar会有解析问题
                         'body{margin:8px;font-family:sans-serif;font-size:16px;}' +
                         //设置段落间距
-                        'p{margin:5px 0;}'
-                        + ( options.initialStyle || '' ) +
-                        '</style></head><body' + (useBodyAsViewport ? ' class=\'view\'' : '') + '></body>';
-                if (options.customDomain && document.domain != location.hostname) {
-                    html += '<script>window.parent.UE.instants[\'ueditorInstant' + me.uid + '\']._setup(document);</script></html>';
-                    container.appendChild(domUtils.createElement(document, 'iframe', {
-                        id: 'ueditor_' + me.uid,
-                        width: "100%",
-                        height: "100%",
-                        frameborder: "0",
-                        src: 'javascript:void(function(){document.open();document.domain="' + document.domain + '";' +
-                            'document.write("' + html + '");document.close();}())'
-                    }));
-                } else {
-
-                    if(options.initialFrameWidth){
-                        options.minFrameWidth = options.initialFrameWidth
-                    }else{
-                        options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
-                    }
-                    if(options.initialFrameHeight){
-                        options.minFrameHeight = options.initialFrameHeight
-                    }else{
-                        options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
-                    }
-                    container.style.width = options.initialFrameWidth + (/%$/.test(options.initialFrameWidth) ? '' : 'px');
-                    container.style.height = options.initialFrameHeight + (/%$/.test(options.initialFrameHeight) ? '' : 'px');
-                    container.style.zIndex = options.zIndex;
-                    container.innerHTML = '<iframe id="' + 'ueditor_' + this.uid + '"' + 'width="100%" height="100%" scroll="no" frameborder="0" ></iframe>';
-                    var doc = container.firstChild.contentWindow.document;
-                    //去掉了原来的判断!browser.webkit，因为会导致onload注册的事件不触发
-                    doc.open();
-                    doc.write(html + '</html>');
-                    doc.close();
-                    me._setup(doc);
-                }
+                        'p{margin:5px 0;}</style>' +
+                        ( options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
+                        (options.initialStyle ? '<style>' + options.initialStyle + '</style>' : '') +
+                        '</head><bodgy class=\'view\' ></body>' +
+                        '<script type=\'text/javascript\' ' + (ie ? 'defer=\'defer\'' : '' ) +' id=\'_initialScript\'>' +
+                        'setTimeout(function(){window.parent.UE.instants[\'ueditorInstant' + me.uid + '\']._setup(document);},0);' +
+                        'var _tmpScript = document.getElementById(\'_initialScript\');_tmpScript.parentNode.removeChild(_tmpScript);</script></html>';
+                container.appendChild(domUtils.createElement(document, 'iframe', {
+                    id: 'ueditor_' + me.uid,
+                    width: "100%",
+                    height: "100%",
+                    frameborder: "0",
+                    src: 'javascript:void(function(){document.open();' + (options.customDomain && document.domain != location.hostname ?  'document.domain="' + document.domain + '";' : '') +
+                        'document.write("' + html + '");document.close();}())'
+                }));
                 container.style.overflow = 'hidden';
             }
         },
@@ -255,8 +246,8 @@
                 doc.body.disabled = false;
             } else {
                 doc.body.contentEditable = true;
-                doc.body.spellcheck = false;
             }
+            doc.body.spellcheck = false;
             me.document = doc;
             me.window = doc.defaultView || doc.parentWindow;
             me.iframe = me.window.frameElement;
@@ -298,6 +289,7 @@
             }
 
             //编辑器不能为空内容
+
             if (domUtils.isEmptyNode(me.body)) {
                 me.body.innerHTML = '<p>' + (browser.ie ? '' : '<br/>') + '</p>';
             }
