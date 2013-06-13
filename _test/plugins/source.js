@@ -185,28 +185,30 @@ test( '默认插入的占位符', function () {
 test( '插入分页符,源码中显示：_baidu_page_break_tag_', function () {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     var editor = te.obj[0];
-    editor.render( div );
-    var range = new baidu.editor.dom.Range( editor.document );
-    var body = editor.body;
-    editor.setContent( '<p><br></p>' );
-    setTimeout(function(){
-        range.setStart( body.firstChild, 0 ).collapse( 1 ).select();
-        editor.execCommand( 'pagebreak' );
-        ua.manualDeleteFillData( editor.body );
-        var pagebreak = body.getElementsByTagName( 'hr' )[0];
+    editor.render(div);
+    setTimeout(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        var body = editor.body;
+        editor.setContent('<p><br></p>');
+        setTimeout(function () {
+            range.setStart(body.firstChild, 0).collapse(1).select();
+            editor.execCommand('pagebreak');
+            ua.manualDeleteFillData(editor.body);
+            var pagebreak = body.getElementsByTagName('hr')[0];
 
-        if ( typeof pagebreak.attributes['class'] == "undefined" ) {
-            equal( pagebreak.getAttribute( 'class' ), 'pagebreak', 'pagebreak' );
-        }
-        else {//适用于ie6,7
-            equal( pagebreak.attributes['class'].nodeValue, 'pagebreak', 'pagebreak' );
-        }
-        ua.manualDeleteFillData( editor.body );
+            if (typeof pagebreak.attributes['class'] == "undefined") {
+                equal(pagebreak.getAttribute('class'), 'pagebreak', 'pagebreak');
+            }
+            else {//适用于ie6,7
+                equal(pagebreak.attributes['class'].nodeValue, 'pagebreak', 'pagebreak');
+            }
+            ua.manualDeleteFillData(editor.body);
 //        var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
-        ok( editor.getContent().indexOf( '_ueditor_page_break_tag_' ) >= 0, 'pagebreak被解析' );
+            ok(editor.getContent().indexOf('_ueditor_page_break_tag_') >= 0, 'pagebreak被解析');
 //        equal( editor.getContent(), '<p>' + br + '</p>_baidu_page_break_tag_<p>' + br + '</p>' );
-        document.body.removeChild( div );
-        start();
+            document.body.removeChild(div);
+            start();
+        }, 50);
     },50);
     stop();
 } );

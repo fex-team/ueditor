@@ -230,10 +230,10 @@ test( '表格和文本', function () {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
     editor.render( div );
-    var body = editor.body;
     stop();
     editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
+        var body = editor.body;
         range.setStart(body.firstChild.firstChild,2).collapse(true).select();
         editor.execCommand('inserttable');
         /*选中图片*/
@@ -250,6 +250,6 @@ test( '表格和文本', function () {
             ua.checkElementPath( eles, ['body','table','tbody','tr','td'], '选中表格' );
             div.parentNode.removeChild(div);
             start();
-        }, 20 )
+        }, 20 );
     });
 } );
