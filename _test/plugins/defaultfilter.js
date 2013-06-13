@@ -56,11 +56,12 @@ test( 'li', function () {
 //<li style="margin: 0px 0px 0px 6px;" ><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name"  >pistachio天<i class="i-arrow-down"></i></a></li>
 //TODO 现在在过滤机制里面去除无用的标签
 test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function() {
-    var editor = new UE.Editor({autoClearEmptyNode:true,'autoFloatEnabled':false});
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue',{autoClearEmptyNode:true,'autoFloatEnabled':false});
+    //
     stop();
-    setTimeout(function () {
-        var div = document.body.appendChild(document.createElement('div'));
-        editor.render(div);
+    editor.ready(function () {
         te.dom.push(div);
         editor.focus();
         var innerHTML = '<span><span></span><strong>xx</strong><em>em</em><em></em></span><div>xxxx</div>';
@@ -99,19 +100,23 @@ test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function(
                 innerHTML = '<a href="http://www.baidu.com"></a><a>a</a><strong>xx</strong><em>em</em><em></em>';
                 editor.setContent(innerHTML);
                 ua.checkSameHtml(editor.getContent(), '<p><a href="http://www.baidu.com" ></a><a>a</a><strong>xx</strong><em>em</em></p>', "a 有href但内容为空,不过滤a标签");
-                start()
+                setTimeout(function () {
+                    UE.delEditor('ue');
+                    document.getElementById('ue').parentNode.removeChild(document.getElementById('ue'));
+                    start()
+                }, 50);
             }, 50);
         }, 50);
-    }, 100);
+    });
 });
 
 //editor.options.autoClearEmptyNode
 test("getContent--不去除无用的空标签:autoClearEmptyNode==false", function() {
-    var editor = new UE.Editor({autoClearEmptyNode:false,'autoFloatEnabled':false});
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue',{autoClearEmptyNode:false,'autoFloatEnabled':false});
     stop();
-    setTimeout(function(){
-        var div = document.body.appendChild(document.createElement('div'));
-        editor.render(div);
+    editor.ready(function () {
         te.dom.push(div);
         editor.focus();
         var innerHTML = '<span><span></span><strong>xx</strong><em>em</em><em></em><strong></strong></span>';
@@ -126,8 +131,12 @@ test("getContent--不去除无用的空标签:autoClearEmptyNode==false", functi
         else {
             ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color:#c4bd97" ></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
         }
-        start();
-    },100);
+        setTimeout(function () {
+            UE.delEditor('ue');
+            document.getElementById('ue').parentNode.removeChild(document.getElementById('ue'));
+            start()
+        }, 50);
+    });
 });
 
 test("getContent--转换空格，nbsp与空格相间显示", function() {

@@ -5,9 +5,9 @@ test( 'trace 1743 右键删除后计算字数', function () {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( te.obj[2].document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( te.obj[2].document );
         editor.setContent('<p>hello</p>');
         range.setStart(editor.body.firstChild,0).collapse(true).select();
         editor.execCommand( 'selectall' );

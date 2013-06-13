@@ -41,9 +41,9 @@ test( '设置段后距后设置字体颜色', function () {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello1<a href="">hello</a></p><p>hello2</p>' );
         range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
         editor.execCommand( 'rowspacing', 15 ,'bottom');
@@ -64,9 +64,9 @@ test( '设置段后距后设置加粗等多种样式', function () {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello1</p><p>hello2</p>' );
         range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
         editor.execCommand( 'rowspacing', 15 ,'bottom');
@@ -85,9 +85,9 @@ test( '非闭合去除加粗等样式', function () {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello1</p><p>hello2</p>' );
         range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
         editor.execCommand( 'rowspacing', 15 ,'bottom');
@@ -108,9 +108,9 @@ test( '闭合去除样式', function () {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello1</p><p>hello2</p>' );
         range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
         editor.execCommand( 'rowspacing', 15 ,'bottom');
@@ -202,33 +202,36 @@ test( '在合并单元格中设置多倍段前距', function () {
         var div = document.body.appendChild( document.createElement( 'div' ) );
         te.dom.push( div );
         editor.render( div );
-        editor.setContent( '<p></p>' );
-        var range = new baidu.editor.dom.Range( editor.document );
-        range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
-        editor.execCommand( 'inserttable', {numCols:3, numRows:3} );
-        stop();
-        /*insertHTML有一个200ms的超时函数*/
-        setTimeout( function () {
-            ua.manualDeleteFillData( editor.body );
-            var trs = editor.body.getElementsByTagName( 'tr' );
-            range.setStart( trs[0].firstChild, 0 ).setEnd( trs[1].firstChild, 0 ).select();
-            editor.currentSelectedArr = [trs[0].firstChild, trs[1].firstChild];
-            editor.execCommand( 'mergecells' );
-            /*合并单元格后设置这个单元格多倍段前距*/
-            ua.manualDeleteFillData( editor.body );
-            range.setStart( trs[0].firstChild, 0 ).collapse( true ).select();
-            editor.execCommand( 'rowspacing', 20 ,'top' );
-            ua.manualDeleteFillData( editor.body );
-            equal( trs[0].firstChild.firstChild.tagName.toLowerCase(), 'p', 'td下面创建了一个p' );
-            equal( trs[0].firstChild.firstChild.style['marginTop'], '20px', 'p设置了2倍行距' );
-            trs = editor.body.firstChild.getElementsByTagName( 'tr' );
-            equal( trs.length, 3, '3行' );
-            var tbodyChild = editor.body.getElementsByTagName( 'tbody' )[0].childNodes;
-            for ( var index = 0; index < tbodyChild.length; index++ ) {
-                equal( tbodyChild[index].tagName.toLowerCase(), 'tr', 'tbody下面都是tr' );
-            }
-            start();
-        }, 300 );
+
+        setTimeout(function () {
+            editor.setContent('<p></p>');
+            var range = new baidu.editor.dom.Range(editor.document);
+            range.setStart(editor.body.firstChild, 0).collapse(true).select();
+            editor.execCommand('inserttable', {numCols:3, numRows:3});
+            stop();
+            /*insertHTML有一个200ms的超时函数*/
+            setTimeout(function () {
+                ua.manualDeleteFillData(editor.body);
+                var trs = editor.body.getElementsByTagName('tr');
+                range.setStart(trs[0].firstChild, 0).setEnd(trs[1].firstChild, 0).select();
+                editor.currentSelectedArr = [trs[0].firstChild, trs[1].firstChild];
+                editor.execCommand('mergecells');
+                /*合并单元格后设置这个单元格多倍段前距*/
+                ua.manualDeleteFillData(editor.body);
+                range.setStart(trs[0].firstChild, 0).collapse(true).select();
+                editor.execCommand('rowspacing', 20, 'top');
+                ua.manualDeleteFillData(editor.body);
+                equal(trs[0].firstChild.firstChild.tagName.toLowerCase(), 'p', 'td下面创建了一个p');
+                equal(trs[0].firstChild.firstChild.style['marginTop'], '20px', 'p设置了2倍行距');
+                trs = editor.body.firstChild.getElementsByTagName('tr');
+                equal(trs.length, 3, '3行');
+                var tbodyChild = editor.body.getElementsByTagName('tbody')[0].childNodes;
+                for (var index = 0; index < tbodyChild.length; index++) {
+                    equal(tbodyChild[index].tagName.toLowerCase(), 'tr', 'tbody下面都是tr');
+                }
+                start();
+            }, 30);
+        }, 300);
     },50);
 } );
 
@@ -236,33 +239,35 @@ test( '在合并单元格中设置多倍段前距', function () {
 test( '合并单元格后设置多个单元格多倍段前距', function () {
     var editor = new baidu.editor.Editor( {'plugins':['table'],'autoFloatEnabled':false} );
     stop();
-    setTimeout(function(){
-        var div = document.body.appendChild( document.createElement( 'div' ) );
-        te.dom.push( div );
-        editor.render( div );
-        editor.setContent( '<p></p>' );
-        var range = new baidu.editor.dom.Range( editor.document );
-        range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
-        editor.execCommand( 'inserttable', {numCols:3, numRows:3} );
+    setTimeout(function () {
+        var div = document.body.appendChild(document.createElement('div'));
+        te.dom.push(div);
+        editor.render(div);
+        setTimeout(function () {
+            editor.setContent('<p></p>');
+            var range = new baidu.editor.dom.Range(editor.document);
+            range.setStart(editor.body.firstChild, 0).collapse(true).select();
+            editor.execCommand('inserttable', {numCols:3, numRows:3});
 
-        setTimeout( function () {
-            ua.manualDeleteFillData( editor.body );
-            var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
-            /*合并第一列前2个单元格*/
-            range.setStart( trs[0].firstChild, 0 ).setEnd( trs[1].firstChild, 0 ).select();
-            editor.currentSelectedArr = [trs[0].firstChild, trs[1].firstChild];
-            editor.execCommand( 'mergecells' );
-            /*设置多倍段前距*/
-            range.setStart( trs[0].firstChild, 0 ).setEnd( trs[2].firstChild, 0 ).select();
-            editor.currentSelectedArr = [trs[0].firstChild, trs[1].firstChild, trs[2].firstChild];
-            editor.execCommand( 'rowspacing', 20 ,'top' );
-            trs = editor.body.firstChild.getElementsByTagName( 'tr' );
-            equal( trs.length, 3, '3行' );
-            var tbodyChild = editor.body.getElementsByTagName( 'tbody' )[0].childNodes;
-            for ( var index = 0; index < tbodyChild.length; index++ ) {
-                equal( tbodyChild[index].tagName.toLowerCase(), 'tr', 'tbody下面都是tr' );
-            }
-            start();
-        }, 300 );
+            setTimeout(function () {
+                ua.manualDeleteFillData(editor.body);
+                var trs = editor.body.firstChild.getElementsByTagName('tr');
+                /*合并第一列前2个单元格*/
+                range.setStart(trs[0].firstChild, 0).setEnd(trs[1].firstChild, 0).select();
+                editor.currentSelectedArr = [trs[0].firstChild, trs[1].firstChild];
+                editor.execCommand('mergecells');
+                /*设置多倍段前距*/
+                range.setStart(trs[0].firstChild, 0).setEnd(trs[2].firstChild, 0).select();
+                editor.currentSelectedArr = [trs[0].firstChild, trs[1].firstChild, trs[2].firstChild];
+                editor.execCommand('rowspacing', 20, 'top');
+                trs = editor.body.firstChild.getElementsByTagName('tr');
+                equal(trs.length, 3, '3行');
+                var tbodyChild = editor.body.getElementsByTagName('tbody')[0].childNodes;
+                for (var index = 0; index < tbodyChild.length; index++) {
+                    equal(tbodyChild[index].tagName.toLowerCase(), 'tr', 'tbody下面都是tr');
+                }
+                start();
+            }, 50);
+        }, 300);
     },50);
 } );

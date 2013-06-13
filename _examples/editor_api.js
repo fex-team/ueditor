@@ -64,6 +64,7 @@
             'plugins/table.cmds.js',
             'plugins/table.action.js',
             'plugins/contextmenu.js',
+            'plugins/shortcutmenu.js',
             'plugins/basestyle.js',
             'plugins/elementpath.js',
             'plugins/formatmatch.js',
@@ -99,7 +100,8 @@
             'ui/menubutton.js',
             'ui/editorui.js',
             'ui/editor.js',
-            'ui/multiMenu.js'
+            'ui/multiMenu.js',
+            'ui/shortcutmenu.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

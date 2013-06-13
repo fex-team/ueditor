@@ -16,9 +16,9 @@ test( 'trace 800:清除超链接的颜色', function () {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( te.obj[2].document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( te.obj[2].document );
         editor.setContent('<a href="http://www.baidu.com/">baidu</a>');
         range.selectNode(editor.body.firstChild).select();
         editor.execCommand( 'forecolor', 'rgb(255,0,0)' );
