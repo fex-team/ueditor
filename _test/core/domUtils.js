@@ -1066,16 +1066,19 @@ test( 'getComputedStyle-在body上设置字体大小', function() {
     var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
     var div = document.body.appendChild( document.createElement( 'div' ) );
     editor.render( div );
-    var body = editor.body;
-    var range = new baidu.editor.dom.Range( editor.document );
-    var h1 = body.appendChild( editor.document.createElement( 'h1' ) );
+    stop();
+    setTimeout(function(){
+        var body = editor.body;
+        var range = new baidu.editor.dom.Range( editor.document );
+        var h1 = body.appendChild( editor.document.createElement( 'h1' ) );
 //    editor.body.style['fontSize'] = '10px';
 //   h1的字体大小不是10px
-    //TODO 各个浏览器没有默认的H1的大小，在默认字体大小为16px时，ie下H1的大小为33px，其他为32px
-    var fontSize = (ua.browser.ie && ua.browser.ie < 9) ? '33px' : '32px';
-    equal( domUtils.getComputedStyle( h1, 'font-size' ), fontSize, 'body的fontSize属性不应当覆盖p的fontSize属性' );
+        //TODO 各个浏览器没有默认的H1的大小，在默认字体大小为16px时，ie下H1的大小为33px，其他为32px
+        var fontSize = (ua.browser.ie && ua.browser.ie < 9) ? '33px' : '32px';
+        equal( domUtils.getComputedStyle( h1, 'font-size' ), fontSize, 'body的fontSize属性不应当覆盖p的fontSize属性' );
 //    editor.setContent( '<h2>这是h2的文本<a>这是一个超链接</a></h2>' );
-
+        start();
+    },50);
 } );
 
 /*不支持一个class的删除，必须为一个数组*/

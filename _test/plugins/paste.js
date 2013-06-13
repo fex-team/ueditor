@@ -7,9 +7,9 @@ test( '粘贴', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     var me = te.obj[2];
     me.render(div);
-    var range = new baidu.editor.dom.Range( te.obj[2].document );
     stop();
     me.ready(function(){
+        var range = new baidu.editor.dom.Range( te.obj[2].document );
         me.focus();
         me.setContent('<p>hello</p>');
         range.setStart(me.body.firstChild,0).collapse(true).select();

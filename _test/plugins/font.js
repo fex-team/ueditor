@@ -35,9 +35,9 @@ test( 'underline and linethrough', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent('hello<a href="http://www.baidu.com/">baidu</a>test');
         setTimeout(function(){
             if(!ua.browser.opera){
@@ -67,9 +67,9 @@ test( 'background--不同字号', function() {
         var div = document.body.appendChild( document.createElement( 'div' ) );
         $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
         te.obj[2].render(div);
-        var range = new baidu.editor.dom.Range( te.obj[2].document );
         stop();
         setTimeout(function(){
+            var range = new baidu.editor.dom.Range( te.obj[2].document );
             te.obj[2].setContent('你好');
             editor.focus();
             var body = editor.document.body;
@@ -98,9 +98,9 @@ test( 'trace 937：为第一个有样式的字加删除线', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p><span style="color: red">欢</span>迎光临</p>' );
         range.selectNode( editor.body.firstChild ).select();
         editor.execCommand( 'strikethrough' );
@@ -120,9 +120,9 @@ test( 'trace 918：字体的状态反射', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>欢迎你回来</p>' );
         var p = editor.body.firstChild;
         range.selectNode( p ).select();
@@ -150,9 +150,9 @@ test( ' 选中文本设置前景色为默认', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( 'hello' );
         range.selectNode( editor.body.firstChild ).select();
         editor.execCommand( 'forecolor', 'rgb(255,0,0)' );
@@ -203,9 +203,9 @@ test( 'trace 823：设置前景色后设置删除线', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p><span style="color: rgb(153, 230, 0); ">你好<span style="color: rgb(255, 0, 0); ">​hello</span></span></p>' );
         range.selectNode( editor.body.firstChild.firstChild, 0 ).select();
         editor.execCommand( 'strikethrough' );
@@ -225,9 +225,9 @@ test( 'trace 819, 765：删除线和下划线互斥', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         var p1 = editor.document.createElement( 'p' );
         editor.setContent( '<p>你好</p>' );
         range.selectNode( editor.body.firstChild ).select();
@@ -285,9 +285,9 @@ test( 'trace 809：闭合时改变前景色和删除线，再输入文本', func
         var div = document.body.appendChild( document.createElement( 'div' ) );
         $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
         editor.render(div);
-        var range = new baidu.editor.dom.Range( editor.document );
         stop();
         setTimeout(function(){
+            var range = new baidu.editor.dom.Range( editor.document );
             editor.setContent( '<p><span style="color: rgb(255, 0, 0); text-decoration: line-through; ">你好</span></p>' );
             var p = editor.body.firstChild;
             range.setStart( p.firstChild, 1 ).collapse( true ).select();
@@ -317,9 +317,9 @@ test( 'trace 805：切换删除线和下划线，前景色没了', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p><strong>你好早安</strong></p>' );
         var text = editor.body.firstChild.firstChild.firstChild;
         range.selectNode( text ).select();
@@ -344,9 +344,9 @@ test( 'trace 802：为设置了字体的文本添加删除线', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p><strong>你好早安</strong></p>' );
         var text = editor.body.firstChild.firstChild.firstChild;
         range.setStart( text, 0 ).setEnd( text, 2 ).select();
@@ -373,9 +373,9 @@ test( 'trace 744：设置超链接背景色后切换到源码再切回来', func
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello<a href="www.baidu.com">baidu</a></p>' );
         range.selectNode( editor.body.firstChild ).select();
         editor.execCommand( 'backcolor', 'rgb(255,0,0)' );
@@ -397,9 +397,9 @@ test( '设置超链接前景色再清除颜色', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello<a href="www.baidu.com">baidu</a></p>' );
         range.selectNode( editor.body.firstChild ).select();
         editor.execCommand( 'forecolor', 'rgb(255,0,0)' );
@@ -419,9 +419,9 @@ test( '对表格中的文本添加颜色和下划线', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<table><tbody><tr><td>hello1</td><td>hello2</td></tr><tr><td colspan="2">hello3</td></tr></tbody></table>' );
         var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
         var ut = editor.getUETable(editor.body.firstChild);
@@ -455,9 +455,9 @@ test( 'trace 740：设置左右字为红色，修改部分字颜色为蓝色，�
     var div = document.body.appendChild( document.createElement( 'div' ) );
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
     stop();
     setTimeout(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>你好早安</p>' );
         range.selectNode( editor.body.firstChild ).select();
         editor.execCommand( 'forecolor', 'rgb(255,0,0)' );
@@ -482,9 +482,9 @@ test( 'trace 721：预先设置下划线和字体颜色，再输入文本，查�
         var div = document.body.appendChild( document.createElement( 'div' ) );
         $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
         editor.render(div);
-        var range = new baidu.editor.dom.Range( editor.document );
         stop();
         setTimeout(function(){
+            var range = new baidu.editor.dom.Range( editor.document );
             editor.setContent( '<p><br></p>' );
             range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
             editor.execCommand( 'underline' );

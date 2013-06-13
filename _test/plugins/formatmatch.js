@@ -301,11 +301,8 @@ test( 'trace 1096，1761:表格刷表格', function () {
 
 /*trace 1092, 991*/
 test( '文本刷a标签(闭合)', function () {
-    var editor = te.obj[2];
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
-    editor.render(div);
-    var range = new baidu.editor.dom.Range( editor.document );
+    var editor = te.obj[0];
+    var range = te.obj[1];
     stop();
     setTimeout(function(){
         editor.setContent('hello<a href="http://www.baidu.com/">baidu</a>');
