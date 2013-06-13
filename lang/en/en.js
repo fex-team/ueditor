@@ -449,6 +449,8 @@ UE.I18N['en'] = {
             lang_search1:"Search",
             lang_search2:"Search",
             lang_replace:"Replace",
+            lang_searchReg:'Support regular expression ,which starts and ends with a slash ,for example "/expression/"',
+            lang_searchReg1:'Support regular expression ,which starts and ends with a slash ,for example "/expression/"',
             lang_case_sensitive1:"Case sense",
             lang_case_sensitive2:"Case sense",
             nextFindBtn:{value:"Next"},

@@ -137,7 +137,7 @@ test( '列表中插入表格', function() {
     },50);
 });
 //刘表中插入img
-test( '刘表中插入img', function() {
+test( '列表中插入img', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<ol><li><p></p></li></ol>');
@@ -148,8 +148,14 @@ test( '刘表中插入img', function() {
     setTimeout(function(){
         equal(lis.length,1,'列表长度没有变化');
         ua.manualDeleteFillData(lis[0]);
-        equal(lis[0].firstChild.tagName.toLowerCase(),'img','列表中插入img');
-        equal(lis[0].firstChild.attributes['src'].nodeValue,'http://img.baidu.com/hi/jx2/j_0001.gif','列表中插入img');
+        if(ua.browser.ie){
+            equal(lis[0].firstChild.firstChild.tagName.toLowerCase(),'img','列表中插入img');
+            equal(lis[0].firstChild.firstChild.attributes['src'].nodeValue,'http://img.baidu.com/hi/jx2/j_0001.gif','列表中插入img');
+        }
+        else{
+            equal(lis[0].firstChild.tagName.toLowerCase(),'img','列表中插入img');
+            equal(lis[0].firstChild.attributes['src'].nodeValue,'http://img.baidu.com/hi/jx2/j_0001.gif','列表中插入img');
+        }
         start();
     },50);
 });

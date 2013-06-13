@@ -51,7 +51,19 @@ UE.plugins['horizontal'] = function(){
         if(domUtils.isBody(rng.startContainer)){
             var hr = rng.startContainer.childNodes[rng.startOffset -1];
             if(hr && hr.nodeName == 'HR'){
-                domUtils.remove(hr)
+                var next = hr.nextSibling;
+                if(next){
+                    rng.setStart(next,0)
+                }else if(hr.previousSibling){
+                    rng.setStartAtLast(hr.previousSibling)
+                }else{
+                    var p = this.document.createElement('p');
+                    hr.parentNode.insertBefore(p,hr);
+                    domUtils.fillNode(this.document,p);
+                    rng.setStart(p,0);
+                }
+                domUtils.remove(hr);
+                rng.setCursor(false,true);
             }
         }
     })

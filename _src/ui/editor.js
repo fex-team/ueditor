@@ -659,7 +659,7 @@
 
 
     UE.ui.Editor = function (options) {
-        var editor = new baidu.editor.Editor(options);
+        var editor = new UE.Editor(options);
         editor.options.editor = editor;
         utils.loadFile(document, {
             href:editor.options.themePath + editor.options.theme + "/_css/ueditor.css",
@@ -738,7 +738,7 @@
                     if(holder.style.height){
                         holder.style.height = ''
                     }
-                    editor.container.style.width = opt.initialFrameWidth+ 'px';
+                    editor.container.style.width = opt.initialFrameWidth + (/%$/.test(opt.initialFrameWidth) ? '' : 'px');
                     editor.container.style.zIndex = opt.zIndex;
                     oldRender.call(editor, editor.ui.getDom('iframeholder'));
 
