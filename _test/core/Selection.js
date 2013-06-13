@@ -1,4 +1,4 @@
-module( "core.Selection" );
+module("core.Selection");
 
 /*
  * 因为编辑器是必定会放在一个iframe中，所以在测试的过程中我们也放在iframe中测试，以防一些他们没有做容错处理导致的问题出现
@@ -87,9 +87,9 @@ module( "core.Selection" );
 //    }, 20 );
 //} );
 
-test( 'getRange--闭合选区的边界情况', function () {
-    var div_new = document.createElement( 'div' );
-    document.body.appendChild( div_new );
+test('getRange--闭合选区的边界情况', function () {
+    var div_new = document.createElement('div');
+    document.body.appendChild(div_new);
     var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
     stop();
     setTimeout(function () {
@@ -134,55 +134,58 @@ test( 'getRange--闭合选区的边界情况', function () {
             start();
         });
     }, 50);
-} );
+});
 
 //test( '不闭合选区的边界情况', function () {
 //
 //} );
 //
-test( 'trace 1742  isFocus', function () {
-    if(!ua.browser.opera){
-        var div1 = document.createElement( 'div' );
-        var div2 = document.createElement( 'div' );
+test('trace 1742  isFocus', function () {
+    if (!ua.browser.opera) {
+        var div1 = document.createElement('div');
+        var div2 = document.createElement('div');
         document.body.appendChild(div1);
         document.body.appendChild(div2);
 
-        var editor1 =   new UE.Editor({'initialContent':'<span>hello</span>','autoFloatEnabled':false});
-        var editor2 =   new UE.Editor({'initialContent':'<span>hello</span>','autoFloatEnabled':false});
+        var editor1 = new UE.Editor({'initialContent':'<span>hello</span>', 'autoFloatEnabled':false});
+        var editor2 = new UE.Editor({'initialContent':'<span>hello</span>', 'autoFloatEnabled':false});
         editor1.render(div1);
         editor2.render(div2);
-        editor1.focus();
-        ok(editor1.selection.isFocus(),'设editor内容是<span> editor1 is focused');
-        ok(!editor2.selection.isFocus(),'设editor内容是<span> editor2 is not focused');
-        editor2.focus();
-        ok(editor2.selection.isFocus(),'设editor内容是<span> editor2 is focused');
-        ok(!editor1.selection.isFocus(),'设editor内容是<span> editor1 is not focused');
-        div1.parentNode.removeChild(div1);
-        div2.parentNode.removeChild(div2);
-
-        var div3 = document.createElement( 'div' );
-        var div4 = document.createElement( 'div' );
-        document.body.appendChild(div3);
-        document.body.appendChild(div4);
-        var editor3 =   new UE.Editor({'initialContent':'<h1>hello</h1>','autoFloatEnabled':false});
-        var editor4 =   new UE.Editor({'initialContent':'<h1>hello</h1>','autoFloatEnabled':false});
-        editor3.render(div3);
-        editor4.render(div4);
-
-        editor3.focus();
-        ok(editor3.selection.isFocus(),'设editor内容是<h1> editor1 is focused');
-        ok(!editor4.selection.isFocus(),'设editor内容是<h1> editor2 is not focused');
-        editor4.focus();
-        ok(editor4.selection.isFocus(),'设editor内容是<h1> editor2 is focused');
-        ok(!editor3.selection.isFocus(),'设editor内容是<h1> editor1 is not focused');
         stop();
         setTimeout(function () {
-            div3.parentNode.removeChild(div3);
-            div4.parentNode.removeChild(div4);
-            start();
+            editor1.focus();
+            ok(editor1.selection.isFocus(), '设editor内容是<span> editor1 is focused');
+            ok(!editor2.selection.isFocus(), '设editor内容是<span> editor2 is not focused');
+            editor2.focus();
+            ok(editor2.selection.isFocus(), '设editor内容是<span> editor2 is focused');
+            ok(!editor1.selection.isFocus(), '设editor内容是<span> editor1 is not focused');
+            div1.parentNode.removeChild(div1);
+            div2.parentNode.removeChild(div2);
+
+            var div3 = document.createElement('div');
+            var div4 = document.createElement('div');
+            document.body.appendChild(div3);
+            document.body.appendChild(div4);
+            var editor3 = new UE.Editor({'initialContent':'<h1>hello</h1>', 'autoFloatEnabled':false});
+            var editor4 = new UE.Editor({'initialContent':'<h1>hello</h1>', 'autoFloatEnabled':false});
+            editor3.render(div3);
+            editor4.render(div4);
+            setTimeout(function () {
+                editor3.focus();
+                ok(editor3.selection.isFocus(), '设editor内容是<h1> editor1 is focused');
+                ok(!editor4.selection.isFocus(), '设editor内容是<h1> editor2 is not focused');
+                editor4.focus();
+                ok(editor4.selection.isFocus(), '设editor内容是<h1> editor2 is focused');
+                ok(!editor3.selection.isFocus(), '设editor内容是<h1> editor1 is not focused');
+                setTimeout(function () {
+                    div3.parentNode.removeChild(div3);
+                    div4.parentNode.removeChild(div4);
+                    start();
+                }, 50);
+            }, 50);
         }, 50);
     }
-} );
+});
 
 
 
