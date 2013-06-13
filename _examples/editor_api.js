@@ -101,7 +101,8 @@
             'ui/editorui.js',
             'ui/editor.js',
             'ui/multiMenu.js',
-            'ui/shortcutmenu.js'
+            'ui/shortcutmenu.js',
+            'ui/breakline.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

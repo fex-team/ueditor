@@ -324,6 +324,9 @@
                         if (toolbarItem == '|') {
                             toolbarItem = 'Separator';
                         }
+                        if(toolbarItem == '||'){
+                            toolbarItem = 'Breakline';
+                        }
                         if (baidu.editor.ui[toolbarItem]) {
                             toolbarItemUi = new baidu.editor.ui[toolbarItem](editor);
                         }
