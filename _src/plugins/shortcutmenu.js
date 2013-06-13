@@ -18,7 +18,7 @@ UE.plugins['shortcutmenu'] = function () {
         return;
     }
 
-    me.addListener ( 'contextmenu selectionchange' , function ( type , e1 , e2) {
+    me.addListener ( 'selectionchange' , function ( type , e1 , e2) {
         var rng = me.selection.getRange ();
 
         if ( rng.collapsed === false || type == "contextmenu" ) {
@@ -39,20 +39,6 @@ UE.plugins['shortcutmenu'] = function () {
 
                 menu.show ( e);
 
-                domUtils.preventDefault ( e );
-
-                if ( browser.ie ) {
-                    var ieRange;
-                    try {
-                        ieRange = me.selection.getNative ().createRange ();
-                    } catch ( e ) {
-                        return;
-                    }
-                    if ( ieRange.item ) {
-                        var range = new dom.Range ( me.document );
-                        range.selectNode ( ieRange.item ( 0 ) ).select ( true , true );
-                    }
-                }
             }
 
         }

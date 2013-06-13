@@ -377,6 +377,10 @@
 //            }
 //           ]
 
+        //快捷菜单
+        //,shortcutMenu:["bold"]
+
+        //
         //wordCount
         //,wordCount:true          //是否开启字数统计
         //,maximumWords:10000       //允许的最大字符数
