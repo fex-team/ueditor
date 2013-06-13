@@ -682,6 +682,18 @@
 //            if ( !me.selection.isFocus() ){
 //                return;
 //            }
+
+            //针对ie9下浏览器无法传递event做的处理
+            if(evt){
+                var customEvt = {
+                    target:evt.target||evt.srcElement,
+                    screenX:evt.screenX,
+                    screenY:evt.screenY,
+                    clientX: evt.clientX,
+                    clientY: evt.clientY
+                };
+            }
+
             var hackForMouseUp = false;
             var mouseX, mouseY;
             if (browser.ie && browser.version < 9 && evt && evt.type == 'mouseup') {
@@ -722,7 +734,7 @@
                 if (me.selection._cachedRange && me.selection._cachedStartElement) {
                     me.fireEvent('beforeselectionchange');
                     // 第二个参数causeByUi为true代表由用户交互造成的selectionchange.
-                    me.fireEvent('selectionchange', !!evt);
+                    me.fireEvent('selectionchange', !!evt,evt);
                     me.fireEvent('afterselectionchange');
                     me.selection.clear();
                 }
