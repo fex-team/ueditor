@@ -74,6 +74,7 @@
 ///import plugins/table.cmds;
 ///import plugins/table.action;
 ///import plugins/contextmenu;
+///import plugins/shortcutmenu;
 ///import plugins/pagebreak;
 ///import plugins/catchremoteimage;
 ///import plugins/webapp;
@@ -112,4 +113,6 @@
 ///import ui/tablebutton;
 ///import ui/autotypesetpicker;
 ///import ui/autotypesetbutton;
+///import ui/shortcutmenu;
+
 

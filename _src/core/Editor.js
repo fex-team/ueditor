@@ -732,7 +732,7 @@
                 if (me.selection._cachedRange && me.selection._cachedStartElement) {
                     me.fireEvent('beforeselectionchange');
                     // 第二个参数causeByUi为true代表由用户交互造成的selectionchange.
-                    me.fireEvent('selectionchange', !!evt,evt);
+                    me.fireEvent('selectionchange', !!evt,customEvt);
                     me.fireEvent('afterselectionchange');
                     me.selection.clear();
                 }

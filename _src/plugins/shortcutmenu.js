@@ -14,42 +14,44 @@ UE.plugins['shortcutmenu'] = function () {
         menu,
         items = me.options.shortcutMenu || ["fontfamily", "fontsize", "bold", "italic", "underline", "forecolor", "backcolor", "insertorderedlist", "insertunorderedlist"];
 
-    if ( ! items.length ) {
+    if (!items.length) {
         return;
     }
 
-    me.addListener ( 'contextmenu selectionchange' , function ( type , e1 , e2) {
+    me.addListener ('contextmenu selectionchange' , function (type , e1 , e2) {
         var rng = me.selection.getRange ();
-
-        if ( rng.collapsed === false || type == "contextmenu" ) {
+        if (type == "selectionchange") {
+            debugger;
+        }
+        if (rng.collapsed === false || type == "contextmenu") {
             var e = typeof e1 == "boolean" ? e2 : e1;
 
-            if ( e ) {
-                if ( ! menu ) {
-                    menu = new baidu.editor.ui.ShortCutMenu ( {
+            if (e && typeof e != "boolean") {
+                if (!menu) {
+                    menu = new baidu.editor.ui.ShortCutMenu ({
                         editor : me ,
                         items : items ,
                         theme : me.options.theme ,
                         className : 'edui-shortcutmenu'
-                    } );
+                    });
 
                     menu.render ();
-                    me.fireEvent("afterrendershortcutmenu",menu);
+                    me.fireEvent ("afterrendershortcutmenu" , menu);
                 }
 
-                menu.show ( e,!!UE.plugins['contextmenu']);
+                menu.show (e , !!UE.plugins['contextmenu']);
 
-                domUtils.preventDefault( e );
-                if ( browser.ie ) {
+                domUtils.preventDefault (e);
+                if (browser.ie) {
                     var ieRange;
                     try {
-                        ieRange = me.selection.getNative().createRange();
-                    } catch ( e ) {
+                        ieRange = me.selection.getNative ().createRange ();
+                    } catch (e) {
                         return;
                     }
-                    if ( ieRange.item ) {
-                        var range = new dom.Range( me.document );
-                        range.selectNode( ieRange.item( 0 ) ).select( true, true );
+                    if (ieRange.item) {
+                        var range = new dom.Range (me.document);
+                        range.selectNode (ieRange.item (0)).select (true , true);
 
                     }
                 }
@@ -57,7 +59,7 @@ UE.plugins['shortcutmenu'] = function () {
             }
 
         }
-    } );
+    });
 };
 
 
