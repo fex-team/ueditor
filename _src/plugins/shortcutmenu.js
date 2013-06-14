@@ -37,7 +37,22 @@ UE.plugins['shortcutmenu'] = function () {
                     me.fireEvent("afterrendershortcutmenu",menu);
                 }
 
-                menu.show ( e);
+                menu.show ( e,!!UE.plugins['contextmenu']);
+
+                domUtils.preventDefault( e );
+                if ( browser.ie ) {
+                    var ieRange;
+                    try {
+                        ieRange = me.selection.getNative().createRange();
+                    } catch ( e ) {
+                        return;
+                    }
+                    if ( ieRange.item ) {
+                        var range = new dom.Range( me.document );
+                        range.selectNode( ieRange.item( 0 ) ).select( true, true );
+
+                    }
+                }
 
             }
 

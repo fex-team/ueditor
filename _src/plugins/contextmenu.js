@@ -488,10 +488,14 @@ UE.plugins['contextmenu'] = function () {
 
         menu = new UE.ui.Menu( {
             items:contextItems,
+            className:"edui-contextmenu",
             editor:me
         } );
         menu.render();
         menu.showAt( offset );
+
+        me.fireEvent("aftershowcontextmenu",menu);
+
         domUtils.preventDefault( evt );
         if ( browser.ie ) {
             var ieRange;
