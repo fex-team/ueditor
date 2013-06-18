@@ -22,7 +22,7 @@
             }
         }
 
-        if(llPopups.length)
+        if(allPopups.length)
             pop.editor.fireEvent("afterhidepop");
     }
 
