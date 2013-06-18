@@ -7,6 +7,23 @@
  */
 UE.plugins['table'] = function () {
     var me = this,
+        tabTimer = null,
+        //拖动计时器
+        tableDragTimer = null,
+        //双击计时器
+        tableResizeTimer = null,
+        //单元格最小宽度
+        cellMinWidth = 5,
+        isInResizeBuffer = false,
+        //单元格边框大小
+        cellBorderWidth = 5,
+        //鼠标偏移距离
+        offsetOfTableCell = 10,
+        //记录在有限时间内的点击状态， 共有3个取值， 0, 1, 2。 0代表未初始化， 1代表单击了1次，2代表2次
+        singleClickState = 0,
+        userActionStatus = null,
+        //双击允许的时间范围
+        dblclickTime = 360,
         debug = true,
         UT = UE.UETable,
         getUETable = function (tdOrTable) {
@@ -490,59 +507,13 @@ UE.plugins['table'] = function () {
                         }
                     }
                 };
-                table.ondblclick = function (evt) {
-                    evt = me.window.event || evt;
-                    var target = getParentTdOrTh(evt.target || evt.srcElement);
-                    if (target) {
-                        var h;
-                        if (h = getRelation(target, mouseCoords(evt))) {
-                            if (h == 'h1') {
-                                h = 'h';
-                                if (inTableSide(domUtils.findParentByTagName(target, "table"), target, evt)) {
-                                    me.execCommand('adaptbywindow');
-                                } else {
-                                    target = getUETable(target).getPreviewCell(target);
-                                    if (target) {
-                                        var rng = me.selection.getRange();
-                                        rng.selectNodeContents(target).setCursor(true, true)
-                                    }
-                                }
-                            }
-                            if (h == 'h') {
-                                var line;
-                                while (line = me.document.getElementById('ue_tableDragLine')) {
-                                    domUtils.remove(line)
-                                }
-                                me.fireEvent('saveScene',true);
-                                var ut = getUETable(target),
-                                    cells = ut.getSameEndPosCells(target, "x"),
-                                    table = ut.table;
-                                table.removeAttribute("width");
-                                utils.each(cells, function (cell) {
-                                    cell.removeAttribute("width");
-                                });
-                                setTimeout(function () {
-                                    var width = cells[0].offsetWidth - 20;
-                                    utils.each(cells, function (cell) {
-                                        cell.setAttribute("width", width);
-                                    })
-                                    table.setAttribute("width", table.offsetWidth);
-                                    me.fireEvent('saveScene',true);
-                                })
-
-                            }
-                        }
-                    }
-                }
             });
 
             switchBorderColor(me, true);
         });
 
-        //仅IE8以上支持
-        if (!browser.ie || (browser.ie && browser.version > 7)) {
-            domUtils.on(me.document, "mousemove", mouseMoveEvent);
-        }
+        domUtils.on(me.document, "mousemove", mouseMoveEvent);
+
         domUtils.on(me.document, "mouseout", function (evt) {
             var target = evt.target || evt.srcElement;
             if (target.tagName == "TABLE") {
@@ -560,16 +531,8 @@ UE.plugins['table'] = function () {
                 getClass = function(list,index,repeat){
                     return list[index] ? list[index] : repeat ? list[index % list.length]: "";
                 };
-
-            var index = 0,
-                classIndex = 0;
-
-            if( me.queryCommandState( "inserttitle" ) === -1 ) {
-                index = 1;
-            }
-
-            for(;index<len;index++, classIndex++){
-                rows[index].className = getClass( classList|| me.options.classList,classIndex,true);
+            for(var i = 0;i<len;i++){
+                rows[i].className = getClass( classList|| me.options.classList,i,true);
             }
         });
         me.addListener("uninterlacetable",function(type,table){
@@ -582,8 +545,6 @@ UE.plugins['table'] = function () {
                 domUtils.removeClasses( rows[i], classList );
             }
         });
-
-
 
         me.addListener("mousedown", mouseDownEvent);
         me.addListener("mouseup", mouseUpEvent);
@@ -680,8 +641,11 @@ UE.plugins['table'] = function () {
 
         //重写execCommand命令，用于处理框选时的处理
         var oldExecCommand = me.execCommand;
-        me.execCommand = function (cmd) {
-            var me = this;
+        me.execCommand = function (cmd, datatat) {
+
+            var me = this,
+                args = arguments;
+
             cmd = cmd.toLowerCase();
             var ut = getUETableBySelected(me), tds,
                 range = new dom.Range(me.document),
@@ -777,16 +741,39 @@ UE.plugins['table'] = function () {
     }
 
     function mouseMoveEvent(evt) {
+
+        if( isEditorDisabled() ) {
+            return;
+        }
+
         try {
+
+            if( isInResizeBuffer ) {
+                me.document.body.style.webkitUserSelect = 'none';
+            }
+
             //普通状态下鼠标移动
             var target = getParentTdOrTh(evt.target || evt.srcElement),
                 pos;
+
+            //区分用户的行为是拖动还是双击
+            if( onBorder && isInResizeBuffer  ) {
+                if( Math.abs( userActionStatus.x - evt.clientX ) > offsetOfTableCell || Math.abs( userActionStatus.y - evt.clientY ) > offsetOfTableCell ) {
+                    clearTableDragTimer();
+                    isInResizeBuffer = false;
+                    singleClickState = 0;
+                    //drag action
+                    tableBorderDrag(evt);
+                }
+            }
+
             //修改单元格大小时的鼠标移动
             if (onDrag && dragTd) {
-                me.document.body.style.webkitUserSelect = 'none';
+                singleClickState = 0;
+                me.body.style.webkitUserSelect = 'none';
                 me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
                 pos = mouseCoords(evt);
-                toggleDraggableState(me, true, "", pos, target);
+                toggleDraggableState(me, true, onDrag, pos, target);
                 if (onDrag == "h") {
                     dragLine.style.left = getPermissionX(dragTd, evt) + "px";
                 } else if (onDrag == "v") {
@@ -804,6 +791,7 @@ UE.plugins['table'] = function () {
                     table = domUtils.findParentByTagName(target, "table", true);
 
                 if (inTableSide(table, target, evt, true)) {
+
                     //toggleCursor(pos,true,"_h");
                     if (me.fireEvent("excludetable", table) === true) return;
                     me.body.style.cursor = "url(" + me.options.cursorpath + "h.png),pointer";
@@ -814,14 +802,15 @@ UE.plugins['table'] = function () {
                 } else {
                     //toggleCursor(pos,false,"");
                     me.body.style.cursor = "text";
+                    var curCell = target;
                     if (/\d/.test(state)) {
                         state = state.replace(/\d/, '');
                         target = getUETable(target).getPreviewCell(target, state == "v");
                     }
                     //位于第一行的顶部或者第一列的左边时不可拖动
                     toggleDraggableState(me, target ? !!state : false, target ? state : '', pos, target);
+
                 }
-//                toggleDragButton(inTable(pos,table),table);
             } else {
                 toggleDragButton(false, table, me);
             }
@@ -928,6 +917,10 @@ UE.plugins['table'] = function () {
                 mouseX = mouseCoords(evt).x,
                 left = (preTd ? domUtils.getXY(preTd).x : domUtils.getXY(ut.table).x) + 20 ,
                 right = nextTd ? domUtils.getXY(nextTd).x + nextTd.offsetWidth - 20 : (me.body.offsetWidth + 5 || parseInt(domUtils.getComputedStyle(me.body, "width"), 10));
+
+            left += cellMinWidth;
+            right -= cellMinWidth;
+
             return mouseX < left ? left : mouseX > right ? right : mouseX;
         }
     }
@@ -966,28 +959,111 @@ UE.plugins['table'] = function () {
     }
 
     /**
+     * 获取与UETable相关的resize line
+     * @param uetable UETable对象
+     */
+    function getResizeLineByUETable() {
+
+        var lineId = '_UETableResizeLine',
+            line = this.document.getElementById( lineId );
+
+        if( !line ) {
+            line = this.document.createElement("div");
+            line.id = lineId;
+            line.contnetEditable = false;
+            line.setAttribute("unselectable", "on");
+
+            var styles = {
+                width: 2*cellBorderWidth + 1 + 'px',
+                position: 'absolute',
+                'z-index': 100000,
+                cursor: 'col-resize',
+                background: 'red',
+                display: 'none'
+            };
+
+            //切换状态
+            line.onmouseout = function(){
+                this.style.display = 'none';
+            };
+
+            utils.extend( line.style, styles );
+
+            this.document.body.appendChild( line );
+
+        }
+
+        return line;
+
+    }
+
+    /**
+     * 更新resize-line
+     */
+    function updateResizeLine( cell, uetable ) {
+
+        var line = getResizeLineByUETable.call( this ),
+            table = uetable.table,
+            styles = {
+                top: domUtils.getXY( table ).y + 'px',
+                left: domUtils.getXY( cell).x + cell.offsetWidth - cellBorderWidth + 'px',
+                display: 'block',
+                height: table.offsetHeight + 'px'
+            };
+
+        utils.extend( line.style, styles );
+
+    }
+
+    /**
+     * 显示resize-line
+     */
+    function showResizeLine( cell ) {
+
+        var uetable = getUETable( cell );
+
+        updateResizeLine.call( this, cell, uetable );
+
+    }
+
+    /**
      * 获取鼠标与当前单元格的相对位置
      * @param ele
      * @param mousePos
      */
     function getRelation(ele, mousePos) {
         var elePos = domUtils.getXY(ele);
-        if (elePos.x + ele.offsetWidth - mousePos.x < 4) {
+
+        if( !elePos ) {
+            return '';
+        }
+
+        if (elePos.x + ele.offsetWidth - mousePos.x < cellBorderWidth) {
             return "h";
         }
-        if (mousePos.x - elePos.x < 4) {
+        if (mousePos.x - elePos.x < cellBorderWidth) {
             return 'h1'
         }
-        if (elePos.y + ele.offsetHeight - mousePos.y < 4) {
+        if (elePos.y + ele.offsetHeight - mousePos.y < cellBorderWidth) {
             return "v";
         }
-        if (mousePos.y - elePos.y < 4) {
+        if (mousePos.y - elePos.y < cellBorderWidth) {
             return 'v1'
         }
         return '';
     }
 
     function mouseDownEvent(type, evt) {
+
+        if( isEditorDisabled() ) {
+            return ;
+        }
+
+        userActionStatus = {
+            x: evt.clientX,
+            y: evt.clientY
+        };
+
         //右键菜单单独处理
         if (evt.button == 2) {
             var ut = getUETableBySelected(me),
@@ -1000,8 +1076,7 @@ UE.plugins['table'] = function () {
                     }
                 });
                 if (!flag) {
-                    removeSelectedClass(domUtils.getElementsByTagName(me.body, "td"));
-                    removeSelectedClass(domUtils.getElementsByTagName(me.body, "th"));
+                    removeSelectedClass(domUtils.getElementsByTagName(me.body, "th td"));
                     ut.clearSelected()
                 } else {
                     td = ut.selectedTds[0];
@@ -1011,52 +1086,245 @@ UE.plugins['table'] = function () {
 
                 }
             }
-            return;
-        }
-        if (evt.shiftKey) {
-            return;
+        } else {
+            tableClickHander( evt );
         }
 
-        removeSelectedClass(domUtils.getElementsByTagName(me.body, "td"));
-        removeSelectedClass(domUtils.getElementsByTagName(me.body, "th"));
+    }
+
+    //清除表格的计时器
+    function clearTableTimer() {
+        tabTimer && clearTimeout( tabTimer );
+        tabTimer = null;
+    }
+
+    //双击收缩
+    function tableDbclickHandler(evt) {
+        singleClickState = 0;
+        evt = evt || me.window.event;
+        var target = getParentTdOrTh(evt.target || evt.srcElement);
+        if (target) {
+            var h;
+            if (h = getRelation(target, mouseCoords(evt))) {
+                if (h == 'h1') {
+                    h = 'h';
+                    if (inTableSide(domUtils.findParentByTagName(target, "table"), target, evt)) {
+                        me.execCommand('adaptbywindow');
+                    } else {
+                        target = getUETable(target).getPreviewCell(target);
+                        if (target) {
+                            var rng = me.selection.getRange();
+                            rng.selectNodeContents(target).setCursor(true, true)
+                        }
+                    }
+                }
+                if (h == 'h') {
+                    var ut = getUETable(target),
+                        table = ut.table,
+                        cells = getCellsByMoveBorder( target, table, true );
+
+                    cells = extractArray( cells, 'left' );
+
+                    ut.width = ut.offsetWidth;
+
+                    var oldWidth = [],
+                        newWidth = [];
+
+                    utils.each( cells, function( cell ){
+
+                        oldWidth.push( cell.offsetWidth );
+
+                    } );
+
+                    utils.each( cells, function( cell ){
+
+                        cell.removeAttribute("width");
+
+                    } );
+
+                    window.setTimeout( function(){
+
+                        //是否允许改变
+                        var changeable = true;
+
+                        utils.each( cells, function( cell, index ){
+
+                            var width = cell.offsetWidth;
+
+                            if( width > oldWidth[index] ) {
+                                changeable = false;
+                                return false;
+                            }
+
+                            newWidth.push( width );
+
+                        } );
+
+                        var change = changeable ? newWidth : oldWidth;
+
+                        utils.each( cells, function( cell, index ){
+
+                            cell.width = change[index] - getTabcellSpace();
+
+                        } );
+
+
+                    }, 0 );
+
+//                    minWidth -= cellMinWidth;
+//
+//                    table.removeAttribute("width");
+//                    utils.each(cells, function (cell) {
+//                        cell.style.width = "";
+//                        cell.width -= minWidth;
+//                    });
+
+                }
+            }
+        }
+    }
+
+    function tableClickHander( evt ) {
+
+        me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
+        removeSelectedClass(domUtils.getElementsByTagName(me.body, "td th"));
         //trace:3113
         //选中单元格，点击table外部，不会清掉table上挂的ueTable,会引起getUETableBySelected方法返回值
         utils.each(me.document.getElementsByTagName('table'), function (t) {
             t.ueTable = null;
         });
         startTd = getTargetTd(me, evt);
-        if (!startTd) return;
+        if( !startTd ) return;
         var table = domUtils.findParentByTagName(startTd, "table", true);
         ut = getUETable(table);
         ut && ut.clearSelected();
+
         //判断当前鼠标状态
         if (!onBorder) {
             me.document.body.style.webkitUserSelect = '';
             mousedown = true;
             me.addListener('mouseover', mouseOverEvent);
         } else {
-            if (browser.ie && browser.version < 8) return;
-            var state = getRelation(startTd, mouseCoords(evt));
-            if (/\d/.test(state)) {
-                state = state.replace(/\d/, '');
-                startTd = getUETable(startTd).getPreviewCell(startTd, state == 'v');
-            }
-            hideDragLine(me);
-            var line;
-            while (line = me.document.getElementById('ue_tableDragLine')) {
-                domUtils.remove(line)
-            }
-            me.fireEvent('saveScene');
-            getDragLine(me, me.document);
-            showDragLineAt(state, startTd);
-            mousedown = true;
-            //拖动开始
-            onDrag = state;
-            dragTd = startTd;
+            //边框上的动作处理
+            borderActionHandler( evt );
         }
+
+
+    }
+
+    //处理表格边框上的动作, 这里做延时处理，避免两种动作互相影响
+    function borderActionHandler( evt ) {
+
+        if ( browser.ie ) {
+            evt = reconstruct(evt );
+        }
+
+        clearTableDragTimer();
+
+        //是否正在等待resize的缓冲中
+        isInResizeBuffer = true;
+
+        tableDragTimer = setTimeout(function(){
+            tableBorderDrag( evt );
+        }, dblclickTime);
+
+    }
+
+    function extractArray( originArr, key ) {
+
+        var result = [],
+            tmp = null;
+
+        for( var i = 0, len = originArr.length; i<len; i++ ) {
+
+            tmp = originArr[ i ][ key ];
+
+            if( tmp ) {
+                result.push( tmp );
+            }
+
+        }
+
+        return result;
+
+    }
+
+    function clearTableDragTimer() {
+        tableDragTimer && clearTimeout(tableDragTimer);
+        tableDragTimer = null;
+    }
+
+    function reconstruct( obj ) {
+
+        var attrs = ['pageX', 'pageY', 'clientX', 'clientY', 'srcElement', 'target'],
+            newObj = {};
+
+        if( obj ) {
+
+            for( var i = 0, key, val; key = attrs[i]; i++ ) {
+                val=obj[ key ];
+                val && (newObj[ key ] = val);
+            }
+
+        }
+
+        return newObj;
+
+    }
+
+    //边框拖动
+    function tableBorderDrag( evt ) {
+
+        isInResizeBuffer = false;
+
+        if( !startTd ) return;
+        var state = getRelation(startTd, mouseCoords(evt));
+        if (/\d/.test(state)) {
+            state = state.replace(/\d/, '');
+            startTd = getUETable(startTd).getPreviewCell(startTd, state == 'v');
+        }
+        hideDragLine(me);
+        getDragLine(me, me.document);
+        me.fireEvent('saveScene');
+        showDragLineAt(state, startTd);
+        mousedown = true;
+        //拖动开始
+        onDrag = state;
+        dragTd = startTd;
     }
 
     function mouseUpEvent(type, evt) {
+
+        if( isEditorDisabled() ) {
+            return ;
+        }
+
+        clearTableDragTimer();
+
+        isInResizeBuffer = false;
+
+        if( onBorder ) {
+            singleClickState = ++singleClickState % 3;
+
+            userActionStatus = {
+                x: evt.clientX,
+                y: evt.clientY
+            };
+
+            tableResizeTimer = setTimeout(function(){
+                singleClickState > 0 && singleClickState--;
+            }, dblclickTime );
+
+            if( singleClickState === 2 ) {
+
+                singleClickState = 0;
+                tableDbclickHandler(evt);
+                return;
+
+            }
+
+        }
+
         if (evt.button == 2)return;
         var me = this;
         //清除表格上原生跨选问题
@@ -1078,14 +1346,19 @@ UE.plugins['table'] = function () {
         mousedown = false;
         me.document.body.style.webkitUserSelect = '';
         //拖拽状态下的mouseUP
-        if ((!browser.ie || (browser.ie && browser.version > 7)) && onDrag && dragTd) {
+        if ( onDrag && dragTd) {
+
+            me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
+
+            singleClickState = 0;
             dragLine = me.document.getElementById('ue_tableDragLine');
 
             var dragTdPos = domUtils.getXY(dragTd),
                 dragLinePos = domUtils.getXY(dragLine);
+
             switch (onDrag) {
                 case "h":
-                    changeColWidth(dragTd, dragLinePos.x - dragTdPos.x - dragTd.offsetWidth);
+                    changeColWidth(dragTd, dragLinePos.x - dragTdPos.x);
                     break;
                 case "v":
                     changeRowHeight(dragTd, dragLinePos.y - dragTdPos.y - dragTd.offsetHeight);
@@ -1094,12 +1367,9 @@ UE.plugins['table'] = function () {
             }
             onDrag = "";
             dragTd = null;
-            var line;
-            while (line = me.document.getElementById('ue_tableDragLine')) {
-                domUtils.remove(line)
-            }
+
+            hideDragLine(me);
             me.fireEvent('saveScene');
-            line && me.document.appendChild(line);
             return;
         }
         //正常状态下的mouseup
@@ -1139,6 +1409,11 @@ UE.plugins['table'] = function () {
     }
 
     function mouseOverEvent(type, evt) {
+
+        if( isEditorDisabled() ) {
+            return;
+        }
+
         var me = this,
             tar = evt.target || evt.srcElement;
         currentTd = domUtils.findParentByTagName(tar, "td", true) || domUtils.findParentByTagName(tar, "th", true);
@@ -1175,35 +1450,44 @@ UE.plugins['table'] = function () {
     }
 
     function changeColWidth(cell, changeValue) {
-        if (Math.abs(changeValue) < 10) return;
+
         var ut = getUETable(cell);
         if (ut) {
+
+            //根据当前移动的边框获取相关的单元格
             var table = ut.table,
-                backTableWidth = getWidth(table),
-                defaultValue = getDefaultValue(me, table),
-            //这里不考虑一个都没有情况，如果一个都没有，可以认为该表格的结构可以精简
-                leftCells = ut.getSameEndPosCells(cell, "x"),
-                backLeftWidth = getWidth(leftCells[0]) - defaultValue.tdPadding * 2 - defaultValue.tdBorder,
-                rightCells = ut.getSameStartPosXCells(cell),
-                backRightWidth = getWidth(rightCells[0]) - defaultValue.tdPadding * 2 - defaultValue.tdBorder;
-            //整列被rowspan时存在
-            utils.each(leftCells, function (cell) {
-                if (cell.style.width) cell.style.width = "";
-                if (changeValue < 0)cell.style.wordBreak = "break-all";
-                cell.setAttribute("width", backLeftWidth + changeValue);
-            });
-            utils.each(rightCells, function (cell) {
-                if (cell.style.width) cell.style.width = "";
-                if (changeValue > 0)cell.style.wordBreak = "break-all";
-                cell.setAttribute("width", backRightWidth - changeValue);
-            });
-            //如果是在表格最右边拖动，则还需要调整表格宽度，否则在合并过的单元格中输入文字，表格会被撑开
-            if (!cell.nextSibling) {
-                if (table.style.width) table.style.width = "";
-                table.setAttribute("width", backTableWidth + changeValue);
+                cells = getCellsByMoveBorder( cell, table );
+
+            table.style.width = "";
+            table.removeAttribute("width");
+
+            //修正改变量
+            changeValue = correctChangeValue( changeValue, cell, cells );
+
+            if (cell.nextSibling) {
+
+                var i=0;
+
+                utils.each( cells, function( cellGroup ){
+
+                    cellGroup.left.width = (+cellGroup.left.width)+changeValue;
+                    cellGroup.right && ( cellGroup.right.width = (+cellGroup.right.width)-changeValue );
+
+                } );
+
+            } else {
+
+                utils.each( cells, function( cellGroup ){
+                    cellGroup.left.width -= -changeValue;
+                } );
+
             }
         }
 
+    }
+
+    function isEditorDisabled() {
+        return me.body.contentEditable === "false";
     }
 
     function changeRowHeight(td, changeValue) {
@@ -1217,6 +1501,229 @@ UE.plugins['table'] = function () {
                 setCellHeight(cell, changeValue, backHeight);
             }
         }
+
+    }
+
+    /**
+     * 获取调整单元格大小的相关单元格
+     * @isContainMergeCell 返回的结果中是否包含发生合并后的单元格
+     */
+    function getCellsByMoveBorder( cell, table, isContainMergeCell ) {
+
+        if( !table ) {
+            table = domUtils.findParentByTagName( cell, 'table' );
+        }
+
+        if( !table ) {
+            return null;
+        }
+
+        //获取到该单元格所在行的序列号
+        var index = domUtils.getNodeIndex( cell ),
+            temp = cell,
+            rows = table.rows,
+            colIndex = 0;
+
+        while( temp ) {
+            //获取到当前单元格在未发生单元格合并时的序列
+            if( temp.nodeType === 1 ) {
+                colIndex += (temp.colSpan || 1);
+            }
+            temp = temp.previousSibling;
+        }
+
+        temp = null;
+
+        //记录想关的单元格
+        var borderCells = [];
+
+        utils.each(rows, function( tabRow ){
+
+            var cells = tabRow.cells,
+                currIndex = 0;
+
+            utils.each( cells, function( tabCell ){
+
+                currIndex += (tabCell.colSpan || 1);
+
+                if( currIndex === colIndex ) {
+
+                    borderCells.push({
+                        left: tabCell,
+                        right: tabCell.nextSibling || null
+                    });
+
+                    return false;
+
+                } else if( currIndex > colIndex ) {
+
+                    if( isContainMergeCell ) {
+                        borderCells.push({
+                            left: tabCell
+                        });
+                    }
+
+                    return false;
+                }
+
+
+            } );
+
+        });
+
+        return borderCells;
+
+    }
+
+
+    /**
+     * 通过给定的单元格集合获取最小的单元格width
+     */
+    function getMinWidthByTableCells( cells ) {
+
+        var minWidth = Number.MAX_VALUE;
+
+        for( var i = 0, curCell; curCell = cells[ i ] ; i++ ) {
+
+            minWidth = Math.min( minWidth, curCell.width || getTableCellWidth( curCell ) );
+
+        }
+
+        return minWidth;
+
+    }
+
+    function correctChangeValue( changeValue, relatedCell, cells ) {
+
+        //为单元格的paading预留空间
+        changeValue -= getTabcellSpace();
+
+        if( changeValue < 0 ) {
+            return 0;
+        }
+
+        changeValue -= getTableCellWidth( relatedCell );
+
+        //确定方向
+        var direction = changeValue < 0 ? 'left':'right';
+
+        changeValue = Math.abs(changeValue);
+
+        //只关心非最后一个单元格就可以
+        utils.each( cells, function( cellGroup ){
+
+            var curCell = cellGroup[direction];
+
+            //为单元格保留最小空间
+            if( curCell ) {
+                changeValue = Math.min( changeValue, getTableCellWidth( curCell )-cellMinWidth );
+            }
+
+
+        } );
+
+
+        //修正越界
+        changeValue = changeValue < 0 ? 0 : changeValue;
+
+        return direction === 'left' ? -changeValue : changeValue;
+
+    }
+
+    function getTableCellWidth( cell ) {
+
+        var width = 0,
+            //偏移纠正量
+            offset = 0,
+            width = cell.offsetWidth - getTabcellSpace();
+
+        //最后一个节点纠正一下
+        if( !cell.nextSibling ) {
+
+            width -= getTableCellOffset( cell );
+
+        }
+
+        width = width < 0 ? 0 : width;
+
+        try {
+            cell.width = width;
+        } catch(e) {
+        }
+
+        return width;
+
+    }
+
+    /**
+     * 获取单元格所在表格的最末单元格的偏移量
+     */
+    function getTableCellOffset( cell ) {
+
+        tab = domUtils.findParentByTagName( cell, "table", false);
+
+        if( tab.offsetVal === undefined ) {
+
+            var prev = cell.previousSibling;
+
+            if( prev ) {
+
+                //最后一个单元格和前一个单元格的width diff结果 如果恰好为一个border width， 则条件成立
+                tab.offsetVal = cell.offsetWidth - prev.offsetWidth === UT.borderWidth ? UT.borderWidth : 0;
+
+            } else {
+                tab.offsetVal = 0;
+            }
+
+        }
+
+        return tab.offsetVal;
+
+    }
+
+    function getTabcellSpace() {
+
+        if( UT.tabcellSpace === undefined ) {
+
+            var cell = null,
+                tab = me.document.createElement("table"),
+                tbody = me.document.createElement("tbody"),
+                trow = me.document.createElement("tr"),
+                tabcell = me.document.createElement("td"),
+                mirror = null;
+
+            tabcell.style.cssText = 'border: 0;';
+            tabcell.width = 1;
+
+            trow.appendChild( tabcell );
+            trow.appendChild( mirror = tabcell.cloneNode( false ) );
+
+            tbody.appendChild( trow );
+
+            tab.appendChild( tbody );
+
+            tab.style.cssText = "visibility: hidden;";
+
+            me.body.appendChild( tab );
+
+            UT.paddingSpace = tabcell.offsetWidth - 1;
+
+            var tmpTabWidth = tab.offsetWidth;
+
+            tabcell.style.cssText = '';
+            mirror.style.cssText = '';
+
+            UT.borderWidth = ( tab.offsetWidth - tmpTabWidth ) / 3;
+
+            UT.tabcellSpace = UT.paddingSpace + UT.borderWidth;
+
+            me.body.removeChild( tab );
+
+        }
+
+        getTabcellSpace = function(){ return UT.tabcellSpace; };
+
+        return UT.tabcellSpace;
 
     }
 

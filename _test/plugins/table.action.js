@@ -254,17 +254,31 @@ test('trace 3059 表格右浮动',function(){
     editor.execCommand( 'inserttable');
     ua.manualDeleteFillData( editor.body );
     var tds = te.obj[0].body.getElementsByTagName('td');
-    ua.dblclick(tds[0],{clientX:199,clientY:100});
-    stop();
+    var oldWidth = tds[0].offsetWidth;
+    ua.mousemove(tds[0],{clientX: 105,clientY:20});
+    ua.mousedown(tds[0],{clientX: 105,clientY:20});
+    ua.mouseup(tds[0],{clientX: 105,clientY:20});
     setTimeout(function(){
-        tds = editor.body.firstChild.getElementsByTagName( 'td' );
-        ok(tds[0].width<10, '第一列宽度变小' );
-        range.setStart( tds[0], 0 ).collapse( true ).select();
-        editor.execCommand( 'tablealignment', 'right');
-        var table = te.obj[0].body.getElementsByTagName('table')[0];
-        equal( table.align, 'right', '表格右浮动' );
-        start();
-    },50);
+
+        ua.mousedown(tds[0],{clientX: 105,clientY:20});
+        ua.mouseup(tds[0],{clientX: 105,clientY:20});
+
+        setTimeout(function(){
+            tds = editor.body.firstChild.getElementsByTagName( 'td' );
+            ok(tds[0].offsetWidth<oldWidth, '第一列宽度变小' );
+            range.setStart( tds[0], 0 ).collapse( true ).select();
+            editor.execCommand( 'tablealignment', 'right');
+            var table = te.obj[0].body.getElementsByTagName('table')[0];
+            equal( table.align, 'right', '表格右浮动' );
+
+            start();
+
+        },50);
+
+    }, 50);
+
+    stop();
+
 });
 
 test('trace 3378：拖拽后tab，不影响表格样式',function(){

@@ -27,7 +27,7 @@
             return getTableItemsByRange(this).table ? -1 : 0;
         },
         execCommand: function (cmd, opt) {
-            function createTable(opt, tableWidth, tdWidth) {
+            function createTable(opt, tdWidth) {
                 var html = [],
                     rowsNum = opt.numRows,
                     colsNum = opt.numCols;
@@ -38,7 +38,8 @@
                     }
                     html.push('</tr>')
                 }
-                return '<table width="' + tableWidth + '"   ><tbody>' + html.join('') + '</tbody></table>'
+                //禁止指定table-width
+                return '<table><tbody>' + html.join('') + '</tbody></table>'
             }
 
             if (!opt) {
@@ -53,14 +54,15 @@
                 start = range.startContainer,
                 firstParentBlock = domUtils.findParent(start, function (node) {
                     return domUtils.isBlockElm(node);
-                }, true);
+                }, true) || me.body;
             var me = this,
                 defaultValue = getDefaultValue(me),
-                tableWidth = getTableWidth(me, true, defaultValue) - (firstParentBlock ? parseInt(domUtils.getXY(firstParentBlock).x, 10) : 0),
+                tableWidth = firstParentBlock.offsetWidth,
                 tdWidth = Math.floor(tableWidth / opt.numCols - defaultValue.tdPadding * 2 - defaultValue.tdBorder);
+
             //todo其他属性
             !opt.tdvalign && (opt.tdvalign = me.options.tdvalign);
-            me.execCommand("inserthtml", createTable(opt, tableWidth, tdWidth));
+            me.execCommand("inserthtml", createTable(opt, tdWidth));
         }
     };
 
@@ -388,6 +390,7 @@
             var cell = getTableItemsByRange(this).cell,
                 ut = getUETable(cell),
                 cellInfo = ut.getCellInfo(cell);
+
             //ut.insertCol(!ut.selectedTds.length ? cellInfo.colIndex:ut.cellsRange.beginColIndex);
             if (!ut.selectedTds.length) {
                 ut.insertCol(cellInfo.colIndex, cell);
@@ -733,7 +736,7 @@
                 table = start && domUtils.findParentByTagName(start, ["table"], true);
 
             if (table) {
-               table.setAttribute("align",value);
+                table.setAttribute("align",value);
             }
         }
     };
@@ -815,12 +818,7 @@
     };
     UE.commands["settablebackground"] = {
         queryCommandState: function () {
-            var selecteds = getSelectedArr(this);
-
-            if( selecteds.length && selecteds[0].tagName.toLowerCase() === 'td' ) {
-                return 0;
-            }
-            return -1;
+            return getSelectedArr(this).length > 1 ? 0 : -1;
         },
         execCommand: function (cmd, value) {
             var table, cells, ut;
