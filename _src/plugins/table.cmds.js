@@ -725,20 +725,18 @@
     //表格对齐方式
     UE.commands['tablealignment'] = {
         queryCommandState: function () {
+            if (browser.ie && browser.version < 8) {
+                return -1;
+            }
             return getTableItemsByRange(this).table ? 0 : -1
         },
-        execCommand: function (cmd, data) {
-
+        execCommand: function (cmd, value) {
             var me = this,
                 start = me.selection.getStart(),
                 table = start && domUtils.findParentByTagName(start, ["table"], true);
 
             if (table) {
-                var obj = {};
-                obj[data[0]] = data[1];
-                table.style[utils.cssStyleToDomStyle("float")] = "";
-                table.style.margin = "";
-                domUtils.setStyles(table, obj);
+                table.setAttribute("align",value);
             }
         }
     };
