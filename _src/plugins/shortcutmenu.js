@@ -20,9 +20,7 @@ UE.plugins['shortcutmenu'] = function () {
 
     me.addListener ('contextmenu selectionchange' , function (type , e1 , e2) {
         var rng = me.selection.getRange ();
-        if (type == "selectionchange") {
-            debugger;
-        }
+
         if (rng.collapsed === false || type == "contextmenu") {
             var e = typeof e1 == "boolean" ? e2 : e1;
 
