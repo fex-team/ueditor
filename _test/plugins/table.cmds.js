@@ -135,23 +135,23 @@ test('删除table', function () {
 test('平均分配行列', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    var html = '<table width="267" ><tbody><tr><td width="46" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" height="57" ><br/></td><td width="158" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" height="57" ><br/></td><td width="-1" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" height="57" ><br/></td></tr><tr><td width="46" valign="top" style="word-break: break-all;" height="134" ><br/></td><td width="158" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" height="134" ><br/></td><td width="-1" valign="top" style="word-break: break-all;" height="134" ><br/></td></tr><tr><td width="46" valign="top" style="word-break: break-all;" ><br/></td><td width="158" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" ><br/></td><td width="-1" valign="top" style="word-break: break-all;" ><br/></td></tr></tbody></table>';
+    var html = '<table width="267" ><tbody><caption></caption><tr><th></th><th></th><th></th></tr><tr><td width="46" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" height="57" ><br/></td><td width="158" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" height="57" ><br/></td><td width="-1" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" height="57" ><br/></td></tr><tr><td width="46" valign="top" style="word-break: break-all;" height="134" ><br/></td><td width="158" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" height="134" ><br/></td><td width="-1" valign="top" style="word-break: break-all;" height="134" ><br/></td></tr><tr><td width="46" valign="top" style="word-break: break-all;" ><br/></td><td width="158" valign="top" colspan="1" rowspan="1" style="word-break: break-all;" ><br/></td><td width="-1" valign="top" style="word-break: break-all;" ><br/></td></tr></tbody></table>';
     editor.setContent(html);
     var trs = editor.body.firstChild.getElementsByTagName('tr');
     var ut = editor.getUETable(editor.body.firstChild);
-    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[0].cells[2]);
+    var cellsRange = ut.getCellsRange(trs[1].cells[0], trs[1].cells[2]);
     ut.setSelected(cellsRange);
-    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+    range.setStart(trs[1].cells[0], 0).collapse(true).select();
     editor.execCommand('averagedistributecol');
     ut.clearSelected();
     equal(editor.body.firstChild.getElementsByTagName('td')[1].width, editor.body.firstChild.getElementsByTagName('td')[2].width, '平均分配各列');
-    cellsRange = ut.getCellsRange(trs[0].cells[0], trs[2].cells[0]);
+    cellsRange = ut.getCellsRange(trs[1].cells[0], trs[3].cells[0]);
     ut.setSelected(cellsRange);
-    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+    range.setStart(trs[1].cells[0], 0).collapse(true).select();
     editor.execCommand('averagedistributerow');
     ut.clearSelected();
     trs = editor.body.firstChild.getElementsByTagName('tr');
-    equal(trs[1].cells[0].height, trs[2].cells[0].height, '平均分配各行');
+    equal(trs[2].cells[0].height, trs[3].cells[0].height, '平均分配各行');
 });
 test('选部分行时，平均分布行/选部分列时，平均分布列', function () {
     var editor = te.obj[0];
@@ -174,16 +174,21 @@ test('选部分行时，平均分布行/选部分列时，平均分布列', func
     ut.clearSelected();
     equal(editor.body.firstChild.getElementsByTagName('td')[0].width, editor.body.firstChild.getElementsByTagName('td')[1].width, '平均分配各列');
 });
+
 test('表格中设置对齐方式', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent('<table><tbody><tr><td></td><td><p>hello</p></td></tr></tbody></table>');
+    editor.setContent('<table><caption></caption><tbody><tr><td></td><td><p>hello</p></td></tr></tbody></table>');
+    var caption = editor.body.getElementsByTagName('caption');
+    range.setStart(caption[0], 0).collapse(true).select();
+    editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
+    equal(caption[0].style.textAlign, 'right', 'caption对齐方式为右上对齐');
+    equal(caption[0].style.verticalAlign, 'top', 'caption对齐方式为右上对齐');
     var tds = editor.body.getElementsByTagName('td');
     range.setStart(tds[0], 0).collapse(true).select();
     editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
     equal(tds[0].align, 'right', 'td对齐方式为右上对齐');
     equal(tds[0].vAlign, 'top', 'td对齐方式为右上对齐');
-
     /*不闭合设置对齐方式*/
     range.selectNode(tds[1].firstChild, 0).select();
     editor.execCommand('cellalignment', {align:'center', vAlign:'middle'});
@@ -219,6 +224,13 @@ test('修改单元格', function () {
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable');
     var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[2], 0).collapse(true).select();
+    editor.execCommand('edittd', '#9bbb59');
+    if (ua.browser.ie && ua.browser.ie < 9) {
+        equal(tds[2].style.backgroundColor, '#9bbb59', '背景颜色');
+    } else {
+        equal(tds[2].style.backgroundColor, 'rgb(155, 187, 89)', '背景颜色');
+    }
     var ut = editor.getUETable(editor.body.firstChild);
     var cellsRange = ut.getCellsRange(tds[0], tds[6]);
     ut.setSelected(cellsRange);
@@ -506,8 +518,14 @@ test('settablebackground', function () {
     setTimeout(function(){
         var br = ua.browser.ie?'':'<br>';
         var tds = editor.body.firstChild.getElementsByTagName('td');
-        ok( tds[0].style.backgroundColor === 'rgb(187, 187, 187)', '选区隔行变色， 第一列第一行颜色匹配' );
-        ok( tds[2].style.backgroundColor === 'rgb(204, 204, 204)', '选区隔行变色， 第一列第二行颜色匹配' );
+        if(ua.browser.ie){
+            ok( tds[0].style.backgroundColor === '#bbb', '选区隔行变色， 第一列第一行颜色匹配' );
+            ok( tds[2].style.backgroundColor === '#ccc', '选区隔行变色， 第一列第二行颜色匹配' );
+        }
+        else{
+            ok( tds[0].style.backgroundColor === 'rgb(187, 187, 187)', '选区隔行变色， 第一列第一行颜色匹配' );
+            ok( tds[2].style.backgroundColor === 'rgb(204, 204, 204)', '选区隔行变色， 第一列第二行颜色匹配' );
+        }
         range.setStart(tds[0], 0).collapse(true).select();
         editor.execCommand('cleartablebackground');
         setTimeout(function(){
@@ -846,6 +864,7 @@ test('单元格对齐方式-vAlign', function () {
     equal(tds[0].vAlign, 'middle', '第一个单元格居中对齐');
     equal(tds[2].vAlign, 'middle', '第二个单元格居中对齐');
 });
+
 test('adaptbytext，adaptbywindow', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -853,7 +872,8 @@ test('adaptbytext，adaptbywindow', function () {
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols:2, numRows:2});
     range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-    ok( editor.body.offsetWidth === editor.body.getElementsByTagName('table')[0].offsetWidth ,'默认按窗口计算宽度');//数值不具体计算了
+    if(ua.browser.ie!=8)
+        ok( editor.body.offsetWidth === editor.body.getElementsByTagName('table')[0].offsetWidth ,'默认按窗口计算宽度');//数值不具体计算了
     editor.execCommand('adaptbytext');//parseInt
     stop();
     setTimeout(function(){
@@ -864,8 +884,8 @@ test('adaptbytext，adaptbywindow', function () {
             start();
         },20);
     },20);
-
 });
+
 test('deletetitle', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -891,6 +911,7 @@ test('deletetitle', function () {
         },20);
     },20);
 });
+
 /*trace 3222*/
 test('trace 3222：在合并后的单元格中按tab键', function () {
     var editor = te.obj[0];
