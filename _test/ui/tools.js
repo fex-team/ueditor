@@ -21,8 +21,10 @@
             te.dom.push(div);
             te.obj.push(ui);
             te.obj.push( ue );
+            QUnit.readyFlag =1;
         },20);
         stop();
+        QUnit.readyFlag =0;
         document.getElementsByClassName = function(eleClassName) {
             var getEleClass = [];//定义一个数组
             var myclass = new RegExp("\\b" + eleClassName + "\\b");//创建一个正则表达式对像
