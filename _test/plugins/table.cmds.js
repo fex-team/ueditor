@@ -503,32 +503,20 @@ test('settablebackground', function () {
     ut.setSelected(cellsRange);
     range.setStart(tds[0], 0).collapse(true).select();
     editor.execCommand("settablebackground",{repeat:true,colorList:["#bbb","#ccc"]});
-    stop();
     setTimeout(function(){
         var br = ua.browser.ie?'':'<br>';
-        var html_1 = '<td width="210" valign="top" class=" selectTdClass" style="background-color: rgb(187, 187, 187);">'+br+'</td><td width="210" valign="top">'+br+'</td>';
-        var html_2 = '<td width="210" valign="top" class=" selectTdClass" style="background-color: rgb(204, 204, 204);">'+br+'</td><td width="210" valign="top">'+br+'</td>';
-        if(ua.browser.ie==8)
-        {
-            html_1 = '<td width="217" valign="top" class=" selectTdClass" style="background-color: #bbb">'+br+'</td><td width="217" valign="top">'+br+'</td>';
-            html_2 = '<td width="217" valign="top" class=" selectTdClass" style="background-color: #ccc">'+br+'</td><td width="217" valign="top">'+br+'</td>';
-        }
-        var trs = editor.body.firstChild.getElementsByTagName('tr');
-        ua.checkSameHtml(trs[0].innerHTML,html_1,'选区隔行变色');
-        ua.checkSameHtml(trs[1].innerHTML,html_2,'选区隔行变色');
+        var tds = editor.body.firstChild.getElementsByTagName('td');
+        ok( tds[0].style.backgroundColor === 'rgb(187, 187, 187)', '选区隔行变色， 第一列第一行颜色匹配' );
+        ok( tds[2].style.backgroundColor === 'rgb(204, 204, 204)', '选区隔行变色， 第一列第二行颜色匹配' );
         range.setStart(tds[0], 0).collapse(true).select();
         editor.execCommand('cleartablebackground');
         setTimeout(function(){
-            html_1 = '<td width="210" valign="top" class=" selectTdClass" style="">'+br+'</td><td width="210" valign="top">'+br+'</td>';
-            if(ua.browser.ie==8)
-                html_1 = '<td width="217" valign="top" class=" selectTdClass">'+br+'</td><td width="217" valign="top">'+br+'</td>';
-            trs = editor.body.firstChild.getElementsByTagName('tr');
-            ua.checkSameHtml(trs[0].innerHTML,html_1,'取消选区隔行变色');
-            ua.checkSameHtml(trs[1].innerHTML,html_1,'取消选区隔行变色');
-//            equal(editor.body.firstChild.attributes['data-sort'].nodeValue,'sortDisabled','sortDisabled');
+            ok( tds[0].style.backgroundColor === '', '取消选区隔行变色， 第一列第一行颜色匹配' );
+            ok( tds[2].style.backgroundColor === '', '取消选区隔行变色， 第一列第二行颜色匹配' );
             start();
         },20);
     },20);
+    stop();
 });
 test('interlacetable', function () {
     var editor = te.obj[0];
@@ -865,7 +853,7 @@ test('adaptbytext，adaptbywindow', function () {
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols:2, numRows:2});
     range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-    ok((parseInt(editor.body.firstChild.width)-editor.body.offsetWidth/2)>0,'默认按窗口计算宽度');//数值不具体计算了
+    ok( editor.body.offsetWidth === editor.body.getElementsByTagName('table')[0].offsetWidth ,'默认按窗口计算宽度');//数值不具体计算了
     editor.execCommand('adaptbytext');//parseInt
     stop();
     setTimeout(function(){

@@ -10,19 +10,15 @@
         var div = document.body.appendChild( document.createElement( 'div' ) );
         $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
         var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','autoFloatEnabled':false});
-
         var ue = new UE.ui.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':true});
-
-//        setTimeout(function(){
-            editor.render(div);
-            setTimeout(function(){
-                var range = new baidu.editor.dom.Range( editor.document );
-                te.dom.push( div );
-                te.obj.push( editor );
-                te.obj.push(range);
-                te.obj.push( ue );
-            },50);
-//        },20);
+        editor.render(div);
+        editor.ready(function(){
+            var range = new baidu.editor.dom.Range( editor.document );
+            te.dom.push( div );
+            te.obj.push( editor );
+            te.obj.push(range);
+            te.obj.push( ue );
+        });
         stop();
         document.getElementsByClassName = function(eleClassName) {
             var getEleClass = [];//定义一个数组
