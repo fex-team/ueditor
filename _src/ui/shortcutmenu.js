@@ -176,7 +176,7 @@
                 buff = this.items;
             }
 
-            return '<div id="##" class="%% edui-toolbar" data-src="shortcutmenu" onselectstart="return false;" >' +
+            return '<div id="##" class="%% edui-toolbar" data-src="shortcutmenu" onmousedown="return false;" onselectstart="return false;" >' +
                 buff +
                 '</div>';
         }
