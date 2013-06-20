@@ -1055,7 +1055,7 @@ UE.plugins['table'] = function () {
 
     function mouseDownEvent(type, evt) {
 
-        if( isEditorDisabled() ) {
+        if( !onBorder || isEditorDisabled() ) {
             return ;
         }
 
@@ -1295,7 +1295,7 @@ UE.plugins['table'] = function () {
 
     function mouseUpEvent(type, evt) {
 
-        if( isEditorDisabled() ) {
+        if( !onBorder || isEditorDisabled() ) {
             return ;
         }
 
