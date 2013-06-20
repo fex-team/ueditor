@@ -18,27 +18,25 @@ UE.plugins['shortcutmenu'] = function () {
         return;
     }
 
-    me.addListener ('contextmenu selectionchange' , function (type , e1 , e2) {
+    me.addListener ('contextmenu mouseup' , function (type , e) {
         var rng = me.selection.getRange ();
 
         if (rng.collapsed === false || type == "contextmenu") {
-            var e = typeof e1 == "boolean" ? e2 : e1;
 
-            if (e && typeof e != "boolean") {
-                if (!menu) {
-                    menu = new baidu.editor.ui.ShortCutMenu ({
-                        editor : me ,
-                        items : items ,
-                        theme : me.options.theme ,
-                        className : 'edui-shortcutmenu'
-                    });
+            if (!menu) {
+                menu = new baidu.editor.ui.ShortCutMenu ({
+                    editor : me ,
+                    items : items ,
+                    theme : me.options.theme ,
+                    className : 'edui-shortcutmenu'
+                });
 
-                    menu.render ();
-                    me.fireEvent ("afterrendershortcutmenu" , menu);
-                }
+                menu.render ();
+                me.fireEvent ("afterrendershortcutmenu" , menu);
+            }
 
-                menu.show (e , !!UE.plugins['contextmenu']);
-
+            menu.show (e , !!UE.plugins['contextmenu']);
+            if(type == 'contextmenu'){
                 domUtils.preventDefault (e);
                 if (browser.ie) {
                     var ieRange;
@@ -53,8 +51,8 @@ UE.plugins['shortcutmenu'] = function () {
 
                     }
                 }
-
             }
+
 
         }
     });
