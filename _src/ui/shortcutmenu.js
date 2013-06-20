@@ -113,7 +113,7 @@
             }
 
             function setPosByCxtMenu (menu) {
-                if (utils.isObject (menu)) {
+                if (!menu.tagName) {
                     menu = menu.getDom ();
                 }
                 offset.left = parseInt (menu.style.left);
