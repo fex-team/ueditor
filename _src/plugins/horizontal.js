@@ -46,26 +46,55 @@ UE.plugins['horizontal'] = function(){
             return domUtils.filterNodeList(this.selection.getStartElementPath(),'table') ? -1 : 0;
         }
     };
-    me.addListener('delkeyup',function(){
+//    me.addListener('delkeyup',function(){
+//        var rng = this.selection.getRange();
+//        if(browser.ie && browser.version > 8){
+//            rng.txtToElmBoundary(true);
+//            if(domUtils.isStartInblock(rng)){
+//                var tmpNode = rng.startContainer;
+//                var pre = tmpNode.previousSibling;
+//                if(pre && domUtils.isTagNode(pre,'hr')){
+//                    domUtils.remove(pre);
+//                    rng.select();
+//                    return;
+//                }
+//            }
+//        }
+//        if(domUtils.isBody(rng.startContainer)){
+//            var hr = rng.startContainer.childNodes[rng.startOffset -1];
+//            if(hr && hr.nodeName == 'HR'){
+//                var next = hr.nextSibling;
+//                if(next){
+//                    rng.setStart(next,0)
+//                }else if(hr.previousSibling){
+//                    rng.setStartAtLast(hr.previousSibling)
+//                }else{
+//                    var p = this.document.createElement('p');
+//                    hr.parentNode.insertBefore(p,hr);
+//                    domUtils.fillNode(this.document,p);
+//                    rng.setStart(p,0);
+//                }
+//                domUtils.remove(hr);
+//                rng.setCursor(false,true);
+//            }
+//        }
+//    })
+    me.addListener('delkeydown',function(name,evt){
         var rng = this.selection.getRange();
-        if(domUtils.isBody(rng.startContainer)){
-            var hr = rng.startContainer.childNodes[rng.startOffset -1];
-            if(hr && hr.nodeName == 'HR'){
-                var next = hr.nextSibling;
-                if(next){
-                    rng.setStart(next,0)
-                }else if(hr.previousSibling){
-                    rng.setStartAtLast(hr.previousSibling)
-                }else{
-                    var p = this.document.createElement('p');
-                    hr.parentNode.insertBefore(p,hr);
-                    domUtils.fillNode(this.document,p);
-                    rng.setStart(p,0);
-                }
-                domUtils.remove(hr);
-                rng.setCursor(false,true);
+
+        rng.txtToElmBoundary(true);
+        if(domUtils.isStartInblock(rng)){
+            var tmpNode = rng.startContainer;
+            var pre = tmpNode.previousSibling;
+            if(pre && domUtils.isTagNode(pre,'hr')){
+                domUtils.remove(pre);
+                rng.select();
+                domUtils.preventDefault(evt);
+                return true;
+
             }
         }
+
     })
 };
 
