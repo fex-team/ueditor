@@ -439,12 +439,13 @@ test('trace 3114 在单元格内粘贴行',function(){
     editor.fireEvent('beforepaste',html);
     editor.fireEvent("afterpaste");
     equal(editor.body.getElementsByTagName('table').length,'1','触发粘贴事件后有1个table');
+    stop();
     setTimeout(function() {
         editor.execCommand('source');
         setTimeout(function() {
             editor.execCommand('source');
             equal(editor.body.getElementsByTagName('tr').length,'7','触发粘贴事件后有7个tr');
             start();
-        },20);
-    },20);
+        },50);
+    },50);
 });
