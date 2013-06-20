@@ -578,7 +578,7 @@
          * //本方法执行后
          * startContainer = <b>; startOffset = 1
          */
-        txtToElmBoundary:function () {
+        txtToElmBoundary:function (ignoreCollapsed) {
             function adjust(r, c) {
                 var container = r[c + 'Container'],
                     offset = r[c + 'Offset'];
@@ -595,7 +595,7 @@
                 }
             }
 
-            if (!this.collapsed) {
+            if (ignoreCollapsed || !this.collapsed) {
                 adjust(this, 'start');
                 adjust(this, 'end');
             }

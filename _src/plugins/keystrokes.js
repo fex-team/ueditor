@@ -54,7 +54,9 @@ UE.plugins['keystrokes'] = function() {
         if (keyCode == 8) {
             rng = me.selection.getRange();
             collapsed = rng.collapsed;
-
+            if(me.fireEvent('delkeydown',evt)){
+                return;
+            }
             var start,end;
             //避免按两次删除才能生效的问题
             if(rng.collapsed && rng.inFillChar()){
