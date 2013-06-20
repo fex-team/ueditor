@@ -50,6 +50,11 @@
 
         me.fireEvent("langReady");
     }
+    function checkCurLang(I18N){
+        for(var lang in I18N){
+            return lang
+        }
+    }
     /**
      * UEditor编辑器类
      * @name Editor
@@ -96,7 +101,10 @@
             tableNativeEditInFF: false,
             autoSyncData : true
         });
+
         if(!utils.isEmptyObject(UE.I18N)){
+            //修改默认的语言类型
+            me.options.lang = checkCurLang(UE.I18N);
             loadPlugins(me)
         }else{
             utils.loadFile(document, {
