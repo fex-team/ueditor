@@ -409,13 +409,14 @@ test('trace 3106 粘贴标题行',function(){
     editor.fireEvent("afterpaste");
     equal(editor.body.getElementsByTagName('table').length,'2','触发粘贴事件后有2个table');
     if(ua.browser.gecko){
-        equal(editor.body.firstChild.firstChild.firstChild.firstChild.tagName.toLowerCase(),'td','不是th，是td');
+        //这个比较没意义
+//        equal(editor.body.firstChild.firstChild.firstChild.firstChild.tagName.toLowerCase(),'td','不是th，是td');
         range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild, 0 ).collapse( true ).select();
         equal( editor.queryCommandState( 'inserttable' ), -1, '应当不可以插入表格' );
         equal( editor.queryCommandState( 'mergeright' ), 0, '应当可以右合并单元格' );
     }
     else{
-        equal(editor.body.firstChild.nextSibling.firstChild.firstChild.firstChild.tagName.toLowerCase(),'td','不是th，是td');
+//        equal(editor.body.firstChild.nextSibling.firstChild.firstChild.firstChild.tagName.toLowerCase(),'td','不是th，是td');
         range.setStart(editor.body.firstChild.nextSibling.firstChild.firstChild.firstChild, 0 ).collapse( true ).select();
         equal( editor.queryCommandState( 'inserttable' ), -1, '应当不可以插入表格' );
         equal( editor.queryCommandState( 'mergeright' ), 0, '应当可以右合并单元格' );
