@@ -518,7 +518,7 @@ test('settablebackground', function () {
     setTimeout(function(){
         var br = ua.browser.ie?'':'<br>';
         var tds = editor.body.firstChild.getElementsByTagName('td');
-        if(ua.browser.ie){
+        if(ua.browser.ie&&ua.browser.ie<9){
             ok( tds[0].style.backgroundColor === '#bbb', '选区隔行变色， 第一列第一行颜色匹配' );
             ok( tds[2].style.backgroundColor === '#ccc', '选区隔行变色， 第一列第二行颜色匹配' );
         }
