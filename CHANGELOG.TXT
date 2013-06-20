@@ -3,7 +3,7 @@ UEditor Change List
 Version 1.2.6.1
     1.查找替换支持正则表达式
     2.修复了ie67下初始化宽高给定百分比
-    3.添加了浮动工具栏
+    3.增加快捷菜单
     4.针对默认过滤回转换div为p标签，提供了配置开关allowDivTransToP,默认为true
     5.修复了在ie下删除分割线后光标定位的问题
     6.提供了手动加载语言文件，避免ie下有时会因语言文件加载失败导致编辑器加载失败,提示"not import language file"的错误

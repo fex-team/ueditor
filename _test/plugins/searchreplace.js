@@ -14,7 +14,7 @@ test('trace 3381：查找',function(){
 });
 
 /*trace 974,先替换再撤销再全部替换，则不会替换
- * ie下会出现的bug*/
+* ie下会出现的bug*/
 test('全部替换',function(){
     if(ua.browser.opera)
         return;
@@ -92,4 +92,19 @@ test('全部替换内容为空',function(){
     editor.execCommand('searchreplace',{searchStr:'欢迎',replaceStr:'',all:true});
     ua.manualDeleteFillData(editor.body);
     equal(editor.body.firstChild.innerHTML,'回来 啊');
+});
+
+test('查找替换支持正则',function(){
+    if(ua.browser.opera)
+        return;
+    var editor = te.obj[0];
+    editor.setContent('<p>sd2323fasdfasd3434f</p>');
+    //因为是字符表示的正则要做转换
+    editor.execCommand('searchreplace',{searchStr:'/\\d+/',replaceStr:'',all:true});
+    ua.manualDeleteFillData(editor.body);
+    equal(editor.body.firstChild.innerHTML,'sdfasdfasdf');
+    editor.setContent('<p>sd2323fasdfasd3434f</p><p>首都发生地2323方</p>');
+    editor.execCommand('searchreplace',{searchStr:'/\\d+/',replaceStr:'',all:true});
+    ua.manualDeleteFillData(editor.body);
+    equal(editor.body.innerHTML.toLowerCase().replace(/>\s+</g,'><'),'<p>sdfasdfasdf</p><p>首都发生地方</p>');
 });

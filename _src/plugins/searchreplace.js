@@ -61,6 +61,7 @@ UE.plugins['searchreplace'] = function(){
                         if(match && match[0]){
                             searchStr = match[0];
                         }else{
+                            currentRange = null;
                             return num;
                         }
                     }
@@ -68,6 +69,7 @@ UE.plugins['searchreplace'] = function(){
                         currentRange = null;
                         tmpRange = me.document.selection.createRange();
                         tmpRange.scrollIntoView();
+                        currentRange = null;
                         return num;
                     }
                     tmpRange.select();
@@ -84,7 +86,8 @@ UE.plugins['searchreplace'] = function(){
                     }
                 }
             }else{
-                var w = me.window,nativeSel = sel.getNative(),tmpRange;
+
+                var w = me.window,nativeSel = sel.getNative();
                 while(1){
                     if(opt.all){
                         if(currentRange){
@@ -146,12 +149,14 @@ UE.plugins['searchreplace'] = function(){
                         if(match && match[0]){
                             searchStr = match[0];
                         }else{
+                            currentRange = null;
                             return num;
                         }
                     }
                     if(!w.find(searchStr,opt.casesensitive,opt.dir < 0 ? true : false) ) {
                         currentRange = null;
                         nativeSel.removeAllRanges();
+
                         return num;
                     }
                     first = 0;

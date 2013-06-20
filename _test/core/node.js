@@ -159,6 +159,15 @@ test( 'setStyle', function() {
     equals(node.firstChild().toHtml(),'<div style="color:#ccc"></div>','删除分号');
     node.innerHTML('<div style="border:1px solid #ccc;color:#ccc" dfasdfas="sdfsdf" sdfsdf="sdfsdfs" ></div>');
     equals(node.firstChild().toHtml(),'<div style="border:1px solid #ccc;color:#ccc" dfasdfas="sdfsdf" sdfsdf="sdfsdfs"></div>');
+
+    node.innerHTML('<div style=" border:1px "></div>');
+    node.firstChild().setStyle('border');
+
+    equals(node.firstChild().toHtml(),'<div></div>');
+    node.innerHTML('<div style=" border:1px solid #ccc; color:#ccc"></div>');
+    node.firstChild().setStyle('border');
+    equals(node.firstChild().toHtml(),'<div style="color:#ccc"></div>');
+
 });
 
 test( 'getIndex', function() {
