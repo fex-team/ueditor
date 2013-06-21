@@ -5,12 +5,10 @@ module( 'plugins.source' );
 //    var div = document.createElement('div');
 //    document.body.appendChild(div);
 //    div.id = 'e';
-//    debugger
 //    var editor = UE.getEditor('e');//,{sourceEditorFirst:true}
 //    stop();
 ////    editor.ready(function(){
 ////        setTimeout(function(){
-////            debugger
 //////            equal(editor.queryCommandState('source'),1,'源码高亮');
 ////            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
 ////////            start();
@@ -305,7 +303,6 @@ test( 'trace 1727:插入超链接后再插入空格，空格不能被删除', fu
 //    editor.ready(function(){
 //        setTimeout(function(){
 ////            equal(editor.queryCommandState('source'),1,'源码高亮');
-//            debugger
 //            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
 //////            start();
 //        },100);

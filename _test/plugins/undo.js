@@ -114,6 +114,8 @@ test( 'trace 617 插入文本、分割线、文本,撤销2次，撤销掉分割�
     range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
     ua.keydown( editor.body );
     range.insertNode( editor.document.createTextNode( 'hello' ) );
+    if(!ua.browser.ie)
+        ua.compositionstart( editor.body );
     ua.keyup( editor.body );
     //输入分割符
     range.setStartAfter( editor.body.lastChild ).collapse( true ).select();
@@ -122,6 +124,8 @@ test( 'trace 617 插入文本、分割线、文本,撤销2次，撤销掉分割�
     range.setStartAfter( editor.body.lastChild ).collapse( true ).select();
     ua.keydown( editor.body );
     range.insertNode( editor.document.createTextNode( 'hello' ) );
+    if(!ua.browser.ie)
+        ua.compositionend( editor.body );
     ua.keyup( editor.body );
 
     editor.execCommand( 'Undo' );
@@ -352,7 +356,7 @@ test( 'trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动�
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
-    editor.setContent( '<p><br></p>' );;
+    editor.setContent( '<p><br></p>' );
     range.setStart( body.firstChild, 0 ).collapse( 1 ).select();
     editor.execCommand( 'insertimage', {src:'http://img.baidu.com/hi/jx2/j_0001.gif', width:50, height:51} );
     range.selectNode( editor.body.getElementsByTagName( 'img' )[0] ).select();
@@ -419,7 +423,6 @@ test( 'ctrl+z/y', function() {
     editor.setContent( '<p>没有加粗的文本</p>' );
     range.selectNode( body.firstChild ).select();
     var p = body.firstChild;
-
     editor.focus();
     setTimeout( function() {
         ua.keydown(editor.body,{'keyCode':66,'ctrlKey':true});
