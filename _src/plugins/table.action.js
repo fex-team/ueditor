@@ -548,6 +548,10 @@ UE.plugins['table'] = function () {
 
         me.addListener("mousedown", mouseDownEvent);
         me.addListener("mouseup", mouseUpEvent);
+        //拖动的时候不出发mouseup
+        domUtils.on( me.body, 'dragstart', function( evt ){
+            mouseUpEvent.call( me, 'dragstart', evt );
+        });
 
         var currentRowIndex = 0;
         me.addListener("mousedown", function () {
@@ -1055,7 +1059,7 @@ UE.plugins['table'] = function () {
 
     function mouseDownEvent(type, evt) {
 
-        if( !onBorder || isEditorDisabled() ) {
+        if( isEditorDisabled() ) {
             return ;
         }
 
@@ -1186,7 +1190,6 @@ UE.plugins['table'] = function () {
 
     function tableClickHander( evt ) {
 
-        me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
         removeSelectedClass(domUtils.getElementsByTagName(me.body, "td th"));
         //trace:3113
         //选中单元格，点击table外部，不会清掉table上挂的ueTable,会引起getUETableBySelected方法返回值
@@ -1295,7 +1298,7 @@ UE.plugins['table'] = function () {
 
     function mouseUpEvent(type, evt) {
 
-        if( !onBorder || isEditorDisabled() ) {
+        if( isEditorDisabled() ) {
             return ;
         }
 
