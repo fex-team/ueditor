@@ -191,7 +191,7 @@
          * @grammar editor.render(containerId);    //可以指定一个容器ID
          * @grammar editor.render(containerDom);   //也可以直接指定容器对象
          */
-        render: function (container,holder) {
+        render: function (container) {
             var me = this, options = me.options;
             if (utils.isString(container)) {
                 container = document.getElementById(container);
@@ -207,8 +207,8 @@
                 }else{
                     options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
                 }
-                container.style.width = options.initialFrameWidth+ (/%$/.test(options.initialFrameWidth) ? '' : 'px');
-                container.style.height = options.initialFrameHeight + (/%$/.test(options.initialFrameHeight) ? '' : 'px');
+                container.style.width = /%$/.test(options.initialFrameWidth) ?  '100%' : options.initialFrameWidth + 'px';
+                container.style.height = /%$/.test(options.initialFrameHeight) ?  '100%' : options.initialFrameHeight + 'px';
                 container.style.zIndex = options.zIndex;
 
                 var html = ( ie && browser.version < 9  ? '' : '<!DOCTYPE html>') +
