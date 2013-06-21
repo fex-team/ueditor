@@ -24,7 +24,6 @@ UE.plugins['table'] = function () {
         userActionStatus = null,
         //双击允许的时间范围
         dblclickTime = 360,
-        debug = true,
         UT = UE.UETable,
         getUETable = function (tdOrTable) {
             return UT.getUETable(tdOrTable);
@@ -40,7 +39,7 @@ UE.plugins['table'] = function () {
         };
 
     function showError(e) {
-        if (debug) throw e;
+//        throw e;
     }
     me.ready(function(){
         var me = this;

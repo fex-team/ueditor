@@ -88,7 +88,6 @@ UE.plugins['searchreplace'] = function(){
                 }
             }else{
                 var w = me.window,nativeSel = sel.getNative();
-                debugger
                 while(1){
                     if(opt.all){
                         if(currentRange){
