@@ -6,7 +6,7 @@
 UE.plugins['insertcode'] = function() {
     var me = this;
     me.ready(function(){
-        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f8f8f8;line-height:1.5}',
+        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f8f8f8;}',
             me.document)
     });
     me.setOpt('insertcode',{
@@ -96,7 +96,7 @@ UE.plugins['insertcode'] = function() {
                                             }else{
                                                 code += cn.data
                                             }
-                                        })
+                                        });
                                         if(!/br>$/.test(code)){
                                             code += '<br>';
                                         }
@@ -182,12 +182,14 @@ UE.plugins['insertcode'] = function() {
             var code = '';
             utils.each(pre.children,function(n){
                if(n.type == 'text'){
-                   code += n.data.replace(/[ ]/g,'&nbsp;');
+                   //在ie下文本内容有可能末尾带有\n要去掉
+                   //trace:3396
+                   code += n.data.replace(/[ ]/g,'&nbsp;').replace(/\n$/,'');
                }else{
                    if(n.tagName == 'br'){
                        code  += '\n'
                    }else{
-                       code += n.innerText();
+                       code += (!dtd.$empty[n.tagName] ? '' : n.innerText());
                    }
 
                }
