@@ -18,7 +18,7 @@ UE.plugins['shortcutmenu'] = function () {
         return;
     }
 
-    me.addListener ('contextmenu mouseup keyup' , function (type , e) {
+    me.addListener ('contextmenu mouseup' , function (type , e) {
         var rng = me.selection.getRange ();
 
         if (rng.collapsed === false || type == "contextmenu") {
@@ -36,8 +36,7 @@ UE.plugins['shortcutmenu'] = function () {
             }
 
             menu.show (e , !!UE.plugins['contextmenu']);
-
-            if (type == 'contextmenu') {
+            if(type == 'contextmenu'){
                 domUtils.preventDefault (e);
                 if (browser.ie) {
                     var ieRange;
@@ -54,14 +53,9 @@ UE.plugins['shortcutmenu'] = function () {
                 }
             }
 
-        }
 
-
-        if (type == "keyup" && menu && menu.isHidden == false) {
-            menu.hide ();
         }
     });
-
 };
 
 

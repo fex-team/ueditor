@@ -1067,7 +1067,7 @@ test( 'getComputedStyle-在body上设置字体大小', function() {
     var div = document.body.appendChild( document.createElement( 'div' ) );
     editor.render( div );
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var body = editor.body;
         var range = new baidu.editor.dom.Range( editor.document );
         var h1 = body.appendChild( editor.document.createElement( 'h1' ) );
@@ -1078,7 +1078,7 @@ test( 'getComputedStyle-在body上设置字体大小', function() {
         equal( domUtils.getComputedStyle( h1, 'font-size' ), fontSize, 'body的fontSize属性不应当覆盖p的fontSize属性' );
 //    editor.setContent( '<h2>这是h2的文本<a>这是一个超链接</a></h2>' );
         start();
-    },50);
+    });
 } );
 
 /*不支持一个class的删除，必须为一个数组*/
