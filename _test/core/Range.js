@@ -1445,59 +1445,55 @@ test('b节点取range',function(){
     var div = te.dom[2];
     var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
     stop();
-    setTimeout(function(){
-        editor.render(div);
-        setTimeout(function(){
-            var range = new baidu.editor.dom.Range( editor.document );
-            editor.setContent('<p>hello<strong>hello1</strong>hello2</p>');
-            range.setStart(editor.body.firstChild.lastChild,0).collapse(1).select();
-            range = editor.selection.getRange();
-            if(ua.browser.ie || ua.browser.webkit )
-                ua.checkResult(range, editor.body.firstChild.lastChild.previousSibling, editor.body.firstChild.lastChild.previousSibling, 1, 1, true, '节点后--check range');
-            else
-                ua.checkResult(range, editor.body.firstChild.lastChild.previousSibling, editor.body.firstChild.lastChild.previousSibling, 0, 0, true, '节点后--check range');
+    editor.render(div);
+    editor.ready(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
+        editor.setContent('<p>hello<strong>hello1</strong>hello2</p>');
+        range.setStart(editor.body.firstChild.lastChild,0).collapse(1).select();
+        range = editor.selection.getRange();
+        if(ua.browser.ie || ua.browser.webkit )
+            ua.checkResult(range, editor.body.firstChild.lastChild.previousSibling, editor.body.firstChild.lastChild.previousSibling, 1, 1, true, '节点后--check range');
+        else
+            ua.checkResult(range, editor.body.firstChild.lastChild.previousSibling, editor.body.firstChild.lastChild.previousSibling, 0, 0, true, '节点后--check range');
 
-            range.setStart(editor.body.firstChild.firstChild.nextSibling,0).collapse(1)
-            range.select();
-            range = editor.selection.getRange();
-            if(ua.browser.webkit )
-                ua.checkResult(range, editor.body.firstChild.firstChild.nextSibling.firstChild, editor.body.firstChild.firstChild.nextSibling.firstChild, 1, 1, true, '节点内文本节点前--check range');
-            else if(ua.browser.ie)
-                ua.checkResult(range, editor.body.firstChild.childNodes[1].childNodes[1], editor.body.firstChild.childNodes[1].childNodes[1], 0, 0, true, '节点内文本节点前--check range');
-            else
-                ua.checkResult(range, editor.body.firstChild.firstChild.nextSibling.firstChild, editor.body.firstChild.firstChild.nextSibling.firstChild, 0, 0, true, '节点内文本节点前--check range');
+        range.setStart(editor.body.firstChild.firstChild.nextSibling,0).collapse(1)
+        range.select();
+        range = editor.selection.getRange();
+        if(ua.browser.webkit )
+            ua.checkResult(range, editor.body.firstChild.firstChild.nextSibling.firstChild, editor.body.firstChild.firstChild.nextSibling.firstChild, 1, 1, true, '节点内文本节点前--check range');
+        else if(ua.browser.ie)
+            ua.checkResult(range, editor.body.firstChild.childNodes[1].childNodes[1], editor.body.firstChild.childNodes[1].childNodes[1], 0, 0, true, '节点内文本节点前--check range');
+        else
+            ua.checkResult(range, editor.body.firstChild.firstChild.nextSibling.firstChild, editor.body.firstChild.firstChild.nextSibling.firstChild, 0, 0, true, '节点内文本节点前--check range');
 
-            range.setStart(editor.body.firstChild.childNodes[1],0).collapse(1).select();
-            range = editor.selection.getRange();
-            if(ua.browser.webkit )
-                ua.checkResult(range, editor.body.firstChild.childNodes[1].firstChild, editor.body.firstChild.childNodes[1].firstChild, 1, 1, true, 'b节点--check range');
-            else if(ua.browser.ie)
-                ua.checkResult(range, editor.body.firstChild.childNodes[1].childNodes[1], editor.body.firstChild.childNodes[1].childNodes[1], 0, 0, true, '节点内文本节点前--check range');
-            else
-                ua.checkResult(range, editor.body.firstChild.childNodes[1].firstChild, editor.body.firstChild.childNodes[1].firstChild, 0, 0, true, 'b节点--check range');
-            start();
-        },50);
-    },50);
+        range.setStart(editor.body.firstChild.childNodes[1],0).collapse(1).select();
+        range = editor.selection.getRange();
+        if(ua.browser.webkit )
+            ua.checkResult(range, editor.body.firstChild.childNodes[1].firstChild, editor.body.firstChild.childNodes[1].firstChild, 1, 1, true, 'b节点--check range');
+        else if(ua.browser.ie)
+            ua.checkResult(range, editor.body.firstChild.childNodes[1].childNodes[1], editor.body.firstChild.childNodes[1].childNodes[1], 0, 0, true, '节点内文本节点前--check range');
+        else
+            ua.checkResult(range, editor.body.firstChild.childNodes[1].firstChild, editor.body.firstChild.childNodes[1].firstChild, 0, 0, true, 'b节点--check range');
+        start();
+    });
 });
 
 test('文本节点中间取range',function(){
     var div = te.dom[2];
     var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
     stop();
-    setTimeout(function(){
-        editor.render(div);
-        setTimeout(function(){
-            var range = new baidu.editor.dom.Range( editor.document );
-            editor.setContent('<p>hello2</p>');
-            range.setStart(editor.body.firstChild.firstChild,2).collapse(1).select();
-            range = editor.selection.getRange();
-            if(ua.browser.ie)
-                ua.checkResult(range, editor.body.firstChild.lastChild, editor.body.firstChild.lastChild, 0, 0, true, 'check range');
-            else
-                ua.checkResult(range, editor.body.firstChild.lastChild, editor.body.firstChild.lastChild, 2, 2, true, 'check range');
-            start();
-        },50);
-    },50);
+    editor.render(div);
+    editor.ready(function(){
+        var range = new baidu.editor.dom.Range( editor.document );
+        editor.setContent('<p>hello2</p>');
+        range.setStart(editor.body.firstChild.firstChild,2).collapse(1).select();
+        range = editor.selection.getRange();
+        if(ua.browser.ie)
+            ua.checkResult(range, editor.body.firstChild.lastChild, editor.body.firstChild.lastChild, 0, 0, true, 'check range');
+        else
+            ua.checkResult(range, editor.body.firstChild.lastChild, editor.body.firstChild.lastChild, 2, 2, true, 'check range');
+        start();
+    });
 });
 
 //test( 'select--closedNode', function() {
@@ -1515,9 +1511,6 @@ test('文本节点中间取range',function(){
 ////    var nativeRange = selection.getRange();
 //    //TODO
 //} );
-
-
-
 
 test('range.createAddress,range.moveAddress',function(){
     function equalRange(rngA,rngB){
