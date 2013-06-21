@@ -37,19 +37,21 @@ test('多实例编辑器检查取得word_img的url地址', function () {
     stop();
     setTimeout(function () {
         editor1.render(div1);
-        editor2.render(div2);
-        setTimeout(function () {
-            editor1.focus();
-            editor1.execCommand('wordimage', 'word_img');
-            equal(editor1.word_img.length, '1', 'editor1有一个wordimg');
-            equal(editor1.word_img[0], "file:///C:DOCUME~1DONGYA~1LOCALS~1Tempmsohtmlclip1clip_image001.gif", '检查url地址');
-            editor2.execCommand('wordimage', 'word_img');
-            equal(editor2.word_img.length, '2', 'editor2有2个wordimg');
-            equal(editor2.word_img[0], "file:///C:\DOCUME~1\DONGYA~1\LOCALS~1\Temp\msohtmlclip1\01\clip_image001.jpg", '检查 第一个url地址');
-            equal(editor2.word_img[1], "file:///C:\DOCUME~1\DONGYA~1\LOCALS~1\Temp\msohtmlclip1\01\clip_image001.gif", '检查 第二个url地址');
-            equal(editor1.queryCommandState('wordimage'), '1', 'queryCommandState');
-            equal(editor2.queryCommandState('wordimage'), '1', 'queryCommandState');
-            start();
-        }, 50);
-    }, 50);
+        editor1.ready(function () {
+            editor2.render(div2);
+            editor2.ready(function () {
+                editor1.focus();
+                editor1.execCommand('wordimage', 'word_img');
+                equal(editor1.word_img.length, '1', 'editor1有一个wordimg');
+                equal(editor1.word_img[0], "file:///C:DOCUME~1DONGYA~1LOCALS~1Tempmsohtmlclip1clip_image001.gif", '检查url地址');
+                editor2.execCommand('wordimage', 'word_img');
+                equal(editor2.word_img.length, '2', 'editor2有2个wordimg');
+                equal(editor2.word_img[0], "file:///C:\DOCUME~1\DONGYA~1\LOCALS~1\Temp\msohtmlclip1\01\clip_image001.jpg", '检查 第一个url地址');
+                equal(editor2.word_img[1], "file:///C:\DOCUME~1\DONGYA~1\LOCALS~1\Temp\msohtmlclip1\01\clip_image001.gif", '检查 第二个url地址');
+                equal(editor1.queryCommandState('wordimage'), '1', 'queryCommandState');
+                equal(editor2.queryCommandState('wordimage'), '1', 'queryCommandState');
+                start();
+            });
+        });
+    });
 });

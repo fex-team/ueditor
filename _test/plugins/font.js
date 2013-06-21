@@ -36,7 +36,7 @@ test( 'underline and linethrough', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent('hello<a href="http://www.baidu.com/">baidu</a>test');
         setTimeout(function(){
@@ -57,7 +57,7 @@ test( 'underline and linethrough', function() {
                 start();
             }, 50);
         },50);
-    },50);
+    });
 } );
 
 /*为不同字号的文本加背景色，trace981*/
@@ -68,7 +68,7 @@ test( 'background--不同字号', function() {
         $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
         te.obj[2].render(div);
         stop();
-        setTimeout(function(){
+        editor.ready(function(){
             var range = new baidu.editor.dom.Range( te.obj[2].document );
             te.obj[2].setContent('你好');
             editor.focus();
@@ -88,7 +88,7 @@ test( 'background--不同字号', function() {
                 div.parentNode.removeChild(div);
                 start();
             },50);
-        },50);
+        });
     }
 } );
 
@@ -99,7 +99,7 @@ test( 'trace 937：为第一个有样式的字加删除线', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p><span style="color: red">欢</span>迎光临</p>' );
         range.selectNode( editor.body.firstChild ).select();
@@ -111,7 +111,7 @@ test( 'trace 937：为第一个有样式的字加删除线', function() {
             div.parentNode.removeChild(div);
             start();
         }, 50);
-    },50);
+    });
 } );
 
 /*trace 918*/
@@ -121,7 +121,7 @@ test( 'trace 918：字体的状态反射', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>欢迎你回来</p>' );
         var p = editor.body.firstChild;
@@ -142,7 +142,7 @@ test( 'trace 918：字体的状态反射', function() {
             div.parentNode.removeChild(div);
             start();
         },50);
-    },50);
+    });
 } );
 
 test( ' 选中文本设置前景色为默认', function() {
@@ -151,7 +151,7 @@ test( ' 选中文本设置前景色为默认', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( 'hello' );
         range.selectNode( editor.body.firstChild ).select();
@@ -163,7 +163,7 @@ test( ' 选中文本设置前景色为默认', function() {
             div.parentNode.removeChild(div);
             start();
         }, 50);
-    },50);
+    });
 } );
 
 /*trace 869*/
@@ -204,7 +204,7 @@ test( 'trace 823：设置前景色后设置删除线', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p><span style="color: rgb(153, 230, 0); ">你好<span style="color: rgb(255, 0, 0); ">​hello</span></span></p>' );
         range.selectNode( editor.body.firstChild.firstChild, 0 ).select();
@@ -216,7 +216,7 @@ test( 'trace 823：设置前景色后设置删除线', function() {
             div.parentNode.removeChild(div);
             start();
         }, 50);
-    },50);
+    });
 } );
 
 /*trace 819, 765*/
@@ -226,7 +226,7 @@ test( 'trace 819, 765：删除线和下划线互斥', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         var p1 = editor.document.createElement( 'p' );
         editor.setContent( '<p>你好</p>' );
@@ -247,7 +247,7 @@ test( 'trace 819, 765：删除线和下划线互斥', function() {
             div.parentNode.removeChild(div);
             start();
         }, 50);
-    },50);
+    });
 } );
 
 ///*trace 810*/
@@ -286,7 +286,7 @@ test( 'trace 809：闭合时改变前景色和删除线，再输入文本', func
         $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
         editor.render(div);
         stop();
-        setTimeout(function(){
+        editor.ready(function(){
             var range = new baidu.editor.dom.Range( editor.document );
             editor.setContent( '<p><span style="color: rgb(255, 0, 0); text-decoration: line-through; ">你好</span></p>' );
             var p = editor.body.firstChild;
@@ -307,7 +307,7 @@ test( 'trace 809：闭合时改变前景色和删除线，再输入文本', func
                 div.parentNode.removeChild(div);
                 start();
             }, 50);
-        },50);
+        });
     }
 } );
 
@@ -318,7 +318,7 @@ test( 'trace 805：切换删除线和下划线，前景色没了', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p><strong>你好早安</strong></p>' );
         var text = editor.body.firstChild.firstChild.firstChild;
@@ -335,7 +335,7 @@ test( 'trace 805：切换删除线和下划线，前景色没了', function() {
             div.parentNode.removeChild(div);
             start();
         }, 50);
-    },50);
+    });
 } );
 
 /*trace 802*/
@@ -345,7 +345,7 @@ test( 'trace 802：为设置了字体的文本添加删除线', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p><strong>你好早安</strong></p>' );
         var text = editor.body.firstChild.firstChild.firstChild;
@@ -364,7 +364,7 @@ test( 'trace 802：为设置了字体的文本添加删除线', function() {
             div.parentNode.removeChild(div);
             start();
         }, 50);
-    },50);
+    });
 } );
 
 /*trace 744*/
@@ -374,7 +374,7 @@ test( 'trace 744：设置超链接背景色后切换到源码再切回来', func
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello<a href="www.baidu.com">baidu</a></p>' );
         range.selectNode( editor.body.firstChild ).select();
@@ -389,7 +389,7 @@ test( 'trace 744：设置超链接背景色后切换到源码再切回来', func
                 start();
             },50);
         },50);
-    },50);
+    });
 } );
 
 test( '设置超链接前景色再清除颜色', function() {
@@ -398,7 +398,7 @@ test( '设置超链接前景色再清除颜色', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello<a href="www.baidu.com">baidu</a></p>' );
         range.selectNode( editor.body.firstChild ).select();
@@ -411,7 +411,7 @@ test( '设置超链接前景色再清除颜色', function() {
             div.parentNode.removeChild(div);
             start();
         }, 50);
-    },50);
+    });
 } );
 
 test( '对表格中的文本添加颜色和下划线', function() {
@@ -420,7 +420,7 @@ test( '对表格中的文本添加颜色和下划线', function() {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<table><tbody><tr><td>hello1</td><td>hello2</td></tr><tr><td colspan="2">hello3</td></tr></tbody></table>' );
         var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
@@ -442,11 +442,10 @@ test( '对表格中的文本添加颜色和下划线', function() {
             equal( editor.queryCommandState( 'forecolor' ), 0, '非underline和line-through返回0' );
             setTimeout(function () {
                 div.parentNode.removeChild(div);
-
                 start();
-            }, 50);
-        },50);
-    },50);
+            }, 100);
+        },100);
+    });
 } );
 
 /*trace 740*/
@@ -456,7 +455,7 @@ test( 'trace 740：设置左右字为红色，修改部分字颜色为蓝色，�
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>你好早安</p>' );
         range.selectNode( editor.body.firstChild ).select();
@@ -472,7 +471,7 @@ test( 'trace 740：设置左右字为红色，修改部分字颜色为蓝色，�
             div.parentNode.removeChild(div);
             start();
         }, 50);
-    },50);
+    });
 } );
 
 /*trace 721*/
@@ -483,7 +482,7 @@ test( 'trace 721：预先设置下划线和字体颜色，再输入文本，查�
         $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
         editor.render(div);
         stop();
-        setTimeout(function(){
+        editor.ready(function(){
             var range = new baidu.editor.dom.Range( editor.document );
             editor.setContent( '<p><br></p>' );
             range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
@@ -498,7 +497,7 @@ test( 'trace 721：预先设置下划线和字体颜色，再输入文本，查�
                 div.parentNode.removeChild(div);
                 start();
             }, 50);
-        }, 50);
+        });
     }
 } );
 
@@ -575,5 +574,3 @@ test( '转换font标签', function () {
     html = '<span style="color:red"><span style="text-decoration:underline;">x</span></span>';
     ua.checkHTMLSameStyle(html,editor.document,editor.body.firstChild,'转换font标签');
 } );
-
-
