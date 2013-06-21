@@ -67,7 +67,7 @@ UE.plugins['defaultfilter'] = function () {
 //
 //                        }
                         if (!node.firstChild()) {
-                            node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
+                            node.innerHTML(browser.ie ? '&nbsp;' : '<br/>')
                         }
                         break;
                     case 'div':

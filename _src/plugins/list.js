@@ -229,6 +229,11 @@ UE.plugins['list'] = function () {
             if(tmpP.firstChild() && !tmpP.parentNode || !li.firstChild()){
                 li.appendChild(tmpP);
             }
+            //trace:3357
+            //p不能为空
+            if (!tmpP.firstChild()) {
+                tmpP.innerHTML(browser.ie ? '&nbsp;' : '<br/>')
+            }
         });
         var orderlisttype = {
                 'num1':/^\d+\)/,
