@@ -546,8 +546,7 @@
 
                 return checkRange(beginRowIndex, beginColIndex, endRowIndex, endColIndex);
             } catch (e) {
-                //这里开发的时候注意一下， 已经把异常给压制住了
-//                throw e;
+                if (debug) throw e;
             }
         },
         /**

@@ -68,7 +68,6 @@
             QUnit.test(testName, expected, callback, true);
         },
 //        calltest:function(testEnvironment,callback){
-//            debugger
 //            clearInterval(config.timer);
 //            callback.call(testEnvironment);
 //
