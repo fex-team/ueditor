@@ -96,7 +96,7 @@ UE.plugins['insertcode'] = function() {
                                             }else{
                                                 code += cn.data
                                             }
-                                        })
+                                        });
                                         if(!/br>$/.test(code)){
                                             code += '<br>';
                                         }
