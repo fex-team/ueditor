@@ -554,5 +554,20 @@ UE.plugins['insertcode'] = function() {
 
             }
         }
+    });
+    //trace:3395
+    me.addListener('delkeydown',function(type,evt){
+        var rng = this.selection.getRange();
+        rng.txtToElmBoundary(true);
+        var start = rng.startContainer;
+        if(domUtils.isTagNode(start,'pre') && rng.collapsed && domUtils.isStartInblock(rng)){
+            var p = me.document.createElement('p');
+            domUtils.fillNode(me.document,p);
+            start.parentNode.insertBefore(p,start);
+            domUtils.remove(start);
+            rng.setStart(p,0).setCursor(false,true);
+            domUtils.preventDefault(evt);
+            return true;
+        }
     })
 };
