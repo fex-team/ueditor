@@ -184,7 +184,12 @@ UE.plugins['insertcode'] = function() {
                if(n.type == 'text'){
                    code += n.data.replace(/[ ]/g,'&nbsp;');
                }else{
-                   code  += '\n'
+                   if(n.tagName == 'br'){
+                       code  += '\n'
+                   }else{
+                       code += n.innerText();
+                   }
+
                }
 
             });

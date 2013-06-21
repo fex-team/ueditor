@@ -340,9 +340,12 @@
                     //chrome下会出现alt+tab切换时，导致选区位置不对
                     if (e.type == 'blur') {
                         me._bakRange = me.selection.getRange();
+
                         try {
+                            me._bakNativeRange = me.selection.getNative().getRangeAt(0);
                             me.selection.getNative().removeAllRanges();
                         } catch (e) {
+                            me._bakNativeRange = null;
                         }
 
                     } else {
@@ -689,16 +692,6 @@
 //                return;
 //            }
 
-            //针对ie9下浏览器无法传递event做的处理
-            if(evt){
-                var customEvt = {
-                    target:evt.target||evt.srcElement,
-                    screenX:evt.screenX,
-                    screenY:evt.screenY,
-                    clientX: evt.clientX,
-                    clientY: evt.clientY
-                };
-            }
 
             var hackForMouseUp = false;
             var mouseX, mouseY;
@@ -740,7 +733,7 @@
                 if (me.selection._cachedRange && me.selection._cachedStartElement) {
                     me.fireEvent('beforeselectionchange');
                     // 第二个参数causeByUi为true代表由用户交互造成的selectionchange.
-                    me.fireEvent('selectionchange', !!evt,customEvt);
+                    me.fireEvent('selectionchange', !!evt);
                     me.fireEvent('afterselectionchange');
                     me.selection.clear();
                 }
