@@ -54,12 +54,13 @@ UE.plugins['searchreplace'] = function(){
                     }
                     nativeRange = tmpRange.duplicate();
 
-                    if(/^\/[^/]+\/$/.test(opt.searchStr)){
+                    if(/^\/[^/]+\/\w*$/.test(opt.searchStr)){
                         var str = tmpRange.text,
-                            reg = new RegExp(opt.searchStr.replace(/^\/|\/$/g,''));
-                        var match = reg.exec(str);
-                        if(match && match[0]){
-                            searchStr = match[0];
+                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g');
+                        var match = str.match(reg);
+                        if(match && match.length){
+
+                            searchStr = opt.dir < 0 ? match[match.length-1] : match[0];
                         }else{
                             currentRange = null;
                             return num;
@@ -86,7 +87,6 @@ UE.plugins['searchreplace'] = function(){
                     }
                 }
             }else{
-
                 var w = me.window,nativeSel = sel.getNative();
                 while(1){
                     if(opt.all){
@@ -107,14 +107,10 @@ UE.plugins['searchreplace'] = function(){
                         //safari弹出层，原生已经找不到range了，所以需要先选回来，再取原生
                         if(browser.safari){
                             me.selection.getRange().select();
-
                         }
                         var nativeSel = w.getSelection();
                         if(!nativeSel.rangeCount){
-                            nativeRange = me.document.createRange();
-                            nativeRange.setStart(me.body,0);
-                            nativeRange.collapse(true);
-                            nativeSel.addRange(nativeRange);
+                            nativeRange = me._bakNativeRange;
                         }else{
                             nativeRange = nativeSel.getRangeAt(0);
                         }
@@ -135,7 +131,8 @@ UE.plugins['searchreplace'] = function(){
                     }
                     //是正则查找
 
-                    if(/^\/[^/]+\/$/.test(opt.searchStr)){
+                    if(/^\/[^/]+\/\w*$/.test(opt.searchStr)){
+                        var tmpRange = nativeRange.cloneRange();
                         //向前查找
                         if(opt.dir < 0 ){
                             nativeRange.collapse(true);
@@ -143,15 +140,20 @@ UE.plugins['searchreplace'] = function(){
                         }else{
                             nativeRange.setEnd(me.body,me.body.childNodes.length);
                         }
+
                         var str = nativeRange + '',
-                            reg = new RegExp(opt.searchStr.replace(/^\/|\/$/g,''));
-                        var match = reg.exec(str);
-                        if(match && match[0]){
-                            searchStr = match[0];
+                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g');
+                        var match = str.match(reg);
+                        if(match && match.length){
+
+                            searchStr = opt.dir < 0 ? match[match.length-1] : match[0];
                         }else{
                             currentRange = null;
                             return num;
                         }
+                        nativeSel.removeAllRanges();
+                        nativeSel.addRange(tmpRange);
+
                     }
                     if(!w.find(searchStr,opt.casesensitive,opt.dir < 0 ? true : false) ) {
                         currentRange = null;

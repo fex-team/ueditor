@@ -340,9 +340,12 @@
                     //chrome下会出现alt+tab切换时，导致选区位置不对
                     if (e.type == 'blur') {
                         me._bakRange = me.selection.getRange();
+
                         try {
+                            me._bakNativeRange = me.selection.getNative().getRangeAt(0);
                             me.selection.getNative().removeAllRanges();
                         } catch (e) {
+                            me._bakNativeRange = null;
                         }
 
                     } else {
