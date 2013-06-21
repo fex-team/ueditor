@@ -278,7 +278,6 @@ test( '检查表格属性', function() {
                         i--;
                     }
                 }
-                debugger
                 equal(iframe1.contentDocument.getElementById('J_tone').value,'#DDDDDD','默认边框颜色');
                 equal(iframe1.contentDocument.getElementById('J_title').checked,false,'无标题行');
                 equal(iframe1.contentDocument.getElementById('J_caption').checked,true,'有名称');
