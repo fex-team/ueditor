@@ -111,10 +111,11 @@ UE.plugins['searchreplace'] = function(){
                         }
                         var nativeSel = w.getSelection();
                         if(!nativeSel.rangeCount){
-                            nativeRange = me.document.createRange();
-                            nativeRange.setStart(me.body,0);
-                            nativeRange.collapse(true);
-                            nativeSel.addRange(nativeRange);
+//                            nativeRange = me.document.createRange();
+//                            nativeRange.setStart(me.body,0);
+//                            nativeRange.collapse(true);
+//                            nativeSel.addRange(nativeRange);
+                            nativeRange = me._bakNativeRange;
                         }else{
                             nativeRange = nativeSel.getRangeAt(0);
                         }
@@ -135,7 +136,7 @@ UE.plugins['searchreplace'] = function(){
                     }
                     //是正则查找
 
-                    if(/^\/[^/]+\/$/.test(opt.searchStr)){
+                    if(/^\/[^/]+\/\w*$/.test(opt.searchStr)){
                         //向前查找
                         if(opt.dir < 0 ){
                             nativeRange.collapse(true);
@@ -144,10 +145,10 @@ UE.plugins['searchreplace'] = function(){
                             nativeRange.setEnd(me.body,me.body.childNodes.length);
                         }
                         var str = nativeRange + '',
-                            reg = new RegExp(opt.searchStr.replace(/^\/|\/$/g,''));
-                        var match = reg.exec(str);
-                        if(match && match[0]){
-                            searchStr = match[0];
+                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g');
+                        var match = str.match(reg);
+                        if(match && match.length){
+                            searchStr = opt.dir < 0 ? match[match.length -1] : match[0];
                         }else{
                             currentRange = null;
                             return num;
