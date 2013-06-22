@@ -54,12 +54,12 @@ UE.plugins['searchreplace'] = function(){
                     }
                     nativeRange = tmpRange.duplicate();
 
-                    if(/^\/[^/]+\/$/.test(opt.searchStr)){
+                    if(/^\/[^/]+\/\w*$/.test(opt.searchStr)){
                         var str = tmpRange.text,
-                            reg = new RegExp(opt.searchStr.replace(/^\/|\/$/g,''));
-                        var match = reg.exec(str);
-                        if(match && match[0]){
-                            searchStr = match[0];
+                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g');
+                        var match = str.match(reg);
+                        if(match && match.length){
+                            searchStr = opt.dir < 0 ? match[match.length -1] : match[0];
                         }else{
                             currentRange = null;
                             return num;
@@ -115,7 +115,7 @@ UE.plugins['searchreplace'] = function(){
 //                            nativeRange.setStart(me.body,0);
 //                            nativeRange.collapse(true);
 //                            nativeSel.addRange(nativeRange);
-                            nativeRange = me._bakNativeRange;
+                            nativeRange = currentRange || me._bakNativeRange;
                         }else{
                             nativeRange = nativeSel.getRangeAt(0);
                         }
@@ -137,6 +137,7 @@ UE.plugins['searchreplace'] = function(){
                     //是正则查找
 
                     if(/^\/[^/]+\/\w*$/.test(opt.searchStr)){
+                        var tmpRange = nativeRange.cloneRange();
                         //向前查找
                         if(opt.dir < 0 ){
                             nativeRange.collapse(true);
@@ -153,11 +154,13 @@ UE.plugins['searchreplace'] = function(){
                             currentRange = null;
                             return num;
                         }
+                        nativeSel.removeAllRanges();
+                        nativeRange = tmpRange;
+                        nativeSel.addRange(nativeRange);
                     }
                     if(!w.find(searchStr,opt.casesensitive,opt.dir < 0 ? true : false) ) {
                         currentRange = null;
                         nativeSel.removeAllRanges();
-
                         return num;
                     }
                     first = 0;
@@ -170,8 +173,9 @@ UE.plugins['searchreplace'] = function(){
                             range.insertNode(text);
                             range.selectNode(text);
                             nativeSel.addRange(range);
-                            currentRange = range.cloneRange();
+
                         }
+                        currentRange = range.cloneRange();
                     }
                     num++;
                     if(!opt.all){
