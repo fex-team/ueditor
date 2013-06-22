@@ -793,19 +793,12 @@ UE.plugins['table'] = function () {
                     table = domUtils.findParentByTagName(target, "table", true);
 
                 if (inTableSide(table, target, evt, true)) {
-
-                    console.log(1)
-
-                    //toggleCursor(pos,true,"_h");
                     if (me.fireEvent("excludetable", table) === true) return;
                     me.body.style.cursor = "url(" + me.options.cursorpath + "h.png),pointer";
                 } else if (inTableSide(table, target, evt)) {
-                    console.log(2)
-                    //toggleCursor(pos,true,"_v");
                     if (me.fireEvent("excludetable", table) === true) return;
                     me.body.style.cursor = "url(" + me.options.cursorpath + "v.png),pointer";
                 } else {
-                    //toggleCursor(pos,false,"");
                     me.body.style.cursor = "text";
                     var curCell = target;
                     if (/\d/.test(state)) {
@@ -900,6 +893,7 @@ UE.plugins['table'] = function () {
     function inTableSide(table, cell, evt, top) {
         var pos = mouseCoords(evt),
             state = getRelation(cell, pos);
+
         if (top) {
             var caption = table.getElementsByTagName("caption")[0],
                 capHeight = caption ? caption.offsetHeight : 0;
@@ -1073,6 +1067,7 @@ UE.plugins['table'] = function () {
         if (evt.button == 2) {
             var ut = getUETableBySelected(me),
                 flag = false;
+
             if (ut) {
                 var td = getTargetTd(me, evt);
                 utils.each(ut.selectedTds, function (ti) {
