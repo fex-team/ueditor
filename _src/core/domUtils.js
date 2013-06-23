@@ -1223,7 +1223,7 @@ var domUtils = dom.domUtils = {
         return node.nodeType == 1 && node.getAttribute('_ue_custom_node_');
     },
     isTagNode:function (node, tagName) {
-        return node.nodeType == 1 && new RegExp(node.tagName,'i').test(tagName)
+        return node.nodeType == 1 && new RegExp('^' + node.tagName + '$','i').test(tagName)
     },
     /**
      * 对于nodelist用filter进行过滤
