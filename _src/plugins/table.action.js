@@ -1106,6 +1106,9 @@ UE.plugins['table'] = function () {
         if (target) {
             var h;
             if (h = getRelation(target, mouseCoords(evt))) {
+
+                hideDragLine( me );
+
                 if (h == 'h1') {
                     h = 'h';
                     if (inTableSide(domUtils.findParentByTagName(target, "table"), target, evt)) {
