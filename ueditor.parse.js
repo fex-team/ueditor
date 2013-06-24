@@ -170,7 +170,6 @@ function uParse(selector,opt){
         }();
 
 
-    //Ĭ�ϵ�������Ŀ
     var defaultOption ={
         liiconpath : 'http://bs.baidu.com/listicon/',
         listDefaultPaddingLeft : '20',
@@ -288,15 +287,14 @@ function uParse(selector,opt){
                 customCss.push(selector +' .list-paddingleft-1{padding-left:0}');
                 customCss.push(selector +' .list-paddingleft-2{padding-left:'+defaultOption.listDefaultPaddingLeft+'px}');
                 customCss.push(selector +' .list-paddingleft-3{padding-left:'+defaultOption.listDefaultPaddingLeft*2+'px}');
-                //�����Ȼ����Զ�Ӧ��ʽ����ֹ�����
+
                 cssRule('list', selector +' ol,'+selector +' ul{margin:0;padding:0;}li{clear:both;}'+customCss.join('\n'), document);
             }
-            //��������
+
             var needParseTagName = {
                 'table' : function(){
                     cssRule('table',
                         selector +' table.noBorderTable td,'+selector+' table.noBorderTable th,'+selector+' table.noBorderTable caption{border:1px dashed #ddd !important}' +
-                            //����ı���Ĭ����ʽ
                             selector +' table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
                             selector +' td,'+selector+' th{ background:white; padding: 5px 10px;border: 1px solid #DDD;}' +
                             selector +' caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
@@ -316,20 +314,20 @@ function uParse(selector,opt){
                             defer : "defer"
                         },function(){
                             _each(nodes,function(pi){
-                                if(/brush/i.test(pi.className)){
+                                if(pi && /brush/i.test(pi.className)){
                                     SyntaxHighlighter.highlight(pi);
-                                    var tables = document.getElementsByTagName('table');
-                                    for(var t= 0,ti;ti=tables[t++];){
-                                        if(/SyntaxHighlighter/i.test(ti.className)){
-                                            var tds = ti.getElementsByTagName('td');
-                                            for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
-                                                ri = tds[1].firstChild.childNodes[i];
-                                                if(ri){
-                                                    ri.style.height = li.style.height = ri.offsetHeight + 'px';
-                                                }
-                                            }
-                                        }
-                                    }
+//                                    var tables = document.getElementsByTagName('table');
+//                                    for(var t= 0,ti;ti=tables[t++];){
+//                                        if(/SyntaxHighlighter/i.test(ti.className)){
+//                                            var tds = ti.getElementsByTagName('td');
+//                                            for(var i=0,li,ri;li=tds[0].childNodes[i];i++){
+//                                                ri = tds[1].firstChild.childNodes[i];
+//                                                if(ri){
+//                                                    ri.style.height = li.style.height = ri.offsetHeight + 'px';
+//                                                }
+//                                            }
+//                                        }
+//                                    }
                                 }
                             });
                         });
@@ -352,7 +350,6 @@ function uParse(selector,opt){
                 'caption':fillNode
 
             };
-            //�Ȳ���Ĭ�ϵ�����
 
             for(var tag in needParseTagName){
                 var nodes = content.getElementsByTagName(tag);
