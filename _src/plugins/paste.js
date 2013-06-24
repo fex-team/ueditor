@@ -113,11 +113,12 @@ UE.plugins['paste'] = function () {
             }
 
             //ie下使用innerHTML会产生多余的\r\n字符，也会产生&nbsp;这里过滤掉
-            html = div.innerHTML//.replace(/>(?:(\s|&nbsp;)*?)</g,'><');
+            html = div.innerHTML;//.replace(/>(?:(\s|&nbsp;)*?)</g,'><');
 
             //过滤word粘贴过来的冗余属性
             html = UE.filterWord(html);
-            var root = UE.htmlparser(html,true);
+            //取消了忽略空白的第二个参数，粘贴过来的有些是有空白的，会被套上相关的标签
+            var root = UE.htmlparser(html);
             //如果给了过滤规则就先进行过滤
             if (me.options.filterRules) {
                 UE.filterNode(root, me.options.filterRules);
