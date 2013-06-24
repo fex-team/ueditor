@@ -172,14 +172,7 @@ UE.plugins['defaultfilter'] = function () {
                                 '_src': ''
                             })
                         }
-                        break;
-                    case 'span':
-                        //去掉因为报错等原因而没有删除掉的bookmark
-                        if(val = node.getAttr('id')){
-                            if(/^_baidu/.test(val)){
-                                node.parentNode.removeChild(node);
-                            }
-                        }
+
 
                 }
             }
