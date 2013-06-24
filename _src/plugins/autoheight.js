@@ -26,8 +26,7 @@ UE.plugins['autoheight'] = function () {
         clearTimeout(timer);
         if(isFullscreen)return;
         timer = setTimeout(function () {
-
-            if (me.queryCommandState && me.queryCommandState('source') != 1) {
+            if (!me.queryCommandState || me.queryCommandState && me.queryCommandState('source') != 1) {
                 if (!span) {
                     span = me.document.createElement('span');
                     //trace:1764
@@ -36,16 +35,13 @@ UE.plugins['autoheight'] = function () {
                 }
                 tmpNode = span.cloneNode(true);
                 me.body.appendChild(tmpNode);
-
                 currentHeight = Math.max(domUtils.getXY(tmpNode).y + tmpNode.offsetHeight,Math.max(options.minFrameHeight, options.initialFrameHeight));
-
                 if (currentHeight != lastHeight) {
 
                     me.setHeight(currentHeight);
 
                     lastHeight = currentHeight;
                 }
-
                 domUtils.remove(tmpNode);
 
             }
@@ -56,12 +52,10 @@ UE.plugins['autoheight'] = function () {
         isFullscreen = f
     });
     me.addListener('destroy', function () {
-        me.removeListener('contentchange', adjustHeight);
-        me.removeListener('afterinserthtml',adjustHeight);
-        me.removeListener('keyup', adjustHeight);
-        me.removeListener('mouseup', adjustHeight);
+        me.removeListener('contentchange afterinserthtml keyup mouseup',adjustHeight)
     });
     me.enableAutoHeight = function () {
+        var me = this;
         if (!me.autoHeightEnabled) {
             return;
         }
@@ -69,13 +63,11 @@ UE.plugins['autoheight'] = function () {
         me.autoHeightEnabled = true;
         bakOverflow = doc.body.style.overflowY;
         doc.body.style.overflowY = 'hidden';
-        me.addListener('contentchange', adjustHeight);
-        me.addListener('afterinserthtml',adjustHeight)
-        me.addListener('keyup', adjustHeight);
-        me.addListener('mouseup', adjustHeight);
+        me.addListener('contentchange afterinserthtml keyup mouseup',adjustHeight);
         //ff不给事件算得不对
+
         setTimeout(function () {
-            adjustHeight.call(this);
+            adjustHeight.call(me);
         }, browser.gecko ? 100 : 0);
         me.fireEvent('autoheightchanged', me.autoHeightEnabled);
     };

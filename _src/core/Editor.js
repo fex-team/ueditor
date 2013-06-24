@@ -207,6 +207,7 @@
                 }else{
                     options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
                 }
+
                 container.style.width = /%$/.test(options.initialFrameWidth) ?  '100%' : options.initialFrameWidth + 'px';
                 container.style.height = /%$/.test(options.initialFrameHeight) ?  '100%' : options.initialFrameHeight + 'px';
                 container.style.zIndex = options.zIndex;
@@ -398,7 +399,9 @@
             if (height !== parseInt(this.iframe.parentNode.style.height)) {
                 this.iframe.parentNode.style.height = height + 'px';
             }
-            this.document.body.style.height = height - 20 + 'px';
+            this.options.minFrameHeight = this.options.initialFrameHeight = height;
+
+            this.body.style.height = height + 'px';
         },
 
         addshortcutkey: function (cmd, keys) {
