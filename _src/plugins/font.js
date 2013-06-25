@@ -145,7 +145,7 @@ UE.plugins['font'] = function () {
 //            }
 //        });
     });
-    me.addOutputRule(function(root){
+//    me.addOutputRule(function(root){
 //        utils.each(root.getNodesByTagName('span'), function (node) {
 //            var val;
 //            if(val = node.getStyle('text-decoration')){
@@ -172,7 +172,7 @@ UE.plugins['font'] = function () {
 //
 //            }
 //        });
-    });
+//    });
     for (var p in fonts) {
         (function (cmd, style) {
             UE.commands[cmd] = {
