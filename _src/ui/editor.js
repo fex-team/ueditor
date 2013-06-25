@@ -68,7 +68,7 @@
 
             });
 
-            editor.addListener('mousedown', function (t, evt) {
+            editor.addListener('mousedown keydown', function (t, evt) {
                 var el = evt.target || evt.srcElement;
                 baidu.editor.ui.Popup.postHide(evt, el);
                 baidu.editor.ui.ShortCutMenu.postHide(evt);
