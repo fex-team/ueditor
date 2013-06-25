@@ -109,6 +109,12 @@
                 fixedlayer = uiUtils.getFixedLayer ();
 
             function setPos (offset) {
+                if (offset.left < 0) {
+                    offset.left = 0;
+                }
+                if (offset.top < 0) {
+                    offset.top = 0;
+                }
                 el.style.cssText = "position:absolute;left:" + offset.left + "px;top:" + offset.top + "px;";
             }
 

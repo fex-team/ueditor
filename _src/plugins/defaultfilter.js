@@ -59,14 +59,15 @@ UE.plugins['defaultfilter'] = function () {
                             node.setAttr('align');
                             node.setStyle('text-align', val)
                         }
-                        var cssStyle = node.getAttr('style');
-                        if (cssStyle) {
-                            cssStyle = cssStyle.replace(/(margin|padding)[^;]+/g, '');
-                            node.setAttr('style', cssStyle)
-
-                        }
+                        //trace:3431
+//                        var cssStyle = node.getAttr('style');
+//                        if (cssStyle) {
+//                            cssStyle = cssStyle.replace(/(margin|padding)[^;]+/g, '');
+//                            node.setAttr('style', cssStyle)
+//
+//                        }
                         if (!node.firstChild()) {
-                            node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
+                            node.innerHTML(browser.ie ? '&nbsp;' : '<br/>')
                         }
                         break;
                     case 'div':
@@ -171,6 +172,7 @@ UE.plugins['defaultfilter'] = function () {
                                 '_src': ''
                             })
                         }
+
 
                 }
             }

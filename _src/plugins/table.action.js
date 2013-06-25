@@ -24,7 +24,6 @@ UE.plugins['table'] = function () {
         userActionStatus = null,
         //双击允许的时间范围
         dblclickTime = 360,
-        debug = true,
         UT = UE.UETable,
         getUETable = function (tdOrTable) {
             return UT.getUETable(tdOrTable);
@@ -40,7 +39,7 @@ UE.plugins['table'] = function () {
         };
 
     function showError(e) {
-        if (debug) throw e;
+//        throw e;
     }
     me.ready(function(){
         var me = this;
@@ -548,6 +547,10 @@ UE.plugins['table'] = function () {
 
         me.addListener("mousedown", mouseDownEvent);
         me.addListener("mouseup", mouseUpEvent);
+        //拖动的时候不出发mouseup
+        domUtils.on( me.body, 'dragstart', function( evt ){
+            mouseUpEvent.call( me, 'dragstart', evt );
+        });
 
         var currentRowIndex = 0;
         me.addListener("mousedown", function () {
@@ -748,16 +751,15 @@ UE.plugins['table'] = function () {
 
         try {
 
-            if( isInResizeBuffer ) {
-                me.document.body.style.webkitUserSelect = 'none';
-            }
-
             //普通状态下鼠标移动
             var target = getParentTdOrTh(evt.target || evt.srcElement),
                 pos;
 
             //区分用户的行为是拖动还是双击
-            if( onBorder && isInResizeBuffer  ) {
+            if( isInResizeBuffer  ) {
+
+                me.body.style.webkitUserSelect = 'none';
+
                 if( Math.abs( userActionStatus.x - evt.clientX ) > offsetOfTableCell || Math.abs( userActionStatus.y - evt.clientY ) > offsetOfTableCell ) {
                     clearTableDragTimer();
                     isInResizeBuffer = false;
@@ -791,16 +793,12 @@ UE.plugins['table'] = function () {
                     table = domUtils.findParentByTagName(target, "table", true);
 
                 if (inTableSide(table, target, evt, true)) {
-
-                    //toggleCursor(pos,true,"_h");
                     if (me.fireEvent("excludetable", table) === true) return;
                     me.body.style.cursor = "url(" + me.options.cursorpath + "h.png),pointer";
                 } else if (inTableSide(table, target, evt)) {
-                    //toggleCursor(pos,true,"_v");
                     if (me.fireEvent("excludetable", table) === true) return;
                     me.body.style.cursor = "url(" + me.options.cursorpath + "v.png),pointer";
                 } else {
-                    //toggleCursor(pos,false,"");
                     me.body.style.cursor = "text";
                     var curCell = target;
                     if (/\d/.test(state)) {
@@ -895,6 +893,7 @@ UE.plugins['table'] = function () {
     function inTableSide(table, cell, evt, top) {
         var pos = mouseCoords(evt),
             state = getRelation(cell, pos);
+
         if (top) {
             var caption = table.getElementsByTagName("caption")[0],
                 capHeight = caption ? caption.offsetHeight : 0;
@@ -1055,7 +1054,7 @@ UE.plugins['table'] = function () {
 
     function mouseDownEvent(type, evt) {
 
-        if( !onBorder || isEditorDisabled() ) {
+        if( isEditorDisabled() ) {
             return ;
         }
 
@@ -1068,6 +1067,7 @@ UE.plugins['table'] = function () {
         if (evt.button == 2) {
             var ut = getUETableBySelected(me),
                 flag = false;
+
             if (ut) {
                 var td = getTargetTd(me, evt);
                 utils.each(ut.selectedTds, function (ti) {
@@ -1106,6 +1106,9 @@ UE.plugins['table'] = function () {
         if (target) {
             var h;
             if (h = getRelation(target, mouseCoords(evt))) {
+
+                hideDragLine( me );
+
                 if (h == 'h1') {
                     h = 'h';
                     if (inTableSide(domUtils.findParentByTagName(target, "table"), target, evt)) {
@@ -1186,7 +1189,6 @@ UE.plugins['table'] = function () {
 
     function tableClickHander( evt ) {
 
-        me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
         removeSelectedClass(domUtils.getElementsByTagName(me.body, "td th"));
         //trace:3113
         //选中单元格，点击table外部，不会清掉table上挂的ueTable,会引起getUETableBySelected方法返回值
@@ -1278,7 +1280,8 @@ UE.plugins['table'] = function () {
         isInResizeBuffer = false;
 
         if( !startTd ) return;
-        var state = getRelation(startTd, mouseCoords(evt));
+        var state = Math.abs( userActionStatus.x - evt.clientX ) >= Math.abs( userActionStatus.y - evt.clientY ) ? 'h' : 'v';
+//        var state = getRelation(startTd, mouseCoords(evt));
         if (/\d/.test(state)) {
             state = state.replace(/\d/, '');
             startTd = getUETable(startTd).getPreviewCell(startTd, state == 'v');
@@ -1295,7 +1298,7 @@ UE.plugins['table'] = function () {
 
     function mouseUpEvent(type, evt) {
 
-        if( !onBorder || isEditorDisabled() ) {
+        if( isEditorDisabled() ) {
             return ;
         }
 
@@ -1346,7 +1349,7 @@ UE.plugins['table'] = function () {
         mousedown = false;
         me.document.body.style.webkitUserSelect = '';
         //拖拽状态下的mouseUP
-        if ( onDrag && dragTd) {
+        if ( onDrag && dragTd ) {
 
             me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
 
@@ -1765,11 +1768,11 @@ UE.plugins['table'] = function () {
             cellPos = domUtils.getXY(cell), css;
         switch (state) {
             case "h":
-                css = 'height:' + height + 'px;top:' + (tablePos.y + (caption.length > 0 ? caption[0].offsetHeight : 0)) + 'px;left:' + (cellPos.x + cell.offsetWidth - 2);
+                css = 'height:' + height + 'px;top:' + (tablePos.y + (caption.length > 0 ? caption[0].offsetHeight : 0)) + 'px;left:' + (cellPos.x + cell.offsetWidth);
                 dragLine.style.cssText = css + 'px;position: absolute;display:block;background-color:blue;width:1px;border:0; color:blue;opacity:.3;filter:alpha(opacity=30)';
                 break;
             case "v":
-                css = 'width:' + width + 'px;left:' + tablePos.x + 'px;top:' + (cellPos.y + cell.offsetHeight - 2 );
+                css = 'width:' + width + 'px;left:' + tablePos.x + 'px;top:' + (cellPos.y + cell.offsetHeight );
                 //必须加上border:0和color:blue，否则低版ie不支持背景色显示
                 dragLine.style.cssText = css + 'px;overflow:hidden;position: absolute;display:block;background-color:blue;height:1px;border:0;color:blue;opacity:.2;filter:alpha(opacity=20)';
                 break;
@@ -1804,8 +1807,47 @@ UE.plugins['table'] = function () {
         return body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (editor.options.offsetWidth || 0);
     }
 
+    /**
+     * 获取当前拖动的单元格
+     */
     function getTargetTd(editor, evt) {
-        var target = domUtils.findParentByTagName(evt.target || evt.srcElement, ["td", "th"], true);
+
+        var target = domUtils.findParentByTagName(evt.target || evt.srcElement, ["td", "th"], true),
+            dir = null;
+
+        if( !target ) {
+            return null;
+        }
+
+        dir = getRelation( target, mouseCoords( evt ) );
+
+        //如果有前一个节点， 需要做一个修正， 否则可能会得到一个错误的td
+
+        if( !target ) {
+            return null;
+        }
+
+        if( dir === 'h1' && target.previousSibling ) {
+
+            var position = domUtils.getXY( target),
+                cellWidth = target.offsetWidth;
+
+            if( Math.abs( position.x + cellWidth - evt.clientX ) > cellWidth / 3 ) {
+                target = target.previousSibling;
+            }
+
+        } else if( dir === 'v1' && target.parentNode.previousSibling ) {
+
+            var position = domUtils.getXY( target),
+                cellHeight = target.offsetHeight;
+
+            if( Math.abs( position.y + cellHeight - evt.clientY ) > cellHeight / 3 ) {
+                target = target.parentNode.previousSibling.firstChild;
+            }
+
+        }
+
+
         //排除了非td内部以及用于代码高亮部分的td
         return target && !(editor.fireEvent("excludetable", target) === true) ? target : null;
     }

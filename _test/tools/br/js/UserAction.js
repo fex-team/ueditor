@@ -33,38 +33,38 @@ UserAction = {
      * @private
      * @static
      * @param {HTMLElement}
-     *            target The target of the given event.
+        *            target The target of the given event.
      * @param {String}
-     *            type The type of event to fire. This can be any one of the
+        *            type The type of event to fire. This can be any one of the
      *            following: keyup, keydown, and keypress.
      * @param {Boolean}
-     *            bubbles (Optional) Indicates if the event can be bubbled up.
+        *            bubbles (Optional) Indicates if the event can be bubbled up.
      *            DOM Level 3 specifies that all key events bubble by default.
      *            The default is true.
      * @param {Boolean}
-     *            cancelable (Optional) Indicates if the event can be canceled
+        *            cancelable (Optional) Indicates if the event can be canceled
      *            using preventDefault(). DOM Level 3 specifies that all key
      *            events can be cancelled. The default is true.
      * @param {Window}
-     *            view (Optional) The view containing the target. This is
+        *            view (Optional) The view containing the target. This is
      *            typically the window object. The default is window.
      * @param {Boolean}
-     *            ctrlKey (Optional) Indicates if one of the CTRL keys is
+        *            ctrlKey (Optional) Indicates if one of the CTRL keys is
      *            pressed while the event is firing. The default is false.
      * @param {Boolean}
-     *            altKey (Optional) Indicates if one of the ALT keys is pressed
+        *            altKey (Optional) Indicates if one of the ALT keys is pressed
      *            while the event is firing. The default is false.
      * @param {Boolean}
-     *            shiftKey (Optional) Indicates if one of the SHIFT keys is
+        *            shiftKey (Optional) Indicates if one of the SHIFT keys is
      *            pressed while the event is firing. The default is false.
      * @param {Boolean}
-     *            metaKey (Optional) Indicates if one of the META keys is
+        *            metaKey (Optional) Indicates if one of the META keys is
      *            pressed while the event is firing. The default is false.
      * @param {int}
-     *            keyCode (Optional) The code for the key that is in use. The
+        *            keyCode (Optional) The code for the key that is in use. The
      *            default is 0.
      * @param {int}
-     *            charCode (Optional) The Unicode code for the character
+        *            charCode (Optional) The Unicode code for the character
      *            associated with the key being used. The default is 0.
      */
     simulateKeyEvent:function (target /* :HTMLElement */, type /* :String */, bubbles /* :Boolean */, cancelable /* :Boolean */, view /* :Window */, ctrlKey /* :Boolean */, altKey /* :Boolean */, shiftKey /* :Boolean */, metaKey /* :Boolean */, keyCode /* :int */, charCode /* :int */) /* :Void */ {
@@ -79,6 +79,8 @@ UserAction = {
         if (typeof type == 'string') {
             type = type.toLowerCase();
             switch (type) {
+                case "compositionend":
+                case "compositionstart":
                 case "paste":
                 case "cut":
                 case "keyup":
@@ -242,59 +244,59 @@ UserAction = {
      * @private
      * @static
      * @param {HTMLElement}
-     *            target The target of the given event.
+        *            target The target of the given event.
      * @param {String}
-     *            type The type of event to fire. This can be any one of the
+        *            type The type of event to fire. This can be any one of the
      *            following: click, dblclick, mousedown, mouseup, mouseout,
      *            mouseover, and mousemove.
      * @param {Boolean}
-     *            bubbles (Optional) Indicates if the event can be bubbled up.
+        *            bubbles (Optional) Indicates if the event can be bubbled up.
      *            DOM Level 2 specifies that all mouse events bubble by default.
      *            The default is true.
      * @param {Boolean}
-     *            cancelable (Optional) Indicates if the event can be canceled
+        *            cancelable (Optional) Indicates if the event can be canceled
      *            using preventDefault(). DOM Level 2 specifies that all mouse
      *            events except mousemove can be cancelled. The default is true
      *            for all events except mousemove, for which the default is
      *            false.
      * @param {Window}
-     *            view (Optional) The view containing the target. This is
+        *            view (Optional) The view containing the target. This is
      *            typically the window object. The default is window.
      * @param {int}
-     *            detail (Optional) The number of times the mouse button has
+        *            detail (Optional) The number of times the mouse button has
      *            been used. The default value is 1.
      * @param {int}
-     *            screenX (Optional) The x-coordinate on the screen at which
+        *            screenX (Optional) The x-coordinate on the screen at which
      *            point the event occured. The default is 0.
      * @param {int}
-     *            screenY (Optional) The y-coordinate on the screen at which
+        *            screenY (Optional) The y-coordinate on the screen at which
      *            point the event occured. The default is 0.
      * @param {int}
-     *            clientX (Optional) The x-coordinate on the client at which
+        *            clientX (Optional) The x-coordinate on the client at which
      *            point the event occured. The default is 0.
      * @param {int}
-     *            clientY (Optional) The y-coordinate on the client at which
+        *            clientY (Optional) The y-coordinate on the client at which
      *            point the event occured. The default is 0.
      * @param {Boolean}
-     *            ctrlKey (Optional) Indicates if one of the CTRL keys is
+        *            ctrlKey (Optional) Indicates if one of the CTRL keys is
      *            pressed while the event is firing. The default is false.
      * @param {Boolean}
-     *            altKey (Optional) Indicates if one of the ALT keys is pressed
+        *            altKey (Optional) Indicates if one of the ALT keys is pressed
      *            while the event is firing. The default is false.
      * @param {Boolean}
-     *            shiftKey (Optional) Indicates if one of the SHIFT keys is
+        *            shiftKey (Optional) Indicates if one of the SHIFT keys is
      *            pressed while the event is firing. The default is false.
      * @param {Boolean}
-     *            metaKey (Optional) Indicates if one of the META keys is
+        *            metaKey (Optional) Indicates if one of the META keys is
      *            pressed while the event is firing. The default is false.
      * @param {int}
-     *            button (Optional) The button being pressed while the event is
+        *            button (Optional) The button being pressed while the event is
      *            executing. The value should be 0 for the primary mouse button
      *            (typically the left button), 1 for the terciary mouse button
      *            (typically the middle button), and 2 for the secondary mouse
      *            button (typically the right button). The default is 0.
      * @param {HTMLElement}
-     *            relatedTarget (Optional) For mouseout events, this is the
+        *            relatedTarget (Optional) For mouseout events, this is the
      *            element that the mouse has moved to. For mouseover events,
      *            this is the element that the mouse has moved from. This
      *            argument is ignored for all other events. The default is null.
@@ -494,13 +496,13 @@ UserAction = {
      * Simulates a mouse event on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to click on.
+        *            target The element to click on.
      * @param {String}
-     *            type The type of event to fire. This can be any one of the
+        *            type The type of event to fire. This can be any one of the
      *            following: click, dblclick, mousedown, mouseup, mouseout,
      *            mouseover, and mousemove.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method mouseEvent
      * @static
      */
@@ -518,9 +520,9 @@ UserAction = {
      * Simulates a click on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to click on.
+        *            target The element to click on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method click
      * @static
      */
@@ -532,9 +534,9 @@ UserAction = {
      * Simulates a double click on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to double click on.
+        *            target The element to double click on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method dblclick
      * @static
      */
@@ -546,9 +548,9 @@ UserAction = {
      * Simulates a mousedown on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to act on.
+        *            target The element to act on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method mousedown
      * @static
      */
@@ -560,9 +562,9 @@ UserAction = {
      * Simulates a mousemove on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to act on.
+        *            target The element to act on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method mousemove
      * @static
      */
@@ -579,9 +581,9 @@ UserAction = {
      * YAHOO.util.Event.getRelatedTarget() to work correctly in both browsers.
      *
      * @param {HTMLElement}
-     *            target The element to act on.
+        *            target The element to act on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method mouseout
      * @static
      */
@@ -599,9 +601,9 @@ UserAction = {
      * browsers.
      *
      * @param {HTMLElement}
-     *            target The element to act on.
+        *            target The element to act on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method mouseover
      * @static
      */
@@ -613,9 +615,9 @@ UserAction = {
      * Simulates a mouseup on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to act on.
+        *            target The element to act on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method mouseup
      * @static
      */
@@ -632,9 +634,9 @@ UserAction = {
      * Simulates a contextmenu on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to show contextmenu.
+        *            target The element to show contextmenu.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method contextmenu
      * @static
      */
@@ -645,9 +647,9 @@ UserAction = {
      * Simulates a dragend on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to show dragend.
+        *            target The element to show dragend.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method dragend
      * @static
      */
@@ -658,9 +660,9 @@ UserAction = {
      * Simulates a blur on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to show blur.
+        *            target The element to show blur.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method blur
      * @static
      */
@@ -706,11 +708,11 @@ UserAction = {
      *
      * @private
      * @param {String}
-     *            type The type of event ("keyup", "keydown" or "keypress").
+        *            type The type of event ("keyup", "keydown" or "keypress").
      * @param {HTMLElement}
-     *            target The target of the event.
+        *            target The target of the event.
      * @param {Object}
-     *            options Options for the event. Either keyCode or charCode are
+        *            options Options for the event. Either keyCode or charCode are
      *            required.
      * @method fireKeyEvent
      * @static
@@ -755,9 +757,9 @@ UserAction = {
      * Simulates a keydown event on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to act on.
+        *            target The element to act on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method keydown
      * @static
      */
@@ -769,9 +771,9 @@ UserAction = {
      * Simulates a keypress on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to act on.
+        *            target The element to act on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method keypress
      * @static
      */
@@ -783,14 +785,42 @@ UserAction = {
      * Simulates a keyup event on a particular element.
      *
      * @param {HTMLElement}
-     *            target The element to act on.
+        *            target The element to act on.
      * @param {Object}
-     *            options Additional event options (use DOM standard names).
+        *            options Additional event options (use DOM standard names).
      * @method keyup
      * @static
      */
     keyup:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
         this.fireKeyEvent("keyup", target, options);
+    },
+
+    /**
+     * Simulates a compositionstart event on a particular element.
+     *
+     * @param {HTMLElement}
+        *            target The element to act on.
+     * @param {Object}
+        *            options Additional event options (use DOM standard names).
+     * @method compositionstart
+     * @static
+     */
+    compositionstart:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireKeyEvent("compositionstart", target, options);
+    },
+
+    /**
+     * Simulates a compositionstart event on a particular element.
+     *
+     * @param {HTMLElement}
+        *            target The element to act on.
+     * @param {Object}
+        *            options Additional event options (use DOM standard names).
+     * @method compositionstart
+     * @static
+     */
+    compositionend:function (target /* :HTMLElement */, options /* Object */) /* :Void */ {
+        this.fireKeyEvent("compositionend", target, options);
     },
 
     /**
@@ -1756,33 +1786,33 @@ UserAction = {
         }
         return str;
     },checkSameNodeAttrs:function (nodeA, nodeB) {
-            var lengthA = this.getPropertyCount(nodeA.attrs);
-            var lengthB = this.getPropertyCount(nodeB.attrs);
-            if (!(lengthA && lengthB))
-                return true;
-            else if (lengthA != lengthB)
-                return false;
-            else {
-                for (var p in nodeA.attrs) {
-                    if(!nodeB.getAttr(p)&&!nodeA.getAttr(p))
-                        return true;
-                    else if (!nodeB.getAttr(p)||!nodeA.getAttr(p))
+        var lengthA = this.getPropertyCount(nodeA.attrs);
+        var lengthB = this.getPropertyCount(nodeB.attrs);
+        if (!(lengthA && lengthB))
+            return true;
+        else if (lengthA != lengthB)
+            return false;
+        else {
+            for (var p in nodeA.attrs) {
+                if(!nodeB.getAttr(p)&&!nodeA.getAttr(p))
+                    return true;
+                else if (!nodeB.getAttr(p)||!nodeA.getAttr(p))
+                    return false;
+                else if (p.toLowerCase() == "style") {
+                    if (!this.checkNodeStyle(nodeA, nodeB))
                         return false;
-                    else if (p.toLowerCase() == "style") {
-                        if (!this.checkNodeStyle(nodeA, nodeB))
-                            return false;
-                    }
-                    else if(p.toLowerCase() == "href"){
-                        if (this.formHref(nodeA.getAttr(p).toLowerCase()) != this.formHref(nodeB.getAttr(p).toLowerCase()))
-                            return false;
-                    }
-                    else {
-                        if (nodeA.getAttr(p).toLowerCase() != nodeB.getAttr(p).toLowerCase())
-                            return false;
-                    }
+                }
+                else if(p.toLowerCase() == "href"){
+                    if (this.formHref(nodeA.getAttr(p).toLowerCase()) != this.formHref(nodeB.getAttr(p).toLowerCase()))
+                        return false;
+                }
+                else {
+                    if (nodeA.getAttr(p).toLowerCase() != nodeB.getAttr(p).toLowerCase())
+                        return false;
                 }
             }
-            return true;
+        }
+        return true;
 
     }, checkChildren:function (nodeA, nodeB) {
         if (!(nodeA.children || nodeB.children))

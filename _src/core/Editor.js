@@ -191,7 +191,7 @@
          * @grammar editor.render(containerId);    //可以指定一个容器ID
          * @grammar editor.render(containerDom);   //也可以直接指定容器对象
          */
-        render: function (container,holder) {
+        render: function (container) {
             var me = this, options = me.options;
             if (utils.isString(container)) {
                 container = document.getElementById(container);
@@ -207,8 +207,9 @@
                 }else{
                     options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
                 }
-                container.style.width = options.initialFrameWidth+ (/%$/.test(options.initialFrameWidth) ? '' : 'px');
-                container.style.height = options.initialFrameHeight + (/%$/.test(options.initialFrameHeight) ? '' : 'px');
+
+                container.style.width = /%$/.test(options.initialFrameWidth) ?  '100%' : options.initialFrameWidth + 'px';
+                container.style.height = /%$/.test(options.initialFrameHeight) ?  '100%' : options.initialFrameHeight + 'px';
                 container.style.zIndex = options.zIndex;
 
                 var html = ( ie && browser.version < 9  ? '' : '<!DOCTYPE html>') +
@@ -341,8 +342,10 @@
                     if (e.type == 'blur') {
                         me._bakRange = me.selection.getRange();
                         try {
+                            me._bakNativeRange = me.selection.getNative().getRangeAt(0);
                             me.selection.getNative().removeAllRanges();
                         } catch (e) {
+                            me._bakNativeRange = null;
                         }
 
                     } else {
@@ -396,7 +399,9 @@
             if (height !== parseInt(this.iframe.parentNode.style.height)) {
                 this.iframe.parentNode.style.height = height + 'px';
             }
-            this.document.body.style.height = height - 20 + 'px';
+            this.options.minFrameHeight = this.options.initialFrameHeight = height;
+
+            this.body.style.height = height + 'px';
         },
 
         addshortcutkey: function (cmd, keys) {
@@ -577,7 +582,7 @@
 
             !notFireSelectionchange && me._selectionChange();
             //清除保存的选区
-            me._bakRange = me._bakIERange = null;
+            me._bakRange = me._bakIERange = me._bakNativeRange = null;
             //trace:1742 setContent后gecko能得到焦点问题
             var geckoSel;
             if (browser.gecko && (geckoSel = this.selection.getNative())) {
@@ -627,47 +632,47 @@
                 if (evt.button == 2)return;
                 me._selectionChange(250, evt);
             });
-            //处理拖拽
-            //ie ff不能从外边拖入
-            //chrome只针对从外边拖入的内容过滤
-            var innerDrag = 0, source = browser.ie ? me.body : me.document, dragoverHandler;
-            domUtils.on(source, 'dragstart', function () {
-                innerDrag = 1;
-            });
-            domUtils.on(source, browser.webkit ? 'dragover' : 'drop', function () {
-                return browser.webkit ?
-                    function () {
-                        clearTimeout(dragoverHandler);
-                        dragoverHandler = setTimeout(function () {
-                            if (!innerDrag) {
-                                var sel = me.selection,
-                                    range = sel.getRange();
-                                if (range) {
-                                    var common = range.getCommonAncestor();
-                                    if (common && me.serialize) {
-                                        var f = me.serialize,
-                                            node =
-                                                f.filter(
-                                                    f.transformInput(
-                                                        f.parseHTML(
-                                                            f.word(common.innerHTML)
-                                                        )
-                                                    )
-                                                );
-                                        common.innerHTML = f.toHTML(node);
-                                    }
-                                }
-                            }
-                            innerDrag = 0;
-                        }, 200);
-                    } :
-                    function (e) {
-                        if (!innerDrag) {
-                            e.preventDefault ? e.preventDefault() : (e.returnValue = false);
-                        }
-                        innerDrag = 0;
-                    }
-            }());
+//            //处理拖拽
+//            //ie ff不能从外边拖入
+//            //chrome只针对从外边拖入的内容过滤
+//            var innerDrag = 0, source = browser.ie ? me.body : me.document, dragoverHandler;
+//            domUtils.on(source, 'dragstart', function () {
+//                innerDrag = 1;
+//            });
+//            domUtils.on(source, browser.webkit ? 'dragover' : 'drop', function () {
+//                return browser.webkit ?
+//                    function () {
+//                        clearTimeout(dragoverHandler);
+//                        dragoverHandler = setTimeout(function () {
+//                            if (!innerDrag) {
+//                                var sel = me.selection,
+//                                    range = sel.getRange();
+//                                if (range) {
+//                                    var common = range.getCommonAncestor();
+//                                    if (common && me.serialize) {
+//                                        var f = me.serialize,
+//                                            node =
+//                                                f.filter(
+//                                                    f.transformInput(
+//                                                        f.parseHTML(
+//                                                            f.word(common.innerHTML)
+//                                                        )
+//                                                    )
+//                                                );
+//                                        common.innerHTML = f.toHTML(node);
+//                                    }
+//                                }
+//                            }
+//                            innerDrag = 0;
+//                        }, 200);
+//                    } :
+//                    function (e) {
+//                        if (!innerDrag) {
+//                            e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+//                        }
+//                        innerDrag = 0;
+//                    }
+//            }());
         },
         /**
          * 触发事件代理

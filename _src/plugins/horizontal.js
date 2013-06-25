@@ -81,7 +81,6 @@ UE.plugins['horizontal'] = function(){
 //    })
     me.addListener('delkeydown',function(name,evt){
         var rng = this.selection.getRange();
-
         rng.txtToElmBoundary(true);
         if(domUtils.isStartInblock(rng)){
             var tmpNode = rng.startContainer;

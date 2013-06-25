@@ -6,7 +6,7 @@
 UE.plugins['insertcode'] = function() {
     var me = this;
     me.ready(function(){
-        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f8f8f8;line-height:1.5}',
+        utils.cssRule('pre','pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f8f8f8;}',
             me.document)
     });
     me.setOpt('insertcode',{
@@ -96,7 +96,7 @@ UE.plugins['insertcode'] = function() {
                                             }else{
                                                 code += cn.data
                                             }
-                                        })
+                                        });
                                         if(!/br>$/.test(code)){
                                             code += '<br>';
                                         }
@@ -182,9 +182,16 @@ UE.plugins['insertcode'] = function() {
             var code = '';
             utils.each(pre.children,function(n){
                if(n.type == 'text'){
-                   code += n.data.replace(/[ ]/g,'&nbsp;');
+                   //在ie下文本内容有可能末尾带有\n要去掉
+                   //trace:3396
+                   code += n.data.replace(/[ ]/g,'&nbsp;').replace(/\n$/,'');
                }else{
-                   code  += '\n'
+                   if(n.tagName == 'br'){
+                       code  += '\n'
+                   }else{
+                       code += (!dtd.$empty[n.tagName] ? '' : n.innerText());
+                   }
+
                }
 
             });
@@ -546,6 +553,21 @@ UE.plugins['insertcode'] = function() {
                 }
 
             }
+        }
+    });
+    //trace:3395
+    me.addListener('delkeydown',function(type,evt){
+        var rng = this.selection.getRange();
+        rng.txtToElmBoundary(true);
+        var start = rng.startContainer;
+        if(domUtils.isTagNode(start,'pre') && rng.collapsed && domUtils.isStartInblock(rng)){
+            var p = me.document.createElement('p');
+            domUtils.fillNode(me.document,p);
+            start.parentNode.insertBefore(p,start);
+            domUtils.remove(start);
+            rng.setStart(p,0).setCursor(false,true);
+            domUtils.preventDefault(evt);
+            return true;
         }
     })
 };
