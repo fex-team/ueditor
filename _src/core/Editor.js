@@ -237,6 +237,17 @@
                         'document.write("' + html + '");document.close();}())'
                 }));
                 container.style.overflow = 'hidden';
+                //解决如果是给定的百分比，会导致高度算不对的问题
+                setTimeout(function(){
+                    if( /%$/.test(options.initialFrameWidth)){
+                        options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
+                        container.style.width = options.initialFrameWidth + 'px';
+                    }
+                    if(/%$/.test(options.initialFrameHeight)){
+                        options.minFrameHeight = options.initialFrameHeight = container.offsetHeight;
+                        container.style.height = options.initialFrameHeight + 'px';
+                    }
+                })
             }
         },
         /**
