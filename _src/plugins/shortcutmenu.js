@@ -18,7 +18,7 @@ UE.plugins['shortcutmenu'] = function () {
         return;
     }
 
-    me.addListener ('contextmenu mouseup' , function (type , e) {
+    me.addListener ('contextmenu mouseup keydown' , function (type , e) {
         var rng = me.selection.getRange ();
 
         if (rng.collapsed === false || type == "contextmenu") {
@@ -53,9 +53,13 @@ UE.plugins['shortcutmenu'] = function () {
                 }
             }
 
+            if(type=="keydown"){
+                menu.hide();
+            }
 
         }
     });
+
 };
 
 
