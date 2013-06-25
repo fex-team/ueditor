@@ -49,14 +49,14 @@
                     tdvalign: this.options.tdvalign
                 })
             }
-
+            var me = this;
             var range = this.selection.getRange(),
                 start = range.startContainer,
                 firstParentBlock = domUtils.findParent(start, function (node) {
                     return domUtils.isBlockElm(node);
                 }, true) || me.body;
-            var me = this,
-                defaultValue = getDefaultValue(me),
+
+            var defaultValue = getDefaultValue(me),
                 tableWidth = firstParentBlock.offsetWidth,
                 tdWidth = Math.floor(tableWidth / opt.numCols - defaultValue.tdPadding * 2 - defaultValue.tdBorder);
 
