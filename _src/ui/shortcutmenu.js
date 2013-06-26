@@ -17,7 +17,7 @@
 
     ShortCutMenu.prototype = {
         isHidden : true ,
-        SPACE:20,
+        SPACE : 5 ,
         initShortCutMenu : function () {
             this.items = this.items || [];
             this.initUIBase ();
@@ -39,8 +39,8 @@
                         el = me.getDom (),
                         wt = el.offsetWidth,
                         ht = el.offsetHeight,
-                        distanceX = wt / 2 + 15,//距离中心X标准
-                        distanceY = ht / 2 + 15,//距离中心Y标准
+                        distanceX = wt / 2 + me.SPACE,//距离中心X标准
+                        distanceY = ht / 2,//距离中心Y标准
                         x = Math.abs (e.screenX - me.left),//离中心距离横坐标
                         y = Math.abs (e.screenY - me.top);//离中心距离纵坐标
 
@@ -63,10 +63,10 @@
                 }
             });
 
-            domUtils.on(doc,"mouseout",function(e){
-                var relatedTgt= e.relatedTarget|| e.toElement;
-                if(relatedTgt==null||relatedTgt.tagName=="HTML"){
-                    me.hide();
+            domUtils.on (doc , "mouseout" , function (e) {
+                var relatedTgt = e.relatedTarget || e.toElement;
+                if (relatedTgt == null || relatedTgt.tagName == "HTML") {
+                    me.hide ();
                 }
             });
 
@@ -133,7 +133,7 @@
                 }
                 offset.left = parseInt (menu.style.left);
                 offset.top = parseInt (menu.style.top);
-                offset.top -= el.offsetHeight + me.SPACE;
+                offset.top -= el.offsetHeight + 15;
                 setPos (offset);
             }
 
@@ -151,22 +151,21 @@
                 }
             } else {
                 offset = uiUtils.getViewportOffsetByEvent (e);
-                offset.top -= el.offsetHeight/2;
-                offset.left+=me.SPACE;
-
+                offset.top -= el.offsetHeight + me.SPACE;
+                offset.left += me.SPACE;
                 setPos (offset);
             }
 
 
+            me.isHidden = false;
+            me.left = e.screenX + el.offsetWidth / 2 - me.SPACE;
+            me.top = e.screenY - (el.offsetHeight / 2) - me.SPACE;
             me.setOpacity (el , 0.2);
+
             if (me.editor) {
                 el.style.zIndex = me.editor.container.style.zIndex * 1 + 10;
                 fixedlayer.style.zIndex = el.style.zIndex - 1;
             }
-
-            me.isHidden = false;
-            me.left = e.screenX + el.offsetWidth / 2;
-            me.top = e.screenY - (el.offsetHeight / 2) - 20;
         } ,
         hide : function () {
             if (this.getDom ()) {
