@@ -17,7 +17,7 @@
 
     ShortCutMenu.prototype = {
         isHidden : true ,
-        SPACE : 20 ,
+        SPACE:20,
         initShortCutMenu : function () {
             this.items = this.items || [];
             this.initUIBase ();
@@ -63,11 +63,20 @@
                 }
             });
 
+            domUtils.on(doc,"mouseout",function(e){
+                var relatedTgt= e.relatedTarget|| e.toElement;
+                if(relatedTgt==null||relatedTgt.tagName=="HTML"){
+                    me.hide();
+                }
+            });
+
+
             me.editor.addListener ("afterhidepop" , function () {
                 if (!me.isHidden) {
                     isSubMenuShow = true;
                 }
             });
+
         } ,
         initItems : function () {
             if (utils.isArray (this.items)) {
@@ -142,7 +151,9 @@
                 }
             } else {
                 offset = uiUtils.getViewportOffsetByEvent (e);
-                offset.top -= el.offsetHeight + me.SPACE;
+                offset.top -= el.offsetHeight/2;
+                offset.left+=me.SPACE;
+
                 setPos (offset);
             }
 
