@@ -199,8 +199,12 @@ UE.plugins['table'] = function () {
                             start = domUtils.findParentByTagName(me.selection.getStart(), ['td', 'th'], true),
                             preNode = table.previousSibling;
                         if (cell === start && (!preNode || preNode.nodeType == 1 && preNode.tagName == 'TABLE' ) && domUtils.isStartInblock(rng)) {
-                            me.execCommand('insertparagraphbeforetable');
-                            domUtils.preventDefault(evt);
+                            var first = domUtils.findParent(me.selection.getStart(), function(n){return domUtils.isBlockElm(n)}, true);
+                            if(first && ( /t(h|d)/i.test(first.tagName) || first ===  start.firstChild )){
+                                me.execCommand('insertparagraphbeforetable');
+                                domUtils.preventDefault(evt);
+                            }
+
                         }
                     }
                 }

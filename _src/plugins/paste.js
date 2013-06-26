@@ -257,7 +257,6 @@ UE.plugins['paste'] = function () {
                 ) {
                 rng.setStartBefore(rng.startContainer);
             }
-            console.log(rng)
             var tmpAddress = rng.createAddress(true);
             address.endAddress = tmpAddress.startAddress;
         }
