@@ -67,8 +67,12 @@ UE.plugins['font'] = function () {
         }
         utils.each(domUtils.getElementsByTagName(common, 'span'), function (span) {
             if (!span.parentNode || domUtils.isBookmarkNode(span))return;
-            if (/^\s*border\s*:\s*none;\s*/i.test(span.style.cssText)) {
-                domUtils.remove(span, true);
+            if (/\s*border\s*:\s*none;?\s*/i.test(span.style.cssText)) {
+                if(/^\s*border\s*:\s*none;?\s*$/.test(span.style.cssText)){
+                    domUtils.remove(span, true);
+                }else{
+                    domUtils.removeStyle(span,'border');
+                }
                 return
             }
             if (/border/i.test(span.style.cssText) && span.parentNode.tagName == 'SPAN' && /border/i.test(span.parentNode.style.cssText)) {
