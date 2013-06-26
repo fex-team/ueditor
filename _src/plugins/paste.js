@@ -153,6 +153,7 @@ UE.plugins['paste'] = function () {
                 txtContent = root.toHtml();
                 //完全模式
                 htmlContent = html.html;
+
                 address = me.selection.getRange().createAddress(true);
                 me.execCommand('insertHtml', htmlContent, true);
             }
@@ -161,9 +162,11 @@ UE.plugins['paste'] = function () {
     }
 
     me.addListener('pasteTransfer', function (cmd, plainType) {
+
         if (address && txtContent && htmlContent && txtContent != htmlContent) {
             var range = me.selection.getRange();
             range.moveToAddress(address, true);
+
             if (!range.collapsed) {
 
                 while (!domUtils.isBody(range.startContainer)
@@ -202,7 +205,7 @@ UE.plugins['paste'] = function () {
                             range.setEndAfter(next)
                         }
                     }
-                    if(range.endOffset == range.endContainer.childNodes.length){
+                    if(range.endOffset == range.endContainer[range.endContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length){
                         range.setEndAfter(range.endContainer);
                     }else{
                         break;
@@ -211,6 +214,7 @@ UE.plugins['paste'] = function () {
                 }
 
             }
+
             range.deleteContents();
             range.select(true);
             me.__hasEnterExecCommand = true;
@@ -247,7 +251,14 @@ UE.plugins['paste'] = function () {
             }
             me.execCommand('inserthtml', html, true);
             me.__hasEnterExecCommand = false;
-            var tmpAddress = me.selection.getRange().createAddress(true);
+            var rng = me.selection.getRange();
+            while (!domUtils.isBody(rng.startContainer) && !rng.startOffset &&
+                rng.startContainer[rng.startContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length
+                ) {
+                rng.setStartBefore(rng.startContainer);
+            }
+            console.log(rng)
+            var tmpAddress = rng.createAddress(true);
             address.endAddress = tmpAddress.startAddress;
         }
     });
