@@ -192,7 +192,11 @@
          * @grammar editor.render(containerDom);   //也可以直接指定容器对象
          */
         render: function (container) {
-            var me = this, options = me.options;
+            var me = this,
+                options = me.options,
+                getStyleValue=function(attr){
+                   return parseInt(domUtils.getComputedStyle(container,attr));
+                };
             if (utils.isString(container)) {
                 container = document.getElementById(container);
             }
@@ -207,8 +211,12 @@
                 }else{
                     options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
                 }
-                container.style.width = /%$/.test(options.initialFrameWidth) ?  '100%' : options.initialFrameWidth + 'px';
-                container.style.height = /%$/.test(options.initialFrameHeight) ?  '100%' : options.initialFrameHeight + 'px';
+
+                container.style.width = /%$/.test(options.initialFrameWidth) ?  '100%' : options.initialFrameWidth-
+                   getStyleValue("padding-left")- getStyleValue("padding-right") +'px';
+                container.style.height = /%$/.test(options.initialFrameHeight) ?  '100%' : options.initialFrameHeight -
+                    getStyleValue("padding-top")- getStyleValue("padding-bottom") +'px';
+
                 container.style.zIndex = options.zIndex;
 
                 var html = ( ie && browser.version < 9  ? '' : '<!DOCTYPE html>') +
@@ -236,6 +244,17 @@
                         'document.write("' + html + '");document.close();}())'
                 }));
                 container.style.overflow = 'hidden';
+                //解决如果是给定的百分比，会导致高度算不对的问题
+                setTimeout(function(){
+                    if( /%$/.test(options.initialFrameWidth)){
+                        options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
+                        container.style.width = options.initialFrameWidth + 'px';
+                    }
+                    if(/%$/.test(options.initialFrameHeight)){
+                        options.minFrameHeight = options.initialFrameHeight = container.offsetHeight;
+                        container.style.height = options.initialFrameHeight + 'px';
+                    }
+                })
             }
         },
         /**
@@ -398,7 +417,9 @@
             if (height !== parseInt(this.iframe.parentNode.style.height)) {
                 this.iframe.parentNode.style.height = height + 'px';
             }
-            this.document.body.style.height = height - 20 + 'px';
+            this.options.minFrameHeight = this.options.initialFrameHeight = height;
+
+            this.body.style.height = height + 'px';
         },
 
         addshortcutkey: function (cmd, keys) {

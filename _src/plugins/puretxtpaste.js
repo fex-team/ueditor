@@ -13,6 +13,9 @@ UE.plugins['pasteplain'] = function(){
                 node.tagName = 'p';
                 node.setStyle();
             }
+            function removeNode(node){
+                node.parentNode.removeChild(node,true)
+            }
             return {
                 //直接删除及其字节点内容
                 '-' : 'script style object iframe embed input select',
@@ -37,33 +40,20 @@ UE.plugins['pasteplain'] = function(){
                     }
                     node.parentNode.removeChild(node);
                 },
-                ol: function (node) {
-                    node.parentNode.removeChild(node,true)
-                },
-                ul: function (node) {
-                    node.parentNode.removeChild(node,true)
-                },
-
-                dl:function(node){
-                    node.parentNode.removeChild(node,true)
-                },
-                dt:function(node){
-                    node.parentNode.removeChild(node,true)
-                },
-                dd:function(node){
-                    node.parentNode.removeChild(node,true)
-                },
-                'li': function(node){
-                    node.parentNode.removeChild(node,true)
-                },
+                ol: removeNode,
+                ul: removeNode,
+                dl:removeNode,
+                dt:removeNode,
+                dd:removeNode,
+                'li':removeNode,
                 'caption':transP,
                 'th':transP,
                 'tr':transP,
                 'h1':transP,'h2':transP,'h3':transP,'h4':transP,'h5':transP,'h6':transP,
                 'td':function(node){
-                    //没有内容的td直接删掉
-                    var txt = !!node.innerText();
-                    if(txt){
+                        //没有内容的td直接删掉
+                        var txt = !!node.innerText();
+                        if(txt){
                          node.parentNode.insertAfter(UE.uNode.createText(' &nbsp; &nbsp;'),node);
                     }
                     node.parentNode.removeChild(node,node.innerText())

@@ -113,11 +113,12 @@ UE.plugins['paste'] = function () {
             }
 
             //ie下使用innerHTML会产生多余的\r\n字符，也会产生&nbsp;这里过滤掉
-            html = div.innerHTML//.replace(/>(?:(\s|&nbsp;)*?)</g,'><');
+            html = div.innerHTML;//.replace(/>(?:(\s|&nbsp;)*?)</g,'><');
 
             //过滤word粘贴过来的冗余属性
             html = UE.filterWord(html);
-            var root = UE.htmlparser(html,true);
+            //取消了忽略空白的第二个参数，粘贴过来的有些是有空白的，会被套上相关的标签
+            var root = UE.htmlparser(html);
             //如果给了过滤规则就先进行过滤
             if (me.options.filterRules) {
                 UE.filterNode(root, me.options.filterRules);
@@ -152,6 +153,7 @@ UE.plugins['paste'] = function () {
                 txtContent = root.toHtml();
                 //完全模式
                 htmlContent = html.html;
+
                 address = me.selection.getRange().createAddress(true);
                 me.execCommand('insertHtml', htmlContent, true);
             }
@@ -160,9 +162,11 @@ UE.plugins['paste'] = function () {
     }
 
     me.addListener('pasteTransfer', function (cmd, plainType) {
+
         if (address && txtContent && htmlContent && txtContent != htmlContent) {
             var range = me.selection.getRange();
             range.moveToAddress(address, true);
+
             if (!range.collapsed) {
 
                 while (!domUtils.isBody(range.startContainer)
@@ -201,7 +205,7 @@ UE.plugins['paste'] = function () {
                             range.setEndAfter(next)
                         }
                     }
-                    if(range.endOffset == range.endContainer.childNodes.length){
+                    if(range.endOffset == range.endContainer[range.endContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length){
                         range.setEndAfter(range.endContainer);
                     }else{
                         break;
@@ -210,6 +214,7 @@ UE.plugins['paste'] = function () {
                 }
 
             }
+
             range.deleteContents();
             range.select(true);
             me.__hasEnterExecCommand = true;
@@ -246,7 +251,13 @@ UE.plugins['paste'] = function () {
             }
             me.execCommand('inserthtml', html, true);
             me.__hasEnterExecCommand = false;
-            var tmpAddress = me.selection.getRange().createAddress(true);
+            var rng = me.selection.getRange();
+            while (!domUtils.isBody(rng.startContainer) && !rng.startOffset &&
+                rng.startContainer[rng.startContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length
+                ) {
+                rng.setStartBefore(rng.startContainer);
+            }
+            var tmpAddress = rng.createAddress(true);
             address.endAddress = tmpAddress.startAddress;
         }
     });

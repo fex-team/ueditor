@@ -117,7 +117,7 @@
 
 
                     me.fireEvent('beforegetcontent');
-                    var root = UE.htmlparser(me.body.innerHTML,true);
+                    var root = UE.htmlparser(me.body.innerHTML);
                     me.filterOutputRule(root);
                     root.traversal(function (node) {
                         if (node.type == 'element') {

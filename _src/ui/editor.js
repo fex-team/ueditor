@@ -100,15 +100,20 @@
                 clearTimeout(timer);
                 timer = setTimeout(function () {
                     if (pastePop && (isPaste || editor.ui._isTransfer)) {
-                        var span = domUtils.createElement(editor.document, 'span', {
-                                'style':"line-height:0px;",
-                                'innerHTML':'\ufeff'
-                            }),
-                            range = editor.selection.getRange();
-                        range.insertNode(span);
-                        var tmp= getDomNode(span, 'firstChild', 'previousSibling');
-                        pastePop.showAnchor(tmp.nodeType == 3 ? tmp.parentNode : tmp);
-                        domUtils.remove(span);
+                        if(pastePop.isHidden()){
+                            var span = domUtils.createElement(editor.document, 'span', {
+                                    'style':"line-height:0px;",
+                                    'innerHTML':'\ufeff'
+                                }),
+                                range = editor.selection.getRange();
+                            range.insertNode(span);
+                            var tmp= getDomNode(span, 'firstChild', 'previousSibling');
+                            pastePop.showAnchor(tmp.nodeType == 3 ? tmp.parentNode : tmp);
+                            domUtils.remove(span);
+
+                        }else{
+                            pastePop.show();
+                        }
                         delete editor.ui._isTransfer;
                         isPaste = false;
                     }
