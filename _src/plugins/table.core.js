@@ -174,6 +174,9 @@
         if (ignoreMerge) {
             tmpCell.rowSpan = tmpCell.colSpan = 1;
         }
+        //去掉宽高
+        domUtils.removeAttributes(tmpCell,'width height');
+
         tmpCell.style.borderLeftStyle = "";
         tmpCell.style.borderTopStyle = "";
         tmpCell.style.borderLeftColor = cell.style.borderRightColor;
