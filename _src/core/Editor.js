@@ -192,7 +192,11 @@
          * @grammar editor.render(containerDom);   //也可以直接指定容器对象
          */
         render: function (container) {
-            var me = this, options = me.options;
+            var me = this,
+                options = me.options,
+                getStyleValue=function(attr){
+                   return parseInt(domUtils.getComputedStyle(container,attr));
+                };
             if (utils.isString(container)) {
                 container = document.getElementById(container);
             }
@@ -208,8 +212,11 @@
                     options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
                 }
 
-                container.style.width = /%$/.test(options.initialFrameWidth) ?  '100%' : options.initialFrameWidth + 'px';
-                container.style.height = /%$/.test(options.initialFrameHeight) ?  '100%' : options.initialFrameHeight + 'px';
+                container.style.width = /%$/.test(options.initialFrameWidth) ?  '100%' : options.initialFrameWidth-
+                   getStyleValue("padding-left")- getStyleValue("padding-right") +'px';
+                container.style.height = /%$/.test(options.initialFrameHeight) ?  '100%' : options.initialFrameHeight -
+                    getStyleValue("padding-top")- getStyleValue("padding-bottom") +'px';
+
                 container.style.zIndex = options.zIndex;
 
                 var html = ( ie && browser.version < 9  ? '' : '<!DOCTYPE html>') +
