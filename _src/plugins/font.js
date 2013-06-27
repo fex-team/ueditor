@@ -295,6 +295,21 @@ UE.plugins['font'] = function () {
                         }
                         return ''
                     }
+
+                    if( cmdName == 'FontSize' ) {
+                        var styleVal = domUtils.getComputedStyle(startNode, style),
+                            tmp = /^([\d\.]+)(\w+)$/.exec( styleVal );
+
+                        if( tmp ) {
+
+                            return Math.floor( tmp[1] ) + tmp[2];
+
+                        }
+
+                        return styleVal;
+
+                    }
+
                     return  domUtils.getComputedStyle(startNode, style);
                 },
                 queryCommandState: function (cmdName) {
