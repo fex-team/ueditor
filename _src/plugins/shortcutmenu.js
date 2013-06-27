@@ -52,11 +52,10 @@ UE.plugins['shortcutmenu'] = function () {
                     }
                 }
             }
+        }
 
-            if(type=="keydown"){
-                menu.hide();
-            }
-
+        if(type=="keydown"){
+            menu.hide();
         }
     });
 
