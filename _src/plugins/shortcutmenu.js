@@ -19,44 +19,47 @@ UE.plugins['shortcutmenu'] = function () {
     }
 
     me.addListener ('contextmenu mouseup keydown' , function (type , e) {
-        var rng = me.selection.getRange ();
+        var me = this;
+        setTimeout (function () {
+            var rng = me.selection.getRange ();
+            if (rng.collapsed === false || type == "contextmenu") {
 
-        if (rng.collapsed === false || type == "contextmenu") {
+                if (!menu) {
+                    menu = new baidu.editor.ui.ShortCutMenu ({
+                        editor : me ,
+                        items : items ,
+                        theme : me.options.theme ,
+                        className : 'edui-shortcutmenu'
+                    });
 
-            if (!menu) {
-                menu = new baidu.editor.ui.ShortCutMenu ({
-                    editor : me ,
-                    items : items ,
-                    theme : me.options.theme ,
-                    className : 'edui-shortcutmenu'
-                });
+                    menu.render ();
+                    me.fireEvent ("afterrendershortcutmenu" , menu);
+                }
 
-                menu.render ();
-                me.fireEvent ("afterrendershortcutmenu" , menu);
-            }
+                menu.show (e , !!UE.plugins['contextmenu']);
+                if (type == 'contextmenu') {
+                    domUtils.preventDefault (e);
+                    if (browser.ie) {
+                        var ieRange;
+                        try {
+                            ieRange = me.selection.getNative ().createRange ();
+                        } catch (e) {
+                            return;
+                        }
+                        if (ieRange.item) {
+                            var range = new dom.Range (me.document);
+                            range.selectNode (ieRange.item (0)).select (true , true);
 
-            menu.show (e , !!UE.plugins['contextmenu']);
-            if(type == 'contextmenu'){
-                domUtils.preventDefault (e);
-                if (browser.ie) {
-                    var ieRange;
-                    try {
-                        ieRange = me.selection.getNative ().createRange ();
-                    } catch (e) {
-                        return;
-                    }
-                    if (ieRange.item) {
-                        var range = new dom.Range (me.document);
-                        range.selectNode (ieRange.item (0)).select (true , true);
-
+                        }
                     }
                 }
             }
+
+        });
+        if (type == "keydown") {
+            menu && !menu.isHidden && menu.hide ();
         }
 
-        if(type=="keydown"){
-            menu.hide();
-        }
     });
 
 };
