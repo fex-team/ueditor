@@ -56,7 +56,7 @@ UE.plugins['searchreplace'] = function(){
 
                     if(/^\/[^/]+\/\w*$/.test(opt.searchStr)){
                         var str = tmpRange.text,
-                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g');
+                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g' + (opt.casesensitive ? '':'i'));
                         var match = str.match(reg);
                         if(match && match.length){
                             searchStr = opt.dir < 0 ? match[match.length -1] : match[0];
@@ -111,10 +111,6 @@ UE.plugins['searchreplace'] = function(){
                         }
                         var nativeSel = w.getSelection();
                         if(!nativeSel.rangeCount){
-//                            nativeRange = me.document.createRange();
-//                            nativeRange.setStart(me.body,0);
-//                            nativeRange.collapse(true);
-//                            nativeSel.addRange(nativeRange);
                             nativeRange = currentRange || me._bakNativeRange;
                         }else{
                             nativeRange = nativeSel.getRangeAt(0);
@@ -146,7 +142,7 @@ UE.plugins['searchreplace'] = function(){
                             nativeRange.setEnd(me.body,me.body.childNodes.length);
                         }
                         var str = nativeRange + '',
-                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g');
+                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g' + (opt.casesensitive ? '':'i'));
                         var match = str.match(reg);
                         if(match && match.length){
                             searchStr = opt.dir < 0 ? match[match.length -1] : match[0];

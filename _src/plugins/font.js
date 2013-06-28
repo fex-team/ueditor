@@ -93,11 +93,14 @@ UE.plugins['font'] = function () {
                 next = span.nextSibling;
             }
             mergeWithParent(span);
-            //拷贝父亲们的特别的属性,这里只做背景颜色的处理
-            var parent = domUtils.findParent(span,function(n){return n.tagName == 'SPAN' && /background-color/.test(n.style.cssText)});
-            if(parent && !/background-color/.test(span.style.cssText)){
-                span.style.backgroundColor = parent.style.backgroundColor;
+            if(browser.ie && browser.version > 8 ){
+                //拷贝父亲们的特别的属性,这里只做背景颜色的处理
+                var parent = domUtils.findParent(span,function(n){return n.tagName == 'SPAN' && /background-color/.test(n.style.cssText)});
+                if(parent && !/background-color/.test(span.style.cssText)){
+                    span.style.backgroundColor = parent.style.backgroundColor;
+                }
             }
+
         });
         rng.moveToBookmark(bk);
     }
