@@ -19,7 +19,16 @@ UE.plugins['shortcutmenu'] = function () {
     }
 
     me.addListener ('contextmenu mouseup keydown' , function (type , e) {
-        var me = this;
+        var me = this,
+            customEvt = {
+                type : type ,
+                target : e.target || e.srcElement ,
+                screenX : e.screenX ,
+                screenY : e.screenY ,
+                clientX : e.clientX ,
+                clientY : e.clientY
+            };
+
         setTimeout (function () {
             var rng = me.selection.getRange ();
             if (rng.collapsed === false || type == "contextmenu") {
@@ -36,26 +45,31 @@ UE.plugins['shortcutmenu'] = function () {
                     me.fireEvent ("afterrendershortcutmenu" , menu);
                 }
 
-                menu.show (e , !!UE.plugins['contextmenu']);
-                if (type == 'contextmenu') {
-                    domUtils.preventDefault (e);
-                    if (browser.ie) {
-                        var ieRange;
-                        try {
-                            ieRange = me.selection.getNative ().createRange ();
-                        } catch (e) {
-                            return;
-                        }
-                        if (ieRange.item) {
-                            var range = new dom.Range (me.document);
-                            range.selectNode (ieRange.item (0)).select (true , true);
+                menu.show (customEvt , !!UE.plugins['contextmenu']);
 
-                        }
-                    }
-                }
             }
 
+
+
         });
+
+        if (type == 'contextmenu') {
+            domUtils.preventDefault (e);
+            if (browser.ie) {
+                var ieRange;
+                try {
+                    ieRange = me.selection.getNative ().createRange ();
+                } catch (e) {
+                    return;
+                }
+                if (ieRange.item) {
+                    var range = new dom.Range (me.document);
+                    range.selectNode (ieRange.item (0)).select (true , true);
+
+                }
+            }
+        }
+
         if (type == "keydown") {
             menu && !menu.isHidden && menu.hide ();
         }
