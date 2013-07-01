@@ -49,7 +49,7 @@ test( '给图片添加超链接', function () {
  * 先设置startContainer和endContainer为第一个单元格中的文本或占位符
  * 再在editor的currentSelectedArr设置当前选中的内容，使得看上去是选中了所有的td*/
 test( '选中多个单元格插入超链接', function () {
-    if(ua.browser.ie==9)return ;//TODO 1.2.6
+    if(ua.browser.ie>8)return ;//TODO 1.2.6
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<table><tbody><tr><td></td><td></td></tr><tr><td>hello</td></tr></tbody></table>' );
@@ -62,7 +62,7 @@ test( '选中多个单元格插入超链接', function () {
 
         editor.execCommand( 'link', {href:'http://www.baidu.com/'} );
         var br = ua.browser.ie ? '' : '<br>';
-        equal( ua.getChildHTML( trs[0].cells[0] ), '<a href="http://www.baidu.com/">http://www.baidu.com/</a>'+(ua.browser.ie==9?' ':br), '第一个单元格中插入超链接' );//原来空单元格的br不去掉
+        equal( ua.getChildHTML( trs[0].cells[0] ), '<a href="http://www.baidu.com/">http://www.baidu.com/</a>'+(ua.browser.ie>8?' ':br), '第一个单元格中插入超链接' );//原来空单元格的br不去掉
         equal( ua.getChildHTML( trs[0].cells[1] ), br, '第二个单元格中未插入超链接' );
         equal( ua.getChildHTML( trs[1].cells[0] ), '<a href="http://www.baidu.com/">hello</a>', '第三个单元格中插入超链接' );
         start();
@@ -71,7 +71,7 @@ test( '选中多个单元格插入超链接', function () {
 } );
 
 test( '去除表格中的链接', function () {
-    if(ua.browser.ie==9)return ;//TODO 1.2.6
+    if(ua.browser.ie>8)return ;//TODO 1.2.6
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<table><tbody><tr><td></td><td></td></tr><tr><td colspan="2">hello</td></tr></tbody></table>' );
@@ -86,7 +86,7 @@ test( '去除表格中的链接', function () {
         var br = ua.browser.ie ? '' : '<br>';
         equal( editor.queryCommandValue( 'link' ), trs[0].cells[0].firstChild, '查询多个单元格的command value为a' );
         editor.execCommand( 'unlink' );
-        equal( ua.getChildHTML( trs[0].cells[0] ), 'http://www.baidu.com/'+(ua.browser.ie==9?' ':br), '第一个单元格中插入超链接' );
+        equal( ua.getChildHTML( trs[0].cells[0] ), 'http://www.baidu.com/'+(ua.browser.ie>8?' ':br), '第一个单元格中插入超链接' );
         equal( ua.getChildHTML( trs[0].cells[1] ), br, '第二个单元格中未插入超链接' );
         equal( ua.getChildHTML( trs[1].cells[0] ), 'hello', '第三个单元格中插入超链接' );
         equal( editor.queryCommandValue( 'link' ), null, '查询多个单元格的command value为null' );

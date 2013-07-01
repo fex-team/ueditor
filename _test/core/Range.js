@@ -421,7 +421,7 @@ test( 'cloneContents--补全后面的标签', function() {
     var first = document.getElementById( 'first' ).firstChild;
     var two = document.getElementById( 'two' ).firstChild;
     r.setStart( first, 1 ).setEnd( two, 2 );
-    equals( ua.getHTML( r.cloneContents() ), '<p id="first">irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">ab</td></tr></tbody></table>' );
+    ua.checkSameHtml(ua.getHTML( r.cloneContents() ), '<p id="first">irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">ab</td></tr></tbody></table>');
     ua.checkResult( r, first, two, 1, 2, false, 'cloneContents--补全后面的标签' );
 } );
 
@@ -434,7 +434,7 @@ test( 'cloneContents--补全前面的标签', function() {
     var two = document.getElementById( 'two' ).firstChild;
     r.setStart( two, 1 );
     r.setEnd( last, 2 );
-    equals( ua.getHTML( r.cloneContents() ), '<table id="table" width="300"><tbody><tr><td id="two">bc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">te</p>' );
+    ua.checkSameHtml( ua.getHTML( r.cloneContents() ), '<table id="table" width="300"><tbody><tr><td id="two">bc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">te</p>' );
     ua.checkResult( r, two, last, 1, 2, false, 'cloneContents--补全前面的标签' );
 } );
 
@@ -447,7 +447,7 @@ test( 'cloneContents--切的部分为兄弟节点', function() {
 
     r.setStart( first.firstChild, 1 ).setEnd( first.lastChild, 4 );
     /*strong前面有空格*/
-    equals( ua.getHTML( r.cloneContents() ), 'irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> str' );
+    ua.checkSameHtml( ua.getHTML( r.cloneContents() ), 'irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> str' );
     ua.checkResult( r, first.firstChild, first.lastChild, 1, 4, false, 'cloneContents--startContainer和endContainer为兄弟节点' );
 } );
 
@@ -471,11 +471,11 @@ test( 'cloneContents--startContainer和endContainer为非文本节点', function
     var first = document.getElementById( 'first' );
     var last = document.getElementById( 'last' );
     r.setStart( first, 0 ).setEnd( last, 0 );
-    equals( ua.getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\"></p>' );
+    ua.checkSameHtml( ua.getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\"></p>' );
     ua.checkResult( r, first, last, 0, 0, false, 'cloneContents--开始和结束位置都是文本' );
 
     r.setStart( first, 1 ).setEnd( last, 1 );
-    equals( ua.getHTML( r.cloneContents() ), '<p id="first"><!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc</p>' );
+    ua.checkSameHtml( ua.getHTML( r.cloneContents() ), '<p id="first"><!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc</p>' );
     ua.checkResult( r, first, last, 1, 1, false, 'cloneContents--开始位置有注释' );
 } );
 
@@ -486,7 +486,7 @@ test( 'cloneContents--完整切掉一个节点', function() {
     div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>';
     var first = document.getElementById( 'first' );
     r.setStart( div, 0 ).setEnd( div, div.childNodes.length - 1 );
-    equals( ua.getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>' );
+    ua.checkSameHtml( ua.getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>' );
     ua.checkResult( r, div, div, 0, div.childNodes.length - 1, false, 'cloneContents--完整切掉一个节点' );
 } );
 
@@ -497,11 +497,11 @@ test( 'cloneContents--startContainer和endContainer节点类型不同', function
     var first = document.getElementById( 'first' );
     var last = document.getElementById( 'last' );
     r.setStart( first, 0 ).setEnd( last.firstChild, 1 );
-    equals( ua.getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">t</p>' );
+    ua.checkSameHtml( ua.getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">t</p>' );
     ua.checkResult( r, first, last.firstChild, 0, 1, false, 'cloneContents--startContainer的nodeType=1，endContainer为文本节点' );
 
     r.setStart( first.firstChild, 1 ).setEnd( last, 0 );
-    equals( ua.getHTML( r.cloneContents() ), '<p id="first">irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last"></p>' );
+    ua.checkSameHtml( ua.getHTML( r.cloneContents() ), '<p id="first">irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last"></p>' );
     ua.checkResult( r, first.firstChild, last, 1, 0, false, 'cloneContents--endContainer为文本节点，startContainer的nodeType=1' );
 } );
 
@@ -583,7 +583,7 @@ test( 'deleteContents--删除相邻节点之间的内容', function() {
     var last = document.getElementById( 'last' );
     r.setStart( two, 1 ).setEnd( last, 2 );
     r.deleteContents();
-    equals( ua.getHTML( div ), '<div id="test"><p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr></tbody></table><p id="last"></p></div>' );
+    ua.checkSameHtml( ua.getHTML( div ), '<div id="test"><p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr></tbody></table><p id="last"></p></div>' );
 
     ua.checkResult( r, div, div, 4, 4, true, '删除相邻节点的内容' );
 } );
@@ -597,7 +597,7 @@ test( 'deleteContents--删除子节点', function() {
 
     r.setStart( div, 0 ).setEnd( div, 2 );
     r.deleteContents();
-    equals( ua.getHTML( r.startContainer ), '<div id="test"><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
 
     ua.checkResult( r, div, div, 0, 0, true, '删除子节点的内容' );
 } );
@@ -614,7 +614,7 @@ test( 'deleteContents--删除同一文本节点内容', function() {
     r.deleteContents();
     equals( ua.getHTML( r.startContainer ), 'rong' );
 
-    equal( ua.getHTML( div ), '<div id="test"><p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">rong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( div ), '<div id="test"><p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">rong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p></div>' );
     ua.checkResult( r, strong_text, strong_text, 0, 0, true, '删除子节点的内容' );
 } );
 
@@ -625,7 +625,7 @@ test( 'deleteContents--startContainer是endContainer父亲', function() {
     r.setStart( div, 0 );
     r.setEnd( document.getElementById( 'traverse' ), 2 );
     r.deleteContents();
-    equals( ua.getHTML( div ), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( div ), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
     ua.checkResult( r, div, div, 0, 0, true, 'startContainer是endContainer父亲' );
 } );
 
@@ -640,7 +640,7 @@ test( 'deleteContents--startContainer和endContainer为不同文本节点', func
     r.deleteContents();
     equals( ua.getHTML( r.startContainer ), '<p id="first">fong.</p>' );
     ua.checkResult( r, p, p, 1, 1, true, 'startContainer和endContainer为文本节点内容' );
-    equal( ua.getHTML( div ), '<div id="test"><p id="first">fong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( div ), '<div id="test"><p id="first">fong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
     equals( ua.getHTML( r.endContainer ), '<p id="first">fong.</p>' );
 } );
 
@@ -653,7 +653,7 @@ test( 'deleteContents--startContainer是endContainer后代', function() {
     var em = document.getElementById( 'em' );
     r.setStart( em, 1 ).setEnd( div, 3 );
     r.deleteContents();
-    equals( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em></p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em></p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p></div>' );
     ua.checkResult( r, div, div, 1, 1, true, 'startContainer是endContainer后代' );
 } );
 
@@ -666,7 +666,7 @@ test( 'deleteContents--startContainer是文本，endContainer的nodeType=1', fun
     var two = document.getElementById( 'two' );
     r.setStart( em, 1 ).setEnd( two, 0 );
     r.deleteContents();
-    equals( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">e</em></p><table id=\"table\" width=\"300\"><tbody><tr><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">e</em></p><table id=\"table\" width=\"300\"><tbody><tr><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p></div>' );
     ua.checkResult( r, div, div, 1, 1, true, 'startContainer是文本，endContainer的nodeType=1' );
 } );
 
@@ -679,8 +679,8 @@ test( 'extractContents--补全后面的标签', function() {
     var first = document.getElementById( 'first' ).firstChild;
     var two = document.getElementById( 'two' ).firstChild;
     r.setStart( first, 1 ).setEnd( two, 2 );
-    equals( ua.getHTML( r.extractContents() ), '<p id="first">irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">ab</td></tr></tbody></table>' );
-    equal( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">f</p><table id=\"table\" width=\"300\"><tbody><tr><td id=\"two\">c</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.extractContents() ), '<p id="first">irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">ab</td></tr></tbody></table>' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">f</p><table id=\"table\" width=\"300\"><tbody><tr><td id=\"two\">c</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p></div>' );
     ua.checkResult( r, div, div, 1, 1, true, 'startContainer--补全后面的标签' );
 } );
 
@@ -692,8 +692,8 @@ test( 'extractContents--补全前面的标签', function() {
     var last = document.getElementById( 'last' ).firstChild;
     var two = document.getElementById( 'two' ).firstChild;
     r.setStart( two, 1 ).setEnd( last, 2 );
-    equals( ua.getHTML( r.extractContents() ), '<table id="table" width="300"><tbody><tr><td id="two">bc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">te</p>' );
-    equal( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">a</td></tr></tbody></table><p id=\"last\">xtabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.extractContents() ), '<table id="table" width="300"><tbody><tr><td id="two">bc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">te</p>' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">a</td></tr></tbody></table><p id=\"last\">xtabc<span>span</span></p></div>' );
     ua.checkResult( r, div, div, 4, 4, true, 'startContainer--补全前面的标签' );
 } );
 
@@ -706,8 +706,8 @@ test( 'extractContents--切的部分为兄弟节点', function() {
 
     r.setStart( first.firstChild, 1 ).setEnd( first.lastChild, 4 );
     /*strong前面有空格*/
-    equals( ua.getHTML( r.extractContents() ), 'irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> str' );
-    equal( ua.getHTML( r.startContainer ), '<p id=\"first\">fong.</p>', 'check startContainer html' );
+    ua.checkSameHtml( ua.getHTML( r.extractContents() ), 'irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> str' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<p id=\"first\">fong.</p>', 'check startContainer html' );
     ua.checkResult( r, first, first, 1, 1, true, 'startContainer--startContainer和endContainer为兄弟节点' );
 } );
 
@@ -732,17 +732,17 @@ test( 'extractContents--startContainer和endContainer为非文本节点', functi
     var first = document.getElementById( 'first' );
     var last = document.getElementById( 'last' );
     r.setStart( first, 0 ).setEnd( last, 0 );
-    equals( ua.getHTML( r.extractContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\"></p>' );
-    equal( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\"></p><p id=\"last\">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.extractContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\"></p>' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\"></p><p id=\"last\">textabc<span>span</span></p></div>' );
     ua.checkResult( r, div, div, 1, 1, true, 'cloneContents--开始和结束位置都是文本' );
 
     div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>';
     first = document.getElementById( 'first' );
     last = document.getElementById( 'last' );
     r.setStart( first, 2 ).setEnd( last, 1 );
-    equals( ua.getHTML( r.extractContents() ), '<p id="first"> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc</p>', '检查得到的contents' );
+    ua.checkSameHtml( ua.getHTML( r.extractContents() ), '<p id="first"> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc</p>', '检查得到的contents' );
 
-    equal( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">first<!--not--></p><p id=\"last\"><span>span</span></p></div>', '检查切除后' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"first\">first<!--not--></p><p id=\"last\"><span>span</span></p></div>', '检查切除后' );
     ua.checkResult( r, div, div, 1, 1, true, 'extractContents--开始位置有注释' );
 } );
 
@@ -753,8 +753,8 @@ test( 'extractContents--完整切掉一个节点', function() {
     div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>';
     var first = document.getElementById( 'first' );
     r.setStart( div, 0 ).setEnd( div, div.childNodes.length - 1 );
-    equals( ua.getHTML( r.extractContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>' );
-    equal( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"last\">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.extractContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id=\"last\">textabc<span>span</span></p></div>' );
     ua.checkResult( r, div, div, 0, 0, true, 'extractContents--完整切掉一个节点' );
 } );
 
@@ -812,13 +812,13 @@ test( 'extractContents', function() {
     r.setStart( document.getElementById( 'test' ), 0 );
     r.setEnd( document.getElementById( 'traverse' ), 2 );
 
-    equals( ua.getHTML( r.extractContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em></p>' );
-    equals( ua.getHTML( r.startContainer ), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.extractContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em></p>' );
+    ua.checkSameHtml( ua.getHTML( r.startContainer ), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
     equals( r.startOffset, 0 );
     equals( r.endContainer.nodeType, 1 );
     equals( r.endOffset, 0 );
-    equals( ua.getHTML( r.endContainer ), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
-    equals( ua.getHTML( document.getElementById( 'test' ) ), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( r.endContainer ), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
+    ua.checkSameHtml( ua.getHTML( document.getElementById( 'test' ) ), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>' );
     equals( r.collapsed, true );
 } );
 
@@ -1294,7 +1294,9 @@ test( 'applyInlineStyle--多个style', function() {
     range.setStart( div, 0 ).setEnd( div, 1 );
 
     range.applyInlineStyle( 'i' ).applyInlineStyle( 'span', {style:'color:red'} ).applyInlineStyle( 'span', {style:'font-size:12px'} );
-    var span = div.firstChild.firstChild;
+    //1.2.6.1 span能套i
+//    var span = div.firstChild.firstChild;
+    var span = div.firstChild;
     equal( span.style['color'], 'red', 'check color' );
     equal( $( span ).css( 'font-size' ), '12px', 'check font size' );
     equal( span.innerHTML.toLowerCase(), 'xxxx', 'check innerHTML including u' );
