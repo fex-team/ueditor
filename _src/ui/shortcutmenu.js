@@ -63,12 +63,16 @@
                 }
             });
 
-            domUtils.on (doc , "mouseout" , function (e) {
-                var relatedTgt = e.relatedTarget || e.toElement;
-                if (relatedTgt == null || relatedTgt.tagName == "HTML") {
-                    me.hide ();
-                }
-            });
+            //ie下 mouseout不准
+            if (!browser.ie) {
+                domUtils.on (doc , "mouseout" , function (e) {
+                    var relatedTgt = e.relatedTarget || e.toElement;
+
+                    if (relatedTgt == null || relatedTgt.tagName == "HTML") {
+                        me.hide ();
+                    }
+                });
+            }
 
 
             me.editor.addListener ("afterhidepop" , function () {
@@ -137,6 +141,7 @@
                 setPos (offset);
             }
 
+
             me.eventType = e.type;
             el.style.cssText = "display:block;left:-9999px";
 
@@ -154,13 +159,13 @@
                 offset.top -= el.offsetHeight + me.SPACE;
                 offset.left += me.SPACE;
                 setPos (offset);
+                me.setOpacity (el , 0.2);
             }
 
 
             me.isHidden = false;
             me.left = e.screenX + el.offsetWidth / 2 - me.SPACE;
             me.top = e.screenY - (el.offsetHeight / 2) - me.SPACE;
-            me.setOpacity (el , 0.2);
 
             if (me.editor) {
                 el.style.zIndex = me.editor.container.style.zIndex * 1 + 10;
