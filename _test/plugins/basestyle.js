@@ -220,8 +220,11 @@ test( '单击B再在其他地方单击I，空的strong标签被删除 ', functio
 } );
 
 test( 'ctrl+i', function() {
-    var editor = te.obj[0];
-    var range = te.obj[1];
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
     var body = editor.body;
     editor.setContent( '<p>没有加粗的文本</p>' );
     range.selectNode( body.firstChild ).select();
@@ -232,17 +235,22 @@ test( 'ctrl+i', function() {
         editor.focus();
         setTimeout( function() {
             equal( ua.getChildHTML( p ), '<em>没有加粗的文本</em>' );
+            UE.delEditor('ue');
             start();
         }, 150 );
     }, 100 );
+    });
     stop();
 } );
 
 test( 'ctrl+u', function() {
-    var editor = te.obj[0];
-    var range = te.obj[1];
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
     var body = editor.body;
-    stop();
+
     editor.setContent( '<p>没有加粗的文本</p>' );
     setTimeout( function() {
         range.selectNode( body.firstChild ).select();
@@ -251,15 +259,21 @@ test( 'ctrl+u', function() {
             var html = '<span style="text-decoration: underline;">没有加粗的文本</span>';
             ua.checkHTMLSameStyle( html, editor.document, body.firstChild, '文本被添加了下划线' );
             equal(editor.body.firstChild.firstChild.style.textDecoration,'underline');
+            UE.delEditor('ue');
             start();
         }, 150 );
         ua.keydown(editor.body,{'keyCode':85,'ctrlKey':true});
     }, 150 );
+    });
+    stop();
 } );
 
 test( 'ctrl+b', function() {
-    var editor = te.obj[0];
-    var range = te.obj[1];
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
     var body = editor.body;
     editor.setContent( '<p>没有加粗的文本</p>' );
     range.selectNode( body.firstChild ).select();
@@ -268,9 +282,11 @@ test( 'ctrl+b', function() {
         ua.keydown(editor.body,{'keyCode':66,'ctrlKey':true});
         setTimeout( function() {
             equal( ua.getChildHTML( body.firstChild ), '<strong>没有加粗的文本</strong>' );
+            UE.delEditor('ue');
             start();
         }, 150 );
     }, 150 );
+    });
     stop();
 } );
 
