@@ -447,7 +447,7 @@
                     editor.iframe.parentNode.style.width = this._bakEditorContaninerWidth + 'px';
                     window.scrollTo(0, this._bakScrollTop);
                 }
-                if (baidu.editor.browser.gecko && editor.body.contentEditable === 'true') {
+                if (browser.gecko && editor.body.contentEditable === 'true') {
                     var input = document.createElement('input');
                     document.body.appendChild(input);
                     editor.body.contentEditable = false;
@@ -455,12 +455,14 @@
                         input.focus();
                         setTimeout(function () {
                             editor.body.contentEditable = true;
+                            editor.fireEvent('fullscreenchanged', fullscreen);
                             editor.selection.getRange().moveToBookmark(bk).select(true);
                             baidu.editor.dom.domUtils.remove(input);
                             fullscreen && window.scroll(0, 0);
                         }, 0)
                     }, 0)
                 }
+
                 if(editor.body.contentEditable === 'true'){
                     this.editor.fireEvent('fullscreenchanged', fullscreen);
                     this.triggerLayout();
@@ -476,7 +478,12 @@
                 this.editor.setHeight(vpRect.height - this.getDom('toolbarbox').offsetHeight - this.getDom('bottombar').offsetHeight - (this.editor.options.topOffset || 0));
                 //不手动调一下，会导致全屏失效
                 if(browser.gecko){
-                    window.onresize();
+                    try{
+                        window.onresize();
+                    }catch(e){
+
+                    }
+
                 }
             }
         },
