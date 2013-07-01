@@ -136,27 +136,31 @@ UE.plugins['list'] = function () {
         domUtils.on(me.body,'cut',function(){
             setTimeout(function(){
                 var rng = me.selection.getRange(),li;
-                if(li = domUtils.findParentByTagName(rng.startContainer,'li',true)){
-                    if(!li.nextSibling && domUtils.isEmptyBlock(li)){
-                        var pn = li.parentNode,node;
-                        if(node = pn.previousSibling){
-                            domUtils.remove(pn);
-                            rng.setStartAtLast(node).collapse(true);
-                            rng.select(true);
-                        }else if(node = pn.nextSibling){
-                            domUtils.remove(pn);
-                            rng.setStartAtFirst(node).collapse(true);
-                            rng.select(true);
-                        }else{
-                            var tmpNode = me.document.createElement('p');
-                            domUtils.fillNode(me.document,tmpNode);
-                            pn.parentNode.insertBefore(tmpNode,pn);
-                            domUtils.remove(pn);
-                            rng.setStart(tmpNode,0).collapse(true);
-                            rng.select(true);
+                //trace:3416
+                if(!rng.collapsed){
+                    if(li = domUtils.findParentByTagName(rng.startContainer,'li',true)){
+                        if(!li.nextSibling && domUtils.isEmptyBlock(li)){
+                            var pn = li.parentNode,node;
+                            if(node = pn.previousSibling){
+                                domUtils.remove(pn);
+                                rng.setStartAtLast(node).collapse(true);
+                                rng.select(true);
+                            }else if(node = pn.nextSibling){
+                                domUtils.remove(pn);
+                                rng.setStartAtFirst(node).collapse(true);
+                                rng.select(true);
+                            }else{
+                                var tmpNode = me.document.createElement('p');
+                                domUtils.fillNode(me.document,tmpNode);
+                                pn.parentNode.insertBefore(tmpNode,pn);
+                                domUtils.remove(pn);
+                                rng.setStart(tmpNode,0).collapse(true);
+                                rng.select(true);
+                            }
                         }
                     }
                 }
+
             })
         })
     });
