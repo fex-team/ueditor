@@ -203,8 +203,8 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'sorttable',
                             exec:function(){
                                 this.execCommand("sorttable",function(td1,td2){
-                                    var value1 = td1.innerHTML.match(/\d+/),
-                                        value2 = td2.innerHTML.match(/\d+/);
+                                    var value1 = td1[browser.ie ? 'innerText':'textContent'].match(/\d+/),
+                                        value2 = td2[browser.ie ? 'innerText':'textContent'].match(/\d+/);
                                     if(value1) value1 = +value1[0];
                                     if(value2) value2 = +value2[0];
                                     return (value1||0) - (value2||0);
@@ -216,8 +216,8 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'sorttable',
                             exec:function(){
                                 this.execCommand("sorttable",function(td1,td2){
-                                    var value1 = td1.innerHTML.match(/\d+/),
-                                        value2 = td2.innerHTML.match(/\d+/);
+                                    var value1 = td1[browser.ie ? 'innerText':'textContent'].match(/\d+/),
+                                        value2 = td2[browser.ie ? 'innerText':'textContent'].match(/\d+/);
                                     if(value1) value1 = +value1[0];
                                     if(value2) value2 = +value2[0];
                                     return (value2||0) - (value1||0);
