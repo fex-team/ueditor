@@ -126,7 +126,9 @@ UE.plugins['insertcode'] = function() {
                 pre = me.document.getElementById('coder');
                 domUtils.removeAttributes(pre,'id');
                 var tmpNode = pre.previousSibling;
-                if(tmpNode && domUtils.isEmptyBlock(tmpNode)){
+
+                if(tmpNode && (tmpNode.nodeType == 3 && tmpNode.nodeValue.length == 1 && browser.ie && browser.version == 6 ||  domUtils.isEmptyBlock(tmpNode))){
+
                     domUtils.remove(tmpNode)
                 }
                 var rng = me.selection.getRange();

@@ -324,7 +324,7 @@ UE.plugins['list'] = function () {
                 }
             }
             var span = cacheNode.firstChild();
-            if(span.type == 'element' && span.tagName == 'span' && /^\s*(&nbsp;)+\s*$/.test(span.innerText())){
+            if(span && span.type == 'element' && span.tagName == 'span' && /^\s*(&nbsp;)+\s*$/.test(span.innerText())){
                 span.parentNode.removeChild(span)
             }
         })
