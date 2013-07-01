@@ -18,7 +18,7 @@ UE.plugins['shortcutmenu'] = function () {
         return;
     }
 
-    me.addListener ('contextmenu mouseup keydown' , function (type , e) {
+    me.addListener ('contextmenu mouseup' , function (type , e) {
         var me = this,
             customEvt = {
                 type : type ,
@@ -46,11 +46,7 @@ UE.plugins['shortcutmenu'] = function () {
                 }
 
                 menu.show (customEvt , !!UE.plugins['contextmenu']);
-
             }
-
-
-
         });
 
         if (type == 'contextmenu') {
@@ -70,6 +66,12 @@ UE.plugins['shortcutmenu'] = function () {
             }
         }
 
+        if (type == "keydown") {
+            menu && !menu.isHidden && menu.hide ();
+        }
+    });
+
+    me.addListener ('keydown' , function (type) {
         if (type == "keydown") {
             menu && !menu.isHidden && menu.hide ();
         }
