@@ -161,17 +161,9 @@
 
         },
         setAutoSize:function () {
-            var me = this,
-                start = editor.selection.getStart(),
-                wt = domUtils.findParentByTagName(start, "table", true).width,
-                flag = !wt;
-            if (flag) {
-                autoSizeContent.checked = flag;
-                me.autoSizeContentHanler();
-            } else {
-                autoSizePage.checked = !flag;
-                me.autoSizePageHanler();
-            }
+            var me = this;
+            autoSizePage.checked = true;
+            me.autoSizePageHanler();
         }
     };
 
