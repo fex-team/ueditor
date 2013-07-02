@@ -20,7 +20,14 @@ UE.plugins['font'] = function () {
             'strikethrough': 'text-decoration',
             'fontborder': 'border'
         },
-        needCmd = {'underline': 1, 'strikethrough': 1, 'fontborder': 1};
+        needCmd = {'underline': 1, 'strikethrough': 1, 'fontborder': 1},
+        needSetChild = {
+            'forecolor': 'color',
+            'backcolor': 'background-color',
+            'fontsize': 'font-size',
+            'fontfamily': 'font-family'
+
+        }
     me.setOpt({
         'fontfamily': [
             { name: 'songti', val: '宋体,SimSun'},
@@ -54,23 +61,28 @@ UE.plugins['font'] = function () {
         }
 
     }
-    function mergeChild(rng){
-        var tmpRng = rng.cloneRange();
-        tmpRng.adjustmentBoundary();
-        if(!tmpRng.collapsed && tmpRng.startContainer.nodeType == 1){
-            var start = tmpRng.startContainer.childNodes[tmpRng.startOffset];
-            if(start && domUtils.isTagNode(start,'span')){
-                utils.each(domUtils.getElementsByTagName(start, 'span'), function (span) {
-                    if (!span.parentNode)return;
-                    span.style.cssText += ';' + start.style.cssText;
-                    if(span.style.cssText.replace(/^;/,'').replace(/;;/g,';') == start.style.cssText){
-                        domUtils.remove(span,true)
-                    }
-                });
+    function mergeChild(rng,cmdName,value){
+        if(needSetChild[cmdName]){
+            var tmpRng = rng.cloneRange();
+            tmpRng.adjustmentBoundary();
+            if(!tmpRng.collapsed && tmpRng.startContainer.nodeType == 1){
+                var start = tmpRng.startContainer.childNodes[tmpRng.startOffset];
+                if(start && domUtils.isTagNode(start,'span')){
+                    utils.each(domUtils.getElementsByTagName(start, 'span'), function (span) {
+                        if (!span.parentNode)return;
+
+                        //span.style[needSetChild[cmdName]] =  start.style[needSetChild[cmdName]];
+                        domUtils.removeStyle(span,needSetChild[cmdName]);
+                        if(span.style.cssText.replace(/^\s+$/,'').length == 0){
+                            domUtils.remove(span,true)
+                        }
+                    });
+                }
             }
         }
+
     }
-    function mergesibling(rng) {
+    function mergesibling(rng,cmdName,value) {
         var collapsed = rng.collapsed,
             bk = rng.createBookmark(), common;
         if (collapsed) {
@@ -120,7 +132,7 @@ UE.plugins['font'] = function () {
 
         });
         rng.moveToBookmark(bk);
-        mergeChild(rng)
+        mergeChild(rng,cmdName,value)
     }
 
     me.addInputRule(function (root) {
@@ -227,7 +239,7 @@ UE.plugins['font'] = function () {
                             domUtils.remove(text);
                         }
 
-                        mergesibling(range);
+                        mergesibling(range,cmdName,value);
                         range.select()
                     } else {
                         if (!range.collapsed) {
@@ -237,7 +249,7 @@ UE.plugins['font'] = function () {
                             range = me.selection.getRange();
 
                             range.applyInlineStyle('span', {'style': style + ':' + value});
-                            mergesibling(range, me);
+                            mergesibling(range, cmdName,value);
                             range.select();
                         } else {
 
@@ -293,12 +305,12 @@ UE.plugins['font'] = function () {
                                 if (opera) {
                                     setTimeout(function () {
                                         range.setStart(span, 0).collapse(true);
-                                        mergesibling(range, me);
+                                        mergesibling(range, cmdName,value);
                                         range.select();
                                     });
                                 } else {
                                     range.setStart(span, 0).collapse(true);
-                                    mergesibling(range, me);
+                                    mergesibling(range,cmdName,value);
                                     range.select();
                                 }
 
