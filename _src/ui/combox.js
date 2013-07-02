@@ -28,8 +28,10 @@
             this.popup = new Menu({
                 items: this.items,
                 uiName: 'list',
-                editor:this.editor
+                editor:this.editor,
+                captureWheel: true
             });
+
             this.initSplitButton();
         },
         _SplitButton_postRender: SplitButton.prototype.postRender,
