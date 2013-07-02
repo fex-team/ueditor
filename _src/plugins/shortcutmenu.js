@@ -12,7 +12,7 @@
 UE.plugins['shortcutmenu'] = function () {
     var me = this,
         menu,
-        items = me.options.shortcutMenu || ["fontfamily", "fontsize", "bold", "italic", "underline", "forecolor", "backcolor", "insertorderedlist", "insertunorderedlist"];
+        items = me.options.shortcutMenu || [];
 
     if (!items.length) {
         return;
