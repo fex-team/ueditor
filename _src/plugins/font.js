@@ -54,6 +54,22 @@ UE.plugins['font'] = function () {
         }
 
     }
+    function mergeChild(rng){
+        var tmpRng = rng.cloneRange();
+        tmpRng.adjustmentBoundary();
+        if(!tmpRng.collapsed && tmpRng.startContainer.nodeType == 1){
+            var start = tmpRng.startContainer.childNodes[tmpRng.startOffset];
+            if(start && domUtils.isTagNode(start,'span')){
+                utils.each(domUtils.getElementsByTagName(start, 'span'), function (span) {
+                    if (!span.parentNode)return;
+                    span.style.cssText += ';' + start.style.cssText;
+                    if(span.style.cssText.replace(/^;/,'').replace(/;;/g,';') == start.style.cssText){
+                        domUtils.remove(span,true)
+                    }
+                });
+            }
+        }
+    }
     function mergesibling(rng) {
         var collapsed = rng.collapsed,
             bk = rng.createBookmark(), common;
@@ -92,6 +108,7 @@ UE.plugins['font'] = function () {
                     break;
                 next = span.nextSibling;
             }
+
             mergeWithParent(span);
             if(browser.ie && browser.version > 8 ){
                 //拷贝父亲们的特别的属性,这里只做背景颜色的处理
@@ -103,6 +120,7 @@ UE.plugins['font'] = function () {
 
         });
         rng.moveToBookmark(bk);
+        mergeChild(rng)
     }
 
     me.addInputRule(function (root) {

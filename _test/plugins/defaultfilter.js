@@ -74,7 +74,7 @@ test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function(
                 //style="color:#c4bd97;"
                 innerHTML = '<span style="color:#c4bd97"><span></span><strong>xx</strong><em>em</em><em></em></span>';
                 editor.setContent(innerHTML);
-                if (ua.browser.ie == 9) {
+                if (ua.browser.ie>8) {
                     ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color: rgb(196, 189, 151);" ><strong>xx</strong><em>em</em></span></p>', "span style不空，套空的em和不空的em");
                 }
                 else {
@@ -83,7 +83,7 @@ test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function(
                 innerHTML = '<span style="color:#c4bd97"></span><strong>xx</strong><em>em</em><em></em>';
                 editor.setContent(innerHTML);
                 /*inline标签上只要有属性就不清理*/
-                if (ua.browser.ie == 9) {
+                if (ua.browser.ie >8) {
                     ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color: rgb(196, 189, 151);" ></span><strong>xx</strong><em>em</em></p>', "span 有style但内容为空");
                 }
                 else {
@@ -91,7 +91,7 @@ test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function(
                 }
                 innerHTML = '<span style="color:#c4bd97">asdf<strong>xx</strong><em>em</em><em></em></span>';
                 editor.setContent(innerHTML);
-                if (ua.browser.ie == 9) {
+                if (ua.browser.ie >8) {
                     ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color: rgb(196, 189, 151);" >asdf<strong>xx</strong><em>em</em></span></p>', "span 有style内容不空");
                 }
                 else {
@@ -102,9 +102,8 @@ test( "getContent--去除无用的空标签:autoClearEmptyNode==true", function(
                 ua.checkSameHtml(editor.getContent(), '<p><a href="http://www.baidu.com" ></a><a>a</a><strong>xx</strong><em>em</em></p>', "a 有href但内容为空,不过滤a标签");
                 setTimeout(function () {
                     UE.delEditor('ue');
-                    document.getElementById('ue').parentNode.removeChild(document.getElementById('ue'));
                     start()
-                }, 50);
+                },300);
             }, 50);
         }, 50);
     });
@@ -125,7 +124,7 @@ test("getContent--不去除无用的空标签:autoClearEmptyNode==false", functi
         innerHTML = '<span style="color:#c4bd97"></span><strong>xx</strong><em>em</em><em></em><strong></strong>';
         editor.setContent(innerHTML);
         ua.manualDeleteFillData(editor.body);
-        if (ua.browser.ie == 9) {
+        if (ua.browser.ie >8) {
             ua.checkSameHtml(editor.getContent().toLowerCase(), '<p><span style="color: rgb(196, 189, 151);" ></span><strong>xx</strong><em>em</em><em></em><strong></strong></p>', "span 有style但内容为空");
         }
         else {
@@ -133,15 +132,13 @@ test("getContent--不去除无用的空标签:autoClearEmptyNode==false", functi
         }
         setTimeout(function () {
             UE.delEditor('ue');
-            document.getElementById('ue').parentNode.removeChild(document.getElementById('ue'));
             start()
-        }, 50);
+        }, 500);
     });
 });
 
 test("getContent--转换空格，nbsp与空格相间显示", function() {
     var editor = te.obj[0];
-    var div = te.dom[0];
     editor.focus();
     //策略改变,原nbsp不做处理,类似:'<p> d </p>'中的空格会被过滤
     var innerHTML = '<div>x  x   x &nbsp;x&nbsp;&nbsp;  &nbsp;</div>';

@@ -1175,6 +1175,8 @@ var domUtils = dom.domUtils = {
         return flag && !domUtils.isBody(tmpRange.startContainer) ? 1 : 0;
     },
     isEmptyBlock:function (node,reg) {
+        if(node.nodeType != 1)
+            return 0;
         reg = reg || new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
         if (node[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length > 0) {
             return 0;

@@ -16,9 +16,9 @@ test('trace 3381：查找',function(){
         start();
     },20);
 });
-
-/*trace 974,先替换再撤销再全部替换，则不会替换
-* ie下会出现的bug*/
+//
+///*trace 974,先替换再撤销再全部替换，则不会替换
+//* ie下会出现的bug*/
 test('全部替换',function(){
     if(ua.browser.opera)
         return;
@@ -34,7 +34,7 @@ test('全部替换',function(){
 });
 
 ///*trace 917*/
-///*trace 3288*/
+///*trace 3288*/todo
 //test('替换内容包含查找内容,全部替换',function(){
 //    if(ua.browser.opera)
 //        return;
@@ -64,7 +64,7 @@ test('替换内容包含查找内容',function(){
     equal(editor.body.firstChild.innerHTML,'欢迎回来');
 });
 //
-///*trace 1286*/
+///*trace 1286*/todo
 //test('连续2次全部替换',function(){
 //    if(ua.browser.opera)
 //        return;
@@ -83,11 +83,15 @@ test('替换内容为空',function(){
         return;
     var editor = te.obj[0];
     editor.setContent('<p>欢迎回来</p>');
-    editor.execCommand('searchreplace',{searchStr:'欢迎',replaceStr:''});
-    ua.manualDeleteFillData(editor.body);
-    equal(editor.body.firstChild.innerHTML,'回来');
+    stop();
+    setTimeout(function(){
+        editor.focus();
+        editor.execCommand('searchreplace',{searchStr:'欢迎',replaceStr:''});
+        equal(editor.body.firstChild.innerHTML,'回来');
+        start();
+    },50);
 });
-
+//
 test('全部替换内容为空',function(){
     if(ua.browser.opera)
         return;

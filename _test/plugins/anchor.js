@@ -15,15 +15,20 @@ test( '插入锚点后切换源码', function() {
         editor.execCommand( 'source' );     /*切到源码模式下会有一个超时*/
         setTimeout( function() {
             var tas = editor.iframe.parentNode.getElementsByTagName( 'textarea' );
-            ok( tas[0].value.indexOf( '<a name="hello"' ) != -1 || tas[0].value.indexOf( '<a anchorname="1"' ) != -1, '查看是否转换成功' );
-            /*没办法比，看上去一样，但是一个42个字符，一个48个字符
+            if(ua.browser.chrome){
+                ok( editor.iframe.nextSibling.textContent.indexOf( '<a name="hello"' ) !=-1, '查看是否转换成功' );
+            }
+            else{
+                ok( tas[0].value.indexOf( '<a name="hello"' ) != -1 || tas[0].value.indexOf( '<a anchorname="1"' ) != -1, '查看是否转换成功' );
+            }
+          /*没办法比，看上去一样，但是一个42个字符，一个48个字符
              * ok((tas[0].value=='<p><a name="hello" anchorname="1"></a></p>')||(tas[0].value=='<p><a anchorname="1" name="hello"></a></p>'),'检查源码');*/
             editor.execCommand( 'source' );
             ua.checkHTMLSameStyle( '<img anchorname="hello" class="anchorclass">' + br, editor.document, body.firstChild, '检查锚点html' );
             setTimeout( function() {
                 start();
             }, 50 );
-        }, 10 );
+        }, 100);
     }, 20 );
 } );
 
