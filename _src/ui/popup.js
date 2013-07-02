@@ -146,7 +146,11 @@
             popBodyEl.style.width = '';
             popBodyEl.style.height = '';
             var size = this.mesureSize();
-            popBodyEl.style.width =  -(-20 -size.width) + 'px';
+            if( this.captureWheel ) {
+                popBodyEl.style.width =  -(-20 -size.width) + 'px';
+            } else {
+                popBodyEl.style.width =  size.width + 'px';
+            }
             popBodyEl.style.height = size.height + 'px';
             this.__size = size;
             this.getDom('content').style.overflow = 'auto';
