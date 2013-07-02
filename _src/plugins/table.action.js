@@ -668,7 +668,7 @@ UE.plugins['table'] = function () {
                     if (isEmptyBlock(td)) {
                         range.setStart(td, 0).setCursor(false, true)
                     } else {
-                        range.selectNodeContents(td).select(true);
+                        range.selectNode(td).select(true);
                     }
                     state = me.queryCommandState(cmd);
                     value = me.queryCommandValue(cmd);

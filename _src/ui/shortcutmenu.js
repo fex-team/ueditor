@@ -6,6 +6,7 @@
         domUtils = baidu.editor.dom.domUtils;
 
     var allMenus = [],//存储所有快捷菜单
+        timeID,
         isSubMenuShow = false;//是否有子pop显示
 
     var ShortCutMenu = UI.ShortCutMenu = function (options) {
@@ -44,22 +45,25 @@
                         x = Math.abs (e.screenX - me.left),//离中心距离横坐标
                         y = Math.abs (e.screenY - me.top);//离中心距离纵坐标
 
-                    if (y > 0 && y < distanceY) {
-                        me.setOpacity (el , "1");
-                    } else if (y > distanceY && y < distanceY + 70) {
-                        me.setOpacity (el , "0.5");
-                        flag = false;
-                    } else if (y > distanceY + 70 && y < distanceY + 140) {
-                        me.hide ();
-                    }
+                    clearTimeout (timeID);
+                    timeID = setTimeout (function () {
+                        if (y > 0 && y < distanceY) {
+                            me.setOpacity (el , "1");
+                        } else if (y > distanceY && y < distanceY + 70) {
+                            me.setOpacity (el , "0.5");
+                            flag = false;
+                        } else if (y > distanceY + 70 && y < distanceY + 140) {
+                            me.hide ();
+                        }
 
-                    if (flag && x > 0 && x < distanceX) {
-                        me.setOpacity (el , "1")
-                    } else if (x > distanceX && x < distanceX + 70) {
-                        me.setOpacity (el , "0.5")
-                    } else if (x > distanceX + 70 && x < distanceX + 140) {
-                        me.hide ();
-                    }
+                        if (flag && x > 0 && x < distanceX) {
+                            me.setOpacity (el , "1")
+                        } else if (x > distanceX && x < distanceX + 70) {
+                            me.setOpacity (el , "0.5")
+                        } else if (x > distanceX + 70 && x < distanceX + 140) {
+                            me.hide ();
+                        }
+                    });
                 }
             });
 
@@ -73,7 +77,6 @@
                     }
                 });
             }
-
 
             me.editor.addListener ("afterhidepop" , function () {
                 if (!me.isHidden) {
@@ -157,7 +160,7 @@
             } else {
                 offset = uiUtils.getViewportOffsetByEvent (e);
                 offset.top -= el.offsetHeight + me.SPACE;
-                offset.left += me.SPACE;
+                offset.left += me.SPACE + 20;
                 setPos (offset);
                 me.setOpacity (el , 0.2);
             }
