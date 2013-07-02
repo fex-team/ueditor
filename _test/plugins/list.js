@@ -926,24 +926,27 @@ test('trace 3165：检查表格中列表tab键', function () {
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
         var body = editor.body;
-        editor.execCommand('inserttable');
-        var tds = body.getElementsByTagName('td');
-        range.setStart(tds[6], 0).collapse(1).select();
-        editor.execCommand('insertorderedlist');
-        equal(tds[6].firstChild.style['listStyleType'], 'decimal', '查询有序列表的类型');
-        tds = body.getElementsByTagName('td');
-        range.setStart(tds[5], 0).collapse(1).select();
-        range = editor.selection.getRange();
-        equal(range.startContainer.parentNode.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
-        ua.keydown(editor.body, {keyCode:9});
-        setTimeout(function () {
+        setTimeout(function(){
+            editor.execCommand('inserttable');
+            var tds = body.getElementsByTagName('td');
+            range.setStart(tds[6], 0).collapse(1).select();
+            editor.execCommand('insertorderedlist');
+            equal(tds[6].firstChild.style['listStyleType'], 'decimal', '查询有序列表的类型');
+            tds = body.getElementsByTagName('td');
+            range.setStart(tds[5], 0).collapse(1).select();
             range = editor.selection.getRange();
-            if (!ua.browser.gecko && !ua.browser.ie)//TODO 1.2.6
-                equal(range.startContainer.parentNode.tagName.toLowerCase(), 'li', 'tab键后光标跳到有列表的单元格中');
-            equal(tds[6].firstChild.style['listStyleType'], 'decimal', '检查有序列表的类型不应该被改变');
-            UE.delEditor('ue');
-            start();
-        }, 20);
+            equal(range.startContainer.parentNode.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
+            ua.keydown(editor.body, {keyCode:9});
+            setTimeout(function () {
+            range = editor.selection.getRange();
+                if (!ua.browser.gecko && !ua.browser.ie)//TODO 1.2.6
+                    equal(range.startContainer.parentNode.tagName.toLowerCase(), 'li', 'tab键后光标跳到有列表的单元格中');
+                equal(tds[6].firstChild.style['listStyleType'], 'decimal', '检查有序列表的类型不应该被改变');
+                UE.delEditor('ue');
+                start();
+            }, 100);
+        },100);
+
     });
     stop();
 });
