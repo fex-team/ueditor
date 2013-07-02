@@ -65,8 +65,64 @@
         },
         _UIBase_postRender: UIBase.prototype.postRender,
         postRender: function (){
+
+
             if (this.content instanceof UIBase) {
                 this.content.postRender();
+            }
+
+            //捕获鼠标滚轮
+            if( this.captureWheel && !this.captured ) {
+
+                this.captured = true;
+
+                var winHeight = document.documentElement.clientHeight - 80,
+                    _height = this.getDom().offsetHeight,
+                    _top = domUtils.getXY( this.getDom() ).y,
+                    content = this.getDom('content'),
+                    me = this;
+
+                while( _top + _height > winHeight ) {
+                    _height -= 30;
+                    content.style.height = _height + 'px';
+                }
+
+                //阻止在combox上的鼠标滚轮事件, 防止用户的正常操作被误解
+                if( window.XMLHttpRequest ) {
+
+                    domUtils.on( content, ( 'onmousewheel' in document.body ) ? 'mousewheel' :'DOMMouseScroll' , function(e){
+
+                        if(e.preventDefault) {
+                            e.preventDefault();
+                        } else {
+                            e.returnValue = false;
+                        }
+
+                        if( e.wheelDelta ) {
+
+                            content.scrollTop -= ( e.wheelDelta / 120 )*60;
+
+                        } else {
+
+                            content.scrollTop -= ( e.detail / -3 )*60;
+
+                        }
+
+                    });
+
+                } else {
+
+                    //ie6
+                    domUtils.on( this.getDom(), 'mousewheel' , function(e){
+
+                        e.returnValue = false;
+
+                        me.getDom('content').scrollTop -= ( e.wheelDelta / 120 )*60;
+
+                    });
+
+                }
+
             }
             this.fireEvent('postRenderAfter');
             this.hide(true);
@@ -82,12 +138,22 @@
             return uiUtils.getClientRect(box);
         },
         fitSize: function (){
+            if( this.sized ) {
+                return this.__size;
+            }
+            this.sized = true;
             var popBodyEl = this.getDom('body');
             popBodyEl.style.width = '';
             popBodyEl.style.height = '';
             var size = this.mesureSize();
-            popBodyEl.style.width = size.width + 'px';
+            if( this.captureWheel ) {
+                popBodyEl.style.width =  -(-20 -size.width) + 'px';
+            } else {
+                popBodyEl.style.width =  size.width + 'px';
+            }
             popBodyEl.style.height = size.height + 'px';
+            this.__size = size;
+            this.getDom('content').style.overflow = 'auto';
             return size;
         },
         showAnchor: function ( element, hoz ){

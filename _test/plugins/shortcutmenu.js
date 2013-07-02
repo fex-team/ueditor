@@ -16,16 +16,18 @@ test( '基本的shortcutmenu', function() {
     stop();
     editor.ready(function () {
         ua.contextmenu(editor.body);
-        var menu=document.getElementsByClassName("edui-shortcutmenu")[0];
-        equal(!!menu,true,'右键检查菜单是否存在');
+        setTimeout(function(){
+            var menu=document.getElementsByClassName("edui-shortcutmenu")[0];
+            equal(!!menu,true,'右键检查菜单是否存在');
 
-        ok(menu.style.display==""||menu.style.display=="block",'右键检查菜单是否显示');
+            ok(menu.style.display==""||menu.style.display=="block",'右键检查菜单是否显示');
 
-        ua.mousedown(editor.body.firstChild);
+            ua.mousedown(editor.body.firstChild);
 
-        equal(menu.style.display,"none",'鼠标按下检查菜单是否隐藏');
+            equal(menu.style.display,"none",'鼠标按下检查菜单是否隐藏');
 
-        start()
+            start()
 
+        },100);
     });
 } );

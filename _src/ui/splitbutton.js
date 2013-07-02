@@ -41,7 +41,7 @@
                 popup.getDom('body').appendChild(
                     uiUtils.createElementByHtml('<div id="' +
                         this.popup.id + '_bordereraser" class="edui-bordereraser edui-background" style="width:' +
-                        (uiUtils.getClientRect(this.getDom()).width - 2) + 'px"></div>')
+                        (uiUtils.getClientRect(this.getDom()).width + 20) + 'px"></div>')
                     );
                 popup.getDom().className += ' ' + this.className;
             }, this));

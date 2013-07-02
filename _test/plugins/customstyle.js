@@ -277,8 +277,8 @@ test( 'block的元素-样式的反复转换：块-内联；包含的选取方式
             style:'font-style:italic;font-weight:bold;color:rgb(51, 153, 204)'
         } );
         ua.manualDeleteFillData( editor.body );
-        equal( editor.body.getElementsByTagName('span')[1].getAttribute( 'label' ), '明显强调', '闭合选区设置样式：明显强调' );
-        var hStyle = $( editor.body.getElementsByTagName('span')[1] );
+        equal( editor.body.getElementsByTagName('h1')[1].firstChild.getAttribute( 'label' ), '明显强调', '闭合选区设置样式：明显强调' );
+        var hStyle = $( editor.body.getElementsByTagName('h1')[1].firstChild );
         if ( ua.browser.webkit )
             ok(  hStyle.css( 'font-style' ) == 'italic'&&hStyle.css( 'font-weight' ) == 'bold' , '检查字体' );
         else
