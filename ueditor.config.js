@@ -381,7 +381,7 @@
 //           ]
 
         //快捷菜单
-        //,shortcutMenu:["bold"]
+        //,shortcutMenu:["fontfamily", "fontsize", "bold", "italic", "underline", "forecolor", "backcolor", "insertorderedlist", "insertunorderedlist"]
 
         //
         //wordCount
