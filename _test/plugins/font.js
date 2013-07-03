@@ -543,7 +543,7 @@ test('trace 3337：字符边框', function () {
     range.setStart(editor.body.firstChild.firstChild, 0).setEnd(editor.body.firstChild.lastChild, 3).select();
     editor.execCommand('fontborder');
     var p1 = '<span style="border: 1px solid rgb(0, 0, 0);"><span style="color: red;">欢</span>迎光临</span>';
-    var p2 = '<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; color: red; border-top: #000 1px solid; border-right: #000 1px solid\">欢</span><span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">迎光临</span>';
+    var p2 = '<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\"><span style="color: red;">欢</span>迎光临</span>';
     if (ua.browser.ie && ua.browser.ie < 9)
         equal(ua.getChildHTML(editor.body.firstChild), p2, '查看添加了字符边框后的样式');
     else
