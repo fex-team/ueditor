@@ -100,22 +100,19 @@ UE.plugins['undo'] = function () {
             me.fireEvent('reset', true);
         };
 
-        this.getScene = function (notSetCursor) {
+        this.getScene = function () {
             var me = this.editor;
             var rng = me.selection.getRange(),
-//                restoreAddress = rng.createAddress(),
                 rngAddress = rng.createAddress(false,true);
             me.fireEvent('beforegetscene');
-            var root = UE.htmlparser(me.body.innerHTML,true);
+            var root = UE.htmlparser(me.body.innerHTML);
             me.options.autoClearEmptyNode = false;
             me.filterOutputRule(root);
             me.options.autoClearEmptyNode = orgState;
             var cont = root.toHtml();
             browser.ie && (cont = cont.replace(/>&nbsp;</g, '><').replace(/\s*</g, '<').replace(/>\s*/g, '>'));
             me.fireEvent('aftergetscene');
-            try{
-//               !notSetCursor && rng.moveToAddress(restoreAddress).select(noNeedFillCharTags[rng.startContainer.nodeName.toLowerCase()]);
-            }catch(e){}
+
             return {
                 address:rngAddress,
                 content:cont
