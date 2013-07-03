@@ -138,7 +138,7 @@
             return uiUtils.getClientRect(box);
         },
         fitSize: function (){
-            if( this.sized ) {
+            if( this.captureWheel && this.sized ) {
                 return this.__size;
             }
             this.sized = true;
