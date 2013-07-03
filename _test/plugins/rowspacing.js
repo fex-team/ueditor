@@ -138,7 +138,7 @@ test( '闭合去除样式', function () {
             div.parentNode.removeChild(div);
             start();
         },50);
-    
+
     });
 } );
 

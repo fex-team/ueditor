@@ -7,13 +7,13 @@
  */
 module( 'plugins.autofloat' );
 test( '检查toolbar是否浮动在页面顶端', function() {
+    te.dom[0].parentNode.removeChild(te.dom[0]);
     var sc = document.createElement("script");
     sc.id="sc";
     sc.type = "text/plain";
     sc.style.height = "100px";
     document.body.appendChild(sc);
     var me = UE.getEditor('sc',{'autoFloatEnabled':true,'topOffset':60,'autoHeightEnabled':true,'scaleEnabled':false});
-    te.dom[0].parentNode.removeChild(te.dom[0]);
     stop();
     me.ready(function(){
         setTimeout(function () {
