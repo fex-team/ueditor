@@ -153,7 +153,7 @@
             }
             popBodyEl.style.height = size.height + 'px';
             this.__size = size;
-            this.getDom('content').style.overflow = 'auto';
+            this.captureWheel && (this.getDom('content').style.overflow = 'auto');
             return size;
         },
         showAnchor: function ( element, hoz ){
