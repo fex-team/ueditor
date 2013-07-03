@@ -711,6 +711,7 @@ test('trace 3088：检查表格属性', function () {
         setTimeout(function () {
             range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse(true).select();
             ua.contextmenu(editor.body.firstChild.firstChild);
+            setTimeout(function () {
             var menutable = document.getElementsByClassName("edui-menu-body")[1];
             var forTable = document.getElementsByClassName('edui-for-table');
             if (ua.browser.ie) {
@@ -723,9 +724,8 @@ test('trace 3088：检查表格属性', function () {
             lang = editor.getLang("contextMenu");
             setTimeout(function () {
                 var iframe = document.getElementsByTagName('iframe');
-                var i = iframe.length - 1;
-                var iframe1 = null;
-                for (var i = iframe.length - 1; i > -1; i--) {
+                var iframe1  ;
+                for (var i = 0; i <iframe.length; i++) {
                     if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
                         iframe1 = iframe[i];
                         break;
@@ -763,6 +763,7 @@ test('trace 3088：检查表格属性', function () {
                         start();
                     }, 20);
                 }, 200);
+            }, 200);
             }, 500);
         }, 500);
     });
