@@ -160,6 +160,13 @@
                 } else {
                     me.iframe.style.cssText = bakCssText;
                     var cont = sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
+                    //处理掉block节点前后的空格,有可能会误命中，暂时不考虑
+                    cont = cont.replace(new RegExp('[\\r\\t\\n ]*<\/?(\\w+)\\s*(?:[^>]*)>','g'), function(a,b){
+                        if(b && !dtd.$inlineWithA[b.toLowerCase()]){
+                            return a.replace(/(^[\n\r\t ]*)|([\n\r\t ]*$)/g,'');
+                        }
+                        return a.replace(/(^[\n\r\t]*)|([\n\r\t]*$)/g,'')
+                    });
                     me.setContent(cont);
                     sourceEditor.dispose();
                     sourceEditor = null;
