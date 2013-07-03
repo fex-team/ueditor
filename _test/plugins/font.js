@@ -477,12 +477,12 @@ test('trace 740：设置左右字为红色，修改部分字颜色为蓝色，�
         var text = editor.body.firstChild.firstChild.firstChild;
         range.setStart(text, 2).setEnd(text, 4).select();
         editor.execCommand('forecolor', 'rgb(0,255,0)');
-        range.selectNode(editor.body.firstChild).select();
+        range.setStart(editor.body.firstChild, 0).setEnd(editor.body.firstChild, 1).select();
         editor.execCommand('fontfamily', ' 楷体, 楷体_GB2312, SimKai; ');
-        //todo 1.2.6.1 去掉多余的复制样式
-        var html = '<span style="color: rgb(255, 0, 0); font-family: 楷体, 楷体_GB2312, SimKai;">你好<span style="color: rgb(0, 255, 0);">早安</span></span>';
-        ua.checkHTMLSameStyle(html, editor.document, editor.body.firstChild, '查看字体和颜色是否正确');
         setTimeout(function () {
+            //todo 1.2.6.1 去掉多余的复制样式
+            var html = '<span style="color: rgb(255, 0, 0); font-family: 楷体, 楷体_GB2312, SimKai;">你好<span style="color: rgb(0, 255, 0);">早安</span></span>';
+            ua.checkSameHtml(html,editor.body.firstChild.innerHTML, '查看字体和颜色是否正确');
             div.parentNode.removeChild(div);
             start();
         }, 50);
