@@ -42,7 +42,7 @@
             allPopups.push( this );
         },
         getHtmlTpl: function (){
-            return '<div id="##" class="edui-popup %%">' +
+            return '<div id="##" class="edui-popup %%" onmousedown="return false;">' +
                 ' <div id="##_body" class="edui-popup-body">' +
                 ' <iframe style="position:absolute;z-index:-1;left:0;top:0;background-color: transparent;" frameborder="0" width="100%" height="100%" src="javascript:"></iframe>' +
                 ' <div class="edui-shadow"></div>' +
