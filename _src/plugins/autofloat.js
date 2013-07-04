@@ -25,8 +25,8 @@
        		LteIE6 = browser.ie && browser.version <= 6,
             quirks = browser.quirks;
 
-        function checkHasUI(editor){
-           if(!editor.ui){
+        function checkHasUI(){
+           if(!UE.ui){
               alert(lang.autofloatMsg);
                return 0;
            }

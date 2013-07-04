@@ -431,12 +431,20 @@ test('对表格中的文本添加颜色和下划线', function () {
         var ut = editor.getUETable(editor.body.firstChild);
         var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
         ut.setSelected(cellsRange);
-        if (ua.browser.ie)
+        if (ua.browser.ie){
             range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild, 0).setEnd(editor.body.firstChild.firstChild.lastChild.firstChild, 6).select();
+        }
+        else{
+            range.setStart(trs[0].cells[0].firstChild, 0).setEnd(trs[1].cells[0].firstChild, 6).select();
+        }
+
         editor.execCommand('forecolor', 'rgb(255,100,100)');
         setTimeout(function () {
             ut.clearSelected();
+            trs = editor.body.firstChild.getElementsByTagName('tr');
+            ut = editor.getUETable(editor.body.firstChild);
             range.selectNode(trs[0].firstChild).select();
+            ut.setSelected(range);
             setTimeout(function () {
                 editor.execCommand('underline');
                 ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色');
@@ -469,12 +477,12 @@ test('trace 740：设置左右字为红色，修改部分字颜色为蓝色，�
         var text = editor.body.firstChild.firstChild.firstChild;
         range.setStart(text, 2).setEnd(text, 4).select();
         editor.execCommand('forecolor', 'rgb(0,255,0)');
-        range.selectNode(editor.body.firstChild).select();
+        range.setStart(editor.body.firstChild, 0).setEnd(editor.body.firstChild, 1).select();
         editor.execCommand('fontfamily', ' 楷体, 楷体_GB2312, SimKai; ');
-        //todo 1.2.6.1 去掉多余的复制样式
-        var html = '<span style="color: rgb(255, 0, 0); font-family: 楷体, 楷体_GB2312, SimKai;">你好<span style="color: rgb(0, 255, 0); font-family: 楷体, 楷体_GB2312, SimKai;">早安</span></span>';
-        ua.checkHTMLSameStyle(html, editor.document, editor.body.firstChild, '查看字体和颜色是否正确');
         setTimeout(function () {
+            //todo 1.2.6.1 去掉多余的复制样式
+            var html = '<span style="color: rgb(255, 0, 0); font-family: 楷体, 楷体_GB2312, SimKai;">你好<span style="color: rgb(0, 255, 0);">早安</span></span>';
+            ua.checkSameHtml(html,editor.body.firstChild.innerHTML, '查看字体和颜色是否正确');
             div.parentNode.removeChild(div);
             start();
         }, 50);
@@ -535,7 +543,7 @@ test('trace 3337：字符边框', function () {
     range.setStart(editor.body.firstChild.firstChild, 0).setEnd(editor.body.firstChild.lastChild, 3).select();
     editor.execCommand('fontborder');
     var p1 = '<span style="border: 1px solid rgb(0, 0, 0);"><span style="color: red;">欢</span>迎光临</span>';
-    var p2 = '<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; color: red; border-top: #000 1px solid; border-right: #000 1px solid\">欢</span><span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">迎光临</span>';
+    var p2 = '<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\"><span style="color: red;">欢</span>迎光临</span>';
     if (ua.browser.ie && ua.browser.ie < 9)
         equal(ua.getChildHTML(editor.body.firstChild), p2, '查看添加了字符边框后的样式');
     else

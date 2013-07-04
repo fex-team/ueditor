@@ -29,7 +29,8 @@
                 items: this.items,
                 uiName: 'list',
                 editor:this.editor,
-                captureWheel: true
+                captureWheel: true,
+                combox: this
             });
 
             this.initSplitButton();

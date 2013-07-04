@@ -76,9 +76,9 @@
 
                 this.captured = true;
 
-                var winHeight = document.documentElement.clientHeight - 80,
+                var winHeight = ( document.documentElement.clientHeight || document.body.clientHeight )  - 80,
                     _height = this.getDom().offsetHeight,
-                    _top = domUtils.getXY( this.getDom() ).y,
+                    _top = domUtils.getXY( this.combox.getDom() ).y,
                     content = this.getDom('content'),
                     me = this;
 

@@ -90,9 +90,15 @@
      * @return {Object}
      */
     UETable.getTableItemsByRange = function (editor) {
-        var start = editor.selection.getStart(),
+        var start = editor.selection.getStart();
+
+        //ff下会选中bookmark
+        if( start && start.id && start.id.indexOf('_baidu_bookmark_start_') === 0 ) {
+            start = start.nextSibling;
+        }
+
         //在table或者td边缘有可能存在选中tr的情况
-            cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
+        var cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
             tr = cell && cell.parentNode,
             caption = start && domUtils.findParentByTagName(start, 'caption', true),
             table = caption ? caption.parentNode : tr && tr.parentNode.parentNode;

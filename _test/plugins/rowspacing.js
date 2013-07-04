@@ -65,19 +65,21 @@ test( '设置段后距后设置加粗等多种样式', function () {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent( '<p>hello1</p><p>hello2</p>' );
-        range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
-        editor.execCommand( 'rowspacing', 15 ,'bottom');
+    editor.ready(function(){
         setTimeout(function(){
-            editor.execCommand( 'bold' );
-            editor.execCommand( 'underline' );
-            equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
-            div.parentNode.removeChild(div);
-            start();
-        },50);
-    },50);
+            var range = new baidu.editor.dom.Range( editor.document );
+            editor.setContent( '<p>hello1</p><p>hello2</p>' );
+            range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
+            editor.execCommand( 'rowspacing', 15 ,'bottom');
+            setTimeout(function(){
+                editor.execCommand( 'bold' );
+                editor.execCommand( 'underline' );
+                equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
+                div.parentNode.removeChild(div);
+                start();
+            },50);
+        },100);
+    });
 } );
 
 test( '非闭合去除加粗等样式', function () {
@@ -86,21 +88,23 @@ test( '非闭合去除加粗等样式', function () {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent( '<p>hello1</p><p>hello2</p>' );
-        range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
-        editor.execCommand( 'rowspacing', 15 ,'bottom');
+    editor.ready(function(){
         setTimeout(function(){
-            editor.execCommand( 'bold' );
-            editor.execCommand( 'underline' );
-            equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
-            editor.execCommand( 'removeformat' );
-            equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 5, '去除样式后查看段后距' );
-            div.parentNode.removeChild(div);
-            start();
-        },50);
-    },50);
+            var range = new baidu.editor.dom.Range( editor.document );
+            editor.setContent( '<p>hello1</p><p>hello2</p>' );
+            range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
+            editor.execCommand( 'rowspacing', 15 ,'bottom');
+            setTimeout(function(){
+                editor.execCommand( 'bold' );
+                editor.execCommand( 'underline' );
+                equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
+                editor.execCommand( 'removeformat' );
+                equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 5, '去除样式后查看段后距' );
+                div.parentNode.removeChild(div);
+                start();
+            },50);
+        },100);
+    });
 } );
 
 test( '闭合去除样式', function () {
@@ -109,7 +113,8 @@ test( '闭合去除样式', function () {
     $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
     editor.render(div);
     stop();
-    setTimeout(function(){
+    editor.ready(function(){
+
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello1</p><p>hello2</p>' );
         range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
@@ -133,7 +138,8 @@ test( '闭合去除样式', function () {
             div.parentNode.removeChild(div);
             start();
         },50);
-    },50);
+
+    });
 } );
 
 test( '表格中设置段距', function () {
