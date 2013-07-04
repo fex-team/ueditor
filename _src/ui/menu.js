@@ -163,7 +163,7 @@
         alwalysHoverable:true,
         getHtmlTpl:function () {
             return '<div id="##" class="%%" stateful onclick="$$._onClick(event, this);">' +
-                '<div class="%%-body">' +
+                '<div class="%%-body"  onmousedown="return false;">' +
                 this.renderLabelHtml() +
                 '</div>' +
                 '</div>';
