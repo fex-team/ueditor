@@ -105,7 +105,38 @@ class Kiss
 
 
     }
+    public function print_all_js( $cov, $release = false )
+    {
+        print '<script type="text/javascript" src="js/jquery-1.5.1.js"></script>' . "\n";
+        print '<script type="text/javascript" src="js/tangram.js"></script>' . "\n";
+        print '<script type="text/javascript" src="js/testrunner.js"></script>' . "\n";
+        print '<script type="text/javascript" src="js/ext_qunit.js"></script>' . "\n";
+        print '<script type="text/javascript" src="js/UserAction.js"></script>' . "\n";
+        print '<link media="screen" href="css/qunit.css" type="text/css" rel="stylesheet" />' . "\n";
+        print '<link  href="../../../themes/default/_css/ueditor.css" type="text/css" rel="stylesheet" />' . "\n";
+        print '<script type="text/javascript" src="js/tools.js"></script>' . "\n";
 
+        print '<script type="text/javascript" charset="utf-8" src="../../../third-party/SyntaxHighlighter/shCore.js"></script>' . "\n";
+
+        print '<script type="text/javascript" charset="utf-8" src="../../../ueditor/ueditor.config.js"></script>' . "\n";
+
+
+        /* load case source*/
+        $importurl = "{$this->projroot}ueditor/ueditor.all.min.js";
+        print "<script type='text/javascript' src='".$importurl."' ></script>\n";
+
+        /* load case and case dependents*/
+        //$ps = explode( '.' , $this->name );
+        $ps = explode( '/' , $this->name ); //为了支持xx.xx.js类型的文件名而修改 田丽丽
+        array_pop( $ps );
+        array_push( $ps , 'tools' );
+
+        if ( file_exists( $this->projroot . '_test/' . implode( '/' , $ps ) . '.js' ) ) //没有就不加载了
+            print '<script type="text/javascript" src="' . $this->projroot . '_test/' . implode( '/' , $ps ) . '.js"></script>' . "\n";
+        print '<script type="text/javascript" src="' . $this->path . '"></script>' . "\n";
+
+
+    }
     public function match( $matcher )
     {
         if ( $matcher == '*' )
