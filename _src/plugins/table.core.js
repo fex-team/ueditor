@@ -182,6 +182,7 @@
         }
         //去掉宽高
         domUtils.removeAttributes(tmpCell,'width height');
+        domUtils.removeAttributes(tmpCell,'style');
 
         tmpCell.style.borderLeftStyle = "";
         tmpCell.style.borderTopStyle = "";
