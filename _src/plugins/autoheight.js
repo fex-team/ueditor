@@ -38,7 +38,7 @@ UE.plugins['autoheight'] = function () {
                 currentHeight = Math.max(domUtils.getXY(tmpNode).y + tmpNode.offsetHeight,Math.max(options.minFrameHeight, options.initialFrameHeight));
                 if (currentHeight != lastHeight) {
 
-                    me.setHeight(currentHeight);
+                    me.setHeight(currentHeight,true);
 
                     lastHeight = currentHeight;
                 }

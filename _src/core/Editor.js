@@ -413,11 +413,11 @@
          * @name setHeight
          * @grammar editor.setHeight(number);  //纯数值，不带单位
          */
-        setHeight: function (height) {
+        setHeight: function (height,notSetHeight) {
             if (height !== parseInt(this.iframe.parentNode.style.height)) {
                 this.iframe.parentNode.style.height = height + 'px';
             }
-            this.options.minFrameHeight = this.options.initialFrameHeight = height;
+            !notSetHeight && (this.options.minFrameHeight = this.options.initialFrameHeight = height);
 
             this.body.style.height = height + 'px';
         },
