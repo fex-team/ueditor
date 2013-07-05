@@ -11,8 +11,7 @@ test( '基本的shortcutmenu', function() {
 //设置菜单内容\
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
-    var editor = UE.getEditor("ue");
-
+    var editor = UE.getEditor("ue" ,{ shortcutMenu: ["fontfamily", "fontsize", "bold", "italic", "underline", "forecolor", "backcolor", "insertorderedlist", "insertunorderedlist"]});
     stop();
     editor.ready(function () {
         ua.contextmenu(editor.body);
