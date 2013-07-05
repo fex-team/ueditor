@@ -135,7 +135,7 @@ UE.plugins['font'] = function () {
     }
 
     me.addInputRule(function (root) {
-        utils.each(root.getNodesByTagName('u s del font'), function (node) {
+        utils.each(root.getNodesByTagName('u s del font strike'), function (node) {
             if (node.tagName == 'font') {
                 var cssStyle = [];
                 for (var p in node.attrs) {
