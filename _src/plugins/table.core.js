@@ -556,7 +556,7 @@
 
                 return checkRange(beginRowIndex, beginColIndex, endRowIndex, endColIndex);
             } catch (e) {
-                if (debug) throw e;
+                //throw e;
             }
         },
         /**
