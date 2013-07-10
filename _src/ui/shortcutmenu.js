@@ -67,8 +67,8 @@
                 }
             });
 
-            //ie下 mouseout不准
-            if (!browser.ie) {
+            //ie\ff下 mouseout不准
+            if (browser.chrome) {
                 domUtils.on (doc , "mouseout" , function (e) {
                     var relatedTgt = e.relatedTarget || e.toElement;
 
