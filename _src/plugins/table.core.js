@@ -170,7 +170,7 @@
         return tdOrTable.ueTable;
     };
 
-    UETable.cloneCell = function(cell,ignoreMerge){
+    UETable.cloneCell = function(cell,ignoreMerge,keepPro){
         if (!cell || utils.isString(cell)) {
             return this.table.ownerDocument.createElement(cell || 'td');
         }
@@ -181,8 +181,8 @@
             tmpCell.rowSpan = tmpCell.colSpan = 1;
         }
         //去掉宽高
-        domUtils.removeAttributes(tmpCell,'width height');
-        domUtils.removeAttributes(tmpCell,'style');
+        !keepPro && domUtils.removeAttributes(tmpCell,'width height');
+        !keepPro && domUtils.removeAttributes(tmpCell,'style');
 
         tmpCell.style.borderLeftStyle = "";
         tmpCell.style.borderTopStyle = "";
