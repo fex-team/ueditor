@@ -27,7 +27,7 @@ UE.plugins['font'] = function () {
             'fontsize': 'font-size',
             'fontfamily': 'font-family'
 
-        }
+        };
     me.setOpt({
         'fontfamily': [
             { name: 'songti', val: '宋体,SimSun'},
@@ -70,6 +70,9 @@ UE.plugins['font'] = function () {
                     var bk = rng.createBookmark();
                     utils.each(domUtils.getElementsByTagName(start, 'span'), function (span) {
                         if (!span.parentNode || domUtils.isBookmarkNode(span))return;
+                        if(cmdName == 'backcolor' && domUtils.getComputedStyle(span,'background-color').toLowerCase() === value){
+                            return;
+                        }
                         domUtils.removeStyle(span,needSetChild[cmdName]);
                         if(span.style.cssText.replace(/^\s+$/,'').length == 0){
                             domUtils.remove(span,true)
@@ -106,14 +109,10 @@ UE.plugins['font'] = function () {
                 span.style.cssText = span.style.cssText.replace(/border[^:]*:[^;]+;?/gi, '');
             }
             var next = span.nextSibling;
-            while (next && next.nodeType == 1 && next.tagName == 'SPAN') {
-                if (domUtils.isBookmarkNode(next)) {
-                    span.appendChild(next);
-                } else {
-                    if (next.style.cssText == span.style.cssText) {
-                        domUtils.moveChild(next, span);
-                        domUtils.remove(next);
-                    }
+            while (next && next.nodeType == 1 && next.tagName == 'SPAN' && !domUtils.isBookmarkNode(next)) {
+                if (next.style.cssText == span.style.cssText) {
+                    domUtils.moveChild(next, span);
+                    domUtils.remove(next);
                 }
                 if (span.nextSibling === next)
                     break;
@@ -234,10 +233,9 @@ UE.plugins['font'] = function () {
                         }
                         me.execCommand('removeFormat', 'span,a', style);
                         if (text) {
-                            range.setStartBefore(text).setCursor();
+                            range.setStartBefore(text).collapse(true);
                             domUtils.remove(text);
                         }
-
                         mergesibling(range,cmdName,value);
                         range.select()
                     } else {
