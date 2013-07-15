@@ -5,11 +5,15 @@ test( '同时去多个超链接', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p><a href="http://www.baidu.com/">hello</a>first<a href="http://www.google.com/">second</a></p><p>third<a href="http://www.sina.com/">sina</a></p><table><tbody><tr><td><a href="http://www.baidu.com/">baidu</a></td></tr></tbody></table>' );
+    stop();
+    setTimeout(function () {
     range.selectNode( editor.body ).select();
     editor.execCommand( 'unlink' );
     equal( editor.body.firstChild.innerHTML, 'hellofirstsecond', '第一段去掉超链接' );
     equal( editor.body.firstChild.nextSibling.innerHTML, 'thirdsina', '第二段去掉超链接' );
     equal( editor.body.lastChild.getElementsByTagName( 'td' )[0].innerHTML, 'baidu', '表格内的超链接被去掉' );
+        start();
+    }, 100);
 } );
 
 test( '光标闭合且没有超链接', function () {
