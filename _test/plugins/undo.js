@@ -364,11 +364,11 @@ test('undo--redo', function () {
 //    var an=editor.body.firstChild.firstChild.getAttribute('anchorname');
 //    equal(cs,'anchorclass','锚点class');
 //    equal(an,'hello','锚点name');
-    var br = (ua.browser.ie) ? '' : '<br>';
+//    var br = (ua.browser.ie) ? '' : '<br>';
     if (ua.browser.ie)
-        equal(ua.getChildHTML(editor.body), '<p><img class=\"anchorclass\" anchorname=\"hello\">' + br + '</p>', '');
+        equal(ua.getChildHTML(editor.body), '<p><img class=\"anchorclass\" anchorname=\"hello\">' + spase + '</p>', '');
     else
-        equal(ua.getChildHTML(editor.body), '<p><img anchorname=\"hello\" class=\"anchorclass\">' + br + '</p>', '');
+        equal(ua.getChildHTML(editor.body), '<p><img anchorname=\"hello\" class=\"anchorclass\">' + spase + '</p>', '');
 });
 
 /*trace 1068  格式刷图片*/
