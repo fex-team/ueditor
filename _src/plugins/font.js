@@ -108,16 +108,24 @@ UE.plugins['font'] = function () {
             if (/border/i.test(span.style.cssText) && span.parentNode.tagName == 'SPAN' && /border/i.test(span.parentNode.style.cssText)) {
                 span.style.cssText = span.style.cssText.replace(/border[^:]*:[^;]+;?/gi, '');
             }
-            var next = span.nextSibling;
-            while (next && next.nodeType == 1 && next.tagName == 'SPAN' && !domUtils.isBookmarkNode(next)) {
-                if (next.style.cssText == span.style.cssText) {
-                    domUtils.moveChild(next, span);
-                    domUtils.remove(next);
+            if(!(cmdName=='fontborder' && value=='none')){
+                var next = span.nextSibling;
+                while (next && next.nodeType == 1 && next.tagName == 'SPAN' ) {
+                    if(domUtils.isBookmarkNode(next) && cmdName == 'fontborder') {
+                        span.appendChild(next);
+                        next = span.nextSibling;
+                        continue;
+                    }
+                    if (next.style.cssText == span.style.cssText) {
+                        domUtils.moveChild(next, span);
+                        domUtils.remove(next);
+                    }
+                    if (span.nextSibling === next)
+                        break;
+                    next = span.nextSibling;
                 }
-                if (span.nextSibling === next)
-                    break;
-                next = span.nextSibling;
             }
+
 
             mergeWithParent(span);
             if(browser.ie && browser.version > 8 ){
