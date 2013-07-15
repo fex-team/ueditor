@@ -970,6 +970,10 @@ var domUtils = dom.domUtils = {
      */
     removeStyle:function (element, name) {
         if(browser.ie ){
+            //针对color先单独处理一下
+            if(name == 'color'){
+                name = '(^|;)' + name;
+            }
             element.style.cssText = element.style.cssText.replace(new RegExp(name + '[^:]*:[^;]+;?','ig'),'')
         }else{
             if (element.style.removeProperty) {
