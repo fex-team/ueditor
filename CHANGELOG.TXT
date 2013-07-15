@@ -3,7 +3,7 @@ UEditor Change List
 Version 1.2.6.1
     1.查找替换支持正则表达式
     2.修复了ie67下初始化宽高给定百分比
-    3.增加类似word中的快捷菜单
+    3.增加类似word中的快捷菜单，默认关闭
     4.针对默认过滤回转换div为p标签，提供了配置开关allowDivTransToP,默认为true
     5.修复了在ie下删除分割线后光标定位的问题
     6.提供了手动加载语言文件，避免ie下有时会因语言文件加载失败导致编辑器加载失败,提示"not import language file"的错误
@@ -18,6 +18,8 @@ Version 1.2.6.1
     15.修复下拉菜单超出屏幕的bug
     16.修复table属性初始化时table布局错误的bug
     17.优化了选择工具栏上下拉菜单类型的操作命令时，选区会有闪动的问题
+    18.优化了关于swfupload的一个xss漏洞
+    19.优化了对于ie9,10的支持
 
 
 Version 1.2.6
