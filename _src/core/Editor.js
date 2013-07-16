@@ -354,7 +354,7 @@
             me.isReady = 1;
             me.fireEvent('ready');
             options.onready && options.onready.call(me);
-            if (!browser.ie) {
+            if (!browser.ie9under) {
                 domUtils.on(me.window, ['blur', 'focus'], function (e) {
                     //chrome下会出现alt+tab切换时，导致选区位置不对
                     if (e.type == 'blur') {

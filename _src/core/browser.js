@@ -90,6 +90,10 @@ var browser = UE.browser = function(){
          */
         browser.ie6Compat = ( version < 7 || browser.quirks );
 
+        browser.ie9above = version > 8;
+
+        browser.ie9under = version < 9;
+
     }
 
     // Gecko.
