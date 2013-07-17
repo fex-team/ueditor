@@ -44,7 +44,7 @@
         getHtmlTpl: function (){
             return '<div id="##" class="edui-popup %%" onmousedown="return false;">' +
                 ' <div id="##_body" class="edui-popup-body">' +
-                ' <iframe style="position:absolute;z-index:-1;left:0;top:0;background-color: transparent;" frameborder="0" width="100%" height="100%" src="javascript:"></iframe>' +
+                ' <iframe style="position:absolute;z-index:-1;left:0;top:0;background-color: transparent;" frameborder="0" width="100%" height="100%" src="about:blank"></iframe>' +
                 ' <div class="edui-shadow"></div>' +
                 ' <div id="##_content" class="edui-popup-content">' +
                 this.getContentHtmlTpl() +
@@ -80,11 +80,16 @@
                     _height = this.getDom().offsetHeight,
                     _top = domUtils.getXY( this.combox.getDom() ).y,
                     content = this.getDom('content'),
+                    ifr = this.getDom('body').getElementsByTagName('iframe'),
                     me = this;
+
+                ifr.length && ( ifr = ifr[0] );
 
                 while( _top + _height > winHeight ) {
                     _height -= 30;
                     content.style.height = _height + 'px';
+                    //同步更改iframe高度
+                    ifr && ( ifr.style.height = _height + 'px' );
                 }
 
                 //阻止在combox上的鼠标滚轮事件, 防止用户的正常操作被误解
@@ -148,6 +153,8 @@
             var size = this.mesureSize();
             if( this.captureWheel ) {
                 popBodyEl.style.width =  -(-20 -size.width) + 'px';
+                var height = parseInt( this.getDom('content').style.height, 10 );
+                !window.isNaN( height ) && ( size.height = height );
             } else {
                 popBodyEl.style.width =  size.width + 'px';
             }

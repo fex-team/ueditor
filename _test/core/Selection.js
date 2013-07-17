@@ -95,6 +95,7 @@ test('getRange--闭合选区的边界情况', function () {
     setTimeout(function () {
         editor.render(div_new);
         editor.ready(function () {
+            setTimeout(function () {
             var range = new baidu.editor.dom.Range(editor.document);
 
             editor.setContent('<p><strong>xxx</strong></p>');
@@ -132,6 +133,7 @@ test('getRange--闭合选区的边界情况', function () {
             te.dom.push(div_new);
             te.obj.push(editor);
             start();
+            }, 50);
         });
     }, 50);
 });
