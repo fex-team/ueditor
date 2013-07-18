@@ -374,12 +374,16 @@
          *
          */
         sync: function (formId) {
-            var me = this,
+            var form;
+            if(!this.textarea || typeof this.textarea === 'string'){
                 form = formId ? document.getElementById(formId) :
-                    domUtils.findParent(me.iframe.parentNode, function (node) {
+                    domUtils.findParent(this.iframe.parentNode, function (node) {
                         return node.tagName == 'FORM'
                     }, true);
-            form && setValue(form, me);
+            }
+            if(this.textarea || form){
+                setValue(form, this);
+            }
         },
         /**
          * 设置编辑器高度
