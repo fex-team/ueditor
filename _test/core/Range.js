@@ -1465,8 +1465,10 @@ test('b节点取range', function () {
         editor.setContent('<p>hello<strong>hello1</strong>hello2</p>');
         range.setStart(editor.body.firstChild.lastChild, 0).collapse(1).select();
         range = editor.selection.getRange();
-        if (ua.browser.ie || ua.browser.webkit)
+        if ((ua.browser.ie &&ua.browser.ie < 9) || ua.browser.webkit)
             ua.checkResult(range, editor.body.firstChild.lastChild.previousSibling, editor.body.firstChild.lastChild.previousSibling, 1, 1, true, '节点后--check range');
+        else if(ua.browser.ie &&ua.browser.ie > 8)//todo ie9,10改range
+            ua.checkResult(range, editor.body.firstChild, editor.body.firstChild, 3, 3, true, '节点后--check range');
         else
             ua.checkResult(range, editor.body.firstChild.lastChild.previousSibling, editor.body.firstChild.lastChild.previousSibling, 0, 0, true, '节点后--check range');
 
@@ -1475,8 +1477,10 @@ test('b节点取range', function () {
         range = editor.selection.getRange();
         if (ua.browser.webkit)
             ua.checkResult(range, editor.body.firstChild.firstChild.nextSibling.firstChild, editor.body.firstChild.firstChild.nextSibling.firstChild, 1, 1, true, '节点内文本节点前--check range');
-        else if (ua.browser.ie)
+        else if (ua.browser.ie&&ua.browser.ie < 9)
             ua.checkResult(range, editor.body.firstChild.childNodes[1].childNodes[1], editor.body.firstChild.childNodes[1].childNodes[1], 0, 0, true, '节点内文本节点前--check range');
+        else if(ua.browser.ie &&ua.browser.ie > 8)//todo ie9,10改range
+            ua.checkResult(range, editor.body.firstChild.childNodes[1], editor.body.firstChild.childNodes[1], 1, 1, true, '节点内文本节点前--check range');
         else
             ua.checkResult(range, editor.body.firstChild.firstChild.nextSibling.firstChild, editor.body.firstChild.firstChild.nextSibling.firstChild, 0, 0, true, '节点内文本节点前--check range');
 
@@ -1484,8 +1488,10 @@ test('b节点取range', function () {
         range = editor.selection.getRange();
         if (ua.browser.webkit)
             ua.checkResult(range, editor.body.firstChild.childNodes[1].firstChild, editor.body.firstChild.childNodes[1].firstChild, 1, 1, true, 'b节点--check range');
-        else if (ua.browser.ie)
+        else if (ua.browser.ie&&ua.browser.ie < 9)
             ua.checkResult(range, editor.body.firstChild.childNodes[1].childNodes[1], editor.body.firstChild.childNodes[1].childNodes[1], 0, 0, true, '节点内文本节点前--check range');
+        else if(ua.browser.ie &&ua.browser.ie > 8)//todo ie9,10改range
+            ua.checkResult(range, editor.body.firstChild.childNodes[1], editor.body.firstChild.childNodes[1], 1, 1, true, '节点内文本节点前--check range');
         else
             ua.checkResult(range, editor.body.firstChild.childNodes[1].firstChild, editor.body.firstChild.childNodes[1].firstChild, 0, 0, true, 'b节点--check range');
         start();
@@ -1501,9 +1507,10 @@ test('文本节点中间取range', function () {
         var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('<p>hello2</p>');
         range.setStart(editor.body.firstChild.firstChild, 2).collapse(1).select();
-        range = editor.selection.getRange();
-        if (ua.browser.ie)
+        range = editor.selection.getRange();        if (ua.browser.ie&&ua.browser.ie < 9)
             ua.checkResult(range, editor.body.firstChild.lastChild, editor.body.firstChild.lastChild, 0, 0, true, 'check range');
+        else if(ua.browser.ie &&ua.browser.ie > 8)//todo ie9,10改range
+            ua.checkResult(range, editor.body.firstChild, editor.body.firstChild, 2, 2, true, 'check range');
         else
             ua.checkResult(range, editor.body.firstChild.lastChild, editor.body.firstChild.lastChild, 2, 2, true, 'check range');
         start();

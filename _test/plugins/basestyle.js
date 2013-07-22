@@ -93,10 +93,11 @@ test( 'trace 870:加粗文本前面去加粗', function () {
     equal( editor.queryCommandState( 'bold' ), 0, '不加粗' );
     range.insertNode( editor.document.createTextNode( 'hello2' ) );     /*插入一个文本节点*/
     ua.manualDeleteFillData( editor.body );
-    if (!ua.browser.chrome && !ua.browser.safari)     /*ie下插入节点后会自动移动光标到节点后面，而其他浏览器不会*/
-        equal( editor.getContent(), '<p><strong>hello</strong>hello2<br/></p>' );
-    else
+    /*ie下插入节点后会自动移动光标到节点后面，而其他浏览器不会*/
+    if(ua.browser.chrome ||ua.browser.safari ||(ua.browser.ie&&ua.browser.ie>8))//todo ie9,10改range
         equal( editor.getContent(), '<p>hello2<strong>hello</strong><br/></p>' );
+    else
+        equal( editor.getContent(), '<p><strong>hello</strong>hello2<br/></p>' );
 } );
 
 /*trace 1043*/

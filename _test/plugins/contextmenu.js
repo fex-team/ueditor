@@ -61,6 +61,7 @@ test('基本右键菜单', function () {
                 equal(editor.body.firstChild.style.textAlign, 'right', '文本右对齐');
                 document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                 UE.delEditor('ue');
+                te.dom.push(document.getElementById('ue'));
                 start();
             }, 500);
         }, 200);
@@ -113,6 +114,7 @@ test('表格右键菜单', function () {
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
+                    te.dom.push(document.getElementById('ue'));
                     start();
                 }, 200);
             }, 200);
@@ -137,6 +139,7 @@ test('右键全选', function () {
             equal(editor.selection.getRange().collapsed, false, '检查选区--非闭合');
             document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
             UE.delEditor('ue');
+            te.dom.push(document.getElementById('ue'));
             start();
         }, 50);
     });
@@ -172,6 +175,7 @@ test('trace 3216：前插入行', function () {
             setTimeout(function () {
                 document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                 UE.delEditor('ue');
+                te.dom.push(document.getElementById('ue'));
                 start();
             }, 200);
         }, 200);
@@ -228,6 +232,7 @@ test('trace 3044：表格名称中右键', function () {
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
+                    te.dom.push(document.getElementById('ue'));
                     start();
                 }, 200);
             }, 200);
@@ -319,6 +324,7 @@ test('选区背景隔行', function () {
                     setTimeout(function () {
                         document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                         UE.delEditor('ue');
+                        te.dom.push(document.getElementById('ue'));
                         start();
                     }, 200);
                 }, 200);
@@ -364,6 +370,7 @@ test('三色渐变', function () {
         setTimeout(function () {
             document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
             UE.delEditor('ue');
+            te.dom.push(document.getElementById('ue'));
             start();
         }, 20);
     });
@@ -420,6 +427,7 @@ test('表格逆序当前', function () {
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
+                    te.dom.push(document.getElementById('ue'));
                     start();
                 }, 20);
             });
@@ -472,6 +480,7 @@ test('按ASCII字符排序', function () {
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
+                    te.dom.push(document.getElementById('ue'));
                     start();
                 }, 200);
             }, 200);
@@ -506,6 +515,7 @@ test('按数值大小排序', function () {
             setTimeout(function () {
                 document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                 UE.delEditor('ue');
+                te.dom.push(document.getElementById('ue'));
                 start();
             }, 200);
         }, 200);
@@ -560,6 +570,7 @@ test('trace 3384：按数值大小排序', function () {
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
+                    te.dom.push(document.getElementById('ue'));
                     start();
                 }, 200);
             }, 200);
@@ -636,6 +647,7 @@ test('trace 3088：检查表格属性', function () {
                     setTimeout(function () {
                         document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                         UE.delEditor('ue');
+                        te.dom.push(document.getElementById('ue'));
                         start();
                     }, 20);
                 }, 200);
@@ -718,6 +730,7 @@ test('trace 3099：清除边框颜色', function () {
                     setTimeout(function () {
                         UE.delEditor('ue');
                         document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                        te.dom.push(document.getElementById('ue'));
                         start();
                     }, 200);
                 }, 200);
@@ -762,6 +775,7 @@ test('标题行中右插入列', function () {
             setTimeout(function () {
                 UE.delEditor('ue');
                 document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                te.dom.push(document.getElementById('ue'));
                 start();
             }, 200);
         });
@@ -793,10 +807,14 @@ test('trace 3060：单元格对齐方式', function () {
                 var tds = editor.body.getElementsByTagName('td');
                 equal(tds[0].align, 'right', '水平居右');
                 equal(tds[0].vAlign, 'middle', '垂直居中');
-                equal(editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase(), 'td', '光标位于单元格中');
+                if(ua.browser.ie && ua.browser.ie > 8)//todo ie9,10改range
+                    equal(editor.selection.getRange().startContainer.tagName.toLowerCase(), 'td', '光标位于单元格中');
+                else
+                    equal(editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase(), 'td', '光标位于单元格中');
                 setTimeout(function () {
                     UE.delEditor('ue');
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                    te.dom.push(document.getElementById('ue'));
                     start();
                 }, 20);
             }, 200);
@@ -849,6 +867,7 @@ test('检查表格属性', function () {
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
+                    te.dom.push(document.getElementById('ue'));
                     start();
                 }, 200);
             }, 300);
@@ -919,6 +938,7 @@ test('trace 3315：表格隔行变色', function () {
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
+                    te.dom.push(document.getElementById('ue'));
                     start();
                 }, 200);
             }, 200);
@@ -993,6 +1013,7 @@ test('trace 3210：添加单元格背景色', function () {
                         setTimeout(function () {
                             UE.delEditor('ue');
                             document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                            te.dom.push(document.getElementById('ue'));
                             start();
                         }, 20);
                     }, 100);
