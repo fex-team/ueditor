@@ -174,19 +174,18 @@ test("render-- elementid", function () {
 test("render-- options", function () {
     var options = {'initialContent':'<span class="span">xxx</span><div>xxx<p></p></div>', 'UEDITOR_HOME_URL':'../../../', autoClearinitialContent:false, 'autoFloatEnabled':false};
     var editor = new baidu.editor.Editor(options);
+
+    var div = document.body.appendChild(document.createElement('div'));
+    editor.render(div);
+    /*会自动用p标签包围*/
+    var space = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
+    //策略变化，自1.2.6，div 标签都会被过滤
     stop();
-    setTimeout(function () {
-        var div = document.body.appendChild(document.createElement('div'));
-        editor.render(div);
-        /*会自动用p标签包围*/
-        var space = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
-        //策略变化，自1.2.6，div 标签都会被过滤
-        setTimeout(function () {
-            equal(ua.getChildHTML(editor.body), '<p><span class="span">xxx</span></p><p>xxx</p><p>' + space + '</p>', 'check initialContent');
-            te.dom.push(div);
-            start();
-        }, 50);
-    }, 50);
+    editor.ready(function () {
+        equal(ua.getChildHTML(editor.body), '<p><span class="span">xxx</span></p><p>xxx</p><p>' + space + '</p>', 'check initialContent');
+        te.dom.push(div);
+        start();
+    });
 });
 
 //test( 'destroy', function() {
@@ -211,14 +210,17 @@ test("getContent--转换空格，nbsp与空格相间显示", function () {
     var div = te.dom[0];
     editor.render(div);
     stop();
-    setTimeout(function () {
+    editor.ready(function () {
+        setTimeout(function () {
         editor.focus();
         var innerHTML = '<div> x  x   x&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;  &nbsp;</div>';
         editor.setContent(innerHTML);
-        equal(editor.getContent(), '<p>x &nbsp;x &nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp; &nbsp;&nbsp;</p>', "转换空格，nbsp与空格相间显示，原nbsp不变");
-        UE.delEditor('test1');
-        start();
-    }, 50);
+
+            equal(editor.getContent(), '<p>x &nbsp;x &nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp; &nbsp;&nbsp;</p>', "转换空格，nbsp与空格相间显示，原nbsp不变");
+            UE.delEditor('test1');
+            start();
+        }, 100);
+    });
 });
 
 test('getContent--参数为函数', function () {
