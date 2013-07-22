@@ -9,8 +9,8 @@
         }
         var div = document.body.appendChild(document.createElement('div'));
         $(div).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
-        var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>', 'autoFloatEnabled':false});
-        var ue = new UE.ui.Editor({'UEDITOR_HOME_URL':'../../../', 'autoFloatEnabled':true});
+        var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>', 'autoFloatEnabled':false,webAppKey:'Qr0M9yTEoLIiUSXXQTtq7yFt'});
+        var ue = new UE.ui.Editor({'UEDITOR_HOME_URL':'../../../', 'autoFloatEnabled':true,webAppKey:'Qr0M9yTEoLIiUSXXQTtq7yFt'});
         editor.render(div);
         editor.ready(function () {
             var range = new baidu.editor.dom.Range(editor.document);
