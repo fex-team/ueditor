@@ -25,6 +25,7 @@
         te.obj.push(domUtils);
     }
     var _d = function () {
+
         if (te) {
             if (te.dom && te.dom.length) {
                 for (var i = 0; i < te.dom.length; i++) {

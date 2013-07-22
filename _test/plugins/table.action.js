@@ -23,8 +23,6 @@ test('trace 3047 ,3545 全屏插入表格',function(){
             editor.ui.setFullScreen(!editor.ui.isFullScreen());
             setTimeout(function () {
                 var width2 = editor.body.getElementsByTagName('td')[0].width;
-                console.log(width1)
-                equal(width1,width2);
                 ok((width1 - width2) > 10, '页面宽度自适应');
                 div.parentNode.removeChild(div);
                 start();

@@ -5,7 +5,7 @@ test('文本居中',function(){
     editor.setContent('<p>p文本<br></p>');
     setTimeout(function(){
         editor.options.autotypeset.textAlign = 'center';
-        editor.execCommand('autotypeset');
+         editor.execCommand('autotypeset');
         equal($(editor.body.firstChild).css('text-align'),'center','文本居中');
         start();
     }, 100 );

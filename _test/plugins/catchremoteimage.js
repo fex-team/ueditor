@@ -1,13 +1,13 @@
 module( 'plugins.catchremoteimage' );
 
 test( '成功远程图片抓取', function () {
-    UEDITOR_CONFIG.UEDITOR_HOME_URL = '../../../';
-    for (var config in window.UEDITOR_CONFIG) {
-        if (typeof(window.UEDITOR_CONFIG[config]) == 'string'){
-            window.UEDITOR_CONFIG[config] = window.UEDITOR_CONFIG[config].replace('_test/tools/br/', '');
+        UEDITOR_CONFIG.UEDITOR_HOME_URL = '../../../';
+        for (var config in window.UEDITOR_CONFIG) {
+            if (typeof(window.UEDITOR_CONFIG[config]) == 'string'){
+                window.UEDITOR_CONFIG[config] = window.UEDITOR_CONFIG[config].replace('_test/tools/br/', '');
+            }
         }
-    }
-    var editor = new UE.Editor({'autoFloatEnabled':false});
+        var editor = new UE.Editor({'autoFloatEnabled':false});
     stop();
     setTimeout(function(){
         var div = document.body.appendChild( document.createElement( 'div' ) );
@@ -23,20 +23,20 @@ test( '成功远程图片抓取', function () {
                 var imgs = body.getElementsByTagName( 'img' );
                 var src = imgs [1].getAttribute( 'src' );
                 if ( /upload/.test( src ) ) {
-                    clearInterval( handler );
-                    ok( /upload/.test( imgs[0].getAttribute( 'src' ) ), '图片已经被转存到本地' );
+                        clearInterval( handler );
+                        ok( /upload/.test( imgs[0].getAttribute( 'src' ) ), '图片已经被转存到本地' );
 //                        equal( imgs[0].getAttribute( 'src' ), imgs[0].getAttribute( '_src' ), '查看_src' );
 //                        equal( imgs[1].getAttribute( 'src' ), imgs[1].getAttribute( '_src' ), '查看_src' );
-                    equal( imgs.length, 2, '2个图片' );
-                    start();
+                        equal( imgs.length, 2, '2个图片' );
+                        start();
                 } else if ( count > 100 ) {
-                    clearInterval( handler );
-                    ok( false, '超时，文件获取失败' );
-                    start();
+                        clearInterval( handler );
+                        ok( false, '超时，文件获取失败' );
+                        start();
                 }
             }, 100 );
             te.dom.push( div );
-        },50);
+         },50);
     },100);
 } );
 

@@ -57,8 +57,8 @@ test('基本右键菜单', function () {
                 equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), lang["inserttable" ], '检查table menu显示的字符');
             }
             ua.click(menuparagraphBody.childNodes[1]);
-            equal(editor.body.firstChild.style.textAlign, 'right', '文本右对齐');
             setTimeout(function () {
+                equal(editor.body.firstChild.style.textAlign, 'right', '文本右对齐');
                 document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                 UE.delEditor('ue');
                 start();
@@ -66,7 +66,6 @@ test('基本右键菜单', function () {
         }, 200);
     });
 });
-
 test('表格右键菜单', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
@@ -236,130 +235,8 @@ test('trace 3044：表格名称中右键', function () {
     });
 });
 
-/*trace 3045*/
-/*trace 3098*/
-/*trace 3410*/
-/*trace 3448*/
-test('检查表格属性', function () {
-    if (ua.browser.ie )return;//todo 1.2.6.1  #3448
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    stop();
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        var lang = editor.getLang("contextMenu");
-        editor.execCommand('cleardoc');
-        editor.execCommand('inserttable');
-        range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-        editor.execCommand('insertcaption');
-        setTimeout(function () {
-            range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse(true).select();
-            ua.contextmenu(editor.body.firstChild.firstChild);
-            var menutable = document.getElementsByClassName("edui-menu-body")[1];
-            var forTable = document.getElementsByClassName('edui-for-table');
-            if (ua.browser.ie) {
-                ua.mouseenter(forTable[forTable.length - 1]);
-                ua.click(menutable.childNodes[6]);
-            } else {
-                ua.mouseover(forTable[forTable.length - 1]);
-                ua.click(menutable.childNodes[4]);
-            }
-            lang = editor.getLang("contextMenu");
-            var iframe = document.getElementsByTagName('iframe');
-            setTimeout(function () {
-                var iframe1;
-                for (var i = 0; i < iframe.length; i++) {
-                    if (iframe[i].id.indexOf('edui') != -1) {
-                        iframe1 = iframe[i];
-                        break;
-                    }
-                }
-                equal(iframe1.contentDocument.getElementById('J_tone').value, '#DDDDDD', '默认边框颜色');
-                equal(iframe1.contentDocument.getElementById('J_title').checked, false, '无标题行');
-                equal(iframe1.contentDocument.getElementById('J_caption').checked, true, '有名称');
-                equal(iframe1.contentDocument.getElementById('J_autoSizePage').checked, true, '页面自适应');
-                setTimeout(function () {
-                    document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
-                    UE.delEditor('ue');
-                    start();
-                }, 200);
-            }, 300);
-        }, 500);
-    });
-});
 
-/*trace 3315*/
-/*trace 3411*/
-test('trace 3315：表格隔行变色', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    stop();
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        var lang = editor.getLang("contextMenu");
-        editor.execCommand('cleardoc');
-        editor.execCommand('inserttable');
-        range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-        ua.contextmenu(editor.body.firstChild);
-        var menutableBody = document.getElementsByClassName("edui-menu-body")[3];
-        var forTable = document.getElementsByClassName('edui-for-table');
-        if (ua.browser.ie) {
-            ua.mouseenter(forTable[forTable.length - 1]);
-        } else {
-            ua.mouseover(forTable[forTable.length - 1]);
-        }
-        setTimeout(function () {
-            lang = editor.getLang("contextMenu");
-            equal(menutableBody.childNodes.length, 1, '1个子项目');
-            if (browser.gecko) {
-                equal(menutableBody.textContent, '表格隔行变色', '检查menu显示的字符');
-            }
-            else {
-                equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), '表格隔行变色', '检查menu显示的字符');
-            }
-            ua.click(menutableBody.childNodes[0]);
-            //        equal(editor.body.getElementsByTagName('table')[0].interlaced,'enabled','表格隔行变色');
-            var trs = editor.body.getElementsByTagName('tr');
-            for (var i = 0; i < trs.length; i++) {
-                if (i % 2 == 0) {
-                    equal(trs[i].className, 'ue-table-interlace-color-single', '第' + i + '行：浅色行');
-                } else {
-                    equal(trs[i].className, 'ue-table-interlace-color-double', '第' + i + '行：深色行');
-                }
-            }
-            range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-            ua.contextmenu(editor.body.firstChild);
-            menutableBody = document.getElementsByClassName("edui-menu-body")[3];
-            forTable = document.getElementsByClassName('edui-for-table');
-            if (ua.browser.ie) {
-                ua.mouseenter(forTable[forTable.length - 1]);
-            } else {
-                ua.mouseover(forTable[forTable.length - 1]);
-            }
-            setTimeout(function () {
-                lang = editor.getLang("contextMenu");
-                equal(menutableBody.childNodes.length, 1, '2个子项目');
-                if (browser.gecko) {
-                    equal(menutableBody.textContent, '取消表格隔行变色', '检查menu显示的字符');
-                }
-                else {
-                    equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), '取消表格隔行变色', '检查menu显示的字符');
-                }
-                ua.click(menutableBody.childNodes[0]);
-                //            equal(editor.body.getElementsByTagName('table')[0].interlaced,'disabled','取消表格隔行变色');
-                equal(editor.body.getElementsByTagName('tr')[0].className, '', '取消表格隔行变色');
-                setTimeout(function () {
-                    document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
-                    UE.delEditor('ue');
-                    start();
-                }, 200);
-            }, 200);
-        }, 200);
-        stop();
-    });
-});
+
 
 test('选区背景隔行', function () {
     var div = document.body.appendChild(document.createElement('div'));
@@ -747,9 +624,8 @@ test('trace 3088：检查表格属性', function () {
 
                 setTimeout(function () {
                     iframe = document.getElementsByTagName('iframe');
-                    i = iframe.length - 1;
                     iframe1 = null;
-                    for (var i = iframe.length - 1; i > -1; i--) {
+                    for (var i = 0; i <iframe.length; i++) {
                         if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
                             iframe1 = iframe[i];
                             break;
@@ -793,15 +669,13 @@ test('trace 3099：清除边框颜色', function () {
             }
             lang = editor.getLang("contextMenu");
             ua.click(menutable.childNodes[14]);
-            var iframe = document.getElementsByTagName('iframe');
             setTimeout(function () {
-                var i = iframe.length - 1;
-                for (var iframe1 in iframe) {
-                    if (iframe[i].id.indexOf('edui') != -1) {
+                var iframe = document.getElementsByTagName('iframe');
+                var iframe1 ;
+                for (var i = 0; i <iframe.length; i++) {
+                    if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
                         iframe1 = iframe[i];
                         break;
-                    } else {
-                        i--;
                     }
                 }
                 iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
@@ -825,16 +699,13 @@ test('trace 3099：清除边框颜色', function () {
                 }
                 lang = editor.getLang("contextMenu");
                 ua.click(menutable.childNodes[14]);
-
                 iframe = document.getElementsByTagName('iframe');
                 setTimeout(function () {
-                    i = iframe.length - 1;
-                    for (var iframe1 in iframe) {
+                    iframe1 = null;
+                    for (var i = iframe.length-1; i >-1; i--) {
                         if (iframe[i].id.indexOf('edui') != -1) {
                             iframe1 = iframe[i];
                             break;
-                        } else {
-                            i--;
                         }
                     }
                     ua.click(iframe1.contentDocument.getElementById('J_tone'));
@@ -930,6 +801,129 @@ test('trace 3060：单元格对齐方式', function () {
                 }, 20);
             }, 200);
         }, 200);
+    });
+});
+/*trace 3045*/
+/*trace 3098*/
+/*trace 3410*/
+/*trace 3448*/
+test('检查表格属性', function () {
+    if (ua.browser.ie )return;//todo 1.2.6.1  #3448
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    stop();
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        var lang = editor.getLang("contextMenu");
+        editor.execCommand('cleardoc');
+        editor.execCommand('inserttable');
+        range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+        editor.execCommand('insertcaption');
+        setTimeout(function () {
+            range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse(true).select();
+            ua.contextmenu(editor.body.firstChild.firstChild);
+            var menutable = document.getElementsByClassName("edui-menu-body")[1];
+            var forTable = document.getElementsByClassName('edui-for-table');
+            if (ua.browser.ie) {
+                ua.mouseenter(forTable[forTable.length - 1]);
+                ua.click(menutable.childNodes[6]);
+            } else {
+                ua.mouseover(forTable[forTable.length - 1]);
+                ua.click(menutable.childNodes[4]);
+            }
+            lang = editor.getLang("contextMenu");
+            var iframe = document.getElementsByTagName('iframe');
+            setTimeout(function () {
+                var iframe1;
+                for (var i = 0; i < iframe.length; i++) {
+                    if (iframe[i].id.indexOf('edui') != -1) {
+                        iframe1 = iframe[i];
+                        break;
+                    }
+                }
+                equal(iframe1.contentDocument.getElementById('J_tone').value, '#DDDDDD', '默认边框颜色');
+                equal(iframe1.contentDocument.getElementById('J_title').checked, false, '无标题行');
+                equal(iframe1.contentDocument.getElementById('J_caption').checked, true, '有名称');
+                equal(iframe1.contentDocument.getElementById('J_autoSizePage').checked, true, '页面自适应');
+                setTimeout(function () {
+                    document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                    UE.delEditor('ue');
+                    start();
+                }, 200);
+            }, 300);
+        }, 500);
+    });
+});
+/*trace 3315*/
+/*trace 3411*/
+test('trace 3315：表格隔行变色', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    stop();
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        var lang = editor.getLang("contextMenu");
+        editor.execCommand('cleardoc');
+        editor.execCommand('inserttable');
+        range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+        ua.contextmenu(editor.body.firstChild);
+        var menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+        var forTable = document.getElementsByClassName('edui-for-table');
+        if (ua.browser.ie) {
+            ua.mouseenter(forTable[forTable.length - 1]);
+        } else {
+            ua.mouseover(forTable[forTable.length - 1]);
+        }
+        setTimeout(function () {
+            lang = editor.getLang("contextMenu");
+            equal(menutableBody.childNodes.length, 1, '1个子项目');
+            if (browser.gecko) {
+                equal(menutableBody.textContent, '表格隔行变色', '检查menu显示的字符');
+            }
+            else {
+                equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), '表格隔行变色', '检查menu显示的字符');
+            }
+            ua.click(menutableBody.childNodes[0]);
+            //        equal(editor.body.getElementsByTagName('table')[0].interlaced,'enabled','表格隔行变色');
+            var trs = editor.body.getElementsByTagName('tr');
+            for (var i = 0; i < trs.length; i++) {
+                if (i % 2 == 0) {
+                    equal(trs[i].className, 'ue-table-interlace-color-single', '第' + i + '行：浅色行');
+                } else {
+                    equal(trs[i].className, 'ue-table-interlace-color-double', '第' + i + '行：深色行');
+                }
+            }
+            range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+            ua.contextmenu(editor.body.firstChild);
+            menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+            forTable = document.getElementsByClassName('edui-for-table');
+            if (ua.browser.ie) {
+                ua.mouseenter(forTable[forTable.length - 1]);
+            } else {
+                ua.mouseover(forTable[forTable.length - 1]);
+            }
+            setTimeout(function () {
+                lang = editor.getLang("contextMenu");
+                equal(menutableBody.childNodes.length, 1, '2个子项目');
+                if (browser.gecko) {
+                    equal(menutableBody.textContent, '取消表格隔行变色', '检查menu显示的字符');
+                }
+                else {
+                    equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), '取消表格隔行变色', '检查menu显示的字符');
+                }
+                ua.click(menutableBody.childNodes[0]);
+                //            equal(editor.body.getElementsByTagName('table')[0].interlaced,'disabled','取消表格隔行变色');
+                equal(editor.body.getElementsByTagName('tr')[0].className, '', '取消表格隔行变色');
+                setTimeout(function () {
+                    document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                    UE.delEditor('ue');
+                    start();
+                }, 200);
+            }, 200);
+        }, 200);
+        stop();
     });
 });
 

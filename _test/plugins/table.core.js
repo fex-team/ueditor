@@ -57,7 +57,7 @@ test("getSameEndPosCells", function () {
         cells1 = ut.getSameEndPosCells(cell, "x"),
         cells2 = ut.getSameEndPosCells(cell, "y");
     ok(cells1.length == 1, "获取到同样X轴结尾位置的cell1个");
-    if(ua.browser.ie!=9)//TODO 1.2.6
+    if(ua.browser.ie)//TODO 1.2.6
     ok(cells2.length == 2, "获取到同样Y轴结尾位置的cell2个");
 });
 
