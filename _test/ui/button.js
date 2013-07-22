@@ -67,25 +67,28 @@ test( "Dialog国际化", function () {
         var r = editor.selection.getRange();
         var dom = $( '#'+document.getElementsByClassName("edui-for-insertimage")[0].id+'_body' )[0];
         ua.click( dom );
-        var dialog = editor.ui._dialogs['insertimageDialog'];
-        ok(dialog.title===editor.getLang("labelMap.insertimage"),"dialog的标题是否一致");
-        ok(dialog.closeDialog === editor.getLang("closeDialog"),"关闭dialog的title是否一致");
-        ok(dialog.buttons[0].label === editor.getLang("ok") && dialog.buttons[1].label === editor.getLang("cancel"),"确认取消按钮是否一致");
-        setTimeout( function () {
-            var dialogDoc = document.getElementById(dialog.id + "_iframe").contentWindow.document;
-            var ids = editor.getLang("insertimage.static");
-            for(var i in ids){
-                if(i==="imgSearchTxt"){
-                    equal(dialogDoc.getElementById(i).value,ids[i].value,"图片搜索文字是否一致")
+        setTimeout(function(){
+            var dialog = editor.ui._dialogs['insertimageDialog'];
+            ok(dialog.title===editor.getLang("labelMap.insertimage"),"dialog的标题是否一致");
+            ok(dialog.closeDialog === editor.getLang("closeDialog"),"关闭dialog的title是否一致");
+            ok(dialog.buttons[0].label === editor.getLang("ok") && dialog.buttons[1].label === editor.getLang("cancel"),"确认取消按钮是否一致");
+            setTimeout( function () {
+                var dialogDoc = document.getElementById(dialog.id + "_iframe").contentWindow.document;
+                var ids = editor.getLang("insertimage.static");
+                for(var i in ids){
+                    if(i==="imgSearchTxt"){
+                        equal(dialogDoc.getElementById(i).value,ids[i].value,"图片搜索文字是否一致")
+                    }
+                    if(i==="imgSearchBtn"){
+                        equal(dialogDoc.getElementById(i).value,ids[i].value,"图片搜索按钮文字是否一致")
+                    }
                 }
-                if(i==="imgSearchBtn"){
-                    equal(dialogDoc.getElementById(i).value,ids[i].value,"图片搜索按钮文字是否一致")
-                }
-            }
-            ua.click(document.getElementById(dialog.closeButton.id+"_body"));
-            var newRange = editor.selection.getRange();
-            ok( r.startContainer === newRange.startContainer, "dialog开闭前后选区是否一致" );
-            start();
-        }, 1500 )
+                ua.click(document.getElementById(dialog.closeButton.id+"_body"));
+                var newRange = editor.selection.getRange();
+                ok( r.startContainer === newRange.startContainer, "dialog开闭前后选区是否一致" );
+                start();
+            }, 1500 )
+        },100);
+
     } )
 } );

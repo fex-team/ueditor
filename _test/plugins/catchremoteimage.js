@@ -37,7 +37,7 @@ test( '成功远程图片抓取', function () {
             }, 100 );
             te.dom.push( div );
          },50);
-    });
+    },100);
 } );
 
 //test( '失败远程图片抓取', function () {

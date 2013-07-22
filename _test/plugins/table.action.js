@@ -5,6 +5,33 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
+/*trace 3047,3545*/
+test('trace 3047 ,3545 全屏插入表格',function(){
+    if(ua.browser.gecko)return;//TODO 1.2.6
+    if(ua.browser.ie < 9)return;//TODO 1.2.6
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+    var editor = te.obj[2];
+    editor.render(div);
+    stop();
+    editor.ready(function(){
+        editor.setContent('<p></p>');
+        editor.ui.setFullScreen(!editor.ui.isFullScreen());
+        editor.execCommand('inserttable');
+        var width1 = editor.body.getElementsByTagName('td')[0].width;
+        setTimeout(function () {
+            editor.ui.setFullScreen(!editor.ui.isFullScreen());
+            setTimeout(function () {
+                var width2 = editor.body.getElementsByTagName('td')[0].width;
+                console.log(width1)
+                equal(width1,width2);
+                ok((width1 - width2) > 10, '页面宽度自适应');
+                div.parentNode.removeChild(div);
+                start();
+            }, 500);
+        }, 500);
+    });
+});
 
 test( 'backspace事件:删除caption', function() {
     var editor = te.obj[0];
@@ -166,30 +193,6 @@ test( 'trace 3022 表格名称中backspace、ctrl+z、enter', function() {
     },20);
 });
 
-/*trace 3047*/
-test('trace 3047 全屏插入表格',function(){
-    if(ua.browser.gecko)return;//TODO 1.2.6
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
-    var editor = te.obj[2];
-    editor.render(div);
-    stop();
-    editor.ready(function(){
-        editor.setContent('<p></p>');
-        editor.ui.setFullScreen(!editor.ui.isFullScreen());
-        editor.execCommand('inserttable');
-        var width1 = editor.body.getElementsByTagName('td')[0].width;
-        setTimeout(function () {
-            editor.ui.setFullScreen(!editor.ui.isFullScreen());
-            setTimeout(function () {
-                var width2 = editor.body.getElementsByTagName('td')[0].width;
-                ok((width1 - width2) > 10, '页面宽度自适应');
-                div.parentNode.removeChild(div);
-                start();
-            }, 500);
-        }, 200);
-    });
-});
 
 /*trace 3067*/
 test( 'trace 3067 向右合并--tab键', function() {

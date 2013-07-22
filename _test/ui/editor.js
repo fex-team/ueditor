@@ -107,7 +107,7 @@ test( '判断render有内容时，显示render内容(script)', function() {
 } );
 
 test( 'render没有内容时，显示initialContent', function() {
-    var ue4 = new baidu.editor.ui.Editor();
+    var ue4 = new baidu.editor.ui.Editor({initialContent:'<br>'});
     var sc4 = document.createElement("script");
     sc4.id="sc4";
     document.body.appendChild(sc4);

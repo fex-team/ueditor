@@ -24,8 +24,8 @@ test( 'AutoTypeSetButton/AutoTypeSetPicker', function() {
             if(inputName=="textAlign"||inputName=="imageBlockLine"){
                 equal(AutoPickerBodyInput[i].checked,editor.options.autotypeset[inputName]!= null,inputName+":"+editor.options.autotypeset[inputName]);
             }
-            else if(inputName=="textAlignValue"||inputName=="imageBlockLineValue"){
-                equal(AutoPickerBodyInput[i].checked,editor.options.autotypeset[inputName.replace('Value','')]==AutoPickerBodyInput[i].value,inputName+":"+editor.options.autotypeset[inputName]);
+            else if(/textAlignValue\d/.test(inputName)||/imageBlockLineValue\d/.test(inputName)){
+                equal(AutoPickerBodyInput[i].checked,editor.options.autotypeset[inputName.replace(new RegExp('Value\\d',"g"),'')]==AutoPickerBodyInput[i].value,inputName+":"+editor.options.autotypeset[inputName]);
             }
             else{
                 equal(AutoPickerBodyInput[i].checked,editor.options.autotypeset[inputName],inputName+":"+editor.options.autotypeset[inputName]);
@@ -34,14 +34,14 @@ test( 'AutoTypeSetButton/AutoTypeSetPicker', function() {
     //更改两个input 的选择
         var flagChecked = document.getElementsByClassName("edui-autotypesetpicker-body")[0].getElementsByTagName("input")[0].checked ;
         document.getElementsByClassName("edui-autotypesetpicker-body")[0].getElementsByTagName("input")[0].checked = !flagChecked;
-        document.getElementById("imageBlockLineValue").childNodes[2].checked = true;
-    //关闭对话框再重新打开，检查更改的input内容是否仍然有效
+        document.getElementById("imageBlockLineValue"+editor.uid).childNodes[2].checked = true;
+//    //关闭对话框再重新打开，检查更改的input内容是否仍然有效
         autotypesetButton.popup.hide();
         equal(autotypesetButton.popup._hidden,true ,'窗口关闭');
         autotypesetButton.showPopup();
         equal(document.getElementsByClassName("edui-autotypesetpicker-body")[0].getElementsByTagName("input")[0].checked,!flagChecked,'检查更改的input内容');
-        equal(document.getElementById("imageBlockLineValue").childNodes[2].checked,true,'检查更改的input内容');
-        equal(document.getElementById("imageBlockLineValue").childNodes[1].checked,null,'检查更改的input内容');
+        equal(document.getElementById("imageBlockLineValue"+editor.uid).childNodes[2].checked,true,'检查更改的input内容');
+        equal(document.getElementById("imageBlockLineValue"+editor.uid).childNodes[1].checked,null,'检查更改的input内容');
         autotypesetButton.popup.hide();
         start();
 
