@@ -16,14 +16,15 @@ test('回车将p转成列表', function () {
     var range = te.obj[1];
     var br = ua.browser.ie ? '' : '<br>';
     editor.setContent('<p>1. 2</p>');
-    range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    ua.keydown(editor.body, {keyCode:13});
-    stop()
+    stop();
     setTimeout(function () {
-        ua.checkSameHtml(ua.getChildHTML(editor.body), '<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p> 2</p></li><li><p>' + br + '</p></li></ol>', '回车将p转成列表');
-        start()
-    }, 50);
-
+        range.setStart(editor.body.firstChild, 0).collapse(true).select();
+        ua.keydown(editor.body, {keyCode:13});
+        setTimeout(function () {
+            ua.checkSameHtml(ua.getChildHTML(editor.body), '<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p> 2</p></li><li><p>' + br + '</p></li></ol>', '回车将p转成列表');
+            start()
+        }, 50);
+    }, 100);
 });
 
 //todo bug3418
@@ -40,16 +41,16 @@ test('li内添加p标签', function () {
     ua.checkSameHtml(editor.body.innerHTML, '<ol class=\" list-paddingleft-2\"><li><p>asd</p><p>asd</p></li></ol>', '添加p标签');
 });
 //todo 1.2.6.1
-test('p转成列表',function(){
+test('p转成列表', function () {
     var editor = te.obj[0];
-    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var br = ua.browser.ie ? '&nbsp;' : '<br>';
     editor.setContent('<p class="MsoListParagraph">1.a</p><ol><li>b</li></ol>');
     ua.manualDeleteFillData(editor.body);
     //todo 1.2.6.1
 //    ua.checkSameHtml(editor.body.innerHTML,'<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p>a</p></li><li><p>b</p></li></ol>','p转成有序列表');
     editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">abc</span></p>');
     ua.manualDeleteFillData(editor.body);
-    ua.checkSameHtml(editor.body.innerHTML,'<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p>'+br+'</p></li></ul>','p转成无序列表');
+    ua.checkSameHtml(editor.body.innerHTML, '<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p>' + br + '</p></li></ul>', 'p转成无序列表');
 //todo bug3417
 //    editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">n</span></p>');
 //    ua.manualDeleteFillData(editor.body);
@@ -889,7 +890,7 @@ test('trace 3133：表格中插入列表再取消列表', function () {
         /*插入列表*/
         equal(tds[0].firstChild.tagName.toLowerCase(), 'ol', '查询列表的类型');
         equal(ua.getChildHTML(tds[0].firstChild), '<li class="list-num-3-1 list-num2-paddingleft-1"><p><br></p></li>');
-               editor.execCommand('insertorderedlist', 'num2');
+        editor.execCommand('insertorderedlist', 'num2');
         /*取消列表*/
         equal(ua.getChildHTML(tds[0]), '<p><br></p>');
         ua.keydown(editor.body, {'keyCode':65, 'ctrlKey':true});
@@ -927,7 +928,7 @@ test('trace 3165：检查表格中列表tab键', function () {
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
         var body = editor.body;
-        setTimeout(function(){
+        setTimeout(function () {
             editor.execCommand('inserttable');
             var tds = body.getElementsByTagName('td');
             range.setStart(tds[6], 0).collapse(1).select();
@@ -939,14 +940,14 @@ test('trace 3165：检查表格中列表tab键', function () {
             equal(range.startContainer.parentNode.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
             ua.keydown(editor.body, {keyCode:9});
             setTimeout(function () {
-            range = editor.selection.getRange();
+                range = editor.selection.getRange();
                 if (!ua.browser.gecko && !ua.browser.ie)//TODO 1.2.6
                     equal(range.startContainer.parentNode.tagName.toLowerCase(), 'li', 'tab键后光标跳到有列表的单元格中');
                 equal(tds[6].firstChild.style['listStyleType'], 'decimal', '检查有序列表的类型不应该被改变');
                 UE.delEditor('ue');
                 start();
             }, 100);
-        },100);
+        }, 100);
 
     });
     stop();

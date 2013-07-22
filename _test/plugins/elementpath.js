@@ -11,43 +11,41 @@ module( 'plugins.elementpath' );
 
 //1.2的版本中，表格的外面会自动套一个带格式的div
 test( '表格', function () {
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
-    setTimeout(function(){
-        editor.render( div );
-        editor.ready(function(){
-            var range = new baidu.editor.dom.Range( editor.document );
-            editor.setContent( '<table><tbody><tr><td>hello1</td><td><strong>strongText</strong>hello2<span style="text-decoration: underline">spanText</span></td></tr></tbody></table>' );
-            var body = editor.body;
-            /*选中整个表格*/
-            range.selectNode( body.firstChild ).select();
-            var eles = editor.queryCommandValue( 'elementpath' );
-            ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td'], '选中整个表格' );
-            /*在单元格中单击*/
-            var tds = body.getElementsByTagName( 'td' );
-            range.setStart( tds[0].firstChild, 0 ).collapse( true ).select();
-            ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td'], '在单元格中单击' );
-            /*在单元格中的加粗文本中单击*/
-            ua.manualDeleteFillData( editor.body );
-            range.setStart( tds[1].firstChild.firstChild, 1 ).collapse( true ).select();
-            eles = editor.queryCommandValue( 'elementpath' );
-            ua.checkElementPath( eles, ['body', 'table', 'tbody', 'tr', 'td', 'strong'], '在单元格中的加粗文本中单击' );
-            /*在单元格中的下划线文本中单击*/
-            ua.manualDeleteFillData( editor.body );
-            range.setStart( tds[1].lastChild.firstChild, 1 ).collapse( true ).select();
-            eles = editor.queryCommandValue( 'elementpath' );
-            ua.checkElementPath( eles, ['body','table', 'tbody', 'tr', 'td', 'span'], '在单元格中的下划线文本中单击' );
-            /*选中有下划线的文本*/
-            ua.manualDeleteFillData( editor.body );
-            range.setStart( tds[1].lastChild.lastChild, 1 ).setEnd( tds[1].lastChild.lastChild, 4 ).select();
-            eles = editor.queryCommandValue('elementpath');
-            ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td', 'span'], '选中有下划线的文本');
-            div.parentNode.removeChild(div);
-            start();
-        });
-    }, 20);
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue', {'initialContent':'<p>欢迎使用ueditor</p>', 'elementPathEnabled':true, 'autoFloatEnabled':false});
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('<table><tbody><tr><td>hello1</td><td><strong>strongText</strong>hello2<span style="text-decoration: underline">spanText</span></td></tr></tbody></table>');
+        var body = editor.body;
+        /*选中整个表格*/
+        range.selectNode(body.firstChild).select();
+        var eles = editor.queryCommandValue('elementpath');
+        ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td'], '选中整个表格');
+        /*在单元格中单击*/
+        var tds = body.getElementsByTagName('td');
+        range.setStart(tds[0].firstChild, 0).collapse(true).select();
+        ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td'], '在单元格中单击');
+        /*在单元格中的加粗文本中单击*/
+        ua.manualDeleteFillData(editor.body);
+        range.setStart(tds[1].firstChild.firstChild, 1).collapse(true).select();
+        eles = editor.queryCommandValue('elementpath');
+        ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td', 'strong'], '在单元格中的加粗文本中单击');
+        /*在单元格中的下划线文本中单击*/
+        ua.manualDeleteFillData(editor.body);
+        range.setStart(tds[1].lastChild.firstChild, 1).collapse(true).select();
+        eles = editor.queryCommandValue('elementpath');
+        ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td', 'span'], '在单元格中的下划线文本中单击');
+        /*选中有下划线的文本*/
+        ua.manualDeleteFillData(editor.body);
+        range.setStart(tds[1].lastChild.lastChild, 1).setEnd(tds[1].lastChild.lastChild, 4).select();
+        eles = editor.queryCommandValue('elementpath');
+        ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td', 'span'], '选中有下划线的文本');
+        UE.delEditor('ue');
+        start();
+    });
     stop();
-} );
+});
 
 test('通过选区路径取range',function(){
     var editor = te.obj[0];
