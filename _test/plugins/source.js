@@ -160,7 +160,10 @@ test( 'trace 1734 range的更新/特殊符号的转换', function () {
 //                var label = ua.browser.gecko ? 'html' : 'body';
                 var label = 'html';
                 ua.manualDeleteFillData(editor.body);
-                equal( editor.selection.getRange().startContainer.parentNode.parentNode.tagName.toLowerCase(), label, 'range的更新' );
+                if (ua.browser.ie && ua.browser.ie > 8)//todo ie9,10改range
+                    equal(editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase(), label, 'range的更新');
+                else
+                    equal(editor.selection.getRange().startContainer.parentNode.parentNode.tagName.toLowerCase(), label, 'range的更新');
                 editor.execCommand( 'source' );
                 setTimeout( function () {
                     editor.execCommand( 'source' );

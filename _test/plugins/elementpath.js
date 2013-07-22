@@ -1,4 +1,4 @@
-module( 'plugins.elementpath' );
+module('plugins.elementpath');
 /*
  <li>表格
  <li>列表
@@ -10,10 +10,10 @@ module( 'plugins.elementpath' );
  * */
 
 //1.2的版本中，表格的外面会自动套一个带格式的div
-test( '表格', function () {
+test('表格', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
-    var editor = UE.getEditor('ue', {'initialContent':'<p>欢迎使用ueditor</p>', 'elementPathEnabled':true, 'autoFloatEnabled':false});
+    var editor = UE.getEditor('ue', {'initialContent': '<p>欢迎使用ueditor</p>', 'elementPathEnabled': true, 'autoFloatEnabled': false});
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('<table><tbody><tr><td>hello1</td><td><strong>strongText</strong>hello2<span style="text-decoration: underline">spanText</span></td></tr></tbody></table>');
@@ -42,15 +42,16 @@ test( '表格', function () {
         eles = editor.queryCommandValue('elementpath');
         ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td', 'span'], '选中有下划线的文本');
         UE.delEditor('ue');
+        te.dom.push(document.getElementById('ue'));
         start();
     });
     stop();
 });
 
-test('通过选区路径取range',function(){
+test('通过选区路径取range', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.options.elementPathEnabled=true;
+    editor.options.elementPathEnabled = true;
     editor.setContent('<table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>45</td></tr></tbody></table>');
     var tds = editor.body.getElementsByTagName('td');
     var trs = editor.body.getElementsByTagName('tr');
@@ -58,66 +59,66 @@ test('通过选区路径取range',function(){
     var table = editor.body.getElementsByTagName('table');
     range.setStart(tds[3].firstChild, 0).collapse(true).select();
     editor.queryCommandValue('elementpath');
-    editor.execCommand('elementpath','4');
+    editor.execCommand('elementpath', '4');
     stop();
-    setTimeout(function(){
+    setTimeout(function () {
         range = editor.selection.getRange();
-        if(ua.browser.gecko){
-            ua.checkResult(range,trs[1],trs[1],1,2,false,'取range--td');
-        }else{
-            if(ua.browser.ie)
-                ua.checkResult(range,tds[3].firstChild,tds[3].lastChild,0,2,false,'取range--td');
+        if (ua.browser.gecko) {
+            ua.checkResult(range, trs[1], trs[1], 1, 2, false, '取range--td');
+        } else {
+            if (ua.browser.ie)
+                ua.checkResult(range, tds[3].firstChild, tds[3].lastChild, 0, 2, false, '取range--td');
             else
-                ua.checkResult(range,tds[3].firstChild,editor.body,0,1,false,'取range--td');
+                ua.checkResult(range, tds[3].firstChild, editor.body, 0, 1, false, '取range--td');
         }
         range.setStart(tds[3].firstChild, 1).collapse(1).select();
-        editor.execCommand('elementpath','3');
-        setTimeout(function(){
+        editor.execCommand('elementpath', '3');
+        setTimeout(function () {
             range = editor.selection.getRange();
-            if(ua.browser.gecko){
-                ua.checkResult(range,tbodys[0],tbodys[0],1,2,false,'取range--tr');
-            }else{
-                if(ua.browser.ie)
-                    ua.checkResult(range,tds[2].firstChild,tds[3].lastChild,0,2,false,'取range--tr');
+            if (ua.browser.gecko) {
+                ua.checkResult(range, tbodys[0], tbodys[0], 1, 2, false, '取range--tr');
+            } else {
+                if (ua.browser.ie)
+                    ua.checkResult(range, tds[2].firstChild, tds[3].lastChild, 0, 2, false, '取range--tr');
                 else
-                    ua.checkResult(range,tds[2].firstChild,editor.body,0,1,false,'取range--tr');
+                    ua.checkResult(range, tds[2].firstChild, editor.body, 0, 1, false, '取range--tr');
             }
             range.setStart(tds[3].firstChild, 0).collapse(1).select();
-            editor.execCommand('elementpath','2');
-            setTimeout(function(){
+            editor.execCommand('elementpath', '2');
+            setTimeout(function () {
                 range = editor.selection.getRange();
-                if(ua.browser.gecko){
-                    ua.checkResult(range,table[0],table[0],0,1,false,'取range--tbody');
-                }else{
-                    if(ua.browser.ie)
-                        ua.checkResult(range,tds[0].firstChild,tds[3].lastChild,0,2,false,'取range--tbody');
+                if (ua.browser.gecko) {
+                    ua.checkResult(range, table[0], table[0], 0, 1, false, '取range--tbody');
+                } else {
+                    if (ua.browser.ie)
+                        ua.checkResult(range, tds[0].firstChild, tds[3].lastChild, 0, 2, false, '取range--tbody');
                     else
-                        ua.checkResult(range,editor.body,editor.body,0,1,false,'取range--tbody');
+                        ua.checkResult(range, editor.body, editor.body, 0, 1, false, '取range--tbody');
                 }
                 editor.setContent('<p>45645</p>');
                 range.selectNode(editor.body.firstChild).select();
-                editor.queryCommandValue( 'elementpath' );
-                editor.execCommand('elementpath',1);
-                setTimeout(function(){
+                editor.queryCommandValue('elementpath');
+                editor.execCommand('elementpath', 1);
+                setTimeout(function () {
                     range = editor.selection.getRange();
                     var p = editor.body.firstChild;
-                    if(ua.browser.gecko){
-                        ua.checkResult(range,editor.body,editor.body,0,1,false,'取range--p');
-                    }else{
-                        ua.checkResult(range,p.firstChild,p.firstChild,0,5,false,'取range--p');
+                    if (ua.browser.gecko) {
+                        ua.checkResult(range, editor.body, editor.body, 0, 1, false, '取range--p');
+                    } else {
+                        ua.checkResult(range, p.firstChild, p.firstChild, 0, 5, false, '取range--p');
                     }
                     start();
-                },20);
-            },20);
-        },20);
-    },20);
+                }, 20);
+            }, 20);
+        }, 20);
+    }, 20);
 });
 
-test( 'trace 1539:列表', function () {
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
+test('trace 1539:列表', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = new baidu.editor.Editor({'initialContent': '<p>欢迎使用ueditor</p>', 'elementPathEnabled': true, 'autoFloatEnabled': false});
     stop();
-    setTimeout(function(){
+    setTimeout(function () {
         editor.render(div);
         editor.ready(function () {
             var range = new baidu.editor.dom.Range(editor.document);
@@ -139,115 +140,117 @@ test( 'trace 1539:列表', function () {
             start();
         });
     }, 20);
-} );
+});
 
-test( '文本和超链接', function () {
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
-    editor.render( div );
+test('文本和超链接', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = new baidu.editor.Editor({'initialContent': '<p>欢迎使用ueditor</p>', 'elementPathEnabled': true, 'autoFloatEnabled': false});
+    editor.render(div);
     stop();
-    editor.ready(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent( '<div><p>hello<a>a_link</a></p></div>' );
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('<div><p>hello<a>a_link</a></p></div>');
         var body = editor.body;
         /*选中文本hello*/
-        range.selectNode( body.firstChild.firstChild ).select();
-        var eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body', 'p'], '选中文本' );
+        range.selectNode(body.firstChild.firstChild).select();
+        var eles = editor.queryCommandValue('elementpath');
+        ua.checkElementPath(eles, ['body', 'p'], '选中文本');
         /*选中超链接*/
-        range.selectNode( body.firstChild.lastChild.firstChild ).select();
-        eles = editor.queryCommandValue( 'elementpath' );
-        ua.checkElementPath( eles, ['body', 'p', 'a'], '选中文本' );
+        range.selectNode(body.firstChild.lastChild.firstChild).select();
+        eles = editor.queryCommandValue('elementpath');
+        ua.checkElementPath(eles, ['body', 'p', 'a'], '选中文本');
         div.parentNode.removeChild(div);
         start();
     });
-} );
+});
 
 //在版本1.2中，如果没有setTimeout在FF（3.6和9都是）中range会出错，其他浏览器没问题
-test( '图片', function () {
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
-    editor.render( div );
+test('图片', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = new baidu.editor.Editor({'initialContent': '<p>欢迎使用ueditor</p>', 'elementPathEnabled': true, 'autoFloatEnabled': false});
+    editor.render(div);
     stop();
-    editor.ready(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent( '<div><p>hello<img /></p></div>' );
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('<div><p>hello<img /></p></div>');
         var body = editor.body;
         /*选中图片*/
-        setTimeout( function () {
-            range.selectNode( body.firstChild.lastChild ).select();
-            var eles = editor.queryCommandValue( 'elementpath' );
-            ua.checkElementPath( eles, ['body', 'p', 'img'], '选中图片' );
+        setTimeout(function () {
+            range.selectNode(body.firstChild.lastChild).select();
+            var eles = editor.queryCommandValue('elementpath');
+            //todo ie9,10改range bug trace
+                ua.checkElementPath(eles, ['body', 'p', 'img'], '选中图片');
             div.parentNode.removeChild(div);
             start();
-        }, 20 )
+        }, 20)
     });
-} );
+});
 
-test( '锚点', function () {
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
-    editor.render( div );
+test('锚点', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = new baidu.editor.Editor({'initialContent': '<p>欢迎使用ueditor</p>', 'elementPathEnabled': true, 'autoFloatEnabled': false});
+    editor.render(div);
     stop();
-    editor.ready(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent( '<div><p>hello<img anchorname="hello" class="anchorclass"></p></div>' );
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('<div><p>hello<img anchorname="hello" class="anchorclass"></p></div>');
         var body = editor.body;
         /*选中图片*/
-        setTimeout( function () {
-            range.selectNode( body.firstChild.lastChild ).select();
-            var eles = editor.queryCommandValue( 'elementpath' );
-            ua.checkElementPath( eles, ['body', 'p', 'anchor'], '选中锚点' );
+        setTimeout(function () {
+            range.selectNode(body.firstChild.lastChild).select();
+            var eles = editor.queryCommandValue('elementpath');
+            //todo ie9,10改range bug trace
+                ua.checkElementPath(eles, ['body', 'p', 'anchor'], '选中锚点');
             div.parentNode.removeChild(div);
             start();
-        }, 20 )
+        }, 20)
     });
-} );
+});
 
-test( '文本', function () {
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
-    editor.render( div );
+test('文本', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = new baidu.editor.Editor({'initialContent': '<p>欢迎使用ueditor</p>', 'elementPathEnabled': true, 'autoFloatEnabled': false});
+    editor.render(div);
     stop();
-    editor.ready(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent( 'hello' );
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('hello');
         var body = editor.body;
         /*选中图片*/
-        setTimeout( function () {
-            range.setStart(body.firstChild.firstChild,1).setEnd(body.firstChild.firstChild,3).select();
-            var eles = editor.queryCommandValue( 'elementpath' );
-            ua.checkElementPath( eles, ['body', 'p'], '选中文本' );
+        setTimeout(function () {
+            range.setStart(body.firstChild.firstChild, 1).setEnd(body.firstChild.firstChild, 3).select();
+            var eles = editor.queryCommandValue('elementpath');
+            ua.checkElementPath(eles, ['body', 'p'], '选中文本');
             div.parentNode.removeChild(div);
             start();
-        }, 20 )
+        }, 20)
     });
-} );
+});
 
-test( '表格和文本', function () {
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','elementPathEnabled' : true,'autoFloatEnabled':false});
-    editor.render( div );
+test('表格和文本', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    var editor = new baidu.editor.Editor({'initialContent': '<p>欢迎使用ueditor</p>', 'elementPathEnabled': true, 'autoFloatEnabled': false});
+    editor.render(div);
     stop();
-    editor.ready(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
         var body = editor.body;
-        range.setStart(body.firstChild.firstChild,2).collapse(true).select();
+        range.setStart(body.firstChild.firstChild, 2).collapse(true).select();
         editor.execCommand('inserttable');
         /*选中图片*/
-        setTimeout( function () {
+        setTimeout(function () {
             range.selectNode(body).select();
-            var eles = editor.queryCommandValue( 'elementpath' );
-            editor.execCommand('elementpath',1);
-            ua.checkElementPath( eles, ['body', 'p'], '选中文本和表格' );
+            var eles = editor.queryCommandValue('elementpath');
+            editor.execCommand('elementpath', 1);
+            ua.checkElementPath(eles, ['body', 'p'], '选中文本和表格');
             range.selectNode(body.firstChild.nextSibling).select();
-            eles = editor.queryCommandValue( 'elementpath' );
-            ua.checkElementPath( eles, ['body','table'], '选中表格' );
-            editor.execCommand('elementpath',4);
-            eles = editor.queryCommandValue( 'elementpath' );
-            ua.checkElementPath( eles, ['body','table','tbody','tr','td'], '选中表格' );
+            eles = editor.queryCommandValue('elementpath');
+            ua.checkElementPath(eles, ['body', 'table'], '选中表格');
+            editor.execCommand('elementpath', 4);
+            eles = editor.queryCommandValue('elementpath');
+            ua.checkElementPath(eles, ['body', 'table', 'tbody', 'tr', 'td'], '选中表格');
             div.parentNode.removeChild(div);
             start();
-        }, 20 );
+        }, 20);
     });
-} );
+});

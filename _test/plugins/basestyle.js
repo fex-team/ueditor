@@ -69,9 +69,9 @@ test( '不闭合插入上下标', function () {
     setTimeout( function () {
         range.setStart( body.firstChild.firstChild, 0 ).setEnd( body.firstChild.lastChild, 3 ).select();
         editor.execCommand( 'superscript' );
-            ua.manualDeleteFillData( body );
-            ua.checkSameHtml( editor.getContent(), '<p><sup><strong>hello1<em>hello2</em></strong></sup><a href="http://www.baid.com/" ><sup><strong>baidu_link</strong></sup></a><sup>hel</sup>lo3</p>', '普通文本添加上标' );
-            start();
+        ua.manualDeleteFillData( body );
+        ua.checkSameHtml( editor.getContent(), '<p><sup><strong>hello1<em>hello2</em></strong></sup><a href="http://www.baid.com/" ><sup><strong>baidu_link</strong></sup></a><sup>hel</sup>lo3</p>', '普通文本添加上标' );
+        start();
     }, 100 );
 } );
 
@@ -93,10 +93,11 @@ test( 'trace 870:加粗文本前面去加粗', function () {
     equal( editor.queryCommandState( 'bold' ), 0, '不加粗' );
     range.insertNode( editor.document.createTextNode( 'hello2' ) );     /*插入一个文本节点*/
     ua.manualDeleteFillData( editor.body );
-    if (!ua.browser.chrome && !ua.browser.safari)     /*ie下插入节点后会自动移动光标到节点后面，而其他浏览器不会*/
-        equal( editor.getContent(), '<p><strong>hello</strong>hello2<br/></p>' );
-    else
+    /*ie下插入节点后会自动移动光标到节点后面，而其他浏览器不会*/
+    if(ua.browser.chrome ||ua.browser.safari ||(ua.browser.ie&&ua.browser.ie>8))//todo ie9,10改range
         equal( editor.getContent(), '<p>hello2<strong>hello</strong><br/></p>' );
+    else
+        equal( editor.getContent(), '<p><strong>hello</strong>hello2<br/></p>' );
 } );
 
 /*trace 1043*/
@@ -215,7 +216,7 @@ test( '单击B再在其他地方单击I，空的strong标签被删除 ', functio
     equal( editor.queryCommandState( 'italic' ), 1, 'b高亮' );
     ua.manualDeleteFillData( body );
     if(!ua.browser.ie){     //ie下有问题不能修，屏蔽ie
-            equal( body.innerHTML.toLowerCase(), '<p><em></em>hello</p>', '空strong标签被删除' )
+        equal( body.innerHTML.toLowerCase(), '<p><em></em>hello</p>', '空strong标签被删除' )
     }
 } );
 
@@ -225,20 +226,20 @@ test( 'ctrl+i', function() {
     var editor = UE.getEditor('ue');
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
-    var body = editor.body;
-    editor.setContent( '<p>没有加粗的文本</p>' );
-    range.selectNode( body.firstChild ).select();
-    var p = body.firstChild;
-    editor.focus();
-    setTimeout( function() {
-        ua.keydown(editor.body,{'keyCode':73,'ctrlKey':true});
+        var body = editor.body;
+        editor.setContent( '<p>没有加粗的文本</p>' );
+        range.selectNode( body.firstChild ).select();
+        var p = body.firstChild;
         editor.focus();
         setTimeout( function() {
-            equal( ua.getChildHTML( p ), '<em>没有加粗的文本</em>' );
-            UE.delEditor('ue');
-            start();
-        }, 150 );
-    }, 100 );
+            ua.keydown(editor.body,{'keyCode':73,'ctrlKey':true});
+            editor.focus();
+            setTimeout( function() {
+                equal( ua.getChildHTML( p ), '<em>没有加粗的文本</em>' );
+                UE.delEditor('ue');
+                start();
+            }, 150 );
+        }, 100 );
     });
     stop();
 } );
@@ -249,21 +250,21 @@ test( 'ctrl+u', function() {
     var editor = UE.getEditor('ue');
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
-    var body = editor.body;
+        var body = editor.body;
 
-    editor.setContent( '<p>没有加粗的文本</p>' );
-    setTimeout( function() {
-        range.selectNode( body.firstChild ).select();
-        editor.focus();
+        editor.setContent( '<p>没有加粗的文本</p>' );
         setTimeout( function() {
-            var html = '<span style="text-decoration: underline;">没有加粗的文本</span>';
-            ua.checkHTMLSameStyle( html, editor.document, body.firstChild, '文本被添加了下划线' );
-            equal(editor.body.firstChild.firstChild.style.textDecoration,'underline');
-            UE.delEditor('ue');
-            start();
+            range.selectNode( body.firstChild ).select();
+            editor.focus();
+            setTimeout( function() {
+                var html = '<span style="text-decoration: underline;">没有加粗的文本</span>';
+                ua.checkHTMLSameStyle( html, editor.document, body.firstChild, '文本被添加了下划线' );
+                equal(editor.body.firstChild.firstChild.style.textDecoration,'underline');
+                UE.delEditor('ue');
+                start();
+            }, 150 );
+            ua.keydown(editor.body,{'keyCode':85,'ctrlKey':true});
         }, 150 );
-        ua.keydown(editor.body,{'keyCode':85,'ctrlKey':true});
-    }, 150 );
     });
     stop();
 } );
@@ -274,18 +275,18 @@ test( 'ctrl+b', function() {
     var editor = UE.getEditor('ue');
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
-    var body = editor.body;
-    editor.setContent( '<p>没有加粗的文本</p>' );
-    range.selectNode( body.firstChild ).select();
-    editor.focus();
-    setTimeout( function() {
-        ua.keydown(editor.body,{'keyCode':66,'ctrlKey':true});
+        var body = editor.body;
+        editor.setContent( '<p>没有加粗的文本</p>' );
+        range.selectNode( body.firstChild ).select();
+        editor.focus();
         setTimeout( function() {
-            equal( ua.getChildHTML( body.firstChild ), '<strong>没有加粗的文本</strong>' );
-            UE.delEditor('ue');
-            start();
+            ua.keydown(editor.body,{'keyCode':66,'ctrlKey':true});
+            setTimeout( function() {
+                equal( ua.getChildHTML( body.firstChild ), '<strong>没有加粗的文本</strong>' );
+                UE.delEditor('ue');
+                start();
+            }, 150 );
         }, 150 );
-    }, 150 );
     });
     stop();
 } );
