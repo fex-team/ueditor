@@ -1,13 +1,18 @@
 ///import core
-///commands 拖拽改变图片大小
+///commands 改变图片大小
 ///commandsName  imageresize
-///commandsTitle  拖拽改变图片大小
+///commandsTitle  改变图片大小
+
 
 function Resize() {
-    this.dom = null;
+    this.container = null;
+    this.cover = null;
+    this.prePos = {x:0,y:0};
+    this.startPos = {x:0,y:0};
 }
 (function () {
     var editor,
+        domUtils = UE.dom.domUtils,
         rect = [
             //[left, top, width, height]
             [1, 1, -1, -1],
@@ -26,39 +31,36 @@ function Resize() {
             if (!editor.ui._imageResize) editor.ui._imageResize = this;
 
             var me = this,
-                angles = [],
+                hands = [],
                 cover = document.createElement('div'),
                 container = document.createElement('div');
 
             for (i = 0; i < 8; i++) {
-                angles[i] = document.createElement('span');
-                angles[i].className = 'hand' + i;
-                angles[i].style.width = angles[i].style.height = '6px';
-                container.appendChild(angles[i]);
+                hands[i] = document.createElement('span');
+                hands[i].className = 'hand' + i;
+                hands[i].style.width = hands[i].style.height = '6px';
+                container.appendChild(hands[i]);
             }
             cover.id = editor.ui.id + '_resizeCover';
-            cover.style.cssText = 'position:absolute;display:none;z-index:'+(editor.options.zIndex+11)+';';
+            cover.style.cssText = 'position:absolute;display:none;z-index:'+(editor.options.zIndex)+';';
             container.id = editor.ui.id + '_resize';
             container.className = 'edui-editor-resize';
-            container.style.cssText += 'position:absolute;display:none;border:1px solid #3b77ff;z-index:' + (editor.options.zIndex+12) + ';';
+            container.style.cssText += 'position:absolute;display:none;border:1px solid #3b77ff;z-index:' + (editor.options.zIndex) + ';';
 
             editor.ui.getDom().appendChild(cover);
             editor.ui.getDom().appendChild(container);
 
-            this.dom = {
-                cover: cover,
-                container: container,
-                angles: angles
-            };
+            me.cover = cover;
+            me.container = container;
             me.initStyle();
         },
         reset: function (targetObj) {
             var me = this,
                 target = me.target = targetObj,
-                container = this.dom.container,
-                imgPos = UE.dom.domUtils.getXY(target),
-                iframePos = UE.dom.domUtils.getXY(editor.iframe),
-                editorPos = UE.dom.domUtils.getXY(container.parentNode);
+                container = this.container,
+                imgPos = domUtils.getXY(target),
+                iframePos = domUtils.getXY(editor.iframe),
+                editorPos = domUtils.getXY(container.parentNode);
             var x = iframePos.x + imgPos.x - editor.document.body.scrollLeft - editorPos.x - parseInt(container.style.borderLeftWidth),
                 y = iframePos.y + imgPos.y - editor.document.body.scrollTop - editorPos.y - parseInt(container.style.borderTopWidth);
             container.style.width = target.offsetWidth + 'px';
@@ -91,33 +93,33 @@ function Resize() {
             var me = this,
                 doc = document;
 
-            me.startX = me.startY = 0;
+            me.startPos.x = me.startPos.y = 0;
             me.isDraging = false;
             me.dragId = -1;
 
             var _mousemoveHandler = function (e) {
-                console.log('moving');
+                console.log(e.clientX);
                 if (me.isDraging) {
-                    me.updateContainerStyle(me.dragId, {x: e.clientX - me.preX, y: e.clientY - me.preY});
-                    me.preX = e.clientX;
-                    me.preY = e.clientY;
+                    me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
+                    me.prePos.x = e.clientX;
+                    me.prePos.y = e.clientY;
                 }
             };
-            UE.dom.domUtils.on(this.dom.container, 'mousedown', function (e) {
+            domUtils.on(this.container, 'mousedown', function (e) {
                 var target = e.target, hand;
                 if (target.className.indexOf('hand') != -1) {
                     me.dragId = target.className.slice(-1);
-                    me.startX = e.clientX;
-                    me.startY = e.clientY;
-                    me.preX = e.clientX;
-                    me.preY = e.clientY;
+                    me.startPos.x = e.clientX;
+                    me.startPos.y = e.clientY;
+                    me.prePos.x = e.clientX;
+                    me.prePos.y = e.clientY;
                     me.isDraging = true;
-                    UE.dom.domUtils.on(doc, 'mousemove', _mousemoveHandler);
+                    domUtils.on(doc, 'mousemove', _mousemoveHandler);
                     document.body.setAttribute('onselectstart', "return false");
                     me.showCover();
                 }
             });
-            UE.dom.domUtils.on(doc, 'mouseup', function (e) {
+            domUtils.on(doc, 'mouseup', function (e) {
                 if(me.isDraging){
                     me.isDraging = false;
                     me.dragId = -1;
@@ -125,17 +127,17 @@ function Resize() {
                     me.reset(me.target);
                     me.hideCover();
                 }
-                UE.dom.domUtils.un(doc, 'mousemove', _mousemoveHandler);
+                domUtils.un(doc, 'mousemove', _mousemoveHandler);
             });
         },
         updateScaledElement: function () {
             var me = this;
-            me.target.style.width = parseInt(me.dom.container.style.width) + 'px';
-            me.target.style.height = parseInt(me.dom.container.style.height) + 'px';
+            me.target.style.width = parseInt(me.container.style.width) + 'px';
+            me.target.style.height = parseInt(me.container.style.height) + 'px';
         },
         updateContainerStyle: function (dir, offset) {
             var me = this,
-                dom = me.dom.container, tmp;
+                dom = me.container, tmp;
 
             rect['def'] = [1, 1, 0, 0];
             if (rect[dir][0] != 0) {
@@ -159,8 +161,8 @@ function Resize() {
             }
         },
         _validScaledProp: function (prop, value) {
-            var ele = this.dom.container,
-                wrap = editor.document.body;
+            var ele = this.container,
+                wrap = document;
 
             value = isNaN(value) ? 0 : value;
             switch (prop) {
@@ -175,44 +177,42 @@ function Resize() {
             }
         },
         hideCover: function () {
-            this.dom.cover.style.display = 'none';
+            this.cover.style.display = 'none';
         },
         showCover: function () {
             var me = this,
-                cover = me.dom.cover,
+                cover = me.cover,
                 w = editor.iframe.offsetWidth,
                 h = editor.iframe.offsetHeight,
-                editorPos = UE.dom.domUtils.getXY(editor.ui.getDom()),
-                iframePos = UE.dom.domUtils.getXY(editor.iframe);
+                editorPos = domUtils.getXY(editor.ui.getDom()),
+                iframePos = domUtils.getXY(editor.iframe);
 
             cover.id = editor.ui.id + '_resizeCover';
             cover.style.display = 'block';
             cover.style.cssText += 'width:'+w+'px;height:'+h+'px;top:'+(iframePos.y-editorPos.y)+'px;left:'+(iframePos.x-editorPos.x)+'px;';
         },
         show: function () {
-            this.dom.container.style.display = 'block';
+            this.container.style.display = 'block';
             editor.document.body.contentEditable = 'false';
-//            editor.document.body.setAttribute('unselectable','on');
         },
         hide: function () {
-            this.dom.container.style.display = 'none';
+            this.container.style.display = 'none';
             editor.document.body.contentEditable = 'true';
-//            editor.document.body.removeAttribute('unselectable');
         }
     }
 })();
 
 UE.plugins['imageresize'] = function () {
     var me = this;
-//    me.commands['imageresize'] = {
-//        execCommand: function (cmd, opt) {
-//            var range = this.selection.getRange(), img = range.getClosedNode();
-//            if (img && img.tagName == 'IMG') {
-//                img.setAttribute('width', opt.width);
-//                img.setAttribute('height', opt.height);
-//            }
-//        }
-//    };
+    me.commands['imageresize'] = {
+        execCommand: function (cmd, opt) {
+            var range = this.selection.getRange(), img = range.getClosedNode();
+            if (img && img.tagName == 'IMG') {
+                img.setAttribute('width', opt.width);
+                img.setAttribute('height', opt.height);
+            }
+        }
+    };
     me.addListener('selectionchange', function (t, causeByUi) {
         if (!causeByUi) return;
         var img = me.selection.getRange().getClosedNode();
@@ -221,13 +221,11 @@ UE.plugins['imageresize'] = function () {
             if (me.ui._imageResize) {
                 iamgeResize = me.ui._imageResize;
             } else {
-                iamgeResize = new Resize();
+                iamgeResize = me.ui._imageResize = new Resize();
                 iamgeResize.init(me);
             }
             iamgeResize.reset(img);
             iamgeResize.show();
-
-            me.selection.getRange().setStartAfter(img);
         } else {
             if (me.ui._imageResize) me.ui._imageResize.hide();
         }
