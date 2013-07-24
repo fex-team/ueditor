@@ -55,7 +55,7 @@ UE.plugins['imageresize'] = (function () {
                 me.initStyle();
             },
             initStyle: function () {
-                utils.cssRule('imageresize','.edui-editor-resize span{position:absolute;left:0;top:0;width:6px;height:6px;inline-height:6px;display:block;background-color:#006DAE;}'
+                utils.cssRule('imageresize','.edui-editor-resize span{position:absolute;left:0;top:0;width:6px;height:6px;overflow:hidden;font-size:0px;display:block;background-color:#006DAE;}'
                     + '.edui-editor-resize .hand0, .edui-editor-resize .hand7{cursor:nw-resize;}'
                     + '.edui-editor-resize .hand1, .edui-editor-resize .hand6{left:50%;margin-left:-3px;cursor:n-resize;}'
                     + '.edui-editor-resize .hand2, .edui-editor-resize .hand4, .edui-editor-resize .hand7{left:100%;margin-left:-6px;}'
