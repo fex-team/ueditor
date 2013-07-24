@@ -6,13 +6,15 @@
 UE.plugins['imageresize'] = (function () {
 
     function Resize() {
+        this.editor = null;
         this.container = null;
         this.cover = null;
-        this.prePos = {x:0,y:0};
-        this.startPos = {x:0,y:0};
+        this.prePos = {x: 0, y: 0};
+        this.startPos = {x: 0, y: 0};
     }
+
     (function () {
-        var editor,
+        var allResizes = [],
             rect = [
                 //[left, top, width, height]
                 [1, 1, -1, -1],
@@ -27,41 +29,43 @@ UE.plugins['imageresize'] = (function () {
 
         Resize.prototype = {
             init: function (editorObj) {
-                editor = editorObj;
-                if (!editor.ui._imageResize) editor.ui._imageResize = this;
-
                 var me = this,
                     hands = [],
                     cover = me.cover = document.createElement('div'),
                     container = me.container = document.createElement('div');
+
+                me.editor = editorObj;
+                me.editor.ui._imageResize = me;
+                allResizes.push(me);
 
                 for (i = 0; i < 8; i++) {
                     hands[i] = document.createElement('span');
                     hands[i].className = 'hand' + i;
                     container.appendChild(hands[i]);
                 }
-                cover.id = editor.ui.id + '_resizeCover';
-                cover.style.cssText = 'position:absolute;display:none;z-index:'+(editor.options.zIndex)+';filter:alpha(opacity=0); opacity:0;background:#CCC;';
-                domUtils.on(cover, 'mouseup', function (e) {
-                    me.cover.style.display = 'none';
+                cover.id = me.editor.ui.id + '_imageresize_cover';
+                cover.style.cssText = 'position:absolute;display:none;z-index:' + (me.editor.options.zIndex) + ';filter:alpha(opacity=0); opacity:0;background:#CCC;';
+                domUtils.on(cover, 'mousedown', function () {
+                    me.hideCover();
                 });
 
-                container.id = editor.ui.id + '_resize';
-                container.className = 'edui-editor-resize';
-                container.style.cssText += ';position:absolute;display:none;border:1px solid #3b77ff;z-index:' + (editor.options.zIndex) + ';';
+                container.id = me.editor.ui.id + '_imageresize';
+                container.className = 'edui-editor-imageresize';
+                container.style.cssText += ';position:absolute;display:none;border:1px solid #3b77ff;z-index:' + (me.editor.options.zIndex) + ';';
 
-                editor.ui.getDom().appendChild(cover);
-                editor.ui.getDom().appendChild(container);
+                me.editor.ui.getDom().appendChild(cover);
+                me.editor.ui.getDom().appendChild(container);
                 me.initStyle();
+
             },
             initStyle: function () {
-                utils.cssRule('imageresize','.edui-editor-resize span{position:absolute;left:0;top:0;width:6px;height:6px;overflow:hidden;font-size:0px;display:block;background-color:#006DAE;}'
-                    + '.edui-editor-resize .hand0, .edui-editor-resize .hand7{cursor:nw-resize;}'
-                    + '.edui-editor-resize .hand1, .edui-editor-resize .hand6{left:50%;margin-left:-3px;cursor:n-resize;}'
-                    + '.edui-editor-resize .hand2, .edui-editor-resize .hand4, .edui-editor-resize .hand7{left:100%;margin-left:-6px;}'
-                    + '.edui-editor-resize .hand3, .edui-editor-resize .hand4{top:50%;margin-top:-3px;cursor:w-resize;}'
-                    + '.edui-editor-resize .hand5, .edui-editor-resize .hand6, .edui-editor-resize .hand7{margin-top:-6px;top:100%;}'
-                    + '.edui-editor-resize .hand2, .edui-editor-resize .hand5{cursor:ne-resize;}');
+                utils.cssRule('imageresize', '.edui-editor-imageresize span{position:absolute;left:0;top:0;width:6px;height:6px;overflow:hidden;font-size:0px;display:block;background-color:#006DAE;}'
+                    + '.edui-editor-imageresize .hand0, .edui-editor-imageresize .hand7{cursor:nw-resize;}'
+                    + '.edui-editor-imageresize .hand1, .edui-editor-imageresize .hand6{left:50%;margin-left:-3px;cursor:n-resize;}'
+                    + '.edui-editor-imageresize .hand2, .edui-editor-imageresize .hand4, .edui-editor-imageresize .hand7{left:100%;margin-left:-6px;}'
+                    + '.edui-editor-imageresize .hand3, .edui-editor-imageresize .hand4{top:50%;margin-top:-3px;cursor:w-resize;}'
+                    + '.edui-editor-imageresize .hand5, .edui-editor-imageresize .hand6, .edui-editor-imageresize .hand7{margin-top:-6px;top:100%;}'
+                    + '.edui-editor-imageresize .hand2, .edui-editor-imageresize .hand5{cursor:ne-resize;}');
             },
             initEvents: function () {
                 var me = this,
@@ -71,7 +75,7 @@ UE.plugins['imageresize'] = (function () {
                 me.isDraging = false;
                 me.dragId = -1;
 
-                var _mousemoveHandler = function (e) {
+                var _mouseMoveHandler = function (e) {
                     if (me.isDraging) {
                         me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
                         me.prePos.x = e.clientX;
@@ -87,20 +91,20 @@ UE.plugins['imageresize'] = (function () {
                         me.prePos.x = e.clientX;
                         me.prePos.y = e.clientY;
                         me.isDraging = true;
-                        domUtils.on(doc, 'mousemove', _mousemoveHandler);
+                        domUtils.on(doc, 'mousemove', _mouseMoveHandler);
                         document.body.setAttribute('onselectstart', "return false");
                         me.showCover();
                     }
                 });
                 domUtils.on(doc, 'mouseup', function (e) {
-                    if(me.isDraging){
+                    if (me.isDraging) {
                         me.isDraging = false;
                         me.dragId = -1;
                         me.updateScaledElement();
                         me.setTarget(me.target);
                         me.hideCover();
                     }
-                    domUtils.un(doc, 'mousemove', _mousemoveHandler);
+                    domUtils.un(doc, 'mousemove', _mouseMoveHandler);
                 });
             },
             setTarget: function (targetObj) {
@@ -108,10 +112,10 @@ UE.plugins['imageresize'] = (function () {
                     target = me.target = targetObj,
                     container = this.container,
                     imgPos = domUtils.getXY(target),
-                    iframePos = domUtils.getXY(editor.iframe),
+                    iframePos = domUtils.getXY(me.editor.iframe),
                     editorPos = domUtils.getXY(container.parentNode);
-                var x = iframePos.x + imgPos.x - editor.document.body.scrollLeft - editorPos.x - parseInt(container.style.borderLeftWidth),
-                    y = iframePos.y + imgPos.y - editor.document.body.scrollTop - editorPos.y - parseInt(container.style.borderTopWidth);
+                var x = iframePos.x + imgPos.x - me.editor.document.body.scrollLeft - editorPos.x - parseInt(container.style.borderLeftWidth),
+                    y = iframePos.y + imgPos.y - me.editor.document.body.scrollTop - editorPos.y - parseInt(container.style.borderTopWidth);
                 container.style.width = target.offsetWidth + 'px';
                 container.style.height = target.offsetHeight + 'px';
                 container.style.left = x + 'px';
@@ -167,53 +171,71 @@ UE.plugins['imageresize'] = (function () {
             showCover: function () {
                 var me = this,
                     cover = me.cover,
-                    w = editor.iframe.offsetWidth,
-                    h = editor.iframe.offsetHeight,
-                    editorPos = domUtils.getXY(editor.ui.getDom()),
-                    iframePos = domUtils.getXY(editor.iframe);
+                    w = me.editor.iframe.offsetWidth,
+                    h = me.editor.iframe.offsetHeight,
+                    editorPos = domUtils.getXY(me.editor.ui.getDom()),
+                    iframePos = domUtils.getXY(me.editor.iframe);
 
-                cover.id = editor.ui.id + '_resizeCover';
-                cover.style.cssText += ';width:'+w+'px; height:'+h+'px;top:'+(iframePos.y-editorPos.y)+'px;left:'+(iframePos.x-editorPos.x)+'px;';
+                cover.style.cssText += ';width:' + w + 'px; height:' + h + 'px;top:' + (iframePos.y - editorPos.y) + 'px;left:' + (iframePos.x - editorPos.x) + 'px;';
                 cover.style.display = '';
             },
             show: function () {
-                this.container.style.display = 'block';
-                editor.document.body.contentEditable = 'false';
+                var me = this;
+                me.container.style.display = 'block';
+                me.editor.document.body.contentEditable = 'false';
+
+                me._keyDownHandler = function() {
+                    me.hide();
+                    var range = me.editor.selection.getRange();
+                    range.selectNode(me.target);
+                    range.select();
+                }
+                me._mouseDownHandler = function(e) {
+                    var ele = e.target || e.srcElement;
+                    if (ele && ele.className.indexOf('imageresize')==-1 && ele.parentNode.className.indexOf('imageresize')==-1 ) {
+                        me._keyDownHandler();
+                    }
+                }
+
+                domUtils.on(document, 'keydown', me._keyDownHandler);
+                domUtils.on(me.editor.document, 'keydown', me._keyDownHandler);
+                domUtils.on(document, 'mousedown', me._mouseDownHandler);
+                domUtils.on(me.editor.document, 'mousedown', me._mouseDownHandler);
             },
             hide: function () {
-                this.container.style.display = 'none';
-                editor.document.body.contentEditable = 'true';
+                var me = this;
+                me.hideCover();
+                me.container.style.display = 'none';
+                me.editor.document.body.contentEditable = 'true';
+
+                domUtils.un(document, 'keydown', me._keyDownHandler);
+                domUtils.un(me.editor.document, 'keydown', me._keyDownHandler);
+                domUtils.un(document, 'mousedown', me._mouseDownHandler);
+                domUtils.un(me.editor.document, 'mousedown', me._mouseDownHandler);
             }
         }
     })();
 
-    return function(){
+    return function () {
         var me = this;
-        me.commands['imageresize'] = {
-            execCommand: function (cmd, opt) {
-                var range = this.selection.getRange(), img = range.getClosedNode();
+        if (me.options.imageResizeEnabled === undefined) me.options.imageResizeEnabled = true;
+        if (me.options.imageResizeEnabled) {
+            me.addListener('mousedown', function (type, e) {
+                var img = e.target || e.srcElement;
                 if (img && img.tagName == 'IMG') {
-                    img.setAttribute('width', opt.width);
-                    img.setAttribute('height', opt.height);
-                }
-            }
-        };
-        me.addListener('mousedown', function(type, e) {
-            var img = e.target || e.srcElement;
-            if (img && img.tagName == 'IMG') {
-                var imageResize;
-                if (me.ui._imageResize) {
-                    imageResize = me.ui._imageResize;
+                    var imageResize;
+                    if (me.ui._imageResize) {
+                        imageResize = me.ui._imageResize;
+                    } else {
+                        imageResize = me.ui._imageResize = new Resize();
+                        imageResize.init(me);
+                    }
+                    imageResize.setTarget(img);
+                    imageResize.show();
                 } else {
-                    imageResize = me.ui._imageResize = new Resize();
-                    imageResize.init(me);
+                    if (me.ui._imageResize) me.ui._imageResize.hide();
                 }
-                imageResize.setTarget(img);
-                imageResize.show();
-                //e.preventDefault();
-            } else {
-                if (me.ui._imageResize) me.ui._imageResize.hide();
-            }
-        });
+            });
+        }
     }
 })();
