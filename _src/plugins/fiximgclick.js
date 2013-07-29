@@ -239,7 +239,6 @@ UE.plugins['fiximgclick'] = (function(){
                 var range = me.selection.getRange(),
                     img = range.getClosedNode();
 
-                console.log(img);
                 if (img && img.tagName == 'IMG') {
                     var imageResize;
                     imageResize = me.ui._imageResize || new Resize();
