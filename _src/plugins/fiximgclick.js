@@ -235,7 +235,7 @@ UE.plugins['fiximgclick'] = (function(){
         var me = this;
 
         if ( !browser.ie ) {
-            me.addListener('click selectionchange', function(type, e){
+            me.addListener('click', function(type, e){
                 var range = me.selection.getRange(),
                     img = range.getClosedNode();
 
