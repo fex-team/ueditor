@@ -249,7 +249,7 @@ UE.plugins['fiximgclick'] = (function(){
                 }
             });
         }
-        if ( !browser.webkit ) {
+        if ( browser.webkit ) {
             me.addListener( 'click', function( type, e ) {
                 if ( e.target.tagName == 'IMG' ) {
                     var range = new dom.Range( me.document );
