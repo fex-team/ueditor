@@ -234,7 +234,7 @@ UE.plugins['fiximgclick'] = (function(){
     return function () {
         var me = this;
 
-        if ( browser.webkit ) {
+        if ( !browser.ie ) {
             me.addListener('click selectionchange', function(type, e){
                 var range = me.selection.getRange(),
                     img = range.getClosedNode();
@@ -249,6 +249,8 @@ UE.plugins['fiximgclick'] = (function(){
                     if (me.ui._imageResize) me.ui._imageResize.hide();
                 }
             });
+        }
+        if ( !browser.webkit ) {
             me.addListener( 'click', function( type, e ) {
                 if ( e.target.tagName == 'IMG' ) {
                     var range = new dom.Range( me.document );
