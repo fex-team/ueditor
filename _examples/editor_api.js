@@ -23,7 +23,6 @@
             'plugins/autosubmit.js',
             'plugins/background.js',
             'plugins/image.js',
-            'plugins/imageresize.js',
             'plugins/justify.js',
             'plugins/font.js',
             'plugins/link.js',
