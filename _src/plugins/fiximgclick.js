@@ -39,7 +39,7 @@ UE.plugins['fiximgclick'] = (function () {
                     cover = me.cover = document.createElement('div'),
                     resizer = me.resizer = document.createElement('div');
 
-                cover.id = me.editor.ui.id + '_scale_cover';
+                cover.id = me.editor.ui.id + '_imagescale_cover';
                 cover.style.cssText = 'position:absolute;display:none;z-index:' + (me.editor.options.zIndex) + ';filter:alpha(opacity=0); opacity:0;background:#CCC;';
                 domUtils.on(cover, 'mousedown click', function () {
                     me.hide();
@@ -48,7 +48,7 @@ UE.plugins['fiximgclick'] = (function () {
                 for (i = 0; i < 8; i++) {
                     hands.push('<span class="edui-editor-scale-hand' + i + '"></span>');
                 }
-                resizer.id = me.editor.ui.id + '_scale';
+                resizer.id = me.editor.ui.id + '_imagescale';
                 resizer.className = 'edui-editor-scale';
                 resizer.innerHTML = hands.join('');
                 resizer.style.cssText += ';display:none;border:1px solid #3b77ff;z-index:' + (me.editor.options.zIndex) + ';';
@@ -100,6 +100,7 @@ UE.plugins['fiximgclick'] = (function () {
                     case 'mouseup':
                         if (me.dragId != -1) {
                             me.dragId = -1;
+                            me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
                             me.updateTargetElement();
                             if (me.target.parentNode) me.attachTo(me.target);
                         }
@@ -235,7 +236,7 @@ UE.plugins['fiximgclick'] = (function () {
                             imageScale.hide();
                         }, _mouseDownHandler = function (e) {
                             var ele = e.target || e.srcElement;
-                            if (ele && ele.className.indexOf('edui-editor-scale') == -1) {
+                            if (ele && (ele.className===undefined || ele.className.indexOf('edui-editor-scale') == -1)) {
                                 _keyDownHandler(e);
                             }
                         }, timer;
