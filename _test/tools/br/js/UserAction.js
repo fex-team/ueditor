@@ -1725,6 +1725,14 @@ UserAction = {
             return ele.style['cssFloat'];
     },
 
+    getComputedStyle:function(ele ){
+        if(this.browser.ie&&ua.browser.ie<9){
+            return ele.currentStyle;
+        }else{
+            return window.getComputedStyle(ele);
+        }
+    },
+
     readTxt:function (name, f) {
         var args = {};
         args['name'] = './txt/' + name;

@@ -47,6 +47,19 @@ test( '删div', function () {
     var html = '<p>视频</p>';
     ua.checkSameHtml(html,editor.body.innerHTML,'删div');
 } );
+test( 'allowDivTransToP--false 不转div', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id ='ue';
+    var editor = UE.getEditor('ue',{allowDivTransToP:false});
+    stop();
+    editor.ready(function(){
+        var html = '<div class="socore" ><div class="sooption" style="padding: 1px;" >视频</div></div>';
+        editor.setContent( html );
+        ua.checkSameHtml(html,editor.body.innerHTML,'删div');
+        UE.delEditor('ue');
+        start();
+    });
+} );
 test( 'li', function () {
     var editor = te.obj[0];
     editor.setContent( '<li style="margin: 0px 0px 0px 6px;" ><a href="http://www.baidu.com/p/pistachio%E5%A4%A9?from=zhidao" class="user-name"  >天<i class="i-arrow-down"></i></a></li>' );
