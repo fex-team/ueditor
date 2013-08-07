@@ -370,7 +370,28 @@ test('undo--redo', function () {
     else
         equal(ua.getChildHTML(editor.body), '<p><img anchorname=\"hello\" class=\"anchorclass\">' + spase + '</p>', '');
 });
+test('reset,index', function () {
+    var editor = te.obj[0];
+    editor.setContent('<p></p>');
+    editor.focus();
+    editor.execCommand('anchor', 'hello');
+    var listLength = editor.undoManger.list.length;
+    ok(listLength>0,'检查undoManger.list');
+    equal(editor.undoManger.index,1,'检查undoManger.index');
+    editor.undoManger.undo();
+    equal(editor.undoManger.list.length,listLength,'undo操作,undoManger.list不变');
+    equal(editor.undoManger.index,0,'undo操作,undoManger.index-1');
+    var spase = ua.browser.ie ? '&nbsp;' : '<br>';
+    equal(ua.getChildHTML(editor.body), '<p>' + spase + '</p>', '检查内容');
+    editor.reset();
+    equal(editor.undoManger.list.length,0,'reset,undoManger.list清空');
+    equal(editor.undoManger.index,0,'reset,undoManger.index清空');
+    editor.undoManger.redo();
+    ua.manualDeleteFillData(editor.body);
+    var spase = ua.browser.ie ? '&nbsp;' : '<br>';
+    equal(ua.getChildHTML(editor.body), '<p>' + spase + '</p>','检查内容');
 
+});
 /*trace 1068  格式刷图片*/
 test('trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动图片刷默认样式的图片', function () {
     var div = document.body.appendChild(document.createElement('div'));
