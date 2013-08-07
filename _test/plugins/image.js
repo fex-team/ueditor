@@ -86,31 +86,6 @@ test( '修改已有图片的属性', function () {
     equal( body.firstChild.childNodes.length, 3, '2个img孩子' );
 } );
 
-/*trace1491 修改动图的宽高*/
-test( 'trace1491 修改动图的宽高', function () {
-    var editor = te.obj[0];
-    var range = te.obj[1];
-    var body = editor.body;
-    editor.setContent( '<p><br></p>' );
-    range.setStart( body.firstChild, 0 ).collapse( 1 ).select();
-    editor.execCommand( 'insertimage', {src:'../data/test.JPG'} );
-    ua.manualDeleteFillData( editor.body );
-    range.selectNode( body.firstChild.firstChild ).select();
-    var img = body.getElementsByTagName( 'img' )[0];
-    img.onload = function () {      //这里必须要等一下才能过
-            equal( $( img ).attr( 'width' ), '30', '比较width' );
-            equal( $( img ).attr( 'height' ), '853', '比较width' );
-            start();
-    };
-    editor.execCommand( 'insertimage', {src:'../data/test.JPG', width:50, height:80} );
-    img.onload = function () {
-            equal( $( img ).attr( 'width' ), '50', '比较width' );
-            equal( $( img ).attr( 'height' ), '80', '比较width' );
-            start();
-    };
-    ok(/data\/test\.JPG/.test( img.getAttribute( 'src' )), '比较src' );
-    stop();
-} );
 
 test( '选区不闭合插入图像', function () {
     var editor = te.obj[0];
