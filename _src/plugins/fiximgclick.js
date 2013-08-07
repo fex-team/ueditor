@@ -117,7 +117,7 @@ UE.plugins['fiximgclick'] = (function () {
                     'width': me.resizer.style.width,
                     'height': me.resizer.style.height
                 })
-                me.attachTo(me.target);
+                //me.attachTo(me.target);
             },
             updateContainerStyle: function (dir, offset) {
                 var me = this,
@@ -208,8 +208,8 @@ UE.plugins['fiximgclick'] = (function () {
                     editorPos = domUtils.getXY(resizer.parentNode);
 
                 domUtils.setStyles(resizer, {
-                    'width': target.offsetWidth + 'px',
-                    'height': target.offsetHeight + 'px',
+                    'width': target.width + 'px',
+                    'height': target.width + 'px',
                     'left': iframePos.x + imgPos.x - me.editor.document.body.scrollLeft - editorPos.x - parseInt(resizer.style.borderLeftWidth) + 'px',
                     'top': iframePos.y + imgPos.y - me.editor.document.body.scrollTop - editorPos.y - parseInt(resizer.style.borderTopWidth) + 'px'
                 });
