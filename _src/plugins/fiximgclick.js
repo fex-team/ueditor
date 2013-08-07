@@ -117,7 +117,7 @@ UE.plugins['fiximgclick'] = (function () {
                     'width': me.resizer.style.width,
                     'height': me.resizer.style.height
                 })
-                //me.attachTo(me.target);
+                me.attachTo(me.target);
             },
             updateContainerStyle: function (dir, offset) {
                 var me = this,
