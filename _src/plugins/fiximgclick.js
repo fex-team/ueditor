@@ -99,10 +99,10 @@ UE.plugins['fiximgclick'] = (function () {
                         break;
                     case 'mouseup':
                         if (me.dragId != -1) {
-                            me.dragId = -1;
                             me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
                             me.updateTargetElement();
                             if (me.target.parentNode) me.attachTo(me.target);
+                            me.dragId = -1;
                         }
                         domUtils.un(me.doc,'mousemove', me.proxy(me._eventHandler, me));
                         break;
@@ -209,7 +209,7 @@ UE.plugins['fiximgclick'] = (function () {
 
                 domUtils.setStyles(resizer, {
                     'width': target.width + 'px',
-                    'height': target.width + 'px',
+                    'height': target.height + 'px',
                     'left': iframePos.x + imgPos.x - me.editor.document.body.scrollLeft - editorPos.x - parseInt(resizer.style.borderLeftWidth) + 'px',
                     'top': iframePos.y + imgPos.y - me.editor.document.body.scrollTop - editorPos.y - parseInt(resizer.style.borderTopWidth) + 'px'
                 });
