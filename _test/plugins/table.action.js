@@ -5,6 +5,7 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
+
 test( '在第一个单元格里最前面回车,且表格前面没有内容', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -483,6 +484,7 @@ test('trace 3114 在单元格内粘贴行',function(){
     editor.setContent('');
     editor.execCommand('inserttable');
     var tds = editor.body.getElementsByTagName('td');
+
     var ut = editor.getUETable(editor.body.firstChild);
     var cellsRange = ut.getCellsRange(tds[0],tds[9]);
     ut.setSelected(cellsRange);
@@ -502,4 +504,48 @@ test('trace 3114 在单元格内粘贴行',function(){
             start();
         },50);
     },50);
+});
+test('在单元格中粘贴_粘到最后',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:3,numRows:3} );                              /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(tds[0],tds[4]);
+    ut.setSelected(cellsRange);                                     /*确定选区*/
+    range.setStart( tds[0], 0 ).collapse( true ).select();          /*定光标*/
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    var html ={html:editor.body.innerHTML};
+    range.setStart( tds[8],0).collapse(true).select();
+    equal(editor.body.getElementsByTagName('tr').length,3,'触发粘贴事件前有3个tr');
+    equal(editor.body.getElementsByTagName('td').length,9,'触发粘贴事件前有9个td');
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+    editor.fireEvent("afterpaste");
+    equal(editor.body.getElementsByTagName('tr').length,4,'触发粘贴事件后有4个tr');
+    equal(editor.body.getElementsByTagName('td').length,16,'触发粘贴事件后有12个td');
+});
+test('在单元格中粘贴_整列',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:3,numRows:3} );                              /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],0).collapse(true).select();
+    editor.execCommand('inserttitle');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(tds[0],tds[6]);
+    ut.setSelected(cellsRange);                                     /*确定选区*/
+    range.setStart( tds[0], 0 ).collapse( true ).select();          /*定光标*/
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    var html ={html:editor.body.innerHTML};
+    range.setStart( tds[6],0).collapse(true).select();
+    equal(editor.body.getElementsByTagName('tr').length,4,'触发粘贴事件前有4个tr');
+    equal(editor.body.getElementsByTagName('th').length,3,'触发粘贴事件前有3个th');
+    equal(editor.body.getElementsByTagName('td').length,9,'触发粘贴事件前有9个td');
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+    editor.fireEvent("afterpaste");
+    equal(editor.body.getElementsByTagName('tr').length,4,'触发粘贴事件后有4个tr');
+    equal(editor.body.getElementsByTagName('th').length,4,'触发粘贴事件前有4个th');
+    equal(editor.body.getElementsByTagName('td').length,12,'触发粘贴事件后有12个td');
 });
