@@ -4,12 +4,13 @@
 ///commandsTitle  修复chrome下图片不能点击的问题，出现八个角可改变大小
 //修复chrome下图片不能点击的问题，出现八个角可改变大小
 
-UE.plugins['fiximgclick'] = (function(){
+UE.plugins['fiximgclick'] = (function () {
 
-    function Resize() {
+    function Scale() {
         this.editor = null;
-        this.container = null;
+        this.resizer = null;
         this.cover = null;
+        this.doc = document;
         this.prePos = {x: 0, y: 0};
         this.startPos = {x: 0, y: 0};
     }
@@ -27,126 +28,100 @@ UE.plugins['fiximgclick'] = (function(){
             [0, 0, 1, 1]
         ];
 
-        Resize.prototype = {
-            reset: function(editor, targetDom){
+        Scale.prototype = {
+            init: function (editor) {
                 var me = this;
-
                 me.editor = editor;
-                me.target = targetDom;
+                me.startPos = this.prePos = {x: 0, y: 0};
+                me.dragId = -1;
 
-                if(!editor.ui._imageResize) {
-                    editor.ui._imageResize = this;
-                    me.init();
-                }
-                me.setTarget(targetDom);
-            },
-            init: function () {
-                var me = this,
-                    hands = [],
+                var hands = [],
                     cover = me.cover = document.createElement('div'),
-                    container = me.container = document.createElement('div');
+                    resizer = me.resizer = document.createElement('div');
 
-                me.editor.ui._imageResize = me;
-
-                for (i = 0; i < 8; i++) {
-                    hands[i] = document.createElement('span');
-                    hands[i].className = 'hand' + i;
-                    container.appendChild(hands[i]);
-                }
-                cover.id = me.editor.ui.id + '_imageresize_cover';
+                cover.id = me.editor.ui.id + '_imagescale_cover';
                 cover.style.cssText = 'position:absolute;display:none;z-index:' + (me.editor.options.zIndex) + ';filter:alpha(opacity=0); opacity:0;background:#CCC;';
                 domUtils.on(cover, 'mousedown click', function () {
-                    me.hideCover();
+                    me.hide();
                 });
 
-                container.id = me.editor.ui.id + '_imageresize';
-                container.className = 'edui-editor-imageresize';
-                container.style.cssText += ';display:none;border:1px solid #3b77ff;z-index:' + (me.editor.options.zIndex) + ';';
+                for (i = 0; i < 8; i++) {
+                    hands.push('<span class="edui-editor-scale-hand' + i + '"></span>');
+                }
+                resizer.id = me.editor.ui.id + '_imagescale';
+                resizer.className = 'edui-editor-scale';
+                resizer.innerHTML = hands.join('');
+                resizer.style.cssText += ';display:none;border:1px solid #3b77ff;z-index:' + (me.editor.options.zIndex) + ';';
 
                 me.editor.ui.getDom().appendChild(cover);
-                me.editor.ui.getDom().appendChild(container);
+                me.editor.ui.getDom().appendChild(resizer);
+
                 me.initStyle();
                 me.initEvents();
-
             },
             initStyle: function () {
-                utils.cssRule('imageresize', '.edui-editor-imageresize{position:absolute;border:1px solid #38B2CE;}' +
-                    '.edui-editor-imageresize span{position:absolute;left:0;top:0;width:6px;height:6px;overflow:hidden;font-size:0px;display:block;background-color:#3C9DD0;}'
-                    + '.edui-editor-imageresize .hand0{cursor:nw-resize;top:0;margin-top:-7px;left:0;margin-left:-7px;}'
-                    + '.edui-editor-imageresize .hand1{cursor:n-resize;top:0;margin-top:-7px;left:50%;margin-left:-3px;}'
-                    + '.edui-editor-imageresize .hand2{cursor:ne-resize;top:0;margin-top:-7px;left:100%;margin-left:1px;}'
-                    + '.edui-editor-imageresize .hand3{cursor:w-resize;top:50%;margin-top:-3px;left:0;margin-left:-7px;}'
-                    + '.edui-editor-imageresize .hand4{cursor:e-resize;top:50%;margin-top:-3px;left:100%;margin-left:1px;}'
-                    + '.edui-editor-imageresize .hand5{cursor:sw-resize;top:100%;margin-top:1px;left:0;margin-left:-7px;}'
-                    + '.edui-editor-imageresize .hand6{cursor:s-resize;top:100%;margin-top:1px;left:50%;margin-left:-3px;}'
-                    + '.edui-editor-imageresize .hand7{cursor:se-resize;top:100%;margin-top:1px;left:100%;margin-left:1px;}');
+                utils.cssRule('imagescale', '.edui-editor-scale{position:absolute;border:1px solid #38B2CE;}' +
+                    '.edui-editor-scale span{position:absolute;width:6px;height:6px;overflow:hidden;font-size:0px;display:block;background-color:#3C9DD0;}'
+                    + '.edui-editor-scale .edui-editor-scale-hand0{cursor:nw-resize;top:0;margin-top:-4px;left:0;margin-left:-4px;}'
+                    + '.edui-editor-scale .edui-editor-scale-hand1{cursor:n-resize;top:0;margin-top:-4px;left:50%;margin-left:-4px;}'
+                    + '.edui-editor-scale .edui-editor-scale-hand2{cursor:ne-resize;top:0;margin-top:-4px;left:100%;margin-left:-3px;}'
+                    + '.edui-editor-scale .edui-editor-scale-hand3{cursor:w-resize;top:50%;margin-top:-4px;left:0;margin-left:-4px;}'
+                    + '.edui-editor-scale .edui-editor-scale-hand4{cursor:e-resize;top:50%;margin-top:-4px;left:100%;margin-left:-3px;}'
+                    + '.edui-editor-scale .edui-editor-scale-hand5{cursor:sw-resize;top:100%;margin-top:-3px;left:0;margin-left:-4px;}'
+                    + '.edui-editor-scale .edui-editor-scale-hand6{cursor:s-resize;top:100%;margin-top:-3px;left:50%;margin-left:-4px;}'
+                    + '.edui-editor-scale .edui-editor-scale-hand7{cursor:se-resize;top:100%;margin-top:-3px;left:100%;margin-left:-3px;}');
             },
             initEvents: function () {
-                var me = this,
-                    doc = document;
+                var me = this;
 
                 me.startPos.x = me.startPos.y = 0;
                 me.isDraging = false;
-                me.dragId = -1;
-
-                var _mouseMoveHandler = function (e) {
-                    if (me.isDraging) {
-                        me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
-                        me.prePos.x = e.clientX;
-                        me.prePos.y = e.clientY;
-                        me.updateTargetElement();
-                    }
-                };
-                domUtils.on(this.container, 'mousedown', function (e) {
-                    var hand = e.target || e.srcElement, hand;
-                    if (hand.className.indexOf('hand') != -1) {
-                        me.dragId = hand.className.slice(-1);
-                        me.startPos.x = e.clientX;
-                        me.startPos.y = e.clientY;
-                        me.prePos.x = e.clientX;
-                        me.prePos.y = e.clientY;
-                        me.isDraging = true;
-                        domUtils.on(doc, 'mousemove', _mouseMoveHandler);
-                        me.showCover();
-                    }
-                });
-                domUtils.on(doc, 'mouseup', function (e) {
-                    if (me.isDraging) {
-                        me.isDraging = false;
-                        me.dragId = -1;
-                        me.updateTargetElement();
-                        me.setTarget(me.target);
-                        me.hideCover();
-                        me.editor.fireEvent('saveScene');
-                    }
-                    domUtils.un(doc, 'mousemove', _mouseMoveHandler);
-                });
             },
-            setTarget: function (targetObj) {
-                var me = this,
-                    target = me.target = targetObj,
-                    container = this.container,
-                    imgPos = domUtils.getXY(target),
-                    iframePos = domUtils.getXY(me.editor.iframe),
-                    editorPos = domUtils.getXY(container.parentNode);
-
-                me.editor.selection.getRange().selectNode(me.target);
-
-                var x = iframePos.x + imgPos.x - me.editor.document.body.scrollLeft - editorPos.x - parseInt(container.style.borderLeftWidth),
-                    y = iframePos.y + imgPos.y - me.editor.document.body.scrollTop - editorPos.y - parseInt(container.style.borderTopWidth);
-                container.style.width = target.offsetWidth + 'px';
-                container.style.height = target.offsetHeight + 'px';
-                container.style.left = x + 'px';
-                container.style.top = y + 'px';
+            _eventHandler: function (e) {
+                var me = this;
+                switch (e.type) {
+                    case 'mousedown':
+                        var hand = e.target || e.srcElement, hand;
+                        if (hand.className.indexOf('edui-editor-scale-hand') != -1 && me.dragId == -1) {
+                            me.dragId = hand.className.slice(-1);
+                            me.startPos.x = me.prePos.x = e.clientX;
+                            me.startPos.y = me.prePos.y = e.clientY;
+                            domUtils.on(me.doc,'mousemove', me.proxy(me._eventHandler, me));
+                        }
+                        break;
+                    case 'mousemove':
+                        if (me.dragId != -1) {
+                            me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
+                            me.prePos.x = e.clientX;
+                            me.prePos.y = e.clientY;
+                            me.updateTargetElement();
+                        }
+                        break;
+                    case 'mouseup':
+                        if (me.dragId != -1) {
+                            me.dragId = -1;
+                            me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
+                            me.updateTargetElement();
+                            if (me.target.parentNode) me.attachTo(me.target);
+                        }
+                        domUtils.un(me.doc,'mousemove', me.proxy(me._eventHandler, me));
+                        break;
+                    default:
+                        break;
+                }
             },
             updateTargetElement: function () {
-                var me = this;
-                me.target.style.width = parseInt(me.container.style.width) + 'px';
-                me.target.style.height = parseInt(me.container.style.height) + 'px';
+                var me = this,
+                    targetPos;
+                domUtils.setStyles(me.target, {
+                    'width': me.resizer.style.width,
+                    'height': me.resizer.style.height
+                })
+                //me.attachTo(me.target);
             },
             updateContainerStyle: function (dir, offset) {
                 var me = this,
-                    dom = me.container, tmp;
+                    dom = me.resizer, tmp;
 
                 if (rect[dir][0] != 0) {
                     tmp = parseInt(dom.style.left) + offset.x;
@@ -166,7 +141,7 @@ UE.plugins['fiximgclick'] = (function(){
                 }
             },
             _validScaledProp: function (prop, value) {
-                var ele = this.container,
+                var ele = this.resizer,
                     wrap = document;
 
                 value = isNaN(value) ? 0 : value;
@@ -186,77 +161,131 @@ UE.plugins['fiximgclick'] = (function(){
             },
             showCover: function () {
                 var me = this,
-                    cover = me.cover,
-                    w = me.editor.iframe.offsetWidth,
-                    h = me.editor.iframe.offsetHeight,
                     editorPos = domUtils.getXY(me.editor.ui.getDom()),
                     iframePos = domUtils.getXY(me.editor.iframe);
 
-                cover.style.cssText += ';width:' + w + 'px; height:' + h + 'px;top:' + (iframePos.y - editorPos.y) + 'px;left:' + (iframePos.x - editorPos.x) + 'px;';
-                cover.style.display = '';
+                domUtils.setStyles(me.cover, {
+                    'width': me.editor.iframe.offsetWidth + 'px',
+                    'height': me.editor.iframe.offsetHeight + 'px',
+                    'top': iframePos.y - editorPos.y + 'px',
+                    'left': iframePos.x - editorPos.x + 'px',
+                    'position': 'absolute',
+                    'display': ''
+                })
             },
-            show: function () {
+            show: function (targetObj) {
                 var me = this;
-                me.container.style.display = 'block';
+                me.resizer.style.display = 'block';
+                if(targetObj) me.attachTo(targetObj);
 
-                me._keyDownHandler = function() {
-                    me.hide();
-                    var range = me.editor.selection.getRange();
-                    range.selectNode(me.target);
-                    range.select();
-                }
-                me._mouseDownHandler = function(e) {
-                    var ele = e.target || e.srcElement;
-                    if (ele && ele.className.indexOf('imageresize')==-1 && ele.parentNode.className.indexOf('imageresize')==-1 ) {
-                        me._keyDownHandler();
-                    }
-                }
+                domUtils.on(this.resizer, 'mousedown', me.proxy(me._eventHandler, me));
+                domUtils.on(me.doc, 'mouseup', me.proxy(me._eventHandler, me));
 
-                domUtils.on(document, 'keydown', me._keyDownHandler);
-                domUtils.on(me.editor.document, 'keydown', me._keyDownHandler);
-                domUtils.on(document, 'mousedown', me._mouseDownHandler);
-                domUtils.on(me.editor.document, 'mousedown', me._mouseDownHandler);
+                me.showCover();
+                me.editor.fireEvent('afterscaleshow', me);
                 me.editor.fireEvent('saveScene');
             },
             hide: function () {
                 var me = this;
                 me.hideCover();
-                me.container.style.display = 'none';
+                me.resizer.style.display = 'none';
 
-                domUtils.un(document, 'keydown', me._keyDownHandler);
-                domUtils.un(me.editor.document, 'keydown', me._keyDownHandler);
-                domUtils.un(document, 'mousedown', me._mouseDownHandler);
-                domUtils.un(me.editor.document, 'mousedown', me._mouseDownHandler);
+                domUtils.un(me.resizer, 'mousedown', me.proxy(me._eventHandler, me));
+                domUtils.un(me.doc, 'mouseup', me.proxy(me._eventHandler, me));
+                me.editor.fireEvent('afterscalehide', me);
+            },
+            proxy: function( fn, context ) {
+                return function(e) {
+                    return fn.apply( context || this, arguments);
+                };
+            },
+            attachTo: function (targetObj) {
+                var me = this,
+                    target = me.target = targetObj,
+                    resizer = this.resizer,
+                    imgPos = domUtils.getXY(target),
+                    iframePos = domUtils.getXY(me.editor.iframe),
+                    editorPos = domUtils.getXY(resizer.parentNode);
+
+                domUtils.setStyles(resizer, {
+                    'width': target.width + 'px',
+                    'height': target.width + 'px',
+                    'left': iframePos.x + imgPos.x - me.editor.document.body.scrollLeft - editorPos.x - parseInt(resizer.style.borderLeftWidth) + 'px',
+                    'top': iframePos.y + imgPos.y - me.editor.document.body.scrollTop - editorPos.y - parseInt(resizer.style.borderTopWidth) + 'px'
+                });
             }
         }
     })();
 
     return function () {
-        var me = this;
+        var me = this,
+            imageScale;
 
-        if ( !browser.ie ) {
-            me.addListener('click', function(type, e){
+        if (browser.webkit) {
+            me.addListener('click', function (type, e) {
                 var range = me.selection.getRange(),
                     img = range.getClosedNode();
 
                 if (img && img.tagName == 'IMG') {
-                    var imageResize;
-                    imageResize = me.ui._imageResize || new Resize();
-                    imageResize.reset(me, img);
-                    imageResize.show();
+                    if (!imageScale) {
+                        imageScale = new Scale();
+                        imageScale.init(me);
+                        me.ui.getDom().appendChild(imageScale.resizer);
+
+                        var _keyDownHandler = function (e) {
+                            imageScale.hide();
+                        }, _mouseDownHandler = function (e) {
+                            var ele = e.target || e.srcElement;
+                            if (ele && (ele.className===undefined || ele.className.indexOf('edui-editor-scale') == -1)) {
+                                _keyDownHandler(e);
+                            }
+                        }, timer;
+
+                        me.addListener('afterscaleshow', function (e) {
+                            domUtils.on(document, 'keydown', _keyDownHandler);
+                            domUtils.on(me.document,'keydown', _keyDownHandler);
+                            domUtils.on(document,'mousedown', _mouseDownHandler);
+                            domUtils.on(me.document,'mousedown', _mouseDownHandler);
+                            me.selection.getNative().removeAllRanges();
+                        });
+                        me.addListener('afterscalehide', function (e) {
+                            domUtils.un(document, 'keydown', _keyDownHandler);
+                            domUtils.un(me.document,'keydown', _keyDownHandler);
+                            domUtils.un(document,'mousedown', _mouseDownHandler);
+                            domUtils.un(me.document,'mousedown', _mouseDownHandler);
+                            var target = imageScale.target;
+                            if (target.parentNode) {
+                                me.selection.getRange().selectNode(target).select();
+                            }
+                        });
+                        //TODO 有iframe的情况，mousedown不能往下传。。
+                        domUtils.on(imageScale.resizer, 'mousedown', function (e) {
+                            me.selection.getNative().removeAllRanges();
+                            var ele = e.target || e.srcElement;
+                            if (ele && ele.className.indexOf('edui-editor-scale-hand') == -1) {
+                                timer = setTimeout(function () {
+                                    imageScale.hide();
+                                }, 200);
+                            }
+                        });
+                        domUtils.on(imageScale.resizer, 'mouseup', function (e) {
+                            var ele = e.target || e.srcElement;
+                            if (ele && ele.className.indexOf('edui-editor-scale-hand') == -1) {
+                                clearTimeout(timer);
+                            }
+                        });
+                    }
+                    imageScale.show(img);
                 } else {
-                    if (me.ui._imageResize) me.ui._imageResize.hide();
+                    if (imageScale && imageScale.resizer.style.display != 'none') imageScale.hide();
                 }
             });
-        }
-        if ( browser.webkit ) {
-            me.addListener( 'click', function( type, e ) {
-                if ( e.target.tagName == 'IMG' ) {
-                    var range = new dom.Range( me.document );
-                    range.selectNode( e.target ).select();
-
+            me.addListener('click', function (type, e) {
+                if (e.target.tagName == 'IMG') {
+                    var range = new dom.Range(me.document);
+                    range.selectNode(e.target).select();
                 }
-            } );
+            });
         }
     }
 })();
