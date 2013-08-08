@@ -1,4 +1,34 @@
 module( "plugins.inserthtml" );
+test( '向span里面插入p', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<address><span style="color:#ff0000">hello1</span></address>');
+    range.setStart(editor.body.firstChild.firstChild, 0 ).collapse(true).select();
+    editor.execCommand( 'inserthtml','<p >hello3</p>' );
+    stop();
+    setTimeout(function(){
+//        equal(editor.body.innerHTML.toLowerCase(),'<address><p >hello3</p><span style="color:#ff0000">hello1</span></address>','向span里面插入p');
+        ua.checkSameHtml(editor.body.getElementsByTagName('address')[0].innerHTML.toLowerCase(),'<p >hello3</p><span style="color:#ff0000">hello1</span>','向span里面插入p');
+        start();
+    },50);
+});
+//列表中插入列表 TODO 1.2.6 trace 3413
+test( '列表中插入列表 trace 3413', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<ol><li><p>hello1</p></li><li><p>hello2</p></li></ol>');
+    var lis = editor.body.getElementsByTagName('li');
+    range.setStart( lis[1], 0 ).collapse(true).select();
+    editor.execCommand( 'inserthtml','<ul><li><p>hello3</p></li></ul>' );
+    stop();
+    setTimeout(function(){
+        lis = editor.body.getElementsByTagName('li');
+        equal(lis.length,3,'列表长度');
+        equal(lis[1].innerHTML.toLowerCase(),'<p>hello3</p>','列表中插入列表');
+        start();
+    },50);
+
+});
 
 test( 'trace 3301：闭合方式插入文本', function() {
     var editor = te.obj[0];
@@ -104,23 +134,7 @@ test( 'trace 3297：notSerialize', function() {
     },50);
     stop();
 } );
-//列表中插入列表 TODO 1.2.6 trace 3413
-//test( '列表中插入列表', function() {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    editor.setContent('<ol><li><p>hello1</p></li><li><p>hello2</p></li></ol>');
-//    var lis = editor.body.getElementsByTagName('li');
-//    range.setStart( lis[1], 0 ).collapse(true).select();
-//    editor.execCommand( 'inserthtml','<ul><li><p>hello3</p></li></ul>' );
-//    stop();
-//    setTimeout(function(){
-//
-////        equal(lis.length,1,'列表长度没有变化');
-////        equal(lis[0].firstChild.tagName.toLowerCase(),'table','列表中插入表格');
-////        start();
-//    },50);
-//
-//});
+
 //列表中插入表格
 test( '列表中插入表格', function() {
     var editor = te.obj[0];

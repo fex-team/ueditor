@@ -1725,6 +1725,14 @@ UserAction = {
             return ele.style['cssFloat'];
     },
 
+    getComputedStyle:function(ele ){
+        if(this.browser.ie&&ua.browser.ie<9){
+            return ele.currentStyle;
+        }else{
+            return window.getComputedStyle(ele);
+        }
+    },
+
     readTxt:function (name, f) {
         var args = {};
         args['name'] = './txt/' + name;
@@ -1766,7 +1774,14 @@ UserAction = {
                     var styleName = nodeAStyle[i].match(/\w+\s*:/)[0].replace(/\s*:/, "");
                     nodeA.attrs.style = nodeA.attrs.style.replace(/&quot;/g,'');
                     nodeB.attrs.style = nodeB.attrs.style.replace(/&quot;/g,'');
-                    if (nodeA.getStyle(styleName).toLowerCase().replace(/\s+/g, "") != nodeB.getStyle(styleName).toLowerCase().replace(/\s+/g, ""))
+                    var styleValueA = nodeA.getStyle(styleName).toLowerCase().replace(/\s+/g, "");
+                    var styleValueB = nodeB.getStyle(styleName).toLowerCase().replace(/\s+/g, "");
+                    if(/color/.test(styleName)){
+                        styleValueA = this.formatColor(styleValueA);
+                        styleValueB = this.formatColor(styleValueB);
+                    }
+                    else;
+                    if (styleValueA != styleValueB)
                         return false;
                 }
             }

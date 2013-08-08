@@ -3,6 +3,20 @@ module("core.Editor");
 //test('', function () {
 //    stop()
 //});
+test("initialStyle", function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue',{initialStyle:"body{font-family: arial black;}.testCss{        color: rgb(192, 0, 0);    }",initialContent:"<p><span class='testCss'>测试样式，红色，字体： arial black</span></p>"});
+    editor.ready(function () {
+        equal(ua.formatColor(ua.getComputedStyle(editor.body.firstChild.firstChild).color), '#c00000', 'initialStyle中设置的class样式有效');
+        ok(/arial black/.test(ua.getComputedStyle(editor.body.firstChild.firstChild).fontFamily), 'initialStyle中设置的body样式有效');
+        UE.delEditor('ue');
+        te.dom.push(document.getElementById('ue'));
+        start();
+    });
+    stop();
+});
+
 test("autoSyncData:true,textarea容器(由setcontent触发的)", function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.innerHTML = '<form id="form" method="post" target="_blank"><textarea id="myEditor" name="myEditor">这里的内容将会和html，body等标签一块提交</textarea></form>';
