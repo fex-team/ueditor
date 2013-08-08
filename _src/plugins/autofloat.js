@@ -37,8 +37,7 @@
            docStyle.backgroundImage = 'url("about:blank")';
            docStyle.backgroundAttachment = 'fixed';
         }
-		var	bakCssText,
-			placeHolder = document.createElement('div'),
+		var	placeHolder = document.createElement('div'),
             toolbarBox,orgTop,
             getPosition,
             flag =true;   //ie7模式下需要偏移
@@ -71,7 +70,6 @@
             if(placeHolder.parentNode){
                 placeHolder.parentNode.removeChild(placeHolder);
             }
-			toolbarBox.style.cssText = bakCssText;
 		}
 
         function updateFloating(){
@@ -98,7 +96,6 @@
                 getPosition = uiUtils.getClientRect;
                 toolbarBox = me.ui.getDom('toolbarbox');
                 orgTop = getPosition(toolbarBox).top;
-                bakCssText = toolbarBox.style.cssText;
                 placeHolder.style.height = toolbarBox.offsetHeight + 'px';
                 if(LteIE6){
                     fixIE6FixedPos();
