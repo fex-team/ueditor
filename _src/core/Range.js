@@ -965,7 +965,7 @@
          * @name select
          * @grammar range.select();  => Range
          */
-        select:browser.ie ? function (noFillData, textRange) {
+        select:browser.ie9below ? function (noFillData, textRange) {
             var nativeRange;
             if (!this.collapsed)
                 this.shrinkBoundary();
