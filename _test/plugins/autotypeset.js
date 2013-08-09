@@ -8,7 +8,7 @@ test('文本居中',function(){
          editor.execCommand('autotypeset');
         equal($(editor.body.firstChild).css('text-align'),'center','文本居中');
         start();
-    }, 50 );
+    }, 100 );
     stop();
 });
 

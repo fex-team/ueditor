@@ -6,6 +6,82 @@
  * To change this template use File | Settings | File Templates.
  */
 
+test( '在第一个单元格里最前面回车,且表格前面没有内容', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:3,numRows:3} );
+
+    var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
+    ut.setSelected(cellsRange);
+    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+    ua.keydown(editor.body,{'keyCode':13});
+    stop();
+    setTimeout(function(){
+        ua.manualDeleteFillData(editor.body);
+        equal(editor.body.firstChild.innerHTML,ua.browser.ie?'&nbsp;':'<br>','表格前插入空行');
+        equal(editor.body.firstChild.tagName.toLowerCase(),'p','表格前插入空行');
+        equal(editor.body.childNodes[1].tagName.toLowerCase(),'table','表格在空行后面');
+        start();
+    },50);
+});
+test( 'delete 事件', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:3,numRows:3} );
+    expect(4);
+    editor.addListener('saveScene',function(){
+        ok(true);
+    });
+    var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+    trs[0].cells[0].innerHTML = 'hello';
+    trs[1].cells[0].innerHTML = 'hello';
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
+    ut.setSelected(cellsRange);
+    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+    ua.keydown(editor.body,{'keyCode':46});
+    stop();
+    setTimeout(function(){
+        ua.manualDeleteFillData(editor.body);
+        trs = editor.body.firstChild.getElementsByTagName( 'tr' );
+        equal(trs[0].cells[0].innerHTML,ua.browser.ie?'':'<br>','内容');
+        equal(trs[1].cells[0].innerHTML,ua.browser.ie?'':'<br>','内容');
+        start();
+    },20);
+});
+/*trace 3047,3545*/
+test('trace 3047 ,3545 全屏插入表格',function(){
+    if(ua.browser.gecko)return;//TODO 1.2.6
+    if(ua.browser.ie < 9)return;//TODO 1.2.6
+    var div = document.body.appendChild( document.createElement( 'div' ) );
+    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+    var editor = te.obj[2];
+    editor.render(div);
+    stop();
+    editor.ready(function(){
+        editor.setContent('<p></p>');
+        editor.ui.setFullScreen(!editor.ui.isFullScreen());
+        editor.execCommand('inserttable');
+        var width1 = editor.body.getElementsByTagName('td')[0].width;
+        setTimeout(function () {
+            editor.ui.setFullScreen(!editor.ui.isFullScreen());
+            setTimeout(function () {
+                var width2 = editor.body.getElementsByTagName('td')[0].width;
+                ok((width1 - width2) > 10, '页面宽度自适应');
+                div.parentNode.removeChild(div);
+                start();
+            }, 500);
+        }, 500);
+    });
+});
+
 test( 'backspace事件:删除caption', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -111,6 +187,7 @@ test( 'trace 3097 标题行中backspace键', function() {
 });
 
 test('拖拽',function(){
+    //todo ie9,10改range bug trace
     if (browser.ie && browser.version < 8) return;
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -166,30 +243,6 @@ test( 'trace 3022 表格名称中backspace、ctrl+z、enter', function() {
     },20);
 });
 
-/*trace 3047*/
-test('trace 3047 全屏插入表格',function(){
-    if(ua.browser.gecko)return;//TODO 1.2.6
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
-    var editor = te.obj[2];
-    editor.render(div);
-    stop();
-    editor.ready(function(){
-        editor.setContent('<p></p>');
-        editor.ui.setFullScreen(!editor.ui.isFullScreen());
-        editor.execCommand('inserttable');
-        var width1 = editor.body.getElementsByTagName('td')[0].width;
-        setTimeout(function () {
-            editor.ui.setFullScreen(!editor.ui.isFullScreen());
-            setTimeout(function () {
-                var width2 = editor.body.getElementsByTagName('td')[0].width;
-                ok((width1 - width2) > 10, '页面宽度自适应');
-                div.parentNode.removeChild(div);
-                start();
-            }, 500);
-        }, 200);
-    });
-});
 
 /*trace 3067*/
 test( 'trace 3067 向右合并--tab键', function() {
@@ -282,6 +335,7 @@ test('trace 3059 表格右浮动',function(){
 });
 
 test('trace 3378：拖拽后tab，不影响表格样式',function(){
+    //todo ie9,10改range bug trace
     if (browser.ie && browser.version < 8) return;
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -430,6 +484,7 @@ test('trace 3114 在单元格内粘贴行',function(){
     editor.setContent('');
     editor.execCommand('inserttable');
     var tds = editor.body.getElementsByTagName('td');
+
     var ut = editor.getUETable(editor.body.firstChild);
     var cellsRange = ut.getCellsRange(tds[0],tds[9]);
     ut.setSelected(cellsRange);
@@ -449,4 +504,48 @@ test('trace 3114 在单元格内粘贴行',function(){
             start();
         },50);
     },50);
+});
+test('在单元格中粘贴_粘到最后',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:3,numRows:3} );                              /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(tds[0],tds[4]);
+    ut.setSelected(cellsRange);                                     /*确定选区*/
+    range.setStart( tds[0], 0 ).collapse( true ).select();          /*定光标*/
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    var html ={html:editor.body.innerHTML};
+    range.setStart( tds[8],0).collapse(true).select();
+    equal(editor.body.getElementsByTagName('tr').length,3,'触发粘贴事件前有3个tr');
+    equal(editor.body.getElementsByTagName('td').length,9,'触发粘贴事件前有9个td');
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+    editor.fireEvent("afterpaste");
+    equal(editor.body.getElementsByTagName('tr').length,4,'触发粘贴事件后有4个tr');
+    equal(editor.body.getElementsByTagName('td').length,16,'触发粘贴事件后有12个td');
+});
+test('在单元格中粘贴_整列',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:3,numRows:3} );                              /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],0).collapse(true).select();
+    editor.execCommand('inserttitle');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(tds[0],tds[6]);
+    ut.setSelected(cellsRange);                                     /*确定选区*/
+    range.setStart( tds[0], 0 ).collapse( true ).select();          /*定光标*/
+    ua.keydown(editor.body,{'keyCode':67,'ctrlKey':true});       /*ctrl+c*/
+    var html ={html:editor.body.innerHTML};
+    range.setStart( tds[6],0).collapse(true).select();
+    equal(editor.body.getElementsByTagName('tr').length,4,'触发粘贴事件前有4个tr');
+    equal(editor.body.getElementsByTagName('th').length,3,'触发粘贴事件前有3个th');
+    equal(editor.body.getElementsByTagName('td').length,9,'触发粘贴事件前有9个td');
+    editor.fireEvent('beforepaste',html);                           /*粘贴*/
+    editor.fireEvent("afterpaste");
+    equal(editor.body.getElementsByTagName('tr').length,4,'触发粘贴事件后有4个tr');
+    equal(editor.body.getElementsByTagName('th').length,4,'触发粘贴事件前有4个th');
+    equal(editor.body.getElementsByTagName('td').length,12,'触发粘贴事件后有12个td');
 });

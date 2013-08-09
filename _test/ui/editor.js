@@ -92,7 +92,7 @@ test( '判断render有内容时，显示render内容(script)', function() {
     sc3.id="sc3";
     sc3.type="text/plain";
 //    if(sc3.text)
-        sc3.text= 'renderinnerhtml';
+    sc3.text= 'renderinnerhtml';
 //    else
 //        sc3.textContent='renderinnerhtml';
     document.body.appendChild(sc3);
@@ -107,7 +107,7 @@ test( '判断render有内容时，显示render内容(script)', function() {
 } );
 
 test( 'render没有内容时，显示initialContent', function() {
-    var ue4 = new baidu.editor.ui.Editor();
+    var ue4 = new baidu.editor.ui.Editor({initialContent:'<br>'});
     var sc4 = document.createElement("script");
     sc4.id="sc4";
     document.body.appendChild(sc4);
@@ -118,7 +118,7 @@ test( 'render没有内容时，显示initialContent', function() {
         sc4 = document.getElementById('sc4');
         sc4.parentNode.removeChild(sc4);
         start();
-     });
+    });
 } );
 
 test('判断dialogs对象名包含"Dialog"字符', function(){

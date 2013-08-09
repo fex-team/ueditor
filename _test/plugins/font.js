@@ -1,4 +1,62 @@
 module("plugins.font");
+test('trace 3337：字符边框', function () {
+
+    if (ua.browser.opera)return;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p></p>');
+    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+    editor.execCommand('fontborder');
+    range = editor.selection.getRange();
+    range.insertNode(editor.document.createTextNode('hello'));
+    ua.manualDeleteFillData(editor.body);
+    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
+    if (ua.browser.ie && ua.browser.ie < 9) {
+        equal(editor.queryCommandValue('fontborder'), '#000 1px solid', '检查反射值');
+        equal(ua.getChildHTML(editor.body.firstChild), "<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hello</span>&nbsp;", '查看添加了字符边框后的样式');
+    }
+    else {
+        equal(editor.queryCommandValue('fontborder'), '1px solid rgb(0, 0, 0)', '检查反射值');
+        ua.checkHTMLSameStyle('<span style="border: 1px solid rgb(0, 0, 0);">hello</span>' + br, editor.document, editor.body.firstChild, '查看添加了字符边框后的样式');
+    }
+    range.setStart(editor.body.firstChild.firstChild.firstChild, 5).collapse(true).select();
+    editor.execCommand('fontborder');
+    equal(editor.queryCommandState('fontborder'), '0');
+    equal(editor.queryCommandValue('fontborder'), '', '无反射值');
+    editor.setContent('<p><span style="color: red">欢</span>迎光临</p>');
+    range.setStart(editor.body.firstChild.firstChild, 0).setEnd(editor.body.firstChild.lastChild, 3).select();
+    editor.execCommand('fontborder');
+    var p1 = '<span style="border: 1px solid rgb(0, 0, 0);"><span style="color: red;">欢</span>迎光临</span>';
+    var p2 = '<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\"><span style="color: red;">欢</span>迎光临</span>';
+    if (ua.browser.ie && ua.browser.ie < 9)
+        ua.checkSameHtml(editor.body.firstChild.innerHTML, p2, '查看添加了字符边框后的样式');
+    else
+        ua.checkHTMLSameStyle(p1, editor.document, editor.body.firstChild, '查看添加了字符边框后的样式');
+});
+test('设置超链接前景色再清除颜色', function () {
+    if(ua.browser.ie < 9)return;//TODO 1.2.6
+    var editor = te.obj[2];
+    var div = document.body.appendChild(document.createElement('div'));
+    $(div).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(div);
+    stop();
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('<p>hello<a href="www.baidu.com">baidu</a></p>');
+        range.selectNode(editor.body.firstChild).select();
+        editor.execCommand('forecolor', 'rgb(255,0,0)');
+        editor.execCommand('backcolor', 'rgb(0,255,0)');
+        editor.execCommand('forecolor', 'default');
+        //        var html = '<span style="background-color: rgb(0, 255, 0);">hello</span><a href="www.baidu.com" _href=\"www.baidu.com\" style="text-decoration: underline;"><span style="background-color: rgb(0, 255, 0);">baidu</span></a>';todo 1.2.6.1 样式复制了一次
+        var html = '<span style="background-color: rgb(0, 255, 0);">hello</span><a href="www.baidu.com" _href=\"www.baidu.com\" style="background-color: rgb(0, 255, 0);text-decoration: underline;"><span style="background-color: rgb(0, 255, 0);">baidu</span></a>';
+        ua.checkHTMLSameStyle(html, editor.document, editor.body.firstChild, '清除前景色');
+        setTimeout(function () {
+            div.parentNode.removeChild(div);
+            start();
+        }, 50);
+    });
+});
+
 
 test('font转span', function () {
     var editor = te.obj[0];
@@ -396,28 +454,6 @@ test('trace 744：设置超链接背景色后切换到源码再切回来', funct
     });
 });
 
-test('设置超链接前景色再清除颜色', function () {
-    var editor = te.obj[2];
-    var div = document.body.appendChild(document.createElement('div'));
-    $(div).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
-    editor.render(div);
-    stop();
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        editor.setContent('<p>hello<a href="www.baidu.com">baidu</a></p>');
-        range.selectNode(editor.body.firstChild).select();
-        editor.execCommand('forecolor', 'rgb(255,0,0)');
-        editor.execCommand('backcolor', 'rgb(0,255,0)');
-        editor.execCommand('forecolor', 'default');
-        //        var html = '<span style="background-color: rgb(0, 255, 0);">hello</span><a href="www.baidu.com" _href=\"www.baidu.com\" style="text-decoration: underline;"><span style="background-color: rgb(0, 255, 0);">baidu</span></a>';todo 1.2.6.1 样式复制了一次
-        var html = '<span style="background-color: rgb(0, 255, 0);">hello</span><a href="www.baidu.com" _href=\"www.baidu.com\" style="background-color: rgb(0, 255, 0);text-decoration: underline;"><span style="background-color: rgb(0, 255, 0);">baidu</span></a>';
-        ua.checkHTMLSameStyle(html, editor.document, editor.body.firstChild, '清除前景色');
-        setTimeout(function () {
-            div.parentNode.removeChild(div);
-            start();
-        }, 50);
-    });
-});
 
 test('对表格中的文本添加颜色和下划线', function () {
     var editor = te.obj[2];
@@ -517,39 +553,6 @@ test('trace 721：预先设置下划线和字体颜色，再输入文本，查�
     }
 });
 
-test('trace 3337：字符边框', function () {
-    if (ua.browser.opera)return;
-    var editor = te.obj[0];
-    var range = te.obj[1];
-    editor.setContent('<p></p>');
-    range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('fontborder');
-    range = editor.selection.getRange();
-    range.insertNode(editor.document.createTextNode('hello'));
-    ua.manualDeleteFillData(editor.body);
-    var br = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
-    if (ua.browser.ie && ua.browser.ie < 9) {
-        equal(editor.queryCommandValue('fontborder'), '#000 1px solid', '检查反射值');
-        equal(ua.getChildHTML(editor.body.firstChild), "<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\">hello</span>&nbsp;", '查看添加了字符边框后的样式');
-    }
-    else {
-        equal(editor.queryCommandValue('fontborder'), '1px solid rgb(0, 0, 0)', '检查反射值');
-        ua.checkHTMLSameStyle('<span style="border: 1px solid rgb(0, 0, 0);">hello</span>' + br, editor.document, editor.body.firstChild, '查看添加了字符边框后的样式');
-    }
-    range.setStart(editor.body.firstChild.firstChild.firstChild, 5).collapse(true).select();
-    editor.execCommand('fontborder');
-    equal(editor.queryCommandState('fontborder'), '0');
-    equal(editor.queryCommandValue('fontborder'), '', '无反射值');
-    editor.setContent('<p><span style="color: red">欢</span>迎光临</p>');
-    range.setStart(editor.body.firstChild.firstChild, 0).setEnd(editor.body.firstChild.lastChild, 3).select();
-    editor.execCommand('fontborder');
-    var p1 = '<span style="border: 1px solid rgb(0, 0, 0);"><span style="color: red;">欢</span>迎光临</span>';
-    var p2 = '<span style=\"border-bottom: #000 1px solid; border-left: #000 1px solid; border-top: #000 1px solid; border-right: #000 1px solid\"><span style="color: red;">欢</span>迎光临</span>';
-    if (ua.browser.ie && ua.browser.ie < 9)
-        equal(ua.getChildHTML(editor.body.firstChild), p2, '查看添加了字符边框后的样式');
-    else
-        ua.checkHTMLSameStyle(p1, editor.document, editor.body.firstChild, '查看添加了字符边框后的样式');
-});
 
 test('trace 3342：字符ab， 给a 加边框再给b加边框，边框效果错误', function () {
     var editor = te.obj[0];

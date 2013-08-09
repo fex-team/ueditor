@@ -88,7 +88,7 @@ UE.plugins['autoheight'] = function () {
         domUtils.on(browser.ie ? me.body : me.document, browser.webkit ? 'dragover' : 'drop', function () {
             clearTimeout(timer);
             timer = setTimeout(function () {
-                adjustHeight.call(this);
+                adjustHeight.call(me);
             }, 100);
 
         });
