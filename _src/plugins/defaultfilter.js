@@ -24,10 +24,10 @@ UE.plugins['defaultfilter'] = function () {
                     case 'script':
                         node.setAttr({
                             cdata_tag: node.tagName,
-                            cdata_data: encodeURIComponent(node.innerText() || '')
+                            style:'display:none'
                         });
                         node.tagName = 'div';
-                        node.removeChild(node.firstChild());
+                        //node.removeChild(node.firstChild());
                         break;
                     case 'a':
                         if (val = node.getAttr('href')) {
@@ -153,8 +153,8 @@ UE.plugins['defaultfilter'] = function () {
                     case 'div':
                         if (val = node.getAttr('cdata_tag')) {
                             node.tagName = val;
-                            node.appendChild(UE.uNode.createText(node.getAttr('cdata_data')));
-                            node.setAttr({cdata_tag: '', cdata_data: ''});
+                            node.setAttr({cdata_tag: '',style:''});
+                            node.innerText(utils.html(node.innerText()),true)
                         }
                         break;
                     case 'a':
