@@ -72,9 +72,7 @@ UE.plugins['autofloat'] = function() {
             placeHolder.parentNode.removeChild(placeHolder);
         }
 
-        if(toolbarBox.style.cssText!=""){
-            toolbarBox.style.cssText = bakCssText;
-        }
+        toolbarBox.style.cssText = bakCssText;
     }
 
     function updateFloating(){
