@@ -65,10 +65,6 @@ UE.plugins['shortcutmenu'] = function () {
                 }
             }
         }
-
-        if (type == "keydown") {
-            menu && !menu.isHidden && menu.hide ();
-        }
     });
 
     me.addListener ('keydown' , function (type) {
