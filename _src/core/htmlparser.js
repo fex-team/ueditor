@@ -109,6 +109,7 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
         children:[]
     });
     var currentParent = root;
+
     while (match = re_tag.exec(htmlstr)) {
         currentIndex = match.index;
         try{
@@ -117,21 +118,32 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
                 text(currentParent, htmlstr.slice(nextIndex, currentIndex));
             }
             if (match[3]) {
-                //start tag
-                currentParent = element(currentParent, match[3].toLowerCase(), match[4]);
+
+                if(dtd.$cdata[currentParent.tagName]){
+                    text(currentParent, match[0]);
+                }else{
+                    //start tag
+                    currentParent = element(currentParent, match[3].toLowerCase(), match[4]);
+                }
+
 
             } else if (match[1]) {
                 if(currentParent.type != 'root'){
-                    var tmpParent = currentParent;
-                    while(currentParent.type == 'element' && currentParent.tagName != match[1].toLowerCase()){
-                        currentParent = currentParent.parentNode;
-                        if(currentParent.type == 'root'){
-                            currentParent = tmpParent;
-                            throw 'break'
+                    if(dtd.$cdata[currentParent.tagName] && !dtd.$cdata[match[1]]){
+                        text(currentParent, match[0]);
+                    }else{
+                        var tmpParent = currentParent;
+                        while(currentParent.type == 'element' && currentParent.tagName != match[1].toLowerCase()){
+                            currentParent = currentParent.parentNode;
+                            if(currentParent.type == 'root'){
+                                currentParent = tmpParent;
+                                throw 'break'
+                            }
                         }
+                        //end tag
+                        currentParent = currentParent.parentNode;
                     }
-                    //end tag
-                    currentParent = currentParent.parentNode;
+
                 }
 
             } else if (match[2]) {

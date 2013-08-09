@@ -116,7 +116,7 @@
     var Selection = dom.Selection = function ( doc ) {
         var me = this, iframe;
         me.document = doc;
-        if ( browser.ie9under ) {
+        if ( browser.ie9below ) {
             iframe = domUtils.getWindow( doc ).frameElement;
             domUtils.on( iframe, 'beforedeactivate', function () {
                 me._bakIERange = me.getIERange();
@@ -145,7 +145,7 @@
         getNative:function () {
             var doc = this.document;
             try {
-                return !doc ? null : browser.ie9under ? doc.selection : domUtils.getWindow( doc ).getSelection();
+                return !doc ? null : browser.ie9below ? doc.selection : domUtils.getWindow( doc ).getSelection();
             } catch ( e ) {
                 return null;
             }
@@ -204,7 +204,7 @@
          */
         isFocus:function () {
             try {
-                return browser.ie9under && _getIERange( this ) || !browser.ie9under && this.getNative().rangeCount ? true : false;
+                return browser.ie9below && _getIERange( this ) || !browser.ie9below && this.getNative().rangeCount ? true : false;
             } catch ( e ) {
                 return false;
             }
@@ -239,7 +239,7 @@
             }
             var range = new baidu.editor.dom.Range( me.document );
 
-            if ( browser.ie9under ) {
+            if ( browser.ie9below ) {
                 var nativeRange = me.getIERange();
                 if ( nativeRange ) {
                     //备份的_bakIERange可能已经实效了，dom树发生了变化比如从源码模式切回来，所以try一下，实效就放到body开始位置
@@ -283,10 +283,10 @@
             if ( this._cachedStartElement ) {
                 return this._cachedStartElement;
             }
-            var range = browser.ie9under ? this.getIERange() : this.getRange(),
+            var range = browser.ie9below ? this.getIERange() : this.getRange(),
                 tmpRange,
                 start, tmp, parent;
-            if ( browser.ie9under ) {
+            if ( browser.ie9below ) {
                 if ( !range ) {
                     //todo 给第一个值可能会有问题
                     return this.document.body.firstChild;
@@ -329,13 +329,13 @@
         getText:function () {
             var nativeSel, nativeRange;
             if ( this.isFocus() && (nativeSel = this.getNative()) ) {
-                nativeRange = browser.ie9under ? nativeSel.createRange() : nativeSel.getRangeAt( 0 );
-                return browser.ie9under ? nativeRange.text : nativeRange.toString();
+                nativeRange = browser.ie9below ? nativeSel.createRange() : nativeSel.getRangeAt( 0 );
+                return browser.ie9below ? nativeRange.text : nativeRange.toString();
             }
             return '';
         },
         clearRange : function(){
-            this.getNative()[browser.ie9under ? 'empty' : 'removeAllRanges']();
+            this.getNative()[browser.ie9below ? 'empty' : 'removeAllRanges']();
         }
     };
 })();

@@ -42,10 +42,10 @@
             })
         }
     };
-    uNode.createText = function (data) {
+    uNode.createText = function (data,noTrans) {
         return new UE.uNode({
             type:'text',
-            'data':utils.unhtml(data || '')
+            'data':noTrans ? data : utils.unhtml(data || '')
         })
     };
     function nodeToHtml(node, arr, formatter, current) {
@@ -196,7 +196,7 @@
                 return tmpRoot.toHtml();
             }
         },
-        innerText:function (textStr) {
+        innerText:function (textStr,noTrans) {
             if (this.type != 'element' || dtd.$empty[this.tagName]) {
                 return this;
             }
@@ -207,7 +207,7 @@
                     }
                 }
                 this.children = [];
-                this.appendChild(uNode.createText(textStr));
+                this.appendChild(uNode.createText(textStr,noTrans));
                 return this;
             } else {
                 return this.toHtml().replace(/<[^>]+>/g, '');

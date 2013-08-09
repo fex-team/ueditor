@@ -92,7 +92,7 @@ var browser = UE.browser = function(){
 
         browser.ie9above = version > 8;
 
-        browser.ie9under = version < 9;
+        browser.ie9below = version < 9;
 
     }
 
