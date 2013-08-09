@@ -57,7 +57,7 @@
             'plugins/fiximgclick.js',
             'plugins/autolink.js',
             'plugins/autoheight.js',
-//            'plugins/autofloat.js',  //依赖UEditor UI,在IE6中，会覆盖掉body的背景图属性
+            'plugins/autofloat.js',  //依赖UEditor UI,在IE6中，会覆盖掉body的背景图属性
             'plugins/puretxtpaste.js',
             'plugins/video.js',
             'plugins/table.core.js',
