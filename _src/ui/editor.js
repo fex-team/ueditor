@@ -35,6 +35,8 @@
                 //提供编辑器实时宽高(全屏时宽高不变化)
                 editor.ui._actualFrameWidth = editor.options.initialFrameWidth;
 
+                UE.browser.ie && UE.browser.version === 6 && editor.container.ownerDocument.execCommand("BackgroundImageCache", false, true);
+
                 //display bottom-bar label based on config
                 if (editor.options.elementPathEnabled) {
                     editor.ui.getDom('elementpath').innerHTML = '<div class="edui-editor-breadcrumb">' + editor.getLang("elementPathTip") + ':</div>';
