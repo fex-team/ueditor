@@ -240,7 +240,39 @@ test( 'chrome删除div', function () {
     }else{
     }
 } );
-
+test( 'formatBlock', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>' );
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],1).collapse(true).select();
+    ua.keydown(editor.body,{'keyCode':13});
+    setTimeout( function () {
+    ua.keyup(editor.body,{'keyCode':13});
+        setTimeout( function () {
+            var td = editor.body.getElementsByTagName('td')[0];
+            equal(td.firstChild&&td.firstChild.tagName.toLowerCase(),'p','加上p');
+            equal(td.firstChild.innerHTML,'hello1','hello1');
+            start();
+        }, 60 );
+    }, 60 );
+    stop();
+} );
+test( '跨td不删', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>' );
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],0).setEnd(tds[2],1).select();
+    editor.addListener("keydown", function (type, evt) {
+        setTimeout( function () {
+            ok(evt.defaultPrevented||!evt.returnValue, "keydown");
+            start();
+        }, 60 );
+    });
+    ua.keydown(editor.body,{'keyCode':13});
+    stop();
+} );
 ////presskey相关，先不测
 //test( '普通文本<strong><span style="color: red">中间</span></strong>回车', function () {
 //    var editor = te.obj[0];
