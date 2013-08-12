@@ -404,8 +404,8 @@
         },
         setStyle:function (name, val) {
             function exec(name, val) {
-                var reg = new RegExp(name + ':([^;]+;?)', 'gi');
-                cssStyle = cssStyle.replace(reg, '');
+                var reg = new RegExp('(^|;)\\s*' + name + ':([^;]+;?)', 'gi');
+                cssStyle = cssStyle.replace(reg, '$1');
                 if (val) {
                     cssStyle = name + ':' + utils.unhtml(val) + ';' + cssStyle
                 }
