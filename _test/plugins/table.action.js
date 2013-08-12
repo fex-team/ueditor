@@ -5,7 +5,56 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
+test('从外面粘贴表格',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p></p>');
 
+    range.setStart(editor.body.firstChild,0).collapse(true).select();
+    var html ={html:'<table style="width:992px"><tbody><tr><td style="border-color: rgb(247, 150, 70);width:198px" >hello1</td><td  style="background-color: rgb(255, 0, 0); border-color: rgb(247, 150, 70);width:198px" ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table><p>hello2</p>'};
+//    <td  style="background-color: rgb(255, 0, 0); border-color: rgb(247, 150, 70);width:198px" ></td>
+    editor.fireEvent('beforepaste',html); /*粘贴*/
+    stop();
+    setTimeout(function(){
+        var space = ua.browser.ie?'':'<br/>';
+        var border = (ua.browser.ie&&ua.browser.ie<9)?'border-bottom-color: rgb(247,150,70); border-top-color: rgb(247,150,70); border-right-color: rgb(247,150,70); border-left-color: rgb(247,150,70)':'border-color: rgb(247, 150, 70)';
+        var resultHtml = '<table width="992"><tbody><tr><td  style="'+border+';" width="198">hello1</td><td  style="background-color: rgb(255, 0, 0); '+border+';" width="198">'+space+'</td></tr><tr><td>hello2</td><td>'+space+'</td></tr></tbody></table><p>hello2</p>';
+        ua.checkSameHtml(html.html.toLowerCase(),resultHtml.toLowerCase(),'粘贴的表格规范格式');
+        start();
+    },50);
+});
+test('从外面粘贴表格到表格-表格中不能粘完整的表格',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:3,numRows:3} ); /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],0).collapse(true).select();
+    var html ={html:'<table><tbody><tr><td>hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table><p>hello2</p>'};
+    editor.fireEvent('beforepaste',html); /*粘贴*/
+    stop();
+    setTimeout(function(){
+        equal(html.html,'<p>hello2</p>','表格中不能粘完整的表格');
+        start();
+    },50);
+});
+test('从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:3,numRows:3} ); /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],0).collapse(true).select();
+    editor.execCommand( 'insertcaption');
+    range.setStart( editor.body.getElementsByTagName('caption')[0], 0 ).collapse( true ).select();
+    var html ={html:'<table><tbody><tr><td>hello1</td><td ></td></tr></tbody></table>'};
+    editor.fireEvent('beforepaste',html); /*粘贴*/
+    stop();
+    setTimeout(function(){
+        equal(html.html,'hello1','在caption中粘贴,只粘贴文本内容');
+        start();
+    },50);
+});
 test( 'getText,取表格内的文本', function() {
     var editor = te.obj[0];
     var range = te.obj[1];
