@@ -429,6 +429,10 @@
         //,minFrameWidth:800    //编辑器拖动时最小宽度,默认800
         //,minFrameHeight:220  //编辑器拖动时最小高度,默认220
 
+        //tableDragable
+        //表格是否可以拖拽
+        //,tableDragable: true
+
         //autoFloatEnabled
         //是否保持toolbar的位置不动,默认true
         //,autoFloatEnabled:true
