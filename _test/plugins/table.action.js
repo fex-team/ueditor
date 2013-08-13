@@ -5,6 +5,114 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
+test('tableDragable',function(){
+    if (browser.ie && browser.version < 8) return;
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue',{tableDragable:true});
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('<p></p>');
+        setTimeout(function () {
+            range.setStart(editor.body.firstChild, 0).collapse(true).select();
+            editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+            var tds = editor.body.getElementsByTagName('td');
+            ua.mousemove(editor.body.firstChild);
+            var pos = domUtils.getXY(editor.body.firstChild);
+            var select = ua.browser.webkit ? '-webkit-user-select: none;' : ua.browser.gecko ? '-moz-user-select: none;' : '';
+            var html = '<div contenteditable=\"false\" style=\"width:15px;height:15px;background-image:url(' + editor.options.UEDITOR_HOME_URL + 'dialogs/table/dragicon.png);position: absolute;cursor:move;top:' + (pos.y - 15) + 'px;left:' + pos.x + 'px; ' + select + '\"' + (ua.browser.ie ? 'unselectable=\"on\"' : '') + '></div>';
+            setTimeout(function () {
+                var button = editor.body.lastChild;
+                ua.checkSameHtml(button.outerHTML.replace('&quot;', ''), html, 'DragButton显示');
+                ua.mouseout(button);
+                ua.mousemove(editor.body);
+                setTimeout(function () {
+                    equal(editor.body.getElementsByTagName('div').length,0,'按钮没有了');
+                UE.delEditor('ue');
+                te.dom.push(document.getElementById('ue'));
+                    start();
+                }, 2100);
+            }, 20);
+        }, 50);
+    });
+    stop();
+});
+//
+//test('从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容',function(){
+//    stop()
+//});
+test('点击一列的最上边,选中一列',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:2,numRows:3} ); /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    tds[0].innerHTML = 'hello1';
+    tds[1].innerHTML = 'hello2';
+    ua.click(tds[0],{clientX:8,clientY:24});
+    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+    equal(selectedTds.length,2,'选中一行');
+    equal(selectedTds[0].className,' selectTdClass','检查样式');
+    equal(selectedTds[1].className,' selectTdClass','检查样式');
+    equal(selectedTds[0].innerHTML,'hello1','检查内容');
+    equal(selectedTds[1].innerHTML,'hello2','检查内容');
+    //todo trace 3571
+//    ua.click(tds[2],{clientX:12,clientY:24,shiftKey:true});
+//    equal(editor.getUETable(editor.body.firstChild).selectedTds.length,6,'');
+});
+
+test('点击一行的最左边,但是每行只有一列,这时选中单元格中的内容',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:1,numRows:1} ); /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    tds[0].innerHTML = 'hello';
+    ua.click(tds[0],{clientX:10,clientY:23});
+    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+    equal(selectedTds.length,0,'不选中行');
+    if(ua.browser.webkit){
+        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 5, false, '检查选中的range');
+    }else{
+        ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 1, false, '检查选中的range');
+    }
+});
+test('点击一列的最上边,但是每列只有一行,这时选中单元格中的内容',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:1,numRows:1} ); /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    tds[0].innerHTML = 'hello';
+    ua.click(tds[0],{clientX:81,clientY:9});
+    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+    equal(selectedTds.length,0,'不选中列');
+    if(ua.browser.webkit){
+        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 5, false, '检查选中的range');
+    }else{
+        ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 1, false, '检查选中的range');
+    }
+
+});
+test('点击一列的最上边,选中一列',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('');
+    editor.execCommand('inserttable', {numCols:3,numRows:3} ); /*插入表格*/
+    var tds = editor.body.getElementsByTagName('td');
+    tds[0].innerHTML = 'hello';
+    ua.click(tds[0],{clientX:81,clientY:9});
+    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+    equal(selectedTds.length,3,'选中一列');
+    equal(selectedTds[0].innerHTML,'hello','检查内容');
+    equal(selectedTds[0].className,' selectTdClass','检查样式');
+    equal(selectedTds[1].className,' selectTdClass','检查样式');
+    equal(selectedTds[2].className,' selectTdClass','检查样式');
+
+    //todo trace 3571
+//    ua.click(tds[2],{clientX:370,clientY:9,shiftKey:true});
+//    equal(editor.getUETable(editor.body.firstChild).selectedTds.length,9,'');
+});
 test('从外面粘贴表格',function(){
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -12,7 +120,6 @@ test('从外面粘贴表格',function(){
 
     range.setStart(editor.body.firstChild,0).collapse(true).select();
     var html ={html:'<table style="width:992px"><tbody><tr><td style="border-color: rgb(247, 150, 70);width:198px" >hello1</td><td  style="background-color: rgb(255, 0, 0); border-color: rgb(247, 150, 70);width:198px" ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table><p>hello2</p>'};
-//    <td  style="background-color: rgb(255, 0, 0); border-color: rgb(247, 150, 70);width:198px" ></td>
     editor.fireEvent('beforepaste',html); /*粘贴*/
     stop();
     setTimeout(function(){

@@ -155,7 +155,7 @@ test('修改列表再删除列表', function () {
 });
 
 test('列表内没有列表标号的项后退', function () {
-    if (ua.browser.safari)return;
+    if ((ua.browser.safari && !ua.browser.chrome))return 0;
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
