@@ -222,19 +222,49 @@ test('destroy', function () {
     var editor = new UE.ui.Editor({'autoFloatEnabled':false});
     editor.key = 'ed';
     var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'edu';
+    div.id = 'ed';
     editor.render(div);
     editor.ready(function () {
         editor.destroy();
         equal(document.getElementById('ed').tagName.toLowerCase(), 'textarea', '容器被删掉了');
         document.getElementById('ed') && te.dom.push(document.getElementById('ed'));
+        start();
     });
+    stop();
 });
 
 //test( "setup--ready event", function() {
 //    //todo
 //} );
 //
+test("testBindshortcutKeys", function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    expect(1);
+    editor.ready(function () {
+        editor.addshortcutkey({
+            "testBindshortcutKeys" : "ctrl+67"//^C
+        });
+        editor.commands["testbindshortcutkeys"] = {
+            execCommand : function( cmdName ) {
+                ok(1,'')
+            },
+            queryCommandState : function() {
+                return 0;
+            }
+        }
+        setTimeout(function(){
+            ua.keydown(editor.body, {keyCode: 67, ctrlKey: true});
+            setTimeout(function () {
+                UE.delEditor('ue');
+                te.dom.push(document.getElementById('ue'));
+                start();
+            }, 200);
+        }, 20);
+    });
+    stop();
+});
 test("getContent--转换空格，nbsp与空格相间显示", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
@@ -373,7 +403,6 @@ test("setContent 追加", function () {
 //    };
 //    editor.focus();
 //} );
-
 test("focus(false)", function () {
     var editor = UE.getEditor('test1');
     stop();
@@ -381,7 +410,7 @@ test("focus(false)", function () {
         var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent("<p>hello1</p><p>hello2</p>");
         editor.focus(false);
-        if (ua.browser.gecko) {
+        if (ua.browser.gecko||(ua.browser.ie&&ua.browser.ie>8)) {
             equal(editor.selection.getRange().startContainer, editor.body.firstChild, "focus(false)焦点在最前面");
             equal(editor.selection.getRange().endContainer, editor.body.firstChild, "focus(false)焦点在最前面");
         }
@@ -397,6 +426,7 @@ test("focus(false)", function () {
     });
 });
 
+
 test("focus(true)", function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
@@ -406,7 +436,7 @@ test("focus(true)", function () {
         var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent("<p>hello1</p><p>hello2</p>");
         editor.focus(true);
-        if (ua.browser.gecko) {
+        if (ua.browser.gecko||(ua.browser.ie&&ua.browser.ie>8)) {
             equal(editor.selection.getRange().startContainer, editor.body.lastChild, "focus( true)焦点在最后面");
             equal(editor.selection.getRange().endContainer, editor.body.lastChild, "focus( true)焦点在最后面");
             equal(editor.selection.getRange().startOffset, editor.body.lastChild.childNodes.length, "focus( true)焦点在最后面");
