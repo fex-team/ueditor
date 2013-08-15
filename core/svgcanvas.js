@@ -6,6 +6,86 @@
     var started=false;
     var root_sctm,start_x,start_y;
 
+    var selectOnly  = function(elems, showGrips) {
+        clearSelection(true);
+        addToSelection(elems, showGrips);
+    };
+
+    var clearSelection = this.clearSelection = function(noCall) {
+        if (selectedElements[0] != null) {
+            var len = selectedElements.length;
+            for (var i = 0; i < len; ++i) {
+                var elem = selectedElements[i];
+                if (elem == null) break;
+                selectorManager.releaseSelector(elem);
+                selectedElements[i] = null;
+            }
+        }
+        if(!noCall) call("selected", selectedElements);
+    };
+
+    var addToSelection = this.addToSelection = function(elemsToAdd, showGrips) {
+        if (elemsToAdd.length == 0) { return; }
+        // find the first null in our selectedElements array
+        var j = 0;
+
+        while (j < selectedElements.length) {
+            if (selectedElements[j] == null) {
+                break;
+            }
+            ++j;
+        }
+
+        // now add each element consecutively
+        var i = elemsToAdd.length;
+        while (i--) {
+            var elem = elemsToAdd[i];
+            if (!elem || !svgedit.utilities.getBBox(elem)) continue;
+
+            if(elem.tagName === 'a' && elem.childNodes.length === 1) {
+                // Make "a" element's child be the selected element
+                elem = elem.firstChild;
+            }
+
+            // if it's not already there, add it
+            if (selectedElements.indexOf(elem) == -1) {
+
+                selectedElements[j] = elem;
+
+                // only the first selectedBBoxes element is ever used in the codebase these days
+//			if (j == 0) selectedBBoxes[0] = svgedit.utilities.getBBox(elem);
+                j++;
+                var sel = selectorManager.requestSelector(elem);
+
+                if (selectedElements.length > 1) {
+                    sel.showGrips(false);
+                }
+            }
+        }
+        call("selected", selectedElements);
+
+        if (showGrips || selectedElements.length == 1) {
+            selectorManager.requestSelector(selectedElements[0]).showGrips(true);
+        }
+        else {
+            selectorManager.requestSelector(selectedElements[0]).showGrips(false);
+        }
+
+        // make sure the elements are in the correct order
+        // See: http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-compareDocumentPosition
+
+        selectedElements.sort(function(a,b) {
+            if(a && b && a.compareDocumentPosition) {
+                return 3 - (b.compareDocumentPosition(a) & 6);
+            } else if(a == null) {
+                return 1;
+            }
+        });
+
+        // Make sure first elements are not null
+        while(selectedElements[0] == null) selectedElements.shift(0);
+    };
+
     var SvgCanvas = UG.SvgCanvas = function (opt) {
         var me=this;
 
@@ -122,7 +202,9 @@
             if(!keep && element != null){
 
             }else if(element!=null){
-
+                setTimeout(function(){
+                    selectOnly([element],true);
+                },1000)
             }
         },
 
@@ -134,5 +216,7 @@
 
         }
     };
+
+
 })();
 
