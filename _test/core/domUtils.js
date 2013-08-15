@@ -1,4 +1,6 @@
 module( 'core.domUtils' );
+
+
 test( 'getPosition--A和B是同一个节点', function() {
     var div = te.dom[2];
     div.innerHTML = "<span>span</span><img  /><b>bbb</b>xxx";
@@ -874,7 +876,16 @@ test( 'mergeChild--非span', function() {
     div_new.firstChild.appendChild( document.createTextNode( 'b2' ) );
     ok( ua.haveSameAllChildAttribs( div, div_new ), '父节点和子节点属性相同，则删子节点' );
 } );
-
+test( 'mergeChild--span--attrs', function() {
+    var div = te.dom[2];
+    var domUtils = baidu.editor.dom.domUtils;
+    var div_new = document.createElement( 'div' );
+    div_new.id = 'test';
+    div.innerHTML = '<span style="background-color:blue;"><span style="font-size:12px;color:red">span_1<span style="font-size:12px">span_2</span></span></span>';
+    var html = '<span style="font-size: 12px; color: red; background-color: blue;">span_1<span style="font-size: 12px; color: red; background-color: red;">span_2</span></span>';
+    domUtils.mergeChild( div.firstChild ,'span',{style:'background-color:red'});
+    ua.checkSameHtml(div.innerHTML,html,'mergeChild-给子节点中的span添加样式');
+} );
 test( 'getElementsByTagName', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
