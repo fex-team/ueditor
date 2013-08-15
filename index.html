@@ -2,15 +2,16 @@
 <html>
 <head>
     <title></title>
+    <meta charset="utf-8">
     <link rel="stylesheet" href="theme/toolbar.css">
 
     <script type="text/javascript" src="lib/jquery.js"></script>
     <script type="text/javascript" src="lib/raphael.js"></script>
 </head>
 <body>
-<div class="toolbar">
-    <div class="select">选中</div>
-    <div class="rect">矩形</div>
+<div class="edui-toolbar" id="toolbar">
+    <div class="select" data-type="select">选中</div>
+    <div class="rect" data-type="rect">矩形</div>
 </div>
 
 <div id="canvas"></div>
@@ -26,7 +27,7 @@
 <script type="text/javascript" src="core/Editor.js"></script>
 
 <script type="text/javascript">
-    var ge=new Editor("canvas",600,600);
+    var ge=new UG.Editor("canvas",600,600);
 </script>
 </body>
 </html>
