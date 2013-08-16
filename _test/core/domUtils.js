@@ -2,8 +2,15 @@ module( 'core.domUtils' );
 test( 'isBoundaryNode--node是firstChild',function(){
 //    var iframe = document.createElement('iframe');
 //    document.body.appendChild(iframe);
-//    var div = iframe.contentWindow.document.body.appendChild(document.createElement('div'));
-    var div = te.dom[1].contentWindow.document.body.appendChild(document.createElement('div'));
+//    var body = iframe.contentDocument.appendChild(document.createElement('body'));
+//    var div = body.appendChild(document.createElement('div'));
+    if(ua.browser.ie){
+        var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
+        var div = body.appendChild(document.createElement('div'));
+    }else{
+        var div = te.dom[1].contentWindow.document.firstChild.appendChild(document.createElement('div'));
+    }
+
     div.innerHTML = "<span>sss</span>aaa<p>ppp</p>";
     var node = div.firstChild.nextSibling;
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
@@ -15,6 +22,9 @@ test( 'isBoundaryNode--node是firstChild',function(){
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
     equal( domUtils.isBoundaryNode(node, "lastChild"), 1 );
 //    iframe.parentNode.removeChild(iframe);
+} );
+test( 'isBoundaryNode--node是firstChild',function(){
+stop()
 } );
 test( 'getPosition--A和B是同一个节点', function() {
     var div = te.dom[2];
@@ -1056,7 +1066,17 @@ test( 'setAttributes--设置class,style', function() {
     div_new.innerHTML = '<div class="div_class" id="div_id" style="color:red;font-size:12px"></div>';
     ok( ua.haveSameAllChildAttribs( div, div_new ), 'check attributes' );
 } );
-
+test( 'setAttributes--设置innerHTML,value', function() {
+    var div = te.dom[2];
+    var domUtils = baidu.editor.dom.domUtils;
+    div.innerHTML = '<div></div>';
+    domUtils.setAttributes( div.firstChild, {'innerHTML':'setAttributes_test','id':'div_id','value':'abcd'} );
+    var div_new = document.createElement( 'div' );
+    div_new.id = 'test';
+    div_new.innerHTML = '<div id="div_id" >setAttributes_test</div>';
+    div_new.firstChild.value="abcd";
+    ok( ua.haveSameAllChildAttribs( div, div_new ), 'check attributes' );
+} );
 test( 'getComputedStyle', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
