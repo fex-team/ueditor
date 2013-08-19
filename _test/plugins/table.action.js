@@ -5,7 +5,7 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
-//test('拖拽-最右边的单元格',function(){
+//test('拖拽-最下边的单元格',function(){
 //    //todo ie9,10改range bug trace
 //    if (browser.ie && browser.version < 8) return;
 //    var editor = te.obj[0];
@@ -13,18 +13,17 @@
 //    editor.setContent( '<p></p>' );
 //    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
 //    editor.execCommand( 'inserttable');
-//    ua.manualDeleteFillData( editor.body );
 //    var tds = te.obj[0].body.getElementsByTagName('td');
-//    var width1 = tds[4].width;
-//    ua.mousemove(tds[4],{clientX:492,clientY:21});
-//    ua.mousedown(tds[4],{clientX:492,clientY:21});
+//    var height1 = tds[20].height;
+//    ua.mousemove(tds[24],{clientX:439,clientY:512});
+//    ua.mousedown(tds[24],{clientX:439,clientY:512});
 //    setTimeout(function(){
-//        equal(editor.body.style.cursor,'col-resize','检查鼠标显示');
-//        ua.mousemove(tds[4],{clientX:481,clientY:21});
-//        ua.mouseup(tds[4],{clientX:481,clientY:21});
+//        equal(editor.body.style.cursor,'row-resize','检查鼠标显示');
+//        ua.mousemove(tds[24],{clientX:439,clientY:562});
+//        ua.mouseup(tds[24],{clientX:439,clientY:562});
 //        setTimeout(function(){
-//            var width2 = te.obj[0].body.getElementsByTagName('td')[4].width;
-//            ok( width1-width2 > 10, '拖拽后单元格宽度改变');
+//            var height2 = te.obj[0].body.getElementsByTagName('td')[20].height;
+//            ok( height2-height1 > 10, '拖拽后单元格宽度改变');
 //            start();
 //        },200);
 //    },20);
@@ -519,6 +518,30 @@ test('拖拽-最右边的单元格',function(){
         setTimeout(function(){
             var width2 = te.obj[0].body.getElementsByTagName('td')[4].width;
             ok( width1-width2 > 10, '拖拽后单元格宽度改变');
+            start();
+        },200);
+    },20);
+    stop();
+});
+test('拖拽-最下边的单元格',function(){
+    //todo ie9,10改range bug trace
+    if (browser.ie && browser.version < 8) return;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable');
+    var tds = te.obj[0].body.getElementsByTagName('td');
+    var height1 = tds[20].height;
+    ua.mousemove(tds[24],{clientX:439,clientY:512});
+    ua.mousedown(tds[24],{clientX:439,clientY:512});
+    setTimeout(function(){
+        equal(editor.body.style.cursor,'row-resize','检查鼠标显示');
+        ua.mousemove(tds[24],{clientX:439,clientY:562});
+        ua.mouseup(tds[24],{clientX:439,clientY:562});
+        setTimeout(function(){
+            var height2 = te.obj[0].body.getElementsByTagName('td')[20].height;
+            ok( height2-height1 > 10, '拖拽后单元格宽度改变');
             start();
         },200);
     },20);
