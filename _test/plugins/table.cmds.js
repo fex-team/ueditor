@@ -180,20 +180,25 @@ test('表格中设置对齐方式', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<table><caption></caption><tbody><tr><td></td><td><p>hello</p></td></tr></tbody></table>');
-    var caption = editor.body.getElementsByTagName('caption');
-    range.setStart(caption[0], 0).collapse(true).select();
-    editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
-    equal(caption[0].style.textAlign, 'right', 'caption对齐方式为右上对齐');
-    equal(caption[0].style.verticalAlign, 'top', 'caption对齐方式为右上对齐');
-    var tds = editor.body.getElementsByTagName('td');
-    range.setStart(tds[0], 0).collapse(true).select();
-    editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
-    equal(tds[0].align, 'right', 'td对齐方式为右上对齐');
-    equal(tds[0].vAlign, 'top', 'td对齐方式为右上对齐');
-    /*不闭合设置对齐方式*/
-    range.selectNode(tds[1].firstChild, 0).select();
-    editor.execCommand('cellalignment', {align:'center', vAlign:'middle'});
-    equal(tds[1].align, 'center', 'p对齐方式为居中对齐');
+    stop();
+    setTimeout(function(){
+        var caption = editor.body.getElementsByTagName('caption');
+        range.setStart(caption[0], 0).collapse(true).select();
+        editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
+        equal(caption[0].style.textAlign, 'right', 'caption对齐方式为右上对齐');
+        equal(caption[0].style.verticalAlign, 'top', 'caption对齐方式为右上对齐');
+        var tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).collapse(true).select();
+        editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
+        equal(tds[0].align, 'right', 'td对齐方式为右上对齐');
+        equal(tds[0].vAlign, 'top', 'td对齐方式为右上对齐');
+        /*不闭合设置对齐方式*/
+        range.selectNode(tds[1].firstChild, 0).select();
+        editor.execCommand('cellalignment', {align:'center', vAlign:'middle'});
+        equal(tds[1].align, 'center', 'p对齐方式为居中对齐');
+        start();
+    },50);
+
 });
 
 test('修改table屬性', function () {

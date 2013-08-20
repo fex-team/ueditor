@@ -297,23 +297,26 @@ test('表格刷文本', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
+    expect(1)
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('<p><span style="background: yellow">hello</span></p><table><tbody><tr><td>hello2</td></tr></tbody></table>');
         setTimeout(function () {
             range.selectNode(editor.body.lastChild).select();
-            editor.currentSelectedArr = [editor.body.lastChild.getElementsByTagName('td')[0]];
+//            editor.currentSelectedArr = [editor.body.lastChild.getElementsByTagName('td')[0]];
             editor.addListener('mouseup', function () {
                 equal(editor.body.firstChild.innerHTML, 'hello', ' 去掉hello的格式');
             });
             editor.execCommand('formatmatch');
-            editor.currentSelectedArr = [];
-            range.selectNode(editor.body.firstChild).select();
-            ua.mouseup(editor.body);
             setTimeout(function () {
-                UE.delEditor('ue');
-                start();
-            }, 500);
+//            editor.currentSelectedArr = [];
+                range.selectNode(editor.body.firstChild).select();
+                ua.mouseup(editor.body);
+                setTimeout(function () {
+                    UE.delEditor('ue');
+                    start();
+                }, 500);
+            }, 50);
         }, 50);
     });
     stop();

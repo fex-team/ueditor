@@ -53,6 +53,8 @@ test('通过选区路径取range', function () {
     var range = te.obj[1];
     editor.options.elementPathEnabled = true;
     editor.setContent('<table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>45</td></tr></tbody></table>');
+    stop();
+    setTimeout(function () {
     var tds = editor.body.getElementsByTagName('td');
     var trs = editor.body.getElementsByTagName('tr');
     var tbodys = editor.body.getElementsByTagName('tbody');
@@ -60,7 +62,6 @@ test('通过选区路径取range', function () {
     range.setStart(tds[3].firstChild, 0).collapse(true).select();
     editor.queryCommandValue('elementpath');
     editor.execCommand('elementpath', '4');
-    stop();
     setTimeout(function () {
         range = editor.selection.getRange();
         if (ua.browser.gecko) {
@@ -112,6 +113,7 @@ test('通过选区路径取range', function () {
             }, 20);
         }, 20);
     }, 20);
+    }, 50);
 });
 
 test('trace 1539:列表', function () {
