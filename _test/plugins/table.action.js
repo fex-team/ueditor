@@ -134,24 +134,31 @@ test('点击一行的最左边,选中一行',function(){
     var range = te.obj[1];
     editor.setContent('');
     editor.execCommand('inserttable', {numCols:2,numRows:3} ); /*插入表格*/
-    var tds = editor.body.getElementsByTagName('td');
-    tds[0].innerHTML = 'hello1';
-    tds[1].innerHTML = 'hello2';
-    ua.mousemove(tds[0],{clientX:8,clientY:24});
-    ua.click(tds[0],{clientX:8,clientY:24});
-    var space = ua.browser.ie?'':' ';
-    var quot = ua.browser.gecko?'\"':'';
-    equal(editor.body.style.cursor, 'url('+ quot+ editor.options.cursorpath + 'v.png'+quot+'),'+space+'pointer');
-    //me.body.style.cursor
-    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
-    equal(selectedTds.length,2,'选中一行');
-    equal(selectedTds[0].className,' selectTdClass','检查样式');
-    equal(selectedTds[1].className,' selectTdClass','检查样式');
-    equal(selectedTds[0].innerHTML,'hello1','检查内容');
-    equal(selectedTds[1].innerHTML,'hello2','检查内容');
-    //todo trace 3571
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        tds[0].innerHTML = 'hello1';
+        tds[1].innerHTML = 'hello2';
+        ua.mousemove(tds[0], {clientX: 8, clientY: 24});
+        ua.click(tds[0], {clientX: 8, clientY: 24});
+        setTimeout(function () {
+
+            var space = ua.browser.ie ? '' : ' ';
+            var quot = ua.browser.gecko ? '\"' : '';
+            equal(editor.body.style.cursor, 'url(' + quot + editor.options.cursorpath + 'v.png' + quot + '),' + space + 'pointer');
+            //me.body.style.cursor
+            var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+            equal(selectedTds.length, 2, '选中一行');
+            equal(selectedTds[0].className, ' selectTdClass', '检查样式');
+            equal(selectedTds[1].className, ' selectTdClass', '检查样式');
+            equal(selectedTds[0].innerHTML, 'hello1', '检查内容');
+            equal(selectedTds[1].innerHTML, 'hello2', '检查内容');
+            //todo trace 3571
 //    ua.click(tds[2],{clientX:12,clientY:24,shiftKey:true});
 //    equal(editor.getUETable(editor.body.firstChild).selectedTds.length,6,'');
+            start();
+        }, 50);
+    }, 50);
+    stop();
 });
 
 test('点击一行的最左边,但是每行只有一列,这时选中单元格中的内容',function(){
@@ -356,17 +363,19 @@ test( 'backspace事件:删除caption', function() {
     editor.addListener('saveScene',function(){
         ok(true);
     });
-    var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
-    range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
-    editor.execCommand( 'insertcaption');
-    ua.keydown(editor.body,{'keyCode':8});
     stop();
-    setTimeout(function(){
-        equal(te.obj[0].body.getElementsByTagName('caption').length,0,'删除caption');
-        equal(te.obj[0].selection.getRange().collapsed,true,'检查光标');
-        equal(te.obj[0].selection.getRange().startContainer,te.obj[0].body.getElementsByTagName('td')[0],'检查光标');
-        start();
-    },20);
+    setTimeout(function () {
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        range.setStart(trs[0].cells[0], 0).collapse(true).select();
+        editor.execCommand('insertcaption');
+        ua.keydown(editor.body, {'keyCode': 8});
+        setTimeout(function () {
+            equal(te.obj[0].body.getElementsByTagName('caption').length, 0, '删除caption');
+            equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
+            equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+            start();
+        }, 20);
+    }, 50);
 });
 
 test( 'backspace事件:deleterow', function() {

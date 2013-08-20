@@ -403,25 +403,33 @@ test('删除行', function () {
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:2, numRows:3});
-    var tds = editor.body.getElementsByTagName('td');
+    editor.execCommand('inserttable', {numCols: 2, numRows: 3});
+    stop();
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
 
-    range.setStart(tds[0], 0).collapse(1).select();
-    editor.execCommand('deleterow');
-    equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
-    editor.undoManger.undo();
-    equal(editor.body.getElementsByTagName('tr').length, 3, '撤销后的行数');
-    range.setStart(tds[5], 0).collapse(1).select();
-    editor.execCommand('deleterow');
-    equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
+        range.setStart(tds[0], 0).collapse(1).select();
+        editor.execCommand('deleterow');
+        equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
+        editor.undoManger.undo();
+        setTimeout(function () {
+            equal(editor.body.getElementsByTagName('tr').length, 3, '撤销后的行数');
+            range.setStart(tds[5], 0).collapse(1).select();
+            editor.execCommand('deleterow');
+            equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
 
-    var table = editor.document.getElementsByTagName("table")[0];
-    var cell = table.rows[0].cells[0];
-    range.setStart(cell, 0).setCursor();
-    editor.execCommand("mergeDown");
-    equal(cell.rowSpan, 2, "合并了一行");
-    editor.execCommand("deleterow");
-    equal(table.rows.length, 1, "在合并的单元格中删除行后，表格变成了一行");
+            var table = editor.document.getElementsByTagName("table")[0];
+            var cell = table.rows[0].cells[0];
+            setTimeout(function () {
+                range.setStart(cell, 0).setCursor();
+                editor.execCommand("mergeDown");
+                equal(cell.rowSpan, 2, "合并了一行");
+                editor.execCommand("deleterow");
+                equal(table.rows.length, 1, "在合并的单元格中删除行后，表格变成了一行");
+                start();
+            }, 50);
+        }, 50);
+    }, 50);
 });
 test('选中部分单元格，删除行列', function () {
     var editor = te.obj[0];
