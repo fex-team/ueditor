@@ -401,32 +401,33 @@ test('原表格非第一行带th，插入列', function () {
 test('删除行', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent('<p></p>');
-    range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols: 2, numRows: 3});
+    editor.setContent('<table><tbody><tr><td width="483" valign="top">1</td><td width="483" valign="top">2</td></tr><tr><td width="483" valign="top">3</td><td width="483" valign="top">4</td></tr><tr><td width="483" valign="top">5</td><td width="483" valign="top">6</td></tr></tbody></table>');
+    //
+
     stop();
     setTimeout(function () {
         var tds = editor.body.getElementsByTagName('td');
-
         range.setStart(tds[0], 0).collapse(1).select();
         editor.execCommand('deleterow');
         equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
         editor.undoManger.undo();
         setTimeout(function () {
             equal(editor.body.getElementsByTagName('tr').length, 3, '撤销后的行数');
+            tds = editor.body.getElementsByTagName('td');
             range.setStart(tds[5], 0).collapse(1).select();
             editor.execCommand('deleterow');
-            equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
-
-            var table = editor.document.getElementsByTagName("table")[0];
-            var cell = table.rows[0].cells[0];
             setTimeout(function () {
-                range.setStart(cell, 0).setCursor();
-                editor.execCommand("mergeDown");
-                equal(cell.rowSpan, 2, "合并了一行");
-                editor.execCommand("deleterow");
-                equal(table.rows.length, 1, "在合并的单元格中删除行后，表格变成了一行");
-                start();
+                equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
+                var table = editor.document.getElementsByTagName("table")[0];
+                var cell = table.rows[0].cells[0];
+                setTimeout(function () {
+                    range.setStart(cell, 0).setCursor();
+                    editor.execCommand("mergeDown");
+                    equal(cell.rowSpan, 2, "合并了一行");
+                    editor.execCommand("deleterow");
+                    equal(table.rows.length, 1, "在合并的单元格中删除行后，表格变成了一行");
+                    start();
+                }, 50);
             }, 50);
         }, 50);
     }, 50);
@@ -945,13 +946,13 @@ test('trace 3222：在合并后的单元格中按tab键', function () {
         trs[1].cells[2].innerHTML = 'asd';
         range.setStart(trs[1].cells[1], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode':9});
-        if (ua.browser.gecko)
+        if (ua.browser.gecko||ua.browser.ie>8)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第一次tab键');
         else
             equal(editor.selection.getRange().startContainer.data, 'asd', '第一次tab键');
         range.setStart(trs[1].cells[1], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode':9});
-        if (ua.browser.gecko)
+        if (ua.browser.gecko||ua.browser.ie>8)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第二次tab键');
         else
             equal(editor.selection.getRange().startContainer.data, 'asd', '第一次tab键');

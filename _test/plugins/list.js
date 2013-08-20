@@ -862,7 +862,6 @@ test('trace 3126：1.2.5+列表重构新增标签，tab键', function () {
 test('trace 3132：单行列表backspace', function () {
     /*实际操作没问题，取range时会在将文本节点分为两个节点，后退操作无法实现*/
     if ((ua.browser.safari && !ua.browser.chrome))return 0;
-    if (ua.browser.ie == 9)return 0;//TODO 1.2.6
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -871,7 +870,8 @@ test('trace 3132：单行列表backspace', function () {
         editor.setContent('<ol><li><br></li></ol>');
         range.selectNode(editor.body.firstChild.firstChild.firstChild.firstChild).select();
         ua.keydown(editor.body, {keyCode:8});
-        equal(ua.getChildHTML(editor.body), '<p><br></p>', '');
+        var space =ua.browser.ie>8?'':'<br>';
+        equal(ua.getChildHTML(editor.body), '<p>'+space+'</p>', '');
         UE.delEditor('ue');
         start()
     });

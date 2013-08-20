@@ -241,9 +241,11 @@ test( 'chrome删除div', function () {
     }
 } );
 test( 'formatBlock', function () {
+    if(ua.browser.ie)return; //这个处理不针对ie
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>' );
+    setTimeout( function () {
     var tds = editor.body.getElementsByTagName('td');
     range.setStart(tds[0],1).collapse(true).select();
     ua.keydown(editor.body,{'keyCode':13});
@@ -255,6 +257,7 @@ test( 'formatBlock', function () {
             equal(td.firstChild.innerHTML,'hello1','hello1');
             start();
         }, 60 );
+    }, 60 );
     }, 60 );
     stop();
 } );
