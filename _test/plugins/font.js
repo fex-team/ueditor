@@ -1,4 +1,5 @@
 module("plugins.font");
+
 test('trace 3337：字符边框', function () {
 
     if (ua.browser.opera)return;
@@ -469,7 +470,7 @@ test('对表格中的文本添加颜色和下划线', function () {
             var ut = editor.getUETable(editor.body.firstChild);
             var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
             ut.setSelected(cellsRange);
-            if (ua.browser.ie) {
+            if (ua.browser.ie&&ua.browser.ie<9) {
                 range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild, 0).setEnd(editor.body.firstChild.firstChild.lastChild.firstChild, 6).select();
             }
             else {
