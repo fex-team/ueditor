@@ -582,9 +582,13 @@ test('trace 3096：单元格中改变字号', function () {
     editor.execCommand('inserttable', {numCols:3, numRows:3});
     var trs = editor.body.firstChild.getElementsByTagName('tr');
     trs[0].cells[0].innerHTML = 'asd';
-    range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild.firstChild, 0).setEnd(editor.body.firstChild.firstChild.firstChild.firstChild.firstChild, 3).select();
-    editor.execCommand('fontsize', '32px');
-    equal(editor.body.firstChild.getElementsByTagName('td')[0].style.height, '', '不固定高度');
+    setTimeout(function () {
+        range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild.firstChild, 0).setEnd(editor.body.firstChild.firstChild.firstChild.firstChild.firstChild, 3).select();
+        editor.execCommand('fontsize', '32px');
+        equal(editor.body.firstChild.getElementsByTagName('td')[0].style.height, '', '不固定高度');
+        start();
+    }, 50);
+    stop();
 });
 
 test('转换font标签', function () {
