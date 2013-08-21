@@ -388,19 +388,21 @@ test( 'backspace事件:deleterow', function() {
     editor.addListener('saveScene',function(){
         ok(true);
     });
-    var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
-    var ut = editor.getUETable(editor.body.firstChild);
-    var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[2]);
-    ut.setSelected(cellsRange);
-    range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
-    ua.keydown(editor.body,{'keyCode':8});
     stop();
-    setTimeout(function(){
-        equal(te.obj[0].body.getElementsByTagName('tr').length,2,'删除整行');
-        equal(te.obj[0].selection.getRange().collapsed,true,'检查光标');
-        equal(te.obj[0].selection.getRange().startContainer,te.obj[0].body.getElementsByTagName('td')[0],'检查光标');
-        start();
-    },20);
+    setTimeout(function () {
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[0].cells[2]);
+        ut.setSelected(cellsRange);
+        range.setStart(trs[0].cells[0], 0).collapse(true).select();
+        ua.keydown(editor.body, {'keyCode': 8});
+        setTimeout(function () {
+            equal(te.obj[0].body.getElementsByTagName('tr').length, 2, '删除整行');
+            equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
+            equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+            start();
+        }, 20);
+    }, 50);
 });
 
 test( 'backspace事件:deletecol', function() {
