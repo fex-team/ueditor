@@ -265,15 +265,17 @@ test( '跨td不删', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>' );
-    var tds = editor.body.getElementsByTagName('td');
-    range.setStart(tds[0],0).setEnd(tds[2],1).select();
     editor.addListener("keydown", function (type, evt) {
         setTimeout( function () {
             ok(evt.defaultPrevented||!evt.returnValue, "keydown");
             start();
         }, 60 );
     });
-    ua.keydown(editor.body,{'keyCode':13});
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).setEnd(tds[2], 1).select();
+        ua.keydown(editor.body, {'keyCode': 13});
+    }, 60);
     stop();
 } );
 ////presskey相关，先不测

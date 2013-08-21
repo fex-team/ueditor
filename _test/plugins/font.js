@@ -464,38 +464,40 @@ test('对表格中的文本添加颜色和下划线', function () {
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('<table><tbody><tr><td>hello1</td><td>hello2</td></tr><tr><td colspan="2">hello3</td></tr></tbody></table>');
-        var trs = editor.body.firstChild.getElementsByTagName('tr');
-        var ut = editor.getUETable(editor.body.firstChild);
-        var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
-        ut.setSelected(cellsRange);
-        if (ua.browser.ie){
-            range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild, 0).setEnd(editor.body.firstChild.firstChild.lastChild.firstChild, 6).select();
-        }
-        else{
-            range.setStart(trs[0].cells[0].firstChild, 0).setEnd(trs[1].cells[0].firstChild, 6).select();
-        }
-
-        editor.execCommand('forecolor', 'rgb(255,100,100)');
         setTimeout(function () {
-            ut.clearSelected();
-            trs = editor.body.firstChild.getElementsByTagName('tr');
-            ut = editor.getUETable(editor.body.firstChild);
-            range.selectNode(trs[0].firstChild).select();
-            ut.setSelected(range);
+            var trs = editor.body.firstChild.getElementsByTagName('tr');
+            var ut = editor.getUETable(editor.body.firstChild);
+            var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
+            ut.setSelected(cellsRange);
+            if (ua.browser.ie) {
+                range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild, 0).setEnd(editor.body.firstChild.firstChild.lastChild.firstChild, 6).select();
+            }
+            else {
+                range.setStart(trs[0].cells[0].firstChild, 0).setEnd(trs[1].cells[0].firstChild, 6).select();
+            }
+
+            editor.execCommand('forecolor', 'rgb(255,100,100)');
             setTimeout(function () {
-                editor.execCommand('underline');
-                ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色');
-                ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); ">hello2</span>', editor.document, trs[0].lastChild, '第2个单元格有前景色');
-                ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); ">hello3</span>', editor.document, trs[1].firstChild, '第3个单元格有前景色');
-                equal(trs[1].firstChild.getAttribute('colspan'), 2, 'colspan为2');
-                equal(editor.queryCommandState('underline'), true, '状态是underline');
-                equal(editor.queryCommandState('forecolor'), 0, '非underline和line-through返回0');
+                ut.clearSelected();
+                trs = editor.body.firstChild.getElementsByTagName('tr');
+                ut = editor.getUETable(editor.body.firstChild);
+                range.selectNode(trs[0].firstChild).select();
+                ut.setSelected(range);
                 setTimeout(function () {
-                    div.parentNode.removeChild(div);
-                    start();
+                    editor.execCommand('underline');
+                    ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色');
+                    ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); ">hello2</span>', editor.document, trs[0].lastChild, '第2个单元格有前景色');
+                    ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); ">hello3</span>', editor.document, trs[1].firstChild, '第3个单元格有前景色');
+                    equal(trs[1].firstChild.getAttribute('colspan'), 2, 'colspan为2');
+                    equal(editor.queryCommandState('underline'), true, '状态是underline');
+                    equal(editor.queryCommandState('forecolor'), 0, '非underline和line-through返回0');
+                    setTimeout(function () {
+                        div.parentNode.removeChild(div);
+                        start();
+                    }, 100);
                 }, 100);
             }, 100);
-        }, 100);
+        }, 50);
     });
 });
 
