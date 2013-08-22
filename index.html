@@ -1,33 +1,44 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="theme/toolbar.css">
-
+    <link rel="stylesheet" href="theme/editor.css" type="text/css"/>
     <script type="text/javascript" src="lib/jquery.js"></script>
-    <script type="text/javascript" src="lib/raphael.js"></script>
+    <script type="text/javascript" src="core/editor.js"></script>
 </head>
 <body>
-<div class="edui-toolbar" id="toolbar">
-    <div class="select" data-type="select">选中</div>
-    <div class="rect" data-type="rect">矩形</div>
+
+<div id="svg_editor">
+    <div id="tools_rect">
+        <div id="tool_square"></div>
+        <div id="tool_rect"></div>
+        <div id="tool_fhrect"></div>
+    </div>
+
+    <div id="tools_ellipse">
+        <div id="tool_circle"></div>
+        <div id="tool_ellipse"></div>
+        <div id="tool_fhellipse"></div>
+    </div>
+
+    <div id="tools">
+        <div>
+            <img class="tool_button_current" id="tool_path" src="images/path.png"/><br/>
+            <img class="tool_button" id="tool_line" src="images/line.png"/><br/>
+            <img class="tool_button" id="tools_rect_show" src="images/square.png"/><br/>
+            <img class="tool_button" id="tools_ellipse_show" src="images/circle.png"/><br/>
+            <img class="tool_button" id="tool_delete" src="images/delete.png"/>
+            <hr/>
+            <img class="tool_button" id="tool_clear" src="images/clear.png"/><br/>
+            <img class="tool_button" id="tool_submit" src="images/submit.png"/><br/>
+        </div>
+    </div>
+
+    <div id="svgcanvas">
+        <object class="svgcanvas" data="svgcanvas.svg" type="image/svg+xml">
+            <embed class="svgcanvas" src="svgcanvas.svg" type="image/svg+xml"/>
+        </object>
+    </div>
+
 </div>
 
-<div id="canvas"></div>
-
-<script type="text/javascript" src="editor.js"></script>
-<script type="text/javascript" src="core/browser.js"></script>
-<script type="text/javascript" src="core/svgtransformlist.js"></script>
-<script type="text/javascript" src="core/math.js"></script>
-<script type="text/javascript" src="core/svgutils.js"></script>
-<script type="text/javascript" src="core/select.js"></script>
-<script type="text/javascript" src="core/path.js"></script>
-<script type="text/javascript" src="core/svgcanvas.js"></script>
-<script type="text/javascript" src="core/Editor.js"></script>
-
-<script type="text/javascript">
-    var ge=new UG.Editor("canvas",600,600);
-</script>
 </body>
 </html>
