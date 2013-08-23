@@ -56,7 +56,7 @@ test('trace 3355：不闭合选区插入代码', function () {
         ua.keydown(editor.body, {'keyCode':65, 'ctrlKey':true});
         editor.execCommand('insertcode', 'html');
         var br = ua.browser.ie ? '' : '<br>';
-        if (ua.browser.gecko || ua.browser.opera)
+        if (ua.browser.gecko || ua.browser.opera ||ua.browser.ie>8)
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre>', '检查插入了html');
         else
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre><p>' + br + '</p>', '检查插入了html');
