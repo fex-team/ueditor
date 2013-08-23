@@ -1395,10 +1395,14 @@
         /**
          * 添加输入过滤规则
          * @method  addInputRule
-         * @param { PlainObject } rule 要添加的过滤规则
+         * @param { Function } rule 要添加的过滤规则
          * @example
          * ```javascript
-         * editor.addOutputRule(rule);
+         * editor.addOutputRule(function(root){
+         *   $.each(root.getNodesByTagName('p'),function(i,node){
+         *       node.tagName="div";
+         *   });
+         * });
          * ```
          */
         addInputRule: function (rule) {
