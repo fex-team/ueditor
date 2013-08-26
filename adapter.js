@@ -1,5 +1,5 @@
 function init() {
-    var svgCanvas = new SvgCanvas(document.getElementById("svgcanvas"));
+    var svgCanvas = new SvgCanvas(document.getElementById("canvas"));
 
     var clickSelect = function () {
         svgCanvas.setMode('select');
