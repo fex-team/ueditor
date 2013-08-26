@@ -131,16 +131,12 @@ function SvgCanvas(c) {
     }
 
     function Selector(id, elem) {
-        // this is the selector's unique number
         this.id = id;
 
-        // this holds a reference to the element for which this selector is being used
         this.selectedElement = elem;
 
-        // this is a flag used internally to track whether the selector is being used or not
         this.locked = true;
 
-        // this function is used to reset the id and element that the selector is attached to
         this.reset = function (e) {
             this.locked = true;
             this.selectedElement = e;
@@ -149,28 +145,23 @@ function SvgCanvas(c) {
             this.selectorGroup.setAttribute("display", "inline");
         };
 
-        // this holds a reference to the <g> element that holds all visual elements of the selector
         this.selectorGroup = addSvgElementFromJson({ "element": "g",
             "attr": {"id": ("selectorGroup" + this.id)}
         });
 
-        // this holds a reference to <rect> element
         this.selectorRect = this.selectorGroup.appendChild(addSvgElementFromJson({
             "element": "rect",
             "attr": {
                 "id": ("selectedBox" + this.id),
                 "fill": "none",
-                "stroke": "blue",
+                "stroke": "#5da2ff",
                 "stroke-width": "1",
-                "stroke-dasharray": "5,5",
                 "width": 1,
                 "height": 1,
-                // need to specify this so that the rect is not selectable
                 "style": "pointer-events:none"
             }
         }));
 
-        // this holds a reference to the grip elements for this selector
         this.selectorGrips = {    "nw": null,
             "n": null,
             "ne": null,
@@ -184,36 +175,32 @@ function SvgCanvas(c) {
             "element": "line",
             "attr": {
                 "id": ("selectorGrip_rotate_connector_" + this.id),
-                "stroke": "blue",
-                "stroke-width": "1",
+                "stroke": "#5da2ff",
+                "stroke-width": "1"
             }
         }));
         this.rotateGrip = this.selectorGroup.appendChild(addSvgElementFromJson({
             "element": "circle",
             "attr": {
                 "id": ("selectorGrip_rotate_" + this.id),
-                "fill": "lime",
+                "fill": "#5da2ff",
                 "r": 4,
-                "stroke": "blue",
+                "stroke": "#fff",
                 "stroke-width": 2
             }
         }));
 
-        // add the corner grips
         for (dir in this.selectorGrips) {
             this.selectorGrips[dir] = this.selectorGroup.appendChild(
                 addSvgElementFromJson({
                     "element": "rect",
                     "attr": {
                         "id": ("selectorGrip_" + dir + "_" + this.id),
-                        "fill": "blue",
+                        "fill": "#5da2ff",
+                        'stroke':'#fff',
                         "width": 6,
                         "height": 6,
                         "style": ("cursor:" + dir + "-resize"),
-                        // This expands the mouse-able area of the grips making them
-                        // easier to grab with the mouse.
-                        // This works in Opera and WebKit, but does not work in Firefox
-                        // see https://bugzilla.mozilla.org/show_bug.cgi?id=500174
                         "stroke-width": 2,
                         "pointer-events": "all",
                         "display": "none"
@@ -241,7 +228,6 @@ function SvgCanvas(c) {
             if (elem) this.updateGripCursors(canvas.getRotationAngle(elem));
         };
 
-        // Updates cursors for corner grips on rotation so arrows point the right way
         this.updateGripCursors = function (angle) {
             var dir_arr = [];
             var steps = Math.round(angle / 45);
@@ -325,19 +311,14 @@ function SvgCanvas(c) {
 
     function SelectorManager() {
 
-        // this will hold the <g> element that contains all selector rects/grips
         this.selectorParentGroup = null;
 
-        // this is a special rect that is used for multi-select
         this.rubberBandBox = null;
 
-        // this will hold objects of type Selector (see above)
         this.selectors = [];
 
-        // this holds a map of SVG elements to their Selector object
         this.selectorMap = {};
 
-        // local reference to this object
         var mgr = this;
 
         this.initGroup = function () {
@@ -353,7 +334,6 @@ function SvgCanvas(c) {
         this.requestSelector = function (elem) {
             if (elem == null) return null;
             var N = this.selectors.length;
-            // if we've already acquired one for this element, return it
             if (typeof(this.selectorMap[elem.id]) == "object") {
                 this.selectorMap[elem.id].locked = true;
                 return this.selectorMap[elem.id];
@@ -367,12 +347,12 @@ function SvgCanvas(c) {
                     return this.selectors[i];
                 }
             }
-            // if we reached here, no available selectors were found, we create one
             this.selectors[N] = new Selector(N, elem);
             this.selectorParentGroup.appendChild(this.selectors[N].selectorGroup);
             this.selectorMap[elem.id] = this.selectors[N];
             return this.selectors[N];
         };
+
         this.releaseSelector = function (elem) {
             if (elem == null) return;
             var N = this.selectors.length;
@@ -398,7 +378,6 @@ function SvgCanvas(c) {
             }
         };
 
-        // this keeps the selector groups as the last child in the document
         this.update = function () {
             this.selectorParentGroup = svgroot.appendChild(this.selectorParentGroup);
         };
@@ -543,15 +522,6 @@ function SvgCanvas(c) {
 
     var curBBoxes = [];
 
-    // This method sends back an array or a NodeList full of elements that
-    // intersect the multi-select rubber-band-box.
-    //
-    // Since the only browser that supports the SVG DOM getIntersectionList is Opera,
-    // we need to provide an implementation here.  We brute-force it for now.
-    //
-    // Reference:
-    // Firefox does not implement getIntersectionList(), see https://bugzilla.mozilla.org/show_bug.cgi?id=501421
-    // Webkit does not implement getIntersectionList(), see https://bugs.webkit.org/show_bug.cgi?id=11274
     var getIntersectionList = function (rect) {
         if (rubberBox == null) {
             return null;
@@ -585,10 +555,6 @@ function SvgCanvas(c) {
         return resultList;
     };
 
-    // FIXME: we MUST compress consecutive text changes to the same element
-    // (right now each keystroke is saved as a separate command that includes the
-    // entire text contents of the text element)
-    // TODO: consider limiting the history that we store here (need to do some slicing)
     var addCommandToHistory = function (cmd) {
         // if our stack pointer is not at the end, then we have to remove
         // all commands after the pointer and insert the new command
@@ -599,7 +565,6 @@ function SvgCanvas(c) {
         undoStackPointer = undoStack.length;
     };
 
-// private functions
     var getId = function () {
         if (events["getid"]) return call("getid", obj_num);
         return idprefix + obj_num;
@@ -621,8 +586,6 @@ function SvgCanvas(c) {
         }
     };
 
-    // this function sanitizes the input node and its children
-    // this function only keeps what is allowed from our whitelist defined above
     var sanitizeSvg = function (node) {
         // we only care about element nodes
         // automatically return for all comment, etc nodes
@@ -742,7 +705,7 @@ function SvgCanvas(c) {
             }
         }
         return out.join('');
-    }; // end svgToString()
+    };
 
     var recalculateAllSelectedDimensions = function () {
         var text = (current_resize_mode == "none" ? "position" : "size");
@@ -762,12 +725,10 @@ function SvgCanvas(c) {
         }
     };
 
-    // this is how we map paths to our preferred relative segment types
     var pathMap = [ 0, 'z', 'm', 'm', 'l', 'l', 'c', 'c', 'q', 'q', 'a', 'a',
         'l', 'l', 'l', 'l', // TODO: be less lazy below and map them to h and v
         's', 's', 't', 't' ];
 
-    // this function returns the command which resulted from the selected change
     var recalculateSelectedDimensions = function (i) {
         var selected = selectedElements[i];
         if (selected == null) return null;
@@ -1050,8 +1011,6 @@ function SvgCanvas(c) {
         }
     };
 
-// public events
-
     this.clearSelection = function () {
         if (selectedElements[0] == null) {
             return;
@@ -1072,7 +1031,6 @@ function SvgCanvas(c) {
             return;
         }
 
-        // find the first null in our selectedElements array
         var j = 0;
         while (j < selectedElements.length) {
             if (selectedElements[j] == null) {
@@ -1081,7 +1039,6 @@ function SvgCanvas(c) {
             ++j;
         }
 
-        // now add each element consecutively
         var i = elemsToAdd.length;
         while (i--) {
             var elem = elemsToAdd[i];
@@ -2073,7 +2030,6 @@ function SvgCanvas(c) {
     };
 
 
-
     this.open = function (str) {
         // Nothing by default, handled by optional widget/extention
         call("opened", str);
@@ -2337,9 +2293,6 @@ function SvgCanvas(c) {
     };
 
 
-    // If you want to change all selectedElements, ignore the elems argument.
-    // If you want to change only a subset of selectedElements, then send the
-    // subset to this function in the elems argument.
     this.changeSelectedAttribute = function (attr, val, elems) {
         var elems = elems || selectedElements;
         canvas.beginUndoableChange(attr, elems);
