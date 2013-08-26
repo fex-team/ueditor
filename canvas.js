@@ -20,7 +20,6 @@ var Utils = {
 
 
 function SvgCanvas(c) {
-
     function ChangeElementCommand(elem, attrs, text) {
         this.elem = elem;
         this.text = text ? ("Change " + elem.tagName + " " + text) : ("Change " + elem.tagName);
