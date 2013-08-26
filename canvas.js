@@ -469,7 +469,6 @@ function SvgCanvas(c) {
     };
 
     var getNextId = function () {
-        // ensure the ID does not exist
         var id = getId();
         while (svgdoc.getElementById(id)) {
             obj_num++;
