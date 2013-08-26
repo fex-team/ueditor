@@ -1102,8 +1102,6 @@ function SvgCanvas(c) {
                 start_x = x;
                 start_y = y;
                 break;
-            case "fhellipse":
-            case "fhrect":
             case "path":
                 started = true;
                 start_x = x;
@@ -1130,7 +1128,6 @@ function SvgCanvas(c) {
                 freehand_min_y = y;
                 freehand_max_y = y;
                 break;
-            case "square":
             case "rect":
                 started = true;
                 start_x = x;
@@ -1215,30 +1212,6 @@ function SvgCanvas(c) {
             case "poly":
                 started = true;
                 break;
-            case "polyedit":
-                started = true;
-                current_poly_oldd = current_poly.getAttribute("d");
-                var id = evt.target.id;
-                if (id.substr(0, 14) == "polypointgrip_") {
-                    current_poly_pt_drag = parseInt(id.substr(14));
-                }
-
-                if (current_poly_pt_drag == -1) {
-                    canvas.clearSelection();
-                    canvas.setMode("multiselect");
-                    if (rubberBox == null) {
-                        rubberBox = selectorManager.getRubberBandBox();
-                    }
-                    assignAttributes(rubberBox, {
-                        'x': start_x,
-                        'y': start_y,
-                        'width': 0,
-                        'height': 0,
-                        'display': 'inline'
-                    }, 100);
-                }
-
-                break;
             case "rotate":
                 started = true;
                 break;
@@ -1256,9 +1229,6 @@ function SvgCanvas(c) {
         var shape = svgdoc.getElementById(getId());
         switch (current_mode) {
             case "select":
-                // we temporarily use a translate on the element(s) being dragged
-                // this transform is removed upon mousing up and the element is
-                // relocated to the new location
                 if (selectedElements[0] != null) {
                     var dx = x - start_x;
                     var dy = y - start_y;
@@ -1301,48 +1271,13 @@ function SvgCanvas(c) {
                     'width': Math.abs(x - start_x),
                     'height': Math.abs(y - start_y)
                 }, 100);
-
-                // this code will probably be faster than using getIntersectionList(), but
-                // not as accurate (only grabs an element if the mouse happens to pass over
-                // its bbox and elements would never be released from selection)
-//				var nodeName = evt.target.nodeName.toLowerCase();
-//				if (nodeName != "div" && nodeName != "svg") {
-//					canvas.addToSelection([evt.target]);
-//				}
-
-                // clear out selection and set it to the new list
                 canvas.clearSelection();
                 canvas.addToSelection(getIntersectionList());
-
-                /*
-                 // for each selected:
-                 // - if newList contains selected, do nothing
-                 // - if newList doesn't contain selected, remove it from selected
-                 // - for any newList that was not in selectedElements, add it to selected
-                 var elemsToRemove = [];
-                 var newList = getIntersectionList();
-                 var len = selectedElements.length;
-                 for (var i = 0; i < len; ++i) {
-                 var ind = newList.indexOf(selectedElements[i]);
-                 if (ind == -1) {
-                 elemsToRemove.push(selectedElements[i]);
-                 }
-                 else {
-                 newList[ind] = null;
-                 }
-                 }
-                 if (elemsToRemove.length > 0)
-                 canvas.removeFromSelection(elemsToRemove);
-                 */
                 break;
             case "resize":
-                // we track the resize bounding box and translate/scale the selected element
-                // while the mouse is down, when mouse goes up, we use this to recalculate
-                // the shape's coordinates
                 var box = canvas.getBBox(selected), left = box.x, top = box.y, width = box.width,
                     height = box.height, dx = (x - start_x), dy = (y - start_y);
 
-                // if rotated, adjust the dx,dy values
                 var angle = canvas.getRotationAngle(selected);
                 if (angle) {
                     var r = Math.sqrt(dx * dx + dy * dy);
@@ -1351,8 +1286,6 @@ function SvgCanvas(c) {
                     dy = r * Math.sin(theta);
                 }
 
-                // if not stretching in y direction, set dy to 0
-                // if not stretching in x direction, set dx to 0
                 if (current_resize_mode.indexOf("n") == -1 && current_resize_mode.indexOf("s") == -1) {
                     dy = 0;
                 }
@@ -1360,22 +1293,18 @@ function SvgCanvas(c) {
                     dx = 0;
                 }
 
-                var ts = null;
                 var tx = 0, ty = 0;
                 var sy = (height + dy) / height, sx = (width + dx) / width;
-                // if we are dragging on the north side, then adjust the scale factor and ty
                 if (current_resize_mode.indexOf("n") != -1) {
                     sy = (height - dy) / height;
                     ty = height;
                 }
 
-                // if we dragging on the east side, then adjust the scale factor and tx
                 if (current_resize_mode.indexOf("w") != -1) {
                     sx = (width - dx) / width;
                     tx = width;
                 }
 
-                // find the rotation transform and prepend it
                 var ts = [" translate(", (left + tx), ",", (top + ty), ") scale(", sx, ",", sy,
                     ") translate(", -(left + tx), ",", -(top + ty), ")"].join('');
                 if (angle) {
@@ -1428,26 +1357,11 @@ function SvgCanvas(c) {
 
                 selectorManager.requestSelector(selected).resize(selectedBBox);
                 break;
-            case "text":
-                assignAttributes(shape, {
-                    'x': x,
-                    'y': y
-                }, 1000);
-                break;
             case "line":
                 var handle = svgroot.suspendRedraw(1000);
                 shape.setAttributeNS(null, "x2", x);
                 shape.setAttributeNS(null, "y2", y);
                 svgroot.unsuspendRedraw(handle);
-                break;
-            case "square":
-                var size = Math.max(Math.abs(x - start_x), Math.abs(y - start_y));
-                assignAttributes(shape, {
-                    'width': size,
-                    'height': size,
-                    'x': start_x < x ? start_x : start_x - size,
-                    'y': start_y < y ? start_y : start_y - size
-                }, 1000);
                 break;
             case "rect":
                 assignAttributes(shape, {
@@ -1471,20 +1385,12 @@ function SvgCanvas(c) {
                 shape.setAttributeNS(null, "ry", Math.abs(y - cy));
                 svgroot.unsuspendRedraw(handle);
                 break;
-            case "fhellipse":
-            case "fhrect":
-                freehand_min_x = Math.min(x, freehand_min_x);
-                freehand_max_x = Math.max(x, freehand_max_x);
-                freehand_min_y = Math.min(y, freehand_min_y);
-                freehand_max_y = Math.max(y, freehand_max_y);
-            // break; missing on purpose
             case "path":
                 start_x = x;
                 start_y = y;
                 d_attr += +x + "," + y + " ";
                 shape.setAttributeNS(null, "points", d_attr);
                 break;
-            // update poly stretch line coordinates
             case "poly":
                 var line = document.getElementById("poly_stretch_line");
                 if (line) {
@@ -1493,7 +1399,6 @@ function SvgCanvas(c) {
                 }
                 break;
             case "polyedit":
-                // if we are dragging a point, let's move it
                 if (current_poly_pt_drag != -1 && current_poly) {
                     var i = current_poly_pt_drag * 2;
 
@@ -1565,7 +1470,6 @@ function SvgCanvas(c) {
         var element = svgdoc.getElementById(getId());
         var keep = false;
         switch (current_mode) {
-            // intentionally fall-through to select here
             case "resize":
             case "multiselect":
                 if (rubberBox != null) {
@@ -1647,7 +1551,6 @@ function SvgCanvas(c) {
                         } // no change in mouse position
                     }
                 }
-                // we return immediately from select so that the obj_num is not incremented
                 return;
                 break;
             case "path":
@@ -1657,7 +1560,6 @@ function SvgCanvas(c) {
                 keep = (element.getAttribute('x1') != element.getAttribute('x2') ||
                     element.getAttribute('y1') != element.getAttribute('y2'));
                 break;
-            case "square":
             case "rect":
                 keep = (element.getAttribute('width') != 0 ||
                     element.getAttribute('height') != 0);
@@ -1668,58 +1570,6 @@ function SvgCanvas(c) {
             case "ellipse":
                 keep = (element.getAttribute('rx') != 0 ||
                     element.getAttribute('ry') != 0);
-                break;
-            case "fhellipse":
-                if ((freehand_max_x - freehand_min_x) > 0 &&
-                    (freehand_max_y - freehand_min_y) > 0) {
-                    element = addSvgElementFromJson({
-                        "element": "ellipse",
-                        "attr": {
-                            "cx": (freehand_min_x + freehand_max_x) / 2,
-                            "cy": (freehand_min_y + freehand_max_y) / 2,
-                            "rx": (freehand_max_x - freehand_min_x) / 2,
-                            "ry": (freehand_max_y - freehand_min_y) / 2,
-                            "id": getId(),
-                            "fill": cur_shape.fill,
-                            "stroke": cur_shape.stroke,
-                            "stroke-width": cur_shape.stroke_width,
-                            "stroke-dasharray": cur_shape.stroke_style,
-                            "opacity": cur_shape.opacity,
-                            "stroke-opacity": cur_shape.stroke_opacity,
-                            "fill-opacity": cur_shape.fill_opacity
-                        }
-                    });
-                    call("changed", [element]);
-                    keep = true;
-                }
-                break;
-            case "fhrect":
-                if ((freehand_max_x - freehand_min_x) > 0 &&
-                    (freehand_max_y - freehand_min_y) > 0) {
-                    element = addSvgElementFromJson({
-                        "element": "rect",
-                        "attr": {
-                            "x": freehand_min_x,
-                            "y": freehand_min_y,
-                            "width": (freehand_max_x - freehand_min_x),
-                            "height": (freehand_max_y - freehand_min_y),
-                            "id": getId(),
-                            "fill": cur_shape.fill,
-                            "stroke": cur_shape.stroke,
-                            "stroke-width": cur_shape.stroke_width,
-                            "stroke-dasharray": cur_shape.stroke_style,
-                            "opacity": cur_shape.opacity,
-                            "stroke-opacity": cur_shape.stroke_opacity,
-                            "fill-opacity": cur_shape.fill_opacity
-                        }
-                    });
-                    call("changed", [element]);
-                    keep = true;
-                }
-                break;
-            case "text":
-                keep = true;
-                canvas.clearSelection();
                 break;
             case "poly":
                 element = null;
@@ -1822,117 +1672,6 @@ function SvgCanvas(c) {
                         addPointGripToPoly(x, y, (current_poly_pts.length / 2 - 1));
                     }
                     keep = true;
-                }
-                break;
-            case "polyedit":
-                keep = true;
-                element = null;
-                if (current_poly_pt_drag != -1) {
-                    current_poly_pt_drag = -1;
-
-                    var batchCmd = new BatchCommand("Edit Poly");
-                    // the attribute changes we want to undo
-                    var oldvalues = {};
-                    oldvalues["d"] = current_poly_oldd;
-
-                    // If the poly was rotated, we must now pay the piper:
-                    // Every poly point must be rotated into the rotated coordinate system of
-                    // its old center, then determine the new center, then rotate it back
-                    var angle = canvas.getRotationAngle(current_poly) * Math.PI / 180.0;
-                    if (angle) {
-                        var box = canvas.getBBox(current_poly);
-                        var oldbox = selectedBBoxes[0];
-                        var oldcx = parseInt(oldbox.x + oldbox.width / 2),
-                            oldcy = parseInt(oldbox.y + oldbox.height / 2),
-                            newcx = parseInt(box.x + box.width / 2),
-                            newcy = parseInt(box.y + box.height / 2);
-
-                        // un-rotate the new center to the proper position
-                        var dx = newcx - oldcx,
-                            dy = newcy - oldcy;
-                        var r = Math.sqrt(dx * dx + dy * dy);
-                        var theta = Math.atan2(dy, dx) + angle;
-                        newcx = parseInt(r * Math.cos(theta) + oldcx);
-                        newcy = parseInt(r * Math.sin(theta) + oldcy);
-
-                        var i = current_poly_pts.length;
-                        while (i) {
-                            i -= 2;
-                            dx = current_poly_pts[i] - oldcx;
-                            dy = current_poly_pts[i + 1] - oldcy;
-
-                            // rotate the point around the old center
-                            r = Math.sqrt(dx * dx + dy * dy);
-                            theta = Math.atan2(dy, dx) + angle;
-                            current_poly_pts[i] = dx = r * Math.cos(theta) + oldcx;
-                            current_poly_pts[i + 1] = dy = r * Math.sin(theta) + oldcy;
-
-                            // dx,dy should now hold the actual coordinates of each
-                            // point after being rotated
-
-                            // now we want to rotate them around the new center in the reverse direction
-                            dx -= newcx;
-                            dy -= newcy;
-
-                            r = Math.sqrt(dx * dx + dy * dy);
-                            theta = Math.atan2(dy, dx) - angle;
-
-                            current_poly_pts[i] = parseInt(r * Math.cos(theta) + newcx);
-                            current_poly_pts[i + 1] = parseInt(r * Math.sin(theta) + newcy);
-                        } // loop for each point
-
-                        // now set the d attribute to the new value of current_poly_pts
-                        var oldd = current_poly.getAttribute("d");
-                        var closedPath = (oldd[oldd.length - 1] == 'z' || oldd[oldd.length - 1] == 'Z');
-                        var len = current_poly_pts.length / 2;
-                        var arr = new Array(len + 1);
-                        var curx = current_poly_pts[0],
-                            cury = current_poly_pts[1];
-                        arr[0] = ["M", curx, ",", cury].join('');
-                        assignAttributes(document.getElementById("polypointgrip_0"),
-                            {"cx": curx, "cy": cury}, 100);
-                        for (var j = 1; j < len; ++j) {
-                            var px = current_poly_pts[j * 2], py = current_poly_pts[j * 2 + 1];
-                            arr[j] = ["l", parseInt(px - curx), ",", parseInt(py - cury)].join('');
-                            curx = px;
-                            cury = py;
-                            assignAttributes(document.getElementById("polypointgrip_" + j),
-                                {"cx": px, "cy": py}, 100);
-                        }
-                        if (closedPath) {
-                            arr[len] = "z";
-                        }
-                        current_poly.setAttribute("d", arr.join(' '));
-
-                        box = canvas.getBBox(current_poly);
-                        selectedBBoxes[0].x = box.x;
-                        selectedBBoxes[0].y = box.y;
-                        selectedBBoxes[0].width = box.width;
-                        selectedBBoxes[0].height = box.height;
-
-                        // now we must set the new transform to be rotated around the new center
-                        var rotate = "rotate(" + (angle * 180.0 / Math.PI) + " " + newcx + "," + newcy + ")";
-                        oldvalues["transform"] = current_poly.getAttribute("rotate");
-                        current_poly.setAttribute("transform", rotate);
-
-                        var pointGripContainer = document.getElementById("polypointgrip_container");
-                        if (pointGripContainer) {
-                            pointGripContainer.setAttribute("transform", rotate);
-                        }
-                    } // if rotated
-
-                    batchCmd.addSubCommand(new ChangeElementCommand(current_poly, oldvalues, "poly points"));
-                    addCommandToHistory(batchCmd);
-                    call("changed", [current_poly]);
-
-                    // make these changes undo-able
-                } // if (current_poly_pt_drag != -1)
-                // else, move back to select mode
-                else {
-                    current_mode = "select";
-                    removeAllPointGripsFromPoly();
-                    canvas.clearSelection();
-                    canvas.addToSelection([evt.target]);
                 }
                 break;
             case "rotate":
