@@ -6,9 +6,56 @@
  * To change this template use File | Settings | File Templates.
  */
 //
+
 //test('从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容', function () {
 //    stop()
 //});
+test('框选', function () {
+    if (ua.browser.ie > 8) return;//todo 3579
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('<p></p>');
+        setTimeout(function () {
+            range.setStart(editor.body.firstChild, 0).collapse(true).select();
+            editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+            var tds = editor.body.getElementsByTagName('td');
+            ua.mousedown(tds[0]);
+            ua.mouseover(tds[4]);
+            ua.mouseup(tds[4]);
+            setTimeout(function () {
+                var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+                var tds = editor.body.getElementsByTagName('td');
+                equal(selectedTds.length, 4, '框选');
+                if (ua.browser.ie && ua.browser.ie < 9)
+                    ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
+                else
+                    ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
+                range.setStart(tds[4], 0).collapse(true).select();
+                ua.mousedown(tds[4], {button: 2});
+                setTimeout(function () {
+                    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+                    var tds = editor.body.getElementsByTagName('td');
+                    equal(selectedTds.length, 4, '右键框选不变');
+                    if (ua.browser.ie && ua.browser.ie < 9)
+                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
+                    else
+                        ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
+                    setTimeout(function () {
+                        UE.delEditor('ue');
+                        te.dom.push(document.getElementById('ue'));
+                        te.dom.push(document.getElementById('edui_fixedlayer'));
+                        start();
+                    }, 200);
+                }, 20);
+            }, 20);
+        }, 50);
+    });
+    stop();
+});
+
 test('tableDragable-显示和消失', function () {
     if (browser.ie && browser.version < 8) return;
     var div = document.body.appendChild(document.createElement('div'));
@@ -817,7 +864,7 @@ test('在单元格中粘贴_整列', function () {
     equal(editor.body.getElementsByTagName('td').length, 12, '触发粘贴事件后有12个td');
 });
 test('点击一行的最左边,选中一行', function () {
-    if(ua.browser.ie&&ua.browser.ie<9)return;//todo click事件模拟有问题
+    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
@@ -849,7 +896,7 @@ test('点击一行的最左边,选中一行', function () {
     stop();
 });
 test('点击一行的最左边,但是每行只有一列,这时选中单元格中的内容', function () {
-    if(ua.browser.ie&&ua.browser.ie<9)return;//todo click事件模拟有问题
+    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
@@ -867,7 +914,7 @@ test('点击一行的最左边,但是每行只有一列,这时选中单元格中
     }
 });
 test('点击一列的最上边,但是每列只有一行,这时选中单元格中的内容', function () {
-    if(ua.browser.ie&&ua.browser.ie<9)return;//todo click事件模拟有问题
+    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
@@ -886,7 +933,7 @@ test('点击一列的最上边,但是每列只有一行,这时选中单元格中
 
 });
 test('点击一列的最上边,选中一列', function () {
-    if(ua.browser.ie&&ua.browser.ie<9)return;//todo click事件模拟有问题
+    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
