@@ -1108,26 +1108,6 @@ function SvgCanvas(c) {
                     }
                 });
                 break;
-            case "ellipse":
-                started = true;
-                addSvgElementFromJson({
-                    "element": "ellipse",
-                    "attr": {
-                        "cx": x,
-                        "cy": y,
-                        "rx": 0,
-                        "ry": 0,
-                        "id": getNextId(),
-                        "fill": cur_shape.fill,
-                        "stroke": cur_shape.stroke,
-                        "stroke-width": cur_shape.stroke_width,
-                        "stroke-dasharray": cur_shape.stroke_style,
-                        "stroke-opacity": cur_shape.stroke_opacity,
-                        "fill-opacity": cur_shape.fill_opacity,
-                        "opacity": cur_shape.opacity / 2
-                    }
-                });
-                break;
             case "poly":
                 started = true;
                 break;
@@ -1296,14 +1276,6 @@ function SvgCanvas(c) {
                 var rad = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy));
                 shape.setAttributeNS(null, "r", rad);
                 break;
-            case "ellipse":
-                var cx = shape.getAttributeNS(null, "cx");
-                var cy = shape.getAttributeNS(null, "cy");
-                var handle = svgroot.suspendRedraw(1000);
-                shape.setAttributeNS(null, "rx", Math.abs(x - cx));
-                shape.setAttributeNS(null, "ry", Math.abs(y - cy));
-                svgroot.unsuspendRedraw(handle);
-                break;
             case "path":
                 start_x = x;
                 start_y = y;
@@ -1315,56 +1287,6 @@ function SvgCanvas(c) {
                 if (line) {
                     line.setAttribute("x2", x);
                     line.setAttribute("y2", y);
-                }
-                break;
-            case "polyedit":
-                if (current_poly_pt_drag != -1 && current_poly) {
-                    var i = current_poly_pt_drag * 2;
-
-                    // if the image is rotated, then we must modify the x,y mouse coordinates
-                    // and rotate them into the shape's rotated coordinate system
-                    var angle = canvas.getRotationAngle(current_poly) * Math.PI / 180.0;
-                    if (angle) {
-                        // calculate the shape's old center that was used for rotation
-                        var box = selectedBBoxes[0];
-                        var cx = parseInt(box.x + box.width / 2),
-                            cy = parseInt(box.y + box.height / 2);
-                        var dx = x - cx, dy = y - cy;
-                        var r = Math.sqrt(dx * dx + dy * dy);
-                        var theta = Math.atan2(dy, dx) - angle;
-                        x = cx + r * Math.cos(theta);
-                        y = cy + r * Math.sin(theta);
-                    }
-
-                    current_poly_pts[i] = x;
-                    current_poly_pts[i + 1] = y;
-
-                    // reset the path's d attribute using current_poly_pts
-                    var oldd = current_poly.getAttribute("d");
-                    var closedPath = (oldd[oldd.length - 1] == 'z' || oldd[oldd.length - 1] == 'Z');
-                    var len = current_poly_pts.length / 2;
-                    var arr = new Array(len + 1);
-                    var curx = current_poly_pts[0],
-                        cury = current_poly_pts[1];
-                    arr[0] = ["M", curx, ",", cury].join('');
-                    for (var j = 1; j < len; ++j) {
-                        var px = current_poly_pts[j * 2], py = current_poly_pts[j * 2 + 1];
-                        arr[j] = ["l", parseInt(px - curx), ",", parseInt(py - cury)].join('');
-                        curx = px;
-                        cury = py;
-                    }
-                    if (closedPath) {
-                        arr[len] = "z";
-                    }
-                    // we don't want to undo this, we are in the middle of a drag
-                    current_poly.setAttribute("d", arr.join(' '));
-
-                    // move the point grip
-                    var grip = document.getElementById("polypointgrip_" + current_poly_pt_drag);
-                    if (grip) {
-                        grip.setAttribute("cx", x);
-                        grip.setAttribute("cy", y);
-                    }
                 }
                 break;
             case "rotate":
@@ -1485,10 +1407,6 @@ function SvgCanvas(c) {
                 break;
             case "circle":
                 keep = (element.getAttribute('r') != 0);
-                break;
-            case "ellipse":
-                keep = (element.getAttribute('rx') != 0 ||
-                    element.getAttribute('ry') != 0);
                 break;
             case "poly":
                 element = null;
