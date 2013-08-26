@@ -461,9 +461,7 @@ function SvgCanvas(c) {
                 }
             }
         }
-        // addToSelection expects an array, but it's ok to pass a NodeList
-        // because using square-bracket notation is allowed:
-        // http://www.w3.org/TR/DOM-Level-2-Core/ecma-script-binding.html
+
         return resultList;
     };
 
