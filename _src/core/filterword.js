@@ -1,10 +1,24 @@
 /**
+ * UE过滤word的静态方法
  * @file
- * @name UE.filterWord
- * @short filterWord
- * @desc 用来过滤word粘贴过来的字符串
- * @import editor.js,core/utils.js
- * @anthor zhanyi
+ */
+
+/**
+ * UEditor公用空间，UEditor所有的功能都挂载在该空间下
+ * @module UE
+ */
+
+
+/**
+ * 根据传入html字符串过滤word
+ * @module UE
+ * @since 1.2.6.1
+ * @method filterWord
+ * @param { String } html字符串
+ * @example
+ * ```javascript
+ * UE.filterWord(html);
+ * ```
  */
 var filterWord = UE.filterWord = function () {
 

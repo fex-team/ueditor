@@ -1,5 +1,27 @@
-//html字符串转换成uNode节点
-//by zhanyi
+/**
+ * html字符串转换成uNode节点
+ * @file
+ * @module UE
+ * @since 1.2.6.1
+ */
+
+/**
+ * UEditor公用空间，UEditor所有的功能都挂载在该空间下
+ * @unfile
+ * @module UE
+ */
+
+/**
+ * html字符串转换成uNode节点的静态方法
+ * @method htmlparser
+ * @param { String } htmlstr 要转换的html代码
+ * @param { Boolean } ignoreBlank 若设置为true，转换的时候忽略\n\r\t等空白字符
+ * @example
+ * ```javascript
+ * var root = UE.htmlparser('<p><b>htmlparser</b></p>', true);
+ * ```
+ */
+
 var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
     var re_tag = /<(?:(?:\/([^>]+)>)|(?:!--([\S|\s]*?)-->)|(?:([^\s\/>]+)\s*((?:(?:"[^"]*")|(?:'[^']*')|[^"'<>])*)\/?>))/g,
         re_attr = /([\w\-:.]+)(?:(?:\s*=\s*(?:(?:"([^"]*)")|(?:'([^']*)')|([^\s>]+)))|(?=\s|$))/g;
@@ -19,7 +41,6 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
             return a.replace(new RegExp('^[\\r\\n'+(ignoreBlank?'':' ')+']+'),'').replace(new RegExp('[\\r\\n'+(ignoreBlank?'':' ')+']+$'),'');
         });
     }
-
 
 
     var uNode = UE.uNode,
