@@ -1048,11 +1048,9 @@ function SvgCanvas(c) {
 
                 var selectedBBox = selectedBBoxes[0];
 
-                // reset selected bbox top-left position
                 selectedBBox.x = left;
                 selectedBBox.y = top;
 
-                // if this is a translate, adjust the box position
                 if (tx) {
                     selectedBBox.x += dx;
                 }
@@ -1060,14 +1058,11 @@ function SvgCanvas(c) {
                     selectedBBox.y += dy;
                 }
 
-                // update box width/height
                 selectedBBox.width = parseInt(width * sx);
                 selectedBBox.height = parseInt(height * sy);
 
-                // normalize selectedBBox
                 if (selectedBBox.width < 0) {
                     selectedBBox.width *= -1;
-                    // if we are dragging on the east side and scaled negatively
                     if (current_resize_mode.indexOf("e") != -1 && sx < 0) {
                         selectedBBox.x = box.x - selectedBBox.width;
                     }
@@ -1449,10 +1444,6 @@ function SvgCanvas(c) {
         current_poly_pts = [];
     };
 
-
-    this.getMode = function () {
-        return current_mode;
-    };
 
     this.setMode = function (name) {
         if (current_mode == "poly" && current_poly_pts.length > 0) {
