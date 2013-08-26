@@ -1,17 +1,16 @@
 /**
  * @file
- * @name UE.ajax
- * @short Ajax
- * @desc UEditor内置的ajax请求模块
- * @import core/utils.js
- * @user: taoqili
- * @date: 11-8-18
- * @time: 下午3:18
+ * @module UE.ajax
+ * @since 1.2.6.1
+ */
+
+/**
+ * 提供对ajax请求的支持
+ * @module UE.ajax
  */
 UE.ajax = function() {
-    /**
-     * 创建一个ajaxRequest对象
-     */
+
+    //创建一个ajaxRequest对象
     var fnStr = 'XMLHttpRequest()';
     try {
         new ActiveXObject("Msxml2.XMLHTTP");
@@ -26,7 +25,7 @@ UE.ajax = function() {
     var creatAjaxRequest = new Function('return new ' + fnStr);
 
 
-    /**
+    /*
      * 将json参数转化成适合ajax提交的参数列表
      * @param json
      */
@@ -46,30 +45,63 @@ UE.ajax = function() {
 
 
     return {
-		/**
-         * @name request
-         * @desc 发出ajax请求，ajaxOpt中默认包含method，timeout，async，data，onsuccess以及onerror等六个，支持自定义添加参数
-         * @grammar UE.ajax.request(url,ajaxOpt);
+        /**
+         * 根据给定的参数项，向指定的url发起一个ajax请求。 ajax请求完成后，会根据请求结果调用相应回调： 如果请求
+         * 成功， 则调用onsuccess回调， 失败则调用 onerror 回调
+         * @method request
+         * @param { URLString } url ajax请求的url地址
+         * @param { PlainObject } ajaxOptions ajax请求选项的key-value对象，支持的选项如下：
          * @example
-         * UE.ajax.request('http://www.xxxx.com/test.php',{
-         *     //可省略，默认POST
-         *     method:'POST',
-         *     //可以自定义参数
-         *     content:'这里是提交的内容',
-         *     //也可以直接传json，但是只能命名为data，否则当做一般字符串处理
-         *     data:{
-         *         name:'UEditor',
-         *         age:'1'
-         *     }
-         *     onsuccess:function(xhr){
-         *         console.log(xhr.responseText);
+         * ```javascript
+         * //向sayhello.php发起一个异步的Ajax GET请求, 请求超时时间为10s， 请求完成后执行相应的回调。
+         * UE.ajax.requeset( 'sayhello.php', {
+         *
+         *     //请求方法。可选值： 'GET', 'POST'，默认值是'POST'
+         *     method: 'GET',
+         *
+         *     //超时时间。 默认为5000， 单位是ms
+         *     timeout: 10000,
+         *
+         *     //是否是异步请求。 true为异步请求， false为同步请求
+         *     async: true,
+         *
+         *     //请求携带的数据。如果请求为GET请求， data会经过stringify后附加到请求url之后。
+         *     data: {
+         *         name: 'ueditor'
          *     },
-         *     onerror:function(xhr){
-         *         console.log(xhr.responseText);
+         *
+         *     //请求成功后的回调， 该回调接受当前的XMLHttpRequest对象作为参数。
+         *     onsuccess: function ( xhr ) {
+         *         console.log( xhr.responseText );
+         *     },
+         *
+         *     //请求失败或者超时后的回调。
+         *     onerror: function ( xhr ) {
+         *          alert( 'Ajax请求失败' );
          *     }
-         * })
-		 * @param ajaxOptions
-		 */
+         *
+         * } );
+         * ```
+         */
+
+        /**
+         * 根据给定的参数项发起一个ajax请求， 参数项里必须包含一个url地址。 ajax请求完成后，会根据请求结果调用相应回调： 如果请求
+         * 成功， 则调用onsuccess回调， 失败则调用 onerror 回调。
+         * @method request
+         * @warning 如果在参数项里未提供一个key为“url”的地址值，则该请求将直接退出。
+         * @param { PlainObject } ajaxOptions ajax请求选项的key-value对象，支持的选项如下：
+         * @example
+         * ```javascript
+         *
+         * //向sayhello.php发起一个异步的Ajax POST请求, 请求超时时间为5s， 请求完成后不执行任何回调。
+         * UE.ajax.requeset( 'sayhello.php', {
+         *
+         *     //请求的地址， 该项是必须的。
+         *     url: 'sayhello.php'
+         *
+         * } );
+         * ```
+         */
 		request:function(url, ajaxOptions) {
             var ajaxRequest = creatAjaxRequest(),
                 //是否超时
