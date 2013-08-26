@@ -1929,11 +1929,6 @@ function SvgCanvas(c) {
 
     };
 
-    $(container).mouseup(mouseUp);
-    $(container).mousedown(mouseDown);
-    $(container).mousemove(mouseMove);
-
-
     this.getVisibleElements = function (includeBBox) {
         var nodes = svgroot.childNodes;
         var i = nodes.length;
@@ -1953,4 +1948,7 @@ function SvgCanvas(c) {
         return contentElems;
     }
 
+    $(container).mouseup(mouseUp);
+    $(container).mousedown(mouseDown);
+    $(container).mousemove(mouseMove);
 }
