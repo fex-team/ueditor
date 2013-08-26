@@ -14,6 +14,8 @@
 /**
  * html字符串转换成uNode节点的静态方法
  * @method htmlparser
+ * @param { String } htmlstr 要转换的html代码
+ * @param { Boolean } ignoreBlank 若设置为true，转换的时候忽略\n\r\t等空白字符
  * @example
  * ```javascript
  * var root = UE.htmlparser('<p><b>htmlparser</b></p>', true);
