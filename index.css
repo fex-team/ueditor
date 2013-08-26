@@ -6,4 +6,5 @@
 .svgcanvas{
     float: left;
     border: 1px solid #ccc;
+    margin-left: 20px;
 }
