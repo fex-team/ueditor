@@ -1,11 +1,39 @@
-///import editor.js
-///import core/utils.js
-///import core/dom/dom.js
-///import core/dom/dtd.js
-///import core/htmlparser.js
-//模拟的节点类
-//by zhanyi
+/**
+ * 编辑器模拟的节点类
+ * @file
+ * @module UE
+ * @class uNode
+ * @since 1.2.6.1
+ */
+
+/**
+ * UEditor公用空间，UEditor所有的功能都挂载在该空间下
+ * @unfile
+ * @module UE
+ */
+
 (function () {
+
+    /**
+     * 编辑器模拟的节点类
+     * @unfile
+     * @module UE
+     * @class uNode
+     */
+
+    /**
+     * 通过一个键值对，创建一个uNode对象
+     * @constructor
+     * @param { KeyValueMap } 传入要创建的uNode的属性
+     * @example
+     * ```javascript
+     * var node = new uNode({
+     *     type:'element',
+     *     tagName:'span',
+     *     attrs:{style:'font-size:14px;'}
+     * }
+     * ```
+     */
     var uNode = UE.uNode = function (obj) {
         this.type = obj.type;
         this.data = obj.data;
@@ -171,6 +199,29 @@
             nodeToHtml(this, arr, formatter, 0);
             return arr.join('')
         },
+
+        /**
+         * 获取节点的html内容
+         * @method innerHTML
+         * @warning 假如节点的type不是‘element’，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @return { String } 返回节点的html内容
+         * @example
+         * ```javascript
+         * var htmlstr = node.innerHTML();
+         * ```
+         */
+
+        /**
+         * 设置节点的html内容
+         * @method innerHTML
+         * @warning 假如节点的type不是‘element’，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @param { String } htmlstr 传入要设置的html内容
+         * @return { uNode } 返回节点本身
+         * @example
+         * ```javascript
+         * node.innerHTML('<span>text</span>');
+         * ```
+         */
         innerHTML:function (htmlstr) {
             if (this.type != 'element' || dtd.$empty[this.tagName]) {
                 return this;
@@ -196,6 +247,29 @@
                 return tmpRoot.toHtml();
             }
         },
+
+        /**
+         * 获取节点的纯文本内容
+         * @method innerText
+         * @warning 假如节点的type不是‘element’，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @return { String } 返回节点的存文本内容
+         * @example
+         * ```javascript
+         * var textStr = node.innerText();
+         * ```
+         */
+
+        /**
+         * 获取节点的纯文本内容
+         * @method innerText
+         * @warning 假如节点的type不是‘element’，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @param { String } textStr 传入要设置的文本内容
+         * @return { uNode } 返回节点本身
+         * @example
+         * ```javascript
+         * node.innerText('<span>text</span>');
+         * ```
+         */
         innerText:function (textStr) {
             if (this.type != 'element' || dtd.$empty[this.tagName]) {
                 return this;
@@ -213,23 +287,47 @@
                 return this.toHtml().replace(/<[^>]+>/g, '');
             }
         },
+
+        /**
+         * 获取当前对象的data属性
+         * @method getData
+         * @return { KeyValueMap } 返回节点的data属性
+         */
         getData:function () {
             if (this.type == 'element')
                 return '';
             return this.data
         },
+
+        /**
+         * 获取当前节点下的第一个子节点
+         * @method firstChild
+         * @return { uNode } 返回第一个子节点
+         */
         firstChild:function () {
 //            if (this.type != 'element' || dtd.$empty[this.tagName]) {
 //                return this;
 //            }
             return this.children ? this.children[0] : null;
         },
+
+        /**
+         * 获取当前节点下的最后一个子节点
+         * @method lastChild
+         * @return { uNode } 返回最后一个子节点
+         */
         lastChild:function () {
 //            if (this.type != 'element' || dtd.$empty[this.tagName] ) {
 //                return this;
 //            }
             return this.children ? this.children[this.children.length - 1] : null;
         },
+
+        /**
+         * 获取和当前节点有相同父亲节点的前一个节点
+         * @method previousSibling
+         * @return { uNode } 返回前一个节点
+         */
         previousSibling : function(){
             var parent = this.parentNode;
             for (var i = 0, ci; ci = parent.children[i]; i++) {
@@ -239,6 +337,12 @@
             }
 
         },
+
+        /**
+         * 获取和当前节点有相同父亲节点的后一个节点
+         * @method nextSibling
+         * @return { uNode } 返回后一个节点
+         */
         nextSibling : function(){
             var parent = this.parentNode;
             for (var i = 0, ci; ci = parent.children[i++];) {
@@ -247,6 +351,14 @@
                 }
             }
         },
+
+        /**
+         * 用新的节点替换当前节点
+         * @method replaceChild
+         * @param { uNode } target 要替换成该节点参数
+         * @param { uNode } source 要被替换掉的节点
+         * @return { uNode } 返回替换之后的节点对象
+         */
         replaceChild:function (target, source) {
             if (this.children) {
                 if(target.parentNode){
@@ -262,6 +374,13 @@
                 }
             }
         },
+
+        /**
+         * 在节点的子节点列表最后位置插入一个节点
+         * @method appendChild
+         * @param { uNode } node 要插入的节点
+         * @return { uNode } 返回刚插入的子节点
+         */
         appendChild:function (node) {
             if (this.type == 'root' || (this.type == 'element' && !dtd.$empty[this.tagName])) {
                 if (!this.children) {
@@ -283,6 +402,14 @@
 
 
         },
+
+        /**
+         * 在传入节点的前面插入一个节点
+         * @method insertBefore
+         * @param { uNode } target 要插入的节点
+         * @param { uNode } source 在该参数节点前面插入
+         * @return { uNode } 返回刚插入的子节点
+         */
         insertBefore:function (target, source) {
             if (this.children) {
                 if(target.parentNode){
@@ -298,6 +425,14 @@
 
             }
         },
+
+        /**
+         * 在传入节点的后面插入一个节点
+         * @method insertAfter
+         * @param { uNode } target 要插入的节点
+         * @param { uNode } source 在该参数节点后面插入
+         * @return { uNode } 返回刚插入的子节点
+         */
         insertAfter:function (target, source) {
             if (this.children) {
                 if(target.parentNode){
@@ -313,6 +448,14 @@
                 }
             }
         },
+
+        /**
+         * 从当前节点的子节点列表中，移除节点
+         * @method removeChild
+         * @param { uNode } node 要移除的节点引用
+         * @param { Boolean } keepChildren 是否保留移除节点的子节点，若传入true，自动把移除节点的子节点插入到移除的位置
+         * @return { * } 返回刚移除的子节点
+         */
         removeChild:function (node,keepChildren) {
             if (this.children) {
                 for (var i = 0, ci; ci = this.children[i]; i++) {
@@ -331,9 +474,24 @@
                 }
             }
         },
+
+        /**
+         * 获取当前节点所代表的元素属性，即获取attrs对象下的属性值
+         * @method getAttr
+         * @param { String } attrName 要获取的属性名称
+         * @return { * } 返回attrs对象下的属性值
+         */
         getAttr:function (attrName) {
             return this.attrs && this.attrs[attrName.toLowerCase()]
         },
+
+        /**
+         * 设置当前节点所代表的元素属性，即设置attrs对象下的属性值
+         * @method getAttr
+         * @param { String } attrName 要设置的属性名称
+         * @param { * } attrVal 要设置的属性值，类型视设置的属性而定
+         * @return { * } 返回attrs对象下的属性值
+         */
         setAttr:function (attrName, attrVal) {
             if (!attrName) {
                 delete this.attrs;
@@ -359,6 +517,12 @@
 
             }
         },
+
+        /**
+         * 获取当前节点在父节点下的位置索引
+         * @method getIndex
+         * @return { Number } 返回索引数值，如果没有父节点，返回-1
+         */
         getIndex:function(){
             var parent = this.parentNode;
             for(var i= 0,ci;ci=parent.children[i];i++){
@@ -368,6 +532,13 @@
             }
             return -1;
         },
+
+        /**
+         * 在当前节点下，根据id查找节点
+         * @method getNodeById
+         * @param { String } id 要查找的id
+         * @return { uNode } 返回找到的节点
+         */
         getNodeById:function (id) {
             var node;
             if (this.children && this.children.length) {
@@ -378,6 +549,13 @@
                 }
             }
         },
+
+        /**
+         * 在当前节点下，根据元素名称查找节点列表
+         * @method getNodeById
+         * @param { String } tagNames 要查找的元素名称
+         * @return { Array } 返回找到的节点列表
+         */
         getNodesByTagName:function (tagNames) {
             tagNames = utils.trim(tagNames).replace(/[ ]{2,}/g, ' ').split(' ');
             var arr = [], me = this;
