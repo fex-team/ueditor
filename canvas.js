@@ -454,8 +454,6 @@ function SvgCanvas(c) {
     svgroot.setAttribute("id", "svgroot");
     svgroot.setAttribute("xmlns", svgns);
     container.appendChild(svgroot);
-    var comment = svgdoc.createComment(" created with SVG-edit - http://svg-edit.googlecode.com/ ");
-    svgroot.appendChild(comment);
 
     var d_attr = null;
     var started = false;
@@ -497,7 +495,6 @@ function SvgCanvas(c) {
     var freehand_max_y = null;
     var current_poly = null;
     var current_poly_pts = [];
-    var current_poly_pt_drag = -1;
     var selectedElements = new Array(1);
     var selectedBBoxes = new Array(1);
     var selectorManager = new SelectorManager();
