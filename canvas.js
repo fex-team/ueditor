@@ -440,7 +440,6 @@ function SvgCanvas(c) {
         }
 
         if (!curBBoxes.length) {
-            // Cache all bboxes
             curBBoxes = canvas.getVisibleElements(true);
         }
 
@@ -743,28 +742,6 @@ function SvgCanvas(c) {
 
                     // take the minimum of the new selected box's dimensions for the new circle radius
                     'r': parseInt(Math.min(selectedBBox.width / 2, selectedBBox.height / 2))
-                }, 1000);
-                break;
-            case "ellipse":
-                changes["cx"] = selected.getAttribute("cx");
-                changes["cy"] = selected.getAttribute("cy");
-                changes["rx"] = selected.getAttribute("rx");
-                changes["ry"] = selected.getAttribute("ry");
-                var pt = remap(changes["cx"], changes["cy"]);
-                assignAttributes(selected, {
-                    'cx': pt.x,
-                    'cy': pt.y,
-                    'rx': scalew(changes["rx"]),
-                    'ry': scaleh(changes["ry"])
-                }, 1000);
-                break;
-            case "text":
-                changes["x"] = selected.getAttribute("x");
-                changes["y"] = selected.getAttribute("y");
-                var pt = remap(changes["x"], changes["y"]);
-                assignAttributes(selected, {
-                    'x': pt.x,
-                    'y': pt.y
                 }, 1000);
                 break;
             case "rect":
@@ -1391,7 +1368,6 @@ function SvgCanvas(c) {
     };
 
     var removeAllPointGripsFromPoly = function () {
-        // loop through and hide all pointgrips
         var i = current_poly_pts.length / 2;
         while (i--) {
             document.getElementById("polypointgrip_" + i).setAttribute("display", "none");
@@ -1480,16 +1456,12 @@ function SvgCanvas(c) {
     };
 
     this.setMode = function (name) {
-        // toss out half-drawn poly
         if (current_mode == "poly" && current_poly_pts.length > 0) {
             var elem = svgdoc.getElementById(getId());
             elem.parentNode.removeChild(elem);
             canvas.clearPoly();
             canvas.clearSelection();
             started = false;
-        }
-        else if (current_mode == "polyedit") {
-            canvas.clearPoly();
         }
 
         cur_properties = (selectedElements[0] && selectedElements[0].nodeName == 'text') ? cur_text : cur_shape;
@@ -1503,7 +1475,6 @@ function SvgCanvas(c) {
             defs = defs[0];
         }
         else {
-            // first child is a comment, so call nextSibling
             defs = svgroot.insertBefore(svgdoc.createElementNS(svgns, "defs"), svgroot.firstChild.nextSibling);
         }
         return defs;
@@ -1570,14 +1541,6 @@ function SvgCanvas(c) {
         } // for each gradient in defs
 
         return null;
-    };
-
-    this.setStrokeWidth = function (val) {
-        if (val == 0 && $.inArray(current_mode, ['line', 'path']) == -1) {
-            canvas.setStrokeWidth(1);
-        }
-        cur_properties.stroke_width = val;
-        this.changeSelectedAttribute("stroke-width", val);
     };
 
     this.getBBox = function (elem) {
@@ -1690,7 +1653,7 @@ function SvgCanvas(c) {
                     }
                 }
             } // if oldValue != newValue
-        } // for each elem
+        }
         svgroot.unsuspendRedraw(handle);
         call("changed", elems);
     };
@@ -1721,7 +1684,7 @@ function SvgCanvas(c) {
             }
         }
         return contentElems;
-    }
+    };
 
     $(container).mouseup(mouseUp);
     $(container).mousedown(mouseDown);
