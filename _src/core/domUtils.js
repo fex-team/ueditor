@@ -156,14 +156,14 @@ var domUtils = dom.domUtils = {
     },
 
     /**
-     * 检测节点node在父节点中的索引位置， 忽略文本节点
+     * 检测节点node在父节点中的索引位置
      * @method getNodeIndex
      * @param { DomNode } node 需要检测的节点对象
      * @return { Number } 该节点在父节点中的位置
      */
 
     /**
-     * 检测节点node在父节点中的索引位置， 根据给定的ignoreTextNode参数决定是否要忽略文本节点
+     * 检测节点node在父节点中的索引位置， 根据给定的mergeTextNode参数决定是否要合并多个连续的文本节点为一个节点
      * @method getNodeIndex
      * @param { DomNode } node 需要检测的节点对象
      * @param { Boolean } ignoreTextNode 是否忽略文本节点
@@ -185,36 +185,29 @@ var domUtils = dom.domUtils = {
     },
 
     /**
-     * 检测节点node是否在节点doc的树上，实质上是检测是否被doc包含
+     * 检测节点node是否在给定doc的树上，实质上是检测该节点是否在给定的dom树上
      * @method inDoc
      * @param { DomNode } node 需要检测的节点对象
-     * @param { DomNode } doc 需要检测的节点对象
-     * @return { Boolean } doc节点是否包含node节点
+     * @param { DomDocument } doc 需要检测的document对象
+     * @return { Boolean } 该节点node是否在给定的document的dom树上
+     * @example
+     * ```javascript
+     *
+     * var node = document.createElement("div");
+     *
+     * //output: false
+     * console.log( UE.do.domUtils.inDoc( node, document ) );
+     *
+     * document.body.appendChild( node );
+     *
+     * //output: true
+     * console.log( UE.do.domUtils.inDoc( node, document ) );
+     *
+     * ```
      */
     inDoc:function (node, doc) {
         return domUtils.getPosition(node, doc) == 10;
     },
-
-    /**
-     * 查找node节点的父节点，查找的过程中不包含自身节点。
-     * @method findParent
-     * @param { DomNode } node 需要查找的节点
-     * @return { DomNode | Null } 如果该节点有父节点就返回该父节点， 否则返回NULL
-     * @warning 查找的终点是到body节点为止
-     * @example
-     * ```javascript
-     * //因为查找的终点是body标签，所以查找body的父节点将返回NULL
-     * var parentNode = UE.dom.domUtils.findParent( document.body );
-     * //output: true
-     * console.log( parentNode === null )
-     * ```
-     * @example
-     * ```javascript
-     * var parentNode = UE.dom.domUtils.findParent( document.body.firstChild );
-     * //output: BODY
-     * console.log( parentNode.tagName );
-     * ```
-     */
 
     /**
      * 根据给定的过滤规则filterFn， 查找符合该过滤规则的node节点的祖先节点，
@@ -223,8 +216,8 @@ var domUtils = dom.domUtils = {
      * @param { DomNode } node 需要查找的节点
      * @param { Function } filterFn 自定义的过滤方法。
      * @warning 查找的终点是到body节点为止
-     * @remind 自定义的过滤方法filterFn接受一个DomNode对象作为参数， 该对象代表当前执行检测的节点。 如果该
-     *          节点满足过滤条件， 则要求返回true， 否则， 请返回false。
+     * @remind 自定义的过滤方法filterFn接受一个DomNode对象作为参数， 该对象代表当前执行检测的祖先节点。 如果该
+     *          节点满足过滤条件， 则要求返回true， 这时将直接返回该节点作为findParent()的结果， 否则， 请返回false。
      * @return { DomNode | Null } 如果找到符合过滤条件的节点， 就返回该节点， 否则返回NULL
      * @example
      * ```javascript
@@ -248,8 +241,8 @@ var domUtils = dom.domUtils = {
      * @param { Function } filterFn 自定义的过滤方法。
      * @param { Boolean } includeSelf 查找过程是否包含自身
      * @warning 查找的终点是到body节点为止
-     * @remind 自定义的过滤方法filterFn接受一个DomNode对象作为参数， 该对象代表当前执行检测的节点。 如果该
-     *          节点满足过滤条件， 则要求返回true， 否则， 请返回false。
+     * @remind 自定义的过滤方法filterFn接受一个DomNode对象作为参数， 该对象代表当前执行检测的祖先节点。 如果该
+     *          节点满足过滤条件， 则要求返回true， 这时将直接返回该节点作为findParent()的结果， 否则， 请返回false。
      * @remind 如果includeSelf为true， 则过滤器第一次执行时的参数会是节点本身。
      *          反之， 过滤器第一次执行时的参数将是该节点的父节点。
      * @return { DomNode | Null } 如果找到符合过滤条件的节点， 就返回该节点， 否则返回NULL
