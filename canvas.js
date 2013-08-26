@@ -511,7 +511,6 @@ function SvgCanvas(c) {
     var current_poly = null;
     var current_poly_pts = [];
     var current_poly_pt_drag = -1;
-    var current_poly_oldd = null;
     var selectedElements = new Array(1);
     var selectedBBoxes = new Array(1);
     var selectorManager = new SelectorManager();
@@ -1946,35 +1945,6 @@ function SvgCanvas(c) {
         return old;
     };
 
-    this.getBold = function () {
-        // should only have one element selected
-        var selected = selectedElements[0];
-        if (selected != null && selected.tagName == "text" &&
-            selectedElements[1] == null) {
-            return (selected.getAttribute("font-weight") == "bold");
-        }
-        return false;
-    };
-
-    this.getItalic = function () {
-        var selected = selectedElements[0];
-        if (selected != null && selected.tagName == "text" &&
-            selectedElements[1] == null) {
-            return (selected.getAttribute("font-style") == "italic");
-        }
-        return false;
-    };
-
-
-    this.getText = function () {
-        var selected = selectedElements[0];
-        if (selected == null) {
-            return "";
-        }
-        return selected.textContent;
-    };
-
-
     this.quickClone = function (elem) {
         // Hack for Firefox bugs where text element features aren't updated
         if (navigator.userAgent.indexOf('Gecko/') == -1) return elem;
@@ -1985,7 +1955,6 @@ function SvgCanvas(c) {
         canvas.addToSelection([clone], true);
         return clone;
     }
-
 
     this.changeSelectedAttributeNoUndo = function (attr, newValue, elems) {
         var handle = svgroot.suspendRedraw(1000);
