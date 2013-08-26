@@ -1770,8 +1770,8 @@ UserAction = {
             return false;
         else {
             for (var i = 0; i < lengthA; i++) {
-                if (nodeAStyle[i].match(/\w+\s*:/)) {
-                    var styleName = nodeAStyle[i].match(/\w+\s*:/)[0].replace(/\s*:/, "");
+                if (nodeAStyle[i].match(/[-\w]+\s*:/) ) {
+                    var styleName = nodeAStyle[i].match(/[-\w]+\s*:/)[0].replace(/\s*:/, "");
                     nodeA.attrs.style = nodeA.attrs.style.replace(/&quot;/g,'');
                     nodeB.attrs.style = nodeB.attrs.style.replace(/&quot;/g,'');
                     var styleValueA = nodeA.getStyle(styleName).toLowerCase().replace(/\s+/g, "");

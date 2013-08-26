@@ -45,7 +45,7 @@ test( 'ctrl+a', function() {
     ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
     setTimeout( function() {
         var range = editor.selection.getRange();
-        if ( ua.browser.gecko )
+        if ( ua.browser.gecko||ua.browser.ie>8 )
             ua.checkResult( range, body, body, 0, 2, false, '查看全选后的range' );
         else
             ua.checkResult( range, body.firstChild.firstChild, body.lastChild.firstChild, 0, 6, false, '查看全选后的range' );

@@ -63,8 +63,12 @@ test( 'horizontal in table', function() {
     var d = editor.document;
     var range = te.obj[1];
     editor.setContent( '<table><tr><td>1</td></tr><tr><td>2</td></tr></table>' );
-    range.setStart( d.getElementsByTagName( 'tr' )[0].firstChild, 0 ).setEnd( d.getElementsByTagName( 'tr' )[1].firstChild, 0 ).select();
-    equal( editor.queryCommandState( "horizontal" ), -1, "边界在table里" );
+    stop();
+    setTimeout(function () {
+        range.setStart(d.getElementsByTagName('tr')[0].firstChild, 0).setEnd(d.getElementsByTagName('tr')[1].firstChild, 0).select();
+        equal(editor.queryCommandState("horizontal"), -1, "边界在table里");
+        start();
+    }, 50);
 } );
 //collapsed=true
 test( 'horizontal&&collapsed', function() {

@@ -52,9 +52,14 @@ test( '在表格中添加和去除引用', function () {
     range.setStart( tds[0].firstChild, 2 ).collapse( true ).select();
     editor.execCommand( 'blockquote' );         /*再执行一次引用，会去掉引用*/
     ok( body.lastChild.tagName.toLowerCase() != 'blockquote', '引用去掉了' );    //1.2版本table外加了div
-    range.selectNode( tds[0] ).select();        /*不闭合选中表格，添加引用*/
-    editor.execCommand( 'blockquote' );
-    equal( body.lastChild.tagName.toLowerCase(), 'blockquote', '非闭合方式选中添加引用' );
+    stop();
+    setTimeout(function(){
+        tds = body.lastChild.getElementsByTagName( 'td' );
+        range.selectNode( tds[0] ).select();        /*不闭合选中表格，添加引用*/
+        editor.execCommand( 'blockquote' );
+        equal( body.lastChild.tagName.toLowerCase(), 'blockquote', '非闭合方式选中添加引用' );
+        start();
+    },50);
 } );
 
 test( '在列表中添加引用', function () {

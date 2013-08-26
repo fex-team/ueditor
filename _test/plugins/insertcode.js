@@ -56,7 +56,7 @@ test('trace 3355：不闭合选区插入代码', function () {
         ua.keydown(editor.body, {'keyCode':65, 'ctrlKey':true});
         editor.execCommand('insertcode', 'html');
         var br = ua.browser.ie ? '' : '<br>';
-        if (ua.browser.gecko || ua.browser.opera)
+        if (ua.browser.gecko || ua.browser.opera ||ua.browser.ie>8)
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre>', '检查插入了html');
         else
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre><p>' + br + '</p>', '检查插入了html');
@@ -142,12 +142,14 @@ test('trace 3407：表格中插入代码', function () {
     var range = te.obj[1];
     editor.setContent('');
     editor.execCommand('inserttable');
-    var tds = editor.body.getElementsByTagName('td');
-    tds[1].innerHTML = 'asd';
-    range.setStart(tds[1], 0).setEnd(tds[1], 1).select();
-    editor.execCommand('insertcode', 'Javascript');
-    var br = ua.browser.ie ? '&nbsp;' : '<br>';
-    ua.checkSameHtml(tds[1].innerHTML, '<pre class="brush:Javascript;toolbar:false">asd</pre>', '检查插入了html');
+    stop();
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        tds[1].innerHTML = 'asd';
+        range.setStart(tds[1], 0).setEnd(tds[1], 1).select();
+        editor.execCommand('insertcode', 'Javascript');
+        var br = ua.browser.ie ? '&nbsp;' : '<br>';
+        ua.checkSameHtml(tds[1].innerHTML, '<pre class="brush:Javascript;toolbar:false">asd</pre>', '检查插入了html');
 //    stop();
 //    setTimeout(function() {//TODO bug
 //        editor.execCommand('source');
@@ -157,4 +159,6 @@ test('trace 3407：表格中插入代码', function () {
 //            start();
 //        },20);
 //    },20);
+        start();
+    }, 50);
 });

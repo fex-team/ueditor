@@ -146,42 +146,52 @@ test( '表格中设置段距', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<table><tbody><tr><td>hello1</td><td>hello2</td></tr><tr><td></td><td></td></tr></tbody></table>' );
-    var tds = editor.body.firstChild.getElementsByTagName( 'td' );
-    /*选中表格中的文本设置段前距*/
-    range.selectNode( tds[0].firstChild ).select();
-    editor.execCommand( 'rowspacing', 20 ,'top');
-    equal( editor.queryCommandValue( 'rowspacing','top' ), 20, '设置表格中文本段前距为2' );
-    /*采用闭合的方式查询段前距*/
-    range.setStart( tds[0].firstChild.firstChild, 1 ).collapse( true ).select();
-    equal( editor.queryCommandValue( 'rowspacing','top' ), 20, '设置表格中文本段前距为2' );
+    stop();
+    setTimeout(function () {
+        var tds = editor.body.firstChild.getElementsByTagName('td');
+        /*选中表格中的文本设置段前距*/
+        range.selectNode(tds[0].firstChild).select();
+        editor.execCommand('rowspacing', 20, 'top');
+        equal(editor.queryCommandValue('rowspacing', 'top'), 20, '设置表格中文本段前距为2');
+        /*采用闭合的方式查询段前距*/
+        setTimeout(function () {
+            range.setStart(tds[0].firstChild.firstChild, 1).collapse(true).select();
+            equal(editor.queryCommandValue('rowspacing', 'top'), 20, '设置表格中文本段前距为2');
 
-    /*闭合在表格中的文本设置段后距*/
-    range.setStart( tds[1].firstChild, 1 ).collapse( true ).select();
-    editor.execCommand( 'rowspacing', 15 ,'bottom');
-    /*选中整个单元格查询段后距*/
-    range.selectNode( tds[1] ).select();
-    equal( editor.queryCommandValue( 'rowspacing','bottom'), 15, '设置表格中文本段后距为1.5' );
-    /*闭合在空白单元格中设置段后距*/
-    range.setStart( tds[2], 0 ).collapse( true ).select();
-    editor.execCommand( 'rowspacing', 25,'bottom' );
-    equal( editor.queryCommandValue( 'rowspacing','bottom' ), 25, '设置表格中文本段后距为2.5' );
-} );
+            /*闭合在表格中的文本设置段后距*/
+            range.setStart(tds[1].firstChild, 1).collapse(true).select();
+            editor.execCommand('rowspacing', 15, 'bottom');
+            /*选中整个单元格查询段后距*/
+            range.selectNode(tds[1]).select();
+            equal(editor.queryCommandValue('rowspacing', 'bottom'), 15, '设置表格中文本段后距为1.5');
+            /*闭合在空白单元格中设置段后距*/
+            range.setStart(tds[2], 0).collapse(true).select();
+            editor.execCommand('rowspacing', 25, 'bottom');
+            equal(editor.queryCommandValue('rowspacing', 'bottom'), 25, '设置表格中文本段后距为2.5');
+            start();
+        }, 50);
+    }, 50);
+});
 
-test( '跨多个单元格设置段前距', function () {
+test('跨多个单元格设置段前距', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<table><tbody><tr><td>hello1</td><td>hello2<img /></td></tr><tr><td><div>hello3</div></td><td><p>hello4</p></td></tr></tbody></table>' );
-    var tds = editor.body.firstChild.getElementsByTagName( 'td' );
-    var p = editor.body.getElementsByTagName( 'p' );
-    range.selectNode( editor.body.firstChild ).select();
-    editor.execCommand( 'rowspacing', 15 ,'top');
-    for ( var index = 0; index < tds.length; index++ ) {
-        range.selectNode( tds[index] ).select();
-        equal( editor.queryCommandValue( 'rowspacing','top' ), 15, '设置表格中文本段前距为1.5' );
-        /*会自动在非block元素外面套p*/
-        //1.2版本，加在p上
-        equal( p[index].style['marginTop'], '15px', '段前距属性都是加在第一个孩子节点上' );
-    }
+    editor.setContent('<table><tbody><tr><td>hello1</td><td>hello2<img /></td></tr><tr><td><div>hello3</div></td><td><p>hello4</p></td></tr></tbody></table>');
+    stop();
+    setTimeout(function () {
+        var tds = editor.body.firstChild.getElementsByTagName('td');
+        var p = editor.body.getElementsByTagName('p');
+        range.selectNode(editor.body.firstChild).select();
+        editor.execCommand('rowspacing', 15, 'top');
+        for (var index = 0; index < tds.length; index++) {
+            range.selectNode(tds[index]).select();
+            equal(editor.queryCommandValue('rowspacing', 'top'), 15, '设置表格中文本段前距为1.5');
+            /*会自动在非block元素外面套p*/
+            //1.2版本，加在p上
+            equal(p[index].style['marginTop'], '15px', '段前距属性都是加在第一个孩子节点上');
+        }
+        start();
+    }, 50);
 } );
 
 /*trace 1052*/

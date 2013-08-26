@@ -155,7 +155,7 @@ test('修改列表再删除列表', function () {
 });
 
 test('列表内没有列表标号的项后退', function () {
-    if (ua.browser.safari)return;
+    if ((ua.browser.safari && !ua.browser.chrome))return 0;
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -595,29 +595,34 @@ test('trace 1622：表格中插入列表', function () {
     var body = editor.body;
     editor.setContent('<table><tbody><tr><td><br></td><td>你好</td></tr><tr><td>hello2</td><td>你好2</td></tr></tbody></table>');
     /*必须加br，否则没办法占位*/
-    var tds = body.getElementsByTagName('td');
-    range.setStart(tds[0], 0).collapse(1).select();
-    /*选中一个单元格*/
-    editor.execCommand('insertorderedlist');
-    /*插入有序列表*/
-    equal(tds[0].firstChild.tagName.toLowerCase(), 'ol', '查询列表的类型');
-    equal(tds[0].firstChild.style['listStyleType'], 'decimal', '查询有序列表的类型');
-    var br = baidu.editor.browser.ie ? "<br>" : "<br>";
-    equal(ua.getChildHTML(tds[0].firstChild), '<li>' + '<p>' + br + '</p>' + '</li>');
-
-    var trs = editor.body.firstChild.getElementsByTagName('tr');
-    /*选中多个单元格*/
-    var ut = editor.getUETable(editor.body.firstChild);
-    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[1]);
-    ut.setSelected(cellsRange);
-    range.setStart(trs[0].cells[0], 0).collapse(true).select();
-    tds = body.getElementsByTagName('td');
-    editor.execCommand('insertunorderedlist', 'circle');
-    /*插入无序列表*/
-    equal(tds[1].firstChild.tagName.toLowerCase(), 'ul', '查询无序列表');
-    equal(tds[1].firstChild.style['listStyleType'], 'circle', '查询无序列表的类型');
-    equal(ua.getChildHTML(tds[1].firstChild), '<li>你好</li>');
-    equal(ua.getChildHTML(tds[3].firstChild), '<li>你好2</li>');
+    stop()
+    setTimeout(function () {
+        var tds = body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).collapse(1).select();
+        /*选中一个单元格*/
+        editor.execCommand('insertorderedlist');
+        /*插入有序列表*/
+        equal(tds[0].firstChild.tagName.toLowerCase(), 'ol', '查询列表的类型');
+        equal(tds[0].firstChild.style['listStyleType'], 'decimal', '查询有序列表的类型');
+        var br = baidu.editor.browser.ie ? "<br>" : "<br>";
+        equal(ua.getChildHTML(tds[0].firstChild), '<li>' + '<p>' + br + '</p>' + '</li>');
+        setTimeout(function () {
+            var trs = editor.body.firstChild.getElementsByTagName('tr');
+            /*选中多个单元格*/
+            var ut = editor.getUETable(editor.body.firstChild);
+            var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[1]);
+            ut.setSelected(cellsRange);
+            range.setStart(trs[0].cells[0], 0).collapse(true).select();
+            tds = body.getElementsByTagName('td');
+            editor.execCommand('insertunorderedlist', 'circle');
+            /*插入无序列表*/
+            equal(tds[1].firstChild.tagName.toLowerCase(), 'ul', '查询无序列表');
+            equal(tds[1].firstChild.style['listStyleType'], 'circle', '查询无序列表的类型');
+            equal(ua.getChildHTML(tds[1].firstChild), '<li>你好</li>');
+            equal(ua.getChildHTML(tds[3].firstChild), '<li>你好2</li>');
+            start();
+        }, 50);
+    }, 50);
 });
 
 ///*presskey*/
@@ -857,7 +862,6 @@ test('trace 3126：1.2.5+列表重构新增标签，tab键', function () {
 test('trace 3132：单行列表backspace', function () {
     /*实际操作没问题，取range时会在将文本节点分为两个节点，后退操作无法实现*/
     if ((ua.browser.safari && !ua.browser.chrome))return 0;
-    if (ua.browser.ie == 9)return 0;//TODO 1.2.6
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -866,7 +870,8 @@ test('trace 3132：单行列表backspace', function () {
         editor.setContent('<ol><li><br></li></ol>');
         range.selectNode(editor.body.firstChild.firstChild.firstChild.firstChild).select();
         ua.keydown(editor.body, {keyCode:8});
-        equal(ua.getChildHTML(editor.body), '<p><br></p>', '');
+        var space =ua.browser.ie>8?'':'<br>';
+        equal(ua.getChildHTML(editor.body), '<p>'+space+'</p>', '');
         UE.delEditor('ue');
         start()
     });

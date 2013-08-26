@@ -180,20 +180,25 @@ test('表格中设置对齐方式', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<table><caption></caption><tbody><tr><td></td><td><p>hello</p></td></tr></tbody></table>');
-    var caption = editor.body.getElementsByTagName('caption');
-    range.setStart(caption[0], 0).collapse(true).select();
-    editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
-    equal(caption[0].style.textAlign, 'right', 'caption对齐方式为右上对齐');
-    equal(caption[0].style.verticalAlign, 'top', 'caption对齐方式为右上对齐');
-    var tds = editor.body.getElementsByTagName('td');
-    range.setStart(tds[0], 0).collapse(true).select();
-    editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
-    equal(tds[0].align, 'right', 'td对齐方式为右上对齐');
-    equal(tds[0].vAlign, 'top', 'td对齐方式为右上对齐');
-    /*不闭合设置对齐方式*/
-    range.selectNode(tds[1].firstChild, 0).select();
-    editor.execCommand('cellalignment', {align:'center', vAlign:'middle'});
-    equal(tds[1].align, 'center', 'p对齐方式为居中对齐');
+    stop();
+    setTimeout(function(){
+        var caption = editor.body.getElementsByTagName('caption');
+        range.setStart(caption[0], 0).collapse(true).select();
+        editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
+        equal(caption[0].style.textAlign, 'right', 'caption对齐方式为右上对齐');
+        equal(caption[0].style.verticalAlign, 'top', 'caption对齐方式为右上对齐');
+        var tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).collapse(true).select();
+        editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
+        equal(tds[0].align, 'right', 'td对齐方式为右上对齐');
+        equal(tds[0].vAlign, 'top', 'td对齐方式为右上对齐');
+        /*不闭合设置对齐方式*/
+        range.selectNode(tds[1].firstChild, 0).select();
+        editor.execCommand('cellalignment', {align:'center', vAlign:'middle'});
+        equal(tds[1].align, 'center', 'p对齐方式为居中对齐');
+        start();
+    },50);
+
 });
 
 test('修改table屬性', function () {
@@ -396,113 +401,137 @@ test('原表格非第一行带th，插入列', function () {
 test('删除行', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent('<p></p>');
-    range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:2, numRows:3});
-    var tds = editor.body.getElementsByTagName('td');
+    editor.setContent('<table><tbody><tr><td width="483" valign="top">1</td><td width="483" valign="top">2</td></tr><tr><td width="483" valign="top">3</td><td width="483" valign="top">4</td></tr><tr><td width="483" valign="top">5</td><td width="483" valign="top">6</td></tr></tbody></table>');
+    //
 
-    range.setStart(tds[0], 0).collapse(1).select();
-    editor.execCommand('deleterow');
-    equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
-    editor.undoManger.undo();
-    equal(editor.body.getElementsByTagName('tr').length, 3, '撤销后的行数');
-    range.setStart(tds[5], 0).collapse(1).select();
-    editor.execCommand('deleterow');
-    equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
-
-    var table = editor.document.getElementsByTagName("table")[0];
-    var cell = table.rows[0].cells[0];
-    range.setStart(cell, 0).setCursor();
-    editor.execCommand("mergeDown");
-    equal(cell.rowSpan, 2, "合并了一行");
-    editor.execCommand("deleterow");
-    equal(table.rows.length, 1, "在合并的单元格中删除行后，表格变成了一行");
+    stop();
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).collapse(1).select();
+        editor.execCommand('deleterow');
+        equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
+        editor.undoManger.undo();
+        setTimeout(function () {
+            equal(editor.body.getElementsByTagName('tr').length, 3, '撤销后的行数');
+            tds = editor.body.getElementsByTagName('td');
+            range.setStart(tds[5], 0).collapse(1).select();
+            editor.execCommand('deleterow');
+            setTimeout(function () {
+                equal(editor.body.getElementsByTagName('tr').length, 2, '删除行');
+                var table = editor.document.getElementsByTagName("table")[0];
+                var cell = table.rows[0].cells[0];
+                setTimeout(function () {
+                    range.setStart(cell, 0).setCursor();
+                    editor.execCommand("mergeDown");
+                    equal(cell.rowSpan, 2, "合并了一行");
+                    editor.execCommand("deleterow");
+                    equal(table.rows.length, 1, "在合并的单元格中删除行后，表格变成了一行");
+                    start();
+                }, 50);
+            }, 50);
+        }, 50);
+    }, 50);
 });
 test('选中部分单元格，删除行列', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:3, numRows:3});
-    var trs = editor.body.firstChild.getElementsByTagName('tr');
-    var ut = editor.getUETable(editor.body.firstChild);
-    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[0].cells[1]);
-    ut.setSelected(cellsRange);
-    range.setStart(trs[0].cells[0], 0).collapse(true).select();
-    editor.execCommand('deleterow');
-    ut.clearSelected();
-    equal(editor.body.getElementsByTagName('tr').length, 2, '选中部分单元格，删除行');
-    trs = editor.body.firstChild.getElementsByTagName('tr');
-    ut = editor.getUETable(editor.body.firstChild);
-    cellsRange = ut.getCellsRange(trs[0].cells[0], trs[0].cells[1]);
-    ut.setSelected(cellsRange);
-    range.setStart(trs[0].cells[0], 0).setEnd(trs[0].cells[1],1).select();
-    editor.execCommand('deletecol');
-    ut.clearSelected();
-    equal(trs[0].childNodes.length, 1, '选中部分单元格，删除列');
-    trs = editor.body.firstChild.getElementsByTagName('tr');
-    ut = editor.getUETable(editor.body.firstChild);
-    cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
-    ut.setSelected(cellsRange);
-    range.setStart(trs[0].cells[0], 0).collapse(true).select();
-    ut.clearSelected();
-    editor.execCommand('deletecol');
-    equal(editor.body.getElementsByTagName('table').length, 0, '删除列至表格删空');
-    range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:3, numRows:3});
-    trs = editor.body.firstChild.getElementsByTagName('tr');
-    ut = editor.getUETable(editor.body.firstChild);
-    cellsRange = ut.getCellsRange(trs[0].cells[0], trs[2].cells[0]);
-    ut.setSelected(cellsRange);
-    range.setStart(trs[0].cells[0], 0).collapse(true).select();
-    editor.execCommand('deleterow');
-    ut.clearSelected();
-    equal(editor.body.getElementsByTagName('table').length, 0, '删除列至表格删空');
+    editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+    setTimeout(function () {
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[0].cells[1]);
+        ut.setSelected(cellsRange);
+        range.setStart(trs[0].cells[0], 0).collapse(true).select();
+        editor.execCommand('deleterow');
+        ut.clearSelected();
+        equal(editor.body.getElementsByTagName('tr').length, 2, '选中部分单元格，删除行');
+        trs = editor.body.firstChild.getElementsByTagName('tr');
+        ut = editor.getUETable(editor.body.firstChild);
+        cellsRange = ut.getCellsRange(trs[0].cells[0], trs[0].cells[1]);
+        ut.setSelected(cellsRange);
+        range.setStart(trs[0].cells[0], 0).setEnd(trs[0].cells[1], 1).select();
+        editor.execCommand('deletecol');
+        ut.clearSelected();
+        equal(trs[0].childNodes.length, 1, '选中部分单元格，删除列');
+        trs = editor.body.firstChild.getElementsByTagName('tr');
+        ut = editor.getUETable(editor.body.firstChild);
+        cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
+        ut.setSelected(cellsRange);
+        range.setStart(trs[0].cells[0], 0).collapse(true).select();
+        ut.clearSelected();
+        editor.execCommand('deletecol');
+        equal(editor.body.getElementsByTagName('table').length, 0, '删除列至表格删空');
+        range.setStart(editor.body.firstChild, 0).collapse(true).select();
+        editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+        trs = editor.body.firstChild.getElementsByTagName('tr');
+        ut = editor.getUETable(editor.body.firstChild);
+        cellsRange = ut.getCellsRange(trs[0].cells[0], trs[2].cells[0]);
+        ut.setSelected(cellsRange);
+        range.setStart(trs[0].cells[0], 0).collapse(true).select();
+        editor.execCommand('deleterow');
+        ut.clearSelected();
+        equal(editor.body.getElementsByTagName('table').length, 0, '删除列至表格删空');
+        start();
+    }, 50);
+    stop();
 });
 test('sorttable', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<table width="1310"><tbody><tr><td width="634" valign="top">1</td><td width="634" valign="top"></td></tr><tr><td width="634" valign="top">2</td><td width="634" valign="top"></td></tr></tbody></table>');
-    var tds = editor.body.getElementsByTagName('td');
-    range.setStart(tds[0], 0).collapse(1).select();
-    editor.execCommand('sorttable',1);
-    ua.manualDeleteFillData(editor.body);
-    var tds = editor.body.getElementsByTagName('td');
-    equal(tds[0].innerHTML,2,'');
-    equal(tds[2].innerHTML,1,'');
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).collapse(1).select();
+        editor.execCommand('sorttable', 1);
+        ua.manualDeleteFillData(editor.body);
+        var tds = editor.body.getElementsByTagName('td');
+        equal(tds[0].innerHTML, 2, '');
+        equal(tds[2].innerHTML, 1, '');
+        start();
+    }, 50);
+    stop();
 });
 test('sorttable,框选', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<table width="1310"><tbody><tr><td width="634" valign="top">1</td><td width="634" valign="top"></td></tr><tr><td width="634" valign="top">2</td><td width="634" valign="top"></td></tr><tr><td valign="top" colspan="1" rowspan="1" style="word-break: break-all;">3</td><td valign="top" colspan="1" rowspan="1" style=""></td></tr></tbody></table>');
-    var trs = editor.body.firstChild.getElementsByTagName('tr');
-    var ut = editor.getUETable(editor.body.firstChild);
-    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
-    ut.setSelected(cellsRange);
-    range.setStart(trs[0].cells[0], 0).collapse(true).select();
-    editor.execCommand('sorttable',1);
-    ua.manualDeleteFillData(editor.body);
-    var tds = editor.body.getElementsByTagName('td');
-    equal(tds[0].innerHTML,2,'');
-    equal(tds[2].innerHTML,1,'');
-    equal(tds[4].innerHTML,3,'');
+    setTimeout(function () {
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
+        ut.setSelected(cellsRange);
+        range.setStart(trs[0].cells[0], 0).collapse(true).select();
+        editor.execCommand('sorttable', 1);
+        ua.manualDeleteFillData(editor.body);
+        var tds = editor.body.getElementsByTagName('td');
+        equal(tds[0].innerHTML, 2, '');
+        equal(tds[2].innerHTML, 1, '');
+        equal(tds[4].innerHTML, 3, '');
+        start();
+    }, 50);
+    stop();
 });
 test('enablesort,disablesort', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<table width="1310"><tbody><tr><td width="634" valign="top">1</td><td width="634" valign="top"></td></tr><tr><td width="634" valign="top">2</td><td width="634" valign="top"></td></tr></tbody></table>');
-    var tds = editor.body.getElementsByTagName('td');
-    range.setStart(tds[0], 0).collapse(1).select();
-    editor.execCommand('enablesort');
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).collapse(1).select();
+        editor.execCommand('enablesort');
+
+        setTimeout(function () {
+            equal(editor.body.firstChild.attributes['data-sort'].nodeValue, 'sortEnabled', 'sortEnabled');
+            editor.execCommand('disablesort');
+            setTimeout(function () {
+                equal(editor.body.firstChild.attributes['data-sort'].nodeValue, 'sortDisabled', 'sortDisabled');
+                start();
+            }, 20);
+        }, 20);
+    }, 50);
     stop();
-    setTimeout(function(){
-        equal(editor.body.firstChild.attributes['data-sort'].nodeValue,'sortEnabled','sortEnabled');
-        editor.execCommand('disablesort');
-        setTimeout(function(){
-            equal(editor.body.firstChild.attributes['data-sort'].nodeValue,'sortDisabled','sortDisabled');
-            start();
-        },20);
-    },20);
 });
 test('settablebackground', function () {
     var editor = te.obj[0];
@@ -932,13 +961,13 @@ test('trace 3222：在合并后的单元格中按tab键', function () {
         trs[1].cells[2].innerHTML = 'asd';
         range.setStart(trs[1].cells[1], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode':9});
-        if (ua.browser.gecko)
+        if (ua.browser.gecko||ua.browser.ie>8)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第一次tab键');
         else
             equal(editor.selection.getRange().startContainer.data, 'asd', '第一次tab键');
         range.setStart(trs[1].cells[1], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode':9});
-        if (ua.browser.gecko)
+        if (ua.browser.gecko||ua.browser.ie>8)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第二次tab键');
         else
             equal(editor.selection.getRange().startContainer.data, 'asd', '第一次tab键');
@@ -954,15 +983,19 @@ test('trace 3191：删除表格名称', function () {
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable');
-    var tds = editor.body.getElementsByTagName('td');
-    range.setStart(tds[0], 0).collapse(true).select();
-    editor.execCommand('insertcaption');
-    range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse(true).select();
-    editor.execCommand('deletecaption');
-    equal(editor.body.getElementsByTagName('caption').length, '0', '表格名称被删除');
-    range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    ua.keydown(editor.body, {keyCode:90, ctrlKey:true});
-    equal(editor.body.getElementsByTagName('caption').length, '1', '表格名称被还原');
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 0).collapse(true).select();
+        editor.execCommand('insertcaption');
+        range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse(true).select();
+        editor.execCommand('deletecaption');
+        equal(editor.body.getElementsByTagName('caption').length, '0', '表格名称被删除');
+        range.setStart(editor.body.firstChild, 0).collapse(true).select();
+        ua.keydown(editor.body, {keyCode: 90, ctrlKey: true});
+        equal(editor.body.getElementsByTagName('caption').length, '1', '表格名称被还原');
+        start();
+    }, 50);
+    stop();
 });
 
 /*trace 3195*/
@@ -1013,23 +1046,26 @@ test('trace 3231：向右合并--拆分成列', function () {
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols:2, numRows:2});
-    ua.manualDeleteFillData(editor.body);
-
-    var tds = editor.body.getElementsByTagName('td');
-    tds[1].innerHTML = 'asd';
-    range.setStart(tds[1], 0).collapse(true).select();
-    editor.execCommand('insertcolnext');
-    ua.manualDeleteFillData(editor.body);
-    equal(editor.body.getElementsByTagName('tr')[0].cells.length, '3', '3列');
-    equal(editor.body.getElementsByTagName('td')[1].innerHTML, 'asd', '后插入行');
-    var br = ua.browser.ie ? '' : '<br>';
-    equal(editor.body.getElementsByTagName('td')[2].innerHTML, br, '后插入行');
-    range.setStart(editor.body.getElementsByTagName('td')[2], 0).collapse(true).select();
-    editor.execCommand('insertrownext');
-    equal(editor.body.getElementsByTagName('tr').length, 3, '3行');
-    editor.execCommand('deletecol');
-    equal(editor.body.getElementsByTagName('td')[1].innerHTML, 'asd', '');
-    equal(editor.body.getElementsByTagName('td').length, '6', '');
+    setTimeout(function () {
+        ua.manualDeleteFillData(editor.body);
+        var tds = editor.body.getElementsByTagName('td');
+        tds[1].innerHTML = 'asd';
+        range.setStart(tds[1], 0).collapse(true).select();
+        editor.execCommand('insertcolnext');
+        ua.manualDeleteFillData(editor.body);
+        equal(editor.body.getElementsByTagName('tr')[0].cells.length, '3', '3列');
+        equal(editor.body.getElementsByTagName('td')[1].innerHTML, 'asd', '后插入行');
+        var br = ua.browser.ie ? '' : '<br>';
+        equal(editor.body.getElementsByTagName('td')[2].innerHTML, br, '后插入行');
+        range.setStart(editor.body.getElementsByTagName('td')[2], 0).collapse(true).select();
+        editor.execCommand('insertrownext');
+        equal(editor.body.getElementsByTagName('tr').length, 3, '3行');
+        editor.execCommand('deletecol');
+        equal(editor.body.getElementsByTagName('td')[1].innerHTML, 'asd', '');
+        equal(editor.body.getElementsByTagName('td').length, '6', '');
+        start();
+    }, 50);
+    stop();
 });
 //test('标题行中底纹',function(){
 //    var editor = te.obj[0];

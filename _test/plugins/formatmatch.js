@@ -297,23 +297,26 @@ test('表格刷文本', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
+    expect(1)
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('<p><span style="background: yellow">hello</span></p><table><tbody><tr><td>hello2</td></tr></tbody></table>');
         setTimeout(function () {
             range.selectNode(editor.body.lastChild).select();
-            editor.currentSelectedArr = [editor.body.lastChild.getElementsByTagName('td')[0]];
+//            editor.currentSelectedArr = [editor.body.lastChild.getElementsByTagName('td')[0]];
             editor.addListener('mouseup', function () {
                 equal(editor.body.firstChild.innerHTML, 'hello', ' 去掉hello的格式');
             });
             editor.execCommand('formatmatch');
-            editor.currentSelectedArr = [];
-            range.selectNode(editor.body.firstChild).select();
-            ua.mouseup(editor.body);
             setTimeout(function () {
-                UE.delEditor('ue');
-                start();
-            }, 500);
+//            editor.currentSelectedArr = [];
+                range.selectNode(editor.body.firstChild).select();
+                ua.mouseup(editor.body);
+                setTimeout(function () {
+                    UE.delEditor('ue');
+                    start();
+                }, 500);
+            }, 50);
         }, 50);
     });
     stop();
@@ -328,29 +331,31 @@ test('trace 1096，1761:表格刷表格', function () {
         var range = new baidu.editor.dom.Range(editor.document);
         setTimeout(function () {
             editor.setContent('<p><span style="background: yellow">hello</span></p><table><tbody><tr><td>hello2</td><td></td></tr><tr><td></td><td>hello3</td></tr></tbody></table>');
-            var trs = editor.body.lastChild.getElementsByTagName('tr');
-            var ut = editor.getUETable(editor.body.lastChild);
-            var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
-            ut.setSelected(cellsRange);
-            range.setStart(trs[0].cells[0], 0).collapse(true).select();
-            var tds = editor.body.lastChild.getElementsByTagName('td');
-            editor.addListener('mouseup', function () {
-                ok(ua.isEqualArray(ut.selectedTds, [trs[0].cells[0], trs[1].cells[0]]), '比较选择的区域');
+            setTimeout(function () {
+                var trs = editor.body.lastChild.getElementsByTagName('tr');
+                var ut = editor.getUETable(editor.body.lastChild);
+                var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
+                ut.setSelected(cellsRange);
+                range.setStart(trs[0].cells[0], 0).collapse(true).select();
+                var tds = editor.body.lastChild.getElementsByTagName('td');
+                editor.addListener('mouseup', function () {
+                    ok(ua.isEqualArray(ut.selectedTds, [trs[0].cells[0], trs[1].cells[0]]), '比较选择的区域');
 //            equal( editor.body.getElementsByTagName('table')[0].getAttribute( 'border' ), '1', '表格边框宽度相同' );      /*如果没有指定border，那么不主动设置border*/
 //            equal( tds[index].style['borderWidth'], '1px', '表格边框宽度相同' );
 //            equal( tds[index].style['borderStyle'], 'solid', '表格边框样式相同' );
-                for (var index = 0; index < tds.length; index++) {
-                    equal(tds[index].style['borderColor'], tds[0].style['borderColor'], '表格边框颜色相同');
-                }
-                setTimeout(function () {
-                    UE.delEditor('ue');
-                    start();
-                }, 500);
-            });
-            editor.execCommand('formatmatch');
+                    for (var index = 0; index < tds.length; index++) {
+                        equal(tds[index].style['borderColor'], tds[0].style['borderColor'], '表格边框颜色相同');
+                    }
+                    setTimeout(function () {
+                        UE.delEditor('ue');
+                        start();
+                    }, 500);
+                });
+                editor.execCommand('formatmatch');
 //        editor.currentSelectedArr = [tds[1], tds[3]];
-            range.setStart(tds[1], 0).setEnd(tds[3], 1).select();
-            ua.mouseup(editor.body);
+                range.setStart(tds[1], 0).setEnd(tds[3], 1).select();
+                ua.mouseup(editor.body);
+            }, 50);
         }, 50);
     });
     stop();

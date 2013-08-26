@@ -151,7 +151,7 @@ function covcalc() {
     }
     var file;
     var files = [];
-    var filter;
+    var filter = '';
     var ls = location.search.split('&');
     for( var i = 0; i < ls.length; i++){
         if(ls[i].indexOf('filter')!=-1){

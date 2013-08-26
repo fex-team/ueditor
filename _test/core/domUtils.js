@@ -1,4 +1,31 @@
 module( 'core.domUtils' );
+test( 'isBoundaryNode--node是firstChild',function(){
+//    var iframe = document.createElement('iframe');
+//    document.body.appendChild(iframe);
+//    var body = iframe.contentDocument.appendChild(document.createElement('body'));
+//    var div = body.appendChild(document.createElement('div'));
+    if(ua.browser.ie){
+        var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
+        var div = body.appendChild(document.createElement('div'));
+    }else{
+        var div = te.dom[1].contentWindow.document.firstChild.appendChild(document.createElement('div'));
+    }
+
+    div.innerHTML = "<span>sss</span>aaa<p>ppp</p>";
+    var node = div.firstChild.nextSibling;
+    equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
+    equal( domUtils.isBoundaryNode(node, "lastChild"), 0 );
+    node = div.firstChild.firstChild;
+    equal( domUtils.isBoundaryNode(node, "firstChild"), 1 );
+    equal( domUtils.isBoundaryNode(node, "lastChild"), 0 );
+    node = div.lastChild.lastChild;
+    equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
+    equal( domUtils.isBoundaryNode(node, "lastChild"), 1 );
+//    iframe.parentNode.removeChild(iframe);
+} );
+test( 'isBoundaryNode--node是firstChild',function(){
+stop()
+} );
 test( 'getPosition--A和B是同一个节点', function() {
     var div = te.dom[2];
     div.innerHTML = "<span>span</span><img  /><b>bbb</b>xxx";
@@ -874,7 +901,16 @@ test( 'mergeChild--非span', function() {
     div_new.firstChild.appendChild( document.createTextNode( 'b2' ) );
     ok( ua.haveSameAllChildAttribs( div, div_new ), '父节点和子节点属性相同，则删子节点' );
 } );
-
+test( 'mergeChild--span--attrs', function() {
+    var div = te.dom[2];
+    var domUtils = baidu.editor.dom.domUtils;
+    var div_new = document.createElement( 'div' );
+    div_new.id = 'test';
+    div.innerHTML = '<span style="background-color:blue;"><span style="font-size:12px;color:red">span_1<span style="font-size:12px">span_2</span></span></span>';
+    var html = '<span style="font-size: 12px; color: red; background-color: blue;">span_1<span style="font-size: 12px; color: red; background-color: red;">span_2</span></span>';
+    domUtils.mergeChild( div.firstChild ,'span',{style:'background-color:red'});
+    ua.checkSameHtml(div.innerHTML,html,'mergeChild-给子节点中的span添加样式');
+} );
 test( 'getElementsByTagName', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
@@ -1030,7 +1066,17 @@ test( 'setAttributes--设置class,style', function() {
     div_new.innerHTML = '<div class="div_class" id="div_id" style="color:red;font-size:12px"></div>';
     ok( ua.haveSameAllChildAttribs( div, div_new ), 'check attributes' );
 } );
-
+test( 'setAttributes--设置innerHTML,value', function() {
+    var div = te.dom[2];
+    var domUtils = baidu.editor.dom.domUtils;
+    div.innerHTML = '<div></div>';
+    domUtils.setAttributes( div.firstChild, {'innerHTML':'setAttributes_test','id':'div_id','value':'abcd'} );
+    var div_new = document.createElement( 'div' );
+    div_new.id = 'test';
+    div_new.innerHTML = '<div id="div_id" >setAttributes_test</div>';
+    div_new.firstChild.value="abcd";
+    ok( ua.haveSameAllChildAttribs( div, div_new ), 'check attributes' );
+} );
 test( 'getComputedStyle', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
