@@ -515,8 +515,6 @@ function SvgCanvas(c) {
     var selectorManager = new SelectorManager();
     var rubberBox = null;
     var events = {};
-    var undoStackPointer = 0;
-    var undoStack = [];
 
     var curBBoxes = [];
 
@@ -551,16 +549,6 @@ function SvgCanvas(c) {
         // because using square-bracket notation is allowed:
         // http://www.w3.org/TR/DOM-Level-2-Core/ecma-script-binding.html
         return resultList;
-    };
-
-    var addCommandToHistory = function (cmd) {
-        // if our stack pointer is not at the end, then we have to remove
-        // all commands after the pointer and insert the new command
-        if (undoStackPointer < undoStack.length && undoStack.length > 0) {
-            undoStack = undoStack.splice(0, undoStackPointer);
-        }
-        undoStack.push(cmd);
-        undoStackPointer = undoStack.length;
     };
 
     var getId = function () {
@@ -718,7 +706,6 @@ function SvgCanvas(c) {
         }
 
         if (!batchCmd.isEmpty()) {
-            addCommandToHistory(batchCmd);
             call("changed", selectedElements);
         }
     };
@@ -2007,10 +1994,6 @@ function SvgCanvas(c) {
 
         canvas.changeSelectedAttributeNoUndo(attr, val, elems);
 
-        var batchCmd = canvas.finishUndoableChange();
-        if (!batchCmd.isEmpty()) {
-            addCommandToHistory(batchCmd);
-        }
     };
 
     $(container).mouseup(mouseUp);
