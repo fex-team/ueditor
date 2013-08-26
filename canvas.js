@@ -431,7 +431,6 @@ function SvgCanvas(c) {
     var selectorManager = new SelectorManager();
     var rubberBox = null;
     var events = {};
-
     var curBBoxes = [];
 
     var getIntersectionList = function (rect) {
