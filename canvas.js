@@ -480,7 +480,7 @@ function SvgCanvas(c) {
 
     var all_properties = {
         shape: {
-            fill: "#FF0000",
+            fill: "#cfe2f3",
             fill_paint: null,
             fill_opacity: 1,
             stroke: "#000000",
