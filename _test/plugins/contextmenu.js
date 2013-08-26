@@ -580,7 +580,7 @@ test('trace 3384：按数值大小排序', function () {
 
 /*trace 3088*/
 test('trace 3088：检查表格属性', function () {
-    if (ua.browser.ie >8)return;
+//    if (ua.browser.ie >8)return;
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -602,7 +602,7 @@ test('trace 3088：检查表格属性', function () {
             setTimeout(function () {
                 var menutable = document.getElementsByClassName("edui-menu-body")[1];
                 var forTable = document.getElementsByClassName('edui-for-table');
-                if (ua.browser.ie) {
+                if (ua.browser.ie&&ua.browser.ie<9) {
                     ua.mouseenter(forTable[forTable.length - 1]);
                     ua.click(menutable.childNodes[6]);
                 } else {
@@ -625,7 +625,7 @@ test('trace 3088：检查表格属性', function () {
                     ua.contextmenu(editor.body.firstChild);
                     menutable = document.getElementsByClassName("edui-menu-body")[1];
                     forTable = document.getElementsByClassName('edui-for-table');
-                    if (ua.browser.ie) {
+                    if (ua.browser.ie&&ua.browser.ie<9) {
                         ua.mouseenter(forTable[forTable.length - 1]);
                     } else {
                         ua.mouseover(forTable[forTable.length - 1]);
@@ -659,7 +659,7 @@ test('trace 3088：检查表格属性', function () {
 
 /*trace 3099*/
 test('trace 3099：清除边框颜色', function () {
-    if (ua.browser.ie >8 )return;
+//    if (ua.browser.ie >8 )return;
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -674,7 +674,7 @@ test('trace 3099：清除边框颜色', function () {
             ua.contextmenu(editor.body.firstChild);
             var menutable = document.getElementsByClassName("edui-menu-body")[1];
             var forTable = document.getElementsByClassName('edui-for-table');
-            if (ua.browser.ie) {
+            if (ua.browser.ie&&ua.browser.ie<9) {
                 ua.mouseenter(forTable[forTable.length - 1]);
             } else {
                 ua.mouseover(forTable[forTable.length - 1]);
@@ -704,7 +704,7 @@ test('trace 3099：清除边框颜色', function () {
                 ua.contextmenu(editor.body.firstChild);
                 menutable = document.getElementsByClassName("edui-menu-body")[1];
                 forTable = document.getElementsByClassName('edui-for-table');
-                if (ua.browser.ie) {
+                if (ua.browser.ie&&ua.browser.ie<9) {
                     ua.mouseenter(forTable[forTable.length - 1]);
                 } else {
                     ua.mouseover(forTable[forTable.length - 1]);
@@ -823,7 +823,7 @@ test('trace 3060：单元格对齐方式', function () {
 /*trace 3410*/
 /*trace 3448*/
 test('检查表格属性', function () {
-    if (ua.browser.ie )return;//todo 1.2.6.1  #3448
+    if (ua.browser.ie <9 )return;//todo 1.2.6.1  #3098
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -840,7 +840,7 @@ test('检查表格属性', function () {
             ua.contextmenu(editor.body.firstChild.firstChild);
             var menutable = document.getElementsByClassName("edui-menu-body")[1];
             var forTable = document.getElementsByClassName('edui-for-table');
-            if (ua.browser.ie) {
+            if (ua.browser.ie&&ua.browser.ie<9) {
                 ua.mouseenter(forTable[forTable.length - 1]);
                 ua.click(menutable.childNodes[6]);
             } else {
@@ -946,7 +946,7 @@ test('trace 3315：表格隔行变色', function () {
 
 /*trace 3210*/
 test('trace 3210：添加单元格背景色', function () {
-    if (ua.browser.ie > 8)return;
+//    if (ua.browser.ie > 8)return;
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -966,7 +966,7 @@ test('trace 3210：添加单元格背景色', function () {
             ua.contextmenu(editor.body.firstChild);
             var menutable = document.getElementsByClassName("edui-menu-body")[1];
             var forTable = document.getElementsByClassName('edui-for-table');
-            if (ua.browser.ie) {
+            if (ua.browser.ie&&ua.browser.ie<9) {
                 ua.mouseenter(forTable[forTable.length - 1]);
             } else {
                 ua.mouseover(forTable[forTable.length - 1]);
