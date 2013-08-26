@@ -1,14 +1,3 @@
-var svgWhiteList = {
-    "circle": ["cx", "cy", "fill", "fill-opacity", "id", "opacity", "r", "stroke", "stroke-dasharray", "stroke-opacity", "stroke-width", "transform"],
-    "ellipse": ["cx", "cy", "fill", "fill-opacity", "id", "opacity", "rx", "ry", "stroke", "stroke-dasharray", "stroke-opacity", "stroke-width", "transform"],
-    "line": ["fill", "fill-opacity", "id", "opacity", "stroke", "stroke-dasharray", "stroke-linecap", "stroke-opacity", "stroke-width", "transform", "x1", "x2", "y1", "y2"],
-    "path": ["d", "fill", "fill-opacity", "id", "opacity", "stroke", "stroke-dasharray", "stroke-linecap", "stroke-linejoin", "stroke-opacity", "stroke-width", "transform"],
-    "polygon": ["id", "fill", "fill-opacity", "id", "opacity", "points", "stroke", "stroke-dasharray", "stroke-linecap", "stroke-linejoin", "stroke-opacity", "stroke-width", "transform"],
-    "polyline": ["id", "fill", "fill-opacity", "opacity", "points", "stroke", "stroke-dasharray", "stroke-linecap", "stroke-linejoin", "stroke-opacity", "stroke-width", "transform"],
-    "rect": ["fill", "fill-opacity", "height", "id", "opacity", "rx", "ry", "stroke", "stroke-dasharray", "stroke-linecap", "stroke-linejoin", "stroke-opacity", "stroke-width", "transform", "width", "x", "y"],
-    "svg": ["id", "height", "transform", "width", "xmlns"]
-};
-
 var Utils = {
     "rectsIntersect": function (r1, r2) {
         return r2.x < (r1.x + r1.width) &&
@@ -17,7 +6,6 @@ var Utils = {
             (r2.y + r2.height) > r1.y;
     }
 };
-
 
 function SvgCanvas(c) {
     function ChangeElementCommand(elem, attrs, text) {
@@ -569,60 +557,6 @@ function SvgCanvas(c) {
     var call = function (event, arg) {
         if (events[event]) {
             return events[event](this, arg);
-        }
-    };
-
-    var sanitizeSvg = function (node) {
-        // we only care about element nodes
-        // automatically return for all comment, etc nodes
-        // for text, we do a whitespace trim
-        if (node.nodeType == 3) {
-            node.nodeValue = node.nodeValue.replace(/^\s+|\s+$/g, "");
-        }
-        if (node.nodeType != 1) return;
-
-        var doc = node.ownerDocument;
-        var parent = node.parentNode;
-        // can parent ever be null here?  I think the root node's parent is the document...
-        if (!doc || !parent) return;
-
-        var allowedAttrs = svgWhiteList[node.nodeName];
-        // if this element is allowed
-        if (allowedAttrs != undefined) {
-            var i = node.attributes.length;
-            while (i--) {
-                // if the attribute is not in our whitelist, then remove it
-                // could use jQuery's inArray(), but I don't know if that's any better
-                var attrName = node.attributes.item(i).nodeName;
-                if (allowedAttrs.indexOf(attrName) == -1) {
-                    // TODO: do I need to call setAttribute(..., "") here for Fx2?
-                    node.removeAttribute(attrName);
-                }
-            }
-
-            // recurse to children
-            i = node.childNodes.length;
-            while (i--) {
-                sanitizeSvg(node.childNodes.item(i));
-            }
-        }
-        // else, remove this element
-        else {
-            // remove all children from this node and insert them before this node
-            var children = [];
-            while (node.hasChildNodes()) {
-                children.push(parent.insertBefore(node.firstChild, node));
-            }
-
-            // remove this node from the document altogether
-            parent.removeChild(node);
-
-            // call sanitizeSvg on each of those children
-            var i = children.length;
-            while (i--) {
-                sanitizeSvg(children[i]);
-            }
-
         }
     };
 
@@ -1985,7 +1919,6 @@ function SvgCanvas(c) {
         svgroot.unsuspendRedraw(handle);
         call("changed", elems);
     };
-
 
     this.changeSelectedAttribute = function (attr, val, elems) {
         var elems = elems || selectedElements;
