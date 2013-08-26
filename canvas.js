@@ -8,75 +8,6 @@ var Utils = {
 };
 
 function SvgCanvas(c) {
-    function ChangeElementCommand(elem, attrs, text) {
-        this.elem = elem;
-        this.text = text ? ("Change " + elem.tagName + " " + text) : ("Change " + elem.tagName);
-        this.newValues = {};
-        this.oldValues = attrs;
-        for (attr in attrs) {
-            if (attr == "#text") this.newValues[attr] = elem.textContent;
-            else this.newValues[attr] = elem.getAttribute(attr);
-        }
-
-        this.apply = function () {
-            for (attr in this.newValues) {
-                if (this.newValues[attr]) {
-                    if (attr == "#text") this.elem.textContent = this.newValues[attr];
-                    else this.elem.setAttribute(attr, this.newValues[attr]);
-                }
-                else {
-                    if (attr != "#text") this.elem.textContent = "";
-                    else this.elem.removeAttribute(attr);
-                }
-            }
-            // relocate rotational transform, if necessary
-            if (attr != "transform") {
-                var angle = canvas.getRotationAngle(elem);
-                if (angle) {
-                    var bbox = elem.getBBox();
-                    var cx = parseInt(bbox.x + bbox.width / 2),
-                        cy = parseInt(bbox.y + bbox.height / 2);
-                    var rotate = ["rotate(", angle, " ", cx, ",", cy, ")"].join('');
-                    if (rotate != elem.getAttribute("transform")) {
-                        elem.setAttribute("transform", rotate);
-                    }
-                }
-            }
-            return true;
-        };
-
-        this.unapply = function () {
-            for (attr in this.oldValues) {
-                if (this.oldValues[attr]) {
-                    if (attr == "#text") this.elem.textContent = this.oldValues[attr];
-                    else this.elem.setAttribute(attr, this.oldValues[attr]);
-                }
-                else {
-                    if (attr == "#text") this.elem.textContent = "";
-                    else this.elem.removeAttribute(attr);
-                }
-            }
-            // relocate rotational transform, if necessary
-            if (attr != "transform") {
-                var angle = canvas.getRotationAngle(elem);
-                if (angle) {
-                    var bbox = elem.getBBox();
-                    var cx = parseInt(bbox.x + bbox.width / 2),
-                        cy = parseInt(bbox.y + bbox.height / 2);
-                    var rotate = ["rotate(", angle, " ", cx, ",", cy, ")"].join('');
-                    if (rotate != elem.getAttribute("transform")) {
-                        elem.setAttribute("transform", rotate);
-                    }
-                }
-            }
-            return true;
-        };
-
-        this.elements = function () {
-            return [this.elem];
-        }
-    }
-
     function BatchCommand(text) {
         this.text = text || "Batch Command";
         this.stack = [];
@@ -557,73 +488,6 @@ function SvgCanvas(c) {
         }
     };
 
-    var svgToString = function (elem, indent) {
-        var out = new Array();
-        if (elem) {
-            var attrs = elem.attributes;
-            var attr;
-            var i;
-            var childs = elem.childNodes;
-            for (i = 0; i < indent; i++) out.push(" ");
-            out.push("<");
-            out.push(elem.nodeName);
-            for (i = attrs.length - 1; i >= 0; i--) {
-                attr = attrs.item(i);
-                if (attr.nodeValue != "") {
-                    //Opera bug turns N.N to N,N in some locales
-                    if (window.opera && attr.nodeName == 'opacity' && /^\d+,\d+$/.test(attr.nodeValue)) {
-                        attr.nodeValue = attr.nodeValue.replace(',', '.');
-                    }
-                    out.push(" ");
-                    out.push(attr.nodeName);
-                    out.push("=\"");
-                    out.push(attr.nodeValue);
-                    out.push("\"");
-                }
-            }
-            if (elem.hasChildNodes()) {
-                out.push(">");
-                indent++;
-                var bOneLine = false;
-                for (i = 0; i < childs.length; i++) {
-                    var child = childs.item(i);
-                    if (child.id == "selectorParentGroup") continue;
-                    switch (child.nodeType) {
-                        case 1: // element node
-                            out.push("\n");
-                            out.push(svgToString(childs.item(i), indent));
-                            break;
-                        case 3: // text node
-                            var str = child.nodeValue.replace(/^\s+|\s+$/g, "");
-                            if (str != "") {
-                                bOneLine = true;
-                                out.push(str + "");
-                            }
-                            break;
-                        case 8: // comment
-                            out.push("\n");
-                            out.push(new Array(indent + 1).join(" "));
-                            out.push("<!--");
-                            out.push(child.data);
-                            out.push("-->");
-                            break;
-                    } // switch on node type
-                }
-                indent--;
-                if (!bOneLine) {
-                    out.push("\n");
-                    for (i = 0; i < indent; i++) out.push(" ");
-                }
-                out.push("</");
-                out.push(elem.nodeName);
-                out.push(">");
-            } else {
-                out.push("/>");
-            }
-        }
-        return out.join('');
-    };
-
     var recalculateAllSelectedDimensions = function () {
         var text = (current_resize_mode == "none" ? "position" : "size");
         var batchCmd = new BatchCommand(text);
@@ -922,9 +786,7 @@ function SvgCanvas(c) {
                 console.log("Unknown shape type: " + selected.tagName);
                 break;
         }
-        if (changes) {
-            return new ChangeElementCommand(selected, changes);
-        }
+
     };
 
     this.clearSelection = function () {
