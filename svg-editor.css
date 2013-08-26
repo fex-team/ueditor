@@ -1,0 +1,9 @@
+.tools{
+    float: left;
+    border: 1px solid #ccc;
+    cursor: default;
+}
+#svgcanvas{
+    float: left;
+    border: 1px solid #ccc;
+}

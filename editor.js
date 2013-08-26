@@ -1,4 +1,0 @@
-var UG = window.UG || {};
-
-
-
