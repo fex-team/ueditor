@@ -133,7 +133,6 @@ function SvgCanvas(c) {
         }
 
         this.showGrips = function (show) {
-            // TODO: use suspendRedraw() here
             var bShow = show ? "inline" : "none";
             this.rotateGrip.setAttribute("display", bShow);
             this.rotateGripConnector.setAttribute("display", bShow);
@@ -161,7 +160,6 @@ function SvgCanvas(c) {
                 this.selectorGrips[dir].setAttribute('style', ("cursor:" + dir_arr[i] + "-resize"));
                 i++;
             }
-            ;
         };
 
         this.resize = function (cur_bbox) {
@@ -206,11 +204,9 @@ function SvgCanvas(c) {
             assignAttributes(this.rotateGripConnector, { x1: l + w / 2, y1: t - 20, x2: l + w / 2, y2: t });
             assignAttributes(this.rotateGrip, { cx: l + w / 2, cy: t - 20 });
 
-            // empty out the transform attribute
             this.selectorGroup.setAttribute("transform", "");
             this.selectorGroup.removeAttribute("transform");
 
-            // align selector group with element coordinate axes
             var elem = this.selectedElement;
             var transform = elem.getAttribute("transform");
             var angle = canvas.getRotationAngle(elem);
@@ -222,7 +218,6 @@ function SvgCanvas(c) {
             svgroot.unsuspendRedraw(sr_handle);
         };
 
-        // now initialize the selector
         this.reset(elem);
     }
 
