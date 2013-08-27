@@ -997,13 +997,11 @@ function SvgCanvas(c) {
                 var t = evt.target;
                 var nodeName = t.nodeName.toLowerCase();
                 if (nodeName != "div" && nodeName != "svg") {
-                    // if this element is not yet selected, clear selection and select it
                     if (selectedElements.indexOf(t) == -1) {
                         canvas.clearSelection();
                         canvas.addToSelection([t]);
                         current_poly = null;
                     }
-                    // else if it's a poly, go into polyedit mode in mouseup
                 }
                 else {
                     canvas.clearSelection();
