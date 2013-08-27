@@ -4,7 +4,8 @@
  * @module UE.dom.domUtils
  * @since 1.2.6.1
  */
-function getDomNode(node, start, ltr, startFromChild, fn, guard) {
+//getDomNode(node, 'firstChild', 'nextSibling', startFromChild, filterFn, guard);
+function getDomNode( node, start, ltr, startFromChild, fn, guard ) {
     var tmpNode = startFromChild && node[start],
         parent;
     !tmpNode && (tmpNode = node[ltr]);
@@ -80,28 +81,28 @@ var domUtils = dom.domUtils = {
      * switch ( position ) {
      *
      *      case 0:
-     *          console.log('相等，同一节点');
+     *          console.log('元素相同');
      *          break;
      *      case 1:
-     *          console.log('无关，节点不相连');
+     *          console.log('两个节点在不同的文档中');
      *          break;
      *      case 2:
-     *          console.log('跟随，即节点A头部位于节点B头部的后面');
+     *          console.log('节点A在节点B之后');
      *          break;
      *      case 4;
-     *          console.log('前置，即节点A头部位于节点B头部的前面');
+     *          console.log('节点A在节点B之前');
      *          break;
      *      case 8:
-     *          console.log('被包含，即节点A被节点B包含');
+     *          console.log('节点A被节点B包含');
      *          break;
      *      case 10:
-     *          console.log('组合类型，即节点A满足跟随节点B且被节点B包含。');
+     *          console.log('节点A被节点B包含且节点A在节点B之后');
      *          break;
      *      case 16:
-     *          console.log('包含，即节点A包含节点B');
+     *          console.log('节点A包含节点B');
      *          break;
      *      case 20:
-     *          console.log('组合类型，即节点A满足前置节点A且包含节点B。');
+     *          console.log('节点A包含节点B且节点A在节点B之前');
      *          break;
      *
      * }
