@@ -804,7 +804,6 @@ function SvgCanvas(c) {
     };
 
     var addAllPointGripsToPoly = function () {
-        // loop through and hide all pointgrips
         var len = current_poly_pts.length;
         for (var i = 0; i < len; i += 2) {
             var grip = document.getElementById("polypointgrip_" + i / 2);
@@ -863,11 +862,6 @@ function SvgCanvas(c) {
     };
 
 
-    this.open = function (str) {
-        // Nothing by default, handled by optional widget/extention
-        call("opened", str);
-    };
-
     this.clearPoly = function () {
         removeAllPointGripsFromPoly();
         current_poly = null;
@@ -889,101 +883,24 @@ function SvgCanvas(c) {
     };
 
 
-    var findDefs = function () {
-        var defs = svgroot.getElementsByTagNameNS(svgns, "defs");
-        if (defs.length > 0) {
-            defs = defs[0];
-        }
-        else {
-            defs = svgroot.insertBefore(svgdoc.createElementNS(svgns, "defs"), svgroot.firstChild.nextSibling);
-        }
-        return defs;
-    };
-
-    var addGradient = function () {
-        $.each(['stroke', 'fill'], function (i, type) {
-
-            if (!cur_properties[type + '_paint'] || cur_properties[type + '_paint'].type == "solidColor") return;
-            var grad = canvas[type + 'Grad'];
-            // find out if there is a duplicate gradient already in the defs
-            var duplicate_grad = findDuplicateGradient(grad);
-            var defs = findDefs();
-            // no duplicate found, so import gradient into defs
-            if (!duplicate_grad) {
-                grad = defs.appendChild(svgdoc.importNode(grad, true));
-                // get next id and set it on the grad
-                grad.id = getNextId();
-            }
-            else { // use existing gradient
-                grad = duplicate_grad;
-            }
-            var functype = type == 'fill' ? 'Fill' : 'Stroke';
-            canvas['set' + functype + 'Color']("url(#" + grad.id + ")");
-        });
-    }
-
-    var findDuplicateGradient = function (grad) {
-        var defs = findDefs();
-        var existing_grads = defs.getElementsByTagNameNS(svgns, "linearGradient");
-        var i = existing_grads.length;
-        while (i--) {
-            var og = existing_grads.item(i);
-            if (grad.getAttribute('x1') != og.getAttribute('x1') ||
-                grad.getAttribute('y1') != og.getAttribute('y1') ||
-                grad.getAttribute('x2') != og.getAttribute('x2') ||
-                grad.getAttribute('y2') != og.getAttribute('y2')) {
-                continue;
-            }
-
-            // else could be a duplicate, iterate through stops
-            var stops = grad.getElementsByTagNameNS(svgns, "stop");
-            var ostops = og.getElementsByTagNameNS(svgns, "stop");
-
-            if (stops.length != ostops.length) {
-                continue;
-            }
-
-            var j = stops.length;
-            while (j--) {
-                var stop = stops.item(j);
-                var ostop = ostops.item(j);
-
-                if (stop.getAttribute('offset') != ostop.getAttribute('offset') ||
-                    stop.getAttribute('stop-opacity') != ostop.getAttribute('stop-opacity') ||
-                    stop.getAttribute('stop-color') != ostop.getAttribute('stop-color')) {
-                    break;
-                }
-            }
-
-            if (j == -1) {
-                return og;
-            }
-        } // for each gradient in defs
-
-        return null;
-    };
-
     this.getBBox = function (elem) {
         var selected = elem || selectedElements[0];
 
         if (elem.nodeName == 'text' && selected.textContent == '') {
-            selected.textContent = 'a'; // Some character needed for the selector to use.
+            selected.textContent = 'a';
             var ret = selected.getBBox();
             selected.textContent = '';
         } else {
             var ret = selected.getBBox();
         }
 
-        // get the bounding box from the DOM (which is in that element's coordinate system)
         return ret;
     };
 
     this.getRotationAngle = function (elem) {
         var selected = elem || selectedElements[0];
-        // find the rotation transform (if any) and set it
         var tlist = selected.transform.baseVal;
         var t = tlist.numberOfItems;
-        var foundRot = false;
         while (t--) {
             var xform = tlist.getItem(t);
             if (xform.type == 4) {
@@ -1011,7 +928,6 @@ function SvgCanvas(c) {
     };
 
     this.quickClone = function (elem) {
-        // Hack for Firefox bugs where text element features aren't updated
         if (navigator.userAgent.indexOf('Gecko/') == -1) return elem;
         var clone = elem.cloneNode(true)
         elem.parentNode.insertBefore(clone, elem);
@@ -1019,7 +935,7 @@ function SvgCanvas(c) {
         canvas.clearSelection();
         canvas.addToSelection([clone], true);
         return clone;
-    }
+    };
 
     this.changeSelectedAttributeNoUndo = function (attr, newValue, elems) {
         var handle = svgroot.suspendRedraw(1000);
@@ -1088,9 +1004,7 @@ function SvgCanvas(c) {
     var mouseDown = function (evt) {
         var x = evt.pageX - container.offsetLeft + container.scrollLeft;
         var y = evt.pageY - container.offsetTop + container.scrollTop;
-        if ($.inArray(current_mode, ['select', 'resize']) == -1) {
-            addGradient();
-        }
+
         start_x = x;
         start_y = y;
 
