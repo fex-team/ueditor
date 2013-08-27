@@ -1,16 +1,12 @@
 module( 'core.domUtils' );
 test( 'isBoundaryNode--node是firstChild',function(){
-//    var iframe = document.createElement('iframe');
-//    document.body.appendChild(iframe);
-//    var body = iframe.contentDocument.appendChild(document.createElement('body'));
-//    var div = body.appendChild(document.createElement('div'));
+
     if(ua.browser.ie){
         var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
         var div = body.appendChild(document.createElement('div'));
     }else{
-        var div = te.dom[1].contentWindow.document.firstChild.appendChild(document.createElement('div'));
+        var div = te.dom[1].contentWindow.document.firstChild.lastChild.appendChild(document.createElement('div'));
     }
-
     div.innerHTML = "<span>sss</span>aaa<p>ppp</p>";
     var node = div.firstChild.nextSibling;
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
@@ -21,11 +17,8 @@ test( 'isBoundaryNode--node是firstChild',function(){
     node = div.lastChild.lastChild;
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
     equal( domUtils.isBoundaryNode(node, "lastChild"), 1 );
-//    iframe.parentNode.removeChild(iframe);
 } );
-test( 'isBoundaryNode--node是firstChild',function(){
-stop()
-} );
+
 test( 'getPosition--A和B是同一个节点', function() {
     var div = te.dom[2];
     div.innerHTML = "<span>span</span><img  /><b>bbb</b>xxx";
