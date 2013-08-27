@@ -210,10 +210,10 @@
 
 
         /**
-         * 该方法是提供给插件里面使用，用来覆盖config文件里面的配置项，
-         * 以attributeName - attributeValue的方式设置编辑器的配置项，以覆盖编辑器的默认选项值
+         * 该方法是提供给插件里面使用，以key，value的方式设置插件内用到的配置项默认值
          * @method setOpt
-         * @warning 该方法仅供编辑器构造函数调用，其他任何方法不能调用。
+         * @warning 在config文件里面有定义参数key或者用户实例化的时候有传入参数key，该方法设置的key参数值无效
+         * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
          * @param { String } key 编辑器的可接受的选项名称
          * @param { * } val  该选项可接受的值
          * @example
@@ -223,10 +223,10 @@
          */
 
         /**
-         * 以key-value集合的方式设置编辑器的配置项，以覆盖编辑器的默认选项值
+         * 该方法是提供给插件里面使用，以{key:value}集合的方式设置插件内用到的配置项默认值
          * @method setOpt
-         * @warning 该方法仅供编辑器构造函数调用，其他任何方法不能调用。
-         * @param { KeyValueMap } settings 编辑器的可接受的选项的key-value集合
+         * @warning 在config文件里面有定义参数key或者用户实例化的时候有传入参数key，该方法设置的key参数值无效
+         * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
          * @example
          * ```javascript
          * editor.setOpt( {
@@ -714,34 +714,41 @@
         },
 
         /**
-         * 获取编辑器的内容
-         * @method getContent
-         * @warning 该方法获取到的是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @return { String } 编辑器的内容字符串, 如果编辑器的内容为空， 则返回空字符串
+         * 设置编辑器的内容，可修改编辑器当前的html内容
+         * @method setContent
+         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @warning 该方法会出发selectionchange事件
+         * @param { String } 要插入的html内容
          * @example
          * ```javascript
-         * var content = editor.getContent();
+         * editor.getContent(‘<p>test</p>’);
          * ```
          */
 
         /**
-         * 获取编辑器的内容。 可以通过参数定义编辑器内置的判空规则
-         * @method getContent
-         * @param { Function } fn 自定的判空规则， 要求该方法返回一个boolean类型的值，
-         *                      代表当前编辑器的内容是否空，
-         *                      如果返回true， 则该方法将直接返回空字符串；如果返回false，则编辑器将返回
-         *                      经过内置过滤规则处理后的内容。
-         * @remind 该方法在处理包含有初始化内容的时候能起到很好的作用。
-         * @warning 该方法获取到的是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @return { String } 编辑器的内容字符串
+         * 设置编辑器的内容，可修改编辑器当前的html内容
+         * @method setContent
+         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @warning 该方法会出发selectionchange事件
+         * @param { String } html 要插入的html内容
+         * @param { Boolean } isAppendTo 若传入true，不清空原来的内容，在最后插入内容，否则，清空内容再插入
          * @example
          * ```javascript
-         * // editor 是一个编辑器的实例
-         * var content = editor.getContent( function ( editor ) {
-         *
-         *      return editor.body.innerHTML === '欢迎使用UEditor';
-         *
-         * } );
+         * //假设设置前的编辑器内容是 <p>old text</p>
+         * editor.getContent(‘<p>new text</p>’, true); //插入的结果是<p>old text</p><p>new text</p>
+         * ```
+         */
+
+        /**
+         * 设置编辑器的内容，可修改编辑器当前的html内容
+         * @method setContent
+         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @param { String } html 要插入的html内容
+         * @param { Boolean } isAppendTo 若传入true，不清空原来的内容，在最后插入内容，否则，清空内容再插入
+         * @param { Boolean } notFireSelectionchange 若传入true，执行该函数过程不触发编辑器的selectionchange事件
+         * @example
+         * ```javascript
+         * editor.getContent(‘<p>new text</p>’, false, true);
          * ```
          */
         setContent: function (html, isAppendTo, notFireSelectionchange) {
