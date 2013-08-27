@@ -6,10 +6,46 @@
  * To change this template use File | Settings | File Templates.
  */
 //
+test('trace 3022 表格名称中backspace、ctrl+z、enter', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p></p>');
+    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+    editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+//    expect(9);
+    editor.addListener('saveScene', function () {
+        ok(true);
+    });
+    var trs = editor.body.firstChild.getElementsByTagName('tr');
+    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+    editor.execCommand('insertcaption');
+    ua.keydown(editor.body, {'keyCode': 8});
+    stop();
+    setTimeout(function () {
+        range.setStart(trs[0].cells[0], 0).collapse(true).select();
+        ua.keydown(editor.body, {'keyCode': 90, 'ctrlKey': true});
+        setTimeout(function () {
+            ua.keydown(editor.body, {'keyCode': 13});
+            equal(te.obj[0].body.getElementsByTagName('caption').length, 1, '撤销删除caption');
+            equal(te.obj[0].body.getElementsByTagName('th').length, 0, '不会误插入标题行');
+            equal(te.obj[0].body.getElementsByTagName('table').length, 1, '不会增加表格数量');
+            equal(te.obj[0].body.getElementsByTagName('tr').length, 3, '不会增加表格行数量');
+            equal(te.obj[0].body.getElementsByTagName('tr')[0].cells.length, 3, '不会增加表格列数量');
+            equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
+            if (ua.browser.ie && ua.browser.ie > 8) {
+                equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+            }
+            else if (!ua.browser.gecko) {
+                equal(te.obj[0].selection.getRange().startContainer.parentNode, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+            }
+            start();
+        }, 20);
+    }, 20);
+});
 
-//test('从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容', function () {
-//    stop()
-//});
+test('从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容', function () {
+    stop()
+});
 test('框选', function () {
     if (ua.browser.ie > 8) return;//todo 3579
     var div = document.body.appendChild(document.createElement('div'));
