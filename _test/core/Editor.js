@@ -1,5 +1,5 @@
 module("core.Editor");
-
+//
 //test('', function () {
 //    stop()
 //});
@@ -647,8 +647,6 @@ test("hasContents--有参数", function () {
 //} );
 
 test('trace 1964 getPlainTxt--得到有格式的编辑器的纯文本内容', function () {
-    if (ua.browser.ie > 0 && ua.browser.ie < 9)return;//TODO 1.2.6
-
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -656,7 +654,8 @@ test('trace 1964 getPlainTxt--得到有格式的编辑器的纯文本内容', fu
     editor.ready(function () {
         editor.focus();
         editor.setContent('<p>&nbsp;</p><p>&nbsp; hell\no<br/>hello</p>');
-        equal(editor.getPlainTxt(), "\n  hello\nhello\n", '得到编辑器的纯文本内容，但会保留段落格式');
+        var html = (ua.browser.ie > 0 && ua.browser.ie < 9)?"\n  hell o\nhello\n":"\n  hello\nhello\n";
+        equal(editor.getPlainTxt(), html, '得到编辑器的纯文本内容，但会保留段落格式');
         UE.delEditor('ue');
         document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
         start();
