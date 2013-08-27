@@ -1,4 +1,4 @@
-function init() {
+$(function () {
     var svgCanvas = new SvgCanvas(document.getElementById("canvas"));
 
     var clickSelect = function () {
@@ -31,10 +31,4 @@ function init() {
     $('#tool_poly').click(clickPoly);
     $('#tools_rect').click(clickSquare);
     $('#tools_ellipse').click(clickCircle);
-
-    return svgCanvas;
-}
-
-$(function () {
-    svgCanvas = init();
 });

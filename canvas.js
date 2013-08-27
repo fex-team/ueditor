@@ -26,7 +26,6 @@ function SvgCanvas(c) {
         };
 
         this.elements = function () {
-            // iterate through all our subcommands and find all the elements we are changing
             var elems = [];
             var cmd = this.stack.length;
             while (cmd--) {
