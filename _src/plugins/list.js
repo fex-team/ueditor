@@ -882,7 +882,6 @@ UE.plugins['list'] = function () {
      * ```
      */
 
-
     /**
      * 运行无序序列表命令
      * @command insertunorderedlist
@@ -896,7 +895,7 @@ UE.plugins['list'] = function () {
      */
     /**
      * 查询当前是否有word文档粘贴进来的图片
-     * @command wordimage
+     * @command insertunorderedlist
      * @method insertunorderedlist
      * @param { String } command 命令字符串
      * @return { int } 如果当前选区是无序列表返回1，否则返回0

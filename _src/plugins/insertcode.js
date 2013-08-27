@@ -1,8 +1,9 @@
-///import core
-///import plugins/inserthtml.js
-///commands 插入代码
-///commandsName  code
-///commandsTitle  插入代码
+/**
+ * 插入代码插件
+ * @file
+ * @since 1.2.6.1
+ */
+
 UE.plugins['insertcode'] = function() {
     var me = this;
     me.ready(function(){
@@ -35,6 +36,29 @@ UE.plugins['insertcode'] = function() {
             'vb':'Vb',
             'xml':'Xml'
     });
+
+    /**
+     * 根据选择的语言，插入代码编辑块
+     * @command insertcode
+     * @method execCommand
+     * @param { String } cmd 命令字符串
+     * @param { String } lang 插入代码的语言
+     * @example
+     * ```javascript
+     * editor.execCommand( 'insertcode', 'javascript' );
+     * ```
+     */
+
+    /**
+     * 如果选区所在位置是插入插入代码区域，返回代码的语言
+     * @command insertcode
+     * @method queryCommandValue
+     * @return { String } 返回代码的语言
+     * @example
+     * ```javascript
+     * editor.queryCommandValue( 'insertcode' );
+     * ```
+     */
     me.commands['insertcode'] = {
         execCommand : function(cmd,lang){
             var me = this,

@@ -226,7 +226,7 @@
         /**
          * 获取节点的html内容
          * @method innerHTML
-         * @warning 假如节点的type不是‘element’，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接反悔当前节点
          * @return { String } 返回节点的html内容
          * @example
          * ```javascript
@@ -237,7 +237,7 @@
         /**
          * 设置节点的html内容
          * @method innerHTML
-         * @warning 假如节点的type不是‘element’，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接反悔当前节点
          * @param { String } htmlstr 传入要设置的html内容
          * @return { uNode } 返回节点本身
          * @example
@@ -274,7 +274,7 @@
         /**
          * 获取节点的纯文本内容
          * @method innerText
-         * @warning 假如节点的type不是‘element’，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接反悔当前节点
          * @return { String } 返回节点的存文本内容
          * @example
          * ```javascript
@@ -285,7 +285,7 @@
         /**
          * 获取节点的纯文本内容
          * @method innerText
-         * @warning 假如节点的type不是‘element’，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接反悔当前节点
          * @param { String } textStr 传入要设置的文本内容
          * @return { uNode } 返回节点本身
          * @example

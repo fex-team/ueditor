@@ -721,7 +721,7 @@
          * @param { String } 要插入的html内容
          * @example
          * ```javascript
-         * editor.getContent(‘<p>test</p>’);
+         * editor.getContent('<p>test</p>');
          * ```
          */
 
@@ -735,7 +735,7 @@
          * @example
          * ```javascript
          * //假设设置前的编辑器内容是 <p>old text</p>
-         * editor.getContent(‘<p>new text</p>’, true); //插入的结果是<p>old text</p><p>new text</p>
+         * editor.getContent('<p>new text</p>', true); //插入的结果是<p>old text</p><p>new text</p>
          * ```
          */
 
@@ -748,7 +748,7 @@
          * @param { Boolean } notFireSelectionchange 若传入true，执行该函数过程不触发编辑器的selectionchange事件
          * @example
          * ```javascript
-         * editor.getContent(‘<p>new text</p>’, false, true);
+         * editor.getContent('<p>new text</p>', false, true);
          * ```
          */
         setContent: function (html, isAppendTo, notFireSelectionchange) {
@@ -1413,7 +1413,7 @@
          * 根据输入过滤规则，过滤编辑器内容
          * @method  filterInputRule
          * @param { uNode } root 要过滤的uNode节点
-         * @remind 执行editor.setContent方法和执行‘inserthtml’命令后，会运行该过滤函数
+         * @remind 执行editor.setContent方法和执行'inserthtml'命令后，会运行该过滤函数
          * @example
          * ```javascript
          * editor.filterInputRule(editor.body);
