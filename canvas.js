@@ -953,19 +953,14 @@ function SvgCanvas(c) {
                 }
                 else elem.setAttribute(attr, newValue);
                 selectedBBoxes[i] = this.getBBox(elem);
-                // Use the Firefox quickClone hack for text elements with gradients or
-                // where other text attributes are changed.
                 if (elem.nodeName == 'text') {
                     if ((newValue + '').indexOf('url') == 0 || $.inArray(attr, ['font-size', 'font-family', 'x', 'y']) != -1) {
                         elem = canvas.quickClone(elem);
                     }
                 }
-                // Timeout needed for Opera & Firefox
                 setTimeout(function () {
                     selectorManager.requestSelector(elem).resize(selectedBBoxes[i]);
                 }, 0);
-                // if this element was rotated, and we changed the position of this element
-                // we need to update the rotational transform attribute
                 var angle = canvas.getRotationAngle(elem);
                 if (angle && attr != "transform") {
                     var cx = parseInt(selectedBBoxes[i].x + selectedBBoxes[i].width / 2),
@@ -975,7 +970,7 @@ function SvgCanvas(c) {
                         elem.setAttribute("transform", rotate);
                     }
                 }
-            } // if oldValue != newValue
+            }
         }
         svgroot.unsuspendRedraw(handle);
         call("changed", elems);
