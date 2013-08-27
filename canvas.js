@@ -489,7 +489,7 @@ function SvgCanvas(c) {
     };
 
     var pathMap = [ 0, 'z', 'm', 'm', 'l', 'l', 'c', 'c', 'q', 'q', 'a', 'a',
-        'l', 'l', 'l', 'l', // TODO: be less lazy below and map them to h and v
+        'l', 'l', 'l', 'l',
         's', 's', 't', 't' ];
 
     var recalculateSelectedDimensions = function (i) {
@@ -498,13 +498,11 @@ function SvgCanvas(c) {
         var selectedBBox = selectedBBoxes[i];
         var box = canvas.getBBox(selected);
 
-        // if we have not moved/resized, then immediately leave
         if (box.x == selectedBBox.x && box.y == selectedBBox.y &&
             box.width == selectedBBox.width && box.height == selectedBBox.height) {
             return null;
         }
 
-        // after this point, we have some change to this element
 
         var remap = function (x, y) {
             return {
@@ -521,7 +519,6 @@ function SvgCanvas(c) {
 
         var changes = {};
 
-        // if there was a rotation transform, re-set it, otherwise empty out the transform attribute
         var angle = canvas.getRotationAngle(selected);
         var pointGripContainer = document.getElementById("polypointgrip_container");
         if (angle) {
@@ -781,9 +778,7 @@ function SvgCanvas(c) {
         var i = elemsToAdd.length;
         while (i--) {
             var elem = elemsToAdd[i];
-            // we ignore any selectors
             if (elem.id.substr(0, 13) == "selectorGrip_") continue;
-            // if it's not already there, add it
             if (selectedElements.indexOf(elem) == -1) {
                 selectedElements[j] = elem;
                 selectedBBoxes[j++] = this.getBBox(elem);
@@ -796,6 +791,299 @@ function SvgCanvas(c) {
             selectorManager.requestSelector(selectedElements[0]).showGrips(true);
         }
     };
+
+
+
+    var removeAllPointGripsFromPoly = function () {
+        var i = current_poly_pts.length / 2;
+        while (i--) {
+            document.getElementById("polypointgrip_" + i).setAttribute("display", "none");
+        }
+        var line = document.getElementById("poly_stretch_line");
+        if (line) line.setAttribute("display", "none");
+    };
+
+    var addAllPointGripsToPoly = function () {
+        // loop through and hide all pointgrips
+        var len = current_poly_pts.length;
+        for (var i = 0; i < len; i += 2) {
+            var grip = document.getElementById("polypointgrip_" + i / 2);
+            if (grip) {
+                assignAttributes(grip, {
+                    'cx': current_poly_pts[i],
+                    'cy': current_poly_pts[i + 1],
+                    'display': 'inline'
+                });
+            }
+            else {
+                addPointGripToPoly(current_poly_pts[i], current_poly_pts[i + 1], i / 2);
+            }
+        }
+        var pointGripContainer = document.getElementById("polypointgrip_container");
+        pointGripContainer.setAttribute("transform", current_poly.getAttribute("transform"));
+    };
+
+    var addPointGripToPoly = function (x, y, index) {
+        var pointGripContainer = document.getElementById("polypointgrip_container");
+        if (!pointGripContainer) {
+            var parent = document.getElementById("selectorParentGroup");
+            pointGripContainer = parent.appendChild(document.createElementNS(svgns, "g"));
+            pointGripContainer.id = "polypointgrip_container";
+        }
+
+        var pointGrip = document.getElementById("polypointgrip_" + index);
+        if (!pointGrip) {
+            pointGrip = document.createElementNS(svgns, "circle");
+            assignAttributes(pointGrip, {
+                'id': "polypointgrip_" + index,
+                'display': "none",
+                'r': 4,
+                'fill': "#0F0",
+                'stroke': "#00F",
+                'stroke-width': 2,
+                'cursor': 'move',
+                "pointer-events": "all"
+            });
+            pointGrip = pointGripContainer.appendChild(pointGrip);
+
+            var grip = $('#polypointgrip_' + index);
+            grip.mouseover(function () {
+                this.setAttribute("stroke", "#F00");
+            });
+            grip.mouseout(function () {
+                this.setAttribute("stroke", "#00F");
+            });
+        }
+
+        assignAttributes(pointGrip, {
+            'cx': x,
+            'cy': y,
+            'display': "inline",
+        });
+    };
+
+
+    this.open = function (str) {
+        // Nothing by default, handled by optional widget/extention
+        call("opened", str);
+    };
+
+    this.clearPoly = function () {
+        removeAllPointGripsFromPoly();
+        current_poly = null;
+        current_poly_pts = [];
+    };
+
+
+    this.setMode = function (name) {
+        if (current_mode == "poly" && current_poly_pts.length > 0) {
+            var elem = svgdoc.getElementById(getId());
+            elem.parentNode.removeChild(elem);
+            canvas.clearPoly();
+            canvas.clearSelection();
+            started = false;
+        }
+
+        cur_properties = (selectedElements[0] && selectedElements[0].nodeName == 'text') ? cur_text : cur_shape;
+        current_mode = name;
+    };
+
+
+    var findDefs = function () {
+        var defs = svgroot.getElementsByTagNameNS(svgns, "defs");
+        if (defs.length > 0) {
+            defs = defs[0];
+        }
+        else {
+            defs = svgroot.insertBefore(svgdoc.createElementNS(svgns, "defs"), svgroot.firstChild.nextSibling);
+        }
+        return defs;
+    };
+
+    var addGradient = function () {
+        $.each(['stroke', 'fill'], function (i, type) {
+
+            if (!cur_properties[type + '_paint'] || cur_properties[type + '_paint'].type == "solidColor") return;
+            var grad = canvas[type + 'Grad'];
+            // find out if there is a duplicate gradient already in the defs
+            var duplicate_grad = findDuplicateGradient(grad);
+            var defs = findDefs();
+            // no duplicate found, so import gradient into defs
+            if (!duplicate_grad) {
+                grad = defs.appendChild(svgdoc.importNode(grad, true));
+                // get next id and set it on the grad
+                grad.id = getNextId();
+            }
+            else { // use existing gradient
+                grad = duplicate_grad;
+            }
+            var functype = type == 'fill' ? 'Fill' : 'Stroke';
+            canvas['set' + functype + 'Color']("url(#" + grad.id + ")");
+        });
+    }
+
+    var findDuplicateGradient = function (grad) {
+        var defs = findDefs();
+        var existing_grads = defs.getElementsByTagNameNS(svgns, "linearGradient");
+        var i = existing_grads.length;
+        while (i--) {
+            var og = existing_grads.item(i);
+            if (grad.getAttribute('x1') != og.getAttribute('x1') ||
+                grad.getAttribute('y1') != og.getAttribute('y1') ||
+                grad.getAttribute('x2') != og.getAttribute('x2') ||
+                grad.getAttribute('y2') != og.getAttribute('y2')) {
+                continue;
+            }
+
+            // else could be a duplicate, iterate through stops
+            var stops = grad.getElementsByTagNameNS(svgns, "stop");
+            var ostops = og.getElementsByTagNameNS(svgns, "stop");
+
+            if (stops.length != ostops.length) {
+                continue;
+            }
+
+            var j = stops.length;
+            while (j--) {
+                var stop = stops.item(j);
+                var ostop = ostops.item(j);
+
+                if (stop.getAttribute('offset') != ostop.getAttribute('offset') ||
+                    stop.getAttribute('stop-opacity') != ostop.getAttribute('stop-opacity') ||
+                    stop.getAttribute('stop-color') != ostop.getAttribute('stop-color')) {
+                    break;
+                }
+            }
+
+            if (j == -1) {
+                return og;
+            }
+        } // for each gradient in defs
+
+        return null;
+    };
+
+    this.getBBox = function (elem) {
+        var selected = elem || selectedElements[0];
+
+        if (elem.nodeName == 'text' && selected.textContent == '') {
+            selected.textContent = 'a'; // Some character needed for the selector to use.
+            var ret = selected.getBBox();
+            selected.textContent = '';
+        } else {
+            var ret = selected.getBBox();
+        }
+
+        // get the bounding box from the DOM (which is in that element's coordinate system)
+        return ret;
+    };
+
+    this.getRotationAngle = function (elem) {
+        var selected = elem || selectedElements[0];
+        // find the rotation transform (if any) and set it
+        var tlist = selected.transform.baseVal;
+        var t = tlist.numberOfItems;
+        var foundRot = false;
+        while (t--) {
+            var xform = tlist.getItem(t);
+            if (xform.type == 4) {
+                return xform.angle;
+            }
+        }
+        return 0;
+    };
+
+    this.setRotationAngle = function (val) {
+        var elem = selectedElements[0];
+        var bbox = elem.getBBox();
+        var cx = parseInt(bbox.x + bbox.width / 2), cy = parseInt(bbox.y + bbox.height / 2);
+        var rotate = "rotate(" + val + " " + cx + "," + cy + ")";
+        this.changeSelectedAttributeNoUndo("transform", rotate, selectedElements);
+        var pointGripContainer = document.getElementById("polypointgrip_container");
+        if (elem.nodeName == "path" && pointGripContainer) {
+            pointGripContainer.setAttribute("transform", rotate);
+        }
+        selectorManager.requestSelector(selectedElements[0]).updateGripCursors(val);
+    };
+
+    this.each = function (cb) {
+        $(svgroot).children().each(cb);
+    };
+
+    this.quickClone = function (elem) {
+        // Hack for Firefox bugs where text element features aren't updated
+        if (navigator.userAgent.indexOf('Gecko/') == -1) return elem;
+        var clone = elem.cloneNode(true)
+        elem.parentNode.insertBefore(clone, elem);
+        elem.parentNode.removeChild(elem);
+        canvas.clearSelection();
+        canvas.addToSelection([clone], true);
+        return clone;
+    }
+
+    this.changeSelectedAttributeNoUndo = function (attr, newValue, elems) {
+        var handle = svgroot.suspendRedraw(1000);
+        var elems = elems || selectedElements;
+        var i = elems.length;
+        while (i--) {
+            var elem = elems[i];
+            if (elem == null) continue;
+            var oldval = attr == "#text" ? elem.textContent : elem.getAttribute(attr);
+            if (oldval == null)  oldval = "";
+            if (oldval != newValue) {
+                if (attr == "#text") {
+                    elem.textContent = newValue;
+                    elem = canvas.quickClone(elem);
+                }
+                else elem.setAttribute(attr, newValue);
+                selectedBBoxes[i] = this.getBBox(elem);
+                // Use the Firefox quickClone hack for text elements with gradients or
+                // where other text attributes are changed.
+                if (elem.nodeName == 'text') {
+                    if ((newValue + '').indexOf('url') == 0 || $.inArray(attr, ['font-size', 'font-family', 'x', 'y']) != -1) {
+                        elem = canvas.quickClone(elem);
+                    }
+                }
+                // Timeout needed for Opera & Firefox
+                setTimeout(function () {
+                    selectorManager.requestSelector(elem).resize(selectedBBoxes[i]);
+                }, 0);
+                // if this element was rotated, and we changed the position of this element
+                // we need to update the rotational transform attribute
+                var angle = canvas.getRotationAngle(elem);
+                if (angle && attr != "transform") {
+                    var cx = parseInt(selectedBBoxes[i].x + selectedBBoxes[i].width / 2),
+                        cy = parseInt(selectedBBoxes[i].y + selectedBBoxes[i].height / 2);
+                    var rotate = ["rotate(", angle, " ", cx, ",", cy, ")"].join('');
+                    if (rotate != elem.getAttribute("transform")) {
+                        elem.setAttribute("transform", rotate);
+                    }
+                }
+            } // if oldValue != newValue
+        }
+        svgroot.unsuspendRedraw(handle);
+        call("changed", elems);
+    };
+
+    this.getVisibleElements = function (includeBBox) {
+        var nodes = svgroot.childNodes;
+        var i = nodes.length;
+        var contentElems = [];
+
+        while (i--) {
+            var elem = nodes[i];
+            try {
+                var box = canvas.getBBox(elem);
+                if (elem.id != "selectorParentGroup" && box) {
+                    var item = includeBBox ? {'elem': elem, 'bbox': box} : elem;
+                    contentElems.push(item);
+                }
+            } catch (e) {
+            }
+        }
+        return contentElems;
+    };
+
 
     var mouseDown = function (evt) {
         var x = evt.pageX - container.offsetLeft + container.scrollLeft;
@@ -977,7 +1265,6 @@ function SvgCanvas(c) {
                                 box.x += dx;
                                 box.y += dy;
                             }
-                            // update our internal bbox that we're tracking while dragging
                             selectorManager.requestSelector(selected).resize(box);
                         }
                     }
@@ -1059,7 +1346,6 @@ function SvgCanvas(c) {
                 }
                 if (selectedBBox.height < 0) {
                     selectedBBox.height *= -1;
-                    // if we are dragging on the south side and scaled negatively
                     if (current_resize_mode.indexOf("s") != -1 && sy < 0) {
                         selectedBBox.y = box.y - selectedBBox.height;
                     }
@@ -1169,20 +1455,18 @@ function SvgCanvas(c) {
                                 for (var i = 1; i < len; ++i) {
                                     var l = segList.getItem(i);
                                     var x = l.x, y = l.y;
-                                    // polys can now be closed, skip Z segments
                                     if (l.pathSegType == 1) {
                                         break;
                                     }
                                     var type = l.pathSegType;
-                                    // current_poly_pts just holds the absolute coords
                                     if (type == 4) {
                                         curx = x;
                                         cury = y;
-                                    } // type 4 (abs line)
+                                    }
                                     else if (type == 5) {
                                         curx += x;
                                         cury += y;
-                                    } // type 5 (rel line)
+                                    }
                                     current_poly_pts.push(curx);
                                     current_poly_pts.push(cury);
                                 }
@@ -1246,7 +1530,6 @@ function SvgCanvas(c) {
                             "opacity": cur_shape.opacity / 2
                         }
                     });
-                    // set stretchy line to first point
                     assignAttributes(stretchy, {
                         'x1': x,
                         'y1': y,
@@ -1256,54 +1539,39 @@ function SvgCanvas(c) {
                     addPointGripToPoly(x, y, 0);
                 }
                 else {
-                    // determine if we clicked on an existing point
                     var i = current_poly_pts.length;
                     var FUZZ = 6;
                     var clickOnPoint = false;
                     while (i) {
                         i -= 2;
                         var px = current_poly_pts[i], py = current_poly_pts[i + 1];
-                        // found a matching point
                         if (x >= (px - FUZZ) && x <= (px + FUZZ) && y >= (py - FUZZ) && y <= (py + FUZZ)) {
                             clickOnPoint = true;
                             break;
                         }
                     }
 
-                    // get poly element that we are in the process of creating
                     var poly = svgdoc.getElementById(getId());
 
-                    // if we clicked on an existing point, then we are done this poly, commit it
-                    // (i,i+1) are the x,y that were clicked on
                     if (clickOnPoint) {
-                        // if clicked on any other point but the first OR
-                        // the first point was clicked on and there are less than 3 points
-                        // then leave the poly open
-                        // otherwise, close the poly
                         if (i == 0 && current_poly_pts.length >= 6) {
                             poly.setAttribute("d", d_attr + "z");
                         }
 
                         removeAllPointGripsFromPoly();
 
-                        // this will signal to commit the poly
                         element = poly;
                         current_poly_pts = [];
                         started = false;
                     }
-                    // else, create a new point, append to pts array, update path element
                     else {
                         var len = current_poly_pts.length;
                         var lastx = current_poly_pts[len - 2], lasty = current_poly_pts[len - 1];
-                        // we store absolute values in our poly points array for easy checking above
                         current_poly_pts.push(x);
                         current_poly_pts.push(y);
-                        // but we store relative coordinates in the d string of the poly for easy
-                        // translation around the canvas in move mode
                         d_attr += "l" + parseInt(x - lastx) + "," + parseInt(y - lasty) + " ";
                         poly.setAttribute("d", d_attr);
 
-                        // set stretchy line to latest point
                         assignAttributes(stretchy, {
                             'x1': x,
                             'y1': y,
@@ -1337,304 +1605,6 @@ function SvgCanvas(c) {
         }
     };
 
-    var removeAllPointGripsFromPoly = function () {
-        var i = current_poly_pts.length / 2;
-        while (i--) {
-            document.getElementById("polypointgrip_" + i).setAttribute("display", "none");
-        }
-        var line = document.getElementById("poly_stretch_line");
-        if (line) line.setAttribute("display", "none");
-    };
-
-    var addAllPointGripsToPoly = function () {
-        // loop through and hide all pointgrips
-        var len = current_poly_pts.length;
-        for (var i = 0; i < len; i += 2) {
-            var grip = document.getElementById("polypointgrip_" + i / 2);
-            if (grip) {
-                assignAttributes(grip, {
-                    'cx': current_poly_pts[i],
-                    'cy': current_poly_pts[i + 1],
-                    'display': 'inline'
-                });
-            }
-            else {
-                addPointGripToPoly(current_poly_pts[i], current_poly_pts[i + 1], i / 2);
-            }
-        }
-        var pointGripContainer = document.getElementById("polypointgrip_container");
-        pointGripContainer.setAttribute("transform", current_poly.getAttribute("transform"));
-    };
-
-    var addPointGripToPoly = function (x, y, index) {
-        // create the container of all the point grips
-        var pointGripContainer = document.getElementById("polypointgrip_container");
-        if (!pointGripContainer) {
-            var parent = document.getElementById("selectorParentGroup");
-            pointGripContainer = parent.appendChild(document.createElementNS(svgns, "g"));
-            pointGripContainer.id = "polypointgrip_container";
-        }
-
-        var pointGrip = document.getElementById("polypointgrip_" + index);
-        // create it
-        if (!pointGrip) {
-            pointGrip = document.createElementNS(svgns, "circle");
-            assignAttributes(pointGrip, {
-                'id': "polypointgrip_" + index,
-                'display': "none",
-                'r': 4,
-                'fill': "#0F0",
-                'stroke': "#00F",
-                'stroke-width': 2,
-                'cursor': 'move',
-                "pointer-events": "all"
-            });
-            pointGrip = pointGripContainer.appendChild(pointGrip);
-
-            var grip = $('#polypointgrip_' + index);
-            grip.mouseover(function () {
-                this.setAttribute("stroke", "#F00");
-            });
-            grip.mouseout(function () {
-                this.setAttribute("stroke", "#00F");
-            });
-        }
-
-        // set up the point grip element and display it
-        assignAttributes(pointGrip, {
-            'cx': x,
-            'cy': y,
-            'display': "inline",
-        });
-    };
-
-
-    this.open = function (str) {
-        // Nothing by default, handled by optional widget/extention
-        call("opened", str);
-    };
-
-    this.clearPoly = function () {
-        removeAllPointGripsFromPoly();
-        current_poly = null;
-        current_poly_pts = [];
-    };
-
-
-    this.setMode = function (name) {
-        if (current_mode == "poly" && current_poly_pts.length > 0) {
-            var elem = svgdoc.getElementById(getId());
-            elem.parentNode.removeChild(elem);
-            canvas.clearPoly();
-            canvas.clearSelection();
-            started = false;
-        }
-
-        cur_properties = (selectedElements[0] && selectedElements[0].nodeName == 'text') ? cur_text : cur_shape;
-        current_mode = name;
-    };
-
-
-    var findDefs = function () {
-        var defs = svgroot.getElementsByTagNameNS(svgns, "defs");
-        if (defs.length > 0) {
-            defs = defs[0];
-        }
-        else {
-            defs = svgroot.insertBefore(svgdoc.createElementNS(svgns, "defs"), svgroot.firstChild.nextSibling);
-        }
-        return defs;
-    };
-
-    var addGradient = function () {
-        $.each(['stroke', 'fill'], function (i, type) {
-
-            if (!cur_properties[type + '_paint'] || cur_properties[type + '_paint'].type == "solidColor") return;
-            var grad = canvas[type + 'Grad'];
-            // find out if there is a duplicate gradient already in the defs
-            var duplicate_grad = findDuplicateGradient(grad);
-            var defs = findDefs();
-            // no duplicate found, so import gradient into defs
-            if (!duplicate_grad) {
-                grad = defs.appendChild(svgdoc.importNode(grad, true));
-                // get next id and set it on the grad
-                grad.id = getNextId();
-            }
-            else { // use existing gradient
-                grad = duplicate_grad;
-            }
-            var functype = type == 'fill' ? 'Fill' : 'Stroke';
-            canvas['set' + functype + 'Color']("url(#" + grad.id + ")");
-        });
-    }
-
-    var findDuplicateGradient = function (grad) {
-        var defs = findDefs();
-        var existing_grads = defs.getElementsByTagNameNS(svgns, "linearGradient");
-        var i = existing_grads.length;
-        while (i--) {
-            var og = existing_grads.item(i);
-            if (grad.getAttribute('x1') != og.getAttribute('x1') ||
-                grad.getAttribute('y1') != og.getAttribute('y1') ||
-                grad.getAttribute('x2') != og.getAttribute('x2') ||
-                grad.getAttribute('y2') != og.getAttribute('y2')) {
-                continue;
-            }
-
-            // else could be a duplicate, iterate through stops
-            var stops = grad.getElementsByTagNameNS(svgns, "stop");
-            var ostops = og.getElementsByTagNameNS(svgns, "stop");
-
-            if (stops.length != ostops.length) {
-                continue;
-            }
-
-            var j = stops.length;
-            while (j--) {
-                var stop = stops.item(j);
-                var ostop = ostops.item(j);
-
-                if (stop.getAttribute('offset') != ostop.getAttribute('offset') ||
-                    stop.getAttribute('stop-opacity') != ostop.getAttribute('stop-opacity') ||
-                    stop.getAttribute('stop-color') != ostop.getAttribute('stop-color')) {
-                    break;
-                }
-            }
-
-            if (j == -1) {
-                return og;
-            }
-        } // for each gradient in defs
-
-        return null;
-    };
-
-    this.getBBox = function (elem) {
-        var selected = elem || selectedElements[0];
-
-        if (elem.nodeName == 'text' && selected.textContent == '') {
-            selected.textContent = 'a'; // Some character needed for the selector to use.
-            var ret = selected.getBBox();
-            selected.textContent = '';
-        } else {
-            var ret = selected.getBBox();
-        }
-
-        // get the bounding box from the DOM (which is in that element's coordinate system)
-        return ret;
-    };
-
-    this.getRotationAngle = function (elem) {
-        var selected = elem || selectedElements[0];
-        // find the rotation transform (if any) and set it
-        var tlist = selected.transform.baseVal;
-        var t = tlist.numberOfItems;
-        var foundRot = false;
-        while (t--) {
-            var xform = tlist.getItem(t);
-            if (xform.type == 4) {
-                return xform.angle;
-            }
-        }
-        return 0;
-    };
-
-    this.setRotationAngle = function (val) {
-        var elem = selectedElements[0];
-        var bbox = elem.getBBox();
-        var cx = parseInt(bbox.x + bbox.width / 2), cy = parseInt(bbox.y + bbox.height / 2);
-        var rotate = "rotate(" + val + " " + cx + "," + cy + ")";
-        this.changeSelectedAttributeNoUndo("transform", rotate, selectedElements);
-        var pointGripContainer = document.getElementById("polypointgrip_container");
-        if (elem.nodeName == "path" && pointGripContainer) {
-            pointGripContainer.setAttribute("transform", rotate);
-        }
-        selectorManager.requestSelector(selectedElements[0]).updateGripCursors(val);
-    };
-
-    this.each = function (cb) {
-        $(svgroot).children().each(cb);
-    };
-
-    this.bind = function (event, f) {
-        var old = events[event];
-        events[event] = f;
-        return old;
-    };
-
-    this.quickClone = function (elem) {
-        // Hack for Firefox bugs where text element features aren't updated
-        if (navigator.userAgent.indexOf('Gecko/') == -1) return elem;
-        var clone = elem.cloneNode(true)
-        elem.parentNode.insertBefore(clone, elem);
-        elem.parentNode.removeChild(elem);
-        canvas.clearSelection();
-        canvas.addToSelection([clone], true);
-        return clone;
-    }
-
-    this.changeSelectedAttributeNoUndo = function (attr, newValue, elems) {
-        var handle = svgroot.suspendRedraw(1000);
-        var elems = elems || selectedElements;
-        var i = elems.length;
-        while (i--) {
-            var elem = elems[i];
-            if (elem == null) continue;
-            var oldval = attr == "#text" ? elem.textContent : elem.getAttribute(attr);
-            if (oldval == null)  oldval = "";
-            if (oldval != newValue) {
-                if (attr == "#text") {
-                    elem.textContent = newValue;
-                    elem = canvas.quickClone(elem);
-                }
-                else elem.setAttribute(attr, newValue);
-                selectedBBoxes[i] = this.getBBox(elem);
-                // Use the Firefox quickClone hack for text elements with gradients or
-                // where other text attributes are changed.
-                if (elem.nodeName == 'text') {
-                    if ((newValue + '').indexOf('url') == 0 || $.inArray(attr, ['font-size', 'font-family', 'x', 'y']) != -1) {
-                        elem = canvas.quickClone(elem);
-                    }
-                }
-                // Timeout needed for Opera & Firefox
-                setTimeout(function () {
-                    selectorManager.requestSelector(elem).resize(selectedBBoxes[i]);
-                }, 0);
-                // if this element was rotated, and we changed the position of this element
-                // we need to update the rotational transform attribute
-                var angle = canvas.getRotationAngle(elem);
-                if (angle && attr != "transform") {
-                    var cx = parseInt(selectedBBoxes[i].x + selectedBBoxes[i].width / 2),
-                        cy = parseInt(selectedBBoxes[i].y + selectedBBoxes[i].height / 2);
-                    var rotate = ["rotate(", angle, " ", cx, ",", cy, ")"].join('');
-                    if (rotate != elem.getAttribute("transform")) {
-                        elem.setAttribute("transform", rotate);
-                    }
-                }
-            } // if oldValue != newValue
-        }
-        svgroot.unsuspendRedraw(handle);
-        call("changed", elems);
-    };
-
-    this.getVisibleElements = function (includeBBox) {
-        var nodes = svgroot.childNodes;
-        var i = nodes.length;
-        var contentElems = [];
-
-        while (i--) {
-            var elem = nodes[i];
-            try {
-                var box = canvas.getBBox(elem);
-                if (elem.id != "selectorParentGroup" && box) {
-                    var item = includeBBox ? {'elem': elem, 'bbox': box} : elem;
-                    contentElems.push(item);
-                }
-            } catch (e) {
-            }
-        }
-        return contentElems;
-    };
 
     $(container).mouseup(mouseUp);
     $(container).mousedown(mouseDown);
