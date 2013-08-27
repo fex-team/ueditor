@@ -452,7 +452,6 @@ function SvgCanvas(c) {
     };
 
     var getId = function () {
-        if (events["getid"]) return call("getid", obj_num);
         return idprefix + obj_num;
     };
 
@@ -465,11 +464,6 @@ function SvgCanvas(c) {
         return id;
     };
 
-    var call = function (event, arg) {
-        if (events[event]) {
-            return events[event](this, arg);
-        }
-    };
 
     var recalculateAllSelectedDimensions = function () {
         var text = (current_resize_mode == "none" ? "position" : "size");
@@ -483,9 +477,7 @@ function SvgCanvas(c) {
             }
         }
 
-        if (!batchCmd.isEmpty()) {
-            call("changed", selectedElements);
-        }
+
     };
 
     var pathMap = [ 0, 'z', 'm', 'm', 'l', 'l', 'c', 'c', 'q', 'q', 'a', 'a',
@@ -759,7 +751,6 @@ function SvgCanvas(c) {
             selectedElements[i] = null;
             selectedBBoxes[i] = null;
         }
-        call("selected", selectedElements);
     };
 
     this.addToSelection = function (elemsToAdd, showGrips) {
@@ -783,7 +774,6 @@ function SvgCanvas(c) {
                 selectedElements[j] = elem;
                 selectedBBoxes[j++] = this.getBBox(elem);
                 selectorManager.requestSelector(elem);
-                call("selected", selectedElements);
             }
         }
 
@@ -973,7 +963,6 @@ function SvgCanvas(c) {
             }
         }
         svgroot.unsuspendRedraw(handle);
-        call("changed", elems);
     };
 
     this.getVisibleElements = function (includeBBox) {
@@ -1510,7 +1499,6 @@ function SvgCanvas(c) {
             cleanupElement(element);
             selectorManager.update();
             canvas.addToSelection([element], true);
-            call("changed", [element]);
         }
     };
 
