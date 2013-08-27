@@ -1,13 +1,11 @@
-var Utils = {
-    "rectsIntersect": function (r1, r2) {
+function SvgCanvas(c) {
+    function rectsIntersect(r1, r2){
         return r2.x < (r1.x + r1.width) &&
             (r2.x + r2.width) > r1.x &&
             r2.y < (r1.y + r1.height) &&
             (r2.y + r2.height) > r1.y;
     }
-};
 
-function SvgCanvas(c) {
     function BatchCommand(text) {
         this.text = text || "Batch Command";
         this.stack = [];
@@ -442,7 +440,7 @@ function SvgCanvas(c) {
             var rubberBBox = rubberBox.getBBox();
             var i = curBBoxes.length;
             while (i--) {
-                if (Utils.rectsIntersect(rubberBBox, curBBoxes[i].bbox)) {
+                if (rectsIntersect(rubberBBox, curBBoxes[i].bbox)) {
                     resultList.push(curBBoxes[i].elem);
                 }
             }
