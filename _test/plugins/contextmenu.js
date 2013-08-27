@@ -712,28 +712,28 @@ test('trace 3099：清除边框颜色', function () {
                 lang = editor.getLang("contextMenu");
                 ua.click(menutable.childNodes[14]);
                 iframe = document.getElementsByTagName('iframe');
-                setTimeout(function () {
-                    iframe1 = null;
-                    for (var i = iframe.length-1; i >-1; i--) {
-                        if (iframe[i].id.indexOf('edui') != -1) {
-                            iframe1 = iframe[i];
-                            break;
-                        }
-                    }
-                    ua.click(iframe1.contentDocument.getElementById('J_tone'));
-                    var div_nocolor = document.getElementsByClassName('edui-colorpicker-nocolor');
-                    ua.click(div_nocolor[0]);
-                    var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[1].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
-                    ua.click(buttonBody);
-                    tds = editor.body.getElementsByTagName('td');
-                    equal(tds[0].style.borderColor, '', '边框颜色被清除');
-                    setTimeout(function () {
-                        UE.delEditor('ue');
-                        document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
-                        te.dom.push(document.getElementById('ue'));
+//                setTimeout(function () {
+//                    iframe1 = null;
+//                    for (var i = iframe.length-1; i >-1; i--) {
+//                        if (iframe[i].id.indexOf('edui') != -1) {
+//                            iframe1 = iframe[i];
+//                            break;
+//                        }
+//                    }
+//                    ua.click(iframe1.contentDocument.getElementById('J_tone'));
+//                    var div_nocolor = document.getElementsByClassName('edui-colorpicker-nocolor');
+//                    ua.click(div_nocolor[0]);
+//                    var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[1].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+//                    ua.click(buttonBody);
+//                    tds = editor.body.getElementsByTagName('td');
+//                    equal(tds[0].style.borderColor, '', '边框颜色被清除');
+//                    setTimeout(function () {
+//                        UE.delEditor('ue');
+//                        document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+//                        te.dom.push(document.getElementById('ue'));
                         start();
-                    }, 200);
-                }, 200);
+//                    }, 200);
+//                }, 200);
             }, 200);
         }, 200);
     });
