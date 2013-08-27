@@ -275,7 +275,6 @@ function SvgCanvas(c) {
                     sel.selectedElement = null;
                     sel.showGrips(false);
 
-                    // remove from DOM and store reference in JS but only if it exists in the DOM
                     try {
                         sel.selectorGroup.setAttribute("display", "none");
                     } catch (e) {
@@ -1616,15 +1615,6 @@ function SvgCanvas(c) {
         }
         svgroot.unsuspendRedraw(handle);
         call("changed", elems);
-    };
-
-    this.changeSelectedAttribute = function (attr, val, elems) {
-        var elems = elems || selectedElements;
-        canvas.beginUndoableChange(attr, elems);
-        var i = elems.length;
-
-        canvas.changeSelectedAttributeNoUndo(attr, val, elems);
-
     };
 
     this.getVisibleElements = function (includeBBox) {
