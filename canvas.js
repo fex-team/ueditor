@@ -171,9 +171,6 @@ function SvgCanvas(c) {
             if (!isNaN(sw)) {
                 offset += sw / 2;
             }
-            if (selected.tagName == "text") {
-                offset += 2;
-            }
             var oldbox = canvas.getBBox(this.selectedElement);
             var bbox = cur_bbox || oldbox;
             var l = bbox.x - offset, t = bbox.y - offset, w = bbox.width + (offset << 1), h = bbox.height + (offset << 1);
@@ -231,16 +228,15 @@ function SvgCanvas(c) {
 
         this.selectorMap = {};
 
-        var mgr = this;
-
         this.initGroup = function () {
-            mgr.selectorParentGroup = addSvgElementFromJson({
+            var me=this;
+            me.selectorParentGroup = addSvgElementFromJson({
                 "element": "g",
                 "attr": {"id": "selectorParentGroup"}
             });
-            mgr.selectorMap = {};
-            mgr.selectors = [];
-            mgr.rubberBandBox = null;
+            me.selectorMap = {};
+            me.selectors = [];
+            me.rubberBandBox = null;
         };
 
         this.requestSelector = function (elem) {
@@ -353,7 +349,6 @@ function SvgCanvas(c) {
 
     this.updateElementFromJson = function (data) {
         var shape = svgdoc.getElementById(data.attr.id);
-        // if shape is a path but we need to create a rect/ellipse, then remove the path
         if (shape && data.element != shape.tagName) {
             svgroot.removeChild(shape);
             shape = null;
@@ -1115,7 +1110,7 @@ function SvgCanvas(c) {
                     cx = parseInt(box.x + box.width / 2),
                     cy = parseInt(box.y + box.height / 2);
                 var angle = parseInt(((Math.atan2(cy - y, cx - x) * (180 / Math.PI)) - 90) % 360);
-                canvas.setRotationAngle(angle < -180 ? (360 + angle) : angle, true);
+                canvas.setRotationAngle(angle < -180 ? (360 + angle) : angle);
                 break;
             default:
                 break;
@@ -1141,9 +1136,7 @@ function SvgCanvas(c) {
                 current_mode = "select";
             case "select":
                 if (selectedElements[0] != null) {
-                    // if we only have one selected element
                     if (selectedElements[1] == null) {
-                        // set our current stroke/fill properties to the element's
                         var selected = selectedElements[0];
                         cur_shape.fill = selected.getAttribute("fill");
                         cur_shape.fill_opacity = selected.getAttribute("fill-opacity");
@@ -1151,14 +1144,9 @@ function SvgCanvas(c) {
                         cur_shape.stroke_opacity = selected.getAttribute("stroke-opacity");
                         cur_shape.stroke_width = selected.getAttribute("stroke-width");
                         cur_shape.stroke_style = selected.getAttribute("stroke-dasharray");
-                        if (selected.tagName == "text") {
-                            cur_text.font_size = selected.getAttribute("font-size");
-                            cur_text.font_family = selected.getAttribute("font-family");
-                        }
 
                         selectorManager.requestSelector(selected).showGrips(true);
                     }
-                    // if it was being dragged/resized
                     if (x != start_x || y != start_y) {
                         recalculateAllSelectedDimensions();
                         var len = selectedElements.length;
@@ -1167,15 +1155,12 @@ function SvgCanvas(c) {
                             selectorManager.requestSelector(selectedElements[i]).resize(selectedBBoxes[i]);
                         }
                     }
-                    // no change in position/size, so maybe we should move to polyedit
                     else {
-                        // TODO: this causes a poly that was just going to be selected to go straight to polyedit
                         if (selectedElements[0].nodeName == "path" && selectedElements[1] == null) {
                             var t = evt.target;
                             if (current_poly == t) {
                                 current_mode = "polyedit";
 
-                                // recalculate current_poly_pts
                                 current_poly_pts = [];
                                 var segList = t.pathSegList;
                                 var curx = segList.getItem(0).x, cury = segList.getItem(0).y;
@@ -1201,16 +1186,15 @@ function SvgCanvas(c) {
                                     } // type 5 (rel line)
                                     current_poly_pts.push(curx);
                                     current_poly_pts.push(cury);
-                                } // for each segment
+                                }
                                 canvas.clearSelection();
-                                // save the poly's bbox
                                 selectedBBoxes[0] = canvas.getBBox(current_poly);
                                 addAllPointGripsToPoly();
-                            } // going into polyedit mode
+                            }
                             else {
                                 current_poly = t;
                             }
-                        } // no change in mouse position
+                        }
                     }
                 }
                 return;
@@ -1556,19 +1540,12 @@ function SvgCanvas(c) {
         return 0;
     };
 
-    this.setRotationAngle = function (val, preventUndo) {
+    this.setRotationAngle = function (val) {
         var elem = selectedElements[0];
-        // we use the actual element's bbox (not the calculated one) since the
-        // calculated bbox's center can change depending on the angle
         var bbox = elem.getBBox();
         var cx = parseInt(bbox.x + bbox.width / 2), cy = parseInt(bbox.y + bbox.height / 2);
         var rotate = "rotate(" + val + " " + cx + "," + cy + ")";
-        if (preventUndo) {
-            this.changeSelectedAttributeNoUndo("transform", rotate, selectedElements);
-        }
-        else {
-            this.changeSelectedAttribute("transform", rotate, selectedElements);
-        }
+        this.changeSelectedAttributeNoUndo("transform", rotate, selectedElements);
         var pointGripContainer = document.getElementById("polypointgrip_container");
         if (elem.nodeName == "path" && pointGripContainer) {
             pointGripContainer.setAttribute("transform", rotate);
