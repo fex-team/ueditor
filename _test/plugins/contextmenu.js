@@ -6,89 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 module('plugins.contextmenu');
-test('trace 3099：清除边框颜色', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    stop();
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        var lang = editor.getLang("contextMenu");
-        editor.execCommand('cleardoc');
-        editor.execCommand('inserttable');
-        setTimeout(function () {
-            range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-            ua.contextmenu(editor.body.firstChild);
-            var menutable = document.getElementsByClassName("edui-menu-body")[1];
-            var forTable = document.getElementsByClassName('edui-for-table');
-            if (ua.browser.ie&&ua.browser.ie<9) {
-                ua.mouseenter(forTable[forTable.length - 1]);
-            } else {
-                ua.mouseover(forTable[forTable.length - 1]);
-            }
-            lang = editor.getLang("contextMenu");
-            ua.click(menutable.childNodes[14]);
-            setTimeout(function () {
-                var iframe = document.getElementsByTagName('iframe');
-                var iframe1 ;
-                for (var i = iframe.length-1; i >-1; i--) {
-                    if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
-                        iframe1 = iframe[i];
-                        break;
-                    }
-                }
-                iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
-                var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
-                ua.click(buttonBody);
-                setTimeout(function () {
-                var tds = editor.body.getElementsByTagName('td');
-                if (ua.browser.ie == 8)
-                    equal(tds[0].style.borderColor, '#ff0000', '边框颜色设置为红色');
-                else {
-                    equal(tds[0].style.borderColor, 'rgb(255, 0, 0)', '边框颜色设置为红色');
-                }
 
-                range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-                ua.contextmenu(editor.body.firstChild);
-                menutable = document.getElementsByClassName("edui-menu-body")[1];
-                forTable = document.getElementsByClassName('edui-for-table');
-                if (ua.browser.ie&&ua.browser.ie<9) {
-                    ua.mouseenter(forTable[forTable.length - 1]);
-                } else {
-                    ua.mouseover(forTable[forTable.length - 1]);
-                }
-                lang = editor.getLang("contextMenu");
-                ua.click(menutable.childNodes[14]);
-                iframe = document.getElementsByTagName('iframe');
-                setTimeout(function () {
-                    iframe1 = null;
-                    for (var i = iframe.length-1; i >-1; i--) {
-                        if (iframe[i].id.indexOf('edui') != -1) {
-                            iframe1 = iframe[i];
-                            break;
-                        }
-                    }
-                    ua.click(iframe1.contentDocument.getElementById('J_tone'));
-                    setTimeout(function () {
-                    var div_nocolor = document.getElementsByClassName('edui-colorpicker-nocolor');
-                    ua.click(div_nocolor[0]);
-                    var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[1].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
-                    ua.click(buttonBody);
-                    tds = editor.body.getElementsByTagName('td');
-                    equal(tds[0].style.borderColor, '', '边框颜色被清除');
-                    setTimeout(function () {
-                        UE.delEditor('ue');
-                        document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
-                        te.dom.push(document.getElementById('ue'));
-                start();
-                    }, 200);
-                    }, 100);
-                }, 100);
-                }, 200);
-            }, 200);
-        }, 200);
-    });
-});
 test('基本右键菜单', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
@@ -772,6 +690,7 @@ test('trace 3099：清除边框颜色', function () {
                         break;
                     }
                 }
+
                 iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
                 var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
                 ua.click(buttonBody);
@@ -794,8 +713,8 @@ test('trace 3099：清除边框颜色', function () {
                     }
                     lang = editor.getLang("contextMenu");
                     ua.click(menutable.childNodes[14]);
-                    iframe = document.getElementsByTagName('iframe');
                     setTimeout(function () {
+                        iframe = document.getElementsByTagName('iframe');
                         iframe1 = null;
                         for (var i = iframe.length-1; i >-1; i--) {
                             if (iframe[i].id.indexOf('edui') != -1) {
@@ -817,10 +736,10 @@ test('trace 3099：清除边框颜色', function () {
                                 te.dom.push(document.getElementById('ue'));
                                 start();
                             }, 200);
-                        }, 100);
-                    }, 100);
+                        }, 200);
+                    }, 200);
                 }, 200);
-            }, 200);
+            }, 500);
         }, 200);
     });
 });
