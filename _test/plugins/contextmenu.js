@@ -6,7 +6,85 @@
  * To change this template use File | Settings | File Templates.
  */
 module('plugins.contextmenu');
+/*trace 3088*/
+test('trace 3088：检查表格属性', function () {
+//    if (ua.browser.ie >8)return;
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    stop();
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        var lang = editor.getLang("contextMenu");
+        editor.execCommand('cleardoc');
+        editor.execCommand('inserttable');
+        range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+        editor.execCommand('inserttitle');
+        range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+        editor.execCommand('insertcaption');
+        range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse(true).select();
+        editor.execCommand('deletetitle');
+        setTimeout(function () {
+            range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse(true).select();
+            ua.contextmenu(editor.body.firstChild.firstChild);
+            setTimeout(function () {
+                var menutable = document.getElementsByClassName("edui-menu-body")[1];
+                var forTable = document.getElementsByClassName('edui-for-table');
+                if (ua.browser.ie&&ua.browser.ie<9) {
+                    ua.mouseenter(forTable[forTable.length - 1]);
+                    ua.click(menutable.childNodes[6]);
+                } else {
+                    ua.mouseover(forTable[forTable.length - 1]);
+                    ua.click(menutable.childNodes[4]);
+                }
+                lang = editor.getLang("contextMenu");
+                setTimeout(function () {
+                    var iframe = document.getElementsByTagName('iframe');
+                    var iframe1  ;
+                    for (var i = 0; i <iframe.length; i++) {
+                        if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
+                            iframe1 = iframe[i];
+                            break;
+                        }
+                    }
+                    equal(iframe1.contentDocument.getElementById('J_title').checked, false, '无标题行');
+                    equal(iframe1.contentDocument.getElementById('J_caption').checked, true, '有名称');
+                    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+                    ua.contextmenu(editor.body.firstChild);
+                    menutable = document.getElementsByClassName("edui-menu-body")[1];
+                    forTable = document.getElementsByClassName('edui-for-table');
+                    if (ua.browser.ie&&ua.browser.ie<9) {
+                        ua.mouseenter(forTable[forTable.length - 1]);
+                    } else {
+                        ua.mouseover(forTable[forTable.length - 1]);
+                    }
+                    lang = editor.getLang("contextMenu");
+                    ua.click(menutable.childNodes[14]);
 
+                    setTimeout(function () {
+                        iframe = document.getElementsByTagName('iframe');
+                        iframe1 = null;
+                        for (var i = 0; i <iframe.length; i++) {
+                            if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
+                                iframe1 = iframe[i];
+                                break;
+                            }
+                        }
+                        equal(iframe1.contentDocument.getElementById('J_title').checked, false, '无标题行');
+                        equal(iframe1.contentDocument.getElementById('J_caption').checked, true, '有名称');
+                        setTimeout(function () {
+                            document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                            UE.delEditor('ue');
+                            te.dom.push(document.getElementById('ue'));
+                            start();
+                        }, 20);
+                    }, 200);
+                }, 200);
+            }, 500);
+        }, 500);
+    });
+});
+test('',function(){stop();})
 test('基本右键菜单', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
@@ -684,7 +762,7 @@ test('trace 3099：清除边框颜色', function () {
             setTimeout(function () {
                 var iframe = document.getElementsByTagName('iframe');
                 var iframe1 ;
-                for (var i = 0; i <iframe.length; i++) {
+                for (var i = iframe.length-1; i >-1; i--) {
                     if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
                         iframe1 = iframe[i];
                         break;
@@ -700,18 +778,18 @@ test('trace 3099：清除边框颜色', function () {
                     equal(tds[0].style.borderColor, 'rgb(255, 0, 0)', '边框颜色设置为红色');
                 }
 
-                range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-                ua.contextmenu(editor.body.firstChild);
-                menutable = document.getElementsByClassName("edui-menu-body")[1];
-                forTable = document.getElementsByClassName('edui-for-table');
-                if (ua.browser.ie&&ua.browser.ie<9) {
-                    ua.mouseenter(forTable[forTable.length - 1]);
-                } else {
-                    ua.mouseover(forTable[forTable.length - 1]);
-                }
-                lang = editor.getLang("contextMenu");
-                ua.click(menutable.childNodes[14]);
-                iframe = document.getElementsByTagName('iframe');
+//                range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+//                ua.contextmenu(editor.body.firstChild);
+//                menutable = document.getElementsByClassName("edui-menu-body")[1];
+//                forTable = document.getElementsByClassName('edui-for-table');
+//                if (ua.browser.ie&&ua.browser.ie<9) {
+//                    ua.mouseenter(forTable[forTable.length - 1]);
+//                } else {
+//                    ua.mouseover(forTable[forTable.length - 1]);
+//                }
+//                lang = editor.getLang("contextMenu");
+//                ua.click(menutable.childNodes[14]);
+//                iframe = document.getElementsByTagName('iframe');
 //                setTimeout(function () {
 //                    iframe1 = null;
 //                    for (var i = iframe.length-1; i >-1; i--) {
