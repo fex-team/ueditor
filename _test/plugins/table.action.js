@@ -216,12 +216,19 @@ test('getText,取表格内的文本', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>');
-    var trs = editor.body.firstChild.getElementsByTagName('tr');
-
-    var ut = editor.getUETable(editor.body.firstChild);
-    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
-    ut.setSelected(cellsRange);
-    equal(editor.selection.getText(), 'hello1hello2');
+    stop();
+    setTimeout(function () {
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        range.setStart(trs[0].cells[0],0).collapse(true).select();
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
+        ut.setSelected(cellsRange);
+        setTimeout(function () {
+            ua.manualDeleteFillData(editor.body);
+            equal(editor.selection.getText(), 'hello1hello2');
+            start();
+        }, 50);
+    }, 50);
 });
 test('在第一个单元格里最前面回车,且表格前面没有内容', function () {
     var editor = te.obj[0];
