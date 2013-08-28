@@ -195,7 +195,7 @@ test( '转换style标签:style data不空', function () {
     editor.setContent( '<style type="text/css"></style>' );
     var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
     var html = br+'<div type="text/css" cdata_tag="style" style="display:none"></div>';
-   
+
     ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 test( 'div出编辑器转换', function () {
