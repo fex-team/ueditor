@@ -237,7 +237,6 @@ function SvgCanvas(c) {
         var angle = utils.getRotationAngle(selected);
         var pointGripContainer = document.getElementById("polypointgrip_container");
         if (angle) {
-            // this is our old center upon which we have rotated the shape
             var tr_x = parseInt(box.x + box.width / 2),
                 tr_y = parseInt(box.y + box.height / 2);
             var cx = null, cy = null;
@@ -253,11 +252,9 @@ function SvgCanvas(c) {
                 }
             }
 
-            // if this was a resize, find the new cx,cy
             if (bFoundScale) {
                 var alpha = angle * Math.PI / 180.0;
 
-                // rotate new opposite corners of bbox by angle at old center
                 var dx = selectedBBox.x - tr_x,
                     dy = selectedBBox.y - tr_y,
                     r = Math.sqrt(dx * dx + dy * dy),
@@ -272,15 +269,12 @@ function SvgCanvas(c) {
                 var right = r * Math.cos(theta) + tr_x,
                     bottom = r * Math.sin(theta) + tr_y;
 
-                // now find mid-point of line between top-left and bottom-right to find new center
                 cx = parseInt(left + (right - left) / 2);
                 cy = parseInt(top + (bottom - top) / 2);
 
-                // now that we know the center and the axis-aligned width/height, calculate the x,y
                 selectedBBox.x = parseInt(cx - selectedBBox.width / 2),
                     selectedBBox.y = parseInt(cy - selectedBBox.height / 2);
             }
-            // if it was not a resize, then it was a translation only
             else {
                 var tx = selectedBBox.x - box.x,
                     ty = selectedBBox.y - box.y;
@@ -295,8 +289,6 @@ function SvgCanvas(c) {
             }
         }
         else {
-            // This fixes Firefox 2- behavior - which does not reset values when the attribute has
-            // been removed, see https://bugzilla.mozilla.org/show_bug.cgi?id=320622
             selected.setAttribute("transform", "");
             selected.removeAttribute("transform");
             if (pointGripContainer) {
@@ -306,13 +298,8 @@ function SvgCanvas(c) {
         }
 
         switch (selected.tagName) {
-            // NOTE: at the moment, there's no way to create an actual polygon element except by
-            // editing source or importing from somewhere else but we'll cover it here anyway
-            // polygon is handled just like polyline
             case "polygon":
             case "polyline":
-                // extract the points from the polygon/polyline, adjust it and write back the new points
-                // but first, save the old points
                 changes["points"] = selected.getAttribute("points");
                 var list = selected.points;
                 var len = list.numberOfItems;
@@ -325,8 +312,6 @@ function SvgCanvas(c) {
                 selected.setAttributeNS(null, "points", newpoints);
                 break;
             case "path":
-                // extract the x,y from the path, adjust it and write back the new path
-                // but first, save the old path
                 changes["d"] = selected.getAttribute("d");
                 var M = selected.pathSegList.getItem(0);
                 var curx = M.x, cury = M.y;
@@ -334,11 +319,8 @@ function SvgCanvas(c) {
                 var newd = "M" + pt.x + "," + pt.y;
                 var segList = selected.pathSegList;
                 var len = segList.numberOfItems;
-                // for all path segments in the path, we first turn them into relative path segments,
-                // then we remap the coordinates from the resize
                 for (var i = 1; i < len; ++i) {
                     var seg = segList.getItem(i);
-                    // if these properties are not in the segment, set them to zero
                     var x = seg.x || 0,
                         y = seg.y || 0,
                         x1 = seg.x1 || 0,
@@ -348,10 +330,9 @@ function SvgCanvas(c) {
 
                     var type = seg.pathSegType;
                     switch (type) {
-                        case 1: // z,Z closepath (Z/z)
+                        case 1:
                             newd += "z";
                             continue;
-                        // turn this into a relative segment then fall through
                         case 2: // absolute move (M)
                         case 4: // absolute line (L)
                         case 12: // absolute horizontal line (H)
@@ -411,8 +392,8 @@ function SvgCanvas(c) {
                             cury += y;
                             newd += [" s", scalew(x2), ",", scaleh(y2), " ", scalew(x), ",", scaleh(y)].join('');
                             break;
-                    } // switch on path segment type
-                } // for each segment
+                    }
+                }
                 selected.setAttributeNS(null, "d", newd);
                 break;
             case "line":
@@ -438,7 +419,6 @@ function SvgCanvas(c) {
                     'cx': pt.x,
                     'cy': pt.y,
 
-                    // take the minimum of the new selected box's dimensions for the new circle radius
                     'r': parseInt(Math.min(selectedBBox.width / 2, selectedBBox.height / 2))
                 }, 1000);
                 break;
@@ -455,7 +435,7 @@ function SvgCanvas(c) {
                     'height': scaleh(changes["height"])
                 }, 1000);
                 break;
-            default: // rect
+            default:
                 console.log("Unknown shape type: " + selected.tagName);
                 break;
         }
