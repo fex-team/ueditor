@@ -1,3 +1,4 @@
+var selectorManager;
 function SvgCanvas(c) {
     function rectsIntersect(r1, r2){
         return r2.x < (r1.x + r1.width) &&
@@ -45,282 +46,8 @@ function SvgCanvas(c) {
         };
     }
 
-    function Selector(id, elem) {
-        this.id = id;
-
-        this.selectedElement = elem;
-
-        this.locked = true;
-
-        this.reset = function (e) {
-            this.locked = true;
-            this.selectedElement = e;
-            this.resize();
-            selectorManager.update();
-            this.selectorGroup.setAttribute("display", "inline");
-        };
-
-        this.selectorGroup = addSvgElementFromJson({ "element": "g",
-            "attr": {"id": ("selectorGroup" + this.id)}
-        });
-
-        this.selectorRect = this.selectorGroup.appendChild(addSvgElementFromJson({
-            "element": "rect",
-            "attr": {
-                "id": ("selectedBox" + this.id),
-                "fill": "none",
-                "stroke": "#5da2ff",
-                "stroke-width": "1",
-                "width": 1,
-                "height": 1,
-                "style": "pointer-events:none"
-            }
-        }));
-
-        this.selectorGrips = {    "nw": null,
-            "n": null,
-            "ne": null,
-            "e": null,
-            "se": null,
-            "s": null,
-            "sw": null,
-            "w": null
-        };
-        this.rotateGripConnector = this.selectorGroup.appendChild(addSvgElementFromJson({
-            "element": "line",
-            "attr": {
-                "id": ("selectorGrip_rotate_connector_" + this.id),
-                "stroke": "#5da2ff",
-                "stroke-width": "1"
-            }
-        }));
-        this.rotateGrip = this.selectorGroup.appendChild(addSvgElementFromJson({
-            "element": "circle",
-            "attr": {
-                "id": ("selectorGrip_rotate_" + this.id),
-                "fill": "#5da2ff",
-                "r": 4,
-                "stroke": "#fff",
-                "stroke-width": 2
-            }
-        }));
-
-        for (dir in this.selectorGrips) {
-            this.selectorGrips[dir] = this.selectorGroup.appendChild(
-                addSvgElementFromJson({
-                    "element": "rect",
-                    "attr": {
-                        "id": ("selectorGrip_" + dir + "_" + this.id),
-                        "fill": "#5da2ff",
-                        'stroke':'#fff',
-                        "width": 6,
-                        "height": 6,
-                        "style": ("cursor:" + dir + "-resize"),
-                        "stroke-width": 2,
-                        "pointer-events": "all",
-                        "display": "none"
-                    }
-                }));
-            $('#' + this.selectorGrips[dir].id).mousedown(function () {
-                current_mode = "resize";
-                current_resize_mode = this.id.substr(13, this.id.indexOf("_", 13) - 13);
-            });
-            $('#selectorGrip_rotate_' + id).mousedown(function () {
-                current_mode = "rotate";
-            });
-        }
-
-        this.showGrips = function (show) {
-            var bShow = show ? "inline" : "none";
-            this.rotateGrip.setAttribute("display", bShow);
-            this.rotateGripConnector.setAttribute("display", bShow);
-            var elem = this.selectedElement;
-            if (elem && elem.tagName == "text") bShow = "none";
-            for (dir in this.selectorGrips) {
-                this.selectorGrips[dir].setAttribute("display", bShow);
-            }
-            if (elem) this.updateGripCursors(canvas.getRotationAngle(elem));
-        };
-
-        this.updateGripCursors = function (angle) {
-            var dir_arr = [];
-            var steps = Math.round(angle / 45);
-            if (steps < 0) steps += 8;
-            for (dir in this.selectorGrips) {
-                dir_arr.push(dir);
-            }
-            while (steps > 0) {
-                dir_arr.push(dir_arr.shift());
-                steps--;
-            }
-            var i = 0;
-            for (dir in this.selectorGrips) {
-                this.selectorGrips[dir].setAttribute('style', ("cursor:" + dir_arr[i] + "-resize"));
-                i++;
-            }
-        };
-
-        this.resize = function (cur_bbox) {
-            var selectedBox = this.selectorRect;
-            var selectedGrips = this.selectorGrips;
-            var selected = this.selectedElement;
-            var sw = parseInt(selected.getAttribute("stroke-width"));
-            var offset = 1;
-            if (!isNaN(sw)) {
-                offset += sw / 2;
-            }
-            var oldbox = canvas.getBBox(this.selectedElement);
-            var bbox = cur_bbox || oldbox;
-            var l = bbox.x - offset, t = bbox.y - offset, w = bbox.width + (offset << 1), h = bbox.height + (offset << 1);
-            var sr_handle = svgroot.suspendRedraw(100);
-            assignAttributes(selectedBox, {
-                'x': l,
-                'y': t,
-                'width': w,
-                'height': h
-            });
-
-            var gripCoords = {
-                nw: [l - 3, t - 3],
-                ne: [l + w - 3, t - 3],
-                sw: [l - 3, t + h - 3],
-                se: [l + w - 3, t + h - 3],
-                n: [l + w / 2 - 3, t - 3],
-                w: [l - 3, t + h / 2 - 3],
-                e: [l + w - 3, t + h / 2 - 3],
-                s: [l + w / 2 - 3, t + h - 3]
-            };
-            $.each(gripCoords, function (dir, coords) {
-                assignAttributes(selectedGrips[dir], {
-                    x: coords[0], y: coords[1]
-                });
-            });
-
-            assignAttributes(this.rotateGripConnector, { x1: l + w / 2, y1: t - 20, x2: l + w / 2, y2: t });
-            assignAttributes(this.rotateGrip, { cx: l + w / 2, cy: t - 20 });
-
-            this.selectorGroup.setAttribute("transform", "");
-            this.selectorGroup.removeAttribute("transform");
-
-            var elem = this.selectedElement;
-            var transform = elem.getAttribute("transform");
-            var angle = canvas.getRotationAngle(elem);
-            if (angle) {
-                var cx = parseInt(oldbox.x + oldbox.width / 2)
-                cy = parseInt(oldbox.y + oldbox.height / 2);
-                this.selectorGroup.setAttribute("transform", "rotate(" + angle + " " + cx + "," + cy + ")");
-            }
-            svgroot.unsuspendRedraw(sr_handle);
-        };
-
-        this.reset(elem);
-    }
-
-    function SelectorManager() {
-
-        this.selectorParentGroup = null;
-
-        this.rubberBandBox = null;
-
-        this.selectors = [];
-
-        this.selectorMap = {};
-
-        this.initGroup = function () {
-            var me=this;
-            me.selectorParentGroup = addSvgElementFromJson({
-                "element": "g",
-                "attr": {"id": "selectorParentGroup"}
-            });
-            me.selectorMap = {};
-            me.selectors = [];
-            me.rubberBandBox = null;
-        };
-
-        this.requestSelector = function (elem) {
-            if (elem == null) return null;
-            var N = this.selectors.length;
-            if (typeof(this.selectorMap[elem.id]) == "object") {
-                this.selectorMap[elem.id].locked = true;
-                return this.selectorMap[elem.id];
-            }
-
-            for (var i = 0; i < N; ++i) {
-                if (this.selectors[i] && !this.selectors[i].locked) {
-                    this.selectors[i].locked = true;
-                    this.selectors[i].reset(elem);
-                    this.selectorMap[elem.id] = this.selectors[i];
-                    return this.selectors[i];
-                }
-            }
-            this.selectors[N] = new Selector(N, elem);
-            this.selectorParentGroup.appendChild(this.selectors[N].selectorGroup);
-            this.selectorMap[elem.id] = this.selectors[N];
-            return this.selectors[N];
-        };
-
-        this.releaseSelector = function (elem) {
-            if (elem == null) return;
-            var N = this.selectors.length;
-            var sel = this.selectorMap[elem.id];
-            for (var i = 0; i < N; ++i) {
-                if (this.selectors[i] && this.selectors[i] == sel) {
-                    if (sel.locked == false) {
-                        console.log("WARNING! selector was released but was already unlocked");
-                    }
-                    delete this.selectorMap[elem.id];
-                    sel.locked = false;
-                    sel.selectedElement = null;
-                    sel.showGrips(false);
-
-                    try {
-                        sel.selectorGroup.setAttribute("display", "none");
-                    } catch (e) {
-                    }
-
-                    break;
-                }
-            }
-        };
-
-        this.update = function () {
-            this.selectorParentGroup = svgroot.appendChild(this.selectorParentGroup);
-        };
-
-        this.getRubberBandBox = function () {
-            if (this.rubberBandBox == null) {
-                this.rubberBandBox = this.selectorParentGroup.appendChild(
-                    addSvgElementFromJson({ "element": "rect",
-                        "attr": {
-                            "id": "selectorRubberBand",
-                            "fill": "blue",
-                            "fill-opacity": 0.15,
-                            "stroke": "blue",
-                            "stroke-width": 0.5,
-                            "display": "none",
-                            "style": "pointer-events:none"
-                        }
-                    }));
-            }
-            return this.rubberBandBox;
-        };
-
-        this.initGroup();
-    }
-
-    var addSvgElementFromJson = function (data) {
+    SvgCanvas.addSvgElementFromJson = function (data) {
         return canvas.updateElementFromJson(data)
-    };
-
-    var assignAttributes = function (node, attrs, suspendLength) {
-        if (!suspendLength) suspendLength = 0;
-        var handle = svgroot.suspendRedraw(suspendLength);
-
-        for (i in attrs) {
-            node.setAttributeNS(null, i, attrs[i]);
-        }
-
-        svgroot.unsuspendRedraw(handle);
     };
 
     var cleanupElement = function (element) {
@@ -354,7 +81,7 @@ function SvgCanvas(c) {
             shape = svgdoc.createElementNS(svgns, data.element);
             svgroot.appendChild(shape);
         }
-        assignAttributes(shape, data.attr, 100);
+        utils.assignAttributes(shape, data.attr, 100);
         cleanupElement(shape);
         return shape;
     };
@@ -414,9 +141,8 @@ function SvgCanvas(c) {
     var current_poly_pts = [];
     var selectedElements = new Array(1);
     var selectedBBoxes = new Array(1);
-    var selectorManager = new SelectorManager();
+    selectorManager = new SelectorManager();
     var rubberBox = null;
-    var events = {};
     var curBBoxes = [];
 
     var getIntersectionList = function (rect) {
@@ -462,7 +188,6 @@ function SvgCanvas(c) {
         return id;
     };
 
-
     var recalculateAllSelectedDimensions = function () {
         var text = (current_resize_mode == "none" ? "position" : "size");
         var batchCmd = new BatchCommand(text);
@@ -486,7 +211,7 @@ function SvgCanvas(c) {
         var selected = selectedElements[i];
         if (selected == null) return null;
         var selectedBBox = selectedBBoxes[i];
-        var box = canvas.getBBox(selected);
+        var box = utils.getBBox(selected);
 
         if (box.x == selectedBBox.x && box.y == selectedBBox.y &&
             box.width == selectedBBox.width && box.height == selectedBBox.height) {
@@ -509,7 +234,7 @@ function SvgCanvas(c) {
 
         var changes = {};
 
-        var angle = canvas.getRotationAngle(selected);
+        var angle = utils.getRotationAngle(selected);
         var pointGripContainer = document.getElementById("polypointgrip_container");
         if (angle) {
             // this is our old center upon which we have rotated the shape
@@ -697,7 +422,7 @@ function SvgCanvas(c) {
                 changes["y2"] = selected.getAttribute("y2");
                 var pt1 = remap(changes["x1"], changes["y1"]),
                     pt2 = remap(changes["x2"], changes["y2"]);
-                assignAttributes(selected, {
+                utils.assignAttributes(selected, {
                     'x1': pt1.x,
                     'y1': pt1.y,
                     'x2': pt2.x,
@@ -709,7 +434,7 @@ function SvgCanvas(c) {
                 changes["cy"] = selected.getAttribute("cy");
                 changes["r"] = selected.getAttribute("r");
                 var pt = remap(changes["cx"], changes["cy"]);
-                assignAttributes(selected, {
+                utils.assignAttributes(selected, {
                     'cx': pt.x,
                     'cy': pt.y,
 
@@ -723,7 +448,7 @@ function SvgCanvas(c) {
                 changes["width"] = selected.getAttribute("width");
                 changes["height"] = selected.getAttribute("height");
                 var pt = remap(changes["x"], changes["y"]);
-                assignAttributes(selected, {
+                utils.assignAttributes(selected, {
                     'x': pt.x,
                     'y': pt.y,
                     'width': scalew(changes["width"]),
@@ -770,7 +495,7 @@ function SvgCanvas(c) {
             if (elem.id.substr(0, 13) == "selectorGrip_") continue;
             if (selectedElements.indexOf(elem) == -1) {
                 selectedElements[j] = elem;
-                selectedBBoxes[j++] = this.getBBox(elem);
+                selectedBBoxes[j++] = utils.getBBox(elem);
                 selectorManager.requestSelector(elem);
             }
         }
@@ -779,8 +504,6 @@ function SvgCanvas(c) {
             selectorManager.requestSelector(selectedElements[0]).showGrips(true);
         }
     };
-
-
 
     var removeAllPointGripsFromPoly = function () {
         var i = current_poly_pts.length / 2;
@@ -796,7 +519,7 @@ function SvgCanvas(c) {
         for (var i = 0; i < len; i += 2) {
             var grip = document.getElementById("polypointgrip_" + i / 2);
             if (grip) {
-                assignAttributes(grip, {
+                utils.assignAttributes(grip, {
                     'cx': current_poly_pts[i],
                     'cy': current_poly_pts[i + 1],
                     'display': 'inline'
@@ -821,7 +544,7 @@ function SvgCanvas(c) {
         var pointGrip = document.getElementById("polypointgrip_" + index);
         if (!pointGrip) {
             pointGrip = document.createElementNS(svgns, "circle");
-            assignAttributes(pointGrip, {
+            utils.assignAttributes(pointGrip, {
                 'id': "polypointgrip_" + index,
                 'display': "none",
                 'r': 4,
@@ -842,7 +565,7 @@ function SvgCanvas(c) {
             });
         }
 
-        assignAttributes(pointGrip, {
+        utils.assignAttributes(pointGrip, {
             'cx': x,
             'cy': y,
             'display': "inline",
@@ -870,33 +593,6 @@ function SvgCanvas(c) {
         current_mode = name;
     };
 
-
-    this.getBBox = function (elem) {
-        var selected = elem || selectedElements[0];
-
-        if (elem.nodeName == 'text' && selected.textContent == '') {
-            selected.textContent = 'a';
-            var ret = selected.getBBox();
-            selected.textContent = '';
-        } else {
-            var ret = selected.getBBox();
-        }
-
-        return ret;
-    };
-
-    this.getRotationAngle = function (elem) {
-        var selected = elem || selectedElements[0];
-        var tlist = selected.transform.baseVal;
-        var t = tlist.numberOfItems;
-        while (t--) {
-            var xform = tlist.getItem(t);
-            if (xform.type == 4) {
-                return xform.angle;
-            }
-        }
-        return 0;
-    };
 
     this.setRotationAngle = function (val) {
         var elem = selectedElements[0];
@@ -940,7 +636,7 @@ function SvgCanvas(c) {
                     elem = canvas.quickClone(elem);
                 }
                 else elem.setAttribute(attr, newValue);
-                selectedBBoxes[i] = this.getBBox(elem);
+                selectedBBoxes[i] = utils.getBBox(elem);
                 if (elem.nodeName == 'text') {
                     if ((newValue + '').indexOf('url') == 0 || $.inArray(attr, ['font-size', 'font-family', 'x', 'y']) != -1) {
                         elem = canvas.quickClone(elem);
@@ -949,7 +645,7 @@ function SvgCanvas(c) {
                 setTimeout(function () {
                     selectorManager.requestSelector(elem).resize(selectedBBoxes[i]);
                 }, 0);
-                var angle = canvas.getRotationAngle(elem);
+                var angle = utils.getRotationAngle(elem);
                 if (angle && attr != "transform") {
                     var cx = parseInt(selectedBBoxes[i].x + selectedBBoxes[i].width / 2),
                         cy = parseInt(selectedBBoxes[i].y + selectedBBoxes[i].height / 2);
@@ -971,7 +667,7 @@ function SvgCanvas(c) {
         while (i--) {
             var elem = nodes[i];
             try {
-                var box = canvas.getBBox(elem);
+                var box = utils.getBBox(elem);
                 if (elem.id != "selectorParentGroup" && box) {
                     var item = includeBBox ? {'elem': elem, 'bbox': box} : elem;
                     contentElems.push(item);
@@ -990,6 +686,14 @@ function SvgCanvas(c) {
         start_x = x;
         start_y = y;
 
+        if(evt.target.id.indexOf('selectorGrip')!=-1){
+            if(evt.target.id.indexOf("rotate")!=-1){
+                current_mode="rotate"
+            }else{
+                current_resize_mode = evt.target.id.substr(13, evt.target.id.indexOf("_", 13) - 13);
+                current_mode="resize";
+            }
+        }
         switch (current_mode) {
             case "select":
                 started = true;
@@ -1009,7 +713,7 @@ function SvgCanvas(c) {
                     if (rubberBox == null) {
                         rubberBox = selectorManager.getRubberBandBox();
                     }
-                    assignAttributes(rubberBox, {
+                    utils.assignAttributes(rubberBox, {
                         'x': start_x,
                         'y': start_y,
                         'width': 0,
@@ -1029,7 +733,7 @@ function SvgCanvas(c) {
                 start_y = y;
                 d_attr = x + "," + y + " ";
                 var stroke_w = cur_shape.stroke_width == 0 ? 1 : cur_shape.stroke_width;
-                addSvgElementFromJson({
+                SvgCanvas.addSvgElementFromJson ({
                     "element": "polyline",
                     "attr": {
                         "points": d_attr,
@@ -1053,7 +757,7 @@ function SvgCanvas(c) {
                 started = true;
                 start_x = x;
                 start_y = y;
-                addSvgElementFromJson({
+                SvgCanvas.addSvgElementFromJson ({
                     "element": "rect",
                     "attr": {
                         "x": x,
@@ -1074,7 +778,7 @@ function SvgCanvas(c) {
             case "line":
                 started = true;
                 var stroke_w = cur_shape.stroke_width == 0 ? 1 : cur_shape.stroke_width;
-                addSvgElementFromJson({
+                SvgCanvas.addSvgElementFromJson ({
                     "element": "line",
                     "attr": {
                         "x1": x,
@@ -1093,7 +797,7 @@ function SvgCanvas(c) {
                 break;
             case "circle":
                 started = true;
-                addSvgElementFromJson({
+                SvgCanvas.addSvgElementFromJson ({
                     "element": "circle",
                     "attr": {
                         "cx": x,
@@ -1128,6 +832,7 @@ function SvgCanvas(c) {
         var x = evt.pageX - container.offsetLeft + container.scrollLeft;
         var y = evt.pageY - container.offsetTop + container.scrollTop;
         var shape = svgdoc.getElementById(getId());
+
         switch (current_mode) {
             case "select":
                 if (selectedElements[0] != null) {
@@ -1140,10 +845,10 @@ function SvgCanvas(c) {
                         for (var i = 0; i < len; ++i) {
                             var selected = selectedElements[i];
                             if (selected == null) break;
-                            var box = canvas.getBBox(selected);
+                            var box = utils.getBBox(selected);
                             selectedBBoxes[i].x = box.x + dx;
                             selectedBBoxes[i].y = box.y + dy;
-                            var angle = canvas.getRotationAngle(selected);
+                            var angle = utils.getRotationAngle(selected);
                             if (angle) {
                                 var cx = parseInt(box.x + box.width / 2),
                                     cy = parseInt(box.y + box.height / 2);
@@ -1165,7 +870,7 @@ function SvgCanvas(c) {
                 }
                 break;
             case "multiselect":
-                assignAttributes(rubberBox, {
+                utils.assignAttributes(rubberBox, {
                     'x': Math.min(start_x, x),
                     'y': Math.min(start_y, y),
                     'width': Math.abs(x - start_x),
@@ -1175,10 +880,10 @@ function SvgCanvas(c) {
                 canvas.addToSelection(getIntersectionList());
                 break;
             case "resize":
-                var box = canvas.getBBox(selected), left = box.x, top = box.y, width = box.width,
+                var box = utils.getBBox(selected), left = box.x, top = box.y, width = box.width,
                     height = box.height, dx = (x - start_x), dy = (y - start_y);
 
-                var angle = canvas.getRotationAngle(selected);
+                var angle = utils.getRotationAngle(selected);
                 if (angle) {
                     var r = Math.sqrt(dx * dx + dy * dy);
                     var theta = Math.atan2(dy, dx) - angle * Math.PI / 180.0;
@@ -1258,7 +963,7 @@ function SvgCanvas(c) {
                 svgroot.unsuspendRedraw(handle);
                 break;
             case "rect":
-                assignAttributes(shape, {
+                utils.assignAttributes(shape, {
                     'width': Math.abs(x - start_x),
                     'height': Math.abs(y - start_y),
                     'x': Math.min(start_x, x),
@@ -1285,7 +990,7 @@ function SvgCanvas(c) {
                 }
                 break;
             case "rotate":
-                var box = canvas.getBBox(selected),
+                var box = utils.getBBox(selected),
                     cx = parseInt(box.x + box.width / 2),
                     cy = parseInt(box.y + box.height / 2);
                 var angle = parseInt(((Math.atan2(cy - y, cx - x) * (180 / Math.PI)) - 90) % 360);
@@ -1365,7 +1070,7 @@ function SvgCanvas(c) {
                                     current_poly_pts.push(cury);
                                 }
                                 canvas.clearSelection();
-                                selectedBBoxes[0] = canvas.getBBox(current_poly);
+                                selectedBBoxes[0] = utils.getBBox(current_poly);
                                 addAllPointGripsToPoly();
                             }
                             else {
@@ -1397,7 +1102,7 @@ function SvgCanvas(c) {
                 var stretchy = document.getElementById("poly_stretch_line");
                 if (!stretchy) {
                     stretchy = document.createElementNS(svgns, "line");
-                    assignAttributes(stretchy, {
+                    utils.assignAttributes(stretchy, {
                         'id': "poly_stretch_line",
                         'stroke': "blue",
                         'stroke-width': "0.5"
@@ -1410,7 +1115,7 @@ function SvgCanvas(c) {
                     current_poly_pts.push(x);
                     current_poly_pts.push(y);
                     d_attr = "M" + x + "," + y + " ";
-                    addSvgElementFromJson({
+                    SvgCanvas.addSvgElementFromJson ({
                         "element": "path",
                         "attr": {
                             "d": d_attr,
@@ -1424,7 +1129,7 @@ function SvgCanvas(c) {
                             "opacity": cur_shape.opacity / 2
                         }
                     });
-                    assignAttributes(stretchy, {
+                    utils.assignAttributes(stretchy, {
                         'x1': x,
                         'y1': y,
                         'x2': x,
@@ -1466,7 +1171,7 @@ function SvgCanvas(c) {
                         d_attr += "l" + parseInt(x - lastx) + "," + parseInt(y - lasty) + " ";
                         poly.setAttribute("d", d_attr);
 
-                        assignAttributes(stretchy, {
+                        utils.assignAttributes(stretchy, {
                             'x1': x,
                             'y1': y,
                             'x2': x,
@@ -1497,7 +1202,6 @@ function SvgCanvas(c) {
             canvas.addToSelection([element], true);
         }
     };
-
 
     $(container).mouseup(mouseUp);
     $(container).mousedown(mouseDown);
