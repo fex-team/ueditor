@@ -1,13 +1,13 @@
 var selectorManager;
 function SvgCanvas(c) {
-    function rectsIntersect(r1, r2){
+    var rectsIntersect = function (r1, r2) {
         return r2.x < (r1.x + r1.width) &&
             (r2.x + r2.width) > r1.x &&
             r2.y < (r1.y + r1.height) &&
             (r2.y + r2.height) > r1.y;
     }
 
-    function BatchCommand(text) {
+    var BatchCommand = function (text) {
         this.text = text || "Batch Command";
         this.stack = [];
 
@@ -44,10 +44,6 @@ function SvgCanvas(c) {
         this.isEmpty = function () {
             return this.stack.length == 0;
         };
-    }
-
-    SvgCanvas.addSvgElementFromJson = function (data) {
-        return canvas.updateElementFromJson(data)
     };
 
     var cleanupElement = function (element) {
@@ -69,6 +65,10 @@ function SvgCanvas(c) {
         if (element.getAttribute('ry') == '0')
             element.removeAttribute('ry')
         svgroot.unsuspendRedraw(handle);
+    };
+
+    SvgCanvas.addSvgElementFromJson = function (data) {
+        return canvas.updateElementFromJson(data)
     };
 
     this.updateElementFromJson = function (data) {
@@ -686,12 +686,12 @@ function SvgCanvas(c) {
         start_x = x;
         start_y = y;
 
-        if(evt.target.id.indexOf('selectorGrip')!=-1){
-            if(evt.target.id.indexOf("rotate")!=-1){
-                current_mode="rotate"
-            }else{
+        if (evt.target.id.indexOf('selectorGrip') != -1) {
+            if (evt.target.id.indexOf("rotate") != -1) {
+                current_mode = "rotate"
+            } else {
                 current_resize_mode = evt.target.id.substr(13, evt.target.id.indexOf("_", 13) - 13);
-                current_mode="resize";
+                current_mode = "resize";
             }
         }
         switch (current_mode) {
@@ -733,7 +733,7 @@ function SvgCanvas(c) {
                 start_y = y;
                 d_attr = x + "," + y + " ";
                 var stroke_w = cur_shape.stroke_width == 0 ? 1 : cur_shape.stroke_width;
-                SvgCanvas.addSvgElementFromJson ({
+                SvgCanvas.addSvgElementFromJson({
                     "element": "polyline",
                     "attr": {
                         "points": d_attr,
@@ -757,7 +757,7 @@ function SvgCanvas(c) {
                 started = true;
                 start_x = x;
                 start_y = y;
-                SvgCanvas.addSvgElementFromJson ({
+                SvgCanvas.addSvgElementFromJson({
                     "element": "rect",
                     "attr": {
                         "x": x,
@@ -778,7 +778,7 @@ function SvgCanvas(c) {
             case "line":
                 started = true;
                 var stroke_w = cur_shape.stroke_width == 0 ? 1 : cur_shape.stroke_width;
-                SvgCanvas.addSvgElementFromJson ({
+                SvgCanvas.addSvgElementFromJson({
                     "element": "line",
                     "attr": {
                         "x1": x,
@@ -797,7 +797,7 @@ function SvgCanvas(c) {
                 break;
             case "circle":
                 started = true;
-                SvgCanvas.addSvgElementFromJson ({
+                SvgCanvas.addSvgElementFromJson({
                     "element": "circle",
                     "attr": {
                         "cx": x,
@@ -1115,7 +1115,7 @@ function SvgCanvas(c) {
                     current_poly_pts.push(x);
                     current_poly_pts.push(y);
                     d_attr = "M" + x + "," + y + " ";
-                    SvgCanvas.addSvgElementFromJson ({
+                    SvgCanvas.addSvgElementFromJson({
                         "element": "path",
                         "attr": {
                             "d": d_attr,
