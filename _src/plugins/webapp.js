@@ -1,9 +1,29 @@
-///import core
-///import plugins/inserthtml.js
-///commands 百度应用
-///commandsName webapp
-///commandsTitle  百度应用
-///commandsDialog  dialogs\webapp
+/**
+ * 百度应用
+ * @file
+ */
+
+
+/**
+ * 在当前光标处插入一个百度应用， 需要百度APPKey
+ * @command webapp
+ * @method execCommand
+ * @param { KeyValueMap } appOptions 应用所需的参数项， 支持的key有： title=>应用标题， width=>应用容器宽度，
+ * height=>应用容器高度，logo=>应用logo，url=>应用地址
+ * @example
+ * ```javascript
+ * //editor是编辑器实例
+ * //在编辑器里插入一个“植物大战僵尸”的APP
+ * editor.execCommand( 'webapp' , {
+ *     title: '植物大战僵尸',
+ *     width: 560,
+ *     height: 465,
+ *     logo: 'http://apps3.bdimg.com/store/static/kvt/f5d3e48a5aedf458eae6f66a44623fe9.jpg',
+ *     url: 'http://app.baidu.com/app/enter?appid=103488&tn=app_canvas&app_spce_id=1&apikey=9HrmGf2ul4mlyK8ktO2Ziayd&api_key=9HrmGf2ul4mlyK8ktO2Ziayd'
+ * } );
+ * ```
+ */
+
 UE.plugins['webapp'] = function () {
     var me = this;
     function createInsertStr( obj, toIframe, addParagraph ) {

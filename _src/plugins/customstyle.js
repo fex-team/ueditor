@@ -1,7 +1,8 @@
-///import core
-///commands 自定义样式
-///commandsName  CustomStyle
-///commandsTitle  自定义样式
+/**
+ * 自定义样式命令支持
+ * @file
+ */
+
 UE.plugins['customstyle'] = function() {
     var me = this;
     me.setOpt({ 'customstyle':[

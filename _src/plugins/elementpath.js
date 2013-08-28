@@ -1,13 +1,8 @@
-///import core
-///commands 选区路径
-///commandsName  ElementPath,elementPathEnabled
-///commandsTitle  选区路径
 /**
- * 选区路径
- * @function
- * @name baidu.editor.execCommand
- * @param {String}     cmdName     elementpath选区路径
+ * 选取路径命令
+ * @file
  */
+
 UE.plugins['elementpath'] = function(){
     var currentLevel,
         tagNames,
@@ -18,6 +13,7 @@ UE.plugins['elementpath'] = function(){
     }
     me.commands['elementpath'] = {
         execCommand : function( cmdName, level ) {
+            debugger;
             var start = tagNames[level],
                 range = me.selection.getRange();
             currentLevel = level*1;
