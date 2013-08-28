@@ -1,7 +1,19 @@
-///import core
-///commands 自动提交
-///commandsName  autosubmit
-///commandsTitle  自动提交
+/**
+ * 快捷键提交
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 对编辑器区域插入html字符串
+ * @command autosubmit
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'autosubmit' );
+ * ```
+ */
 UE.plugins['autosubmit'] = function(){
     var me = this;
     me.commands['autosubmit'] = {

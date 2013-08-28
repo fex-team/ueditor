@@ -77,7 +77,7 @@
      * 获取语言包里面的第一个
      * @private
      * @method checkCurLang
-     * @param { PlainObject } I18N 编辑器事例
+     * @param { KeyValueMap } I18N 编辑器事例
      */
     function checkCurLang(I18N) {
         for (var lang in I18N) {
@@ -106,9 +106,7 @@
      * @example
      * ```javascript
      * editor.addListener( 'selectionchange', function( editor ) {
-     *
-     *     editor.execCommand( 'bold' );
-     *
+     *     console.log('选区发生改变');
      * }
      */
 
@@ -126,7 +124,7 @@
     /**
      * 以给定的参数集合创建一个编辑器对象，对于未指定的参数，将应用默认参数。
      * @constructor
-     * @param { PlainObject } setting 创建编辑器的参数
+     * @param { KeyValueMap } setting 创建编辑器的参数
      * @example
      * ```javascript
      * var editor = new UE.Editor();
@@ -199,9 +197,7 @@
          * @example
          * ```javascript
          * editor.ready( function( editor ) {
-         *
          *     editor.setContent('初始化完毕');
-         *
          * } );
          * ```
          */
@@ -214,9 +210,10 @@
 
 
         /**
-         * 以attributeName - attributeValue的方式设置编辑器的配置项，以覆盖编辑器的默认选项值
+         * 该方法是提供给插件里面使用，以key，value的方式设置插件内用到的配置项默认值
          * @method setOpt
-         * @warning 该方法仅供编辑器构造函数调用，其他任何方法不能调用。
+         * @warning 在config文件里面有定义参数key或者用户实例化的时候有传入参数key，该方法设置的key参数值无效
+         * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
          * @param { String } key 编辑器的可接受的选项名称
          * @param { * } val  该选项可接受的值
          * @example
@@ -226,10 +223,10 @@
          */
 
         /**
-         * 以key-value集合的方式设置编辑器的配置项，以覆盖编辑器的默认选项值
+         * 该方法是提供给插件里面使用，以{key:value}集合的方式设置插件内用到的配置项默认值
          * @method setOpt
-         * @warning 该方法仅供编辑器构造函数调用，其他任何方法不能调用。
-         * @param { PlainObject } settings 编辑器的可接受的选项的key-value集合
+         * @warning 在config文件里面有定义参数key或者用户实例化的时候有传入参数key，该方法设置的key参数值无效
+         * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
          * @example
          * ```javascript
          * editor.setOpt( {
@@ -498,9 +495,8 @@
         },
 
         /**
-         * 同步编辑器的数据，为提交数据做准备，主要用于是手动提交的情况
-         * 后台取得数据的键值使用你容器上的name属性，如果没有就使用参数传入的textarea属性
-         * 获取要同步的表单，从编辑器的容器向上查找要同步数据的form，如果找到就同步数据
+         * 从编辑器的容器节点向上查找form元素，若找到，就同步编辑内容到找到的form里，为提交数据做准备，主要用于是手动提交的情况
+         * 后台取得数据的键值，使用你容器上的name属性，如果没有就使用参数里的textarea项
          * @method sync
          * @example
          * ```javascript
@@ -510,9 +506,8 @@
          */
 
         /**
-         * 同步编辑器的数据，为提交数据做准备，主要用于是手动提交的情况
-         * 后台取得数据的键值使用你容器上的name属性，如果没有就使用参数传入的textarea属性
-         * 根据传入表单id参数，获取要同步数据的form
+         * 根据传入的formId，在页面上查找要同步数据的表单，若找到，就同步编辑内容到找到的form里，为提交数据做准备，主要用于是手动提交的情况
+         * 后台取得数据的键值，使用你容器上的name属性，如果没有就使用参数里的textarea项
          * @method sync
          * @param { String } formID 指定一个要同步数据的form的id,编辑器的数据会同步到你指定form下
          */
@@ -544,9 +539,9 @@
         },
 
         /**
-         * 添加命令的快捷键
+         * 这个接口是为插件扩展提供的接口,主要是为新添加的插件，如果需要添加快捷键，所提供的接口
          * @method addshortcutkey
-         * @param { PlainObject } keyset 命令和快捷键的键值对对象，多个按钮的快捷键用“＋”分隔
+         * @param { KeyValueMap } keyset 命令和快捷键的键值对对象，多个按钮的快捷键用“＋”分隔
          * @example
          * ```javascript
          * editor.addshortcutkey({
@@ -556,7 +551,7 @@
          * ```
          */
         /**
-         * 添加命令的快捷键
+         * 这个接口是为插件扩展提供的接口,主要是为新添加的插件，如果需要添加快捷键，所提供的接口
          * @method addshortcutkey
          * @param { String } cmd 触发快捷键时，响应的命令
          * @param { String } keys 快捷键的字符串，多个按钮用“＋”分隔
@@ -607,12 +602,11 @@
             });
         },
 
-
         /**
          * 获取编辑器的内容
          * @method getContent
          * @warning 该方法获取到的是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @return { String } 编辑器的内容字符串, 如果编辑器的内容为空， 则返回空字符串
+         * @return { String } 编辑器的内容字符串, 如果编辑器的内容为空，或者是空的标签内容（如:”<p><br/></p>“）， 则返回空字符串
          * @example
          * ```javascript
          * var content = editor.getContent();
@@ -720,34 +714,41 @@
         },
 
         /**
-         * 获取编辑器的内容
-         * @method getContent
-         * @warning 该方法获取到的是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @return { String } 编辑器的内容字符串, 如果编辑器的内容为空， 则返回空字符串
+         * 设置编辑器的内容，可修改编辑器当前的html内容
+         * @method setContent
+         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @warning 该方法会出发selectionchange事件
+         * @param { String } 要插入的html内容
          * @example
          * ```javascript
-         * var content = editor.getContent();
+         * editor.getContent('<p>test</p>');
          * ```
          */
 
         /**
-         * 获取编辑器的内容。 可以通过参数定义编辑器内置的判空规则
-         * @method getContent
-         * @param { Function } fn 自定的判空规则， 要求该方法返回一个boolean类型的值，
-         *                      代表当前编辑器的内容是否空，
-         *                      如果返回true， 则该方法将直接返回空字符串；如果返回false，则编辑器将返回
-         *                      经过内置过滤规则处理后的内容。
-         * @remind 该方法在处理包含有初始化内容的时候能起到很好的作用。
-         * @warning 该方法获取到的是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @return { String } 编辑器的内容字符串
+         * 设置编辑器的内容，可修改编辑器当前的html内容
+         * @method setContent
+         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @warning 该方法会出发selectionchange事件
+         * @param { String } html 要插入的html内容
+         * @param { Boolean } isAppendTo 若传入true，不清空原来的内容，在最后插入内容，否则，清空内容再插入
          * @example
          * ```javascript
-         * // editor 是一个编辑器的实例
-         * var content = editor.getContent( function ( editor ) {
-         *
-         *      return editor.body.innerHTML === '欢迎使用UEditor';
-         *
-         * } );
+         * //假设设置前的编辑器内容是 <p>old text</p>
+         * editor.getContent('<p>new text</p>', true); //插入的结果是<p>old text</p><p>new text</p>
+         * ```
+         */
+
+        /**
+         * 设置编辑器的内容，可修改编辑器当前的html内容
+         * @method setContent
+         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @param { String } html 要插入的html内容
+         * @param { Boolean } isAppendTo 若传入true，不清空原来的内容，在最后插入内容，否则，清空内容再插入
+         * @param { Boolean } notFireSelectionchange 若传入true，执行该函数过程不触发编辑器的selectionchange事件
+         * @example
+         * ```javascript
+         * editor.getContent('<p>new text</p>', false, true);
          * ```
          */
         setContent: function (html, isAppendTo, notFireSelectionchange) {
@@ -1265,7 +1266,6 @@
          * 显示编辑器，show方法的兼容版本
          * @method setShow
          * @private
-         * @param  { String } cont 要存入的内容
          */
         setShow: function () {
             var me = this, range = me.selection.getRange();
@@ -1288,7 +1288,6 @@
         /**
          * 显示编辑器
          * @method show
-         * @param  { String } cont 要存入的内容
          * @example
          * ```javascript
          * editor.show()
@@ -1329,7 +1328,7 @@
          * 根据指定的路径，获取对应的语言资源
          * @method getLang
          * @param { String } path 路径根据的是lang目录下的语言文件的路径结构
-         * @return { PlainObject | String } 根据路径返回语言资源的Json格式对象或者语言字符串
+         * @return { KeyValueMap | String } 根据路径返回语言资源的Json格式对象或者语言字符串
          * @example
          * ```javascript
          * editor.getLang('contextMenu.delete'); //如果当前是中文，那返回是的是'删除'
@@ -1361,7 +1360,7 @@
         /**
          * 计算编辑器当前存文本内容的长度
          * @method  getContentLength
-         * @param { Boolean } ingoneHtml
+         * @param { Boolean } ingoneHtml 传入true时，只按照纯文本来计算
          * @return { Number } 返回计算的长度，内容中有hr/img/iframe标签，长度加1
          * @example
          * ```javascript
@@ -1372,9 +1371,10 @@
         /**
          * 计算编辑器当前内容的长度
          * @method  getContentLength
-         * @param { Boolean } ingoneHtml
-         * @param { Array } tagNames
+         * @param { Boolean } ingoneHtml 传入true时，只按照纯文本来计算
+         * @param { Array } tagNames 忽略html代码时，遇到数组里的标签，长度加1
          * @return { Number } 返回计算的长度，内容中有hr/img/iframe标签或者参数tagNames中的标签，长度加1
+         * @remind 当ingoneHtml为false，第二个参数不作用
          * @example
          * ```javascript
          * editor.getContentLength(true, ['em','strong'])
@@ -1398,9 +1398,9 @@
          * @param { Function } rule 要添加的过滤规则
          * @example
          * ```javascript
-         * editor.addOutputRule(function(root){
-         *   $.each(root.getNodesByTagName('p'),function(i,node){
-         *       node.tagName="div";
+         * editor.addInputRule(function(root){
+         *   $.each(root.getNodesByTagName('div'),function(i,node){
+         *       node.tagName="p";
          *   });
          * });
          * ```
@@ -1412,7 +1412,8 @@
         /**
          * 根据输入过滤规则，过滤编辑器内容
          * @method  filterInputRule
-         * @param { Element } root 要过滤的文档节点
+         * @param { uNode } root 要过滤的uNode节点
+         * @remind 执行editor.setContent方法和执行'inserthtml'命令后，会运行该过滤函数
          * @example
          * ```javascript
          * editor.filterInputRule(editor.body);
@@ -1427,10 +1428,14 @@
         /**
          * 添加输出过滤规则
          * @method  addOutputRule
-         * @param { PlainObject } rule 要添加的过滤规则
+         * @param { Function } rule 要添加的过滤规则
          * @example
          * ```javascript
-         * editor.addOutputRule(rule);
+         * editor.addOutputRule(function(root){
+         *   $.each(root.getNodesByTagName('p'),function(i,node){
+         *       node.tagName="div";
+         *   });
+         * });
          * ```
          */
         addOutputRule: function (rule) {
@@ -1440,7 +1445,8 @@
         /**
          * 根据输出过滤规则，过滤编辑器内容
          * @method  filterOutputRule
-         * @param { Element } root 要过滤的文档节点
+         * @remind 执行editor.getContent方法的时候，会先运行该过滤函数
+         * @param { uNode } root 要过滤的uNode节点
          * @example
          * ```javascript
          * editor.filterOutputRule(editor.body);

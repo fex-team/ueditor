@@ -1,14 +1,9 @@
-///import core
-///commands 锚点
-///commandsName  Anchor
-///commandsTitle  锚点
-///commandsDialog  dialogs\anchor
 /**
- * 锚点
- * @function
- * @name baidu.editor.execCommands
- * @param {String} cmdName     cmdName="anchor"插入锚点
+ * 锚点插件，为UEditor提供插入锚点支持
+ * @file
+ * @since 1.2.6.1
  */
+
 UE.plugins['anchor'] = function (){
     var me = this;
 
@@ -46,6 +41,19 @@ UE.plugins['anchor'] = function (){
             }
         })
     });
+
+    /**
+     * 插入锚点
+     * @command anchor
+     * @method execCommand
+     * @param { String } cmd 命令字符串
+     * @param { String } name 锚点名称字符串
+     * @example
+     * ```javascript
+     * //editor 是编辑器实例
+     * editor.execCommand('anchor', 'anchor1');
+     * ```
+     */
     me.commands['anchor'] = {
         execCommand:function (cmd, name) {
             var range = this.selection.getRange(),img = range.getClosedNode();

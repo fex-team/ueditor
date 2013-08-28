@@ -1,13 +1,19 @@
-///import core
-///commands 清空文档
-///commandsName  ClearDoc
-///commandsTitle  清空文档
 /**
- *
- * 清空文档
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     cleardoc清空文档
+ * 清空文档插件
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 清空文档命令
+ * @command cleardoc
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * //editor 是编辑器实例
+ * editor.execCommand('cleardoc');
+ * ```
  */
 
 UE.commands['cleardoc'] = {
