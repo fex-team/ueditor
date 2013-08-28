@@ -1,22 +1,11 @@
 function Selector(id, elem) {
     this.id = id;
-
     this.selectedElement = elem;
-
     this.locked = true;
-
-    this.reset = function (e) {
-        this.locked = true;
-        this.selectedElement = e;
-        this.resize();
-        selectorManager.update();
-        this.selectorGroup.setAttribute("display", "inline");
-    };
 
     this.selectorGroup = SvgCanvas.addSvgElementFromJson({ "element": "g",
         "attr": {"id": ("selectorGroup" + this.id)}
     });
-
     this.selectorRect = this.selectorGroup.appendChild(SvgCanvas.addSvgElementFromJson({
         "element": "rect",
         "attr": {
@@ -29,7 +18,6 @@ function Selector(id, elem) {
             "style": "pointer-events:none"
         }
     }));
-
     this.selectorGrips = {    "nw": null,
         "n": null,
         "ne": null,
@@ -58,25 +46,40 @@ function Selector(id, elem) {
         }
     }));
 
-    for (dir in this.selectorGrips) {
-        this.selectorGrips[dir] = this.selectorGroup.appendChild(
-            SvgCanvas.addSvgElementFromJson({
-                "element": "rect",
-                "attr": {
-                    "id": ("selectorGrip_" + dir + "_" + this.id),
-                    "fill": "#5da2ff",
-                    'stroke':'#fff',
-                    "width": 6,
-                    "height": 6,
-                    "style": ("cursor:" + dir + "-resize"),
-                    "stroke-width": 2,
-                    "pointer-events": "all",
-                    "display": "none"
-                }
-            }));
-    }
 
-    this.showGrips = function (show) {
+    this.initGrips();
+    this.reset(elem);
+}
+Selector.prototype = {
+    reset: function (e) {
+        this.locked = true;
+        this.selectedElement = e;
+        this.resize();
+        selectorManager.update();
+        this.selectorGroup.setAttribute("display", "inline");
+    },
+
+    initGrips: function () {
+        for (dir in this.selectorGrips) {
+            this.selectorGrips[dir] = this.selectorGroup.appendChild(
+                SvgCanvas.addSvgElementFromJson({
+                    "element": "rect",
+                    "attr": {
+                        "id": ("selectorGrip_" + dir + "_" + this.id),
+                        "fill": "#5da2ff",
+                        'stroke': '#fff',
+                        "width": 6,
+                        "height": 6,
+                        "style": ("cursor:" + dir + "-resize"),
+                        "stroke-width": 2,
+                        "pointer-events": "all",
+                        "display": "none"
+                    }
+                }));
+        }
+    },
+
+    showGrips: function (show) {
         var bShow = show ? "inline" : "none";
         this.rotateGrip.setAttribute("display", bShow);
         this.rotateGripConnector.setAttribute("display", bShow);
@@ -86,9 +89,9 @@ function Selector(id, elem) {
             this.selectorGrips[dir].setAttribute("display", bShow);
         }
         if (elem) this.updateGripCursors(utils.getRotationAngle(elem));
-    };
+    },
 
-    this.updateGripCursors = function (angle) {
+    updateGripCursors: function (angle) {
         var dir_arr = [];
         var steps = Math.round(angle / 45);
         if (steps < 0) steps += 8;
@@ -104,9 +107,9 @@ function Selector(id, elem) {
             this.selectorGrips[dir].setAttribute('style', ("cursor:" + dir_arr[i] + "-resize"));
             i++;
         }
-    };
+    },
 
-    this.resize = function (cur_bbox) {
+    resize: function (cur_bbox) {
         var selectedBox = this.selectorRect;
         var selectedGrips = this.selectorGrips;
         var selected = this.selectedElement;
@@ -157,10 +160,8 @@ function Selector(id, elem) {
             this.selectorGroup.setAttribute("transform", "rotate(" + angle + " " + cx + "," + cy + ")");
         }
         svgroot.unsuspendRedraw(sr_handle);
-    };
-
-    this.reset(elem);
-}
+    }
+};
 
 function SelectorManager() {
 
@@ -172,8 +173,12 @@ function SelectorManager() {
 
     this.selectorMap = {};
 
-    this.initGroup = function () {
-        var me=this;
+
+    this.initGroup();
+}
+SelectorManager.prototype = {
+    initGroup: function () {
+        var me = this;
         me.selectorParentGroup = SvgCanvas.addSvgElementFromJson({
             "element": "g",
             "attr": {"id": "selectorParentGroup"}
@@ -181,9 +186,9 @@ function SelectorManager() {
         me.selectorMap = {};
         me.selectors = [];
         me.rubberBandBox = null;
-    };
+    },
 
-    this.requestSelector = function (elem) {
+    requestSelector: function (elem) {
         if (elem == null) return null;
         var N = this.selectors.length;
         if (typeof(this.selectorMap[elem.id]) == "object") {
@@ -203,9 +208,9 @@ function SelectorManager() {
         this.selectorParentGroup.appendChild(this.selectors[N].selectorGroup);
         this.selectorMap[elem.id] = this.selectors[N];
         return this.selectors[N];
-    };
+    },
 
-    this.releaseSelector = function (elem) {
+    releaseSelector: function (elem) {
         if (elem == null) return;
         var N = this.selectors.length;
         var sel = this.selectorMap[elem.id];
@@ -227,13 +232,13 @@ function SelectorManager() {
                 break;
             }
         }
-    };
+    },
 
-    this.update = function () {
+    update: function () {
         this.selectorParentGroup = svgroot.appendChild(this.selectorParentGroup);
-    };
+    },
 
-    this.getRubberBandBox = function () {
+    getRubberBandBox: function () {
         if (this.rubberBandBox == null) {
             this.rubberBandBox = this.selectorParentGroup.appendChild(
                 SvgCanvas.addSvgElementFromJson({ "element": "rect",
@@ -249,8 +254,5 @@ function SelectorManager() {
                 }));
         }
         return this.rubberBandBox;
-    };
-
-    this.initGroup();
-}
-
+    }
+};
