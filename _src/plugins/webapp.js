@@ -18,8 +18,8 @@
  *     title: '植物大战僵尸',
  *     width: 560,
  *     height: 465,
- *     logo: 'http://apps3.bdimg.com/store/static/kvt/f5d3e48a5aedf458eae6f66a44623fe9.jpg',
- *     url: 'http://app.baidu.com/app/enter?appid=103488&tn=app_canvas&app_spce_id=1&apikey=9HrmGf2ul4mlyK8ktO2Ziayd&api_key=9HrmGf2ul4mlyK8ktO2Ziayd'
+ *     logo: '应用展示的图片',
+ *     url: '百度应用的地址'
  * } );
  * ```
  */

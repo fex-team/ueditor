@@ -583,7 +583,7 @@ var domUtils = dom.domUtils = {
      * 获取元素element相对于viewport的位置坐标
      * @method getXY
      * @param { DomNode } element 需要计算位置的节点对象
-     * @return { PlainObject } 返回形如{x:left,y:top}的一个key-value映射对象， 其中键x代表水平偏移距离，
+     * @return { KeyValueMap } 返回形如{x:left,y:top}的一个key-value映射对象， 其中键x代表水平偏移距离，
      *                          y代表垂直偏移距离。
      *
      * @example
@@ -1296,7 +1296,7 @@ var domUtils = dom.domUtils = {
      * @method createElement
      * @param { DomDocument } doc 新创建的元素属于该document节点创建
      * @param { String } tagName 需要创建的元素的标签名
-     * @param { PlainObject } attrs 新创建的元素的属性key-value集合
+     * @param { KeyValueMap } attrs 新创建的元素的属性key-value集合
      * @return { DomElement } 新创建的元素对象
      * @example
      * ```javascript

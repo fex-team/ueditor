@@ -16,7 +16,7 @@ var utils = UE.utils = {
     /**
      * 用给定的迭代器遍历对象
      * @method each
-     * @param { PlainObject } obj 需要遍历的对象
+     * @param { Object } obj 需要遍历的对象
      * @param { Function } iterator 迭代器， 该方法接受两个参数， 第一个参数是当前所处理的value， 第二个参数是当前遍历对象的key
      * @example
      * ```javascript

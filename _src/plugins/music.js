@@ -17,7 +17,7 @@
  *     width: 400,
  *     height: 95,
  *     align: "center",
- *     url: 'http://box.baidu.com/widget/flash/bdspacesong.swf?from=tiebasongwidget&url=&name=%E7%88%B1%E6%88%91%E5%88%AB%E8%B5%B0&artist=%E5%BC%A0%E9%9C%87%E5%B2%B3&extra=%E6%BB%9A%E7%9F%B3%E9%A6%99%E6%B8%AF%E9%BB%84%E9%87%91%E5%8D%81%E5%B9%B4-%E5%BC%A0%E9%9C%87%E5%B2%B3%E7%B2%BE%E9%80%89&autoPlay=false&loop=true'
+ *     url: "音乐地址"
  * } );
  * ```
  */
