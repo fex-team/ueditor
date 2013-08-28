@@ -4,7 +4,7 @@
 ///import core/dom/dtd.js
 ///import core/dom/domUtils.js
 ///import core/dom/Range.js
-/**
+/*
  * @class baidu.editor.dom.Selection    Selection类
  */
 (function () {
@@ -73,7 +73,7 @@
         return  {container:child, offset:position > 0 ? -distance : child.nodeValue.length + distance}
     }
 
-    /**
+    /*
      * 将ieRange转换为Range对象
      * @param {Range}   ieRange    ieRange对象
      * @param {Range}   range      Range对象
@@ -93,7 +93,7 @@
         return range;
     }
 
-    /**
+    /*
      * 获得ieRange
      * @param {Selection} sel    Selection对象
      * @return {ieRange}    得到ieRange
@@ -135,7 +135,7 @@
     };
 
     Selection.prototype = {
-        /**
+        /*
          * 获取原生seleciton对象
          * @public
          * @function
@@ -150,7 +150,7 @@
                 return null;
             }
         },
-        /**
+        /*
          * 获得ieRange
          * @public
          * @function
@@ -167,7 +167,7 @@
             return ieRange;
         },
 
-        /**
+        /*
          * 缓存当前选区的range和选区的开始节点
          * @public
          * @function
@@ -190,7 +190,7 @@
             }
             return [];
         },
-        /**
+        /*
          * 清空缓存
          * @public
          * @function
@@ -199,7 +199,7 @@
         clear:function () {
             this._cachedStartElementPath = this._cachedRange = this._cachedStartElement = null;
         },
-        /**
+        /*
          * 编辑器是否得到了选区
          */
         isFocus:function () {
@@ -210,7 +210,7 @@
             }
 
         },
-        /**
+        /*
          * 获取选区对应的Range
          * @public
          * @function
@@ -271,7 +271,7 @@
             return this._bakRange = range;
         },
 
-        /**
+        /*
          * 获取开始元素，用于状态反射
          * @public
          * @function
@@ -318,7 +318,7 @@
             }
             return start;
         },
-        /**
+        /*
          * 得到选区中的文本
          * @public
          * @function
