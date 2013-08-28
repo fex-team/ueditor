@@ -177,27 +177,26 @@ test("getContent--转换空格，nbsp与空格相间显示", function() {
 });
 test( '转换script标签', function () {
     var editor = te.obj[0];
-    var br = ua.browser.ie?'&nbsp;':'<br>';
+    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
     editor.setContent( '<script type="text/javascript">ueditor</script>' );
-    var html = '<p>'+br+'</p><div type="text/javascript" cdata_tag=\"script\"  style="display:none">ueditor</div>';
-    ua.checkSameHtml(html,editor.body.innerHTML,'转换script标签');
+    var html = br+'<div type="text/javascript" cdata_tag=\"script\"  style="display:none">ueditor</div>';
+    ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 
 test( '转换style标签:style data不为空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css">sdf</style>' );
-    var br = ua.browser.ie?'&nbsp;':'<br>';
-    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" style="display:none">sdf</div>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
-    ua.checkSameHtml(html,editor.body.innerHTML);
+    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
+    var html = br+'<div type="text/css" cdata_tag="style" style="display:none">sdf</div>';
+    ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 test( '转换style标签:style data不空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css"></style>' );
-    var br = ua.browser.ie?'&nbsp;':'<br>';
-    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" style="display:none"></div>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
-    ua.checkSameHtml(html,editor.body.innerHTML);
+    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
+    var html = br+'<div type="text/css" cdata_tag="style" style="display:none"></div>';
+   
+    ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 test( 'div出编辑器转换', function () {
     var editor = te.obj[0];
