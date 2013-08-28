@@ -1,12 +1,18 @@
-///import core
-///commands 打印
-///commandsName  Print
-///commandsTitle  打印
 /**
- * @description 打印
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     print打印编辑器内容
- * @author zhanyi
+ * 打印
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 打印
+ * @command print
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'print' );
+ * ```
  */
 UE.commands['print'] = {
     execCommand : function(){

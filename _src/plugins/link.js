@@ -1,24 +1,65 @@
-///import core
-///commands 超链接,取消链接
-///commandsName  Link,Unlink
-///commandsTitle  超链接,取消链接
-///commandsDialog  dialogs\link
 /**
  * 超链接
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     link插入超链接
- * @param   {Object}  options         url地址，title标题，target是否打开新页
- * @author zhanyi
- */
-/**
- * 取消链接
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     unlink取消链接
- * @author zhanyi
+ * @file
+ * @since 1.2.6.1
  */
 
+/**
+ * 插入超链接
+ * @command link
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { Object } options   url地址，title标题，target是否打开新页
+ * @example
+ * ```javascript
+ * editor.execCommand( 'link', '{
+ *     url:'ueditor.baidu.com',
+ *     title:'ueditor官网',
+ *     target:'_blank'
+ * }' );
+ * ```
+ */
+/**
+ * 如果选区所在位置是区域，返回当前超链接节点
+ * @command link
+ * @method queryCommandValue
+ * @return { Element } 超链接节点
+ * @example
+ * ```javascript
+ * editor.queryCommandValue( 'link' );
+ * ```
+ */
+/**
+ * 返回当前选区位置是否是超链接
+ * @command link
+ * @method queryCommandState
+ * @return { Int } 0为是，-1为不是
+ * @example
+ * ```javascript
+ * editor.queryCommandState( 'link' );
+ * ```
+ */
+
+/**
+ * 根据当前选区取消超链接
+ * @command unlink
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'unlink');
+ * ```
+ */
+/**
+ * 返回当前选区位置是否是超链接
+ * @command unlink
+ * @method queryCommandState
+ * @return { Int } 0为是，-1为不是
+ * @example
+ * ```javascript
+ * editor.queryCommandState( 'unlink' );
+ * ```
+ */
 UE.plugins['link'] = function(){
     function optimize( range ) {
         var start = range.startContainer,end = range.endContainer;

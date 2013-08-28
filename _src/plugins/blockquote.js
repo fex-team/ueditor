@@ -1,15 +1,44 @@
-///import core
-///commands 引用
-///commandsName  BlockQuote
-///commandsTitle  引用
 /**
- * 
- * 引用模块实现
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     blockquote引用
+ * 添加引用
+ * @file
+ * @since 1.2.6.1
  */
 
+/**
+ * 根据选区位置对标签添加引用
+ * @command blockquote
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'blockquote' );
+ * ```
+ */
+
+/**
+ * 根据选区位置对标签添加引用
+ * @command blockquote
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { Object } attrs 节点属性
+ * @example
+ * ```javascript
+ * editor.execCommand( 'blockquote',{
+ *     color:'#000'
+ * } );
+ * ```
+ */
+
+/**
+ * 返回当前选区位置是否在引用标签内
+ * @command blockquote
+ * @method queryCommandState
+ * @return { int } 0为是，-1为不是
+ * @example
+ * ```javascript
+ * editor.queryCommandState( 'blockquote' );
+ * ```
+ */
 
 UE.plugins['blockquote'] = function(){
     var me = this;

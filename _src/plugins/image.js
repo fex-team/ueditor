@@ -9,7 +9,7 @@
  * @command imagefloat
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } align 排版位置，可传left、right、none、center
+ * @param { String } align 对齐方式，可传left、right、none、center
  * @example
  * ```javascript
  * editor.execCommand( 'imagefloat', 'center' );
@@ -17,20 +17,20 @@
  */
 
 /**
- * 如果选区所在位置是图片区域，返回图片排版位置
+ * 如果选区所在位置是图片区域
  * @command imagefloat
  * @method queryCommandValue
- * @return { String } 返回代码的语言
+ * @return { String } 返回图片对齐方式
  * @example
  * ```javascript
  * editor.queryCommandValue( 'imagefloat' );
  * ```
  */
 /**
- * 返回当前选区位置是否是图片,0为是，-1为不是
+ * 返回当前选区位置是否是图片
  * @command imagefloat
  * @method queryCommandState
- * @return { String } 返回代码的语言
+ * @return { int } 0为是，-1为不是
  * @example
  * ```javascript
  * editor.queryCommandState( 'imagefloat' );
