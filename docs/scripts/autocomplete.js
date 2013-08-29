@@ -1,9 +1,10 @@
 /**
  * AutoComplete组件
- * @file
  */
 
 ( function () {
+
+    'use strict';
 
     //匹配结果最大条数
     var MAX_COUNT = 11;
@@ -103,7 +104,7 @@
 
             } ).on( "keydown", function ( evt ) {
 
-                if ( evt.ctrlKey && evt.keyCode === 81 ) {
+                if ( ( evt.ctrlKey && evt.keyCode === 81 ) || evt.keyCode === 27 ) {
                     $( document ).trigger( 'togglepanel' );
                     return false;
                 }
