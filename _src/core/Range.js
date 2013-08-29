@@ -1,17 +1,23 @@
-///import editor.js
-///import core/utils.js
-///import core/browser.js
-///import core/dom/dom.js
-///import core/dom/dtd.js
-///import core/dom/domUtils.js
-/*
+/**
+ * Range封装
  * @file
- * @name UE.dom.Range
- * @anthor zhanyi
- * @short Range
- * @import editor.js,core/utils.js,core/browser.js,core/dom/domUtils.js,core/dom/dtd.js
- * @desc Range范围实现类，本类是UEditor底层核心类，统一w3cRange和ieRange之间的差异，包括接口和属性
+ * @module UE.dom
+ * @class Range
  */
+
+/**
+ * dom操作封装
+ * @unfile
+ * @module UE.dom
+ */
+
+/**
+ * Range实现类，本类是UEditor底层核心类，统一w3cRange和ieRange之间的差异，包括接口和属性
+ * @unfile
+ * @module UE.dom
+ * @class Range
+ */
+
 (function () {
     var guid = 0,
         fillChar = domUtils.fillChar,
@@ -152,17 +158,37 @@
         return frag;
     }
 
-    /*
-     * @name Range
-     * @grammar new UE.dom.Range(document)  => Range 实例
-     * @desc 创建一个跟document绑定的空的Range实例
-     * - ***startContainer*** 开始边界的容器节点,可以是elementNode或者是textNode
-     * - ***startOffset*** 容器节点中的偏移量，如果是elementNode就是childNodes中的第几个，如果是textNode就是nodeValue的第几个字符
-     * - ***endContainer*** 结束边界的容器节点,可以是elementNode或者是textNode
-     * - ***endOffset*** 容器节点中的偏移量，如果是elementNode就是childNodes中的第几个，如果是textNode就是nodeValue的第几个字符
-     * - ***document*** 跟range关联的document对象
-     * - ***collapsed*** 是否是闭合状态
+    /**
+     * 创建一个跟document绑定的空的Range实例
+     * @constructor
      */
+
+    /**
+     * @property { Node } startContainer 当前Range的开始边界的容器节点, 可以是一个元素节点或者是文本节点
+     */
+
+    /**
+     * @property { Node } startOffset 当前Range的开始边界容器节点的偏移量, 如果是元素节点，
+     *                              该值就是childNodes中的第几个节点， 如果是文本节点就是文本内容的第几个字符
+     */
+
+    /**
+     * @property { Node } endContainer 当前Range的结束边界的容器节点, 可以是一个元素节点或者是文本节点
+     */
+
+    /**
+     * @property { Node } endOffset 当前Range的结束边界容器节点的偏移量, 如果是元素节点，
+     *                              该值就是childNodes中的第几个节点， 如果是文本节点就是文本内容的第几个字符
+     */
+
+    /**
+     * @property { Boolean } collapsed 当前Range是否是闭合的
+     */
+
+    /**
+     * @property { Document } document 当前Range所属的Document对象
+     */
+
     var Range = dom.Range = function (document) {
         var me = this;
         me.startContainer =
@@ -216,29 +242,52 @@
     }
 
     Range.prototype = {
-        /*
-         * @name cloneContents
-         * @grammar range.cloneContents()  => DocumentFragment
-         * @desc 克隆选中的内容到一个fragment里，如果选区是空的将返回null
+
+        /**
+         * 克隆选中的内容到一个DocumentFragment里
+         * @method cloneContents
+         * @return { DocumentFragment | NULL } 如果选区是空的将返回null， 否则， 返回包含所clone内容的DocumentFragment元素
+         * @example
+         * ```html
+         * <!-- 被选中的内容 -->
+         * <div>123</div><div>456</div>
+         *
+         * <script>
+         *     //output: 2
+         *     console.log( range.cloneContents().childNodes.length );
+         * </script>
+         * ```
          */
         cloneContents:function () {
             return this.collapsed ? null : execContentsAction(this, 0);
         },
-        /*
-         * @name deleteContents
-         * @grammar range.deleteContents()  => Range
-         * @desc 删除当前选区范围中的所有内容并返回range实例，这时的range已经变成了闭合状态
+
+        /**
+         * 删除当前选区范围中的所有内容
+         * @method deleteContents
+         * @remind 执行完该操作后， 当前Range对象变成了闭合状态
+         * @remind 执行该操作会引起当前Range对象的其他属性的变化
+         * @return { UE.dom.Range } 当前操作的Range对象
          * @example
-         * DOM Element :
-         * <b>x<i>x[x<i>xx]x</b>
-         * //执行方法后
-         * <b>x<i>x<i>|x</b>
-         * 注意range改变了
-         * range.startContainer => b
-         * range.startOffset  => 2
-         * range.endContainer => b
-         * range.endOffset => 2
-         * range.collapsed => true
+         * ```html
+         * <body>
+         *     <!-- 选区开始 -->
+         *     <div></div>
+         *     <span></span>
+         *     <!-- 选区结束 -->
+         * </body>
+         *
+         * <script>
+         *     //output: 5
+         *     console.log( document.body.childNodes.length );
+         *
+         *     //执行删除选区内容操作
+         *     range.deleteContents();
+         *
+         *     //output: 2
+         *     console.log( document.body.childNodes.length );
+         * </script>
+         * ```
          */
         deleteContents:function () {
             var txt;
@@ -254,110 +303,299 @@
             }
             return this;
         },
-        /*
-         * @name extractContents
-         * @grammar range.extractContents()  => DocumentFragment
-         * @desc 将当前的内容放到一个fragment里并返回这个fragment，这时的range已经变成了闭合状态
+
+        /**
+         * 将当前选区的内容提取到一个DocumentFragment里
+         * @method extractContents
+         * @remind 执行该操作后， 选区将变成闭合状态
+         * @warning 执行该操作后， 原来选区所选中的内容将从dom树上剥离出来
+         * @return { DocumentFragment } 返回包含所提取内容的DocumentFragment对象
          * @example
-         * DOM Element :
-         * <b>x<i>x[x<i>xx]x</b>
-         * //执行方法后
-         * 返回的fragment里的 dom结构是
-         * <i>x<i>xx
-         * dom树上的结构是
-         * <b>x<i>x<i>|x</b>
-         * 注意range改变了
-         * range.startContainer => b
-         * range.startOffset  => 2
-         * range.endContainer => b
-         * range.endOffset => 2
-         * range.collapsed => true
+         * ```html
+         * <body>
+         *     <!-- 选区开始 -->
+         *     <div></div>
+         *     <span></span>
+         *     <!-- 选区结束 -->
+         * </body>
+         * <script>
+         *     //output: 5
+         *     console.log( document.body.childNodes.length );
+         *
+         *     //执行选区内容提取
+         *     var contents = range.extractContents();
+         *
+         *     //output: 2
+         *     console.log( document.body.childNodes.length );
+         *
+         *     //output: 3
+         *     console.log( contents.childNodes.length );
+         *
+         * </script>
          */
         extractContents:function () {
             return this.collapsed ? null : execContentsAction(this, 2);
         },
-        /*
-         * @name  setStart
-         * @grammar range.setStart(node,offset)  => Range
-         * @desc    设置range的开始位置位于node节点内，偏移量为offset
-         * 如果node是elementNode那offset指的是childNodes中的第几个，如果是textNode那offset指的是nodeValue的第几个字符
+
+        /**
+         * 设置Range的开始位置
+         * @method  setStart
+         * @remind 如果容器节点是元素节点，那么offset指的是其子元素中索引为offset的元素，
+         *          如果是文本节点，那么offset指的是其文本内容的第offset个字符
+         * @param { Node } node 将被设为当前选区开始边界容器的节点对象
+         * @param { int } offset 开始容器的偏移量
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *     <div id="test"></div>
+         *     <!-- 选区开始 -->
+         *     <span></span>
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         * </body>
+         *
+         * <script>
+         *
+         *     //output: SPAN
+         *     console.log( range.startContainer.tagName );
+         *
+         *     range.setStart( document.getElementById( "test" ), 0 );
+         *
+         *     //output: DIV
+         *     console.log( range.startContainer.tagName );
+         *
+         * </script>
+         * ```
          */
         setStart:function (node, offset) {
             return setEndPoint(true, node, offset, this);
         },
-        /*
-         * 设置range的结束位置位于node节点，偏移量为offset
-         * 如果node是elementNode那offset指的是childNodes中的第几个，如果是textNode那offset指的是nodeValue的第几个字符
-         * @name  setEnd
-         * @grammar range.setEnd(node,offset)  => Range
+
+        /**
+         * 设置Range的结束位置
+         * @method  setEnd
+         * @param { Node } node 将被设为当前选区结束边界容器的节点对象
+         * @param { int } offset 结束容器的偏移量
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *     <!-- 选区开始 -->
+         *     <span></span>
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         *     <div id="test"></div>
+         * </body>
+         *
+         * <script>
+         *
+         *     //output: A
+         *     console.log( range.endContainer.tagName );
+         *
+         *     range.setEnd( document.getElementById( "test" ), 0 );
+         *
+         *     //output: DIV
+         *     console.log( range.endContainer.tagName );
+         *
+         * </script>
+         * ```
          */
         setEnd:function (node, offset) {
             return setEndPoint(false, node, offset, this);
         },
-        /*
+
+        /**
          * 将Range开始位置设置到node节点之后
-         * @name  setStartAfter
-         * @grammar range.setStartAfter(node)  => Range
+         * @method  setStartAfter
+         * @param { Node } node 当前选区开始边界之前的节点
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * <b>xx<i>x|x</i>x</b>
-         * 执行setStartAfter(i)后
-         * range.startContainer =>b
-         * range.startOffset =>2
+         * ```html
+         * <body>
+         *     <div id="test"></div>
+         *     <span></span>
+         *     <!-- 选区开始 -->
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         * </body>
+         *
+         * <script>
+         *
+         *     //output: A
+         *     console.log( range.startContainer.tagName );
+         *
+         *     range.setStartAfter( document.getElementById( "test" ) );
+         *
+         *     //output: SPAN
+         *     console.log( range.startContainer.tagName );
+         *
+         * </script>
+         * ```
          */
         setStartAfter:function (node) {
             return this.setStart(node.parentNode, domUtils.getNodeIndex(node) + 1);
         },
-        /*
+
+        /**
          * 将Range开始位置设置到node节点之前
-         * @name  setStartBefore
-         * @grammar range.setStartBefore(node)  => Range
+         * @method  setStartBefore
+         * @param { Node } node 新的选区开始位置在该节点之前
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * <b>xx<i>x|x</i>x</b>
-         * 执行setStartBefore(i)后
-         * range.startContainer =>b
-         * range.startOffset =>1
+         * ```html
+         * <body>
+         *     <span></span>
+         *     <div id="test"></div>
+         *     <!-- 选区开始 -->
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         * </body>
+         *
+         * <script>
+         *
+         *     //output: A
+         *     console.log( range.startContainer.tagName );
+         *
+         *     range.setStartBefore( document.getElementById( "test" ) );
+         *
+         *     //output: SPAN
+         *     console.log( range.startContainer.tagName );
+         *
+         * </script>
+         * ```
          */
         setStartBefore:function (node) {
             return this.setStart(node.parentNode, domUtils.getNodeIndex(node));
         },
-        /*
+
+        /**
          * 将Range结束位置设置到node节点之后
-         * @name  setEndAfter
-         * @grammar range.setEndAfter(node)  => Range
+         * @method  setEndAfter
+         * @param { Node } node 目标节点
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * <b>xx<i>x|x</i>x</b>
-         * setEndAfter(i)后
-         * range.endContainer =>b
-         * range.endtOffset =>2
+         * ```html
+         * <body>
+         *     <!-- 选区开始 -->
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         *     <span></span>
+         *     <div id="test"></div>
+         *
+         *     <script>
+         *         //output: A
+         *         console.log( range.endContainer.tagName );
+         *
+         *         range.setEndAfter( document.getElementById( "test" ) );
+         *
+         *         //output: DJV
+         *         console.log( range.endContainer.tagName );
+         *     </script>
+         * </body>
+         * ```
          */
         setEndAfter:function (node) {
             return this.setEnd(node.parentNode, domUtils.getNodeIndex(node) + 1);
         },
-        /*
+
+        /**
          * 将Range结束位置设置到node节点之前
-         * @name  setEndBefore
-         * @grammar range.setEndBefore(node)  => Range
+         * @method  setEndBefore
+         * @param { Node } node 目标节点
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * <b>xx<i>x|x</i>x</b>
-         * 执行setEndBefore(i)后
-         * range.endContainer =>b
-         * range.endtOffset =>1
+         * ```html
+         * <body>
+         *     <!-- 选区开始 -->
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         *     <span></span>
+         *     <div id="test"></div>
+         *
+         *     <script>
+         *         //output: A
+         *         console.log( range.endContainer.tagName );
+         *
+         *         range.setEndBefore( document.getElementById( "test" ) );
+         *
+         *         //output: SPAN
+         *         console.log( range.endContainer.tagName );
+         *     </script>
+         * </body>
+         * ```
          */
         setEndBefore:function (node) {
             return this.setEnd(node.parentNode, domUtils.getNodeIndex(node));
         },
-        /*
-         * 将Range开始位置设置到node节点内的开始位置
-         * @name  setStartAtFirst
-         * @grammar range.setStartAtFirst(node)  => Range
+
+        /**
+         * 设置Range的开始位置设置到node节点内的第一个节点处
+         * @method  setStartAtFirst
+         * @param { Node } node 目标节点
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *     <div id="test">
+         *         <i></i>
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <!-- 选区结束 -->
+         *         <span></span>
+         *     </div>
+         *
+         *     <script>
+         *         //output: '<a></a>'
+         *         console.log( range.cloneContents() );
+         *
+         *         range.setStartAtFirst( document.getElementById("test") );
+         *
+         *         //output: '<i></i><a></a>'
+         *         console.log( range.cloneContents() );
+         *     </script>
+         * </body>
+         * ```
          */
         setStartAtFirst:function (node) {
             return this.setStart(node, 0);
         },
-        /*
-         * 将Range开始位置设置到node节点内的结束位置
-         * @name  setStartAtLast
-         * @grammar range.setStartAtLast(node)  => Range
+
+        /**
+         * 设置Range的开始位置设置到node节点内的最后一个节点处
+         * @method  setStartAtLast
+         * @param { Node } node 目标节点
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *     <div id="test">
+         *         <i></i>
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <!-- 选区结束 -->
+         *         <span></span>
+         *     </div>
+         *
+         *     <script>
+         *         //output: <a></a>
+         *         console.log( range.cloneContents() );
+         *
+         *         range.setStartAtLast( document.body. );
+         *
+         *         //选区已经闭合， 输出空字符串
+         *         //output: ''
+         *         console.log( range.cloneContents() );
+         *     </script>
+         * </body>
+         * ```
          */
         setStartAtLast:function (node) {
             return this.setStart(node, node.nodeType == 3 ? node.nodeValue.length : node.childNodes.length);
@@ -366,6 +604,33 @@
          * 将Range结束位置设置到node节点内的开始位置
          * @name  setEndAtFirst
          * @grammar range.setEndAtFirst(node)  => Range
+         */
+        /**
+         * 设置Range的结束位置设置到node节点内的第一个节点处
+         * @method  setEndAtFirst
+         * @param { Node } node 目标节点
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *     <div id="test"></div>
+         *     <!-- 选区开始 -->
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         *     <span></span>
+         *
+         *     <script>
+         *         //output: A
+         *         console.log( range.startContainer.tagName );
+         *
+         *         range.setStartAtFirst( document.body );
+         *
+         *         //output: BODY
+         *         console.log( range.startContainer.tagName );
+         *     </script>
+         * </body>
+         * ```
          */
         setEndAtFirst:function (node) {
             return this.setEnd(node, 0);

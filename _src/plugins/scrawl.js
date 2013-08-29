@@ -4,7 +4,7 @@
  * @since 1.2.6.1
  */
 
-/**
+/*
  * 涂鸦浏览器判断
  * @command scrawl
  * @method queryCommandState

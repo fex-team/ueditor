@@ -5,7 +5,16 @@ body {
 
 .page {
     width: 70%;
-    margin: 0 15%;
+    margin: 0 15% 200px;
+}
+
+.title {
+    width: 70%;
+    margin: 20px auto;
+}
+
+.title span {
+    font-size: 0.5em;
 }
 
 .member-module {
@@ -52,6 +61,19 @@ body {
 
 .member-box {
     /*margin: 2em 0 2em 2em;*/
+}
+
+.command-method-container, .command-method-wrap {
+    padding-left: 2em;
+}
+
+.command-method-wrap {
+    margin-bottom: 50px;
+}
+
+.command-method-desc h5 {
+    font-weight: bold;
+    display: inline-block;
 }
 
 .member-event-info, .member-property-info, .member-constructor-info, .member-method-info {
@@ -112,6 +134,7 @@ legend {
     left: 0;
     width: 9%;
     height: 100%;
+    overflow: auto;
 }
 
 .nav .api-list {
@@ -154,7 +177,14 @@ legend {
     max-height: 300px;
     border: 1px solid #cfcfcf;
     background: #fff;
-    padding: 5px;
+}
+
+.search-panel li {
+    padding: 0 10px;
+}
+
+.search-panel li:HOVER {
+    background: #f0f0f0;
 }
 
 .search-box .search-input {
@@ -165,6 +195,7 @@ legend {
     border-top-color: #c0c0c0;
     outline: none;
 }
+
 .search-box .search-input:HOVER {
     box-shadow: inset 0px 1px 2px rgba(0,0,0,0.1);
 }
@@ -181,7 +212,6 @@ legend {
 }
 
 .search-panel .search-result-item:HOVER {
-    background: #f0f0f0;
     text-decoration: none;
 }
 
