@@ -2,7 +2,7 @@
 ///commands 自动排版
 ///commandsName  autotypeset
 ///commandsTitle  自动排版
-/**
+/*
  * 自动排版
  * @function
  * @name baidu.editor.execCommands

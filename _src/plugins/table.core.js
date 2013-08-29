@@ -1,11 +1,11 @@
-/**
+/*
  * Created with JetBrains WebStorm.
  * User: taoqili
  * Date: 13-1-18
  * Time: 上午11:09
  * To change this template use File | Settings | File Templates.
  */
-/**
+/*
  * UE表格操作类
  * @param table
  * @constructor
@@ -47,7 +47,7 @@
         return parseInt(domUtils.getComputedStyle(cell, "width"), 10);
     };
 
-    /**
+    /*
      * 获取单元格或者单元格组的“对齐”状态。 如果当前的检测对象是一个单元格组， 只有在满足所有单元格的 水平和竖直 对齐属性都相同的
      * 条件时才会返回其状态值，否则将返回null； 如果当前只检测了一个单元格， 则直接返回当前单元格的对齐状态；
      * @param table cell or table cells , 支持单个单元格dom对象 或者 单元格dom对象数组
@@ -85,7 +85,7 @@
 
     };
 
-    /**
+    /*
      * 根据当前选区获取相关的table信息
      * @return {Object}
      */
@@ -157,7 +157,7 @@
             };
         }
     };
-    /**
+    /*
      * 根据当前点击的td或者table获取索引对象
      * @param tdOrTable
      */
@@ -206,7 +206,7 @@
             }
             return maxLen;
         },
-        /**
+        /*
          * 获取当前表格的最大列数
          */
         getMaxCols:function () {
@@ -234,7 +234,7 @@
         getCellColIndex:function (cell) {
 
         },
-        /**
+        /*
          * 获取当前cell旁边的单元格，
          * @param cell
          * @param right
@@ -274,7 +274,7 @@
             return nextCell;
 
         },
-        /**
+        /*
          * 获取视觉上的后置单元格
          * @param cell
          * @param bottom
@@ -296,7 +296,7 @@
                 showError(e);
             }
         },
-        /**
+        /*
          * 获取相同结束位置的单元格，xOrY指代了是获取x轴相同还是y轴相同
          */
         getSameEndPosCells:function (cell, xOrY) {
@@ -330,7 +330,7 @@
             cell.innerHTML = content || (browser.ie ? domUtils.fillChar : "<br />");
         },
         cloneCell:UETable.cloneCell,
-        /**
+        /*
          * 获取跟当前单元格的右边竖线为左边的所有未合并单元格
          */
         getSameStartPosXCells:function (cell) {
@@ -353,7 +353,7 @@
                 showError(e);
             }
         },
-        /**
+        /*
          * 更新table对应的索引表
          */
         update:function (table) {
@@ -442,7 +442,7 @@
             }
 
         },
-        /**
+        /*
          * 获取单元格的索引信息
          */
         getCellInfo:function (cell) {
@@ -458,13 +458,13 @@
                 }
             }
         },
-        /**
+        /*
          * 根据行列号获取单元格
          */
         getCell:function (rowIndex, cellIndex) {
             return rowIndex < this.rowsNum && this.table.rows[rowIndex].cells[cellIndex] || null;
         },
-        /**
+        /*
          * 删除单元格
          */
         deleteCell:function (cell, rowIndex) {
@@ -472,7 +472,7 @@
             var row = this.table.rows[rowIndex];
             row.deleteCell(cell.cellIndex);
         },
-        /**
+        /*
          * 根据始末两个单元格获取被框选的所有单元格范围
          */
         getCellsRange:function (cellA, cellB) {
@@ -559,7 +559,7 @@
                 //throw e;
             }
         },
-        /**
+        /*
          * 依据cellsRange获取对应的单元格集合
          */
         getCells:function (range) {
@@ -587,7 +587,7 @@
             }
             return returnTds;
         },
-        /**
+        /*
          * 清理已经选中的单元格
          */
         clearSelected:function () {
@@ -595,7 +595,7 @@
             this.selectedTds = [];
             this.cellsRange = {};
         },
-        /**
+        /*
          * 根据range设置已经选中的单元格
          */
         setSelected:function (range) {
@@ -616,7 +616,7 @@
             return  !ths.length ? rows == this.rowsNum : rows == this.rowsNum || (rows == this.rowsNum - 1);
 
         },
-        /**
+        /*
          * 获取视觉上的前置单元格，默认是左边，top传入时
          * @param cell
          * @param top
@@ -656,7 +656,7 @@
                 showError(e);
             }
         },
-        /**
+        /*
          * 移动单元格中的内容
          */
         moveContent:function (cellTo, cellFrom) {
@@ -673,7 +673,7 @@
                 cellTo.appendChild(child);
             }
         },
-        /**
+        /*
          * 向右合并单元格
          */
         mergeRight:function (cell) {
@@ -691,7 +691,7 @@
             this.deleteCell(rightCell, rightCellInfo.rowIndex);
             this.update();
         },
-        /**
+        /*
          * 向下合并单元格
          */
         mergeDown:function (cell) {
@@ -705,7 +705,7 @@
             this.deleteCell(downCell, downCellInfo.rowIndex);
             this.update();
         },
-        /**
+        /*
          * 合并整个range中的内容
          */
         mergeRange:function () {
@@ -754,7 +754,7 @@
             }
             this.update();
         },
-        /**
+        /*
          * 插入一行单元格
          */
         insertRow:function (rowIndex, sourceCell) {
@@ -790,7 +790,7 @@
             this.update();
             return row;
         },
-        /**
+        /*
          * 删除一行单元格
          * @param rowIndex
          */

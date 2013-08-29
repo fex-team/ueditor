@@ -3,6 +3,7 @@
  * @file
  * @module UE.dom
  * @class Range
+ * @since 1.2.6.1
  */
 
 /**
@@ -600,11 +601,7 @@
         setStartAtLast:function (node) {
             return this.setStart(node, node.nodeType == 3 ? node.nodeValue.length : node.childNodes.length);
         },
-        /*
-         * 将Range结束位置设置到node节点内的开始位置
-         * @name  setEndAtFirst
-         * @grammar range.setEndAtFirst(node)  => Range
-         */
+
         /**
          * 设置Range的结束位置设置到node节点内的第一个节点处
          * @method  setEndAtFirst
@@ -614,20 +611,20 @@
          * @example
          * ```html
          * <body>
-         *     <div id="test"></div>
          *     <!-- 选区开始 -->
          *     <a></a>
          *     <!-- 选区结束 -->
          *     <span></span>
+         *     <div id="test"></div>
          *
          *     <script>
-         *         //output: A
-         *         console.log( range.startContainer.tagName );
+         *         //output: '<a></a>'
+         *         console.log( range.cloneContents() );
          *
-         *         range.setStartAtFirst( document.body );
+         *         range.setEndAtFirst( document.getElementById("test") );
          *
-         *         //output: BODY
-         *         console.log( range.startContainer.tagName );
+         *         //output: '<a></a><div></div>'
+         *         console.log( range.cloneContents() );
          *     </script>
          * </body>
          * ```
@@ -635,56 +632,193 @@
         setEndAtFirst:function (node) {
             return this.setEnd(node, 0);
         },
-        /*
-         * 将Range结束位置设置到node节点内的结束位置
-         * @name  setEndAtLast
-         * @grammar range.setEndAtLast(node)  => Range
+
+        /**
+         * 设置Range的结束位置设置到node节点内的最后一个节点处
+         * @method  setEndAtLast
+         * @param { Node } node 目标节点
+         * @see UE.dom.Range:setStart(Node,int)
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *     <div id="test">
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <!-- 选区结束 -->
+         *         <span></span>
+         *     </div>
+         *
+         *     <script>
+         *         //output: '<a></a>'
+         *         console.log( range.cloneContents() );
+         *
+         *         range.setEndAtLast( document.getElementById("test") );
+         *
+         *         //output: '<a></a><span></span>'
+         *         console.log( range.cloneContents() );
+         *     </script>
+         * </body>
+         * ```
          */
         setEndAtLast:function (node) {
             return this.setEnd(node, node.nodeType == 3 ? node.nodeValue.length : node.childNodes.length);
         },
 
-        /*
-         * 选中完整的指定节点,并返回包含该节点的range
-         * @name  selectNode
-         * @grammar range.selectNode(node)  => Range
+        /**
+         * 选中一个节点， 并返回包含这个节点的range对象
+         * @method  selectNode
+         * @param { Node } node 需要选中的节点
+         * @return { UE.dom.Range } 当前range对象， 但是选区已经改变， 包含了当前选择的节点对象
+         * @example
+         * ```html
+         * <body>
+         *
+         *     <div id="test"></div>
+         *
+         *     <script>
+         *
+         *         range.selectNode( document.getElementById("test") );
+         *
+         *         //output: '<div id="test"></div>'
+         *         console.log( range.cloneContents() );
+         *
+         *     </script>
+         * </body>
+         * ```
          */
         selectNode:function (node) {
             return this.setStartBefore(node).setEndAfter(node);
         },
-        /*
-         * 选中node内部的所有节点，并返回对应的range
-         * @name selectNodeContents
-         * @grammar range.selectNodeContents(node)  => Range
+
+        /**
+         * 选中给定节点内部的所有节点， 并返回包含这个节点内容的range对象
+         * @method  selectNodeContents
+         * @param { Node } node 目标节点， 当前range将包含该节点内的所有节点
+         * @return { UE.dom.Range } 当前range对象，  包含了当前选择的节点对象的所有子节点
          * @example
-         * <b>xx[x<i>xxx</i>]xxx</b>
-         * 执行后
-         * <b>[xxx<i>xxx</i>xxx]</b>
-         * range.startContainer =>b
-         * range.startOffset =>0
-         * range.endContainer =>b
-         * range.endOffset =>3
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *          <a></a>
+         *          <i></i>
+         *     </div>
+         *
+         *     <script>
+         *
+         *         range.selectNodeContents( document.getElementById("test") );
+         *
+         *         //output: '<a></a><i></i>'
+         *         console.log( range.cloneContents() );
+         *
+         *     </script>
+         * </body>
+         * ```
          */
         selectNodeContents:function (node) {
             return this.setStart(node, 0).setEndAtLast(node);
         },
 
-        /*
-         * 克隆一个新的range对象
-         * @name  cloneRange
-         * @grammar range.cloneRange() => Range
+        /**
+         * clone当前Range对象
+         * @method  cloneRange
+         * @return { UE.dom.Range } 当前range对象的一个副本
+         * @example
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <i></i>
+         *         <!-- 选区结束 -->
+         *     </div>
+         *
+         *     <script>
+         *
+         *         var cloneRange = range.cloneRange();
+         *
+         *         //output: '<a></a><i></i>'
+         *         console.log( cloneRange.cloneContents() );
+         *
+         *     </script>
+         * </body>
+         * ```
          */
         cloneRange:function () {
             var me = this;
             return new Range(me.document).setStart(me.startContainer, me.startOffset).setEnd(me.endContainer, me.endOffset);
-
         },
 
-        /*
-         * 让选区闭合到尾部，若toStart为真，则闭合到头部
-         * @name  collapse
-         * @grammar range.collapse() => Range
-         * @grammar range.collapse(true) => Range   //闭合选区到头部
+        /**
+         * 闭合当前选区，向尾部闭合
+         * @method  collapse
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <i></i>
+         *         <!-- 选区结束 -->
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: '<a></a><i></i>'
+         *         console.log( range.cloneContents() );
+         *         //output: 1
+         *         console.log( range.startOffset );
+         *
+         *         range.collapse();
+         *
+         *         //output: ''
+         *         console.log( range.cloneContents() );
+         *         //output: 3
+         *         console.log( range.startOffset );
+         *
+         *     </script>
+         * </body>
+         * ```
+         */
+
+        /**
+         * 闭合当前选区，根据给定的toStart参数项决定是向尾部闭合还是向前闭合，
+         * 如果toStart的值为true，则闭合到首部， 反之，则闭合到尾部
+         * @method  collapse
+         * @param { Boolean } toStart 是否向前闭合选区
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <i></i>
+         *         <!-- 选区结束 -->
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: '<a></a><i></i>'
+         *         console.log( range.cloneContents() );
+         *         //output: 1
+         *         console.log( range.startOffset );
+         *
+         *         range.collapse();
+         *
+         *         //output: ''
+         *         console.log( range.cloneContents() );
+         *         //output: 3
+         *         console.log( range.startOffset );
+         *
+         *     </script>
+         * </body>
+         * ```
          */
         collapse:function (toStart) {
             var me = this;
@@ -708,6 +842,39 @@
          * <b>xx[</b>xxxxx] ==> <b>xx</b>[xxxxx]
          * <b>x[xx</b><i>]xxx</i> ==> <b>x[xx]</b><i>xxx</i>
          * [<b><i>xxxx</i>xxxxxxx</b>] ==> <b><i>[xxxx</i>xxxxxxx]</b>
+         */
+        /**
+         * 调整range的开始位置和结束位置，使其"收缩"到最小的位置
+         * @method  shrinkBoundary
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <i></i>
+         *         <!-- 选区结束 -->
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: '<a></a><i></i>'
+         *         console.log( range.cloneContents() );
+         *         //output: 1
+         *         console.log( range.startOffset );
+         *
+         *         range.collapse();
+         *
+         *         //output: ''
+         *         console.log( range.cloneContents() );
+         *         //output: 3
+         *         console.log( range.startOffset );
+         *
+         *     </script>
+         * </body>
+         * ```
          */
         shrinkBoundary:function (ignoreEnd) {
             var me = this, child,
@@ -733,26 +900,144 @@
             }
             return me;
         },
-        /*
-         * 获取当前range所在位置的公共祖先节点，当前range位置可以位于文本节点内，也可以包含整个元素节点，也可以位于两个节点之间
-         * @name  getCommonAncestor
-         * @grammar range.getCommonAncestor([includeSelf, ignoreTextNode])  => Element
+
+        /**
+         * 获取当前选区所包含的所有节点的公共祖先节点，
+         * 返回的公共祖先节点一定不是range自身的容器节点， 但有可能是一个文本节点
+         * @method  getCommonAncestor
+         * @return { Node } 当前range对象内所有节点的公共祖先节点
          * @example
-         * <b>xx[xx<i>xx]x</i>xxx</b> ==>getCommonAncestor() ==> b
-         * <b>[<img/>]</b>
-         * range.startContainer ==> b
-         * range.startOffset ==> 0
-         * range.endContainer ==> b
-         * range.endOffset ==> 1
-         * range.getCommonAncestor() ==> b
-         * range.getCommonAncestor(true) ==> img
-         * <b>xxx|xx</b>
-         * range.startContainer ==> textNode
-         * range.startOffset ==> 3
-         * range.endContainer ==> textNode
-         * range.endOffset ==> 3
-         * range.getCommonAncestor() ==> textNode
-         * range.getCommonAncestor(null,true) ==> b
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <i></i>
+         *         <!-- 选区结束 -->
+         *     </div>
+         *
+         *     <script>
+         *
+         *         var ancestorNode = range.getCommonAncestor();
+         *
+         *         //output: 'DIV'
+         *         console.log( ancestorNode.tagName );
+         *
+         *     </script>
+         *
+         * </body>
+         * ```
+         * @example
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *          <span>
+         *              <!-- 选区开始 -->
+         *              <a></a>
+         *          </span>
+         *          <span>
+         *              <i></i>
+         *              <!-- 选区结束 -->
+         *          </span>
+         *     </div>
+         *
+         *     <script>
+         *
+         *         var ancestorNode = range.getCommonAncestor();
+         *
+         *         //output: 'DIV'
+         *         console.log( ancestorNode.tagName );
+         *
+         *     </script>
+         *
+         * </body>
+         * ```
+         */
+
+        /**
+         * 获取当前选区所包含的所有节点的公共祖先节点， 可以根据给定的参数 includeSelf 决定获取到
+         * 的公共祖先节点是否可以是当前选区的startContainer或endContainer节点， 如果 includeSelf
+         * 的取值为true， 则返回的节点可以是自身的容器节点， 否则， 则不能是容器节点
+         * @method  getCommonAncestor
+         * @param { Boolean } includeSelf 是否允许获取到的公共祖先节点是当前range对象的容器节点
+         * @return { Node } 当前range对象内所有节点的公共祖先节点
+         * @see UE.dom.Range:getCommonAncestor()
+         * @example
+         * ```html
+         * <body>
+         *
+         *     <!-- 选区开始 -->
+         *     <div id="test">
+         *         <a></a>
+         *         <i></i>
+         *     </div>
+         *     <!-- 选区结束 -->
+         *
+         *     <script>
+         *
+         *         var ancestorNode = range.getCommonAncestor( true );
+         *
+         *         //output: 'DIV'
+         *         console.log( ancestorNode.tagName );
+         *
+         *         ancestorNode = range.getCommonAncestor( false );
+         *
+         *         //output: BODY
+         *         console.log( ancestorNode.tagName );
+         *
+         *     </script>
+         *
+         * </body>
+         * ```
+         */
+
+        /**
+         * 获取当前选区所包含的所有节点的公共祖先节点， 可以根据给定的参数 includeSelf 决定获取到
+         * 的公共祖先节点是否可以是当前选区的startContainer或endContainer节点， 如果 includeSelf
+         * 的取值为true， 则返回的节点可以是自身的容器节点， 否则， 则不能是容器节点； 同时可以根据
+         * ignoreTextNode 参数的取值决定是否忽略类型为文本节点的祖先节点。
+         * @method  getCommonAncestor
+         * @param { Boolean } includeSelf 是否允许获取到的公共祖先节点是当前range对象的容器节点
+         * @param { Boolean } ignoreTextNode 获取祖先节点的过程中是否忽略类型为文本节点的祖先节点
+         * @return { Node } 当前range对象内所有节点的公共祖先节点
+         * @see UE.dom.Range:getCommonAncestor()
+         * @see UE.dom.Range:getCommonAncestor(Boolean)
+         * @example
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *         <span>
+         *             我是一个
+         *             <!-- 选区开始 -->
+         *             文本
+         *             <!-- 选区结束 -->
+         *             内容
+         *         </span>
+         *     </div>
+         *
+         *     <script>
+         *
+         *         var ancestorNode = range.getCommonAncestor( true, false );
+         *
+         *         //output: 3
+         *         console.log( ancestorNode.nodeType );
+         *         //output: SPAN
+         *         console.log( ancestorNode.parentNode.tagName );
+         *
+         *         ancestorNode = range.getCommonAncestor( true, true );
+         *
+         *         //output: 1
+         *         console.log( ancestorNode.nodeType );
+         *         //output: SPAN
+         *         console.log( ancestorNode.tagName );
+         *
+         *     </script>
+         *
+         * </body>
+         * ```
          */
         getCommonAncestor:function (includeSelf, ignoreTextNode) {
             var me = this,
@@ -769,22 +1054,79 @@
             }
             return domUtils.getCommonAncestor(start, end);
         },
-        /*
-         * 调整边界容器，如果是textNode,就调整到elementNode上
-         * @name trimBoundary
-         * @grammar range.trimBoundary([ignoreEnd])  => Range //true忽略结束边界
+
+        /**
+         * 调整当前Range的开始和结束边界容器，如果是容器节点是文本节点,就调整到包含该文本节点的父节点上
+         * @method trimBoundary
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * DOM Element :
-         * <b>|xxx</b>
-         * startContainer = xxx; startOffset = 0
-         * //执行后本方法后
-         * startContainer = <b>;  startOffset = 0
+         * ```html
+         *
+         * <body>
+         *     <div>
+         *         你好
+         *         <!-- 选区开始 -->
+         *         我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
+         *         <!-- 选区结束 -->
+         *         到这里文本结束了
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: 3
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *         range.trimBoundary();
+         *
+         *         //output: 1
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 1
+         *         console.log( range.endContainer.nodeType );
+         *
+         *     </script>
+         * </body>
+         *
+         * ```
+         */
+
+        /**
+         * 调整当前Range的开始和结束边界容器，如果是容器节点是文本节点,就调整到包含该文本节点的父节点上，
+         * 可以根据 ignoreEnd 参数的值决定是否调整对结束边界的调整
+         * @method trimBoundary
+         * @param { Boolean } ignoreEnd 是否忽略对结束边界的调整
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * Dom Element :
-         * <b>xx|x</b>
-         * startContainer = xxx;  startOffset = 2
-         * //执行本方法后，xxx被实实在在地切分成两个TextNode
-         * startContainer = <b>; startOffset = 1
+         * ```html
+         *
+         * <body>
+         *     <div>
+         *         你好
+         *         <!-- 选区开始 -->
+         *         我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
+         *         <!-- 选区结束 -->
+         *         到这里文本结束了
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: 3
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *         range.trimBoundary( true );
+         *
+         *         //output: 1
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *     </script>
+         * </body>
+         *
+         * ```
          */
         trimBoundary:function (ignoreEnd) {
             this.txtToElmBoundary();
@@ -827,21 +1169,134 @@
             }
             return this;
         },
-        /*
-         * 如果选区在文本的边界上，就扩展选区到文本的父节点上
-         * @name  txtToElmBoundary
+
+        /**
+         * 如果选区在文本的边界上，就扩展选区到文本的父节点上, 如果当前选区是闭合的， 则什么也不做
+         * @method txtToElmBoundary
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * Dom Element :
-         * <b> |xxx</b>
-         * startContainer = xxx;  startOffset = 0
-         * //本方法执行后
-         * startContainer = <b>; startOffset = 0
+         * ```html
+         *
+         * <body>
+         *     <div>
+         *         <!-- 选区开始 -->
+         *         你好，我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
+         *         <!-- 选区结束 -->
+         *         到这里文本结束了
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: 3
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *         range.txtToElmBoundary();
+         *
+         *         //output: 1
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *     </script>
+         * </body>
+         *
+         * ```
          * @example
-         * Dom Element :
-         * <b> xxx| </b>
-         * startContainer = xxx; startOffset = 3
-         * //本方法执行后
-         * startContainer = <b>; startOffset = 1
+         * ```html
+         *
+         * <body>
+         *     <div>
+         *         <!-- 选区开始 -->
+         *         你好，我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
+         *         到这里文本结束了
+         *         <!-- 选区结束 -->
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: 3
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *         range.txtToElmBoundary();
+         *
+         *         //output: 1
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 1
+         *         console.log( range.endContainer.nodeType );
+         *
+         *     </script>
+         * </body>
+         *
+         * ```
+         */
+
+        /**
+         * 如果选区在文本的边界上，就扩展选区到文本的父节点上, 如果当前选区是闭合的， 则根据参数项
+         * ignoreCollapsed 的值决定是否执行该调整
+         * @method txtToElmBoundary
+         * @param { Boolean } ignoreCollapsed 是否忽略选区的闭合状态， 如果该参数取值为true， 则
+         *                      不论选区是否闭合， 都会执行该操作， 反之， 则不会对闭合的选区执行该操作
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         *
+         * <body>
+         *     <div>
+         *         你好，我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
+         *         <!-- 选区开始 --><!-- 选区结束 -->
+         *         到这里文本结束了
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: 3
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *         range.txtToElmBoundary( true );
+         *
+         *         //output: 1
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 1
+         *         console.log( range.endContainer.nodeType );
+         *
+         *     </script>
+         * </body>
+         *
+         * ```
+         * @example
+         * ```html
+         *
+         * <body>
+         *     <div>
+         *         你好，我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
+         *         <!-- 选区开始 --><!-- 选区结束 -->
+         *         到这里文本结束了
+         *     </div>
+         *
+         *     <script>
+         *
+         *         //output: 3
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *         range.txtToElmBoundary( false );
+         *
+         *         //output: 3
+         *         console.log( range.startContainer.nodeType );
+         *         //output: 3
+         *         console.log( range.endContainer.nodeType );
+         *
+         *     </script>
+         * </body>
+         *
+         * ```
          */
         txtToElmBoundary:function (ignoreCollapsed) {
             function adjust(r, c) {
@@ -867,17 +1322,40 @@
             return this;
         },
 
-        /*
-         * 在当前选区的开始位置前插入一个节点或者fragment，range的开始位置会在插入节点的前边
-         * @name  insertNode
-         * @grammar range.insertNode(node)  => Range //node可以是textNode,elementNode,fragment
+        /**
+         * 在当前选区的开始位置后紧临着插入一个节点，新插入的节点会被该range包含
+         * @method  insertNode
+         * @param { Node } 需要插入的节点
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * Range :
-         * xxx[x<p>xxxx</p>xxxx]x<p>sdfsdf</p>
-         * 待插入Node :
-         * <p>ssss</p>
-         * 执行本方法后的Range :
-         * xxx[<p>ssss</p>x<p>xxxx</p>xxxx]x<p>sdfsdf</p>
+         * ```html
+         * <body>
+         *
+         *     <div id="test">
+         *         <!-- 选区开始 -->
+         *         <span></span>
+         *         <i></i>
+         *         <!-- 选区结束 -->
+         *     </div>
+         *
+         *     <script>
+         *
+         *
+         *         var newNode = document.createElement('div');
+         *         newNode.id = 'ueditor';
+         *
+         *         //output: <span></span><i></i>
+         *         console.log( range.cloneContents() );
+         *
+         *         range.insertNode( newNode );
+         *
+         *         //output: <div id="ueditor"></div><span></span><i></i>
+         *         console.log( range.cloneContents() );
+         *
+         *     </script>
+         *
+         * </body>
+         * ```
          */
         insertNode:function (node) {
             var first = node, length = 1;
@@ -899,18 +1377,34 @@
             }
             return this.setStartBefore(first);
         },
-        /*
-         * 设置光标闭合位置,toEnd设置为true时光标将闭合到选区的结尾
-         * @name  setCursor
-         * @grammar range.setCursor([toEnd])  =>  Range   //toEnd为true时，光标闭合到选区的末尾
+
+        /**
+         * 闭合选区到当前选区的开始位置， 并且定位光标到闭合后的位置
+         * @method  setCursor
+         * @return { UE.dom.Range } 当前range对象
+         * @see UE.dom.Range:collapse()
+         */
+
+        /**
+         * 闭合选区， 并且定位光标到闭合后的位置， 可以根据参数toEnd的值控制选区是向前闭合还是向后闭合
+         * @method  setCursor
+         * @param { Boolean } toEnd 是否向后闭合， 如果为true， 则闭合选区时， 将向结束容器方向闭合，
+         *                      反之，则向开始容器方向闭合
+         * @return { UE.dom.Range } 当前range对象
+         * @see UE.dom.Range:collapse(Boolean)
          */
         setCursor:function (toEnd, noFillData) {
             return this.collapse(!toEnd).select(noFillData);
         },
-        /*
+
+        /**
          * 创建当前range的一个书签，记录下当前range的位置，方便当dom树改变时，还能找回原来的选区位置
-         * @name createBookmark
-         * @grammar range.createBookmark([serialize])  => Object  //{start:开始标记,end:结束标记,id:serialize} serialize为真时，开始结束标记是插入节点的id，否则是插入节点的引用
+         * @method createBookmark
+         * @param { Boolean } serialize 控制返回的标记位置是对当前位置的引用还是ID，如果该值为true，则
+         *                              返回标记位置的ID， 反之则返回标记位置的引用
+         * @return { KeyValueMap } 返回一个书签记录键值对， 其包含的key有： start => 开始标记的ID或者引用，
+         *                          end => 结束标记的ID或引用， id => 当前标记的类型， 如果为true，则表示
+         *                          返回的记录的类型为ID， 反之则为引用
          */
         createBookmark:function (serialize, same) {
             var endNode,
@@ -934,10 +1428,13 @@
                 id:serialize
             }
         },
-        /*
-         *  移动边界到书签位置，并删除插入的书签节点
-         *  @name  moveToBookmark
-         *  @grammar range.moveToBookmark(bookmark)  => Range //让当前的range选到给定bookmark的位置,bookmark对象是由range.createBookmark创建的
+
+        /**
+         *  调整当前range的边界到书签位置，并删除该书签对象所标记的位置内的节点
+         *  @method  moveToBookmark
+         *  @param { BookMark } createBookmark所创建的标签对象
+         *  @return { UE.dom.Range } 当前range对象
+         *  @see UE.dom.Range:createBookmark(Boolean)
          */
         moveToBookmark:function (bookmark) {
             var start = bookmark.id ? this.document.getElementById(bookmark.start) : bookmark.start,
@@ -952,12 +1449,63 @@
             }
             return this;
         },
-        /*
-         * 调整range的边界，使其"放大"到最近的父block节点
-         * @name  enlarge
-         * @grammar range.enlarge()  =>  Range
+
+        /**
+         * 调整range的边界，使其"放大"到最近的父节点
+         * @method  enlarge
+         * @return { UE.dom.Range } 当前range对象
          * @example
-         * <p><span>xxx</span><b>x[x</b>xxxxx]</p><p>xxx</p> ==> [<p><span>xxx</span><b>xx</b>xxxxx</p>]<p>xxx</p>
+         * ```html
+         *
+         * <body>
+         *     <div>
+         *          <span>
+         *              <b>a<!-- 选区开始 -->b</b>
+         *              cdef
+         *              <!-- 选区结束 -->
+         *          </span>
+         *     </div>
+         *
+         *     <script>
+         *
+         *          range.enlarge();
+         *
+         *          //output: <span><b>ab</b>cdef</span>
+         *          console.log( enlarge.cloneContents() );
+         *
+         *     </script>
+         * </body>
+         * ```
+         */
+
+        /**
+         * 调整range的边界，使其"放大"到最近的父节点，根据参数 toBlock 的取值， 可以
+         * 要求扩大之后的父节点是block节点
+         * @method  enlarge
+         * @param { Boolean } toBlock 是否要求扩大之后的父节点必须是block节点
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         *
+         * <body>
+         *     <div>
+         *          <span>
+         *              <b>a<!-- 选区开始 -->b</b>
+         *              cdef
+         *              <!-- 选区结束 -->
+         *          </span>
+         *     </div>
+         *
+         *     <script>
+         *
+         *          range.enlarge( true );
+         *
+         *          //output: <div><span><b>ab</b>cdef</span></div>
+         *          console.log( enlarge.cloneContents() );
+         *
+         *     </script>
+         * </body>
+         * ```
          */
         enlarge:function (toBlock, stopFn) {
             var isBody = domUtils.isBody,
@@ -1038,13 +1586,12 @@
             }
             return this;
         },
-        /*
+
+        /**
          * 调整Range的边界，使其"缩小"到最合适的位置
-         * @name adjustmentBoundary
-         * @grammar range.adjustmentBoundary() => Range   //参见<code><a href="#shrinkboundary">shrinkBoundary</a></code>
-         * @example
-         * <b>xx[</b>xxxxx] ==> <b>xx</b>[xxxxx]
-         * <b>x[xx</b><i>]xxx</i> ==> <b>x[xx</b>]<i>xxx</i>
+         * @method adjustmentBoundary
+         * @return { UE.dom.Range } 当前range对象
+         * @see UE.dom.Range:shrinkBoundary()
          */
         adjustmentBoundary:function () {
             if (!this.collapsed) {

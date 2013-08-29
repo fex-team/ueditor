@@ -3,7 +3,7 @@
 ///commandsName  SearchReplace
 ///commandsTitle  查询替换
 ///commandsDialog  dialogs\searchreplace
-/**
+/*
  * @description 查找替换
  * @author zhanyi
  */
