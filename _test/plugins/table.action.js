@@ -5,10 +5,88 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
+//test('点击一列的最上边,选中一列', function () {
+//    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
+//    var editor = te.obj[0];
+//    var range = te.obj[1];
+//    editor.setContent('');
+//    editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+//    /*插入表格*/
+//    stop();
+//    setTimeout(function () {
+//        var tds = editor.body.getElementsByTagName('td');
+//        tds[0].innerHTML = 'hello';
+//        ua.mousemove(tds[0], {clientX: 81, clientY: 9});
+//        var space = ua.browser.ie ? '' : ' ';
+//        var quot = ua.browser.gecko ? '\"' : '';
+//        equal(editor.body.style.cursor, 'url(' + quot + editor.options.cursorpath + 'h.png' + quot + '),' + space + 'pointer');
+//        ua.click(tds[0], {clientX: 81, clientY: 9});
+//        setTimeout(function () {
 //
-//test('从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容', function () {
+////
+////            var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+////            equal(selectedTds.length, 3, '选中一列');
+////            equal(selectedTds[0].innerHTML, 'hello', '检查内容');
+////            equal(selectedTds[0].className, ' selectTdClass', '检查样式');
+////            equal(selectedTds[1].className, ' selectTdClass', '检查样式');
+////            equal(selectedTds[2].className, ' selectTdClass', '检查样式');
+//
+//            //todo trace 3571
+////    ua.click(tds[2],{clientX:370,clientY:9,shiftKey:true});
+////    equal(editor.getUETable(editor.body.firstChild).selectedTds.length,9,'');
+//            start();
+//        }, 50);
+//    }, 50);
+//});
+//test('', function () {
 //    stop()
 //});
+test('框选', function () {
+    if (ua.browser.ie > 8) return;//todo 3579
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent('<p></p>');
+        setTimeout(function () {
+            range.setStart(editor.body.firstChild, 0).collapse(true).select();
+            editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+            var tds = editor.body.getElementsByTagName('td');
+            ua.mousedown(tds[0]);
+            ua.mouseover(tds[4]);
+            ua.mouseup(tds[4]);
+            setTimeout(function () {
+                var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+                var tds = editor.body.getElementsByTagName('td');
+                equal(selectedTds.length, 4, '框选');
+                if (ua.browser.ie && ua.browser.ie < 9)
+                    ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
+                else
+                    ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
+                range.setStart(tds[4], 0).collapse(true).select();
+                ua.mousedown(tds[4], {button: 2});
+                setTimeout(function () {
+                    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+                    var tds = editor.body.getElementsByTagName('td');
+                    equal(selectedTds.length, 4, '右键框选不变');
+                    if (ua.browser.ie && ua.browser.ie < 9)
+                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
+                    else
+                        ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
+                    setTimeout(function () {
+                        UE.delEditor('ue');
+                        te.dom.push(document.getElementById('ue'));
+                        te.dom.push(document.getElementById('edui_fixedlayer'));
+                        start();
+                    }, 200);
+                }, 20);
+            }, 20);
+        }, 50);
+    });
+    stop();
+});
+
 test('tableDragable-显示和消失', function () {
     if (browser.ie && browser.version < 8) return;
     var div = document.body.appendChild(document.createElement('div'));
@@ -169,12 +247,19 @@ test('getText,取表格内的文本', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>');
-    var trs = editor.body.firstChild.getElementsByTagName('tr');
-
-    var ut = editor.getUETable(editor.body.firstChild);
-    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
-    ut.setSelected(cellsRange);
-    equal(editor.selection.getText(), 'hello1hello2');
+    stop();
+    setTimeout(function () {
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        range.setStart(trs[0].cells[0],0).collapse(true).select();
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[0]);
+        ut.setSelected(cellsRange);
+        setTimeout(function () {
+            ua.manualDeleteFillData(editor.body);
+            equal(editor.selection.getText(), 'hello1hello2');
+            start();
+        }, 50);
+    }, 50);
 });
 test('在第一个单元格里最前面回车,且表格前面没有内容', function () {
     var editor = te.obj[0];
@@ -457,7 +542,6 @@ test('拖拽-最下边的单元格', function () {
     }, 20);
     stop();
 });
-/*trace 3022*/
 test('trace 3022 表格名称中backspace、ctrl+z、enter', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -468,31 +552,34 @@ test('trace 3022 表格名称中backspace、ctrl+z、enter', function () {
     editor.addListener('saveScene', function () {
         ok(true);
     });
-    var trs = editor.body.firstChild.getElementsByTagName('tr');
-    range.setStart(trs[0].cells[0], 0).collapse(true).select();
-    editor.execCommand('insertcaption');
-    ua.keydown(editor.body, {'keyCode': 8});
     stop();
     setTimeout(function () {
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
         range.setStart(trs[0].cells[0], 0).collapse(true).select();
-        ua.keydown(editor.body, {'keyCode': 90, 'ctrlKey': true});
+        editor.execCommand('insertcaption');
+        ua.keydown(editor.body, {'keyCode': 8});
         setTimeout(function () {
-            ua.keydown(editor.body, {'keyCode': 13});
-            equal(te.obj[0].body.getElementsByTagName('caption').length, 1, '撤销删除caption');
-            equal(te.obj[0].body.getElementsByTagName('th').length, 0, '不会误插入标题行');
-            equal(te.obj[0].body.getElementsByTagName('table').length, 1, '不会增加表格数量');
-            equal(te.obj[0].body.getElementsByTagName('tr').length, 3, '不会增加表格行数量');
-            equal(te.obj[0].body.getElementsByTagName('tr')[0].cells.length, 3, '不会增加表格列数量');
-            equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
-            if (ua.browser.ie && ua.browser.ie > 8) {
-                equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
-            }
-            else if (!ua.browser.gecko) {
-                equal(te.obj[0].selection.getRange().startContainer.parentNode, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
-            }
-            start();
+
+            range.setStart(trs[0].cells[0], 0).collapse(true).select();
+            ua.keydown(editor.body, {'keyCode': 90, 'ctrlKey': true});
+            setTimeout(function () {
+                ua.keydown(editor.body, {'keyCode': 13});
+                equal(te.obj[0].body.getElementsByTagName('caption').length, 1, '撤销删除caption');
+                equal(te.obj[0].body.getElementsByTagName('th').length, 0, '不会误插入标题行');
+                equal(te.obj[0].body.getElementsByTagName('table').length, 1, '不会增加表格数量');
+                equal(te.obj[0].body.getElementsByTagName('tr').length, 3, '不会增加表格行数量');
+                equal(te.obj[0].body.getElementsByTagName('tr')[0].cells.length, 3, '不会增加表格列数量');
+                equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
+                if (ua.browser.ie && ua.browser.ie > 8) {
+                    equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+                }
+                else if (!ua.browser.gecko) {
+                    equal(te.obj[0].selection.getRange().startContainer.parentNode, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+                }
+                start();
+            }, 20);
         }, 20);
-    }, 20);
+    }, 50);
 });
 
 
@@ -817,7 +904,7 @@ test('在单元格中粘贴_整列', function () {
     equal(editor.body.getElementsByTagName('td').length, 12, '触发粘贴事件后有12个td');
 });
 test('点击一行的最左边,选中一行', function () {
-    if(ua.browser.ie&&ua.browser.ie<9)return;//todo click事件模拟有问题
+    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
@@ -849,7 +936,7 @@ test('点击一行的最左边,选中一行', function () {
     stop();
 });
 test('点击一行的最左边,但是每行只有一列,这时选中单元格中的内容', function () {
-    if(ua.browser.ie&&ua.browser.ie<9)return;//todo click事件模拟有问题
+    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
@@ -858,55 +945,70 @@ test('点击一行的最左边,但是每行只有一列,这时选中单元格中
     var tds = editor.body.getElementsByTagName('td');
     tds[0].innerHTML = 'hello';
     ua.click(tds[0], {clientX: 10, clientY: 23});
-    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
-    equal(selectedTds.length, 0, '不选中行');
-    if (ua.browser.webkit) {
-        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 5, false, '检查选中的range');
-    } else {
-        ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 1, false, '检查选中的range');
-    }
+    setTimeout(function () {
+        var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+        equal(selectedTds.length, 0, '不选中行');
+        if (ua.browser.webkit) {
+            ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 5, false, '检查选中的range');
+        } else {
+            ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 1, false, '检查选中的range');
+        }
+        start();
+    }, 50);
+    stop();
 });
 test('点击一列的最上边,但是每列只有一行,这时选中单元格中的内容', function () {
-    if(ua.browser.ie&&ua.browser.ie<9)return;//todo click事件模拟有问题
+    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
     editor.execCommand('inserttable', {numCols: 1, numRows: 1});
     /*插入表格*/
-    var tds = editor.body.getElementsByTagName('td');
-    tds[0].innerHTML = 'hello';
-    ua.click(tds[0], {clientX: 81, clientY: 9});
-    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
-    equal(selectedTds.length, 0, '不选中列');
-    if (ua.browser.webkit) {
-        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 5, false, '检查选中的range');
-    } else {
-        ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 1, false, '检查选中的range');
-    }
-
+    stop();
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        tds[0].innerHTML = 'hello';
+        ua.click(tds[0], {clientX: 81, clientY: 9});
+        setTimeout(function () {
+            var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+            equal(selectedTds.length, 0, '不选中列');
+            if (ua.browser.webkit) {
+                ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 5, false, '检查选中的range');
+            } else {
+                ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 1, false, '检查选中的range');
+            }
+            start();
+        }, 50);
+    }, 50);
 });
 test('点击一列的最上边,选中一列', function () {
-    if(ua.browser.ie&&ua.browser.ie<9)return;//todo click事件模拟有问题
+    if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
     editor.execCommand('inserttable', {numCols: 3, numRows: 3});
     /*插入表格*/
-    var tds = editor.body.getElementsByTagName('td');
-    tds[0].innerHTML = 'hello';
-    ua.mousemove(tds[0], {clientX: 81, clientY: 9});
-    ua.click(tds[0], {clientX: 81, clientY: 9});
-    var space = ua.browser.ie ? '' : ' ';
-    var quot = ua.browser.gecko ? '\"' : '';
-    equal(editor.body.style.cursor, 'url(' + quot + editor.options.cursorpath + 'h.png' + quot + '),' + space + 'pointer');
-    var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
-    equal(selectedTds.length, 3, '选中一列');
-    equal(selectedTds[0].innerHTML, 'hello', '检查内容');
-    equal(selectedTds[0].className, ' selectTdClass', '检查样式');
-    equal(selectedTds[1].className, ' selectTdClass', '检查样式');
-    equal(selectedTds[2].className, ' selectTdClass', '检查样式');
+    stop();
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        tds[0].innerHTML = 'hello';
+        ua.mousemove(tds[0], {clientX: 81, clientY: 9});
+        var space = ua.browser.ie ? '' : ' ';
+        var quot = ua.browser.gecko ? '\"' : '';
+        equal(editor.body.style.cursor, 'url(' + quot + editor.options.cursorpath + 'h.png' + quot + '),' + space + 'pointer');
+        ua.click(tds[0], {clientX: 81, clientY: 9});
+        setTimeout(function () {
+            var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
+            equal(selectedTds.length, 3, '选中一列');
+            equal(selectedTds[0].innerHTML, 'hello', '检查内容');
+            equal(selectedTds[0].className, ' selectTdClass', '检查样式');
+            equal(selectedTds[1].className, ' selectTdClass', '检查样式');
+            equal(selectedTds[2].className, ' selectTdClass', '检查样式');
 
-    //todo trace 3571
+            //todo trace 3571
 //    ua.click(tds[2],{clientX:370,clientY:9,shiftKey:true});
 //    equal(editor.getUETable(editor.body.firstChild).selectedTds.length,9,'');
+            start();
+        }, 50);
+    }, 50);
 });

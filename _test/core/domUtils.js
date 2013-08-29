@@ -1,16 +1,13 @@
 module( 'core.domUtils' );
+
 test( 'isBoundaryNode--node是firstChild',function(){
-//    var iframe = document.createElement('iframe');
-//    document.body.appendChild(iframe);
-//    var body = iframe.contentDocument.appendChild(document.createElement('body'));
-//    var div = body.appendChild(document.createElement('div'));
+
     if(ua.browser.ie){
         var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
         var div = body.appendChild(document.createElement('div'));
     }else{
-        var div = te.dom[1].contentWindow.document.firstChild.appendChild(document.createElement('div'));
+        var div = te.dom[1].contentWindow.document.firstChild.lastChild.appendChild(document.createElement('div'));
     }
-
     div.innerHTML = "<span>sss</span>aaa<p>ppp</p>";
     var node = div.firstChild.nextSibling;
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
@@ -21,11 +18,8 @@ test( 'isBoundaryNode--node是firstChild',function(){
     node = div.lastChild.lastChild;
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
     equal( domUtils.isBoundaryNode(node, "lastChild"), 1 );
-//    iframe.parentNode.removeChild(iframe);
 } );
-test( 'isBoundaryNode--node是firstChild',function(){
-stop()
-} );
+
 test( 'getPosition--A和B是同一个节点', function() {
     var div = te.dom[2];
     div.innerHTML = "<span>span</span><img  /><b>bbb</b>xxx";
@@ -1107,7 +1101,7 @@ test( 'getComputedStyle-border', function() {
     equal( domUtils.getComputedStyle( div.lastChild, 'border-color' ), 'red' );
 } );
 //修复ie下的一个bug，如果在body上强制设了字体大小，h1的字体大小就会继承body的字体，而没有办法取到真是的字体大小
-test( 'getComputedStyle-在body上设置字体大小', function() {
+test( 'getComputedStyle-在body上设置字体大小,检查h1字体大小', function() {
     var domUtils = baidu.editor.dom.domUtils;
     var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
     var div = document.body.appendChild( document.createElement( 'div' ) );
@@ -1119,8 +1113,9 @@ test( 'getComputedStyle-在body上设置字体大小', function() {
         var h1 = body.appendChild( editor.document.createElement( 'h1' ) );
 //    editor.body.style['fontSize'] = '10px';
 //   h1的字体大小不是10px
-        var fontSize = '32px';
+        var fontSize = (ua.browser.ie&&ua.browser.ie<9)?'33px':'32px';//todo 1.2.7 trace 3588
         equal( domUtils.getComputedStyle( h1, 'font-size' ), fontSize, 'body的fontSize属性不应当覆盖p的fontSize属性' );
+        te.dom.push(div);
 //    editor.setContent( '<h2>这是h2的文本<a>这是一个超链接</a></h2>' );
         start();
     });

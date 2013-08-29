@@ -1305,23 +1305,7 @@ test('applyInlineStyle--多个style', function () {
     equal(span.innerHTML.toLowerCase(), '<i>xxxx</i>', 'check innerHTML including u');
 
 });
-//todo 1.2.6.1 把这个改到font上
-//test( 'trace1583:applyInlineStyle--MergeToParent', function() {
-//    var div = te.dom[2];
-//    var range = new baidu.editor.dom.Range( document );
-//    div.innerHTML = '1<span style="font-size: 24px; ">23456<span style="font-size: 16px; ">7</span></span><span style="font-size: 16px; ">89</span>10';
-//    range.selectNode( div ).select();
-//    range.applyInlineStyle( 'span', {style:'font-size:24px'} );
-//    var html = '<span style="font-size: 24px; ">1</span><span style="font-size: 24px; ">89</span>';
-//    var div_new = document.createElement('div');
-//    div_new.innerHTML = html;
-//    div_new.firstChild.appendChild(document.createTextNode('23456'));
-//    div_new.firstChild.appendChild(document.createTextNode('7'));
-//    div_new.lastChild.appendChild(document.createTextNode('10'));
-//    ua.flag = true;
-//
-//    ok(ua.checkAllChildAttribs(div,div_new),'MergeToParent');
-//} );
+
 test('applyInlineStyle--MergeToParent', function () {
     var div = te.dom[2];
     var range = new baidu.editor.dom.Range(document);

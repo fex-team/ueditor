@@ -120,22 +120,21 @@ test( 'trace 3298：对段落添加引用和去除引用', function () {
 } );
 
 /*trace 3285*/
-//TODO 1.2.6不严重bug注释 空style未删除
-//test( 'trace 3285：startContainer为body添加引用', function () {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    editor.setContent( 'hello<ol><li>hello1</li><li>hello2</li></ol>' );
-//    var body = editor.body;
-//    range.setStart( body, 0 ).setEnd( body, 2 ).select();       /*不闭合选取*/
-//    editor.execCommand( 'blockquote' );
-////    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\" list-paddingleft-2\"':(ua.browser.webkit?' class=\" list-paddingleft-2\"':' style=\" list-paddingleft-2\"');
-//    var padding  = ' class=\" list-paddingleft-2\"';
-//    equal( ua.getChildHTML( body ), '<blockquote><p>hello</p><ol'+padding+'><li><p>hello1</p></li><li><p>hello2</p></li></ol></blockquote>', '选中body加引用' );
-//    equal( editor.queryCommandState( 'blockquote' ), 1, '引用高亮' );
-//    editor.undoManger.undo();
-//    range.setStart( body, 1 ).collapse( true ).select();        /*闭合选取*/
-//    equal( editor.queryCommandState( 'blockquote' ), 0, '引用不高亮' );
-//} );
+test( 'trace 3285：startContainer为body添加引用', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( 'hello<ol><li>hello1</li><li>hello2</li></ol>' );
+    var body = editor.body;
+    range.setStart( body, 0 ).setEnd( body, 2 ).select();       /*不闭合选取*/
+    editor.execCommand( 'blockquote' );
+//    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\" list-paddingleft-2\"':(ua.browser.webkit?' class=\" list-paddingleft-2\"':' style=\" list-paddingleft-2\"');
+    var padding  = ' class=\" list-paddingleft-2\"';
+    equal( ua.getChildHTML( body ), '<blockquote><p>hello</p><ol'+padding+'><li><p>hello1</p></li><li><p>hello2</p></li></ol></blockquote>', '选中body加引用' );
+    equal( editor.queryCommandState( 'blockquote' ), 1, '引用高亮' );
+    editor.undoManger.undo();
+    range.setStart( body, 1 ).collapse( true ).select();        /*闭合选取*/
+    equal( editor.queryCommandState( 'blockquote' ), 0, '引用不高亮' );
+} );
 
 //ie 不通过
 test('aa标签',function(){
@@ -154,14 +153,13 @@ test('aa标签',function(){
 });
 
 /*trace 3284*/
-//TODO 1.2.6不严重bug注释 空style未删除
-//test('trace 3284：列表内引用',function(){
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-////    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':(ua.browser.webkit?' style=\"padding-left: 30px;\"':' style=\"padding-left: 30px;\"');
-//    var padding  = ' class=\" list-paddingleft-2\"';
-//    editor.setContent('<ol><li><blockquote><p>hello1</p></blockquote></li><blockquote><li><p>hello2</p></li></blockquote></ol>');
-//    range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild,0).setEnd(editor.body.firstChild.lastChild.firstChild.firstChild,6).select();
-//    editor.execCommand('blockquote');
-//    equal(ua.getChildHTML(editor.body ),'<ol'+padding+'><li><p>hello1</p></li><li><p>hello2</p></li></ol>','引用删除');
-//});
+test('trace 3284：列表内引用',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+//    var padding  = ua.browser.ie&&ua.browser.ie<9?' style=\"padding-left: 30px\"':(ua.browser.webkit?' style=\"padding-left: 30px;\"':' style=\"padding-left: 30px;\"');
+    var padding  = ' class=\" list-paddingleft-2\"';
+    editor.setContent('<ol><li><blockquote><p>hello1</p></blockquote></li><blockquote><li><p>hello2</p></li></blockquote></ol>');
+    range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild,0).setEnd(editor.body.firstChild.lastChild.firstChild.firstChild,6).select();
+    editor.execCommand('blockquote');
+    equal(ua.getChildHTML(editor.body ),'<ol'+padding+'><li><p>hello1</p></li><li><p>hello2</p></li></ol>','引用删除');
+});

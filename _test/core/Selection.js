@@ -101,15 +101,11 @@ test('getRange--闭合选区的边界情况', function () {
                 range.setStart(editor.body.firstChild.firstChild, 0).collapse(true).select();
                 range = editor.selection.getRange();
                 var strong = editor.body.firstChild.firstChild;
-                if(ua.browser.ie&&ua.browser.ie>8){//todo ie9,10改range
-                    ok(range.startContainer === strong,'startContainer是strong');
-                    ok(range.startOffset == 1,'startOffset是1')
-                }
-                else{
+
                     ok(range.startContainer.nodeType == 3, 'startContainer是文本节点');
                     /*startContainer:ie is xxx,others are strong.firstChild*/
                     ok(( range.startContainer === strong.firstChild) && strong.firstChild.length == 1 || (range.startContainer.nodeValue.length == 3 && range.startContainer === strong.lastChild), 'startContainer是xxx左边的占位符或者xxx');
-                }
+
                 ua.manualDeleteFillData(editor.body);
                 range.setStart(editor.body.firstChild.firstChild, 1).collapse(true).select();
                 /*去掉占位符*/
