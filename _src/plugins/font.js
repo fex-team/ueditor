@@ -148,7 +148,16 @@ UE.plugins['font'] = function () {
                 for (var p in node.attrs) {
                     switch (p) {
                         case 'size':
-                            cssStyle.push('font-size:' + node.attrs[p] + 'px');
+                            cssStyle.push('font-size:' +
+                                ({
+                                '1':'10',
+                                '2':'12',
+                                '3':'16',
+                                '4':'18',
+                                '5':'24',
+                                '6':'32',
+                                '7':'48'
+                            }[node.attrs[p]] || node.attrs[p]) + 'px');
                             break;
                         case 'color':
                             cssStyle.push('color:' + node.attrs[p]);
