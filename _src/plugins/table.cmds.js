@@ -1,4 +1,4 @@
-/**
+/*
  * Created with JetBrains PhpStorm.
  * User: taoqili
  * Date: 13-2-20
@@ -693,7 +693,7 @@
                 });
             }
         },
-        /**
+        /*
          * 查询当前点击的单元格的对齐状态， 如果当前已经选择了多个单元格， 则会返回所有单元格经过统一协调过后的状态
          * @see UE.UETable.getTableCellAlignState
          */
