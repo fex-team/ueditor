@@ -2,7 +2,7 @@
 ///commands 撤销和重做
 ///commandsName  Undo,Redo
 ///commandsTitle  撤销,重做
-/**
+/*
  * @description 回退
  * @author zhanyi
  */

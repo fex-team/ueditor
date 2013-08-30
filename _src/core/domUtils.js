@@ -1834,7 +1834,7 @@ var domUtils = dom.domUtils = {
         }
     },
 
-    /*
+    /**
      * 将显示区域滚动到指定节点的位置
      * @method scrollToView
      * @param    {Node}   node    节点
