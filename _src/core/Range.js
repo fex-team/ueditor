@@ -494,7 +494,7 @@
          *
          *         range.setEndAfter( document.getElementById( "test" ) );
          *
-         *         //output: DJV
+         *         //output: DIV
          *         console.log( range.endContainer.tagName );
          *     </script>
          * </body>
@@ -589,7 +589,7 @@
          *         //output: <a></a>
          *         console.log( range.cloneContents() );
          *
-         *         range.setStartAtLast( document.body. );
+         *         range.setStartAtLast( document.body );
          *
          *         //选区已经闭合， 输出空字符串
          *         //output: ''
@@ -1752,12 +1752,32 @@
             }
             return this.moveToBookmark(bookmark);
         },
-        /*
-         * 得到一个自闭合的节点,常用于获取自闭和的节点，例如图片节点
-         * @name  getClosedNode
-         * @grammar range.getClosedNode()  => node|null
+
+        /**
+         * 获取当前选区中的首个自闭合的节点
+         * @method  getClosedNode
+         * @return { Node | NULL } 如果在当前选区中存在自闭合的节点， 则返回该节点， 否则返回NULL
          * @example
-         * <b>xxxx[<img />]xxx</b>
+         * ```html
+         * <body>
+         *     <div>
+         *         <!-- 选区开始 -->
+         *         <a></a>
+         *         <span><img></span>
+         *         <i></i>
+         *         <!-- 选区结束 -->
+         *     </div>
+         *
+         *     <script>
+         *
+         *         var node = range.getCloseNode();
+         *
+         *         //output: IMG
+         *         console.log( node.tagName );
+         *
+         *     </script>
+         * </body>
+         * ```
          */
         getClosedNode:function () {
             var node;
@@ -1772,10 +1792,11 @@
             }
             return node;
         },
-        /*
-         * 根据当前range选中内容节点（在页面上表现为反白显示）
-         * @name select
-         * @grammar range.select();  => Range
+
+        /**
+         * 选中当前选区
+         * @method select
+         * @return { UE.dom.Range } 返回当前Range对象
          */
         select:browser.ie ? function (noFillData, textRange) {
             var nativeRange;
@@ -1911,10 +1932,20 @@
             }
             return this;
         },
-        /*
-         * 滚动条跳到当然range开始的位置
-         * @name scrollToView
-         * @grammar range.scrollToView([win,offset]) => Range //针对window对象，若不指定，将以编辑区域的窗口为准,offset偏移量
+
+        /**
+         * 滚动到当前range开始的位置
+         * @method scrollToView
+         * @param { Window } win 当前range对象所属的window对象
+         * @return { UE.dom.Range } 当前Range对象
+         */
+
+        /**
+         * 滚动到距离当前range开始位置 offset 的位置处
+         * @method scrollToView
+         * @param { Window } win 当前range对象所属的window对象
+         * @param { Number } offset 距离range开始位置处的偏移量， 如果为正数， 则向下偏移， 反之， 则向上偏移
+         * @return { UE.dom.Range } 当前Range对象
          */
         scrollToView:function (win, offset) {
             win = win ? window : domUtils.getWindow(this.document);
@@ -1927,6 +1958,12 @@
             domUtils.remove(span);
             return me;
         },
+
+        /**
+         * 当前光标所在处是否是一个“填充字符”
+         * @method inFillChar
+         * @return { Boolean } 如果光标当前所处位置处是一个“填充字符”， 则返回true， 否则返回false
+         */
         inFillChar : function(){
             var start = this.startContainer;
             if(this.collapsed && start.nodeType == 3
@@ -1936,6 +1973,8 @@
             }
             return false;
         },
+
+
         createAddress : function(ignoreEnd,ignoreTxt){
             var addr = {},me = this;
 
@@ -2027,6 +2066,13 @@
             !ignoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
         },
+
+        /**
+         * 判断给定的Range对象是否和当前Range对象表示的是同一个选区
+         * @method equals
+         * @param { UE.dom.Range } 需要判断的Range对象
+         * @return { Boolean } 如果给定的Range对象与当前Range对象表示的是同一个选区， 则返回true， 否则返回false
+         */
         equals : function(rng){
             for(var p in this){
                 if(this.hasOwnProperty(p)){
@@ -2037,6 +2083,87 @@
             return true;
 
         },
+
+        /**
+         * 遍历range内的节点。每当遍历一个节点时， 都会执行参数项 doFn 指定的函数， 该函数的接受当前遍历的节点
+         * 作为其参数。
+         * @method traversal
+         * @param { Function }  doFn 对每个遍历的节点要执行的方法， 该方法接受当前遍历的节点作为其参数
+         * @return { UE.dom.Range } 当前range对象
+         * @example
+         * ```html
+         *
+         * <body>
+         *
+         *     <!-- 选区开始 -->
+         *     <span></span>
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         * </body>
+         *
+         * <script>
+         *
+         *     //output: <span></span><a></a>
+         *     console.log( range.cloneContents() );
+         *
+         *     range.traversal( function ( node ) {
+         *
+         *         if ( node.nodeType === 1 ) {
+         *             node.className = "test";
+         *         }
+         *
+         *     } );
+         *
+         *     //output: <span class="test"></span><a class="test"></a>
+         *     console.log( range.cloneContents() );
+         *
+         * </script>
+         * ```
+         */
+
+        /**
+         * 遍历range内的节点。
+         * 每当遍历一个节点时， 都会执行参数项 doFn 指定的函数， 该函数的接受当前遍历的节点
+         * 作为其参数。
+         * 可以通过参数项 filterFn 来指定一个过滤器， 只有符合该过滤器过滤规则的节点才会触
+         * 发doFn函数的执行
+         * @method traversal
+         * @param { Function } doFn 对每个遍历的节点要执行的方法， 该方法接受当前遍历的节点作为其参数
+         * @param { Function } filterFn 过滤器， 该函数接受当前遍历的节点作为参数， 如果该节点满足过滤
+         *                      规则， 请返回true， 该节点会触发doFn， 否则， 请返回false， 则该节点不
+         *                      会触发doFn。
+         * @return { UE.dom.Range } 当前range对象
+         * @see UE.dom.Range:traversal(Function)
+         * @example
+         * ```html
+         *
+         * <body>
+         *
+         *     <!-- 选区开始 -->
+         *     <span></span>
+         *     <a></a>
+         *     <!-- 选区结束 -->
+         * </body>
+         *
+         * <script>
+         *
+         *     //output: <span></span><a></a>
+         *     console.log( range.cloneContents() );
+         *
+         *     range.traversal( function ( node ) {
+         *
+         *         node.className = "test";
+         *
+         *     }, function ( node ) {
+         *          return node.nodeType === 1;
+         *     } );
+         *
+         *     //output: <span class="test"></span><a class="test"></a>
+         *     console.log( range.cloneContents() );
+         *
+         * </script>
+         * ```
+         */
         traversal:function(doFn,filterFn){
             if (this.collapsed)
                 return this;

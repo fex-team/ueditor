@@ -46,6 +46,11 @@
  */
 
 /**
+ * 浏览器DOMNode， dom节点
+ * @class Node
+ */
+
+/**
  * 浏览器DOMElement， dom元素
  * @class Element
  */

@@ -6,12 +6,14 @@
 /**
  * 格式刷，只格式inline的
  * @file
+ * @since 1.2.6.1
  */
 
 /**
  * 格式刷，对inline类型的文本内容执行格式刷操作
  * @command formatmatch
  * @method execCommand
+ * @param { String } cmd 命令字符串
  * @example
  * ```javascript
  * //editor是编辑器实例
@@ -24,6 +26,7 @@
  * 获取当前的格式状态
  * @command formatmatch
  * @method queryCommandState
+ * @param { String } cmd 命令字符串
  * @return { int } 如果当前的格式刷处于可用状态， 则返回1， 否则返回0
  * @example
  * ```javascript
