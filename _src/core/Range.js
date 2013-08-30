@@ -1364,10 +1364,12 @@
             }
             return this;
         },
-        /*
-         * 滚动条跳到当然range开始的位置
-         * @name scrollToView
-         * @grammar range.scrollToView([win,offset]) => Range //针对window对象，若不指定，将以编辑区域的窗口为准,offset偏移量
+        /**
+         * 让滚动条跳到当然range开始的位置
+         * @method scrollToView
+         * @param { Window } win 编辑器所在的window
+         * @param { Number } offset 距离上方的偏移量
+         * @return { Editor } 返回编辑器对象本身
          */
         scrollToView:function (win, offset) {
             win = win ? window : domUtils.getWindow(this.document);
@@ -1380,6 +1382,11 @@
             domUtils.remove(span);
             return me;
         },
+        /**
+         * 判断当前选区内容是否占位符
+         * @method inFillChar
+         * @return { Boolean } 如果是占位符返回true，否则返回false
+         */
         inFillChar : function(){
             var start = this.startContainer;
             if(this.collapsed && start.nodeType == 3
@@ -1389,6 +1396,29 @@
             }
             return false;
         },
+        /**
+         * 保存
+         * @method createAddress
+         * @return { Boolean } 返回开始和结束的位置
+         * @example
+         * ```html
+         * <body>
+         *     <p>
+         *         aaaa
+         *         <em>
+         *             <!-- 选区开始 -->
+         *             bbbb
+         *             <!-- 选区结束 -->
+         *         </em>
+         *     </p>
+         *
+         *     <script>
+         *         //output: {startAddress:[0,1,0,0],endAddress:[0,1,0,4]}
+         *         console.log( range.createAddress() );
+         *     </script>
+         * </body>
+         * ```
+         */
         createAddress : function(ignoreEnd,ignoreTxt){
             var addr = {},me = this;
 
@@ -1448,6 +1478,32 @@
             }
             return addr;
         },
+        /**
+         * 保存
+         * @method createAddress
+         * @return { Boolean } 返回开始和结束的位置
+         * @example
+         * ```html
+         * <body>
+         *     <p>
+         *         aaaa
+         *         <em>
+         *             <!-- 选区开始 -->
+         *             bbbb
+         *             <!-- 选区结束 -->
+         *         </em>
+         *     </p>
+         *
+         *     <script>
+         *         var range = editor.selection.getRange();
+         *         range.moveToAddress({startAddress:[0,1,0,0],endAddress:[0,1,0,4]});
+         *         range.select();
+         *         //output: 'bbbb'
+         *         console.log(editor.selection.getText());
+         *     </script>
+         * </body>
+         * ```
+         */
         moveToAddress : function(addr,ignoreEnd){
             var me = this;
             function getNode(address,isStart){
@@ -1480,6 +1536,18 @@
             !ignoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
         },
+        /**
+         * 比较两个Range对象是否相等
+         * @method equals
+         * @param { Range } rng 要和当前选区比较的Range对象
+         * @returns { Boolean } 如果相等返回true，否则返回false
+         * @example
+         * ```javascript
+         * rangeNew.moveToAddress(rangeOld.createAddress());
+         * //output: true
+         * console.log(rangeNew.equals(rangeOld));
+         * ```
+         */
         equals : function(rng){
             for(var p in this){
                 if(this.hasOwnProperty(p)){
@@ -1490,6 +1558,33 @@
             return true;
 
         },
+        /**
+         * 传入函数，遍历节点
+         * @method traversal
+         * @param { Function } doFn 遍历节点时，每个节点要执行的函数
+         * @param { Function } filterFn 遍历节点的时候可以通过该过滤函数，跳过不需要遍历的节点。函数返回false跳过节点
+         * @returns { Range } 返回当前Range对象
+         * @example
+         * ```html
+         * <body>
+         *     <p>
+         *         <!-- 选区开始 -->
+         *         1<em>23<strong>4567</strong>89</em>01<sup>23</sup>4<sub>56</sub>7890
+         *         <!-- 选区结束 -->
+         *     </p>
+         *     <script>
+         *         //output: EM SUP SUB
+         *         r.traversal(function(node){
+         *                 if(node.tagName) {
+         *                     console.log(node.tagName);
+         *                 }
+         *             }, function(node){
+         *                 return true;
+         *             });
+         *     </script>
+         * </body>
+         * ```
+         */
         traversal:function(doFn,filterFn){
             if (this.collapsed)
                 return this;
