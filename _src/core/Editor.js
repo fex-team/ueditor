@@ -27,7 +27,7 @@
      * 获取编辑器的html内容，赋值到编辑器所在表单的textarea文本域里面
      * @private
      * @method setValue
-     * @param { Editor } editor 编辑器事例
+     * @param { UE.Editor } editor 编辑器事例
      */
     function setValue(form, editor) {
         var textarea;
@@ -61,7 +61,7 @@
      * 初始化插件
      * @private
      * @method loadPlugins
-     * @param { Editor } editor 编辑器事例
+     * @param { UE.Editor } editor 编辑器事例
      */
     function loadPlugins(me) {
         //初始化插件
@@ -1412,7 +1412,7 @@
         /**
          * 根据输入过滤规则，过滤编辑器内容
          * @method  filterInputRule
-         * @param { uNode } root 要过滤的uNode节点
+         * @param { UE.uNode } root 要过滤的uNode节点
          * @remind 执行editor.setContent方法和执行'inserthtml'命令后，会运行该过滤函数
          * @example
          * ```javascript
@@ -1446,7 +1446,7 @@
          * 根据输出过滤规则，过滤编辑器内容
          * @method  filterOutputRule
          * @remind 执行editor.getContent方法的时候，会先运行该过滤函数
-         * @param { uNode } root 要过滤的uNode节点
+         * @param { UE.uNode } root 要过滤的uNode节点
          * @example
          * ```javascript
          * editor.filterOutputRule(editor.body);
