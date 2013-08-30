@@ -1,6 +1,7 @@
 /**
  * B、I、sub、super命令支持
  * @file
+ * @since 1.2.6.1
  */
 
 UE.plugins['basestyle'] = function(){
@@ -8,6 +9,7 @@ UE.plugins['basestyle'] = function(){
     /**
      * 字体加粗， 对已加粗的文本内容执行该命令， 将取消加粗
      * @command bold
+     * @param { String } cmd 命令字符串
      * @method execCommand
      * @example
      * ```javascript
@@ -24,6 +26,7 @@ UE.plugins['basestyle'] = function(){
     /**
      * 获取当前选中的文本内容的加粗状态
      * @command bold
+     * @param { String } cmd 命令字符串
      * @method queryCommandState
      * @return { int } 如果当前选中的所有文本内容已经被加粗， 则返回1， 否则返回0
      * @example
@@ -38,6 +41,7 @@ UE.plugins['basestyle'] = function(){
     /**
      * 字体倾斜, 对已倾斜的文本内容执行该命令， 将取消倾斜
      * @command italic
+     * @param { String } cmd 命令字符串
      * @method execCommand
      * @example
      * ```javascript
@@ -55,6 +59,7 @@ UE.plugins['basestyle'] = function(){
      * 获取当前选中的文本内容的倾斜状态
      * @command italic
      * @method queryCommandState
+     * @param { String } cmd 命令字符串
      * @return { int } 如果当前选中的所有文本内容已经是斜体， 则返回1， 否则返回0
      * @example
      * ```javascript
@@ -70,6 +75,7 @@ UE.plugins['basestyle'] = function(){
      * 正常文本
      * @command subscript
      * @method execCommand
+     * @param { String } cmd 命令字符串
      * @example
      * ```javascript
      * //editor是编辑器实例
@@ -86,6 +92,7 @@ UE.plugins['basestyle'] = function(){
      * 获取当前选中的文本内容的下标状态
      * @command subscript
      * @method queryCommandState
+     * @param { String } cmd 命令字符串
      * @return { int } 如果当前选中的所有文本内容已经是下标文本， 则返回1， 否则返回0
      * @example
      * ```javascript
@@ -101,6 +108,7 @@ UE.plugins['basestyle'] = function(){
      * 正常文本
      * @command superscript
      * @method execCommand
+     * @param { String } cmd 命令字符串
      * @example
      * ```javascript
      * //editor是编辑器实例
@@ -117,6 +125,7 @@ UE.plugins['basestyle'] = function(){
      * 获取当前选中的文本内容的上标状态
      * @command superscript
      * @method queryCommandState
+     * @param { String } cmd 命令字符串
      * @return { int } 如果当前选中的所有文本内容已经是上标文本， 则返回1， 否则返回0
      * @example
      * ```javascript

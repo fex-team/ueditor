@@ -14,8 +14,8 @@
  * @module UE
  * @since 1.2.6.1
  * @method filterNode
- * @param { Object } 指定root节点
- * @param { Object } 过滤规则json对象
+ * @param { Object } root 指定root节点
+ * @param { Object } rules 过滤规则json对象
  * @example
  * ```javascript
  * UE.filterNode(root,editor.options.filterRules);

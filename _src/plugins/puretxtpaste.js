@@ -68,6 +68,7 @@ UE.plugins['pasteplain'] = function(){
      * 启用或取消纯文本粘贴模式
      * @command pasteplain
      * @method execCommand
+     * @param { String } cmd 命令字符串
      * @example
      * ```javascript
      * editor.queryCommandState( 'pasteplain' );
@@ -78,6 +79,7 @@ UE.plugins['pasteplain'] = function(){
      * 查询当前是否处于纯文本粘贴模式
      * @command pasteplain
      * @method queryCommandState
+     * @param { String } cmd 命令字符串
      * @return { int } 如果处于纯文本模式，返回1，否则，返回0
      * @example
      * ```javascript

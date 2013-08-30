@@ -384,8 +384,8 @@ var utils = UE.utils = {
     /**
      * 删除字符串str的首尾空格
      * @method trim
-     * @param { String } str 需要删除首位空格的字符串
-     * @return { String } 删除了首位的空格后的字符串
+     * @param { String } str 需要删除首尾空格的字符串
+     * @return { String } 删除了首尾的空格后的字符串
      * @example
      * ```javascript
      *
@@ -506,7 +506,7 @@ var utils = UE.utils = {
     /**
      * 将css样式转换为驼峰的形式
      * @method cssStyleToDomStyle
-     * @param { String } 需要转换的css样式名
+     * @param { String } cssName 需要转换的css样式名
      * @return { String } 转换成驼峰形式后的css样式名
      * @example
      * ```javascript
