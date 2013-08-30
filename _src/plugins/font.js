@@ -19,6 +19,7 @@
  * 返回选区字体颜色
  * @command forecolor
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } 返回字体颜色
  * @example
  * ```javascript
@@ -41,6 +42,7 @@
  * 返回选区字体颜色
  * @command backcolor
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } 返回字体背景颜色
  * @example
  * ```javascript
@@ -63,6 +65,7 @@
  * 返回选区字体大小
  * @command fontsize
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } 返回字体大小
  * @example
  * ```javascript
@@ -85,6 +88,7 @@
  * 返回选区字体样式
  * @command fontfamily
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } 返回字体样式
  * @example
  * ```javascript
@@ -106,6 +110,7 @@
  * 返回选区下划线样式
  * @command underline
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } underline|default
  * @example
  * ```javascript
@@ -116,6 +121,7 @@
  * 返回选区有无下划线
  * @command underline
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { Bool }true为有下划线，反之则无
  * @example
  * ```javascript
@@ -137,6 +143,7 @@
  * 返回选区删除线样式
  * @command strikethrough
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } line-through|default
  * @example
  * ```javascript
@@ -147,6 +154,7 @@
  * 返回选区有无删除线
  * @command strikethrough
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { Bool }true为有删除线，反之则无
  * @example
  * ```javascript
@@ -168,6 +176,7 @@
  * 返回选区字体边框样式
  * @command fontborder
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } 字体边框样式
  * @example
  * ```javascript
@@ -178,6 +187,7 @@
  * 返回选区有无字体边框
  * @command fontborder
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { Bool }true为有字体边框，反之则无
  * @example
  * ```javascript

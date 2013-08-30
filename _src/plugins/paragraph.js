@@ -36,6 +36,7 @@
  * 返回选区内节点标签名
  * @command Paragraph
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } 节点标签名
  * @example
  * ```javascript

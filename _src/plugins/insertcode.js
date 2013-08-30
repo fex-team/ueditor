@@ -53,6 +53,7 @@ UE.plugins['insertcode'] = function() {
      * 如果选区所在位置是插入插入代码区域，返回代码的语言
      * @command insertcode
      * @method queryCommandValue
+     * @param { String } cmd 命令字符串
      * @return { String } 返回代码的语言
      * @example
      * ```javascript

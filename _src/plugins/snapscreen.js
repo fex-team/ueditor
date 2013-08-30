@@ -1,12 +1,14 @@
 /**
  * 截屏
  * @file
+ * @since 1.2.6.1
  */
 
 /**
  * 截屏
  * @command snapscreen
  * @method execCommand
+ * @param { String } cmd 命令字符串
  * @example
  * ```javascript
  * //editor是编辑器实例

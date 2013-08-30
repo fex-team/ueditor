@@ -23,6 +23,7 @@ UE.plugins['lineheight'] = function(){
      * 查询当前选区内容的行高大小
      * @command lineheight
      * @method queryCommandValue
+     * @param { String } cmd 命令字符串
      * @return { String } 返回当前行高大小
      * @example
      * ```javascript

@@ -53,6 +53,7 @@ UE.plugins['pagebreak'] = function () {
      * 插入分页符，在当前光标插入分页符
      * @command pagebreak
      * @method execCommand
+     * @param { String } cmd 命令字符串
      * @example
      * ```javascript
      * editor.execCommand( 'pagebreak'); //插入一个hr标签，带有样式类名pagebreak
