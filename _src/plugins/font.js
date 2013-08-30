@@ -104,7 +104,7 @@
  */
 /**
  * 返回选区下划线样式
- * @command justify
+ * @command underline
  * @method queryCommandValue
  * @return { String } underline|default
  * @example

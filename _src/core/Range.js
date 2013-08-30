@@ -1958,11 +1958,10 @@
             domUtils.remove(span);
             return me;
         },
-
         /**
-         * 当前光标所在处是否是一个“填充字符”
+         * 判断当前选区内容是否占位符
          * @method inFillChar
-         * @return { Boolean } 如果光标当前所处位置处是一个“填充字符”， 则返回true， 否则返回false
+         * @return { Boolean } 如果是占位符返回true，否则返回false
          */
         inFillChar : function(){
             var start = this.startContainer;
@@ -1974,7 +1973,29 @@
             return false;
         },
 
-
+        /**
+         * 保存
+         * @method createAddress
+         * @return { Boolean } 返回开始和结束的位置
+         * @example
+         * ```html
+         * <body>
+         *     <p>
+         *         aaaa
+         *         <em>
+         *             <!-- 选区开始 -->
+         *             bbbb
+         *             <!-- 选区结束 -->
+         *         </em>
+         *     </p>
+         *
+         *     <script>
+         *         //output: {startAddress:[0,1,0,0],endAddress:[0,1,0,4]}
+         *         console.log( range.createAddress() );
+         *     </script>
+         * </body>
+         * ```
+         */
         createAddress : function(ignoreEnd,ignoreTxt){
             var addr = {},me = this;
 
@@ -2034,6 +2055,32 @@
             }
             return addr;
         },
+        /**
+         * 保存
+         * @method createAddress
+         * @return { Boolean } 返回开始和结束的位置
+         * @example
+         * ```html
+         * <body>
+         *     <p>
+         *         aaaa
+         *         <em>
+         *             <!-- 选区开始 -->
+         *             bbbb
+         *             <!-- 选区结束 -->
+         *         </em>
+         *     </p>
+         *
+         *     <script>
+         *         var range = editor.selection.getRange();
+         *         range.moveToAddress({startAddress:[0,1,0,0],endAddress:[0,1,0,4]});
+         *         range.select();
+         *         //output: 'bbbb'
+         *         console.log(editor.selection.getText());
+         *     </script>
+         * </body>
+         * ```
+         */
         moveToAddress : function(addr,ignoreEnd){
             var me = this;
             function getNode(address,isStart){
@@ -2072,7 +2119,6 @@
          * @method equals
          * @param { UE.dom.Range } 需要判断的Range对象
          * @return { Boolean } 如果给定的Range对象与当前Range对象表示的是同一个选区， 则返回true， 否则返回false
-         */
         equals : function(rng){
             for(var p in this){
                 if(this.hasOwnProperty(p)){

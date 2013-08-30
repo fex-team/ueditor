@@ -883,7 +883,7 @@ UE.plugins['list'] = function () {
      */
 
     /**
-     * 运行无序序列表命令
+     * 运行无序列表命令
      * @command insertunorderedlist
      * @method execCommand
      * @param { String } command 命令字符串
