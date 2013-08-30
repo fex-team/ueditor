@@ -1,5 +1,14 @@
 module("plugins.font");
 
+test( 'trace1583:applyInlineStyle--MergeToParent', function() {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p>1<span style="font-size: 24px; ">23456<span style="font-size: 16px; ">7</span></span><span style="font-size: 16px; ">89</span>10</p>');
+    range.setStart( editor.body.firstChild,0 ).setEnd( editor.body.firstChild,4 ).select();
+    editor.execCommand('fontsize', '24px');
+    var html = '<span style=\"font-size: 24px;\">12345678910</span>';
+    ua.checkSameHtml(editor.body.firstChild.innerHTML.toLowerCase(),html,'');
+} );
 test('trace 3337：字符边框', function () {
 
     if (ua.browser.opera)return;
@@ -272,7 +281,6 @@ test('trace 823：设置前景色后设置删除线', function () {
         editor.execCommand('strikethrough');
         var p1 = editor.document.createElement('p');
         p1.innerHTML = '<span style="color: rgb(153, 230, 0); text-decoration: line-through;">你好<span style="color: rgb(255, 0, 0); text-decoration: line-through;">hello</span></span>';
-        //todo 1.2.6.1 span复制了多余的样式
         ok(ua.haveSameAllChildAttribs(editor.body.firstChild, p1), '检查加入删除线后的样式');
         setTimeout(function () {
             div.parentNode.removeChild(div);
@@ -520,7 +528,6 @@ test('trace 740：设置左右字为红色，修改部分字颜色为蓝色，�
         range.setStart(editor.body.firstChild, 0).setEnd(editor.body.firstChild, 1).select();
         editor.execCommand('fontfamily', ' 楷体, 楷体_GB2312, SimKai; ');
         setTimeout(function () {
-            //todo 1.2.6.1 去掉多余的复制样式
             var html = '<span style="color: rgb(255, 0, 0); font-family: 楷体, 楷体_GB2312, SimKai;">你好<span style="color: rgb(0, 255, 0);">早安</span></span>';
             ua.checkSameHtml(html,editor.body.firstChild.innerHTML, '查看字体和颜色是否正确');
             div.parentNode.removeChild(div);

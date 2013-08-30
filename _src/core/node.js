@@ -395,17 +395,17 @@
             if (!cssStyle) {
                 return ''
             }
-            var reg = new RegExp(name + ':([^;]+)','i');
+            var reg = new RegExp('(^|;)\\s*' + name + ':([^;]+)','i');
             var match = cssStyle.match(reg);
             if (match && match[0]) {
-                return match[1]
+                return match[2]
             }
             return '';
         },
         setStyle:function (name, val) {
             function exec(name, val) {
-                var reg = new RegExp(name + ':([^;]+;?)', 'gi');
-                cssStyle = cssStyle.replace(reg, '');
+                var reg = new RegExp('(^|;)\\s*' + name + ':([^;]+;?)', 'gi');
+                cssStyle = cssStyle.replace(reg, '$1');
                 if (val) {
                     cssStyle = name + ':' + utils.unhtml(val) + ';' + cssStyle
                 }

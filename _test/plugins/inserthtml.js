@@ -72,9 +72,12 @@ test( '表格中插入图片', function() {
     editor.setContent( '<table><tbody><tr><td></td><td></td></tr></tbody></table>' );
     setTimeout(function(){
         var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
-        var ut = editor.getUETable(editor.body.firstChild);
-        var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
-        ut.setSelected(cellsRange);
+
+        if(!ua.browser.ie || ua.browser.ie<9){//todo 1.2.7 trace #3579 ie9,10表格不能框选
+            var ut = editor.getUETable(editor.body.firstChild);
+            var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
+            ut.setSelected(cellsRange);
+        }
         range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
         var tds = body.firstChild.getElementsByTagName( 'td' );
         editor.execCommand( 'inserthtml', '<img style="float:left"/>' );
@@ -87,7 +90,7 @@ test( '表格中插入图片', function() {
     },50);
     stop();
 } );
-
+//test('',function(){stop()});
 test( '选中多个单元格插入超链接', function() {
     if(ua.browser.ie>8)return ;//TODO 1.2.6
     var editor = te.obj[0];
@@ -162,7 +165,7 @@ test( '列表中插入img', function() {
     setTimeout(function(){
         equal(lis.length,1,'列表长度没有变化');
         ua.manualDeleteFillData(lis[0]);
-        if(ua.browser.ie){
+        if(ua.browser.ie&&ua.browser.ie<9){
             equal(lis[0].firstChild.firstChild.tagName.toLowerCase(),'img','列表中插入img');
             equal(lis[0].firstChild.firstChild.attributes['src'].nodeValue,'http://img.baidu.com/hi/jx2/j_0001.gif','列表中插入img');
         }

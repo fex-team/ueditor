@@ -5,12 +5,16 @@ test( '设置段前距查看状态反射', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p>hello1</p><p>hello2</p>' );
+    stop();
+    setTimeout(function () {
     range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
     editor.execCommand( 'rowspacing', 15 ,'top');
     equal( editor.queryCommandValue( 'rowspacing' ,'top'), 15, '查看段前距' );
     /*光标闭合时查看状态反射*/
     range.setStart( editor.body.firstChild.firstChild, 1 ).collapse( true ).select();
     equal( editor.queryCommandValue( 'rowspacing','top' ), 15, '查看段前距' );
+        start();
+    }, 50);
 } );
 
 /*trace 1035*/
@@ -18,9 +22,11 @@ test( '非闭合清除段前距等样式，查看状态反射', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p>hello1</p><p>hello2</p>' );
-    range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
-    editor.execCommand( 'rowspacing', 20,'top' );
-    equal( editor.queryCommandValue( 'rowspacing' ,'top'), 20, '段前距为2.0' );
+
+        range.setStart(editor.body.firstChild, 0).setEnd(editor.body.lastChild, 1).select();
+        editor.execCommand('rowspacing', 20, 'top');
+        equal(editor.queryCommandValue('rowspacing', 'top'), 20, '段前距为2.0');
+
 } );
 
 test( '闭合清除段前距等样式，查看状态反射', function () {
@@ -69,6 +75,7 @@ test( '设置段后距后设置加粗等多种样式', function () {
         setTimeout(function(){
             var range = new baidu.editor.dom.Range( editor.document );
             editor.setContent( '<p>hello1</p><p>hello2</p>' );
+            setTimeout(function(){
             range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
             editor.execCommand( 'rowspacing', 15 ,'bottom');
             setTimeout(function(){
@@ -77,6 +84,7 @@ test( '设置段后距后设置加粗等多种样式', function () {
                 equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
                 div.parentNode.removeChild(div);
                 start();
+            },50);
             },50);
         },100);
     });
@@ -92,6 +100,7 @@ test( '非闭合去除加粗等样式', function () {
         setTimeout(function(){
             var range = new baidu.editor.dom.Range( editor.document );
             editor.setContent( '<p>hello1</p><p>hello2</p>' );
+            setTimeout(function(){
             range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
             editor.execCommand( 'rowspacing', 15 ,'bottom');
             setTimeout(function(){
@@ -102,6 +111,7 @@ test( '非闭合去除加粗等样式', function () {
                 equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 5, '去除样式后查看段后距' );
                 div.parentNode.removeChild(div);
                 start();
+            },50);
             },50);
         },100);
     });
@@ -117,6 +127,7 @@ test( '闭合去除样式', function () {
 
         var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello1</p><p>hello2</p>' );
+        setTimeout(function(){
         range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
         editor.execCommand( 'rowspacing', 15 ,'bottom');
         setTimeout(function(){
@@ -138,7 +149,7 @@ test( '闭合去除样式', function () {
             div.parentNode.removeChild(div);
             start();
         },50);
-
+        },50);
     });
 } );
 
@@ -199,6 +210,8 @@ test( '对插入的代码设置多倍段前距', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p></p>' );
+    stop();
+    setTimeout(function () {
     range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
     var stylecode = "var tds = editor.body.firstChild.getElementsByTagName( 'td' );\n range.selectNode( editor.body.firstChild ).select();";
     editor.execCommand( 'inserthtml', "<pre style='background-color: #F8F8F8;border: 1px solid #CCCCCC;padding:10px 10px'>" + stylecode + "</pre>" );
@@ -209,6 +222,8 @@ test( '对插入的代码设置多倍段前距', function () {
     equal( pre.tagName.toLowerCase(), 'pre', '不允许将p换成pre' );
     equal( pre.style['borderWidth'], '1px', '宽度' );
     ok( pre.style['borderColor'].toUpperCase() == '#CCCCCC' || pre.style['borderColor'] == 'rgb(204, 204, 204)', '颜色' );
+        start();
+    }, 50);
 } );
 
 test( '在合并单元格中设置多倍段前距', function () {

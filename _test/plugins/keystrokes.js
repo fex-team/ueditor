@@ -8,7 +8,6 @@
 module( "plugins.keystrokes" );
 
 test('跨节点输入tab键',function(){
-    //todo ie9,10改range bug trace
     var editor = te.obj[0];
     editor.setContent( '<h1>hello<br></h1><p>he<img src="http://img.baidu.com/hi/jx2/j_0015.gif" />oll</p>' );
     var range = te.obj[1];

@@ -301,7 +301,7 @@ UserAction = {
      *            this is the element that the mouse has moved from. This
      *            argument is ignored for all other events. The default is null.
      */
-    simulateMouseEvent:function (target /* :HTMLElement */, type /* :String */, bubbles /* :Boolean */, cancelable /* :Boolean */, view /* :Window */, detail /* :int */, screenX /* :int */, screenY /* :int */, clientX /* :int */, clientY /* :int */, ctrlKey /* :Boolean */, altKey /* :Boolean */, shiftKey /* :Boolean */, metaKey /* :Boolean */, button /* :int */, relatedTarget /* :HTMLElement */) /* :Void */ {
+    simulateMouseEvent:function (target /* :HTMLElement */, type /* :String */, bubbles /* :Boolean */, cancelable /* :Boolean */, view /* :Window */, detail /* :int */, screenX /* :int */, screenY /* :int */, clientX /* :int */, clientY /* :int */, ctrlKey /* :Boolean */, altKey /* :Boolean */, shiftKey /* :Boolean */, metaKey /* :Boolean */, button /* :int */, relatedTarget /* :HTMLElement */,button) /* :Void */ {
 
         // check target
         target = typeof target == 'string' ? document.getElementById(target)
@@ -462,6 +462,7 @@ UserAction = {
                     customEvent.button = 4;
                     break;
                 case 2:
+                    customEvent.button = 2;
                     // leave as is
                     break;
                 default:
@@ -513,7 +514,7 @@ UserAction = {
             options.screenX, options.screenY, options.clientX,
             options.clientY, options.ctrlKey, options.altKey,
             options.shiftKey, options.metaKey, options.button,
-            options.relatedTarget);
+            options.relatedTarget,options.button);
     },
 
     /**
