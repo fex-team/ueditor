@@ -865,6 +865,7 @@ UE.plugins['list'] = function () {
      * 查询当前选区内容是否有序列表
      * @command insertorderedlist
      * @method queryCommandState
+     * @param { String } cmd 命令字符串
      * @return { int } 如果当前选区是有序列表返回1，否则返回0
      * @example
      * ```javascript
@@ -875,6 +876,7 @@ UE.plugins['list'] = function () {
      * 查询当前选区内容是否有序列表
      * @command insertorderedlist
      * @method queryCommandValue
+     * @param { String } cmd 命令字符串
      * @return { String } 返回当前有序列表的类型，值为null或decimal,lower-alpha,lower-roman,upper-alpha,upper-roman
      * @example
      * ```javascript
@@ -887,7 +889,7 @@ UE.plugins['list'] = function () {
      * @command insertunorderedlist
      * @method execCommand
      * @param { String } command 命令字符串
-     * @param { String } style 插入的有序列表类型，值为：circle,disc,square
+     * @param { String } style 插入的无序列表类型，值为：circle,disc,square
      * @example
      * ```javascript
      * editor.execCommand( 'insertunorderedlist','circle');

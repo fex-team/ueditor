@@ -31,6 +31,7 @@ UE.plugins["wordimage"] = function () {
      * 粘贴word文档的内容时，运行该命令，会把编辑区域里的word图片地址，赋值到editor.word_img的数组里面
      * @command wordimage
      * @method execCommand
+     * @param { String } cmd 命令字符串
      * @example
      * ```javascript
      * editor.execCommand( 'wordimage');
@@ -41,6 +42,7 @@ UE.plugins["wordimage"] = function () {
      * 查询当前是否有word文档粘贴进来的图片
      * @command wordimage
      * @method queryCommandState
+     * @param { String } cmd 命令字符串
      * @return { int } 如果当前编辑区域有word文档的粘贴进来的图片，则返回1，否则返回-1
      * @example
      * ```javascript
