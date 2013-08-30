@@ -28,7 +28,7 @@ UE.plugins["wordimage"] = function () {
     });
 
     /**
-     * 粘贴word文档的图片时，运行该命令，会word的图片本地地址，赋值到editor.word_img的数组里面
+     * 粘贴word文档的内容时，运行该命令，会把编辑区域里的word图片地址，赋值到editor.word_img的数组里面
      * @command wordimage
      * @method execCommand
      * @example

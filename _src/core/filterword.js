@@ -14,7 +14,7 @@
  * @module UE
  * @since 1.2.6.1
  * @method filterWord
- * @param { String } html字符串
+ * @param { String } html html字符串
  * @example
  * ```javascript
  * UE.filterWord(html);
