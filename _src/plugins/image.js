@@ -20,6 +20,7 @@
  * 如果选区所在位置是图片区域
  * @command imagefloat
  * @method queryCommandValue
+ * @param { String } cmd 命令字符串
  * @return { String } 返回图片对齐方式
  * @example
  * ```javascript
@@ -30,6 +31,7 @@
  * 返回当前选区位置是否是图片
  * @command imagefloat
  * @method queryCommandState
+ * @param { String } cmd 命令字符串
  * @return { int } 0为是，-1为不是
  * @example
  * ```javascript
