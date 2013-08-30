@@ -1077,6 +1077,7 @@
         /**
          * 检查编辑区域中是否有内容，若包含参数tags中的节点类型，直接返回true
          * @method  hasContents
+         * @param { Array } tags 传入数组判断时用到的节点类型
          * @return { Boolean } 若文档中包含tags数组里对应的tag，返回true，否则返回false
          * @example
          * ```javascript
