@@ -100,7 +100,7 @@ EventBase.prototype = {
      * 触发事件
      * @method fireEvent
      * @param { String } types 触发的事件名称，同时触发多个事件使用空格分隔
-     * @param { *... } options 第二项开始的参数会传给触发的回调函数
+     * @param { *... } options 可选参数，可以传入一个或多个参数，会传给事件触发的回调函数
      * @example
      * ```javascript
      * editor.fireEvent("selectionchange");

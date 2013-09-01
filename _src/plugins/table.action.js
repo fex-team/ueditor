@@ -1,4 +1,4 @@
-/**
+/*
  * Created with JetBrains PhpStorm.
  * User: taoqili
  * Date: 12-10-12
@@ -523,7 +523,7 @@ UE.plugins['table'] = function () {
                 toggleDraggableState(me, false, "", null);
             }
         });
-        /**
+        /*
          * 表格隔行变色
          */
         me.addListener("interlacetable",function(type,table,classList){
@@ -699,7 +699,7 @@ UE.plugins['table'] = function () {
 
 
     });
-    /**
+    /*
      * 删除obj的宽高style，改成属性宽高
      * @param obj
      * @param replaceToProperty
@@ -907,7 +907,7 @@ UE.plugins['table'] = function () {
         }
     }
 
-    /**
+    /*
      * 获取拖动时允许的X轴坐标
      * @param dragTd
      * @param evt
@@ -928,7 +928,7 @@ UE.plugins['table'] = function () {
         }
     }
 
-    /**
+    /*
      * 获取拖动时允许的Y轴坐标
      */
     function getPermissionY(dragTd, evt) {
@@ -941,7 +941,7 @@ UE.plugins['table'] = function () {
         }
     }
 
-    /**
+    /*
      * 移动状态切换
      */
     function toggleDraggableState(editor, draggable, dir, mousePos, cell) {
@@ -961,7 +961,7 @@ UE.plugins['table'] = function () {
         }
     }
 
-    /**
+    /*
      * 获取与UETable相关的resize line
      * @param uetable UETable对象
      */
@@ -1000,7 +1000,7 @@ UE.plugins['table'] = function () {
 
     }
 
-    /**
+    /*
      * 更新resize-line
      */
     function updateResizeLine( cell, uetable ) {
@@ -1018,7 +1018,7 @@ UE.plugins['table'] = function () {
 
     }
 
-    /**
+    /*
      * 显示resize-line
      */
     function showResizeLine( cell ) {
@@ -1029,7 +1029,7 @@ UE.plugins['table'] = function () {
 
     }
 
-    /**
+    /*
      * 获取鼠标与当前单元格的相对位置
      * @param ele
      * @param mousePos
@@ -1511,7 +1511,7 @@ UE.plugins['table'] = function () {
 
     }
 
-    /**
+    /*
      * 获取调整单元格大小的相关单元格
      * @isContainMergeCell 返回的结果中是否包含发生合并后的单元格
      */
@@ -1583,7 +1583,7 @@ UE.plugins['table'] = function () {
     }
 
 
-    /**
+    /*
      * 通过给定的单元格集合获取最小的单元格width
      */
     function getMinWidthByTableCells( cells ) {
@@ -1662,7 +1662,7 @@ UE.plugins['table'] = function () {
 
     }
 
-    /**
+    /*
      * 获取单元格所在表格的最末单元格的偏移量
      */
     function getTableCellOffset( cell ) {
@@ -1757,7 +1757,7 @@ UE.plugins['table'] = function () {
         }
     }
 
-    /**
+    /*
      * 依据state（v|h）在cell位置显示横线
      * @param state
      * @param cell
@@ -1784,7 +1784,7 @@ UE.plugins['table'] = function () {
         }
     }
 
-    /**
+    /*
      * 当表格边框颜色为白色时设置为虚线,true为添加虚线
      * @param editor
      * @param flag
@@ -1811,7 +1811,7 @@ UE.plugins['table'] = function () {
         return body.offsetWidth - (needIEHack ? parseInt(domUtils.getComputedStyle(body, 'margin-left'), 10) * 2 : 0) - defaultValue.tableBorder * 2 - (editor.options.offsetWidth || 0);
     }
 
-    /**
+    /*
      * 获取当前拖动的单元格
      */
     function getTargetTd(editor, evt) {

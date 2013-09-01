@@ -1,22 +1,30 @@
-///import core
-///import plugins\inserthtml.js
-///commands 日期,时间
-///commandsName  Date,Time
-///commandsTitle  日期,时间
 /**
- * 插入日期
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName    date插入日期
- * @author zhuwenxuan
-*/
+ * 插入时间和日期
+ * @file
+ * @since 1.2.6.1
+ */
+
 /**
- * 插入时间
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName    time插入时间
- * @author zhuwenxuan
-*/
+ * 插入当前时间，插入的格式：12:59:59
+ * @command time
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'time');
+ * ```
+ */
+
+/**
+ * 插入当前日期，插入格式：2013-08-30
+ * @command date
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'date');
+ * ```
+ */
 UE.commands['time'] = UE.commands["date"] = {
     execCommand : function(cmd){
         var date = new Date;

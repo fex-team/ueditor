@@ -1,15 +1,43 @@
-///import core
-///import plugins\inserthtml.js
-///commands 插入图片，操作图片的对齐方式
-///commandsName  InsertImage,ImageNone,ImageLeft,ImageRight,ImageCenter
-///commandsTitle  图片,默认,居左,居右,居中
-///commandsDialog  dialogs\image
 /**
- * Created by .
- * User: zhanyi
- * for image
+ * 图片插入、排版插件
+ * @file
+ * @since 1.2.6.1
  */
 
+/**
+ * 对图片居左居中居右排版
+ * @command imagefloat
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { String } align 对齐方式，可传left、right、none、center
+ * @example
+ * ```javascript
+ * editor.execCommand( 'imagefloat', 'center' );
+ * ```
+ */
+
+/**
+ * 如果选区所在位置是图片区域
+ * @command imagefloat
+ * @method queryCommandValue
+ * @param { String } cmd 命令字符串
+ * @return { String } 返回图片对齐方式
+ * @example
+ * ```javascript
+ * editor.queryCommandValue( 'imagefloat' );
+ * ```
+ */
+/**
+ * 返回当前选区位置是否是图片
+ * @command imagefloat
+ * @method queryCommandState
+ * @param { String } cmd 命令字符串
+ * @return { int } 0为是，-1为不是
+ * @example
+ * ```javascript
+ * editor.queryCommandState( 'imagefloat' );
+ * ```
+ */
 UE.commands['imagefloat'] = {
     execCommand:function (cmd, align) {
         var me = this,
@@ -127,7 +155,21 @@ UE.commands['imagefloat'] = {
         return -1;
     }
 };
-
+/**
+ * 向编辑器插入图片
+ * @command insertimage
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { Object } opt 属性键值对，这些属性都将被复制到当前插入图片
+ * @example
+ * ```javascript
+ * editor.execCommand( 'insertimage', {
+ *     src:'a/b/c.jpg',
+ *     width:'100',
+ *     height:'100'
+ * } );
+ * ```
+ */
 UE.commands['insertimage'] = {
     execCommand:function (cmd, opt) {
 

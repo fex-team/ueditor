@@ -5,9 +5,36 @@
 ///commandsTitle  格式刷
 /**
  * 格式刷，只格式inline的
- * @function
- * @name baidu.editor.execCommand
- * @param {String}     cmdName    formatmatch执行格式刷
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 格式刷，对inline类型的文本内容执行格式刷操作
+ * @command formatmatch
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * //editor是编辑器实例
+ * //获取格式刷
+ * editor.execCommand( 'formatmatch' );
+ * ```
+ */
+
+/**
+ * 获取当前的格式状态
+ * @command formatmatch
+ * @method queryCommandState
+ * @param { String } cmd 命令字符串
+ * @return { int } 如果当前的格式刷处于可用状态， 则返回1， 否则返回0
+ * @example
+ * ```javascript
+ * //editor是编辑器实例
+ * //获取当前选中的文本内容的上标状态
+ * //output: 1 或者 0
+ * console.log( editor.queryCommandState( 'formatmatch' ) );
+ * ```
  */
 UE.plugins['formatmatch'] = function(){
 

@@ -1,9 +1,8 @@
-///import core
-///commands 本地图片引导上传
-///commandsName  WordImage
-///commandsTitle  本地图片引导上传
-///commandsDialog  dialogs\wordimage
-
+/**
+ * 本地图片引导上传插件
+ * @file
+ * @since 1.2.6.1
+ */
 
 UE.plugins["wordimage"] = function () {
     var me = this,
@@ -27,6 +26,30 @@ UE.plugins["wordimage"] = function () {
             }
         })
     });
+
+    /**
+     * 粘贴word文档的内容时，运行该命令，会把编辑区域里的word图片地址，赋值到editor.word_img的数组里面
+     * @command wordimage
+     * @method execCommand
+     * @param { String } cmd 命令字符串
+     * @example
+     * ```javascript
+     * editor.execCommand( 'wordimage');
+     * ```
+     */
+
+    /**
+     * 查询当前是否有word文档粘贴进来的图片
+     * @command wordimage
+     * @method queryCommandState
+     * @param { String } cmd 命令字符串
+     * @return { int } 如果当前编辑区域有word文档的粘贴进来的图片，则返回1，否则返回-1
+     * @example
+     * ```javascript
+     * editor.queryCommandState( 'wordimage' );
+     * ```
+     */
+
     me.commands['wordimage'] = {
         execCommand:function () {
             images = domUtils.getElementsByTagName(me.document.body, "img");

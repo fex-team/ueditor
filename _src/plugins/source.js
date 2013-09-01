@@ -1,9 +1,9 @@
-///import core
-///import plugins/serialize.js
-///import plugins/undo.js
-///commands 查看源码
-///commandsName  Source
-///commandsTitle  查看源码
+/**
+ * 源码编辑插件
+ * @file
+ * @since 1.2.6.1
+ */
+
 (function (){
     var sourceEditors = {
         textarea: function (editor, holder){
@@ -101,6 +101,29 @@
         var oldGetContent = me.getContent,
             bakAddress;
 
+
+        /**
+         * 切换源码编辑模式和可视化编辑模式
+         * @command source
+         * @method execCommand
+         * @param { String } cmd 命令字符串
+         * @example
+         * ```javascript
+         * editor.execCommand( 'source');
+         * ```
+         */
+
+        /**
+         * 查询当前编辑区域的状态是源码模式还是可视化模式
+         * @command source
+         * @method queryCommandState
+         * @param { String } cmd 命令字符串
+         * @return { int } 如果当前是源码编辑模式，返回1，否则返回0
+         * @example
+         * ```javascript
+         * editor.queryCommandState( 'source' );
+         * ```
+         */
         me.commands['source'] = {
             execCommand: function (){
 

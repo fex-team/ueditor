@@ -1,13 +1,29 @@
-///import core
-///import plugins\inserthtml.js
-///commands 分割线
-///commandsName  Horizontal
-///commandsTitle  分隔线
 /**
- * 分割线
- * @function
- * @name baidu.editor.execCommand
- * @param {String}     cmdName    horizontal插入分割线
+ * 插入分割线插件
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 插入分割线，分割线是hr标签
+ * @command horizontal
+ * @method execCommand
+ * @param { String } cmdName 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'horizontal' );
+ * ```
+ */
+
+/**
+ * 查询当前是否允许插入分割线
+ * @command horizontal
+ * @method queryCommandState
+ * @return { Int } 如果选区在表格里面，返回0，否则返回1
+ * @example
+ * ```javascript
+ * editor.queryCommandState( 'horizontal' );
+ * ```
  */
 UE.plugins['horizontal'] = function(){
     var me = this;

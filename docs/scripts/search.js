@@ -5,6 +5,8 @@
 
 jQuery( function ( $ ) {
 
+    'use strict';
+
     //panle open state
     var PANEL_OPEN_STATE = false,
         isInput = false,
@@ -91,6 +93,8 @@ jQuery( function ( $ ) {
 
     function hidePanel () {
         PANEL_OPEN_STATE = false;
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
         $searchPanel.hide();
         $searchInput.blur();
         complete.clear();
@@ -98,6 +102,8 @@ jQuery( function ( $ ) {
 
     function showPanel () {
         PANEL_OPEN_STATE = true;
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
         $searchPanel.show();
         $searchInput.focus();
     }

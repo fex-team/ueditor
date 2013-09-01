@@ -1,16 +1,49 @@
-///import core
-///commands 格式
-///commandsName  Paragraph
-///commandsTitle  段落格式
 /**
  * 段落样式
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     paragraph插入段落执行命令
- * @param   {String}   style               标签值为：'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
- * @param   {String}   attrs               标签的属性
- * @author zhanyi
+ * @file
+ * @since 1.2.6.1
  */
+/**
+ * 对选区内文本添加相应标签嵌套
+ * @command Paragraph
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param {String}   style               标签值为：'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+ * @param {Object}   attrs               标签的属性
+ * @example
+ * ```javascript
+ * editor.execCommand( 'Paragraph','h1','{
+ *     color:'#000'
+ * }' );
+ * ```
+ */
+/**
+ * 对选区内文本添加相应标签嵌套
+ * @command Paragraph
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param {String}   style               标签值为：'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+ * @param {Object}   attrs               标签的属性
+ * @param {String}   sourceCmdName       对与customstyle特殊处理
+ * @example
+ * ```javascript
+ * editor.execCommand( 'Paragraph','h1','{
+ *     color:'#000'
+ * }' );
+ * ```
+ */
+/**
+ * 返回选区内节点标签名
+ * @command Paragraph
+ * @method queryCommandValue
+ * @param { String } cmd 命令字符串
+ * @return { String } 节点标签名
+ * @example
+ * ```javascript
+ * editor.queryCommandValue( 'Paragraph' );
+ * ```
+ */
+
 UE.plugins['paragraph'] = function() {
     var me = this,
         block = domUtils.isBlockElm,

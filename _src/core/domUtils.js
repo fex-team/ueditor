@@ -4,7 +4,15 @@
  * @module UE.dom.domUtils
  * @since 1.2.6.1
  */
-function getDomNode(node, start, ltr, startFromChild, fn, guard) {
+
+/**
+ * Dom操作工具包
+ * @unfile
+ * @module UE.dom.domUtils
+ */
+
+//getNode(node, 'firstChild', 'nextSibling', startFromChild, filterFn, guard);
+function getNode( node, start, ltr, startFromChild, fn, guard ) {
     var tmpNode = startFromChild && node[start],
         parent;
     !tmpNode && (tmpNode = node[ltr]);
@@ -15,7 +23,7 @@ function getDomNode(node, start, ltr, startFromChild, fn, guard) {
         tmpNode = parent[ltr];
     }
     if (tmpNode && fn && !fn(tmpNode)) {
-        return  getDomNode(tmpNode, start, ltr, false, fn);
+        return  getNode(tmpNode, start, ltr, false, fn);
     }
     return tmpNode;
 }
@@ -69,8 +77,8 @@ var domUtils = dom.domUtils = {
     /**
      * 获取节点A相对于节点B的位置关系
      * @method getPosition
-     * @param { DomNode } nodeA 需要查询位置关系的节点A
-     * @param { DomNode } nodeB 需要查询位置关系的节点B
+     * @param { Node } nodeA 需要查询位置关系的节点A
+     * @param { Node } nodeB 需要查询位置关系的节点B
      * @return { Number } 节点A与节点B的关系
      * @example
      * ```javascript
@@ -80,28 +88,28 @@ var domUtils = dom.domUtils = {
      * switch ( position ) {
      *
      *      case 0:
-     *          console.log('相等，同一节点');
+     *          console.log('元素相同');
      *          break;
      *      case 1:
-     *          console.log('无关，节点不相连');
+     *          console.log('两个节点在不同的文档中');
      *          break;
      *      case 2:
-     *          console.log('跟随，即节点A头部位于节点B头部的后面');
+     *          console.log('节点A在节点B之后');
      *          break;
      *      case 4;
-     *          console.log('前置，即节点A头部位于节点B头部的前面');
+     *          console.log('节点A在节点B之前');
      *          break;
      *      case 8:
-     *          console.log('被包含，即节点A被节点B包含');
+     *          console.log('节点A被节点B包含');
      *          break;
      *      case 10:
-     *          console.log('组合类型，即节点A满足跟随节点B且被节点B包含。');
+     *          console.log('节点A被节点B包含且节点A在节点B之后');
      *          break;
      *      case 16:
-     *          console.log('包含，即节点A包含节点B');
+     *          console.log('节点A包含节点B');
      *          break;
      *      case 20:
-     *          console.log('组合类型，即节点A满足前置节点A且包含节点B。');
+     *          console.log('节点A包含节点B且节点A在节点B之前');
      *          break;
      *
      * }
@@ -156,16 +164,16 @@ var domUtils = dom.domUtils = {
     },
 
     /**
-     * 检测节点node在父节点中的索引位置， 忽略文本节点
+     * 检测节点node在父节点中的索引位置
      * @method getNodeIndex
-     * @param { DomNode } node 需要检测的节点对象
+     * @param { Node } node 需要检测的节点对象
      * @return { Number } 该节点在父节点中的位置
      */
 
     /**
-     * 检测节点node在父节点中的索引位置， 根据给定的ignoreTextNode参数决定是否要忽略文本节点
+     * 检测节点node在父节点中的索引位置， 根据给定的mergeTextNode参数决定是否要合并多个连续的文本节点为一个节点
      * @method getNodeIndex
-     * @param { DomNode } node 需要检测的节点对象
+     * @param { Node } node 需要检测的节点对象
      * @param { Boolean } ignoreTextNode 是否忽略文本节点
      * @return { Number } 该节点在父节点中的位置
      */
@@ -185,47 +193,40 @@ var domUtils = dom.domUtils = {
     },
 
     /**
-     * 检测节点node是否在节点doc的树上，实质上是检测是否被doc包含
+     * 检测节点node是否在给定doc的树上，实质上是检测该节点是否在给定的dom树上
      * @method inDoc
-     * @param { DomNode } node 需要检测的节点对象
-     * @param { DomNode } doc 需要检测的节点对象
-     * @return { Boolean } doc节点是否包含node节点
+     * @param { Node } node 需要检测的节点对象
+     * @param { DomDocument } doc 需要检测的document对象
+     * @return { Boolean } 该节点node是否在给定的document的dom树上
+     * @example
+     * ```javascript
+     *
+     * var node = document.createElement("div");
+     *
+     * //output: false
+     * console.log( UE.do.domUtils.inDoc( node, document ) );
+     *
+     * document.body.appendChild( node );
+     *
+     * //output: true
+     * console.log( UE.do.domUtils.inDoc( node, document ) );
+     *
+     * ```
      */
     inDoc:function (node, doc) {
         return domUtils.getPosition(node, doc) == 10;
     },
 
     /**
-     * 查找node节点的父节点，查找的过程中不包含自身节点。
-     * @method findParent
-     * @param { DomNode } node 需要查找的节点
-     * @return { DomNode | Null } 如果该节点有父节点就返回该父节点， 否则返回NULL
-     * @warning 查找的终点是到body节点为止
-     * @example
-     * ```javascript
-     * //因为查找的终点是body标签，所以查找body的父节点将返回NULL
-     * var parentNode = UE.dom.domUtils.findParent( document.body );
-     * //output: true
-     * console.log( parentNode === null )
-     * ```
-     * @example
-     * ```javascript
-     * var parentNode = UE.dom.domUtils.findParent( document.body.firstChild );
-     * //output: BODY
-     * console.log( parentNode.tagName );
-     * ```
-     */
-
-    /**
      * 根据给定的过滤规则filterFn， 查找符合该过滤规则的node节点的祖先节点，
      * 查找的过程中不包含自身节点。
      * @method findParent
-     * @param { DomNode } node 需要查找的节点
+     * @param { Node } node 需要查找的节点
      * @param { Function } filterFn 自定义的过滤方法。
      * @warning 查找的终点是到body节点为止
-     * @remind 自定义的过滤方法filterFn接受一个DomNode对象作为参数， 该对象代表当前执行检测的节点。 如果该
-     *          节点满足过滤条件， 则要求返回true， 否则， 请返回false。
-     * @return { DomNode | Null } 如果找到符合过滤条件的节点， 就返回该节点， 否则返回NULL
+     * @remind 自定义的过滤方法filterFn接受一个Node对象作为参数， 该对象代表当前执行检测的祖先节点。 如果该
+     *          节点满足过滤条件， 则要求返回true， 这时将直接返回该节点作为findParent()的结果， 否则， 请返回false。
+     * @return { Node | Null } 如果找到符合过滤条件的节点， 就返回该节点， 否则返回NULL
      * @example
      * ```javascript
      * var filterNode = UE.dom.domUtils.findParent( document.body.firstChild, function ( node ) {
@@ -244,15 +245,15 @@ var domUtils = dom.domUtils = {
      * 根据给定的过滤规则filterFn， 查找符合该过滤规则的node节点的祖先节点，
      * 查找的过程中根据includeSelf的值决定是否包含自身节点。
      * @method findParent
-     * @param { DomNode } node 需要查找的节点
+     * @param { Node } node 需要查找的节点
      * @param { Function } filterFn 自定义的过滤方法。
      * @param { Boolean } includeSelf 查找过程是否包含自身
      * @warning 查找的终点是到body节点为止
-     * @remind 自定义的过滤方法filterFn接受一个DomNode对象作为参数， 该对象代表当前执行检测的节点。 如果该
-     *          节点满足过滤条件， 则要求返回true， 否则， 请返回false。
+     * @remind 自定义的过滤方法filterFn接受一个Node对象作为参数， 该对象代表当前执行检测的祖先节点。 如果该
+     *          节点满足过滤条件， 则要求返回true， 这时将直接返回该节点作为findParent()的结果， 否则， 请返回false。
      * @remind 如果includeSelf为true， 则过滤器第一次执行时的参数会是节点本身。
      *          反之， 过滤器第一次执行时的参数将是该节点的父节点。
-     * @return { DomNode | Null } 如果找到符合过滤条件的节点， 就返回该节点， 否则返回NULL
+     * @return { Node | Null } 如果找到符合过滤条件的节点， 就返回该节点， 否则返回NULL
      * @example
      * ```html
      * <body>
@@ -290,10 +291,10 @@ var domUtils = dom.domUtils = {
     /**
      * 查找node的节点名为tagName的祖先节点， 查找过程中不包含node节点自身
      * @method findParentByTagName
-     * @param { DomNode } node 需要查找的节点对象
+     * @param { Node } node 需要查找的节点对象
      * @param { Array } tagNames 需要查找的父节点的名称数组
      * @warning 查找的终点是到body节点为止
-     * @return { DomNode | NULL } 如果找到符合条件的节点， 则返回该节点， 否则返回NULL
+     * @return { Node | NULL } 如果找到符合条件的节点， 则返回该节点， 否则返回NULL
      * @example
      * ```javascript
      * var node = UE.dom.domUtils.findParentByTagName( document.getElementsByTagName("div")[0], [ "BODY" ] );
@@ -305,11 +306,11 @@ var domUtils = dom.domUtils = {
     /**
      * 查找node的节点名为tagName的祖先节点， 查找过程中根据includeSelf的值决定是否包含node节点自身
      * @method findParentByTagName
-     * @param { DomNode } node 需要查找的节点对象
+     * @param { Node } node 需要查找的节点对象
      * @param { Array } tagNames 需要查找的父节点的名称数组
      * @param { Boolean } includeSelf 查找过程是否包含node节点自身
      * @warning 查找的终点是到body节点为止
-     * @return { DomNode | NULL } 如果找到符合条件的节点， 则返回该节点， 否则返回NULL
+     * @return { Node | NULL } 如果找到符合条件的节点， 则返回该节点， 否则返回NULL
      * @example
      * ```javascript
      * var queryTarget = document.getElementsByTagName("div")[0];
@@ -323,14 +324,14 @@ var domUtils = dom.domUtils = {
      * 查找node的节点名为tagName的祖先节点，并且该祖先节点不满足excludeFn过滤器的过滤要求，
      * 查找过程中根据includeSelf的值决定是否包含node节点自身，
      * @method findParentByTagName
-     * @param { DomNode } node 需要查找的节点对象
+     * @param { Node } node 需要查找的节点对象
      * @param { Array } tagNames 需要查找的父节点的名称数组
      * @param { Boolean } includeSelf 查找过程是否包含node节点自身
      * @param { Function } excludeFn 查找过程中应用的过滤器， 如果该过滤器对给定的节点返回true，
      *                                  则该节点将被排除在查询结果之外。
      * @remind 查找过滤器excludeFn要求对不应该被匹配的节点应该返回true
      * @warning 查找的终点是到body节点为止
-     * @return { DomNode | NULL } 如果找到符合条件的节点， 则返回该节点， 否则返回NULL
+     * @return { Node | NULL } 如果找到符合条件的节点， 则返回该节点， 否则返回NULL
      * @example
      * ```javascript
      * var queryTarget = document.getElementsByTagName("div")[0];
@@ -352,7 +353,7 @@ var domUtils = dom.domUtils = {
         }, includeSelf);
     },
 
-    /**
+    /*
      * 查找节点node的祖先节点集合
      * @name findParents
      * @grammar UE.dom.domUtils.findParents(node)  => Array  //返回一个祖先节点数组集合，不包含自身
@@ -371,9 +372,9 @@ var domUtils = dom.domUtils = {
     /**
      * 在节点node后面插入新节点newNode
      * @method insertAfter
-     * @param { DomNode } node 目标节点
-     * @param { DomNode } newNode 新插入的节点， 该节点将置于目标节点之后
-     * @return { DomNode } 新插入的节点
+     * @param { Node } node 目标节点
+     * @param { Node } newNode 新插入的节点， 该节点将置于目标节点之后
+     * @return { Node } 新插入的节点
      */
     insertAfter:function (node, newNode) {
         return node.parentNode.insertBefore(newNode, node.nextSibling);
@@ -382,8 +383,8 @@ var domUtils = dom.domUtils = {
     /**
      * 删除节点node及其下属的所有节点
      * @method remove
-     * @param { DomNode } node 需要删除的节点对象
-     * @return { DomNode } 返回刚删除的节点对象
+     * @param { Node } node 需要删除的节点对象
+     * @return { Node } 返回刚删除的节点对象
      * @example
      * ```html
      * <div id="test">
@@ -400,9 +401,9 @@ var domUtils = dom.domUtils = {
     /**
      * 删除节点node，并根据keepChildren的值决定是否保留子节点
      * @method remove
-     * @param { DomNode } node 需要删除的节点对象
+     * @param { Node } node 需要删除的节点对象
      * @param { Boolean } keepChildren 是否需要保留子节点
-     * @return { DomNode } 返回刚删除的节点对象
+     * @return { Node } 返回刚删除的节点对象
      * @example
      * ```html
      * <div id="test">
@@ -432,14 +433,14 @@ var domUtils = dom.domUtils = {
     /*
      * 取得node节点在dom树上的下一个节点,即多叉树遍历
      */
-    getNextDomNode:function (node, startFromChild, filterFn, guard) {
-        return getDomNode(node, 'firstChild', 'nextSibling', startFromChild, filterFn, guard);
+    getNextNode:function (node, startFromChild, filterFn, guard) {
+        return getNode(node, 'firstChild', 'nextSibling', startFromChild, filterFn, guard);
     },
 
     /**
      * 检测节点node是否属是UEditor定义的bookmark节点
      * @method isBookmarkNode
-     * @param { DomNode } node 需要检测的节点对象
+     * @param { Node } node 需要检测的节点对象
      * @return { Boolean } 是否是bookmark节点
      * @example
      * ```html
@@ -458,7 +459,7 @@ var domUtils = dom.domUtils = {
     /**
      * 获取节点node所属的window对象
      * @method  getWindow
-     * @param { DomNode } node 节点对象
+     * @param { Node } node 节点对象
      * @return { Window } 当前节点所属的window对象
      * @example
      * ```javascript
@@ -474,10 +475,10 @@ var domUtils = dom.domUtils = {
     /**
      * 获取离nodeA与nodeB最近的公共的祖先节点
      * @method  getCommonAncestor
-     * @param { DomNode } nodeA 第一个节点
-     * @param { DomNode } nodeB 第二个节点
+     * @param { Node } nodeA 第一个节点
+     * @param { Node } nodeB 第二个节点
      * @remind 如果给定的两个节点是同一个节点， 将直接返回该节点。
-     * @return { DomNode | NULL } 如果未找到公共节点， 返回NULL， 否则返回最近的公共祖先节点。
+     * @return { Node | NULL } 如果未找到公共节点， 返回NULL， 否则返回最近的公共祖先节点。
      * @example
      * ```javascript
      * var commonAncestor = UE.dom.domUtils.getCommonAncestor( document.body, document.body.firstChild );
@@ -536,9 +537,9 @@ var domUtils = dom.domUtils = {
     /**
      * 将一个文本节点textNode拆分成两个文本节点，offset指定拆分位置
      * @method split
-     * @param { DomNode } textNode 需要拆分的文本节点对象
+     * @param { Node } textNode 需要拆分的文本节点对象
      * @param { int } offset 需要拆分的位置， 位置计算从0开始
-     * @return { DomNode } 拆分后形成的新节点
+     * @return { Node } 拆分后形成的新节点
      * @example
      * ```html
      * <div id="test">abcdef</div>
@@ -568,7 +569,7 @@ var domUtils = dom.domUtils = {
     /**
      * 检测文本节点textNode是否为空节点（包括空格、换行、占位符等字符）
      * @method  isWhitespace
-     * @param { DomNode } node 需要检测的节点对象
+     * @param { Node } node 需要检测的节点对象
      * @return { Boolean } 检测的节点是否为空
      * @example
      * ```html
@@ -588,8 +589,8 @@ var domUtils = dom.domUtils = {
     /**
      * 获取元素element相对于viewport的位置坐标
      * @method getXY
-     * @param { DomNode } element 需要计算位置的节点对象
-     * @return { PlainObject } 返回形如{x:left,y:top}的一个key-value映射对象， 其中键x代表水平偏移距离，
+     * @param { Node } element 需要计算位置的节点对象
+     * @return { KeyValueMap } 返回形如{x:left,y:top}的一个key-value映射对象， 其中键x代表水平偏移距离，
      *                          y代表垂直偏移距离。
      *
      * @example
@@ -612,7 +613,7 @@ var domUtils = dom.domUtils = {
     /**
      * 为元素element绑定原生DOM事件，type为事件类型，handler为处理函数
      * @method on
-     * @param { DomNode } element 需要绑定事件的节点对象
+     * @param { Node } element 需要绑定事件的节点对象
      * @param { String } type 绑定的事件类型
      * @param { Function } handler 事件处理器
      * @example
@@ -626,7 +627,7 @@ var domUtils = dom.domUtils = {
     /**
      * 为元素element绑定原生DOM事件，type为事件类型，handler为处理函数
      * @method on
-     * @param { DomNode } element 需要绑定事件的节点对象
+     * @param { Node } element 需要绑定事件的节点对象
      * @param { Array } type 绑定的事件类型数组
      * @param { Function } handler 事件处理器
      * @example
@@ -671,7 +672,7 @@ var domUtils = dom.domUtils = {
     /**
      * 解除DOM事件绑定
      * @method un
-     * @param { DomNode } element 需要解除事件绑定的节点对象
+     * @param { Node } element 需要解除事件绑定的节点对象
      * @param { String } type 需要接触绑定的事件类型
      * @param { Function } handler 对应的事件处理器
      * @example
@@ -685,7 +686,7 @@ var domUtils = dom.domUtils = {
     /**
      * 解除DOM事件绑定
      * @method un
-     * @param { DomNode } element 需要解除事件绑定的节点对象
+     * @param { Node } element 需要解除事件绑定的节点对象
      * @param { Array } type 需要接触绑定的事件类型数组
      * @param { Function } handler 对应的事件处理器
      * @example
@@ -721,8 +722,8 @@ var domUtils = dom.domUtils = {
     /**
      * 比较节点nodeA与节点nodeB是否具有相同的标签名、属性名以及属性值
      * @method  isSameElement
-     * @param { DomNode } nodeA 需要比较的节点
-     * @param { DomNode } nodeB 需要比较的节点
+     * @param { Node } nodeA 需要比较的节点
+     * @param { Node } nodeB 需要比较的节点
      * @return { Boolean } 两个节点是否具有相同的标签名、属性名以及属性值
      * @example
      * ```html
@@ -796,8 +797,8 @@ var domUtils = dom.domUtils = {
     /**
      * 判断节点nodeA与节点nodeB的元素的style属性是否一致
      * @method isSameStyle
-     * @param { DomNode } nodeA 需要比较的节点
-     * @param { DomNode } nodeB 需要比较的节点
+     * @param { Node } nodeA 需要比较的节点
+     * @param { Node } nodeB 需要比较的节点
      * @return { Boolean } 两个节点是否具有相同的style属性值
      * @example
      * ```html
@@ -856,7 +857,7 @@ var domUtils = dom.domUtils = {
     /**
      * 检查节点node是否为block元素
      * @method isBlockElm
-     * @param { DomNode } node 需要检测的节点对象
+     * @param { Node } node 需要检测的节点对象
      * @return { Boolean } 是否是block元素节点
      * @warning 该方法的判断规则如下： 如果该元素原本是block元素， 则不论该元素当前的css样式是什么都会返回true；
      *          否则，检测该元素的css样式， 如果该元素当前是block元素， 则返回true。 其余情况下都返回false。
@@ -887,7 +888,7 @@ var domUtils = dom.domUtils = {
     /**
      * 检测node节点是否为body节点
      * @method isBody
-     * @param { DomElement } node 需要检测的dom元素
+     * @param { Element } node 需要检测的dom元素
      * @return { Boolean } 给定的元素是否是body元素
      * @example
      * ```javascript
@@ -977,7 +978,7 @@ var domUtils = dom.domUtils = {
     /**
      * 删除node节点下首尾两端的空白文本子节点
      * @method trimWhiteTextNode
-     * @param { DomElement } node 需要执行删除操作的元素对象
+     * @param { Element } node 需要执行删除操作的元素对象
      * @example
      * ```html
      * <div id="test">
@@ -1077,7 +1078,7 @@ var domUtils = dom.domUtils = {
     /**
      * 将节点node提取到父节点上
      * @method mergeToParent
-     * @param { DomElement } node 需要提取的元素对象
+     * @param { Element } node 需要提取的元素对象
      * @example
      * ```html
      * <div id="parent">
@@ -1133,7 +1134,7 @@ var domUtils = dom.domUtils = {
     /**
      * 合并节点node的左右兄弟节点
      * @method mergeSibling
-     * @param { DomElement } node 需要合并的目标节点
+     * @param { Element } node 需要合并的目标节点
      * @example
      * ```html
      * <b>xxxx</b><b id="test">ooo</b><b>xxxx</b>
@@ -1150,7 +1151,7 @@ var domUtils = dom.domUtils = {
     /**
      * 合并节点node的左右兄弟节点， 可以根据给定的条件选择是否忽略合并左节点。
      * @method mergeSibling
-     * @param { DomElement } node 需要合并的目标节点
+     * @param { Element } node 需要合并的目标节点
      * @param { Boolean } ignorePre 是否忽略合并左节点
      * @example
      * ```html
@@ -1168,7 +1169,7 @@ var domUtils = dom.domUtils = {
     /**
      * 合并节点node的左右兄弟节点，可以根据给定的条件选择是否忽略合并左右节点。
      * @method mergeSibling
-     * @param { DomElement } node 需要合并的目标节点
+     * @param { Element } node 需要合并的目标节点
      * @param { Boolean } ignorePre 是否忽略合并左节点
      * @param { Boolean } ignoreNext 是否忽略合并右节点
      * @remind 如果同时忽略左右节点， 则该操作什么也不会做
@@ -1205,7 +1206,7 @@ var domUtils = dom.domUtils = {
     /**
      * 设置节点node及其子节点不会被选中
      * @method unSelectable
-     * @param { DomElement } node 需要执行操作的dom元素
+     * @param { Element } node 需要执行操作的dom元素
      * @remind 执行该操作后的节点， 将不能被鼠标选中
      * @example
      * ```javascript
@@ -1302,8 +1303,8 @@ var domUtils = dom.domUtils = {
      * @method createElement
      * @param { DomDocument } doc 新创建的元素属于该document节点创建
      * @param { String } tagName 需要创建的元素的标签名
-     * @param { PlainObject } attrs 新创建的元素的属性key-value集合
-     * @return { DomElement } 新创建的元素对象
+     * @param { KeyValueMap } attrs 新创建的元素的属性key-value集合
+     * @return { Element } 新创建的元素对象
      * @example
      * ```javascript
      * var ele = UE.dom.domUtils.createElement( document, 'div', {
@@ -1325,9 +1326,9 @@ var domUtils = dom.domUtils = {
     /**
      * 为节点node添加属性attrs，attrs为属性键值对
      * @method setAttributes
-     * @param { DomElement } node 需要设置属性的元素对象
+     * @param { Element } node 需要设置属性的元素对象
      * @param { KeyValueMap } attrs 需要设置的属性名-值对
-     * @return { DomElement } 设置属性的元素对象
+     * @return { Element } 设置属性的元素对象
      * @example
      * ```html
      * <span id="test"></span>
@@ -1373,7 +1374,7 @@ var domUtils = dom.domUtils = {
     /**
      * 获取元素element经过计算后的样式值
      * @method getComputedStyle
-     * @param { DomElement } element 需要获取样式的元素对象
+     * @param { Element } element 需要获取样式的元素对象
      * @param { String } styleName 需要获取的样式名
      * @return { String } 获取到的样式值
      * @example
@@ -1428,7 +1429,7 @@ var domUtils = dom.domUtils = {
     /**
      * 删除元素element指定的className
      * @method removeClasses
-     * @param { DomElement } ele 需要删除class的元素节点
+     * @param { Element } ele 需要删除class的元素节点
      * @param { String } classNames 需要删除的className， 多个className之间以空格分开
      * @example
      * ```html
@@ -1449,7 +1450,7 @@ var domUtils = dom.domUtils = {
     /**
      * 删除元素element指定的className
      * @method removeClasses
-     * @param { DomElement } ele 需要删除class的元素节点
+     * @param { Element } ele 需要删除class的元素节点
      * @param { Array } classNames 需要删除的className数组
      * @example
      * ```html
@@ -1483,7 +1484,7 @@ var domUtils = dom.domUtils = {
     /**
      * 给元素element添加className
      * @method addClass
-     * @param { DomNode } ele 需要增加className的元素
+     * @param { Node } ele 需要增加className的元素
      * @param { String } classNames 需要添加的className， 多个className之间以空格分割
      * @remind 相同的类名不会被重复添加
      * @example
@@ -1505,7 +1506,7 @@ var domUtils = dom.domUtils = {
     /**
      * 给元素element添加className
      * @method addClass
-     * @param { DomNode } ele 需要增加className的元素
+     * @param { Node } ele 需要增加className的元素
      * @param { Array } classNames 需要添加的className的数组
      * @remind 相同的类名不会被重复添加
      * @example
@@ -1536,7 +1537,7 @@ var domUtils = dom.domUtils = {
     /**
      * 判断元素element是否包含给定的样式类名className
      * @method hasClass
-     * @param { DomNode } ele 需要检测的元素
+     * @param { Node } ele 需要检测的元素
      * @param { String } classNames 需要检测的className， 多个className之间用空格分割
      * @return { Boolean } 元素是否包含所有给定的className
      * @example
@@ -1558,7 +1559,7 @@ var domUtils = dom.domUtils = {
     /**
      * 判断元素element是否包含给定的样式类名className
      * @method hasClass
-     * @param { DomNode } ele 需要检测的元素
+     * @param { Node } ele 需要检测的元素
      * @param { Array } classNames 需要检测的className数组
      * @return { Boolean } 元素是否包含所有给定的className
      * @example
@@ -1605,7 +1606,7 @@ var domUtils = dom.domUtils = {
     /**
      * 删除元素element指定的样式
      * @method removeStyle
-     * @param { DomElement } element 需要删除样式的元素
+     * @param { Element } element 需要删除样式的元素
      * @param { String } styleName 需要删除的样式名
      * @example
      * ```html
@@ -1647,7 +1648,7 @@ var domUtils = dom.domUtils = {
     /**
      * 获取元素element的style属性的指定值
      * @method getStyle
-     * @param { DomElement } element 需要获取属性值的元素
+     * @param { Element } element 需要获取属性值的元素
      * @param { String } styleName 需要获取的style的名称
      * @warning 该方法仅获取元素style属性中所标明的值
      * @return { String } 该元素包含指定的style属性值
@@ -1677,7 +1678,7 @@ var domUtils = dom.domUtils = {
     /**
      * 为元素element设置样式属性值
      * @method setStyle
-     * @param { DomElement } element 需要设置样式的元素
+     * @param { Element } element 需要设置样式的元素
      * @param { String } styleName 样式名
      * @param { String } styleValue 样式值
      * @example
@@ -1708,7 +1709,7 @@ var domUtils = dom.domUtils = {
     /**
      * 为元素element设置多个样式属性值
      * @method setStyles
-     * @param { DomElement } element 需要设置样式的元素
+     * @param { Element } element 需要设置样式的元素
      * @param { KeyValueMap } styles 样式名值对
      * @example
      * ```html
@@ -1740,6 +1741,7 @@ var domUtils = dom.domUtils = {
 
     /**
      * 删除_moz_dirty属性
+     * @method removeDirtyAttr
      */
     removeDirtyAttr:function (node) {
         for (var i = 0, ci, nodes = node.getElementsByTagName('*'); ci = nodes[i++];) {
@@ -1751,7 +1753,7 @@ var domUtils = dom.domUtils = {
     /**
      * 获取子节点的数量
      * @method getChildCount
-     * @param { DomElement } node 需要检测的元素
+     * @param { Element } node 需要检测的元素
      * @return { Number } 给定的node元素的子节点数量
      * @example
      * ```html
@@ -1771,7 +1773,7 @@ var domUtils = dom.domUtils = {
     /**
      * 根据给定的过滤规则， 获取符合条件的子节点的数量
      * @method getChildCount
-     * @param { DomElement } node 需要检测的元素
+     * @param { Element } node 需要检测的元素
      * @param { Function } fn 过滤器， 要求对符合条件的子节点返回true， 反之则要求返回false
      * @return { Number } 符合过滤条件的node元素的子节点数量
      * @example
@@ -1809,7 +1811,7 @@ var domUtils = dom.domUtils = {
     /**
      * 判断给定节点是否为空节点
      * @method isEmptyNode
-     * @param { DomNode } node 需要检测的节点对象
+     * @param { Node } node 需要检测的节点对象
      * @return { Boolean } 节点是否为空
      * @example
      * ```javascript
@@ -1840,7 +1842,7 @@ var domUtils = dom.domUtils = {
         }
     },
 
-    /*
+    /**
      * 将显示区域滚动到指定节点的位置
      * @method scrollToView
      * @param    {Node}   node    节点
@@ -1885,7 +1887,7 @@ var domUtils = dom.domUtils = {
     /**
      * 判断给定节点是否为br
      * @method isBr
-     * @param { DomNode } node 需要判断的节点对象
+     * @param { Node } node 需要判断的节点对象
      * @return { Boolean } 给定的节点是否是br节点
      */
     isBr:function (node) {
@@ -1894,7 +1896,8 @@ var domUtils = dom.domUtils = {
 
     /**
      * 判断给定的节点是否是一个“填充”节点
-     * @param { DomNode } node 需要判断的节点
+     * @method isFillChar
+     * @param { Node } node 需要判断的节点
      * @param { Boolean } isInStart 是否从节点内容的开始位置匹配
      * @returns { Boolean } 节点是否是填充节点
      */
@@ -1959,7 +1962,8 @@ var domUtils = dom.domUtils = {
 
     /**
      * 判断给定的元素是否是一个空元素
-     * @param { DomElement } node 需要判断的元素
+     * @method isEmptyBlock
+     * @param { Element } node 需要判断的元素
      * @return { Boolean } 是否是空元素
      * @example
      * ```html
@@ -1974,7 +1978,8 @@ var domUtils = dom.domUtils = {
 
     /**
      * 根据指定的判断规则判断给定的元素是否是一个空元素
-     * @param { DomElement } node 需要判断的元素
+     * @method isEmptyBlock
+     * @param { Element } node 需要判断的元素
      * @param { RegExp } reg 对内容执行判断的正则表达式对象
      * @return { Boolean } 是否是空元素
      */
@@ -1996,7 +2001,7 @@ var domUtils = dom.domUtils = {
     /**
      * 移动元素使得该元素的位置移动指定的偏移量的距离
      * @method setViewportOffset
-     * @param { DomElement } element 需要设置偏移量的元素
+     * @param { Element } element 需要设置偏移量的元素
      * @param { KeyValueMap } offset 偏移量， 形如{ left: 100, top: 50 }的一个键值对， 表示该元素将在
      *                                  现有的位置上向水平方向偏移offset.left的距离， 在竖直方向上偏移
      *                                  offset.top的距离
@@ -2037,7 +2042,7 @@ var domUtils = dom.domUtils = {
      * 用“填充字符”填充节点
      * @method fillNode
      * @param { DomDocument } doc 填充的节点所在的docment对象
-     * @param { DomNode } node 需要填充的节点对象
+     * @param { Node } node 需要填充的节点对象
      * @example
      * ```html
      * <div id="test"></div>
@@ -2065,8 +2070,8 @@ var domUtils = dom.domUtils = {
     /**
      * 把节点src的所有子节点追加到另一个节点tag上去
      * @method moveChild
-     * @param { DomNode } src 源节点， 该节点下的所有子节点将被移除
-     * @param { DomNode } tag 目标节点， 从源节点移除的子节点将被追加到该节点下
+     * @param { Node } src 源节点， 该节点下的所有子节点将被移除
+     * @param { Node } tag 目标节点， 从源节点移除的子节点将被追加到该节点下
      * @example
      * ```html
      * <div id="test1">
@@ -2096,8 +2101,8 @@ var domUtils = dom.domUtils = {
     /**
      * 把节点src的所有子节点移动到另一个节点tag上去, 可以通过dir参数控制附加的行为是“追加”还是“插入顶部”
      * @method moveChild
-     * @param { DomNode } src 源节点， 该节点下的所有子节点将被移除
-     * @param { DomNode } tag 目标节点， 从源节点移除的子节点将被附加到该节点下
+     * @param { Node } src 源节点， 该节点下的所有子节点将被移除
+     * @param { Node } tag 目标节点， 从源节点移除的子节点将被附加到该节点下
      * @param { Boolean } dir 附加方式， 如果为true， 则附加进去的节点将被放到目标节点的顶部， 反之，则放到末尾
      * @example
      * ```html
@@ -2137,7 +2142,7 @@ var domUtils = dom.domUtils = {
     /**
      * 判断节点的标签上是否不存在任何属性
      * @method hasNoAttributes
-     * @param { DomNode } node 需要检测的节点对象
+     * @param { Node } node 需要检测的节点对象
      * @return { Boolean } 节点是否不包含任何属性
      * @example
      * ```html
@@ -2161,7 +2166,7 @@ var domUtils = dom.domUtils = {
     /**
      * 检测节点是否是UEditor所使用的辅助节点
      * @method isCustomeNode
-     * @param { DomNode } node 需要检测的节点
+     * @param { Node } node 需要检测的节点
      * @remind 辅助节点是指编辑器要完成工作临时添加的节点， 在输出的时候将会从编辑器内移除， 不会影响最终的结果。
      * @return { Boolean } 给定的节点是否是一个辅助节点
      */
@@ -2172,7 +2177,7 @@ var domUtils = dom.domUtils = {
     /**
      * 检测节点的标签是否是给定的标签
      * @method isTagNode
-     * @param { DomNode } node 需要检测的节点对象
+     * @param { Node } node 需要检测的节点对象
      * @param { String } tagName 标签
      * @return { Boolean } 节点的标签是否是给定的标签
      * @example
@@ -2196,7 +2201,7 @@ var domUtils = dom.domUtils = {
      * @method filterNodeList
      * @param { Array } nodeList 需要过滤的节点数组
      * @param { Function } fn 过滤器， 对符合条件的节点， 执行结果返回true， 反之则返回false
-     * @return { DomNode | NULL } 如果找到符合过滤条件的节点， 则返回该节点， 否则返回NULL
+     * @return { Node | NULL } 如果找到符合过滤条件的节点， 则返回该节点， 否则返回NULL
      * @example
      * ```javascript
      * var divNodes = document.getElementsByTagName("div");
@@ -2214,7 +2219,7 @@ var domUtils = dom.domUtils = {
      * @method filterNodeList
      * @param { Array } nodeList 需要过滤的节点数组
      * @param { String } tagNames 需要匹配的标签名， 多个标签名之间用空格分割
-     * @return { DomNode | NULL } 如果找到标签名匹配的节点， 则返回该节点， 否则返回NULL
+     * @return { Node | NULL } 如果找到标签名匹配的节点， 则返回该节点， 否则返回NULL
      * @example
      * ```javascript
      * var divNodes = document.getElementsByTagName("div");
@@ -2232,7 +2237,7 @@ var domUtils = dom.domUtils = {
      * @param { Array } nodeList 需要过滤的节点数组
      * @param { Function } fn 过滤器， 对符合条件的节点， 执行结果返回true， 反之则返回false
      * @param { Boolean } forAll 是否返回整个节点数组, 如果该参数为false， 则返回节点集合中的第一个节点
-     * @return { Array | DomNode | NULL } 如果找到符合过滤条件的节点， 则根据参数forAll的值决定返回满足
+     * @return { Array | Node | NULL } 如果找到符合过滤条件的节点， 则根据参数forAll的值决定返回满足
      *                                      过滤条件的节点数组或第一个节点， 否则返回NULL
      * @example
      * ```javascript

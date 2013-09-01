@@ -1,11 +1,22 @@
-///import core
-///import plugins\inserthtml.js
-///import plugins\image.js
-///commandsName  snapscreen
-///commandsTitle  截屏
 /**
- * 截屏插件
+ * 截屏
+ * @file
+ * @since 1.2.6.1
  */
+
+/**
+ * 截屏
+ * @command snapscreen
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * //editor是编辑器实例
+ * //执行截屏命令， 需要服务器端配合接收图片
+ * editor.execCommand( 'snapscreen' );
+ * ```
+ */
+
 UE.plugins['snapscreen'] = function(){
     var me = this,
         doc,

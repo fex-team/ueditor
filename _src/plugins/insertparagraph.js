@@ -1,12 +1,20 @@
-///import core
-///commands 插入空行
-///commandsName  insertparagraph
-///commandsTitle  插入空行
 /**
- * 插入空行
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     insertparagraph
+ * 插入新的段落
+ * @file
+ * @since 1.2.6.1
+ */
+
+
+/**
+ * 在当前光标位置处插入新段落, 如果光标已经在段落之中， 则会在该段落之后插入一个新的段落。
+ * @command insertparagraph
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * //editor是编辑器实例
+ * editor.execCommand( 'insertparagraph' );
+ * ```
  */
 
 UE.commands['insertparagraph'] = {

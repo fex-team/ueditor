@@ -1,14 +1,15 @@
-///import core
-///import plugins/inserthtml.js
-///commands 视频
-///commandsName InsertVideo
-///commandsTitle  插入视频
-///commandsDialog  dialogs\video
+/**
+ * video插件， 为UEditor提供视频插入支持
+ * @file
+ * @since 1.2.6.1
+ */
+
 UE.plugins['video'] = function (){
+
     var me =this,
         div;
 
-    /**
+    /*
      * 创建插入视频字符窜
      * @param url 视频地址
      * @param width 视频宽度
@@ -46,6 +47,49 @@ UE.plugins['video'] = function (){
         switchImgAndEmbed(root)
     });
 
+    /**
+     * 插入视频
+     * @command insertvideo
+     * @method execCommand
+     * @param { String } cmd 命令字符串
+     * @param { KeyValueMap } videoObj 键值对对象， 描述一个视频的所有属性
+     * @example
+     * ```javascript
+     *
+     * //editor 是编辑器实例
+     * editor.execCommand( 'insertvideo', {
+     *
+     * } );
+     * ```
+     */
+
+    /**
+     * 插入视频
+     * @command insertvideo
+     * @method execCommand
+     * @param { String } cmd 命令字符串
+     * @param { Array } videoArr 需要插入的视频的数组， 其中的每一个元素都是一个键值对对象， 描述了一个视频的所有属性
+     * @example
+     * ```javascript
+     *
+     * //editor 是编辑器实例
+     * editor.execCommand( 'insertvideo', [  ] );
+     * ```
+     */
+
+    /**
+     * 查询当前光标所在处是否是一个视频
+     * @command insertvideo
+     * @method queryCommandState
+     * @param { String } cmd 需要查询的命令字符串
+     * @return { int } 如果当前光标所在处的元素是一个视频对象， 则返回1，否则返回0
+     * @example
+     * ```javascript
+     *
+     * //editor 是编辑器实例
+     * editor.queryCommandState( 'insertvideo' );
+     * ```
+     */
     me.commands["insertvideo"] = {
         execCommand: function (cmd, videoObjs){
             videoObjs = utils.isArray(videoObjs)?videoObjs:[videoObjs];

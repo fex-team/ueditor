@@ -1,11 +1,33 @@
-///import core
 /**
- * @description 插入内容
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     inserthtml插入内容的命令
- * @param   {String}   html                要插入的内容
- * @author zhanyi
+ * 插入html字符串插件
+ * @file
+ * @since 1.2.6.1
  */
+
+/**
+ * 对编辑器区域插入html字符串
+ * @command inserthtml
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { String } html 插入的html字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'insertcode', '<p>我是UEdtior开发者</P>' );
+ * ```
+ */
+/**
+ * 对编辑器区域插入html字符串
+ * @command inserthtml
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { String } html 插入的html字符串
+ * @param { Bool } notNeedFilter 传true时不走过滤规则，反之要走配置项过滤规则
+ * @example
+ * ```javascript
+ * editor.execCommand( 'inserthtml', '<div>我是UEdtior开发者</div>' ,true);
+ * ```
+ */
+
 UE.commands['inserthtml'] = {
     execCommand: function (command,html,notNeedFilter){
         var me = this,

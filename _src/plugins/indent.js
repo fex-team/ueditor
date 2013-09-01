@@ -1,14 +1,32 @@
-///import core
-///import plugins\paragraph.js
-///commands 首行缩进
-///commandsName  Outdent,Indent
-///commandsTitle  取消缩进,首行缩进
 /**
- * 首行缩进
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     outdent取消缩进，indent缩进
+ * 缩进
+ * @file
+ * @since 1.2.6.1
  */
+
+/**
+ * 给选区内文本添加缩进
+ * @command indent
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'indent' );
+ * ```
+ */
+
+/**
+ * 返回当前选区位置是否有缩进
+ * @command indent
+ * @method queryCommandState
+ * @param { String } cmd 命令字符串
+ * @return { int } 0为不是，1为是
+ * @example
+ * ```javascript
+ * editor.queryCommandState( 'indent' );
+ * ```
+ */
+
 UE.commands['indent'] = {
     execCommand : function() {
          var me = this,value = me.queryCommandState("indent") ? "0em" : (me.options.indentValue || '2em');
