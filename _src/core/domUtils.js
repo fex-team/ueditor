@@ -433,7 +433,7 @@ var domUtils = dom.domUtils = {
     /*
      * 取得node节点在dom树上的下一个节点,即多叉树遍历
      */
-    getNextNode:function (node, startFromChild, filterFn, guard) {
+    getNextDomNode:function (node, startFromChild, filterFn, guard) {
         return getNode(node, 'firstChild', 'nextSibling', startFromChild, filterFn, guard);
     },
 
