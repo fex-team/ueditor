@@ -855,7 +855,7 @@ UE.plugins['list'] = function () {
      * @command insertorderedlist
      * @method execCommand
      * @param { String } command 命令字符串
-     * @param { String } style 插入的有序列表类型，值为：decimal,lower-alpha,lower-roman,upper-alpha,upper-roman
+     * @param { String } style 插入的有序列表类型，值为：decimal,lower-alpha,lower-roman,upper-alpha,upper-roman,cn,cn1,cn2,num,num1,num2
      * @example
      * ```javascript
      * editor.execCommand( 'insertunorderedlist','decimal');
@@ -877,7 +877,7 @@ UE.plugins['list'] = function () {
      * @command insertorderedlist
      * @method queryCommandValue
      * @param { String } cmd 命令字符串
-     * @return { String } 返回当前有序列表的类型，值为null或decimal,lower-alpha,lower-roman,upper-alpha,upper-roman
+     * @return { String } 返回当前有序列表的类型，值为null或decimal,lower-alpha,lower-roman,upper-alpha,upper-roman,cn,cn1,cn2,num,num1,num2
      * @example
      * ```javascript
      * editor.queryCommandValue( 'insertorderedlist' );
@@ -889,7 +889,7 @@ UE.plugins['list'] = function () {
      * @command insertunorderedlist
      * @method execCommand
      * @param { String } command 命令字符串
-     * @param { String } style 插入的无序列表类型，值为：circle,disc,square
+     * @param { String } style 插入的无序列表类型，值为：circle,disc,square,dash,dot
      * @example
      * ```javascript
      * editor.execCommand( 'insertunorderedlist','circle');
@@ -911,7 +911,7 @@ UE.plugins['list'] = function () {
      * @command insertunorderedlist
      * @method queryCommandValue
      * @param { String } command 命令字符串
-     * @return { String } 返回当前无序列表的类型，值为null或circle,disc,square
+     * @return { String } 返回当前无序列表的类型，值为null或circle,disc,square,dash,dot
      * @example
      * ```javascript
      * editor.queryCommandValue( 'insertunorderedlist' );
