@@ -6,9 +6,11 @@
 
 
 /**
- * 在当前光标处插入一个百度应用， 需要百度APPKey
+ * 插入百度应用
  * @command webapp
  * @method execCommand
+ * @remind 需要百度APPKey
+ * @remind 百度应用主页： <a href="http://app.baidu.com/" target="_blank">http://app.baidu.com/</a>
  * @param { KeyValueMap } appOptions 应用所需的参数项， 支持的key有： title=>应用标题， width=>应用容器宽度，
  * height=>应用容器高度，logo=>应用logo，url=>应用地址
  * @example

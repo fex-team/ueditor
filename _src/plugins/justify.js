@@ -9,7 +9,7 @@
  * @command justify
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } align 对齐方式：left居左，right居右，center居中，justify两端对齐
+ * @param { String } align 对齐方式：left => 居左，right => 居右，center => 居中，justify => 两端对齐
  * @example
  * ```javascript
  * editor.execCommand( 'justify', 'center' );
@@ -20,7 +20,7 @@
  * @command justify
  * @method queryCommandValue
  * @param { String } cmd 命令字符串
- * @return { String } 返回图片对齐方式
+ * @return { String } 返回段落对齐方式
  * @example
  * ```javascript
  * editor.queryCommandValue( 'justify' );

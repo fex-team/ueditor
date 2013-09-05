@@ -24,20 +24,8 @@
  * @example
  * ```javascript
  * editor.execCommand( 'blockquote',{
- *     color:'#000'
+ *     style: "color: red;"
  * } );
- * ```
- */
-
-/**
- * 返回当前选区位置是否在引用标签内
- * @command blockquote
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { int } 0为是，-1为不是
- * @example
- * ```javascript
- * editor.queryCommandState( 'blockquote' );
  * ```
  */
 
