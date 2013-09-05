@@ -12,7 +12,6 @@
  * @param   {String}   tags     以逗号隔开的标签。如：strong
  * @param   {String}   style    样式如：color
  * @param   {String}   attrs    属性如:width
- * @param   {String}   notIncluedA    是否把a标签切开，默认不切
  * @example
  * ```javascript
  * editor.execCommand( 'removeformat', 'strong','color','width' );
