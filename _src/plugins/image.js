@@ -5,7 +5,7 @@
  */
 
 /**
- * 对图片居左居中居右排版
+ * 设置图片对齐方式
  * @command imagefloat
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -156,7 +156,7 @@ UE.commands['imagefloat'] = {
     }
 };
 /**
- * 向编辑器插入图片
+ * 插入图片
  * @command insertimage
  * @method execCommand
  * @param { String } cmd 命令字符串
