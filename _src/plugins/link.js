@@ -9,12 +9,12 @@
  * @command link
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { Object } options   url地址，title标题，target是否打开新页
+ * @param { Object } options   设置自定义属性，例如：url、title、target
  * @example
  * ```javascript
  * editor.execCommand( 'link', '{
  *     url:'ueditor.baidu.com',
- *     title:'ueditor官网',
+ *     title:'ueditor',
  *     target:'_blank'
  * }' );
  * ```
