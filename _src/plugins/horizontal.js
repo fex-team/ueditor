@@ -5,7 +5,7 @@
  */
 
 /**
- * 插入分割线，分割线是hr标签
+ * 插入分割线
  * @command horizontal
  * @method execCommand
  * @param { String } cmdName 命令字符串
