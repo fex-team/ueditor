@@ -9,7 +9,7 @@
  * @command forecolor
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } value 色值
+ * @param { String } value 色值(必须十六进制)
  * @example
  * ```javascript
  * editor.execCommand( 'forecolor', '#000' );
@@ -32,7 +32,7 @@
  * @command backcolor
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } value 色值
+ * @param { String } value 色值(必须十六进制)
  * @example
  * ```javascript
  * editor.execCommand( 'backcolor', '#000' );
@@ -78,7 +78,7 @@
  * @command fontfamily
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } value 字体大小
+ * @param { String } value 字体样式
  * @example
  * ```javascript
  * editor.execCommand( 'fontfamily', '微软雅黑' );
@@ -106,17 +106,7 @@
  * editor.execCommand( 'underline' );
  * ```
  */
-/**
- * 返回选区下划线样式
- * @command underline
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { String } underline|default
- * @example
- * ```javascript
- * editor.queryCommandValue( 'underline' );
- * ```
- */
+
 /**
  * 返回选区有无下划线
  * @command underline
@@ -139,17 +129,7 @@
  * editor.execCommand( 'strikethrough' );
  * ```
  */
-/**
- * 返回选区删除线样式
- * @command strikethrough
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { String } line-through|default
- * @example
- * ```javascript
- * editor.queryCommandValue( 'strikethrough' );
- * ```
- */
+
 /**
  * 返回选区有无删除线
  * @command strikethrough
@@ -170,17 +150,6 @@
  * @example
  * ```javascript
  * editor.execCommand( 'fontborder' );
- * ```
- */
-/**
- * 返回选区字体边框样式
- * @command fontborder
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { String } 字体边框样式
- * @example
- * ```javascript
- * editor.queryCommandValue( 'fontborder' );
  * ```
  */
 /**
