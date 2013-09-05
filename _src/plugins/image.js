@@ -5,7 +5,7 @@
  */
 
 /**
- * 设置图片对齐方式
+ * 设置图片对齐方式(center为独占一行居中)
  * @command imagefloat
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -168,6 +168,25 @@ UE.commands['imagefloat'] = {
  *     width:'100',
  *     height:'100'
  * } );
+ * ```
+ */
+/**
+ * 插入图片
+ * @command insertimage
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { Array } opt 多张图片的属性键值对，这些属性都将被复制到这些图片
+ * @example
+ * ```javascript
+ * editor.execCommand( 'insertimage', [{
+ *     src:'a/b/c.jpg',
+ *     width:'100',
+ *     height:'100'
+ * },{
+ *     src:'a/b/d.jpg',
+ *     width:'100',
+ *     height:'100'
+ * }] );
  * ```
  */
 UE.commands['insertimage'] = {

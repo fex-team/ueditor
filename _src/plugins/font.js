@@ -108,18 +108,6 @@
  */
 
 /**
- * 返回选区有无下划线
- * @command underline
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { Bool }true为有下划线，反之则无
- * @example
- * ```javascript
- * editor.queryCommandValue( 'underline' );
- * ```
- */
-
-/**
  * 设置字体删除线
  * @command strikethrough
  * @method execCommand
@@ -127,18 +115,6 @@
  * @example
  * ```javascript
  * editor.execCommand( 'strikethrough' );
- * ```
- */
-
-/**
- * 返回选区有无删除线
- * @command strikethrough
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { Bool }true为有删除线，反之则无
- * @example
- * ```javascript
- * editor.queryCommandValue( 'strikethrough' );
  * ```
  */
 
@@ -152,17 +128,7 @@
  * editor.execCommand( 'fontborder' );
  * ```
  */
-/**
- * 返回选区有无字体边框
- * @command fontborder
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { Bool }true为有字体边框，反之则无
- * @example
- * ```javascript
- * editor.queryCommandValue( 'fontborder' );
- * ```
- */
+
 UE.plugins['font'] = function () {
     var me = this,
         fonts = {
