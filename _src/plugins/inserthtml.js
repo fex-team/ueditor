@@ -12,9 +12,10 @@
  * @param { String } html 插入的html字符串
  * @example
  * ```javascript
- * editor.execCommand( 'insertcode', '<p>我是UEdtior开发者</P>' );
+ * editor.execCommand( 'inserthtml', '<p>我是UEdtior开发者</P>' );
  * ```
  */
+
 UE.commands['inserthtml'] = {
     execCommand: function (command,html,notNeedFilter){
         var me = this,
