@@ -97,7 +97,7 @@
  */
 
 /**
- * 根据选区内文本有无下划线设置字体下划线
+ * 设置字体下划线
  * @command underline
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -130,7 +130,7 @@
  */
 
 /**
- * 根据选区内文本有无删除线设置字体删除线
+ * 设置字体删除线
  * @command strikethrough
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -163,7 +163,7 @@
  */
 
 /**
- * 根据选区内文本有无字体边框设置字体边框
+ * 设置字体边框
  * @command fontborder
  * @method execCommand
  * @param { String } cmd 命令字符串

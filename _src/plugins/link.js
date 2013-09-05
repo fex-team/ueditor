@@ -43,7 +43,7 @@
  */
 
 /**
- * 根据当前选区取消超链接
+ * 取消超链接
  * @command unlink
  * @method execCommand
  * @param { String } cmd 命令字符串
