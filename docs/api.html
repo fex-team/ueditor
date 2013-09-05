@@ -16,502 +16,562 @@
             <div class="member-module">
                 <h2><a name="COMMAND.LIST" class="anchor">命令列表</a></h2>
 
+<div>
+    <fileset>
+        <legend>COMMAND通用方法</legend>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>方法</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>execCommand( String cmd, * params... )</td>
+                    <td>
+                        <p>执行命令的通用方法</p>
+                        <p>
+                            该方法的第一个参数是需要执行的命令。剩下的<strong>可选的</strong>参数根据每个命令的不同而有一些差异，
+                            具体请参照相应的命令详情。
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>queryCommandState( String cmd )</td>
+                    <td>
+                        <p>
+                            查询给定命令在当前选区内的状态。<br/>
+                            通用的返回状态有：
+                            <ul>
+                                <li>
+                                    1 => 代表当前命令在当前选区内已执行
+                                </li>
+                                <li>
+                                    0 => 代表当前命令在当前选区内未执行， 但处于可用状态
+                                </li>
+                                <li>
+                                    -1 => 代表当前命令在当前选区内处于不可用状态
+                                </li>
+                            </ul>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>queryCommandValue</td>
+                    <td>
+                        <p>查询给定命令在当前选区内的值， 默认返回undefined，代表当前命令未提供该方法的自定义实现。根据命令的不同其返回值也会不同。</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                    <p class="command-table-tips">以上列表中的方法对于没一个命令都是适用的。区别在于，对于不同的命令，其需要的参数可能会不同。</p>
+                    <td>
+                </tr>
+            </tbody>
+        </table>
+    </fileset>
+</div>
+
 <div class="command-list">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>命令</th>
-                <th>描述</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-            
-            
-            
-            <tr>
-                <td>1</td>
-                <td><a href="#COMMAND::anchor">anchor</a></td>
-                <td>
-                    插入锚点
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>2</td>
-                <td><a href="#COMMAND::autosubmit">autosubmit</a></td>
-                <td>
-                    对编辑器区域插入html字符串
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>3</td>
-                <td><a href="#COMMAND::bold">bold</a></td>
-                <td>
-                    字体加粗， 对已加粗的文本内容执行该命令， 将取消加粗
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>4</td>
-                <td><a href="#COMMAND::italic">italic</a></td>
-                <td>
-                    字体倾斜, 对已倾斜的文本内容执行该命令， 将取消倾斜
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>5</td>
-                <td><a href="#COMMAND::subscript">subscript</a></td>
-                <td>
-                    下标文本， 把选中的文本内容切换成下标文本， 如果当前选中的文本已经是下标， 则该操作会把文本内容还原成
+    <fileset>
+        <legend>COMMAND列表</legend>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>命令</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                
+                
+                
+                <tr>
+                    <td>1</td>
+                    <td><a href="#COMMAND::anchor">anchor</a></td>
+                    <td>
+                        插入锚点
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>2</td>
+                    <td><a href="#COMMAND::autosubmit">autosubmit</a></td>
+                    <td>
+                        ctrl+enter 自动提交表单
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>3</td>
+                    <td><a href="#COMMAND::bold">bold</a></td>
+                    <td>
+                        字体加粗， 对已加粗的文本内容执行该命令， 将取消加粗
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>4</td>
+                    <td><a href="#COMMAND::italic">italic</a></td>
+                    <td>
+                        字体倾斜, 对已倾斜的文本内容执行该命令， 将取消倾斜
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>5</td>
+                    <td><a href="#COMMAND::subscript">subscript</a></td>
+                    <td>
+                        下标文本， 把选中的文本内容切换成下标文本， 如果当前选中的文本已经是下标， 则该操作会把文本内容还原成
  正常文本
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>6</td>
-                <td><a href="#COMMAND::superscript">superscript</a></td>
-                <td>
-                    上标文本， 把选中的文本内容切换成上标文本， 如果当前选中的文本已经是上标， 则该操作会把文本内容还原成
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>6</td>
+                    <td><a href="#COMMAND::superscript">superscript</a></td>
+                    <td>
+                        上标文本， 把选中的文本内容切换成上标文本， 如果当前选中的文本已经是上标， 则该操作会把文本内容还原成
  正常文本
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>7</td>
-                <td><a href="#COMMAND::blockquote">blockquote</a></td>
-                <td>
-                    根据选区位置对标签添加引用
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>8</td>
-                <td><a href="#COMMAND::cleardoc">cleardoc</a></td>
-                <td>
-                    清空文档命令
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>9</td>
-                <td><a href="#COMMAND::touppercase">touppercase</a></td>
-                <td>
-                    把选区内文本变大写
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>10</td>
-                <td><a href="#COMMAND::tolowercase">tolowercase</a></td>
-                <td>
-                    把选区内文本变小写
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>11</td>
-                <td><a href="#COMMAND::directionality">directionality</a></td>
-                <td>
-                    设置文字的方向，可设置从左向右输入，或者从右向左输入，操作对当前段作用
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>12</td>
-                <td><a href="#COMMAND::forecolor">forecolor</a></td>
-                <td>
-                    设置字体颜色
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>13</td>
-                <td><a href="#COMMAND::backcolor">backcolor</a></td>
-                <td>
-                    设置字体背景颜色
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>14</td>
-                <td><a href="#COMMAND::fontsize">fontsize</a></td>
-                <td>
-                    设置字体大小
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>15</td>
-                <td><a href="#COMMAND::fontfamily">fontfamily</a></td>
-                <td>
-                    设置字体样式
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>16</td>
-                <td><a href="#COMMAND::underline">underline</a></td>
-                <td>
-                    根据选区内文本有无下划线设置字体下划线
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>17</td>
-                <td><a href="#COMMAND::strikethrough">strikethrough</a></td>
-                <td>
-                    根据选区内文本有无删除线设置字体删除线
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>18</td>
-                <td><a href="#COMMAND::fontborder">fontborder</a></td>
-                <td>
-                    根据选区内文本有无字体边框设置字体边框
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>19</td>
-                <td><a href="#COMMAND::formatmatch">formatmatch</a></td>
-                <td>
-                    格式刷，对inline类型的文本内容执行格式刷操作
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>20</td>
-                <td><a href="#COMMAND::horizontal">horizontal</a></td>
-                <td>
-                    插入分割线，分割线是hr标签
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>21</td>
-                <td><a href="#COMMAND::imagefloat">imagefloat</a></td>
-                <td>
-                    对图片居左居中居右排版
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>22</td>
-                <td><a href="#COMMAND::insertimage">insertimage</a></td>
-                <td>
-                    向编辑器插入图片
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>23</td>
-                <td><a href="#COMMAND::indent">indent</a></td>
-                <td>
-                    给选区内文本添加缩进
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>24</td>
-                <td><a href="#COMMAND::insertcode">insertcode</a></td>
-                <td>
-                    根据选择的语言，插入代码编辑块
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>25</td>
-                <td><a href="#COMMAND::inserthtml">inserthtml</a></td>
-                <td>
-                    对编辑器区域插入html字符串
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>26</td>
-                <td><a href="#COMMAND::insertparagraph">insertparagraph</a></td>
-                <td>
-                    在当前光标位置处插入新段落, 如果光标已经在段落之中， 则会在该段落之后插入一个新的段落。
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>27</td>
-                <td><a href="#COMMAND::justify">justify</a></td>
-                <td>
-                    对段落居左,居右,居中,两端对齐
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>28</td>
-                <td><a href="#COMMAND::lineheight">lineheight</a></td>
-                <td>
-                    设置选区的行高
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>29</td>
-                <td><a href="#COMMAND::link">link</a></td>
-                <td>
-                    插入超链接
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>30</td>
-                <td><a href="#COMMAND::unlink">unlink</a></td>
-                <td>
-                    根据当前选区取消超链接
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>31</td>
-                <td><a href="#COMMAND::insertorderedlist">insertorderedlist</a></td>
-                <td>
-                    运行有序列表命令
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>32</td>
-                <td><a href="#COMMAND::insertunorderedlist">insertunorderedlist</a></td>
-                <td>
-                    运行无序列表命令
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>33</td>
-                <td><a href="#COMMAND::music">music</a></td>
-                <td>
-                    在当前光标处插入音乐
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>34</td>
-                <td><a href="#COMMAND::pagebreak">pagebreak</a></td>
-                <td>
-                    插入分页符，在当前光标插入分页符
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>35</td>
-                <td><a href="#COMMAND::Paragraph">Paragraph</a></td>
-                <td>
-                    对选区内文本添加相应标签嵌套
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>36</td>
-                <td><a href="#COMMAND::preview">preview</a></td>
-                <td>
-                    预览
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>37</td>
-                <td><a href="#COMMAND::print">print</a></td>
-                <td>
-                    打印
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>38</td>
-                <td><a href="#COMMAND::pasteplain">pasteplain</a></td>
-                <td>
-                    启用或取消纯文本粘贴模式
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>39</td>
-                <td><a href="#COMMAND::removeformat">removeformat</a></td>
-                <td>
-                    对图片居左居中居右排版
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>40</td>
-                <td><a href="#COMMAND::rowspacing">rowspacing</a></td>
-                <td>
-                    设置段前距,段后距
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>41</td>
-                <td><a href="#COMMAND::selectall">selectall</a></td>
-                <td>
-                    选中编辑器里的所有内容
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>42</td>
-                <td><a href="#COMMAND::snapscreen">snapscreen</a></td>
-                <td>
-                    截屏
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>43</td>
-                <td><a href="#COMMAND::source">source</a></td>
-                <td>
-                    切换源码编辑模式和可视化编辑模式
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>44</td>
-                <td><a href="#COMMAND::time">time</a></td>
-                <td>
-                    插入当前时间，插入的格式：12:59:59
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>45</td>
-                <td><a href="#COMMAND::date">date</a></td>
-                <td>
-                    插入当前日期，插入格式：2013-08-30
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>46</td>
-                <td><a href="#COMMAND::insertvideo">insertvideo</a></td>
-                <td>
-                    插入视频
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>47</td>
-                <td><a href="#COMMAND::webapp">webapp</a></td>
-                <td>
-                    在当前光标处插入一个百度应用， 需要百度APPKey
-                </td>
-            </tr>
-            
-            
-            
-            <tr>
-                <td>48</td>
-                <td><a href="#COMMAND::wordimage">wordimage</a></td>
-                <td>
-                    粘贴word文档的内容时，运行该命令，会把编辑区域里的word图片地址，赋值到editor.word_img的数组里面
-                </td>
-            </tr>
-            
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>7</td>
+                    <td><a href="#COMMAND::blockquote">blockquote</a></td>
+                    <td>
+                        根据选区位置对标签添加引用
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>8</td>
+                    <td><a href="#COMMAND::cleardoc">cleardoc</a></td>
+                    <td>
+                        清空文档命令
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>9</td>
+                    <td><a href="#COMMAND::touppercase">touppercase</a></td>
+                    <td>
+                        把选区内文本变大写
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>10</td>
+                    <td><a href="#COMMAND::tolowercase">tolowercase</a></td>
+                    <td>
+                        把选区内文本变小写
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>11</td>
+                    <td><a href="#COMMAND::directionality">directionality</a></td>
+                    <td>
+                        设置文字的方向，可设置从左向右输入，或者从右向左输入，操作对当前段作用
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>12</td>
+                    <td><a href="#COMMAND::forecolor">forecolor</a></td>
+                    <td>
+                        设置字体颜色
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>13</td>
+                    <td><a href="#COMMAND::backcolor">backcolor</a></td>
+                    <td>
+                        设置字体背景颜色
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>14</td>
+                    <td><a href="#COMMAND::fontsize">fontsize</a></td>
+                    <td>
+                        设置字体大小
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>15</td>
+                    <td><a href="#COMMAND::fontfamily">fontfamily</a></td>
+                    <td>
+                        设置字体样式
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>16</td>
+                    <td><a href="#COMMAND::underline">underline</a></td>
+                    <td>
+                        根据选区内文本有无下划线设置字体下划线
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>17</td>
+                    <td><a href="#COMMAND::strikethrough">strikethrough</a></td>
+                    <td>
+                        根据选区内文本有无删除线设置字体删除线
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>18</td>
+                    <td><a href="#COMMAND::fontborder">fontborder</a></td>
+                    <td>
+                        根据选区内文本有无字体边框设置字体边框
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>19</td>
+                    <td><a href="#COMMAND::formatmatch">formatmatch</a></td>
+                    <td>
+                        格式刷，对inline类型的文本内容执行格式刷操作
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>20</td>
+                    <td><a href="#COMMAND::horizontal">horizontal</a></td>
+                    <td>
+                        插入分割线，分割线是hr标签
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>21</td>
+                    <td><a href="#COMMAND::imagefloat">imagefloat</a></td>
+                    <td>
+                        对图片居左居中居右排版
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>22</td>
+                    <td><a href="#COMMAND::insertimage">insertimage</a></td>
+                    <td>
+                        向编辑器插入图片
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>23</td>
+                    <td><a href="#COMMAND::indent">indent</a></td>
+                    <td>
+                        给选区内文本添加缩进
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>24</td>
+                    <td><a href="#COMMAND::insertcode">insertcode</a></td>
+                    <td>
+                        根据选择的语言，插入代码编辑块
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>25</td>
+                    <td><a href="#COMMAND::inserthtml">inserthtml</a></td>
+                    <td>
+                        对编辑器区域插入html字符串
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>26</td>
+                    <td><a href="#COMMAND::insertparagraph">insertparagraph</a></td>
+                    <td>
+                        在当前光标位置处插入新段落, 如果光标已经在段落之中， 则会在该段落之后插入一个新的段落。
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>27</td>
+                    <td><a href="#COMMAND::justify">justify</a></td>
+                    <td>
+                        对段落居左,居右,居中,两端对齐
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>28</td>
+                    <td><a href="#COMMAND::lineheight">lineheight</a></td>
+                    <td>
+                        设置选区的行高
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>29</td>
+                    <td><a href="#COMMAND::link">link</a></td>
+                    <td>
+                        插入超链接
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>30</td>
+                    <td><a href="#COMMAND::unlink">unlink</a></td>
+                    <td>
+                        根据当前选区取消超链接
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>31</td>
+                    <td><a href="#COMMAND::insertorderedlist">insertorderedlist</a></td>
+                    <td>
+                        运行有序列表命令
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>32</td>
+                    <td><a href="#COMMAND::insertunorderedlist">insertunorderedlist</a></td>
+                    <td>
+                        运行无序列表命令
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>33</td>
+                    <td><a href="#COMMAND::music">music</a></td>
+                    <td>
+                        在当前光标处插入音乐
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>34</td>
+                    <td><a href="#COMMAND::pagebreak">pagebreak</a></td>
+                    <td>
+                        插入分页符，在当前光标插入分页符
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>35</td>
+                    <td><a href="#COMMAND::paragraph">paragraph</a></td>
+                    <td>
+                        对选区内文本添加相应标签嵌套
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>36</td>
+                    <td><a href="#COMMAND::Paragraph">Paragraph</a></td>
+                    <td>
+                        对选区内文本添加相应标签嵌套
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>37</td>
+                    <td><a href="#COMMAND::preview">preview</a></td>
+                    <td>
+                        预览
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>38</td>
+                    <td><a href="#COMMAND::print">print</a></td>
+                    <td>
+                        打印
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>39</td>
+                    <td><a href="#COMMAND::pasteplain">pasteplain</a></td>
+                    <td>
+                        启用或取消纯文本粘贴模式
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>40</td>
+                    <td><a href="#COMMAND::removeformat">removeformat</a></td>
+                    <td>
+                        对图片居左居中居右排版
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>41</td>
+                    <td><a href="#COMMAND::rowspacing">rowspacing</a></td>
+                    <td>
+                        设置段前距,段后距
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>42</td>
+                    <td><a href="#COMMAND::selectall">selectall</a></td>
+                    <td>
+                        选中编辑器里的所有内容
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>43</td>
+                    <td><a href="#COMMAND::snapscreen">snapscreen</a></td>
+                    <td>
+                        截屏
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>44</td>
+                    <td><a href="#COMMAND::source">source</a></td>
+                    <td>
+                        切换源码编辑模式和可视化编辑模式
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>45</td>
+                    <td><a href="#COMMAND::time">time</a></td>
+                    <td>
+                        插入当前时间，插入的格式：12:59:59
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>46</td>
+                    <td><a href="#COMMAND::date">date</a></td>
+                    <td>
+                        插入当前日期，插入格式：2013-08-30
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>47</td>
+                    <td><a href="#COMMAND::insertvideo">insertvideo</a></td>
+                    <td>
+                        插入视频
+                    </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td>48</td>
+                    <td><a href="#COMMAND::webapp">webapp</a></td>
+                    <td>
+                        在当前光标处插入一个百度应用， 需要百度APPKey
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </fileset>
 </div><div class="member member-command">
 
     <div class="member-command-signature">
@@ -649,7 +709,7 @@
     </div>
 
     <div class="command-desc">
-        对编辑器区域插入html字符串
+        ctrl+enter 自动提交表单
     </div>
 
     <fileset class="command-method-container">
@@ -7581,6 +7641,142 @@
 </div><div class="member member-command">
 
     <div class="member-command-signature">
+        <h4><a name="COMMAND::paragraph" class="anchor">paragraph</a></h4>
+        <div class="member-flag">
+            <span class="label label-primary">命令</span>
+        </div>
+        
+            <span class="since">
+                1.2.6.1
+            </span>
+        
+    </div>
+
+    <div class="command-desc">
+        对选区内文本添加相应标签嵌套
+    </div>
+
+    <fileset class="command-method-container">
+        <legend>方法列表</legend>
+        
+            
+                
+            
+            
+            <div class="command-method-wrap">
+                <div class="command-method-desc">
+
+                    <h5>execCommand(String cmd, String style, Object attrs)</h5>
+                    <div class="member-flag">
+                        <span class="label label-primary">命令方法</span>
+                        
+                            <span class="since">
+                                1.2.6.1
+                            </span>
+                        
+                    </div>
+
+                    <div class="member-description">
+                        执行当前命令
+                    </div>
+
+                    
+
+                    
+
+                </div>
+
+                <div class="member-method-info">
+
+                    
+                        <!-- param start -->
+                        <fileset>
+                            <legend>参数列表</legend>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>参数名</th>
+                                        <th>类型</th>
+                                        <th>描述</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>
+                                            cmd
+                                        </td>
+                                        <td>
+                                            <a href="#String">String</a>
+                                        </td>
+                                        <td>
+                                            命令字符串
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>
+                                            style
+                                        </td>
+                                        <td>
+                                            <a href="#String">String</a>
+                                        </td>
+                                        <td>
+                                            标签值为：'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>
+                                            attrs
+                                        </td>
+                                        <td>
+                                            <a href="#Object">Object</a>
+                                        </td>
+                                        <td>
+                                            标签的属性
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </fileset>
+                        <!-- param end -->
+                        
+
+                        
+
+                        
+                        <!-- example start -->
+                        <fileset>
+                            <legend>示例</legend>
+                            
+                                <div class="example">
+                                    
+                                    <div class="example-type">
+                                        <span class="example-language">javascript</span>代码：
+                                    </div>
+                                    
+                                    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre> <span class="nx">editor</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span> <span class="s1">&#39;Paragraph&#39;</span><span class="p">,</span><span class="s1">&#39;h1&#39;</span><span class="p">,</span><span class="s1">&#39;{</span>
+<span class="s1">     color:&#39;</span><span class="err">#</span><span class="mi">000</span><span class="s1">&#39;</span>
+<span class="s1"> }&#39;</span> <span class="p">);</span>
+</pre></div>
+</td></tr></table>
+                                </div>
+                            
+                        </fileset>
+                        <!-- example end -->
+                    
+                </div>
+            </div>
+        
+    </fileset>
+
+</div><div class="member member-command">
+
+    <div class="member-command-signature">
         <h4><a name="COMMAND::Paragraph" class="anchor">Paragraph</a></h4>
         <div class="member-flag">
             <span class="label label-primary">命令</span>
@@ -9547,221 +9743,6 @@
      <span class="nx">logo</span><span class="o">:</span> <span class="s1">&#39;应用展示的图片&#39;</span><span class="p">,</span>
      <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;百度应用的地址&#39;</span>
  <span class="p">}</span> <span class="p">);</span>
-</pre></div>
-</td></tr></table>
-                                </div>
-                            
-                        </fileset>
-                        <!-- example end -->
-                    
-                </div>
-            </div>
-        
-    </fileset>
-
-</div><div class="member member-command">
-
-    <div class="member-command-signature">
-        <h4><a name="COMMAND::wordimage" class="anchor">wordimage</a></h4>
-        <div class="member-flag">
-            <span class="label label-primary">命令</span>
-        </div>
-        
-            <span class="since">
-                1.2.6.1
-            </span>
-        
-    </div>
-
-    <div class="command-desc">
-        粘贴word文档的内容时，运行该命令，会把编辑区域里的word图片地址，赋值到editor.word_img的数组里面
-    </div>
-
-    <fileset class="command-method-container">
-        <legend>方法列表</legend>
-        
-            
-                
-            
-            
-            <div class="command-method-wrap">
-                <div class="command-method-desc">
-
-                    <h5>execCommand(String cmd)</h5>
-                    <div class="member-flag">
-                        <span class="label label-primary">命令方法</span>
-                        
-                            <span class="since">
-                                1.2.6.1
-                            </span>
-                        
-                    </div>
-
-                    <div class="member-description">
-                        执行当前命令
-                    </div>
-
-                    
-
-                    
-
-                </div>
-
-                <div class="member-method-info">
-
-                    
-                        <!-- param start -->
-                        <fileset>
-                            <legend>参数列表</legend>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>参数名</th>
-                                        <th>类型</th>
-                                        <th>描述</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    <tr>
-                                        <td>
-                                            cmd
-                                        </td>
-                                        <td>
-                                            <a href="#String">String</a>
-                                        </td>
-                                        <td>
-                                            命令字符串
-                                        </td>
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                        </fileset>
-                        <!-- param end -->
-                        
-
-                        
-
-                        
-                        <!-- example start -->
-                        <fileset>
-                            <legend>示例</legend>
-                            
-                                <div class="example">
-                                    
-                                    <div class="example-type">
-                                        <span class="example-language">javascript</span>代码：
-                                    </div>
-                                    
-                                    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre> <span class="nx">editor</span><span class="p">.</span><span class="nx">execCommand</span><span class="p">(</span> <span class="s1">&#39;wordimage&#39;</span><span class="p">);</span>
-</pre></div>
-</td></tr></table>
-                                </div>
-                            
-                        </fileset>
-                        <!-- example end -->
-                    
-                </div>
-            </div>
-        
-            
-            
-            <div class="command-method-wrap">
-                <div class="command-method-desc">
-
-                    <h5>queryCommandState(String cmd)</h5>
-                    <div class="member-flag">
-                        <span class="label label-primary">命令方法</span>
-                        
-                            <span class="since">
-                                1.2.6.1
-                            </span>
-                        
-                    </div>
-
-                    <div class="member-description">
-                        查询当前是否有word文档粘贴进来的图片
-                    </div>
-
-                    
-
-                    
-
-                </div>
-
-                <div class="member-method-info">
-
-                    
-                        <!-- param start -->
-                        <fileset>
-                            <legend>参数列表</legend>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>参数名</th>
-                                        <th>类型</th>
-                                        <th>描述</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    <tr>
-                                        <td>
-                                            cmd
-                                        </td>
-                                        <td>
-                                            <a href="#String">String</a>
-                                        </td>
-                                        <td>
-                                            命令字符串
-                                        </td>
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                        </fileset>
-                        <!-- param end -->
-                        
-
-                        
-                        <!-- returnValue start -->
-                        <fileset>
-                            <legend>返回值</legend>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>类型</th>
-                                        <th>描述</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a href="#int">int</a>
-                                        </td>
-                                        <td>
-                                            如果当前编辑区域有word文档的粘贴进来的图片，则返回1，否则返回-1
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </fileset>
-                        <!-- returnValue end -->
-                        
-
-                        
-                        <!-- example start -->
-                        <fileset>
-                            <legend>示例</legend>
-                            
-                                <div class="example">
-                                    
-                                    <div class="example-type">
-                                        <span class="example-language">javascript</span>代码：
-                                    </div>
-                                    
-                                    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre> <span class="nx">editor</span><span class="p">.</span><span class="nx">queryCommandState</span><span class="p">(</span> <span class="s1">&#39;wordimage&#39;</span> <span class="p">);</span>
 </pre></div>
 </td></tr></table>
                                 </div>
@@ -20735,6 +20716,16 @@
                 </td>
             </tr>
         
+        
+            <tr>
+                <td>
+                    <a href="#UE.dom.Selection">Selection</a>
+                </td>
+                <td>
+                    选区集合
+                </td>
+            </tr>
+        
         </tbody>
     </table>
 </fileset>
@@ -28272,41 +28263,38 @@
 
 </div>
                     
-                    
-                </div>
-
-            </fileset>
-            
-
-        </div>
-
-    </div>
-
-</div>
-            
-                <div class="member-module">
-    <div class="member-module-name">
-        <h2><a name="" class="anchor"></a></h2>
+                        <div class="member-clazz">
+    <div class="member-clazz-name">
+        <h3><a name="UE.dom.Selection" class="anchor">Selection</a></h3>
         <div class="member-flag">
-            <span class="label label-primary">模块</span>
+            <span class="label label-primary">类</span>
         </div>
     </div>
 
-    <div class="member-module-desc">
+    <div class="member-clazz-desc">
 
         <div class="member-description">
-            
+            选区集合
         </div>
 
         
 
         
+
+        <div class="affiliated">
+            <div>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+        </div>
 
     </div>
 
     <div class="member-box">
+        <div class="member-clazz-info">
 
-        <div class="member-module-info">
+            
+
+            
 
             
 
@@ -28325,10 +28313,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.getNative()">getNative()</a>
+                    <a href="#UE.dom.Selection:getNative()">getNative()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     获取原生seleciton对象
@@ -28337,10 +28325,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.getIERange()">getIERange()</a>
+                    <a href="#UE.dom.Selection:getIERange()">getIERange()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     获得ieRange
@@ -28349,10 +28337,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.cache()">cache()</a>
+                    <a href="#UE.dom.Selection:cache()">cache()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     缓存当前选区的range和选区的开始节点
@@ -28361,10 +28349,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.getStartElementPath()">getStartElementPath()</a>
+                    <a href="#UE.dom.Selection:getStartElementPath()">getStartElementPath()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     获取选区开始位置的父节点到body
@@ -28373,10 +28361,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.clear()">clear()</a>
+                    <a href="#UE.dom.Selection:clear()">clear()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     清空缓存
@@ -28385,10 +28373,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.isFocus()">isFocus()</a>
+                    <a href="#UE.dom.Selection:isFocus()">isFocus()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     编辑器是否得到了选区
@@ -28397,10 +28385,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.getRange()">getRange()</a>
+                    <a href="#UE.dom.Selection:getRange()">getRange()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     获取选区对应的Range
@@ -28409,10 +28397,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.getStart()">getStart()</a>
+                    <a href="#UE.dom.Selection:getStart()">getStart()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     获取开始元素，用于状态反射
@@ -28421,10 +28409,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.getText()">getText()</a>
+                    <a href="#UE.dom.Selection:getText()">getText()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     得到选区中的文本
@@ -28433,10 +28421,10 @@
         
             <tr>
                 <td>
-                    <a href="#UE.dom.Selection.clearRange()">clearRange()</a>
+                    <a href="#UE.dom.Selection:clearRange()">clearRange()</a>
                 </td>
                 <td>
-                    是
+                    否
                 </td>
                 <td>
                     清除选区
@@ -28448,15 +28436,13 @@
 </fileset>
 <!-- method list end -->
 
-            
-
         </div>
 
         <div class="clazz-member-list">
 
             
             <fileset>
-                <legend>模块成员详细描述(<a href="#"></a>)</legend>
+                <legend>类成员详细描述(<a href="#UE.dom.Selection">Selection</a>)</legend>
 
                 <div class="member-box">
                     
@@ -28464,13 +28450,20 @@
                     
 
                     
-                    <div class="member member-method">
+                    
+                    
+
+                    
+                    
+                    
+
+                    
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.getNative()" class="anchor">getNative()</a></h4>
+        <h4><a name="UE.dom.Selection:getNative()" class="anchor">getNative()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -28492,7 +28485,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -28551,13 +28548,13 @@
         <!-- example end -->
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.getIERange()" class="anchor">getIERange()</a></h4>
+        <h4><a name="UE.dom.Selection:getIERange()" class="anchor">getIERange()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -28579,7 +28576,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -28638,13 +28639,13 @@
         <!-- example end -->
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.cache()" class="anchor">cache()</a></h4>
+        <h4><a name="UE.dom.Selection:cache()" class="anchor">cache()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -28666,7 +28667,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -28683,13 +28688,13 @@
 
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.getStartElementPath()" class="anchor">getStartElementPath()</a></h4>
+        <h4><a name="UE.dom.Selection:getStartElementPath()" class="anchor">getStartElementPath()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -28711,7 +28716,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -28770,13 +28779,13 @@
         <!-- example end -->
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.clear()" class="anchor">clear()</a></h4>
+        <h4><a name="UE.dom.Selection:clear()" class="anchor">clear()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -28798,7 +28807,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -28815,13 +28828,13 @@
 
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.isFocus()" class="anchor">isFocus()</a></h4>
+        <h4><a name="UE.dom.Selection:isFocus()" class="anchor">isFocus()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -28843,7 +28856,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -28860,13 +28877,13 @@
 
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.getRange()" class="anchor">getRange()</a></h4>
+        <h4><a name="UE.dom.Selection:getRange()" class="anchor">getRange()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -28888,7 +28905,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -28947,13 +28968,13 @@
         <!-- example end -->
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.getStart()" class="anchor">getStart()</a></h4>
+        <h4><a name="UE.dom.Selection:getStart()" class="anchor">getStart()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -28975,7 +28996,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -29034,13 +29059,13 @@
         <!-- example end -->
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.getText()" class="anchor">getText()</a></h4>
+        <h4><a name="UE.dom.Selection:getText()" class="anchor">getText()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -29062,7 +29087,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -29121,13 +29150,13 @@
         <!-- example end -->
         
     </div>
-</div><div class="member member-method">
+</div>
+                    
+                        <div class="member member-method">
     <div class="member-method-signature">
-        <h4><a name="UE.dom.Selection.clearRange()" class="anchor">clearRange()</a></h4>
+        <h4><a name="UE.dom.Selection:clearRange()" class="anchor">clearRange()</a></h4>
         <div class="member-flag">
         <span class="label label-primary">方法</span>
-        
-            <span class="label label-info">静态</span>
         
         </div>
         
@@ -29149,7 +29178,11 @@
 
         <div class="affiliated">
             <div>
-                所属模块： <a href="#UE.dom.Selection">UE.dom.Selection</a>
+                所属模块： <a href="#UE.dom">UE.dom</a>
+            </div>
+            
+            <div>
+                所属类： <a href="#UE.dom.Selection">UE.dom.Selection</a>
             </div>
             
         </div>
@@ -29186,7 +29219,16 @@
     </div>
 </div>
                     
+                    
+                </div>
+            </fileset>
+            
 
+        </div>
+    </div>
+
+</div>
+                    
                     
                 </div>
 
@@ -45724,15 +45766,23 @@
         </div>
         <div class="nav">
             <div class="module-list">
-    <label>模块列表</label>
+    <label>快速导航</label>
     <ul>
         <li href="#COMMAND.LIST"><a href="#COMMAND.LIST">命令列表</></li>
         
         <li><a href="#UE">UE</a></li>
         
+        <li><a href="#UE.Editor">UE.Editor</a></li>
+        
+        <li><a href="#UE.EventBase">UE.EventBase</a></li>
+        
+        <li><a href="#UE.uNode">UE.uNode</a></li>
+        
         <li><a href="#UE.dom">UE.dom</a></li>
         
-        <li></li>
+        <li><a href="#UE.dom.Range">UE.dom.Range</a></li>
+        
+        <li><a href="#UE.dom.Selection">UE.dom.Selection</a></li>
         
         <li><a href="#UE.ajax">UE.ajax</a></li>
         
@@ -46678,68 +46728,68 @@
         
         <li>
             <div>
-                <div></div>
+                <div>UE.dom.Selection</div>
                 <div class="api-wrap">
                     <ul>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.getNative()" class="api-item">getNative()</a>
+                            <a href="#UE.dom.Selection:getNative()" class="api-item">getNative()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.getIERange()" class="api-item">getIERange()</a>
+                            <a href="#UE.dom.Selection:getIERange()" class="api-item">getIERange()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.cache()" class="api-item">cache()</a>
+                            <a href="#UE.dom.Selection:cache()" class="api-item">cache()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.getStartElementPath()" class="api-item">getStartElementPath()</a>
+                            <a href="#UE.dom.Selection:getStartElementPath()" class="api-item">getStartElementPath()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.clear()" class="api-item">clear()</a>
+                            <a href="#UE.dom.Selection:clear()" class="api-item">clear()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.isFocus()" class="api-item">isFocus()</a>
+                            <a href="#UE.dom.Selection:isFocus()" class="api-item">isFocus()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.getRange()" class="api-item">getRange()</a>
+                            <a href="#UE.dom.Selection:getRange()" class="api-item">getRange()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.getStart()" class="api-item">getStart()</a>
+                            <a href="#UE.dom.Selection:getStart()" class="api-item">getStart()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.getText()" class="api-item">getText()</a>
+                            <a href="#UE.dom.Selection:getText()" class="api-item">getText()</a>
                         </li>
                         
                         
                         
                         <li>
-                            <a href="#UE.dom.Selection.clearRange()" class="api-item">clearRange()</a>
+                            <a href="#UE.dom.Selection:clearRange()" class="api-item">clearRange()</a>
                         </li>
                         
                     </ul>
@@ -47485,7 +47535,7 @@
     <a class="btn btn-danger search-tip-btn" data-type="close">按 ESC 可以关闭搜索框</a>
 </div>
 <script>
-    var _source = ["UE.getListener(Object,String,Boolean)","UE.filterNode(Object,Object)","UE.filterWord(String)","UE.htmlparser(String,Boolean)","UE.Editor:setValue(UE.Editor)","UE.Editor:loadPlugins(UE.Editor)","UE.Editor:checkCurLang(KeyValueMap)","UE.Editor:ready","UE.Editor:selectionchange","UE.Editor:Editor()","UE.Editor:Editor(KeyValueMap)","UE.Editor:ready(Function)","UE.Editor:setOpt(String,*)","UE.Editor:setOpt()","UE.Editor:destroy()","UE.Editor:render(String)","UE.Editor:render(Element)","UE.Editor:_setup(Element)","UE.Editor:sync()","UE.Editor:sync(String)","UE.Editor:setHeight(Number)","UE.Editor:addshortcutkey(KeyValueMap)","UE.Editor:addshortcutkey(String,String)","UE.Editor:_bindshortcutKeys()","UE.Editor:getContent()","UE.Editor:getContent(Function)","UE.Editor:getAllHtml()","UE.Editor:getPlainTxt()","UE.Editor:getContentTxt()","UE.Editor:setContent()","UE.Editor:setContent(String,Boolean)","UE.Editor:setContent(String,Boolean,Boolean)","UE.Editor:focus()","UE.Editor:focus(Boolean)","UE.Editor:_initEvents()","UE.Editor:_proxyDomEvent()","UE.Editor:_selectionChange()","UE.Editor:_callCmdFn(String,*)","UE.Editor:execCommand()","UE.Editor:queryCommandState()","UE.Editor:queryCommandValue()","UE.Editor:hasContents()","UE.Editor:hasContents(Array)","UE.Editor:reset()","UE.Editor:setEnabled()","UE.Editor:enable()","UE.Editor:setDisabled()","UE.Editor:setDisabled(String)","UE.Editor:setDisabled(Array)","UE.Editor:disable()","UE.Editor:disable(String)","UE.Editor:disable(Array)","UE.Editor:_setDefaultContent(String)","UE.Editor:setShow()","UE.Editor:show()","UE.Editor:setHide()","UE.Editor:hide()","UE.Editor:getLang(String)","UE.Editor:getContentLength()","UE.Editor:getContentLength(Boolean)","UE.Editor:getContentLength(Boolean,Array)","UE.Editor:addInputRule(Function)","UE.Editor:filterInputRule(UE.uNode)","UE.Editor:addOutputRule(Function)","UE.Editor:filterOutputRule(UE.uNode)","UE.EventBase:EventBase()","UE.EventBase:addListener(String,Function)","UE.EventBase:removeListener(String,Function)","UE.EventBase:fireEvent(String)","UE.EventBase:fireEvent(String,*...)","UE.uNode:uNode()","UE.uNode:toHtml()","UE.uNode:toHtml(Boolean)","UE.uNode:innerHTML()","UE.uNode:innerHTML(String)","UE.uNode:innerText()","UE.uNode:innerText(String)","UE.uNode:getData()","UE.uNode:firstChild()","UE.uNode:lastChild()","UE.uNode:previousSibling()","UE.uNode:nextSibling()","UE.uNode:replaceChild(UE.uNode,UE.uNode)","UE.uNode:appendChild(UE.uNode)","UE.uNode:insertBefore(UE.uNode,UE.uNode)","UE.uNode:insertAfter(UE.uNode,UE.uNode)","UE.uNode:removeChild(UE.uNode,Boolean)","UE.uNode:getAttr(String)","UE.uNode:getAttr(String,*)","UE.uNode:getIndex()","UE.uNode:getNodeById(String)","UE.uNode:getNodeById(String)","UE.uNode:getStyle(String)","UE.uNode:setStyle(String,String)","UE.uNode:traversal(Function)","UE.dom.Range:Range()","UE.dom.Range:startContainer","UE.dom.Range:startOffset","UE.dom.Range:endContainer","UE.dom.Range:endOffset","UE.dom.Range:collapsed","UE.dom.Range:document","UE.dom.Range:cloneContents()","UE.dom.Range:deleteContents()","UE.dom.Range:extractContents()","UE.dom.Range:setStart(Node,int)","UE.dom.Range:setEnd(Node,int)","UE.dom.Range:setStartAfter(Node)","UE.dom.Range:setStartBefore(Node)","UE.dom.Range:setEndAfter(Node)","UE.dom.Range:setEndBefore(Node)","UE.dom.Range:setStartAtFirst(Node)","UE.dom.Range:setStartAtLast(Node)","UE.dom.Range:setEndAtFirst(Node)","UE.dom.Range:setEndAtLast(Node)","UE.dom.Range:selectNode(Node)","UE.dom.Range:selectNodeContents(Node)","UE.dom.Range:cloneRange()","UE.dom.Range:collapse()","UE.dom.Range:collapse(Boolean)","UE.dom.Range:shrinkBoundary()","UE.dom.Range:getCommonAncestor()","UE.dom.Range:getCommonAncestor(Boolean)","UE.dom.Range:getCommonAncestor(Boolean,Boolean)","UE.dom.Range:trimBoundary()","UE.dom.Range:trimBoundary(Boolean)","UE.dom.Range:txtToElmBoundary()","UE.dom.Range:txtToElmBoundary(Boolean)","UE.dom.Range:insertNode()","UE.dom.Range:setCursor()","UE.dom.Range:setCursor(Boolean)","UE.dom.Range:createBookmark(Boolean)","UE.dom.Range:moveToBookmark()","UE.dom.Range:enlarge()","UE.dom.Range:enlarge(Boolean)","UE.dom.Range:adjustmentBoundary()","UE.dom.Range:getClosedNode()","UE.dom.Range:select()","UE.dom.Range:scrollToView(Window)","UE.dom.Range:scrollToView(Window,Number)","UE.dom.Range:inFillChar()","UE.dom.Range:createAddress()","UE.dom.Range:createAddress()","UE.dom.Range:equals(Function)","UE.dom.Range:traversal(Function,Function)","UE.dom.Selection.getNative()","UE.dom.Selection.getIERange()","UE.dom.Selection.cache()","UE.dom.Selection.getStartElementPath()","UE.dom.Selection.clear()","UE.dom.Selection.isFocus()","UE.dom.Selection.getRange()","UE.dom.Selection.getStart()","UE.dom.Selection.getText()","UE.dom.Selection.clearRange()","UE.ajax.request(URLString,KeyValueMap)","UE.ajax.request(KeyValueMap)","UE.browser.ie","UE.browser.opera","UE.browser.webkit","UE.browser.mac","UE.browser.quirks","UE.browser.gecko","UE.browser.ie9Compat","UE.browser.ie8","UE.browser.ie8Compat","UE.browser.ie7Compat","UE.browser.ie6Compat","UE.browser.chrome","UE.browser.safari","UE.browser.version","UE.browser.isCompatible","UE.dom.domUtils.getPosition(Node,Node)","UE.dom.domUtils.getNodeIndex(Node)","UE.dom.domUtils.getNodeIndex(Node,Boolean)","UE.dom.domUtils.inDoc(Node,DomDocument)","UE.dom.domUtils.findParent(Node,Function)","UE.dom.domUtils.findParent(Node,Function,Boolean)","UE.dom.domUtils.findParentByTagName(Node,Array)","UE.dom.domUtils.findParentByTagName(Node,Array,Boolean)","UE.dom.domUtils.findParentByTagName(Node,Array,Boolean,Function)","UE.dom.domUtils.insertAfter(Node,Node)","UE.dom.domUtils.remove(Node)","UE.dom.domUtils.remove(Node,Boolean)","UE.dom.domUtils.isBookmarkNode(Node)","UE.dom.domUtils.getWindow(Node)","UE.dom.domUtils.getCommonAncestor(Node,Node)","UE.dom.domUtils.split(Node,int)","UE.dom.domUtils.isWhitespace(Node)","UE.dom.domUtils.getXY(Node)","UE.dom.domUtils.on(Node,String,Function)","UE.dom.domUtils.on(Node,Array,Function)","UE.dom.domUtils.un(Node,String,Function)","UE.dom.domUtils.un(Node,Array,Function)","UE.dom.domUtils.isSameElement(Node,Node)","UE.dom.domUtils.isSameStyle(Node,Node)","UE.dom.domUtils.isBlockElm(Node)","UE.dom.domUtils.isBody(Element)","UE.dom.domUtils.trimWhiteTextNode(Element)","UE.dom.domUtils.mergeToParent(Element)","UE.dom.domUtils.mergeSibling(Element)","UE.dom.domUtils.mergeSibling(Element,Boolean)","UE.dom.domUtils.mergeSibling(Element,Boolean,Boolean)","UE.dom.domUtils.unSelectable(Element)","UE.dom.domUtils.removeAttributes(String)","UE.dom.domUtils.removeAttributes(Array)","UE.dom.domUtils.createElement(DomDocument,String,KeyValueMap)","UE.dom.domUtils.setAttributes(Element,KeyValueMap)","UE.dom.domUtils.getComputedStyle(Element,String)","UE.dom.domUtils.removeClasses(Element,String)","UE.dom.domUtils.removeClasses(Element,Array)","UE.dom.domUtils.addClass(Node,String)","UE.dom.domUtils.addClass(Node,Array)","UE.dom.domUtils.hasClass(Node,String)","UE.dom.domUtils.hasClass(Node,Array)","UE.dom.domUtils.preventDefault(Event)","UE.dom.domUtils.removeStyle(Element,String)","UE.dom.domUtils.getStyle(Element,String)","UE.dom.domUtils.setStyle(Element,String,String)","UE.dom.domUtils.setStyles(Element,KeyValueMap)","UE.dom.domUtils.removeDirtyAttr()","UE.dom.domUtils.getChildCount(Element)","UE.dom.domUtils.getChildCount(Element,Function)","UE.dom.domUtils.isEmptyNode(Node)","UE.dom.domUtils.clearSelectedArr(Array)","UE.dom.domUtils.scrollToView(Node,window,Number)","UE.dom.domUtils.isBr(Node)","UE.dom.domUtils.isFillChar(Node,Boolean)","UE.dom.domUtils.isEmptyBlock(Element)","UE.dom.domUtils.isEmptyBlock(Element,RegExp)","UE.dom.domUtils.setViewportOffset(Element,KeyValueMap)","UE.dom.domUtils.fillNode(DomDocument,Node)","UE.dom.domUtils.moveChild(Node,Node)","UE.dom.domUtils.moveChild(Node,Node,Boolean)","UE.dom.domUtils.hasNoAttributes(Node)","UE.dom.domUtils.isCustomeNode(Node)","UE.dom.domUtils.isTagNode(Node,String)","UE.dom.domUtils.filterNodeList(Array,Function)","UE.dom.domUtils.filterNodeList(Array,String)","UE.dom.domUtils.filterNodeList(Array,Function,Boolean)","UE.utils.each(Object,Function)","UE.utils.each(Array,Function)","UE.utils.makeInstance(Object)","UE.utils.extend(Object,Object)","UE.utils.extend(Object,Object,Boolean)","UE.utils.extend2(Object,Object...)","UE.utils.inherits(Object,Object)","UE.utils.bind(Function,Object)","UE.utils.defer(Function,int)","UE.utils.defer(Function,int,Boolean)","UE.utils.indexOf(Array,*)","UE.utils.indexOf(Array,*,int)","UE.utils.removeItem(Array,*)","UE.utils.trim(String)","UE.utils.listToMap(String)","UE.utils.listToMap(Array)","UE.utils.unhtml(String)","UE.utils.html(String)","UE.utils.cssStyleToDomStyle(String)","UE.utils.loadFile(DomDocument,KeyValueMap)","UE.utils.loadFile(DomDocument,KeyValueMap,Function)","UE.utils.isEmptyObject(*)","UE.utils.transUnitToPx()","UE.utils.domReady(Function)","UE.utils.isString(*)","UE.utils.isArray(*)","UE.utils.isFunction(*)","UE.utils.isNumber(*)","UE.utils.isRegExp(*)","UE.utils.isObject(*)"];
+    var _source = ["UE.getListener(Object,String,Boolean)","UE.filterNode(Object,Object)","UE.filterWord(String)","UE.htmlparser(String,Boolean)","UE.Editor:setValue(UE.Editor)","UE.Editor:loadPlugins(UE.Editor)","UE.Editor:checkCurLang(KeyValueMap)","UE.Editor:ready","UE.Editor:selectionchange","UE.Editor:Editor()","UE.Editor:Editor(KeyValueMap)","UE.Editor:ready(Function)","UE.Editor:setOpt(String,*)","UE.Editor:setOpt()","UE.Editor:destroy()","UE.Editor:render(String)","UE.Editor:render(Element)","UE.Editor:_setup(Element)","UE.Editor:sync()","UE.Editor:sync(String)","UE.Editor:setHeight(Number)","UE.Editor:addshortcutkey(KeyValueMap)","UE.Editor:addshortcutkey(String,String)","UE.Editor:_bindshortcutKeys()","UE.Editor:getContent()","UE.Editor:getContent(Function)","UE.Editor:getAllHtml()","UE.Editor:getPlainTxt()","UE.Editor:getContentTxt()","UE.Editor:setContent()","UE.Editor:setContent(String,Boolean)","UE.Editor:setContent(String,Boolean,Boolean)","UE.Editor:focus()","UE.Editor:focus(Boolean)","UE.Editor:_initEvents()","UE.Editor:_proxyDomEvent()","UE.Editor:_selectionChange()","UE.Editor:_callCmdFn(String,*)","UE.Editor:execCommand()","UE.Editor:queryCommandState()","UE.Editor:queryCommandValue()","UE.Editor:hasContents()","UE.Editor:hasContents(Array)","UE.Editor:reset()","UE.Editor:setEnabled()","UE.Editor:enable()","UE.Editor:setDisabled()","UE.Editor:setDisabled(String)","UE.Editor:setDisabled(Array)","UE.Editor:disable()","UE.Editor:disable(String)","UE.Editor:disable(Array)","UE.Editor:_setDefaultContent(String)","UE.Editor:setShow()","UE.Editor:show()","UE.Editor:setHide()","UE.Editor:hide()","UE.Editor:getLang(String)","UE.Editor:getContentLength()","UE.Editor:getContentLength(Boolean)","UE.Editor:getContentLength(Boolean,Array)","UE.Editor:addInputRule(Function)","UE.Editor:filterInputRule(UE.uNode)","UE.Editor:addOutputRule(Function)","UE.Editor:filterOutputRule(UE.uNode)","UE.EventBase:EventBase()","UE.EventBase:addListener(String,Function)","UE.EventBase:removeListener(String,Function)","UE.EventBase:fireEvent(String)","UE.EventBase:fireEvent(String,*...)","UE.uNode:uNode()","UE.uNode:toHtml()","UE.uNode:toHtml(Boolean)","UE.uNode:innerHTML()","UE.uNode:innerHTML(String)","UE.uNode:innerText()","UE.uNode:innerText(String)","UE.uNode:getData()","UE.uNode:firstChild()","UE.uNode:lastChild()","UE.uNode:previousSibling()","UE.uNode:nextSibling()","UE.uNode:replaceChild(UE.uNode,UE.uNode)","UE.uNode:appendChild(UE.uNode)","UE.uNode:insertBefore(UE.uNode,UE.uNode)","UE.uNode:insertAfter(UE.uNode,UE.uNode)","UE.uNode:removeChild(UE.uNode,Boolean)","UE.uNode:getAttr(String)","UE.uNode:getAttr(String,*)","UE.uNode:getIndex()","UE.uNode:getNodeById(String)","UE.uNode:getNodeById(String)","UE.uNode:getStyle(String)","UE.uNode:setStyle(String,String)","UE.uNode:traversal(Function)","UE.dom.Range:Range()","UE.dom.Range:startContainer","UE.dom.Range:startOffset","UE.dom.Range:endContainer","UE.dom.Range:endOffset","UE.dom.Range:collapsed","UE.dom.Range:document","UE.dom.Range:cloneContents()","UE.dom.Range:deleteContents()","UE.dom.Range:extractContents()","UE.dom.Range:setStart(Node,int)","UE.dom.Range:setEnd(Node,int)","UE.dom.Range:setStartAfter(Node)","UE.dom.Range:setStartBefore(Node)","UE.dom.Range:setEndAfter(Node)","UE.dom.Range:setEndBefore(Node)","UE.dom.Range:setStartAtFirst(Node)","UE.dom.Range:setStartAtLast(Node)","UE.dom.Range:setEndAtFirst(Node)","UE.dom.Range:setEndAtLast(Node)","UE.dom.Range:selectNode(Node)","UE.dom.Range:selectNodeContents(Node)","UE.dom.Range:cloneRange()","UE.dom.Range:collapse()","UE.dom.Range:collapse(Boolean)","UE.dom.Range:shrinkBoundary()","UE.dom.Range:getCommonAncestor()","UE.dom.Range:getCommonAncestor(Boolean)","UE.dom.Range:getCommonAncestor(Boolean,Boolean)","UE.dom.Range:trimBoundary()","UE.dom.Range:trimBoundary(Boolean)","UE.dom.Range:txtToElmBoundary()","UE.dom.Range:txtToElmBoundary(Boolean)","UE.dom.Range:insertNode()","UE.dom.Range:setCursor()","UE.dom.Range:setCursor(Boolean)","UE.dom.Range:createBookmark(Boolean)","UE.dom.Range:moveToBookmark()","UE.dom.Range:enlarge()","UE.dom.Range:enlarge(Boolean)","UE.dom.Range:adjustmentBoundary()","UE.dom.Range:getClosedNode()","UE.dom.Range:select()","UE.dom.Range:scrollToView(Window)","UE.dom.Range:scrollToView(Window,Number)","UE.dom.Range:inFillChar()","UE.dom.Range:createAddress()","UE.dom.Range:createAddress()","UE.dom.Range:equals(Function)","UE.dom.Range:traversal(Function,Function)","UE.dom.Selection:getNative()","UE.dom.Selection:getIERange()","UE.dom.Selection:cache()","UE.dom.Selection:getStartElementPath()","UE.dom.Selection:clear()","UE.dom.Selection:isFocus()","UE.dom.Selection:getRange()","UE.dom.Selection:getStart()","UE.dom.Selection:getText()","UE.dom.Selection:clearRange()","UE.ajax.request(URLString,KeyValueMap)","UE.ajax.request(KeyValueMap)","UE.browser.ie","UE.browser.opera","UE.browser.webkit","UE.browser.mac","UE.browser.quirks","UE.browser.gecko","UE.browser.ie9Compat","UE.browser.ie8","UE.browser.ie8Compat","UE.browser.ie7Compat","UE.browser.ie6Compat","UE.browser.chrome","UE.browser.safari","UE.browser.version","UE.browser.isCompatible","UE.dom.domUtils.getPosition(Node,Node)","UE.dom.domUtils.getNodeIndex(Node)","UE.dom.domUtils.getNodeIndex(Node,Boolean)","UE.dom.domUtils.inDoc(Node,DomDocument)","UE.dom.domUtils.findParent(Node,Function)","UE.dom.domUtils.findParent(Node,Function,Boolean)","UE.dom.domUtils.findParentByTagName(Node,Array)","UE.dom.domUtils.findParentByTagName(Node,Array,Boolean)","UE.dom.domUtils.findParentByTagName(Node,Array,Boolean,Function)","UE.dom.domUtils.insertAfter(Node,Node)","UE.dom.domUtils.remove(Node)","UE.dom.domUtils.remove(Node,Boolean)","UE.dom.domUtils.isBookmarkNode(Node)","UE.dom.domUtils.getWindow(Node)","UE.dom.domUtils.getCommonAncestor(Node,Node)","UE.dom.domUtils.split(Node,int)","UE.dom.domUtils.isWhitespace(Node)","UE.dom.domUtils.getXY(Node)","UE.dom.domUtils.on(Node,String,Function)","UE.dom.domUtils.on(Node,Array,Function)","UE.dom.domUtils.un(Node,String,Function)","UE.dom.domUtils.un(Node,Array,Function)","UE.dom.domUtils.isSameElement(Node,Node)","UE.dom.domUtils.isSameStyle(Node,Node)","UE.dom.domUtils.isBlockElm(Node)","UE.dom.domUtils.isBody(Element)","UE.dom.domUtils.trimWhiteTextNode(Element)","UE.dom.domUtils.mergeToParent(Element)","UE.dom.domUtils.mergeSibling(Element)","UE.dom.domUtils.mergeSibling(Element,Boolean)","UE.dom.domUtils.mergeSibling(Element,Boolean,Boolean)","UE.dom.domUtils.unSelectable(Element)","UE.dom.domUtils.removeAttributes(String)","UE.dom.domUtils.removeAttributes(Array)","UE.dom.domUtils.createElement(DomDocument,String,KeyValueMap)","UE.dom.domUtils.setAttributes(Element,KeyValueMap)","UE.dom.domUtils.getComputedStyle(Element,String)","UE.dom.domUtils.removeClasses(Element,String)","UE.dom.domUtils.removeClasses(Element,Array)","UE.dom.domUtils.addClass(Node,String)","UE.dom.domUtils.addClass(Node,Array)","UE.dom.domUtils.hasClass(Node,String)","UE.dom.domUtils.hasClass(Node,Array)","UE.dom.domUtils.preventDefault(Event)","UE.dom.domUtils.removeStyle(Element,String)","UE.dom.domUtils.getStyle(Element,String)","UE.dom.domUtils.setStyle(Element,String,String)","UE.dom.domUtils.setStyles(Element,KeyValueMap)","UE.dom.domUtils.removeDirtyAttr()","UE.dom.domUtils.getChildCount(Element)","UE.dom.domUtils.getChildCount(Element,Function)","UE.dom.domUtils.isEmptyNode(Node)","UE.dom.domUtils.clearSelectedArr(Array)","UE.dom.domUtils.scrollToView(Node,window,Number)","UE.dom.domUtils.isBr(Node)","UE.dom.domUtils.isFillChar(Node,Boolean)","UE.dom.domUtils.isEmptyBlock(Element)","UE.dom.domUtils.isEmptyBlock(Element,RegExp)","UE.dom.domUtils.setViewportOffset(Element,KeyValueMap)","UE.dom.domUtils.fillNode(DomDocument,Node)","UE.dom.domUtils.moveChild(Node,Node)","UE.dom.domUtils.moveChild(Node,Node,Boolean)","UE.dom.domUtils.hasNoAttributes(Node)","UE.dom.domUtils.isCustomeNode(Node)","UE.dom.domUtils.isTagNode(Node,String)","UE.dom.domUtils.filterNodeList(Array,Function)","UE.dom.domUtils.filterNodeList(Array,String)","UE.dom.domUtils.filterNodeList(Array,Function,Boolean)","UE.utils.each(Object,Function)","UE.utils.each(Array,Function)","UE.utils.makeInstance(Object)","UE.utils.extend(Object,Object)","UE.utils.extend(Object,Object,Boolean)","UE.utils.extend2(Object,Object...)","UE.utils.inherits(Object,Object)","UE.utils.bind(Function,Object)","UE.utils.defer(Function,int)","UE.utils.defer(Function,int,Boolean)","UE.utils.indexOf(Array,*)","UE.utils.indexOf(Array,*,int)","UE.utils.removeItem(Array,*)","UE.utils.trim(String)","UE.utils.listToMap(String)","UE.utils.listToMap(Array)","UE.utils.unhtml(String)","UE.utils.html(String)","UE.utils.cssStyleToDomStyle(String)","UE.utils.loadFile(DomDocument,KeyValueMap)","UE.utils.loadFile(DomDocument,KeyValueMap,Function)","UE.utils.isEmptyObject(*)","UE.utils.transUnitToPx()","UE.utils.domReady(Function)","UE.utils.isString(*)","UE.utils.isArray(*)","UE.utils.isFunction(*)","UE.utils.isNumber(*)","UE.utils.isRegExp(*)","UE.utils.isObject(*)"];
 </script>
         </div>
         <a id="elevator" class="go-to-top" href="#">
