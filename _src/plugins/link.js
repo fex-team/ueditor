@@ -30,17 +30,6 @@
  * editor.queryCommandValue( 'link' );
  * ```
  */
-/**
- * 返回当前选区位置是否是超链接
- * @command link
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { Int } 0为是，-1为不是
- * @example
- * ```javascript
- * editor.queryCommandState( 'link' );
- * ```
- */
 
 /**
  * 取消超链接
@@ -50,8 +39,6 @@
  * @example
  * ```javascript
  * editor.execCommand( 'unlink');
- * ```
- */
  * ```
  */
 
