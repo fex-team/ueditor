@@ -20,7 +20,7 @@
  * ```
  */
 /**
- * 如果选区所在位置是区域，返回当前超链接节点
+ * 返回当前选中的第一个超链接节点
  * @command link
  * @method queryCommandValue
  * @param { String } cmd 命令字符串
@@ -28,6 +28,17 @@
  * @example
  * ```javascript
  * editor.queryCommandValue( 'link' );
+ * ```
+ */
+/**
+ * 返回当前选区位置是否是超链接
+ * @command link
+ * @method queryCommandState
+ * @param { String } cmd 命令字符串
+ * @return { Int } 0为是，-1为不是
+ * @example
+ * ```javascript
+ * editor.queryCommandState( 'link' );
  * ```
  */
 
@@ -39,6 +50,8 @@
  * @example
  * ```javascript
  * editor.execCommand( 'unlink');
+ * ```
+ */
  * ```
  */
 

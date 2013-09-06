@@ -24,8 +24,10 @@
  * @example
  * ```javascript
  * editor.execCommand( 'blockquote',{
- *     color:'#000'
+ *     style: "color: red;"
  * } );
+ * ```
+ */
  * ```
  */
 

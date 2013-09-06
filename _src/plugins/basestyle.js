@@ -24,7 +24,7 @@ UE.plugins['basestyle'] = function(){
      */
 
     /**
-     * 获取当前选中的文本内容的加粗状态
+     * 获取当前选区的加粗状态
      * @command bold
      * @param { String } cmd 命令字符串
      * @method queryCommandState
@@ -56,7 +56,7 @@ UE.plugins['basestyle'] = function(){
      */
 
     /**
-     * 获取当前选中的文本内容的倾斜状态
+     * 获取当前选区的倾斜状态
      * @command italic
      * @method queryCommandState
      * @param { String } cmd 命令字符串
@@ -89,7 +89,7 @@ UE.plugins['basestyle'] = function(){
      */
 
     /**
-     * 获取当前选中的文本内容的下标状态
+     * 获取当前选区的下标状态
      * @command subscript
      * @method queryCommandState
      * @param { String } cmd 命令字符串
@@ -122,7 +122,7 @@ UE.plugins['basestyle'] = function(){
      */
 
     /**
-     * 获取当前选中的文本内容的上标状态
+     * 获取当前选区的上标状态
      * @command superscript
      * @method queryCommandState
      * @param { String } cmd 命令字符串

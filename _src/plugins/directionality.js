@@ -74,7 +74,7 @@
         };
 
     /**
-     * 设置文字的方向，可设置从左向右输入，或者从右向左输入，操作对当前段作用
+     * 设置文字的方向，可设置从左向右输入，或者从右向左输入
      * @command directionality
      * @method execCommand
      * @param { String } cmdName 命令字符串
@@ -86,7 +86,7 @@
      */
 
     /**
-     * 查询当前段落的文字输入方向
+     * 查询当前选区的文字输入方向
      * @command directionality
      * @method queryCommandValue
      * @param { String } cmdName 命令字符串
