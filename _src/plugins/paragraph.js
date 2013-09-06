@@ -3,6 +3,7 @@
  * @file
  * @since 1.2.6.1
  */
+
 /**
  * 对选区内文本添加相应标签嵌套
  * @command paragraph
@@ -17,9 +18,10 @@
  * }' );
  * ```
  */
+
 /**
  * 返回选区内节点标签名
- * @command Paragraph
+ * @command paragraph
  * @method queryCommandValue
  * @param { String } cmd 命令字符串
  * @return { String } 节点标签名
