@@ -4,7 +4,7 @@
  */
 
 /**
- * 在当前光标处插入音乐
+ * 插入音乐
  * @command music
  * @method execCommand
  * @param { Object } musicOptions 插入音乐的参数项， 支持的key有： url=>音乐地址；

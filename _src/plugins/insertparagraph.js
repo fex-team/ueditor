@@ -6,7 +6,7 @@
 
 
 /**
- * 插入新段落
+ * 插入段落
  * @command insertparagraph
  * @method execCommand
  * @param { String } cmd 命令字符串

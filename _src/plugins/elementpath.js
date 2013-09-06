@@ -13,7 +13,6 @@ UE.plugins['elementpath'] = function(){
     }
     me.commands['elementpath'] = {
         execCommand : function( cmdName, level ) {
-            debugger;
             var start = tagNames[level],
                 range = me.selection.getRange();
             currentLevel = level*1;
