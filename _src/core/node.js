@@ -24,7 +24,7 @@
     /**
      * 通过一个键值对，创建一个uNode对象
      * @constructor
-     * @param { KeyValueMap } 传入要创建的uNode的属性
+     * @param { Object } 传入要创建的uNode的属性
      * @example
      * ```javascript
      * var node = new uNode({
@@ -314,7 +314,7 @@
         /**
          * 获取当前对象的data属性
          * @method getData
-         * @return { KeyValueMap } 若节点的type值是elemenet，返回空字符串，否则返回节点的data属性
+         * @return { Object } 若节点的type值是elemenet，返回空字符串，否则返回节点的data属性
          * @example
          * ```javascript
          * node.getData();

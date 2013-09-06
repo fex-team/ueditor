@@ -1402,7 +1402,7 @@
          * @method createBookmark
          * @param { Boolean } serialize 控制返回的标记位置是对当前位置的引用还是ID，如果该值为true，则
          *                              返回标记位置的ID， 反之则返回标记位置的引用
-         * @return { KeyValueMap } 返回一个书签记录键值对， 其包含的key有： start => 开始标记的ID或者引用，
+         * @return { Object } 返回一个书签记录键值对， 其包含的key有： start => 开始标记的ID或者引用，
          *                          end => 结束标记的ID或引用， id => 当前标记的类型， 如果为true，则表示
          *                          返回的记录的类型为ID， 反之则为引用
          */

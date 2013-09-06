@@ -77,7 +77,7 @@
      * 获取语言包里面的第一个
      * @private
      * @method checkCurLang
-     * @param { KeyValueMap } I18N 编辑器事例
+     * @param { Object } I18N 编辑器事例
      */
     function checkCurLang(I18N) {
         for (var lang in I18N) {
@@ -124,7 +124,7 @@
     /**
      * 以给定的参数集合创建一个编辑器对象，对于未指定的参数，将应用默认参数。
      * @constructor
-     * @param { KeyValueMap } setting 创建编辑器的参数
+     * @param { Object } setting 创建编辑器的参数
      * @example
      * ```javascript
      * var editor = new UE.Editor();
@@ -541,7 +541,7 @@
         /**
          * 这个接口是为插件扩展提供的接口,主要是为新添加的插件，如果需要添加快捷键，所提供的接口
          * @method addshortcutkey
-         * @param { KeyValueMap } keyset 命令和快捷键的键值对对象，多个按钮的快捷键用“＋”分隔
+         * @param { Object } keyset 命令和快捷键的键值对对象，多个按钮的快捷键用“＋”分隔
          * @example
          * ```javascript
          * editor.addshortcutkey({
@@ -1329,7 +1329,7 @@
          * 根据指定的路径，获取对应的语言资源
          * @method getLang
          * @param { String } path 路径根据的是lang目录下的语言文件的路径结构
-         * @return { KeyValueMap | String } 根据路径返回语言资源的Json格式对象或者语言字符串
+         * @return { Object | String } 根据路径返回语言资源的Json格式对象或者语言字符串
          * @example
          * ```javascript
          * editor.getLang('contextMenu.delete'); //如果当前是中文，那返回是的是'删除'

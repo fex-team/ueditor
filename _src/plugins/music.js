@@ -7,7 +7,7 @@
  * 在当前光标处插入音乐
  * @command music
  * @method execCommand
- * @param { KeyValueMap } musicOptions 插入音乐的参数项， 支持的key有： url=>音乐地址；
+ * @param { Object } musicOptions 插入音乐的参数项， 支持的key有： url=>音乐地址；
  * width=>音乐容器宽度；height=>音乐容器高度；align=>音乐文件的对齐方式， 可选值有: left, center, right, none
  * @example
  * ```javascript

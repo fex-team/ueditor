@@ -52,7 +52,7 @@ UE.plugins['video'] = function (){
      * @command insertvideo
      * @method execCommand
      * @param { String } cmd 命令字符串
-     * @param { KeyValueMap } videoObj 键值对对象， 描述一个视频的所有属性
+     * @param { Object } videoAttr 键值对对象， 描述一个视频的所有属性
      * @example
      * ```javascript
      *

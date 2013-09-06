@@ -50,7 +50,7 @@ UE.ajax = function() {
          * 成功， 则调用onsuccess回调， 失败则调用 onerror 回调
          * @method request
          * @param { URLString } url ajax请求的url地址
-         * @param { KeyValueMap } ajaxOptions ajax请求选项的键值对，支持的选项如下：
+         * @param { Object } ajaxOptions ajax请求选项的键值对，支持的选项如下：
          * @example
          * ```javascript
          * //向sayhello.php发起一个异步的Ajax GET请求, 请求超时时间为10s， 请求完成后执行相应的回调。
@@ -89,7 +89,7 @@ UE.ajax = function() {
          * 成功， 则调用onsuccess回调， 失败则调用 onerror 回调。
          * @method request
          * @warning 如果在参数项里未提供一个key为“url”的地址值，则该请求将直接退出。
-         * @param { KeyValueMap } ajaxOptions ajax请求选项的键值对，支持的选项如下：
+         * @param { Object } ajaxOptions ajax请求选项的键值对，支持的选项如下：
          * @example
          * ```javascript
          *

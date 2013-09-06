@@ -590,7 +590,7 @@ var domUtils = dom.domUtils = {
      * 获取元素element相对于viewport的位置坐标
      * @method getXY
      * @param { Node } element 需要计算位置的节点对象
-     * @return { KeyValueMap } 返回形如{x:left,y:top}的一个key-value映射对象， 其中键x代表水平偏移距离，
+     * @return { Object } 返回形如{x:left,y:top}的一个key-value映射对象， 其中键x代表水平偏移距离，
      *                          y代表垂直偏移距离。
      *
      * @example
@@ -1303,7 +1303,7 @@ var domUtils = dom.domUtils = {
      * @method createElement
      * @param { DomDocument } doc 新创建的元素属于该document节点创建
      * @param { String } tagName 需要创建的元素的标签名
-     * @param { KeyValueMap } attrs 新创建的元素的属性key-value集合
+     * @param { Object } attrs 新创建的元素的属性key-value集合
      * @return { Element } 新创建的元素对象
      * @example
      * ```javascript
@@ -1327,7 +1327,7 @@ var domUtils = dom.domUtils = {
      * 为节点node添加属性attrs，attrs为属性键值对
      * @method setAttributes
      * @param { Element } node 需要设置属性的元素对象
-     * @param { KeyValueMap } attrs 需要设置的属性名-值对
+     * @param { Object } attrs 需要设置的属性名-值对
      * @return { Element } 设置属性的元素对象
      * @example
      * ```html
@@ -1710,7 +1710,7 @@ var domUtils = dom.domUtils = {
      * 为元素element设置多个样式属性值
      * @method setStyles
      * @param { Element } element 需要设置样式的元素
-     * @param { KeyValueMap } styles 样式名值对
+     * @param { Object } styles 样式名值对
      * @example
      * ```html
      * <div id="test"></div>
@@ -2002,7 +2002,7 @@ var domUtils = dom.domUtils = {
      * 移动元素使得该元素的位置移动指定的偏移量的距离
      * @method setViewportOffset
      * @param { Element } element 需要设置偏移量的元素
-     * @param { KeyValueMap } offset 偏移量， 形如{ left: 100, top: 50 }的一个键值对， 表示该元素将在
+     * @param { Object } offset 偏移量， 形如{ left: 100, top: 50 }的一个键值对， 表示该元素将在
      *                                  现有的位置上向水平方向偏移offset.left的距离， 在竖直方向上偏移
      *                                  offset.top的距离
      * @example
