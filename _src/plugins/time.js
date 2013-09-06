@@ -50,7 +50,7 @@ UE.commands['time'] = UE.commands["date"] = {
         function formatDate(date, format) {
             var yyyy = ('000' + date.getFullYear()).slice(-4),
                 yy = yyyy.slice(-2),
-                mm = ('0' + date.getMonth()).slice(-2),
+                mm = ('0' + (date.getMonth()+1)).slice(-2),
                 dd = ('0' + date.getDate()).slice(-2);
             format = format || 'yyyy-mm-dd';
             return format.replace(/yyyy/ig, yyyy).replace(/yy/ig, yy).replace(/mm/ig, mm).replace(/dd/ig, dd);
