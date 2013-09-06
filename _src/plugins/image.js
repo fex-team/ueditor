@@ -27,17 +27,7 @@
  * editor.queryCommandValue( 'imagefloat' );
  * ```
  */
-/**
- * 返回当前选区位置是否是图片
- * @command imagefloat
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { int } 0为是，-1为不是
- * @example
- * ```javascript
- * editor.queryCommandState( 'imagefloat' );
- * ```
- */
+
 UE.commands['imagefloat'] = {
     execCommand:function (cmd, align) {
         var me = this,
