@@ -15,18 +15,6 @@
  * ```
  */
 
-/**
- * 返回当前选区位置是否有缩进
- * @command indent
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { int } 0为不是，1为是
- * @example
- * ```javascript
- * editor.queryCommandState( 'indent' );
- * ```
- */
-
 UE.commands['indent'] = {
     execCommand : function() {
          var me = this,value = me.queryCommandState("indent") ? "0em" : (me.options.indentValue || '2em');

@@ -28,6 +28,9 @@
  * } );
  * ```
  */
+ * ```
+ */
+
 
 UE.plugins['blockquote'] = function(){
     var me = this;

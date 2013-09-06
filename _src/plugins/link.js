@@ -41,6 +41,7 @@
  * editor.execCommand( 'unlink');
  * ```
  */
+
 UE.plugins['link'] = function(){
     function optimize( range ) {
         var start = range.startContainer,end = range.endContainer;

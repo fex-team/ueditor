@@ -5,7 +5,7 @@
  */
 
 /**
- * 对段落居左,居右,居中,两端对齐
+ * 设置段落对齐方式
  * @command justify
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -26,17 +26,7 @@
  * editor.queryCommandValue( 'justify' );
  * ```
  */
-/**
- * 返回当前选区位置是否是图片
- * @command justify
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { Int } 0为是，-1为不是
- * @example
- * ```javascript
- * editor.queryCommandState( 'justify' );
- * ```
- */
+
 UE.plugins['justify']=function(){
     var me=this,
         block = domUtils.isBlockElm,
