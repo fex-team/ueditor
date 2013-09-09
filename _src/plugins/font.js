@@ -5,7 +5,7 @@
  */
 
 /**
- * 设置字体颜色
+ * 字体颜色
  * @command forecolor
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -28,7 +28,7 @@
  */
 
 /**
- * 设置字体背景颜色
+ * 字体背景颜色
  * @command backcolor
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -51,7 +51,7 @@
  */
 
 /**
- * 设置字体大小
+ * 字体大小
  * @command fontsize
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -74,7 +74,7 @@
  */
 
 /**
- * 设置字体样式
+ * 字体样式
  * @command fontfamily
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -97,7 +97,7 @@
  */
 
 /**
- * 设置字体下划线
+ * 字体下划线
  * @command underline
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -108,7 +108,7 @@
  */
 
 /**
- * 设置字体删除线
+ * 字体删除线
  * @command strikethrough
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -119,7 +119,7 @@
  */
 
 /**
- * 设置字体边框
+ * 字体边框
  * @command fontborder
  * @method execCommand
  * @param { String } cmd 命令字符串

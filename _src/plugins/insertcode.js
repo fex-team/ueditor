@@ -38,7 +38,7 @@ UE.plugins['insertcode'] = function() {
     });
 
     /**
-     * 根据选择的语言，插入代码编辑块
+     * 插入代码
      * @command insertcode
      * @method execCommand
      * @param { String } cmd 命令字符串

@@ -5,7 +5,7 @@
  */
 
 /**
- * 自动提交表单
+ * 提交表单
  * @command autosubmit
  * @method execCommand
  * @param { String } cmd 命令字符串

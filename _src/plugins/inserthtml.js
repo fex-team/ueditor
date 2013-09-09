@@ -5,7 +5,7 @@
  */
 
 /**
- * 插入html字符串
+ * 插入html
  * @command inserthtml
  * @method execCommand
  * @param { String } cmd 命令字符串
