@@ -556,7 +556,7 @@ var utils = UE.utils = {
      * @param { Object } options 加载资源文件的属性集合， 该集合支持的值是script标签和style标签支持的所有属性。
      * @param { Function } fn 资源文件加载成功之后执行的回调
      * @warning 对于在同一个文档中多次加载同一URL的文件， 该方法会在第一次加载之后缓存该请求，
-     *           在此之后的所有同一URL的请求， 将会直接出发回调。
+     *           在此之后的所有同一URL的请求， 将会直接触发回调。
      * @example
      * ```javascript
      *
