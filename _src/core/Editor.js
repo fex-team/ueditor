@@ -90,6 +90,8 @@
      * @module UE
      * @class Editor
      * @event ready
+     * @remind render方法执行完成之后,会触发该事件
+     * @remind
      * @example
      * ```javascript
      * editor.addListener( 'ready', function( editor ) {
@@ -98,19 +100,25 @@
      * ```
      */
     /**
+     * 执行destroy方法,会触发该事件
      * @module UE
      * @class Editor
      * @event destroy
+     * @see UE.Editor:destroy()
      */
     /**
-     * @module UE
-     * @class Editor
-     * @event focus
-     */
-    /**
+     * 执行reset方法,会触发该事件
      * @module UE
      * @class Editor
      * @event reset
+     * @see UE.Editor:reset()
+     */
+    /**
+     * 执行focus方法,会触发该事件
+     * @module UE
+     * @class Editor
+     * @event focus
+     * @see UE.Editor:focus(Boolean)
      */
     /**
      * 语言加载完成会触发该事件
@@ -137,34 +145,35 @@
      * @event firstBeforeExecCommand
      */
     /**
+     * 在getContent方法执行之前会触发该事件
      * @module UE
      * @class Editor
      * @event beforeGetContent
+     * @see UE.Editor:getContent()
      */
     /**
+     * 在getContent方法执行之后会触发该事件
      * @module UE
      * @class Editor
      * @event afterGetContent
+     * @see UE.Editor:getContent()
      */
     /**
-     * @module UE
-     * @class Editor
-     * @event getAllHtml
-     */
-    /**
+     * 在setContent方法执行之前会触发该事件
      * @module UE
      * @class Editor
      * @event beforeSetContent
+     * @see UE.Editor:setContent(String)
      */
     /**
+     * 在setContent方法执行之后会触发该事件
      * @module UE
      * @class Editor
      * @event afterSetContent
+     * @see UE.Editor:setContent(String)
      */
     /**
-     * 每当编辑器内部选区发生改变后， 将触发该事件
-     * @event selectionChange
-     * 每当编辑器内部选区发生改变后，将触发该事件
+     * 每当编辑器内部选区发生改变时，将触发该事件
      * @event selectionchange
      * @warning 该事件的触发非常频繁，不建议在该事件的处理过程中做重量级的处理
      * @example
@@ -174,16 +183,21 @@
      * }
      */
     /**
+     * 在所有selectionchange的监听函数执行之前，会触发该事件
      * @module UE
      * @class Editor
      * @event beforeSelectionChange
+     * @see UE.Editor:selectionchange
      */
     /**
+     * 在所有selectionchange的监听函数执行完之后，会触发该事件
      * @module UE
      * @class Editor
      * @event afterSelectionChange
+     * @see UE.Editor:selectionchange
      */
     /**
+     * 编辑器内容发生改变时会触发该事件
      * @module UE
      * @class Editor
      * @event contentChange
@@ -292,7 +306,7 @@
         /**
          * 该方法是提供给插件里面使用，设置配置项默认值
          * @method setOpt
-         * @warning 在config文件里面有定义参数key或者用户实例化的时候有传入参数key，该方法设置的key参数值无效
+         * @warning 三处设置配置项的优先级: 实例化时传入参数 > setOpt()设置 > config文件里设置
          * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
          * @param { String } key 编辑器的可接受的选项名称
          * @param { * } val  该选项可接受的值
@@ -305,7 +319,7 @@
         /**
          * 该方法是提供给插件里面使用，以{key:value}集合的方式设置插件内用到的配置项默认值
          * @method setOpt
-         * @warning 在config文件里面有定义参数key或者用户实例化的时候有传入参数key，该方法设置的key参数值无效
+         * @warning 三处设置配置项的优先级: 实例化时传入参数 > setOpt()设置 > config文件里设置
          * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
          * @example
          * ```javascript
@@ -691,7 +705,8 @@
          * @return { String } 编辑器的内容字符串, 如果编辑器的内容为空，或者是空的标签内容（如:”<p><br/></p>“）， 则返回空字符串
          * @example
          * ```javascript
-         * var content = editor.getContent();
+         * //编辑器html内容:<p>1<strong>2<em>34</em>5</strong>6</p>
+         * var content = editor.getContent(); //返回值:<p>1<strong>2<em>34</em>5</strong>6</p>
          * ```
          */
 
@@ -735,7 +750,7 @@
          * @return { String } 编辑器的内容html文档字符串
          * @eaxmple
          * ```javascript
-         * editor.getAllHtml();
+         * editor.getAllHtml(); //返回格式大致是: <html><head>...</head><body>...</body></html>
          * ```
          */
         getAllHtml: function () {
@@ -764,7 +779,9 @@
          * @return { String } 编辑器带段落格式的纯文本内容字符串
          * @example
          * ```javascript
-         * editor.getPlainTxt();
+         * //编辑器html内容:<p><strong>1</strong></p><p><strong>2</strong></p>
+         * console.log(editor.getPlainTxt()); //输出:"1\n2\n
+         "
          * ```
          */
         getPlainTxt: function () {
@@ -786,7 +803,8 @@
          * @return { String } 编辑器不带段落格式的纯文本内容字符串
          * @example
          * ```javascript
-         * editor.getContentTxt();
+         * //编辑器html内容:<p><strong>1</strong></p><p><strong>2</strong></p>
+         * console.log(editor.getPlainTxt()); //输出:"12
          * ```
          */
         getContentTxt: function () {
@@ -800,7 +818,7 @@
          * @method setContent
          * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
          * @warning 该方法会触发selectionchange事件
-         * @param { String } 要插入的html内容
+         * @param { String } html 要插入的html内容
          * @example
          * ```javascript
          * editor.getContent('<p>test</p>');
@@ -1238,7 +1256,7 @@
 
         /** 设置当前编辑区域不可编辑,except中的命令除外
          * @method setDisabled
-         * @param { Array } except 字符串数组，数组中的命令仍然可以执行
+         * @param { Array } except 例外命令的字符串数组，数组中的命令仍然可以执行
          * @remind 即使设置了disable，此处配置的例外命令仍然可以执行
          * @example
          * ```javascript
@@ -1328,7 +1346,7 @@
          * @method setHide
          * @example
          * ```javascript
-         * editor.hide()
+         * editor.setHide()
          * ```
          */
         setHide: function () {
