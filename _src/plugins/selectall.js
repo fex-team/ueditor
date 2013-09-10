@@ -5,7 +5,7 @@
  */
 
 /**
- * 选中编辑器里的所有内容
+ * 选中所有内容
  * @command selectall
  * @method execCommand
  * @param { String } cmd 命令字符串

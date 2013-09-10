@@ -5,7 +5,7 @@
  */
 
 /**
- * 根据选区位置对标签添加引用
+ * 添加引用
  * @command blockquote
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -26,8 +26,6 @@
  * editor.execCommand( 'blockquote',{
  *     style: "color: red;"
  * } );
- * ```
- */
  * ```
  */
 

@@ -5,7 +5,7 @@
  */
 
 /**
- * 对选区内文本添加相应标签嵌套
+ * 段落格式
  * @command paragraph
  * @method execCommand
  * @param { String } cmd 命令字符串

@@ -9,7 +9,7 @@ UE.plugins['lineheight'] = function(){
     me.setOpt({'lineheight':['1', '1.5','1.75','2', '3', '4', '5']});
 
     /**
-     * 设置段内行距
+     * 行距
      * @command lineheight
      * @method execCommand
      * @param { String } cmdName 命令字符串

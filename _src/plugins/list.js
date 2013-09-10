@@ -851,7 +851,7 @@ UE.plugins['list'] = function () {
 
 
     /**
-     * 设置有序列表
+     * 有序列表
      * @command insertorderedlist
      * @method execCommand
      * @param { String } command 命令字符串
@@ -885,7 +885,7 @@ UE.plugins['list'] = function () {
      */
 
     /**
-     * 设置无序列表
+     * 无序列表
      * @command insertunorderedlist
      * @method execCommand
      * @param { String } command 命令字符串

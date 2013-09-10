@@ -5,7 +5,7 @@
  */
 
 /**
- * 设置段落对齐方式
+ * 段落对齐方式
  * @command justify
  * @method execCommand
  * @param { String } cmd 命令字符串

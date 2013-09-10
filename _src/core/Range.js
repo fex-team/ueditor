@@ -13,7 +13,7 @@
  */
 
 /**
- * Range实现类，本类是UEditor底层核心类，统一w3cRange和ieRange之间的差异，包括接口和属性
+ * Range实现类，本类是UEditor底层核心类，封装不同浏览器之间的Range操作。
  * @unfile
  * @module UE.dom
  * @class Range
@@ -162,6 +162,7 @@
     /**
      * 创建一个跟document绑定的空的Range实例
      * @constructor
+     * @param { Document } document 当前选区所属的文档对象
      */
 
     /**
@@ -183,11 +184,13 @@
      */
 
     /**
-     * @property { Boolean } collapsed 当前Range是否是闭合的
+     * @property { Boolean } collapsed 当前Range是否闭合
+     * @remind Range是闭合的时候， sart
      */
 
     /**
      * @property { Document } document 当前Range所属的Document对象
+     * @remind 不同range的的document属性可以是不同的
      */
 
     var Range = dom.Range = function (document) {
@@ -245,18 +248,23 @@
     Range.prototype = {
 
         /**
-         * 克隆选中的内容到一个DocumentFragment里
+         * 克隆选区的内容到一个DocumentFragment里
          * @method cloneContents
-         * @return { DocumentFragment | NULL } 如果选区是空的将返回null， 否则， 返回包含所clone内容的DocumentFragment元素
+         * @return { DocumentFragment | NULL } 如果选区是闭合的将返回null， 否则， 返回包含所clone内容的DocumentFragment元素
          * @example
          * ```html
-         * <!-- 被选中的内容 -->
-         * <div>123</div><div>456</div>
+         * <body>
+         *      <!-- 选区开始 -->
+         *      <div>123</div><div>456</div>
+         *      <!-- 选区结束 -->
          *
-         * <script>
-         *     //output: 2
-         *     console.log( range.cloneContents().childNodes.length );
-         * </script>
+         *      <script>
+         *
+         *          //range是已选中的选区
+         *          range = range.cloneContents();
+         *
+         *      </script>
+         * </body>
          * ```
          */
         cloneContents:function () {
@@ -267,7 +275,6 @@
          * 删除当前选区范围中的所有内容
          * @method deleteContents
          * @remind 执行完该操作后， 当前Range对象变成了闭合状态
-         * @remind 执行该操作会引起当前Range对象的其他属性的变化
          * @return { UE.dom.Range } 当前操作的Range对象
          * @example
          * ```html
@@ -536,9 +543,10 @@
         },
 
         /**
-         * 设置Range的开始位置设置到node节点内的第一个节点处
+         * 设置Range的开始位置到node节点内的第一个节点之前
          * @method  setStartAtFirst
          * @param { Node } node 目标节点
+         * @remind node必须是一个元素节点， 且必须是允许包含子节点的元素。
          * @see UE.dom.Range:setStart(Node,int)
          * @return { UE.dom.Range } 当前range对象
          * @example
@@ -569,8 +577,9 @@
         },
 
         /**
-         * 设置Range的开始位置设置到node节点内的最后一个节点处
+         * 设置Range的开始位置到node节点内的最后一个节点之后
          * @method  setStartAtLast
+         * @remind node必须是一个元素节点， 且必须是允许包含子节点的元素。
          * @param { Node } node 目标节点
          * @see UE.dom.Range:setStart(Node,int)
          * @return { UE.dom.Range } 当前range对象
@@ -603,9 +612,10 @@
         },
 
         /**
-         * 设置Range的结束位置设置到node节点内的第一个节点处
+         * 设置Range的结束位置到node节点内的第一个节点之前
          * @method  setEndAtFirst
          * @param { Node } node 目标节点
+         * @remind node必须是一个元素节点， 且必须是允许包含子节点的元素。
          * @see UE.dom.Range:setStart(Node,int)
          * @return { UE.dom.Range } 当前range对象
          * @example
@@ -634,9 +644,10 @@
         },
 
         /**
-         * 设置Range的结束位置设置到node节点内的最后一个节点处
+         * 设置Range的结束位置到node节点内的最后一个节点之后
          * @method  setEndAtLast
          * @param { Node } node 目标节点
+         * @remind node必须是一个元素节点， 且必须是允许包含子节点的元素。
          * @see UE.dom.Range:setStart(Node,int)
          * @return { UE.dom.Range } 当前range对象
          * @example
@@ -666,7 +677,7 @@
         },
 
         /**
-         * 选中一个节点， 并返回包含这个节点的range对象
+         * 选中给定节点
          * @method  selectNode
          * @param { Node } node 需要选中的节点
          * @return { UE.dom.Range } 当前range对象， 但是选区已经改变， 包含了当前选择的节点对象
@@ -692,7 +703,7 @@
         },
 
         /**
-         * 选中给定节点内部的所有节点， 并返回包含这个节点内容的range对象
+         * 选中给定节点内部的所有节点
          * @method  selectNodeContents
          * @param { Node } node 目标节点， 当前range将包含该节点内的所有节点
          * @return { UE.dom.Range } 当前range对象，  包含了当前选择的节点对象的所有子节点
@@ -752,7 +763,7 @@
         },
 
         /**
-         * 闭合当前选区，向尾部闭合
+         * 向尾部闭合选区
          * @method  collapse
          * @return { UE.dom.Range } 当前range对象
          * @example
@@ -1058,6 +1069,7 @@
         /**
          * 调整当前Range的开始和结束边界容器，如果是容器节点是文本节点,就调整到包含该文本节点的父节点上
          * @method trimBoundary
+         * @remind 该操作有可能会引起文本节点被切开
          * @return { UE.dom.Range } 当前range对象
          * @example
          * ```html
@@ -1173,6 +1185,7 @@
         /**
          * 如果选区在文本的边界上，就扩展选区到文本的父节点上, 如果当前选区是闭合的， 则什么也不做
          * @method txtToElmBoundary
+         * @remind 该操作不会修改dom节点
          * @return { UE.dom.Range } 当前range对象
          * @example
          * ```html
@@ -1323,9 +1336,10 @@
         },
 
         /**
-         * 在当前选区的开始位置后紧临着插入一个节点，新插入的节点会被该range包含
+         * 在当前选区的开始位置前插入节点，新插入的节点会被该range包含
          * @method  insertNode
-         * @param { Node } 需要插入的节点
+         * @param { Node } node 需要插入的节点
+         * @remind 插入的节点可以是一个DocumentFragment依次插入多个节点
          * @return { UE.dom.Range } 当前range对象
          * @example
          * ```html
@@ -1386,7 +1400,7 @@
          */
 
         /**
-         * 闭合选区， 并且定位光标到闭合后的位置， 可以根据参数toEnd的值控制选区是向前闭合还是向后闭合
+         * 闭合选区，可以根据参数toEnd的值控制选区是向前闭合还是向后闭合， 并且定位光标到闭合后的位置。
          * @method  setCursor
          * @param { Boolean } toEnd 是否向后闭合， 如果为true， 则闭合选区时， 将向结束容器方向闭合，
          *                      反之，则向开始容器方向闭合
@@ -1401,7 +1415,7 @@
          * 创建当前range的一个书签，记录下当前range的位置，方便当dom树改变时，还能找回原来的选区位置
          * @method createBookmark
          * @param { Boolean } serialize 控制返回的标记位置是对当前位置的引用还是ID，如果该值为true，则
-         *                              返回标记位置的ID， 反之则返回标记位置的引用
+         *                              返回标记位置的ID， 反之则返回标记位置节点的引用
          * @return { Object } 返回一个书签记录键值对， 其包含的key有： start => 开始标记的ID或者引用，
          *                          end => 结束标记的ID或引用， id => 当前标记的类型， 如果为true，则表示
          *                          返回的记录的类型为ID， 反之则为引用
@@ -1432,7 +1446,7 @@
         /**
          *  调整当前range的边界到书签位置，并删除该书签对象所标记的位置内的节点
          *  @method  moveToBookmark
-         *  @param { BookMark } createBookmark所创建的标签对象
+         *  @param { BookMark } bookmark createBookmark所创建的标签对象
          *  @return { UE.dom.Range } 当前range对象
          *  @see UE.dom.Range:createBookmark(Boolean)
          */
@@ -1453,6 +1467,7 @@
         /**
          * 调整range的边界，使其"放大"到最近的父节点
          * @method  enlarge
+         * @remind 会引起选区的变化
          * @return { UE.dom.Range } 当前range对象
          * @example
          * ```html
@@ -1754,9 +1769,9 @@
         },
 
         /**
-         * 获取当前选区中的首个自闭合的节点
+         * 获取当前选中自闭合的节点
          * @method  getClosedNode
-         * @return { Node | NULL } 如果在当前选区中存在自闭合的节点， 则返回该节点， 否则返回NULL
+         * @return { Node | NULL } 如果当前选中的是自闭合节点， 则返回该节点， 否则返回NULL
          * @example
          * ```html
          * <body>
@@ -1794,7 +1809,7 @@
         },
 
         /**
-         * 选中当前选区
+         * 在页面上高亮range所表示的选区
          * @method select
          * @return { UE.dom.Range } 返回当前Range对象
          */
@@ -1958,7 +1973,7 @@
             domUtils.remove(span);
             return me;
         },
-        /**
+        /*
          * 判断当前选区内容是否占位符
          * @method inFillChar
          * @return { Boolean } 如果是占位符返回true，否则返回false

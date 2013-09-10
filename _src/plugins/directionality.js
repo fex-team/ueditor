@@ -74,7 +74,7 @@
         };
 
     /**
-     * 设置文字的方向，可设置从左向右输入，或者从右向左输入
+     * 文字输入方向
      * @command directionality
      * @method execCommand
      * @param { String } cmdName 命令字符串
