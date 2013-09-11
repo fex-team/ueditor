@@ -5,7 +5,7 @@
  */
 
 /**
- * 把选区内文本变大写
+ * 把选区内文本变大写，与“tolowercase”命令互斥
  * @command touppercase
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -16,7 +16,7 @@
  */
 
 /**
- * 把选区内文本变小写
+ * 把选区内文本变小写，与“touppercase”命令互斥
  * @command tolowercase
  * @method execCommand
  * @param { String } cmd 命令字符串

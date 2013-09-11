@@ -44,7 +44,7 @@ UE.plugins['basestyle'] = function(){
      */
 
     /**
-     * 下标文本
+     * 下标文本，与“superscript”命令互斥
      * @command subscript
      * @method execCommand
      * @remind  把选中的文本内容切换成下标文本， 如果当前选中的文本已经是下标， 则该操作会把文本内容还原成正常文本
@@ -62,7 +62,7 @@ UE.plugins['basestyle'] = function(){
      */
 
     /**
-     * 上标文本
+     * 上标文本，与“subscript”命令互斥
      * @command superscript
      * @method execCommand
      * @remind 把选中的文本内容切换成上标文本， 如果当前选中的文本已经是上标， 则该操作会把文本内容还原成正常文本
