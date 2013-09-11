@@ -85,7 +85,6 @@
         }
     }
 
-
     /**
      * 编辑器准备就绪后会触发该事件
      * @module UE
@@ -94,12 +93,77 @@
      * @example
      * ```javascript
      * editor.addListener( 'ready', function( editor ) {
-     *     editor.execCommand( 'focus' );
+     *     editor.execCommand( 'focus' ); //编辑器家在完成后，让编辑器拿到焦点
      * } );
      * ```
      */
-
     /**
+     * @module UE
+     * @class Editor
+     * @event destroy
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event focus
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event reset
+     */
+    /**
+     * 语言加载完成会触发该事件
+     * @module UE
+     * @class Editor
+     * @event langReady
+     */
+    /**
+     * 运行命令之后会触发该命令
+     * @module UE
+     * @class Editor
+     * @event beforeExecCommand
+     */
+    /**
+     * 运行命令之后会触发该命令
+     * @module UE
+     * @class Editor
+     * @event afterExecCommand
+     */
+    /**
+     * 运行命令之前会触发该命令
+     * @module UE
+     * @class Editor
+     * @event firstBeforeExecCommand
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event beforeGetContent
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event afterGetContent
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event getAllHtml
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event beforeSetContent
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event afterSetContent
+     */
+    /**
+     * 每当编辑器内部选区发生改变后， 将触发该事件
+     * @event selectionChange
      * 每当编辑器内部选区发生改变后，将触发该事件
      * @event selectionchange
      * @warning 该事件的触发非常频繁，不建议在该事件的处理过程中做重量级的处理
@@ -109,6 +173,22 @@
      *     console.log('选区发生改变');
      * }
      */
+    /**
+     * @module UE
+     * @class Editor
+     * @event beforeSelectionChange
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event afterSelectionChange
+     */
+    /**
+     * @module UE
+     * @class Editor
+     * @event contentChange
+     */
+
 
     /**
      * 以默认参数构建一个编辑器实例
@@ -210,7 +290,7 @@
 
 
         /**
-         * 该方法是提供给插件里面使用，以key，value的方式设置插件内用到的配置项默认值
+         * 该方法是提供给插件里面使用，设置配置项默认值
          * @method setOpt
          * @warning 在config文件里面有定义参数key或者用户实例化的时候有传入参数key，该方法设置的key参数值无效
          * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
@@ -246,7 +326,7 @@
 
 
         /**
-         * 销毁编辑器实例对象
+         * 销毁编辑器实例，使用textarea代替
          * @method destroy
          * @example
          * ```javascript
@@ -495,6 +575,7 @@
         },
 
         /**
+         * 同步数据到编辑器所在的form
          * 从编辑器的容器节点向上查找form元素，若找到，就同步编辑内容到找到的form里，为提交数据做准备，主要用于是手动提交的情况
          * 后台取得数据的键值，使用你容器上的name属性，如果没有就使用参数里的textarea项
          * @method sync
@@ -539,9 +620,10 @@
         },
 
         /**
+         * 为编辑器的编辑命令提供快捷键
          * 这个接口是为插件扩展提供的接口,主要是为新添加的插件，如果需要添加快捷键，所提供的接口
          * @method addshortcutkey
-         * @param { Object } keyset 命令和快捷键的键值对对象，多个按钮的快捷键用“＋”分隔
+         * @param { Object } keyset 命令名和快捷键键值对对象，多个按钮的快捷键用“＋”分隔
          * @example
          * ```javascript
          * editor.addshortcutkey({
@@ -627,7 +709,7 @@
          * ```javascript
          * // editor 是一个编辑器的实例
          * var content = editor.getContent( function ( editor ) {
-         *      return editor.body.innerHTML === '欢迎使用UEditor';
+         *      return editor.body.innerHTML === '欢迎使用UEditor'; //返回空字符串
          * } );
          * ```
          */
@@ -717,7 +799,7 @@
          * 设置编辑器的内容，可修改编辑器当前的html内容
          * @method setContent
          * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @warning 该方法会出发selectionchange事件
+         * @warning 该方法会触发selectionchange事件
          * @param { String } 要插入的html内容
          * @example
          * ```javascript
@@ -729,26 +811,13 @@
          * 设置编辑器的内容，可修改编辑器当前的html内容
          * @method setContent
          * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @warning 该方法会出发selectionchange事件
+         * @warning 该方法会触发selectionchange事件
          * @param { String } html 要插入的html内容
          * @param { Boolean } isAppendTo 若传入true，不清空原来的内容，在最后插入内容，否则，清空内容再插入
          * @example
          * ```javascript
          * //假设设置前的编辑器内容是 <p>old text</p>
-         * editor.getContent('<p>new text</p>', true); //插入的结果是<p>old text</p><p>new text</p>
-         * ```
-         */
-
-        /**
-         * 设置编辑器的内容，可修改编辑器当前的html内容
-         * @method setContent
-         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @param { String } html 要插入的html内容
-         * @param { Boolean } isAppendTo 若传入true，不清空原来的内容，在最后插入内容，否则，清空内容再插入
-         * @param { Boolean } notFireSelectionchange 若传入true，执行该函数过程不触发编辑器的selectionchange事件
-         * @example
-         * ```javascript
-         * editor.getContent('<p>new text</p>', false, true);
+         * editor.setContent('<p>new text</p>', true); //插入的结果是<p>old text</p><p>new text</p>
          * ```
          */
         setContent: function (html, isAppendTo, notFireSelectionchange) {
@@ -1111,7 +1180,7 @@
         /**
          * 重置编辑器，可用来做多个tab使用同一个编辑器实例
          * @method  reset
-         * @remind 此方法会清空编辑器内容，清空回退列表
+         * @remind 此方法会清空编辑器内容，清空回退列表，会触发reset事件
          * @example
          * ```javascript
          * editor.reset()
@@ -1149,17 +1218,6 @@
                 me.fireEvent('selectionchange');
             }
         },
-
-        /**
-         * 设置当前编辑区域可以编辑
-         * @method enable
-         * @return { * } 返回setEnabled方法的返回值
-         * @example
-         * ```javascript
-         * editor.enable()
-         * ```
-         * @see UE.Editor:setEnabled()
-         */
         enable: function () {
             return this.setEnabled();
         },
@@ -1205,33 +1263,6 @@
                 me.fireEvent('selectionchange');
             }
         },
-
-        /** 设置当前编辑区域不可编辑
-         * @method disable
-         * @see UE.Editor:setEnabled()
-         */
-
-        /** 设置当前编辑区域不可编辑,except中的命令除外
-         * @method disable
-         * @param { String } except 例外命令的字符串
-         * @remind 即使设置了disable，此处配置的例外命令仍然可以执行
-         * @example
-         * ```javascript
-         * editor.disable('bold'); //禁用工具栏中除加粗之外的所有功能
-         * ```
-         * @see UE.Editor:setEnabled(String)
-         */
-
-        /** 设置当前编辑区域不可编辑,except中的命令除外
-         * @method disable
-         * @param { Array } except 字符串数组，数组中的命令仍然可以执行
-         * @remind 即使设置了disable，此处配置的例外命令仍然可以执行
-         * @example
-         * ```javascript
-         * editor.disable(['bold','insertimage']); //禁用工具栏中除加粗和插入图片之外的所有功能
-         * ```
-         * @see UE.Editor:setEnabled(Array)
-         */
         disable: function (except) {
             return this.setDisabled(except);
         },
@@ -1264,9 +1295,12 @@
         }(),
 
         /**
-         * 显示编辑器，show方法的兼容版本
+         * 显示编辑器
          * @method setShow
-         * @private
+         * @example
+         * ```javascript
+         * editor.setShow()
+         * ```
          */
         setShow: function () {
             var me = this, range = me.selection.getRange();
@@ -1285,24 +1319,17 @@
                 me.container.style.display = '';
             }
         },
-
-        /**
-         * 显示编辑器
-         * @method show
-         * @example
-         * ```javascript
-         * editor.show()
-         * ```
-         * @see UE.Editor:setShow(String)
-         */
         show: function () {
             return this.setShow();
         },
 
         /**
-         * 隐藏编辑器，hide方法的兼容版本
+         * 隐藏编辑器
          * @method setHide
-         * @private
+         * @example
+         * ```javascript
+         * editor.hide()
+         * ```
          */
         setHide: function () {
             var me = this;
@@ -1311,16 +1338,6 @@
             }
             me.container.style.display = 'none'
         },
-
-        /**
-         * 隐藏编辑器
-         * @method hide
-         * @example
-         * ```javascript
-         * editor.hide()
-         * ```
-         * @see UE.Editor:setHide()
-         */
         hide: function () {
             return this.setHide();
         },
@@ -1349,36 +1366,12 @@
         },
 
         /**
-         * 计算编辑器当前html内容的长度
+         * 计算编辑器实际内容文字的个数
          * @method  getContentLength
          * @return { Number } 返回计算的长度
          * @example
          * ```javascript
          * editor.getContentLength()
-         * ```
-         */
-
-        /**
-         * 计算编辑器当前存文本内容的长度
-         * @method  getContentLength
-         * @param { Boolean } ingoneHtml 传入true时，只按照纯文本来计算
-         * @return { Number } 返回计算的长度，内容中有hr/img/iframe标签，长度加1
-         * @example
-         * ```javascript
-         * editor.getContentLength(true)
-         * ```
-         */
-
-        /**
-         * 计算编辑器当前内容的长度
-         * @method  getContentLength
-         * @param { Boolean } ingoneHtml 传入true时，只按照纯文本来计算
-         * @param { Array } tagNames 忽略html代码时，遇到数组里的标签，长度加1
-         * @return { Number } 返回计算的长度，内容中有hr/img/iframe标签或者参数tagNames中的标签，长度加1
-         * @remind 当ingoneHtml为false，第二个参数不作用
-         * @example
-         * ```javascript
-         * editor.getContentLength(true, ['em','strong'])
          * ```
          */
         getContentLength: function (ingoneHtml, tagNames) {
@@ -1394,7 +1387,7 @@
         },
 
         /**
-         * 添加输入过滤规则
+         * 注册输入过滤规则
          * @method  addInputRule
          * @param { Function } rule 要添加的过滤规则
          * @example
@@ -1411,7 +1404,7 @@
         },
 
         /**
-         * 根据输入过滤规则，过滤编辑器内容
+         * 执行注册的过滤规则
          * @method  filterInputRule
          * @param { UE.uNode } root 要过滤的uNode节点
          * @remind 执行editor.setContent方法和执行'inserthtml'命令后，会运行该过滤函数
@@ -1419,6 +1412,7 @@
          * ```javascript
          * editor.filterInputRule(editor.body);
          * ```
+         * @see UE.Editor:addInputRule
          */
         filterInputRule: function (root) {
             for (var i = 0, ci; ci = this.inputRules[i++];) {
@@ -1427,7 +1421,7 @@
         },
 
         /**
-         * 添加输出过滤规则
+         * 注册输出过滤规则
          * @method  addOutputRule
          * @param { Function } rule 要添加的过滤规则
          * @example
@@ -1452,6 +1446,7 @@
          * ```javascript
          * editor.filterOutputRule(editor.body);
          * ```
+         * @see UE.Editor:addOutputRule
          */
         filterOutputRule: function (root) {
             for (var i = 0, ci; ci = this.outputRules[i++];) {
