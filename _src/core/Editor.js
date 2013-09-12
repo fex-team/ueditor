@@ -207,6 +207,7 @@
     /**
      * 以默认参数构建一个编辑器实例
      * @constructor
+     * @remind 通过 改构造方法实例化的编辑器,不带ui层.需要render到一个容器,编辑器实例才能正常渲染到页面
      * @example
      * ```javascript
      * var editor = new UE.Editor();
@@ -218,6 +219,7 @@
     /**
      * 以给定的参数集合创建一个编辑器实例，对于未指定的参数，将应用默认参数。
      * @constructor
+     * @remind 通过 改构造方法实例化的编辑器,不带ui层.需要render到一个容器,编辑器实例才能正常渲染到页面
      * @param { Object } setting 创建编辑器的参数
      * @example
      * ```javascript
@@ -287,13 +289,14 @@
          * @method ready
          * @param { Function } fn 编辑器ready之后所执行的回调, 如果在注册事件之前编辑器已经ready，将会
          * 立即触发该回调。
-         * @see UE.Editor.event:ready
+         * @remind 需要等待编辑器加载完成后才能执行的代码,可以使用该方法传入
          * @example
          * ```javascript
          * editor.ready( function( editor ) {
          *     editor.setContent('初始化完毕');
          * } );
          * ```
+         * @see UE.Editor.event:ready
          */
         ready: function (fn) {
             var me = this;
@@ -380,6 +383,7 @@
          * 渲染编辑器的DOM到指定容器
          * @method render
          * @param { String } containerId 指定一个容器ID
+         * @remind 执行该方法,会触发ready事件
          * @warning 必须且只能调用一次
          */
 
@@ -387,6 +391,7 @@
          * 渲染编辑器的DOM到指定容器
          * @method render
          * @param { Element } containerDom 直接指定容器对象
+         * @remind 执行该方法,会触发ready事件
          * @warning 必须且只能调用一次
          */
         render: function (container) {
@@ -618,6 +623,7 @@
         /**
          * 设置编辑器高度
          * @method setHeight
+         * @remind 当配置项autoHeightEnabled为真时,该方法无效
          * @param { Number } number 设置的高度值，纯数值，不带单位
          * @example
          * ```javascript
