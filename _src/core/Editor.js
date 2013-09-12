@@ -787,7 +787,6 @@
          * ```javascript
          * //编辑器html内容:<p><strong>1</strong></p><p><strong>2</strong></p>
          * console.log(editor.getPlainTxt()); //输出:"1\n2\n
-         "
          * ```
          */
         getPlainTxt: function () {
@@ -1131,14 +1130,12 @@
         /**
          * 根据传入的command命令，查选编辑器当前的选区，返回命令的状态
          * @method  queryCommandState
-         * @return { Number } number 返回放前命令的状态
-         * 返回 -1 当前命令不可用
-         * 返回 0 当前命令可用
-         * 返回 1 当前命令已经执行过了
+         * @return { Number } number 返回放前命令的状态，返回值三种情况：(-1|0|1)
          * @example
          * ```javascript
          * editor.queryCommandState(cmdName)  => (-1|0|1)
          * ```
+         * @see COMMAND.LIST
          */
         queryCommandState: function (cmdName) {
             return this._callCmdFn('queryCommandState', arguments);
@@ -1150,6 +1147,7 @@
          * @remind 只有部分插件有此方法
          * @return { * } 返回每个命令特定的当前状态值
          * @grammar editor.queryCommandValue(cmdName)  =>  {*}
+         * @see COMMAND.LIST
          */
         queryCommandValue: function (cmdName) {
             return this._callCmdFn('queryCommandValue', arguments);
@@ -1390,12 +1388,24 @@
         },
 
         /**
-         * 计算编辑器实际内容文字的个数
+         * 计算编辑器html内容字符串的长度
          * @method  getContentLength
          * @return { Number } 返回计算的长度
          * @example
          * ```javascript
-         * editor.getContentLength()
+         * //编辑器html内容<p><strong>132</strong></p>
+         * editor.getContentLength() //返回27
+         * ```
+         */
+        /**
+         * 计算编辑器当前纯文本内容的长度
+         * @method  getContentLength
+         * @param { Boolean } ingoneHtml 传入true时，只按照纯文本来计算
+         * @return { Number } 返回计算的长度，内容中有hr/img/iframe标签，长度加1
+         * @example
+         * ```javascript
+         * //编辑器html内容<p><strong>132</strong></p>
+         * editor.getContentLength() //返回3
          * ```
          */
         getContentLength: function (ingoneHtml, tagNames) {
