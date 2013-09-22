@@ -1,6 +1,18 @@
 /**
- * 自定义样式命令支持
+ * 自定义样式
  * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 根据config配置文件里“autotypeset”选项的值对匹配的标签执行样式替换。
+ * @command customstyle
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'customstyle' );
+ * ```
  */
 
 UE.plugins['customstyle'] = function() {
