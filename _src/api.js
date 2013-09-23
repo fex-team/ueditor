@@ -55,3 +55,8 @@
  * 浏览器Element， dom元素
  * @class Element
  */
+
+/**
+ * UEditor模拟dom节点对象
+ * @class uNode
+ */

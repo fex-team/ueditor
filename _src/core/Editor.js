@@ -324,6 +324,7 @@
          * @method setOpt
          * @warning 三处设置配置项的优先级: 实例化时传入参数 > setOpt()设置 > config文件里设置
          * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
+         * @param { Object } 将要设置的选项的键值对对象
          * @example
          * ```javascript
          * editor.setOpt( {
@@ -606,8 +607,8 @@
          */
 
         /**
-         * 根据传入的formId，在页面上查找要同步数据的表单，若找到，就同步编辑内容到找到的form里，为提交数据做准备，主要用于是手动提交的情况
-         * 后台取得数据的键值，使用你容器上的name属性，如果没有就使用参数里的textarea项
+         * 根据传入的formId，在页面上查找要同步数据的表单，若找到，就同步编辑内容到找到的form里，为提交数据做准备
+         * 后台取得数据的键值，该键值默认使用给定的编辑器容器的name属性，如果没有name属性则使用参数项里给定的“textarea”项
          * @method sync
          * @param { String } formID 指定一个要同步数据的form的id,编辑器的数据会同步到你指定form下
          */
@@ -708,7 +709,7 @@
          * 获取编辑器的内容
          * @method getContent
          * @warning 该方法获取到的是经过编辑器内置的过滤规则进行过滤后得到的内容
-         * @return { String } 编辑器的内容字符串, 如果编辑器的内容为空，或者是空的标签内容（如:”<p><br/></p>“）， 则返回空字符串
+         * @return { String } 编辑器的内容字符串, 如果编辑器的内容为空，或者是空的标签内容（如:”&lt;p&gt;&lt;br/&gt;&lt;/p&gt;“）， 则返回空字符串
          * @example
          * ```javascript
          * //编辑器html内容:<p>1<strong>2<em>34</em>5</strong>6</p>
@@ -1096,6 +1097,8 @@
         /**
          * 执行编辑命令cmdName，完成富文本编辑效果
          * @method execCommand
+         * @param { String } cmdName 需要执行的命令
+         * @remind 具体命令的使用请参考<a href="#COMMAND.LIST">命令列表</a>
          * @return { * } 返回命令函数运行的返回值
          * @example
          * ```javascript
@@ -1130,6 +1133,8 @@
         /**
          * 根据传入的command命令，查选编辑器当前的选区，返回命令的状态
          * @method  queryCommandState
+         * @param { String } cmdName 需要查询的命令名称
+         * @remind 具体命令的使用请参考<a href="#COMMAND.LIST">命令列表</a>
          * @return { Number } number 返回放前命令的状态，返回值三种情况：(-1|0|1)
          * @example
          * ```javascript
@@ -1144,6 +1149,8 @@
         /**
          * 根据传入的command命令，查选编辑器当前的选区，根据命令返回相关的值
          * @method queryCommandValue
+         * @param { String } cmdName 需要查询的命令名称
+         * @remind 具体命令的使用请参考<a href="#COMMAND.LIST">命令列表</a>
          * @remind 只有部分插件有此方法
          * @return { * } 返回每个命令特定的当前状态值
          * @grammar editor.queryCommandValue(cmdName)  =>  {*}
