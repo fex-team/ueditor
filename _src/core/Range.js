@@ -726,6 +726,15 @@
          * [<b><i>xxxx</i>xxxxxxx</b>] => <b><i>[xxxx</i>xxxxxxx]</b>
          * ```
          */
+
+        /**
+         * 调整range的开始位置和结束位置，使其"收缩"到最小的位置，
+         * 如果ignoreEnd的值为true，则忽略对结束位置的调整
+         * @method  shrinkBoundary
+         * @param { Boolean } ignoreEnd 是否忽略对结束位置的调整
+         * @return { UE.dom.Range } 当前range对象
+         * @see UE.dom.domUtils.Range:shrinkBoundary()
+         */
         shrinkBoundary:function (ignoreEnd) {
             var me = this, child,
                 collapsed = me.collapsed;

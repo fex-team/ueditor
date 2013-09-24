@@ -159,6 +159,13 @@
      * @see UE.Editor:getContent()
      */
     /**
+     * 在getAllHtml方法执行时会触发该事件
+     * @module UE
+     * @class Editor
+     * @event getAllHtml
+     * @see UE.Editor:getAllHtml()
+     */
+    /**
      * 在setContent方法执行之前会触发该事件
      * @module UE
      * @class Editor
@@ -324,7 +331,7 @@
          * @method setOpt
          * @warning 三处设置配置项的优先级: 实例化时传入参数 > setOpt()设置 > config文件里设置
          * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
-         * @param { Object } 将要设置的选项的键值对对象
+         * @param { Object } options 将要设置的选项的键值对对象
          * @example
          * ```javascript
          * editor.setOpt( {

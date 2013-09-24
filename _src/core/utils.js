@@ -749,11 +749,19 @@ var utils = UE.utils = {
             });
     },
 
-    /*
-     * 深度克隆对象，从source到target
+    /**
+     * 克隆对象
      * @method clone
-     * @grammar UE.utils.clone(source) => anthorObj 新的对象是完整的source的副本
-     * @grammar UE.utils.clone(source,target) => target包含了source的所有内容，重名会覆盖
+     * @param { Object } source 源对象
+     * @return { Object } source的一个副本
+     */
+
+    /**
+     * 深度克隆对象，将source的属性克隆到target对象， 会覆盖target重名的属性。
+     * @method clone
+     * @param { Object } source 源对象
+     * @param { Object } target 目标对象
+     * @return { Object } 附加了source对象所有属性的target对象
      */
     clone:function (source, target) {
         var tmp;

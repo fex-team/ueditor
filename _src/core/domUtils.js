@@ -1114,8 +1114,6 @@ var domUtils = dom.domUtils = {
      *
      *      //1
      *      console.log( node.childNodes.length );
-     *
-     * </script>
      * ```
      */
     trimWhiteTextNode:function (node) {
@@ -1368,6 +1366,7 @@ var domUtils = dom.domUtils = {
     /**
      * 删除节点node上的指定属性名称的属性
      * @method  removeAttributes
+     * @param { Node } node 需要删除属性的节点对象
      * @param { String } attrNames 可以是空格隔开的多个属性名称，该操作将会依次删除相应的属性
      * @example
      * ```html
@@ -1389,6 +1388,7 @@ var domUtils = dom.domUtils = {
     /**
      * 删除节点node上的指定属性名称的属性
      * @method  removeAttributes
+     * @param { Node } node 需要删除属性的节点对象
      * @param { Array } attrNames 需要删除的属性名数组
      * @example
      * ```html
@@ -2399,7 +2399,7 @@ var domUtils = dom.domUtils = {
      * @method isInNodeEndBoundary
      * @param { UE.dom.Range } rng 需要判断的range对象， 该对象的startContainer不能为NULL
      * @param node 需要检测的节点对象
-     * @returns { Number } 如果给定的选取range对象是在node内部的最末端， 则返回1, 否则返回0
+     * @return { Number } 如果给定的选取range对象是在node内部的最末端， 则返回1, 否则返回0
      */
     isInNodeEndBoundary : function (rng,node){
         var start = rng.startContainer;
