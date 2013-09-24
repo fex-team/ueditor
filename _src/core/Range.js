@@ -185,6 +185,7 @@
 
     /**
      * @property { Boolean } collapsed 当前Range是否闭合
+     * @default true
      * @remind Range是闭合的时候， startContainer === endContainer && startOffset === endOffset
      */
 
@@ -702,17 +703,7 @@
          * @return { UE.dom.Range } 当前range对象
          * @example
          * ```html
-         * <!-- 选区示例 -->
-         * <span>xx<b>xx[</b>xxxxx]</span>
-         *
-         * <script>
-         *
-         *     //执行收缩
-         *     range.shrinkBoundary();
-         *
-         *     //结果选区
-         *     //<span>xx<b>xx</b>[xxxxx]</span>
-         * </script>
+         * <span>xx<b>xx[</b>xxxxx]</span> => <span>xx<b>xx</b>[xxxxx]</span>
          * ```
          *
          * @example
@@ -732,17 +723,7 @@
          *
          * @example
          * ```html
-         * <!-- 选区示例 -->
-         * [<b><i>xxxx</i>xxxxxxx</b>]
-         *
-         * <script>
-         *
-         *     //执行收缩
-         *     range.shrinkBoundary();
-         *
-         *     //结果选区
-         *     //<b><i>[xxxx</i>xxxxxxx]</b>
-         * </script>
+         * [<b><i>xxxx</i>xxxxxxx</b>] => <b><i>[xxxx</i>xxxxxxx]</b>
          * ```
          */
         shrinkBoundary:function (ignoreEnd) {
@@ -953,134 +934,20 @@
             return this;
         },
 
-        /*
+        /**
          * 如果选区在文本的边界上，就扩展选区到文本的父节点上, 如果当前选区是闭合的， 则什么也不做
          * @method txtToElmBoundary
          * @remind 该操作不会修改dom节点
          * @return { UE.dom.Range } 当前range对象
-         * @example
-         * ```html
-         *
-         * <body>
-         *     <div>
-         *         <!-- 选区开始 -->
-         *         你好，我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
-         *         <!-- 选区结束 -->
-         *         到这里文本结束了
-         *     </div>
-         *
-         *     <script>
-         *
-         *         //output: 3
-         *         console.log( range.startContainer.nodeType );
-         *         //output: 3
-         *         console.log( range.endContainer.nodeType );
-         *
-         *         range.txtToElmBoundary();
-         *
-         *         //output: 1
-         *         console.log( range.startContainer.nodeType );
-         *         //output: 3
-         *         console.log( range.endContainer.nodeType );
-         *
-         *     </script>
-         * </body>
-         *
-         * ```
-         * @example
-         * ```html
-         *
-         * <body>
-         *     <div>
-         *         <!-- 选区开始 -->
-         *         你好，我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
-         *         到这里文本结束了
-         *         <!-- 选区结束 -->
-         *     </div>
-         *
-         *     <script>
-         *
-         *         //output: 3
-         *         console.log( range.startContainer.nodeType );
-         *         //output: 3
-         *         console.log( range.endContainer.nodeType );
-         *
-         *         range.txtToElmBoundary();
-         *
-         *         //output: 1
-         *         console.log( range.startContainer.nodeType );
-         *         //output: 1
-         *         console.log( range.endContainer.nodeType );
-         *
-         *     </script>
-         * </body>
-         *
-         * ```
          */
 
-        /*
+        /**
          * 如果选区在文本的边界上，就扩展选区到文本的父节点上, 如果当前选区是闭合的， 则根据参数项
          * ignoreCollapsed 的值决定是否执行该调整
          * @method txtToElmBoundary
          * @param { Boolean } ignoreCollapsed 是否忽略选区的闭合状态， 如果该参数取值为true， 则
          *                      不论选区是否闭合， 都会执行该操作， 反之， 则不会对闭合的选区执行该操作
          * @return { UE.dom.Range } 当前range对象
-         * @example
-         * ```html
-         *
-         * <body>
-         *     <div>
-         *         你好，我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
-         *         <!-- 选区开始 --><!-- 选区结束 -->
-         *         到这里文本结束了
-         *     </div>
-         *
-         *     <script>
-         *
-         *         //output: 3
-         *         console.log( range.startContainer.nodeType );
-         *         //output: 3
-         *         console.log( range.endContainer.nodeType );
-         *
-         *         range.txtToElmBoundary( true );
-         *
-         *         //output: 1
-         *         console.log( range.startContainer.nodeType );
-         *         //output: 1
-         *         console.log( range.endContainer.nodeType );
-         *
-         *     </script>
-         * </body>
-         *
-         * ```
-         * @example
-         * ```html
-         *
-         * <body>
-         *     <div>
-         *         你好，我是一段文本， 我旁边的注释内容其实是不存在的,仅仅是为了描述一下选区的边界
-         *         <!-- 选区开始 --><!-- 选区结束 -->
-         *         到这里文本结束了
-         *     </div>
-         *
-         *     <script>
-         *
-         *         //output: 3
-         *         console.log( range.startContainer.nodeType );
-         *         //output: 3
-         *         console.log( range.endContainer.nodeType );
-         *
-         *         range.txtToElmBoundary( false );
-         *
-         *         //output: 3
-         *         console.log( range.startContainer.nodeType );
-         *         //output: 3
-         *         console.log( range.endContainer.nodeType );
-         *
-         *     </script>
-         * </body>
-         *
-         * ```
          */
         txtToElmBoundary:function (ignoreCollapsed) {
             function adjust(r, c) {
@@ -1206,63 +1073,19 @@
             return this;
         },
 
-        /*
+        /**
          * 调整range的边界，使其"放大"到最近的父节点
          * @method  enlarge
          * @remind 会引起选区的变化
          * @return { UE.dom.Range } 当前range对象
-         * @example
-         * ```html
-         *
-         * <body>
-         *     <div>
-         *          <span>
-         *              <b>a<!-- 选区开始 -->b</b>
-         *              cdef
-         *              <!-- 选区结束 -->
-         *          </span>
-         *     </div>
-         *
-         *     <script>
-         *
-         *          range.enlarge();
-         *
-         *          //output: <span><b>ab</b>cdef</span>
-         *          console.log( enlarge.cloneContents() );
-         *
-         *     </script>
-         * </body>
-         * ```
          */
 
-        /*
+        /**
          * 调整range的边界，使其"放大"到最近的父节点，根据参数 toBlock 的取值， 可以
          * 要求扩大之后的父节点是block节点
          * @method  enlarge
          * @param { Boolean } toBlock 是否要求扩大之后的父节点必须是block节点
          * @return { UE.dom.Range } 当前range对象
-         * @example
-         * ```html
-         *
-         * <body>
-         *     <div>
-         *          <span>
-         *              <b>a<!-- 选区开始 -->b</b>
-         *              cdef
-         *              <!-- 选区结束 -->
-         *          </span>
-         *     </div>
-         *
-         *     <script>
-         *
-         *          range.enlarge( true );
-         *
-         *          //output: <div><span><b>ab</b>cdef</span></div>
-         *          console.log( enlarge.cloneContents() );
-         *
-         *     </script>
-         * </body>
-         * ```
          */
         enlarge:function (toBlock, stopFn) {
             var isBody = domUtils.isBody,
@@ -1367,15 +1190,35 @@
             }
             return this;
         },
-        /*
-         * 给range选区中的内容添加给定的标签，主要用于inline标签
-         * @name applyInlineStyle
-         * @grammar range.applyInlineStyle(tagName)        =>  Range    //tagName为需要添加的样式标签名
-         * @grammar range.applyInlineStyle(tagName,attrs)  =>  Range    //attrs为属性json对象
-         * @desc
-         * <code type="html"><p>xxxx[xxxx]x</p>  ==>  range.applyInlineStyle("strong")  ==>  <p>xxxx[<strong>xxxx</strong>]x</p>
-         * <p>xx[dd<strong>yyyy</strong>]x</p>  ==>  range.applyInlineStyle("strong")  ==>  <p>xx[<strong>ddyyyy</strong>]x</p>
-         * <p>xxxx[xxxx]x</p>  ==>  range.applyInlineStyle("strong",{"style":"font-size:12px"})  ==>  <p>xxxx[<strong style="font-size:12px">xxxx</strong>]x</p></code>
+        /**
+         * 给range选区中的内容添加给定的inline标签
+         * @method applyInlineStyle
+         * @param { String } tagName 需要添加的标签名
+         * @example
+         * ```html
+         * <p>xxxx[xxxx]x</p>  ==>  range.applyInlineStyle("strong")  ==>  <p>xxxx[<strong>xxxx</strong>]x</p>
+         * ```
+         */
+
+        /**
+         * 给range选区中的内容添加给定的inline标签， 并且为标签附加上一些初始化属性。
+         * @method applyInlineStyle
+         * @param { String } tagName 需要添加的标签名
+         * @param { Object } attrs 跟随新添加的标签的属性
+         * @return { UE.dom.Range } 当前选区
+         * @example
+         * ```html
+         * <p>xxxx[xxxx]x</p>
+         *
+         * ==>
+         *
+         * <!-- 执行操作 -->
+         * range.applyInlineStyle("strong",{"style":"font-size:12px"})
+         *
+         * ==>
+         *
+         * <p>xxxx[<strong style="font-size:12px">xxxx</strong>]x</p>
+         * ```
          */
         applyInlineStyle:function (tagName, attrs, list) {
             if (this.collapsed)return this;
@@ -1442,12 +1285,24 @@
             }
             return this.moveToBookmark(bookmark);
         },
-        /*
-         * 对当前range选中的节点，去掉给定的标签节点，但标签中的内容保留，主要用于处理inline元素
-         * @name removeInlineStyle
-         * @grammar range.removeInlineStyle(tagNames)  => Range  //tagNames 为需要去掉的样式标签名,支持"b"或者["b","i","u"]
-         * @desc
-         * <code type="html">xx[x<span>xxx<em>yyy</em>zz]z</span>  => range.removeInlineStyle(["em"])  => xx[x<span>xxxyyyzz]z</span></code>
+
+        /**
+         * 移除当前选区内指定的inline标签，但保留其中的内容
+         * @method removeInlineStyle
+         * @param { String } tagName 需要移除的标签名
+         * @return { UE.dom.Range } 当前的range对象
+         * @example
+         * ```html
+         * xx[x<span>xxx<em>yyy</em>zz]z</span>  => range.removeInlineStyle(["em"])  => xx[x<span>xxxyyyzz]z</span>
+         * ```
+         */
+
+        /**
+         * 移除当前选区内指定的一组inline标签，但保留其中的内容
+         * @method removeInlineStyle
+         * @param { Array } tagNameArr 需要移除的标签名的数组
+         * @return { UE.dom.Range } 当前的range对象
+         * @see UE.dom.Range:removeInlineStyle(String)
          */
         removeInlineStyle:function (tagNames) {
             if (this.collapsed)return this;
@@ -1510,31 +1365,10 @@
             return this.moveToBookmark(bookmark);
         },
 
-        /*
-         * 获取当前选中自闭合的节点
+        /**
+         * 获取当前选中的自闭合的节点
          * @method  getClosedNode
          * @return { Node | NULL } 如果当前选中的是自闭合节点， 则返回该节点， 否则返回NULL
-         * @example
-         * ```html
-         * <body>
-         *     <div>
-         *         <!-- 选区开始 -->
-         *         <a></a>
-         *         <span><img></span>
-         *         <i></i>
-         *         <!-- 选区结束 -->
-         *     </div>
-         *
-         *     <script>
-         *
-         *         var node = range.getCloseNode();
-         *
-         *         //output: IMG
-         *         console.log( node.tagName );
-         *
-         *     </script>
-         * </body>
-         * ```
          */
         getClosedNode:function () {
             var node;
