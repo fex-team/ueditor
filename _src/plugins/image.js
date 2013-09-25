@@ -148,7 +148,7 @@ UE.commands['imagefloat'] = {
     }
 };
 /**
- * 插入单张图片
+ * 插入图片
  * @command insertimage
  * @method execCommand
  * @param { String } cmd 命令字符串
