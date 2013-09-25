@@ -1,9 +1,0 @@
-/*颜色按钮 */
-.edui-default .edui-toolbar .edui-colorbutton .edui-colorlump {
-    position: absolute;
-    overflow: hidden;
-    bottom: 1px;
-    left: 1px;
-    width: 18px;
-    height: 4px;
-}
