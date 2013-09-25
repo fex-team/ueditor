@@ -5,12 +5,13 @@
  */
 
 /**
- * 设置图片对齐方式
+ * 图片对齐方式
  * @command imagefloat
  * @method execCommand
  * @remind 值center为独占一行居中
  * @param { String } cmd 命令字符串
  * @param { String } align 对齐方式，可传left、right、none、center
+ * @remaind center表示图片独占一行
  * @example
  * ```javascript
  * editor.execCommand( 'imagefloat', 'center' );

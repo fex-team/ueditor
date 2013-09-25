@@ -5,7 +5,7 @@
  */
 
 /**
- * 对选取内文本清除格式
+ * 清除文字样式
  * @command removeformat
  * @method execCommand
  * @param { String } cmd 命令字符串
