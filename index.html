@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文库付费编辑器页面</title>
+    <meta charset="utf-8"/>
+    <script type="text/javascript" charset="utf-8" src="ueditor/ueditor.config.js"></script>
+    <!--开发版-->
+    <script type="text/javascript" charset="utf-8" src="ueditor/_examples/editor_api.js"> </script>
+    <!--<script src="ueditor/ueditor.all.js"></script>-->
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <script type="text/javascript" charset="utf-8" src="ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script src="jquery-1.10.1.min.js"></script>
+    <link rel="stylesheet" href="demo.css"/>
+</head>
+<body>
+
+    <div class="box editor-container">
+        <textarea id="editor"></textarea>
+    </div>
+    <p></p>
+    <p></p>
+    <script>
+        jQuery(function($){
+
+            var $preview = $("#preview");
+
+            window.ue = UE.getEditor('editor', {
+                initialFrameWidth: '100%',
+                initialFrameHeight: 400
+            });
+
+            ue.addListener('ready', function(){
+
+                $.getJSON('data4.json', function( data ){
+                    ue.setWkContent( data );
+                    ue.getWkJsonContent()
+                });
+
+            });
+
+            window.doon = function(){
+
+                ue.setWkContent( ue.getWkJsonContent() );
+
+            };
+
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+/*不可选中菜单按钮 */
+.edui-default .edui-toolbar .edui-combox-body .edui-button-body {
+    width: 60px;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding-left: 5px;
+    white-space: nowrap;
+    margin: 0 3px 0 0;
+}
+
+.edui-default .edui-toolbar .edui-combox-body .edui-arrow {
+    background: url(../images/icons.png) -741px 0;
+    _background: url(../images/icons.gif) -741px 0;
+    height: 20px;
+    width: 9px;
+}
+
+.edui-default .edui-toolbar .edui-combox .edui-combox-body {
+    border: 1px solid #CCC;
+    background-color: white;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+
+.edui-default .edui-toolbar .edui-combox-body .edui-splitborder {
+    display: none;
+}
+
+.edui-default .edui-toolbar .edui-combox-body .edui-arrow {
+    border-left: 1px solid #CCC;
+}
+
+.edui-default .edui-toolbar .edui-state-hover .edui-combox-body {
+    background-color: #fff5d4;
+    border: 1px solid #dcac6c;
+}
+
+.edui-default .edui-toolbar .edui-state-hover .edui-combox-body .edui-arrow {
+    border-left: 1px solid #dcac6c;
+}
+
+.edui-default .edui-toolbar .edui-state-checked .edui-combox-body {
+    background-color: #FFE69F;
+    border: 1px solid #DCAC6C;
+}
+
+.edui-toolbar .edui-state-checked .edui-combox-body .edui-arrow {
+    border-left: 1px solid #DCAC6C;
+}
+
+.edui-toolbar .edui-state-disabled .edui-combox-body {
+    background-color: #F0F0EE;
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+}
+
+.edui-toolbar .edui-state-opened .edui-combox-body {
+    background-color: white;
+    border: 1px solid gray;
+}

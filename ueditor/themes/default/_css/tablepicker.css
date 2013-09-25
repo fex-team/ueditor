@@ -1,0 +1,40 @@
+/* 表格弹出菜单 */
+.edui-default .edui-for-inserttable .edui-splitborder {
+    display: none
+}
+.edui-default .edui-for-inserttable  .edui-splitbutton-body .edui-arrow {
+    width: 0
+}
+.edui-default .edui-toolbar .edui-for-inserttable  .edui-state-active .edui-splitborder{
+    border-left: 1px solid transparent;
+}
+.edui-default .edui-tablepicker .edui-infoarea {
+    height: 14px;
+    line-height: 14px;
+    font-size: 12px;
+    width: 220px;
+    margin-bottom: 3px;
+    clear: both;
+}
+
+.edui-default .edui-tablepicker .edui-infoarea .edui-label {
+    float: left;
+}
+
+.edui-default .edui-dialog-buttons .edui-label {
+    line-height: 24px;
+}
+
+.edui-default .edui-tablepicker .edui-infoarea .edui-clickable {
+    float: right;
+}
+
+.edui-default .edui-tablepicker .edui-pickarea {
+    background: url("../images/unhighlighted.gif") repeat;
+    height: 220px;
+    width: 220px;
+}
+
+.edui-default .edui-tablepicker .edui-pickarea .edui-overlay {
+    background: url("../images/highlighted.gif") repeat;
+}
