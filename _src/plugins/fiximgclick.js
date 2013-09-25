@@ -226,7 +226,7 @@ UE.plugins['fiximgclick'] = (function () {
                 var range = me.selection.getRange(),
                     img = range.getClosedNode();
 
-                if (img && img.tagName == 'IMG') {
+                if (img && img.tagName == 'IMG' && me.body.contentEditable!="false") {
                     if (!imageScale) {
                         imageScale = new Scale();
                         imageScale.init(me);
@@ -281,7 +281,7 @@ UE.plugins['fiximgclick'] = (function () {
                 }
             });
             me.addListener('click', function (type, e) {
-                if (e.target.tagName == 'IMG') {
+                if (e.target.tagName == 'IMG' && me.body.contentEditable!="false") {
                     var range = new dom.Range(me.document);
                     range.selectNode(e.target).select();
                 }
