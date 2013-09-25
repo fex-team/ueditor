@@ -97,7 +97,7 @@
  */
 
 /**
- * 字体下划线
+ * 字体下划线,与删除线互斥
  * @command underline
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -108,7 +108,7 @@
  */
 
 /**
- * 字体删除线
+ * 字体删除线,与下划线互斥
  * @command strikethrough
  * @method execCommand
  * @param { String } cmd 命令字符串
