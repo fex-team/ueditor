@@ -3,9 +3,10 @@
  * @file
  * @since 1.2.6.1
  */
+
 /**
- * 对选区内文本添加相应标签嵌套
- * @command Paragraph
+ * 段落格式
+ * @command paragraph
  * @method execCommand
  * @param { String } cmd 命令字符串
  * @param {String}   style               标签值为：'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
@@ -13,28 +14,14 @@
  * @example
  * ```javascript
  * editor.execCommand( 'Paragraph','h1','{
- *     color:'#000'
+ *     class:'test'
  * }' );
  * ```
  */
-/**
- * 对选区内文本添加相应标签嵌套
- * @command Paragraph
- * @method execCommand
- * @param { String } cmd 命令字符串
- * @param {String}   style               标签值为：'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
- * @param {Object}   attrs               标签的属性
- * @param {String}   sourceCmdName       对与customstyle特殊处理
- * @example
- * ```javascript
- * editor.execCommand( 'Paragraph','h1','{
- *     color:'#000'
- * }' );
- * ```
- */
+
 /**
  * 返回选区内节点标签名
- * @command Paragraph
+ * @command paragraph
  * @method queryCommandValue
  * @param { String } cmd 命令字符串
  * @return { String } 节点标签名

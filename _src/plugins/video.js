@@ -52,14 +52,21 @@ UE.plugins['video'] = function (){
      * @command insertvideo
      * @method execCommand
      * @param { String } cmd 命令字符串
-     * @param { KeyValueMap } videoObj 键值对对象， 描述一个视频的所有属性
+     * @param { Object } videoAttr 键值对对象， 描述一个视频的所有属性
      * @example
      * ```javascript
      *
-     * //editor 是编辑器实例
-     * editor.execCommand( 'insertvideo', {
+     * var videoAttr = {
+     *      //视频地址
+     *      url: 'http://www.youku.com/xxx',
+     *      //视频宽高值， 单位px
+     *      width: 200,
+     *      height: 100
+     * };
      *
-     * } );
+     * //editor 是编辑器实例
+     * //向编辑器插入单个视频
+     * editor.execCommand( 'insertvideo', videoAttr );
      * ```
      */
 
@@ -72,8 +79,24 @@ UE.plugins['video'] = function (){
      * @example
      * ```javascript
      *
+     * var videoAttr1 = {
+     *      //视频地址
+     *      url: 'http://www.youku.com/xxx',
+     *      //视频宽高值， 单位px
+     *      width: 200,
+     *      height: 100
+     * },
+     * videoAttr2 = {
+     *      //视频地址
+     *      url: 'http://www.youku.com/xxx',
+     *      //视频宽高值， 单位px
+     *      width: 200,
+     *      height: 100
+     * }
+     *
      * //editor 是编辑器实例
-     * editor.execCommand( 'insertvideo', [  ] );
+     * //该方法将会向编辑器内插入两个视频
+     * editor.execCommand( 'insertvideo', [ videoAttr1, videoAttr2 ] );
      * ```
      */
 

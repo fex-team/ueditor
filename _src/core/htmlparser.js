@@ -16,6 +16,7 @@
  * @method htmlparser
  * @param { String } htmlstr 要转换的html代码
  * @param { Boolean } ignoreBlank 若设置为true，转换的时候忽略\n\r\t等空白字符
+ * @return { uNode } 给定的html片段转换形成的uNode对象
  * @example
  * ```javascript
  * var root = UE.htmlparser('<p><b>htmlparser</b></p>', true);

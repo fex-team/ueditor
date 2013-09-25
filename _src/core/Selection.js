@@ -1,13 +1,16 @@
 /**
  * 选集
  * @file
- * @module UE.dom.Selection
+ * @module UE.dom
+ * @class Selection
  * @since 1.2.6.1
  */
 
 /**
- * UEditor公用空间，UEditor所有的功能都挂载在该空间下
- * @module UE
+ * 选区集合
+ * @unfile
+ * @module UE.dom
+ * @class Selection
  */
 
 (function () {

@@ -101,9 +101,19 @@ EventBase.prototype = {
      * @method fireEvent
      * @param { String } types 触发的事件名称，同时触发多个事件使用空格分隔
      * @param { *... } options 可选参数，可以传入一个或多个参数，会传给事件触发的回调函数
+     * @return { * } 返回触发事件的队列中，最后执行的回调函数的返回值
      * @example
      * ```javascript
-     * editor.fireEvent("selectionchange");
+     *
+     * editor.addListener( "selectionchange", function ( type, arg1, arg2 ) {
+     *
+     *     console.log( arg1 + " " + arg2 );
+     *
+     * } );
+     *
+     * //触发selectionchange事件， 会执行上面的事件监听器
+     * //output: Hello World
+     * editor.fireEvent("selectionchange", "Hello", "World");
      * ```
      */
     fireEvent: function () {

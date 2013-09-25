@@ -5,12 +5,12 @@
  */
 
 /**
- * 设置段前距,段后距
+ * 设置段间距
  * @command rowspacing
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } value 传入段间距的值，以px为单位
- * @param { String } dir 传入间距位置，top或bottom，分别表示段前和段后
+ * @param { String } value 段间距的值，以px为单位
+ * @param { String } dir 间距位置，top或bottom，分别表示段前和段后
  * @example
  * ```javascript
  * editor.execCommand( 'rowspacing', '10', 'top' );

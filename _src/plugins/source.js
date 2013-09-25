@@ -103,7 +103,7 @@
 
 
         /**
-         * 切换源码编辑模式和可视化编辑模式
+         * 切换源码模式和编辑模式
          * @command source
          * @method execCommand
          * @param { String } cmd 命令字符串

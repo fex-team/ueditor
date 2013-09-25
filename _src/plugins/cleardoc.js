@@ -5,7 +5,7 @@
  */
 
 /**
- * 清空文档命令
+ * 清空文档
  * @command cleardoc
  * @method execCommand
  * @param { String } cmd 命令字符串

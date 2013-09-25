@@ -9,18 +9,18 @@
  * @command link
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { Object } options   url地址，title标题，target是否打开新页
+ * @param { Object } options   设置自定义属性，例如：url、title、target
  * @example
  * ```javascript
  * editor.execCommand( 'link', '{
  *     url:'ueditor.baidu.com',
- *     title:'ueditor官网',
+ *     title:'ueditor',
  *     target:'_blank'
  * }' );
  * ```
  */
 /**
- * 如果选区所在位置是区域，返回当前超链接节点
+ * 返回当前选中的第一个超链接节点
  * @command link
  * @method queryCommandValue
  * @param { String } cmd 命令字符串
@@ -30,20 +30,9 @@
  * editor.queryCommandValue( 'link' );
  * ```
  */
-/**
- * 返回当前选区位置是否是超链接
- * @command link
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { Int } 0为是，-1为不是
- * @example
- * ```javascript
- * editor.queryCommandState( 'link' );
- * ```
- */
 
 /**
- * 根据当前选区取消超链接
+ * 取消超链接
  * @command unlink
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -52,17 +41,7 @@
  * editor.execCommand( 'unlink');
  * ```
  */
-/**
- * 返回当前选区位置是否是超链接
- * @command unlink
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { Int } 0为是，-1为不是
- * @example
- * ```javascript
- * editor.queryCommandState( 'unlink' );
- * ```
- */
+
 UE.plugins['link'] = function(){
     function optimize( range ) {
         var start = range.startContainer,end = range.endContainer;

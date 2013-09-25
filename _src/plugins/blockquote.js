@@ -5,7 +5,7 @@
  */
 
 /**
- * 根据选区位置对标签添加引用
+ * 添加引用
  * @command blockquote
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -16,7 +16,7 @@
  */
 
 /**
- * 根据选区位置对标签添加引用
+ * 添加引用
  * @command blockquote
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -24,22 +24,11 @@
  * @example
  * ```javascript
  * editor.execCommand( 'blockquote',{
- *     color:'#000'
+ *     style: "color: red;"
  * } );
  * ```
  */
 
-/**
- * 返回当前选区位置是否在引用标签内
- * @command blockquote
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { int } 0为是，-1为不是
- * @example
- * ```javascript
- * editor.queryCommandState( 'blockquote' );
- * ```
- */
 
 UE.plugins['blockquote'] = function(){
     var me = this;

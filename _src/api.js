@@ -22,6 +22,7 @@
 
 /**
  * 原生Object对象， 普通对象
+ * @remind 如果某一方法的参数类型为Object时， 表示该参数应该接受一个key-value集合
  * @class Object
  */
 
@@ -46,11 +47,16 @@
  */
 
 /**
- * 浏览器DOMNode， dom节点
+ * 浏览器Node， dom节点
  * @class Node
  */
 
 /**
- * 浏览器DOMElement， dom元素
+ * 浏览器Element， dom元素
  * @class Element
+ */
+
+/**
+ * UEditor模拟dom节点对象
+ * @class uNode
  */

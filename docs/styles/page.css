@@ -76,6 +76,10 @@ body {
     display: inline-block;
 }
 
+.command-table-tips {
+    color: #a0a0a0;
+}
+
 .member-event-info, .member-property-info, .member-constructor-info, .member-method-info {
     /*margin: 2em 0 2em 2em;*/
 }

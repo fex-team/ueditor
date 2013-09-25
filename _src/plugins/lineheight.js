@@ -9,14 +9,14 @@ UE.plugins['lineheight'] = function(){
     me.setOpt({'lineheight':['1', '1.5','1.75','2', '3', '4', '5']});
 
     /**
-     * 设置选区的行高
+     * 行距
      * @command lineheight
      * @method execCommand
      * @param { String } cmdName 命令字符串
-     * @param { String } value 传入的行高大小
+     * @param { String } value 传入的行高值， 该值是当前字体的倍数， 例如： 1.5, 1.75
      * @example
      * ```javascript
-     * editor.execCommand( 'lineheight', '1');
+     * editor.execCommand( 'lineheight', 1.5);
      * ```
      */
     /**

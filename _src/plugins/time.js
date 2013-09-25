@@ -5,7 +5,7 @@
  */
 
 /**
- * 插入当前时间，插入的格式：12:59:59
+ * 插入时间，默认格式：12:59:59
  * @command time
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -16,7 +16,7 @@
  */
 
 /**
- * 插入当前日期，插入格式：2013-08-30
+ * 插入日期，默认格式：2013-08-30
  * @command date
  * @method execCommand
  * @param { String } cmd 命令字符串

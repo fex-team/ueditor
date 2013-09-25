@@ -24,7 +24,7 @@
     /**
      * 通过一个键值对，创建一个uNode对象
      * @constructor
-     * @param { KeyValueMap } 传入要创建的uNode的属性
+     * @param { Object } attr 传入要创建的uNode的初始属性
      * @example
      * ```javascript
      * var node = new uNode({
@@ -214,7 +214,7 @@
          * @return { String } 返回转换后的html字符串
          * @example
          * ```javascript
-         * node.toHtml();
+         * node.toHtml( true );
          * ```
          */
         toHtml: function (formatter) {
@@ -226,7 +226,7 @@
         /**
          * 获取节点的html内容
          * @method innerHTML
-         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接返回当前节点
          * @return { String } 返回节点的html内容
          * @example
          * ```javascript
@@ -237,7 +237,7 @@
         /**
          * 设置节点的html内容
          * @method innerHTML
-         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接返回当前节点
          * @param { String } htmlstr 传入要设置的html内容
          * @return { UE.uNode } 返回节点本身
          * @example
@@ -274,7 +274,7 @@
         /**
          * 获取节点的纯文本内容
          * @method innerText
-         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接返回当前节点
          * @return { String } 返回节点的存文本内容
          * @example
          * ```javascript
@@ -283,9 +283,9 @@
          */
 
         /**
-         * 获取节点的纯文本内容
+         * 设置节点的纯文本内容
          * @method innerText
-         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接反悔当前节点
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接返回当前节点
          * @param { String } textStr 传入要设置的文本内容
          * @return { UE.uNode } 返回节点本身
          * @example
@@ -314,7 +314,7 @@
         /**
          * 获取当前对象的data属性
          * @method getData
-         * @return { KeyValueMap } 若节点的type值是elemenet，返回空字符串，否则返回节点的data属性
+         * @return { Object } 若节点的type值是elemenet，返回空字符串，否则返回节点的data属性
          * @example
          * ```javascript
          * node.getData();
@@ -554,7 +554,7 @@
 
         /**
          * 设置当前节点所代表的元素属性，即设置attrs对象下的属性值
-         * @method getAttr
+         * @method setAttr
          * @param { String } attrName 要设置的属性名称
          * @param { * } attrVal 要设置的属性值，类型视设置的属性而定
          * @return { * } 返回attrs对象下的属性值
@@ -631,7 +631,7 @@
 
         /**
          * 在当前节点下，根据元素名称查找节点列表
-         * @method getNodeById
+         * @method getNodesByTagName
          * @param { String } tagNames 要查找的元素名称
          * @return { Array } 返回找到的节点列表
          * @example

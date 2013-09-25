@@ -5,11 +5,11 @@
  */
 
 /**
- * 设置字体颜色
+ * 字体颜色
  * @command forecolor
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } value 色值
+ * @param { String } value 色值(必须十六进制)
  * @example
  * ```javascript
  * editor.execCommand( 'forecolor', '#000' );
@@ -28,11 +28,11 @@
  */
 
 /**
- * 设置字体背景颜色
+ * 字体背景颜色
  * @command backcolor
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } value 色值
+ * @param { String } value 色值(必须十六进制)
  * @example
  * ```javascript
  * editor.execCommand( 'backcolor', '#000' );
@@ -51,7 +51,7 @@
  */
 
 /**
- * 设置字体大小
+ * 字体大小
  * @command fontsize
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -74,11 +74,11 @@
  */
 
 /**
- * 设置字体样式
+ * 字体样式
  * @command fontfamily
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } value 字体大小
+ * @param { String } value 字体样式
  * @example
  * ```javascript
  * editor.execCommand( 'fontfamily', '微软雅黑' );
@@ -97,7 +97,7 @@
  */
 
 /**
- * 根据选区内文本有无下划线设置字体下划线
+ * 字体下划线
  * @command underline
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -106,31 +106,9 @@
  * editor.execCommand( 'underline' );
  * ```
  */
-/**
- * 返回选区下划线样式
- * @command underline
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { String } underline|default
- * @example
- * ```javascript
- * editor.queryCommandValue( 'underline' );
- * ```
- */
-/**
- * 返回选区有无下划线
- * @command underline
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { Bool }true为有下划线，反之则无
- * @example
- * ```javascript
- * editor.queryCommandValue( 'underline' );
- * ```
- */
 
 /**
- * 根据选区内文本有无删除线设置字体删除线
+ * 字体删除线
  * @command strikethrough
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -139,31 +117,9 @@
  * editor.execCommand( 'strikethrough' );
  * ```
  */
-/**
- * 返回选区删除线样式
- * @command strikethrough
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { String } line-through|default
- * @example
- * ```javascript
- * editor.queryCommandValue( 'strikethrough' );
- * ```
- */
-/**
- * 返回选区有无删除线
- * @command strikethrough
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { Bool }true为有删除线，反之则无
- * @example
- * ```javascript
- * editor.queryCommandValue( 'strikethrough' );
- * ```
- */
 
 /**
- * 根据选区内文本有无字体边框设置字体边框
+ * 字体边框
  * @command fontborder
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -172,28 +128,7 @@
  * editor.execCommand( 'fontborder' );
  * ```
  */
-/**
- * 返回选区字体边框样式
- * @command fontborder
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { String } 字体边框样式
- * @example
- * ```javascript
- * editor.queryCommandValue( 'fontborder' );
- * ```
- */
-/**
- * 返回选区有无字体边框
- * @command fontborder
- * @method queryCommandValue
- * @param { String } cmd 命令字符串
- * @return { Bool }true为有字体边框，反之则无
- * @example
- * ```javascript
- * editor.queryCommandValue( 'fontborder' );
- * ```
- */
+
 UE.plugins['font'] = function () {
     var me = this,
         fonts = {

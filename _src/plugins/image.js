@@ -5,9 +5,10 @@
  */
 
 /**
- * 对图片居左居中居右排版
+ * 设置图片对齐方式
  * @command imagefloat
  * @method execCommand
+ * @remind 值center为独占一行居中
  * @param { String } cmd 命令字符串
  * @param { String } align 对齐方式，可传left、right、none、center
  * @example
@@ -27,17 +28,7 @@
  * editor.queryCommandValue( 'imagefloat' );
  * ```
  */
-/**
- * 返回当前选区位置是否是图片
- * @command imagefloat
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { int } 0为是，-1为不是
- * @example
- * ```javascript
- * editor.queryCommandState( 'imagefloat' );
- * ```
- */
+
 UE.commands['imagefloat'] = {
     execCommand:function (cmd, align) {
         var me = this,
@@ -156,7 +147,7 @@ UE.commands['imagefloat'] = {
     }
 };
 /**
- * 向编辑器插入图片
+ * 插入单张图片
  * @command insertimage
  * @method execCommand
  * @param { String } cmd 命令字符串
@@ -168,6 +159,25 @@ UE.commands['imagefloat'] = {
  *     width:'100',
  *     height:'100'
  * } );
+ * ```
+ */
+/**
+ * 插入多张图片
+ * @command insertimage
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { Array } opt 多张图片的属性键值对，这些属性都将被复制到这些图片
+ * @example
+ * ```javascript
+ * editor.execCommand( 'insertimage', [{
+ *     src:'a/b/c.jpg',
+ *     width:'100',
+ *     height:'100'
+ * },{
+ *     src:'a/b/d.jpg',
+ *     width:'100',
+ *     height:'100'
+ * }] );
  * ```
  */
 UE.commands['insertimage'] = {

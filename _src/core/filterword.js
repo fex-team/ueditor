@@ -15,6 +15,7 @@
  * @since 1.2.6.1
  * @method filterWord
  * @param { String } html html字符串
+ * @return { String } 已过滤后的结果字符串
  * @example
  * ```javascript
  * UE.filterWord(html);

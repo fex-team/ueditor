@@ -5,7 +5,7 @@
  */
 
 /**
- * 对编辑器区域插入html字符串
+ * 提交表单
  * @command autosubmit
  * @method execCommand
  * @param { String } cmd 命令字符串

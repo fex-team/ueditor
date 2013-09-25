@@ -5,25 +5,13 @@
  */
 
 /**
- * 给选区内文本添加缩进
+ * 缩进
  * @command indent
  * @method execCommand
  * @param { String } cmd 命令字符串
  * @example
  * ```javascript
  * editor.execCommand( 'indent' );
- * ```
- */
-
-/**
- * 返回当前选区位置是否有缩进
- * @command indent
- * @method queryCommandState
- * @param { String } cmd 命令字符串
- * @return { int } 0为不是，1为是
- * @example
- * ```javascript
- * editor.queryCommandState( 'indent' );
  * ```
  */
 
