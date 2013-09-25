@@ -5,7 +5,7 @@
  */
 
 /**
- * 给选区内文本添加缩进
+ * 缩进
  * @command indent
  * @method execCommand
  * @param { String } cmd 命令字符串
