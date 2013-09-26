@@ -87,30 +87,30 @@ var domUtils = dom.domUtils = {
      * switch ( position ) {
      *
      *      //0
-     *      case POSITION_IDENTICAL:
+     *      case UE.dom.domUtils.POSITION_IDENTICAL:
      *          console.log('元素相同');
      *          break;
      *      //1
-     *      case POSITION_DISCONNECTED:
+     *      case UE.dom.domUtils.POSITION_DISCONNECTED:
      *          console.log('两个节点在不同的文档中');
      *          break;
      *      //2
-     *      case POSITION_FOLLOWING:
+     *      case UE.dom.domUtils.POSITION_FOLLOWING:
      *          console.log('节点A在节点B之后');
      *          break;
      *      //4
-     *      case POSITION_PRECEDING;
+     *      case UE.dom.domUtils.POSITION_PRECEDING;
      *          console.log('节点A在节点B之前');
      *          break;
      *      //8
-     *      case POSITION_IS_CONTAINED:
+     *      case UE.dom.domUtils.POSITION_IS_CONTAINED:
      *          console.log('节点A被节点B包含');
      *          break;
      *      case 10:
      *          console.log('节点A被节点B包含且节点A在节点B之后');
      *          break;
      *      //16
-     *      case POSITION_CONTAINS:
+     *      case UE.dom.domUtils.POSITION_CONTAINS:
      *          console.log('节点A包含节点B');
      *          break;
      *      case 20:
