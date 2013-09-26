@@ -55,8 +55,8 @@ UE.plugins['classnameoutputfilter'] = function () {
                 node.type = 'element';
                 node.tagName = 'p';
 
-                breakNode = UE.uNode.createElement( '<br type="page">' );
-
+                breakNode = UE.uNode.createElement( '<br>' );
+                breakNode.attrs['dataType'] = 'page';
                 node.appendChild( breakNode );
 
             }
@@ -79,7 +79,7 @@ UE.plugins['classnameoutputfilter'] = function () {
             classNames = [];
 
 //        //清除不是分页符的换行符
-//        if( node.tagName === 'br' && node.getAttr('type') !== 'page') {
+//        if( node.tagName === 'br' && node.getAttr('dataType') !== 'page') {
 //            node.parentNode.removeChild( node );
 //        }
 

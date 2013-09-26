@@ -40,7 +40,7 @@ UE.plugins['classnameinputfilter'] = function () {
     /* 分页符相关 */
 
     function isPageBreak( node ) {
-        return node.tagName === 'br' && node.getAttr('type') === 'page';
+        return node.tagName === 'br' && node.getAttr('dataType') === 'page';
     }
 
     function parsePageBreak( node ) {

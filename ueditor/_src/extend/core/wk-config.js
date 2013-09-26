@@ -10,7 +10,8 @@
 //            href: true
 //        },
         br: {
-            type: true
+            type: true,
+            dataType: true
         },
         div: {},
         h1: {},
