@@ -488,7 +488,8 @@ UE.I18N['zh-cn'] = {
         xlzm:"希腊字母",
         ewzm:"俄文字符",
         pyzm:"拼音字母",
-        zyzf:"注音及其他"
+        yyyb:"英语音标",
+        zyzf:"其他"
     },
     'edittable':{
         'static':{

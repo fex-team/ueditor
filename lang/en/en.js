@@ -506,6 +506,7 @@ UE.I18N['en'] = {
         xlzm:"The Greek",
         ewzm:"Russian",
         pyzm:"Phonetic",
+        yyyb:"English",
         zyzf:"Others"
     },
     'edittable':{
