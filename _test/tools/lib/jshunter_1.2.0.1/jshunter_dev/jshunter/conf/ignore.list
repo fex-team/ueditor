@@ -1,0 +1,14 @@
+#there 3 level:ignore warning error
+[level]
+Unsafe character=ignore
+Mixed spaces and tabs=warning
+Too many var statements=ignore
+Unclosed string=ignore
+Missing semicolon=error
+Unexpected dangling=ignore
+to compare with=ignore
+is not defined=ignore
+Unexpected dangling=ignore
+A constructor name should start with an uppercase letter=warning
+Expected an assignment or function call and instead saw an expression=warning
+Mixed spaces and tabs=ignore

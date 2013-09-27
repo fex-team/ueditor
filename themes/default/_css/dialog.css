@@ -1,0 +1,286 @@
+/* 弹出对话框按钮和对话框大小 */
+.edui-default .edui-dialog {
+    z-index: 2000;
+    position: absolute;
+}
+
+.edui-default .edui-dialog-wrap {
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.edui-default .edui-dialog-body {
+    position: relative;
+
+    padding:2px 0 0 2px;
+    _zoom: 1;
+}
+
+.edui-default .edui-dialog-shadow {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+}
+
+.edui-default .edui-dialog-foot {
+    background-color: white;
+}
+
+.edui-default .edui-dialog-titlebar {
+    height: 26px;
+    border-bottom: 1px solid #c6c6c6;
+    background: url(../images/dialog-title-bg.png) repeat-x bottom;
+    position: relative;
+    cursor: move;
+}
+.edui-default .edui-dialog-caption {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 26px;
+    padding-left: 5px;
+}
+
+.edui-default .edui-dialog-draghandle {
+    height: 26px;
+}
+
+.edui-default .edui-dialog-closebutton {
+    position: absolute !important;
+    right: 5px;
+    top: 3px;
+}
+
+.edui-default .edui-dialog-closebutton .edui-button-body {
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    background: url("../images/icons-all.gif") no-repeat 0 -59px;
+}
+
+.edui-default .edui-dialog-closebutton .edui-state-hover .edui-button-body {
+    background: url("../images/icons-all.gif") no-repeat 0 -89px;
+}
+
+.edui-default .edui-dialog-foot {
+    height: 40px;
+}
+
+.edui-default .edui-dialog-buttons {
+    position: absolute;
+    right: 0;
+}
+
+.edui-default .edui-dialog-buttons .edui-button {
+    margin-right: 10px;
+}
+
+.edui-default .edui-dialog-buttons .edui-button .edui-button-body {
+    background: url("../images/icons-all.gif") no-repeat;
+    height: 24px;
+    width: 96px;
+    font-size: 12px;
+    line-height: 24px;
+    text-align: center;
+    cursor: default;
+}
+
+.edui-default .edui-dialog-buttons .edui-button .edui-state-hover .edui-button-body {
+    background: url("../images/icons-all.gif") no-repeat 0 -30px;
+}
+
+.edui-default .edui-dialog iframe {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+}
+
+.edui-default .edui-dialog-modalmask {
+    opacity: 0.3;
+    filter: alpha(opacity = 30);
+    background-color: #ccc;
+    position: absolute;
+    /*z-index: 1999;*/
+}
+
+.edui-default .edui-dialog-dragmask {
+    position: absolute;
+    /*z-index: 2001;*/
+    background-color: transparent;
+    cursor: move;
+}
+
+.edui-default .edui-dialog-content {
+    position: relative;
+}
+
+.edui-default .dialogcontmask {
+    cursor: move;
+    visibility: hidden;
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    filter: alpha(opacity = 0);
+}
+
+/*link-dialog*/
+.edui-default .edui-for-link .edui-dialog-content {
+    width: 420px;
+    height: 200px;
+    overflow: hidden;
+}
+/*background-dialog*/
+.edui-default .edui-for-background .edui-dialog-content {
+    width: 440px;
+    height: 280px;
+    overflow: hidden;
+}
+
+/*template-dialog*/
+.edui-default .edui-for-template .edui-dialog-content {
+    width: 630px;
+    height: 390px;
+    overflow: hidden;
+}
+
+/*scrawl-dialog*/
+.edui-default .edui-for-scrawl .edui-dialog-content {
+    width: 515px;
+    *width: 506px;
+    height: 360px;
+}
+
+/*spechars-dialog*/
+.edui-default .edui-for-spechars .edui-dialog-content {
+    width: 620px;
+    height: 500px;
+    *height: 570px;
+}
+
+/*image-dialog*/
+.edui-default .edui-for-insertimage .edui-dialog-content {
+    width: 640px;
+    height: 390px;
+    overflow: hidden;
+}
+/*webapp-dialog*/
+.edui-default .edui-for-webapp .edui-dialog-content {
+    width: 560px;
+    _width: 565px;
+    height: 450px;
+    overflow: hidden;
+}
+
+/*image-insertframe*/
+.edui-default .edui-for-insertframe .edui-dialog-content {
+    width: 350px;
+    height: 200px;
+    overflow: hidden;
+}
+
+/*wordImage-dialog*/
+.edui-default .edui-for-wordimage .edui-dialog-content {
+    width: 620px;
+    height: 380px;
+    overflow: hidden;
+}
+
+/*attachment-dialog*/
+.edui-default .edui-for-attachment .edui-dialog-content {
+    width: 480px;
+    height: 360px;
+    overflow: hidden;
+}
+
+/*code-dialog*/
+.edui-default .edui-for-highlightcode .edui-dialog-content {
+    width: 550px;
+    height: 360px;
+    overflow: hidden;
+}
+
+/*map-dialog*/
+.edui-default .edui-for-map .edui-dialog-content {
+    width: 550px;
+    height: 400px;
+}
+
+/*gmap-dialog*/
+.edui-default .edui-for-gmap .edui-dialog-content {
+    width: 550px;
+    height: 400px;
+}
+
+/*video-dialog*/
+.edui-default .edui-for-insertvideo .edui-dialog-content {
+    width: 590px;
+    height: 390px;
+}
+
+/*anchor-dialog*/
+.edui-default .edui-for-anchor .edui-dialog-content {
+    width: 320px;
+    height: 60px;
+    overflow: hidden;
+}
+
+/*searchreplace-dialog*/
+.edui-default .edui-for-searchreplace .edui-dialog-content {
+    width: 400px;
+    height: 180px;
+}
+
+/*help-dialog*/
+.edui-default .edui-for-help .edui-dialog-content {
+    width: 400px;
+    height: 420px;
+}
+
+/*edittable-dialog*/
+.edui-default .edui-for-edittable .edui-dialog-content {
+    width: 540px;
+    _width:590px;
+    height: 285px;
+}
+
+/*edittip-dialog*/
+.edui-default .edui-for-edittip .edui-dialog-content {
+    width: 225px;
+    height: 60px;
+}
+
+/*edittd-dialog*/
+.edui-default .edui-for-edittd .edui-dialog-content {
+    width: 240px;
+    height: 50px;
+}
+/*snapscreen-dialog*/
+.edui-default .edui-for-snapscreen .edui-dialog-content {
+    width: 400px;
+    height: 220px;
+}
+
+/*music-dialog*/
+.edui-default .edui-for-music .edui-dialog-content {
+    width: 515px;
+    height: 360px;
+}
