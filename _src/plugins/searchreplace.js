@@ -33,7 +33,6 @@ UE.plugins['searchreplace'] = function(){
                 me.focus();
                 while(1){
                     var tmpRange;
-
                     nativeRange = me.document.selection.createRange();
                     tmpRange = nativeRange.duplicate();
                     tmpRange.moveToElementText(me.document.body);
@@ -77,8 +76,7 @@ UE.plugins['searchreplace'] = function(){
                     if(opt.hasOwnProperty("replaceStr")){
                         range = sel.getRange();
                         range.deleteContents().insertNode(range.document.createTextNode(opt.replaceStr)).select();
-                        currentRange = sel.getNative().createRange();
-
+                        currentRange = me.document.selection.createRange()
                     }
                     num++;
                     if(!opt.all){
