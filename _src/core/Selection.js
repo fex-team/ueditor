@@ -135,6 +135,11 @@
     };
 
     Selection.prototype = {
+        rangeInBody : function(rng,txtRange){
+            var node = browser.ie9below || txtRange ? rng.item ? rng.item() : rng.parentElement() : rng.startContainer;
+
+            return node === this.document.body || domUtils.inDoc(node,this.document.body);
+        },
         /**
          * 获取原生seleciton对象
          * @public
@@ -204,7 +209,12 @@
          */
         isFocus:function () {
             try {
-                return browser.ie9below && _getIERange( this ) || !browser.ie9below && this.getNative().rangeCount ? true : false;
+                if(browser.iebelow){
+                    var nativeRange = _getIERange(this);
+                    return nativeRange && this.rangeInBody(nativeRange);
+                }else{
+                    return !!this.getNative().rangeCount;
+                }
             } catch ( e ) {
                 return false;
             }
