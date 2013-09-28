@@ -1,5 +1,9 @@
 UEditor Change List
 
+Version 1.3.0
+    1.ie8以上版本使用w3cRange
+    2.编辑器实例上添加isFocus,blur方法
+
 Version 1.2.6.1
     1.查找替换支持正则表达式
     2.修复了ie67下初始化宽高给定百分比
