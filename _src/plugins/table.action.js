@@ -117,11 +117,14 @@ UE.plugins['table'] = function () {
             //选中的td上的样式
             '.selectTdClass{background-color:#edf5fa !important}' +
                 'table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}' +
+                'table.sortEnabled tr:first-child th,table.sortEnabled tr:first-child td{padding-right:20px;background-repeat: no-repeat;background-position: center right;' +
+                '   background-image:url(' + me.options.themePath + me.options.theme + '/images/sortable.png);}' +
                 //插入的表格的默认样式
                 'table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
                 'td,th{padding: 5px 10px;border: 1px solid #DDD;}' +
                 'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
-                'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
+                'th{border-top:1px solid #BBB;background-color:#F7F7F7;}' +
+                'table tr:first-child th{border-top-width:2px;}' +
                 '.ue-table-interlace-color-single{ background-color: #fcfcfc; } .ue-table-interlace-color-double{ background-color: #f7faff; }' +
                 'td p{margin:0;padding:0;}', me.document);
 
