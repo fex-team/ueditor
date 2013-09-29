@@ -6,10 +6,11 @@
  * @date
  */
 UE.plugins['dropfile'] = function() {
-    var me = this,
-        dropFileEnabled = me.options.dropFileEnabled;
-    if(dropFileEnabled!==false) dropFileEnabled = true;
-    if(dropFileEnabled) {
+    var me = this;
+
+    me.setOpt('dropFileEnabled', true);
+
+    if( me.getOpt('dropFileEnabled') && window.FormData && window.FileReader) {
         me.addListener('ready', function(){
             domUtils.on(me.body, 'drop', function (e) {
                 //获取文件列表

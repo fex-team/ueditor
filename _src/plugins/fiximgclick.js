@@ -221,7 +221,9 @@ UE.plugins['fiximgclick'] = (function () {
         var me = this,
             imageScale;
 
-        if (browser.webkit) {
+        me.setOpt('imageScaleEnabled', true);
+
+        if (browser.webkit && me.getOpt('imageScaleEnabled')) {
             me.addListener('click', function (type, e) {
                 var range = me.selection.getRange(),
                     img = range.getClosedNode();
@@ -280,6 +282,9 @@ UE.plugins['fiximgclick'] = (function () {
                     if (imageScale && imageScale.resizer.style.display != 'none') imageScale.hide();
                 }
             });
+        }
+
+        if (browser.webkit) {
             me.addListener('click', function (type, e) {
                 if (e.target.tagName == 'IMG' && me.body.contentEditable!="false") {
                     var range = new dom.Range(me.document);
