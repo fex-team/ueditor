@@ -19,113 +19,7 @@
      * 因此，UEditor提供了针对不同页面的编辑器可单独配置的根路径，具体来说，在需要实例化编辑器的页面最顶部写上如下代码即可。当然，需要令此处的URL等于对应的配置。
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
-    var URL = window.UEDITOR_HOME_URL || (function(){
-
-        function PathStack() {
-
-            this.documentURL = self.document.URL || self.location.href;
-
-            this.separator = '/';
-            this.separatorPattern = /\\|\//g;
-            this.currentDir = './';
-            this.currentDirPattern = /^[.]\/]/;
-
-            this.path = this.documentURL;
-            this.stack = [];
-
-            this.push( this.documentURL );
-
-        }
-
-        PathStack.isParentPath = function( path ){
-            return path === '..';
-        };
-
-        PathStack.hasProtocol = function( path ){
-            return !!PathStack.getProtocol( path );
-        };
-
-        PathStack.getProtocol = function( path ){
-
-            var protocol = /^[^:]*:\/*/.exec( path );
-
-            return protocol ? protocol[0] : null;
-
-        };
-
-        PathStack.prototype = {
-            push: function( path ){
-
-                this.path = path;
-
-                update.call( this );
-                parse.call( this );
-
-                return this;
-
-            },
-            getPath: function(){
-                return this + "";
-            },
-            toString: function(){
-                return this.protocol + ( this.stack.concat( [''] ) ).join( this.separator );
-            }
-        };
-
-        function update() {
-
-            var protocol = PathStack.getProtocol( this.path || '' );
-
-            if( protocol ) {
-
-                //根协议
-                this.protocol = protocol;
-
-                //local
-                this.localSeparator = /\\|\//.exec( this.path.replace( protocol, '' ) )[0];
-
-                this.stack = [];
-            } else {
-                protocol = /\\|\//.exec( this.path );
-                protocol && (this.localSeparator = protocol[0]);
-            }
-
-        }
-
-        function parse(){
-
-            var parsedStack = this.path.replace( this.currentDirPattern, '' );
-
-            if( PathStack.hasProtocol( this.path ) ) {
-                parsedStack = parsedStack.replace( this.protocol , '');
-            }
-
-            parsedStack = parsedStack.split( this.localSeparator );
-            parsedStack.length = parsedStack.length - 1;
-
-            for(var i= 0,tempPath,l=parsedStack.length,root = this.stack;i<l;i++){
-                tempPath = parsedStack[i];
-                if(tempPath){
-                    if( PathStack.isParentPath( tempPath ) ) {
-                        root.pop();
-                    } else {
-                        root.push( tempPath );
-                    }
-                }
-
-            }
-
-
-        }
-
-        var currentPath = document.getElementsByTagName('script');
-
-        currentPath = currentPath[ currentPath.length -1 ].src;
-
-        return new PathStack().push( currentPath ) + "";
-
-
-    })();
+    var URL = window.UEDITOR_HOME_URL || getUEBasePath();
 
     /**
      * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
@@ -481,4 +375,113 @@
         //填写过滤规则
         //filterRules : {}
     };
+
+    function getUEBasePath ( docUrl, confUrl ) {
+
+        var configPath = document.getElementsByTagName('script');
+
+        configPath = configPath[ configPath.length -1 ].src;
+
+        return getBasePath( docUrl || self.document.URL || self.location.href, confUrl || configPath );
+
+    }
+
+    function getBasePath ( documentURL, configURL ) {
+
+        var separator = '/',
+            currentDirPattern = /^[.]\/]/,
+            localSeparator = null,
+            curPath = documentURL,
+            curProtocol = null,
+            stack = [];
+
+        function isParentPath ( path ) {
+            return path === '..';
+        }
+
+        function hasProtocol ( path ) {
+            return !!getProtocol( path );
+        }
+
+        function getProtocol ( path ) {
+
+            var protocol = /^[^:]*:\/*/.exec( path );
+
+            return protocol ? protocol[0] : null;
+
+        }
+
+        function push ( path ) {
+
+            curPath = path;
+
+            update( path );
+            parse( path );
+
+        }
+
+        function getPath () {
+            return curProtocol + ( stack.concat( [''] ) ).join( separator );
+        }
+
+        function update( path ) {
+
+            var protocol = getProtocol( path );
+
+            if( protocol ) {
+
+                //根协议
+                curProtocol = protocol;
+
+                //local
+                localSeparator = /\\|\//.exec( path.replace( protocol, '' ) )[0];
+
+                stack = [];
+
+            } else {
+
+                protocol = /\\|\//.exec( path );
+                protocol && ( localSeparator = protocol[0] );
+
+            }
+
+        }
+
+        function parse( path ) {
+
+            var parsedStack = path.replace( currentDirPattern, '' );
+
+            if( hasProtocol( path ) ) {
+                parsedStack = parsedStack.replace( curProtocol , '');
+            }
+
+            parsedStack = parsedStack.split( localSeparator );
+            parsedStack.length = parsedStack.length - 1;
+
+            for(var i= 0,tempPath,l=parsedStack.length,root = stack;i<l;i++){
+                tempPath = parsedStack[i];
+                if(tempPath){
+                    if( isParentPath( tempPath ) ) {
+                        root.pop();
+                    } else {
+                        root.push( tempPath );
+                    }
+                }
+
+            }
+
+
+        }
+
+        push( documentURL );
+        push( configURL );
+
+        return getPath();
+
+    }
+
+    window.UE = {
+        getUEBasePath: getUEBasePath
+    };
+
 })();

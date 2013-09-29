@@ -78,7 +78,7 @@
 
                 var winHeight = ( document.documentElement.clientHeight || document.body.clientHeight )  - 80,
                     _height = this.getDom().offsetHeight,
-                    _top = domUtils.getXY( this.combox.getDom() ).y,
+                    _top = uiUtils.getClientRect( this.combox.getDom() ).top,
                     content = this.getDom('content'),
                     ifr = this.getDom('body').getElementsByTagName('iframe'),
                     me = this;
