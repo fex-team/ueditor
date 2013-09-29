@@ -780,7 +780,7 @@ UE.plugins['table'] = function () {
             if (onDrag && dragTd) {
                 singleClickState = 0;
                 me.body.style.webkitUserSelect = 'none';
-                me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
+                me.selection.getNative()[browser.ie9below ? 'empty' : 'removeAllRanges']();
                 pos = mouseCoords(evt);
                 toggleDraggableState(me, true, onDrag, pos, target);
                 if (onDrag == "h") {
@@ -1358,7 +1358,7 @@ UE.plugins['table'] = function () {
         //拖拽状态下的mouseUP
         if ( onDrag && dragTd ) {
 
-            me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
+            me.selection.getNative()[browser.ie9below ? 'empty' : 'removeAllRanges']();
 
             singleClickState = 0;
             dragLine = me.document.getElementById('ue_tableDragLine');
@@ -1434,7 +1434,7 @@ UE.plugins['table'] = function () {
             var ut = getUETable(currentTd);
             if (startTd != currentTd) {
                 me.document.body.style.webkitUserSelect = 'none';
-                me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
+                me.selection.getNative()[browser.ie9below ? 'empty' : 'removeAllRanges']();
                 var range = ut.getCellsRange(startTd, currentTd);
                 ut.setSelected(range);
             } else {

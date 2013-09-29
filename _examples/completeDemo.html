@@ -24,7 +24,6 @@
     <script id="editor" type="text/plain" style="width:1024px;height:500px;margin:100px 0;"></script>
 </div>
 
-
 <div class="clear"></div>
 <div id="btns">
     <div>
@@ -36,6 +35,9 @@
         <button onclick="getPlainTxt()">获得带格式的纯文本</button>
         <button onclick="hasContent()">判断是否有内容</button>
         <button onclick="setFocus()">使编辑器获得焦点</button>
+        <button onmousedown="isFocus(event)" >编辑器是否获得焦点</button>
+        <button onmousedown="blur(event)" >编辑器失去焦点</button>
+
     </div>
     <div>
         <button onclick="getText()">获得当前选中的文本</button>
@@ -60,7 +62,14 @@
 
     //实例化编辑器
     var ue = UE.getEditor('editor');
-
+    function isFocus(e){
+        alert(ue.isFocus());
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function blur(e){
+        ue.blur();
+        UE.dom.domUtils.preventDefault(e)
+    }
     function insertHtml() {
         var value = prompt('插入html代码', '');
         ue.execCommand('insertHtml', value)

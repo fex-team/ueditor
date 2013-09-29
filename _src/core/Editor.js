@@ -625,11 +625,18 @@
                 } else {
                     rng.select(true);
                 }
-                this.fireEvent('focus');
+                this.fireEvent('focus selectionchange');
             } catch (e) {
             }
         },
-
+        isFocus:function(){
+            return this.selection.isFocus();
+        },
+        blur:function(){
+            var sel = this.selection.getNative();
+            sel.empty ? sel.empty() : sel.removeAllRanges();
+            this.fireEvent('blur selectionchange');
+        },
         /**
          * 初始化UE事件及部分事件代理
          * @private
@@ -650,47 +657,6 @@
                 if (evt.button == 2)return;
                 me._selectionChange(250, evt);
             });
-//            //处理拖拽
-//            //ie ff不能从外边拖入
-//            //chrome只针对从外边拖入的内容过滤
-//            var innerDrag = 0, source = browser.ie ? me.body : me.document, dragoverHandler;
-//            domUtils.on(source, 'dragstart', function () {
-//                innerDrag = 1;
-//            });
-//            domUtils.on(source, browser.webkit ? 'dragover' : 'drop', function () {
-//                return browser.webkit ?
-//                    function () {
-//                        clearTimeout(dragoverHandler);
-//                        dragoverHandler = setTimeout(function () {
-//                            if (!innerDrag) {
-//                                var sel = me.selection,
-//                                    range = sel.getRange();
-//                                if (range) {
-//                                    var common = range.getCommonAncestor();
-//                                    if (common && me.serialize) {
-//                                        var f = me.serialize,
-//                                            node =
-//                                                f.filter(
-//                                                    f.transformInput(
-//                                                        f.parseHTML(
-//                                                            f.word(common.innerHTML)
-//                                                        )
-//                                                    )
-//                                                );
-//                                        common.innerHTML = f.toHTML(node);
-//                                    }
-//                                }
-//                            }
-//                            innerDrag = 0;
-//                        }, 200);
-//                    } :
-//                    function (e) {
-//                        if (!innerDrag) {
-//                            e.preventDefault ? e.preventDefault() : (e.returnValue = false);
-//                        }
-//                        innerDrag = 0;
-//                    }
-//            }());
         },
         /**
          * 触发事件代理
