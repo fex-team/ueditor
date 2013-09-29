@@ -223,7 +223,7 @@ UE.plugins['fiximgclick'] = (function () {
 
         me.setOpt('imageScaleEnabled', true);
 
-        if (browser.webkit && me.getOpt('imageScaleEnabled')) {
+        if (browser.webkit && me.options.imageScaleEnabled) {
             me.addListener('click', function (type, e) {
                 var range = me.selection.getRange(),
                     img = range.getClosedNode();

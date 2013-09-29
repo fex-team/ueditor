@@ -10,7 +10,7 @@ UE.plugins['dropfile'] = function() {
 
     me.setOpt('dropFileEnabled', true);
 
-    if( me.getOpt('dropFileEnabled') && window.FormData && window.FileReader) {
+    if( me.options.dropFileEnabled && window.FormData && window.FileReader) {
         me.addListener('ready', function(){
             domUtils.on(me.body, 'drop', function (e) {
                 //获取文件列表
