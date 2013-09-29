@@ -4,7 +4,7 @@ var baidu = window.baidu || {};
 
 window.baidu = baidu;
 
-window.UE = baidu.editor =  {};
+window.UE = baidu.editor =  window.UE || {};
 
 UE.plugins = {};
 
