@@ -19,7 +19,7 @@ module.exports = function ( grunt ) {
                 sources = sources.split( "," );
 
                 sources.forEach( function ( filepath, index ) {
-                    grunt.log.writeln('--------' + filepath);
+
                     sources[ index ] = Util.jsBasePath + filepath;
 
                 } );
@@ -153,8 +153,7 @@ module.exports = function ( grunt ) {
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        //var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:'+server, 'transcoding' ];
-        var tasks = [ 'concat' ];
+        var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:'+server, 'transcoding' ];
 
         //config修改
         updateConfigFile();
