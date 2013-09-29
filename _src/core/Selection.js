@@ -212,7 +212,7 @@
                 if(browser.ie9below){
 
                     var nativeRange = _getIERange(this);
-                    return nativeRange && this.rangeInBody(nativeRange);
+                    return !!(nativeRange && this.rangeInBody(nativeRange));
                 }else{
                     return !!this.getNative().rangeCount;
                 }
