@@ -173,6 +173,7 @@
 .edui-default .edui-for-spechars .edui-dialog-content {
     width: 620px;
     height: 500px;
+    *width: 630px;
     *height: 570px;
 }
 

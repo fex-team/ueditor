@@ -139,6 +139,8 @@ UE.I18N['zh-cn'] = {
         'deletecaption':'删除表格名称',
         'inserttitle':'插入表格标题行',
         'deletetitle':'删除表格标题行',
+        'inserttitlecol':'插入表格标题列',
+        'deletetitlecol':'删除表格标题列',
         'averageDiseRow':'平均分布各行',
         'averageDisCol':'平均分布各列',
         'mergeright':"向右合并",
@@ -488,13 +490,15 @@ UE.I18N['zh-cn'] = {
         xlzm:"希腊字母",
         ewzm:"俄文字符",
         pyzm:"拼音字母",
-        zyzf:"注音及其他"
+        yyyb:"英语音标",
+        zyzf:"其他"
     },
     'edittable':{
         'static':{
             'lang_tableStyle':'表格样式',
             'lang_insertCaption':'添加表格标题行',
             'lang_insertTitle':'添加表格名称行',
+            'lang_insertTitleCol':'添加表格名称列',
             'lang_orderbycontent':"使表格内容可排序",
             'lang_tableSize':'自动调整表格尺寸',
             'lang_autoSizeContent':'按表格文字自适应',

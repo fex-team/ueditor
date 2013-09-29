@@ -213,6 +213,46 @@
             this.selection.getRange().setStart(td, 0).setCursor(false, true);
         }
     };
+    UE.commands['inserttitlecol'] = {
+        queryCommandState: function () {
+            var table = getTableItemsByRange(this).table;
+            if (table) {
+                var lastRow = table.rows[table.rows.length-1];
+                return lastRow.getElementsByTagName('th').length ? -1 : 0;
+            }
+            return -1;
+        },
+        execCommand: function (cmd) {
+            var table = getTableItemsByRange(this).table;
+            if (table) {
+                getUETable(table).insertThCol(0, 'th');
+            }
+            resetTdWidth(table, this);
+            var th = table.getElementsByTagName('th')[0];
+            this.selection.getRange().setStart(th, 0).setCursor(false, true);
+        }
+    };
+    UE.commands['deletetitlecol'] = {
+        queryCommandState: function () {
+            var table = getTableItemsByRange(this).table;
+            if (table) {
+                var lastRow = table.rows[table.rows.length-1];
+                return lastRow.getElementsByTagName('th').length ? 0 : -1;
+            }
+            return -1;
+        },
+        execCommand: function () {
+            var table = getTableItemsByRange(this).table;
+            if (table) {
+                for(var i = 0; i< table.rows.length; i++ ){
+                    domUtils.remove(table.rows[i].children[0])
+                }
+            }
+            resetTdWidth(table, this);
+            var td = table.getElementsByTagName('td')[0];
+            this.selection.getRange().setStart(td, 0).setCursor(false, true);
+        }
+    };
 
     UE.commands["mergeright"] = {
         queryCommandState: function (cmd) {
@@ -808,12 +848,21 @@
     };
 
     UE.commands["enablesort"] = UE.commands["disablesort"] = {
-        queryCommandState: function () {
-            return getTableItemsByRange(this).table ? 0 : -1;
+        queryCommandState: function (cmd) {
+            var table = getTableItemsByRange(this).table;
+            if(table && cmd=='enablesort') {
+                var cells = domUtils.getElementsByTagName(table, 'th td');
+                for(var i = 0; i<cells.length; i++) {
+                    if(cells[i].getAttribute('colspan')>1 || cells[i].getAttribute('rowspan')>1) return -1;
+                }
+            }
+
+            return !table ? -1: cmd=='enablesort' ^ table.getAttribute('data-sort')!='sortEnabled' ? 1:0;
         },
         execCommand: function (cmd) {
             var table = getTableItemsByRange(this).table;
             table.setAttribute("data-sort", cmd == "enablesort" ? "sortEnabled" : "sortDisabled");
+            cmd == "enablesort" ? table.classList.add("sortEnabled"):table.classList.remove("sortEnabled");
         }
     };
     UE.commands["settablebackground"] = {
@@ -870,14 +919,18 @@
     };
 
     function resetTdWidth(table, editor) {
-        var tds = table.getElementsByTagName("td");
+        var tds = domUtils.getElementsByTagName(table,'td th');
         utils.each(tds, function (td) {
             td.removeAttribute("width");
         });
         table.setAttribute('width', getTableWidth(editor, true, getDefaultValue(editor, table)));
+        var tdsWidths = [];
         setTimeout(function () {
             utils.each(tds, function (td) {
-                (td.colSpan == 1) && td.setAttribute("width", td.offsetWidth + "");
+                (td.colSpan == 1) && tdsWidths.push(td.offsetWidth)
+            })
+            utils.each(tds, function (td,i) {
+                (td.colSpan == 1) && td.setAttribute("width", tdsWidths[i] + "");
             })
         }, 0);
     }

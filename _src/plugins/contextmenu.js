@@ -116,6 +116,14 @@ UE.plugins['contextmenu'] = function () {
                             label:lang.deletetitle,
                             cmdName:'deletetitle'
                         },
+                        {
+                            label:lang.inserttitlecol,
+                            cmdName:'inserttitlecol'
+                        },
+                        {
+                            label:lang.deletetitle,
+                            cmdName:'deletetitlecol'
+                        },
                         '-',
                         {
                             label:lang.mergecells,

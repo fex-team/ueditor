@@ -137,6 +137,8 @@ UE.I18N['en'] = {
         'deletecaption':'Delete Caption',
         'inserttitle':'Insert Title',
         'deletetitle':'Delete Title',
+        'inserttitlecol':'Insert Title Col',
+        'deletetitlecol':'Delete Title Col',
         'averageDiseRow':'AverageDise Row',
         'averageDisCol':'AverageDis Col',
         'deleterow':"Delete row",
@@ -506,6 +508,7 @@ UE.I18N['en'] = {
         xlzm:"The Greek",
         ewzm:"Russian",
         pyzm:"Phonetic",
+        yyyb:"English",
         zyzf:"Others"
     },
     'edittable':{
@@ -513,6 +516,7 @@ UE.I18N['en'] = {
             'lang_tableStyle':'Table style',
             'lang_insertCaption':'Add table header row',
             'lang_insertTitle':'Add table title row',
+            'lang_insertTitleCol':'Add table title col',
             'lang_tableSize':'Automatically adjust table size',
             'lang_autoSizeContent':'Adaptive by form text',
             'lang_orderbycontent':"Table of contents sortable",
