@@ -209,7 +209,8 @@
          */
         isFocus:function () {
             try {
-                if(browser.iebelow){
+                if(browser.ie9below){
+
                     var nativeRange = _getIERange(this);
                     return nativeRange && this.rangeInBody(nativeRange);
                 }else{
