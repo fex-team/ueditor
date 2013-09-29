@@ -49,7 +49,7 @@
             'plugins/wordimage.js',
             'plugins/dragdrop.js',
             'plugins/undo.js',
-            'plugins/paste.js',     //粘贴时候的提示依赖了UI
+            'plugins/paste.js',
             'plugins/list.js',
             'plugins/source.js',
             'plugins/enterkey.js',
@@ -57,7 +57,7 @@
             'plugins/fiximgclick.js',
             'plugins/autolink.js',
             'plugins/autoheight.js',
-            'plugins/autofloat.js',  //依赖UEditor UI,在IE6中，会覆盖掉body的背景图属性
+            'plugins/autofloat.js',
             'plugins/puretxtpaste.js',
             'plugins/video.js',
             'plugins/table.core.js',
