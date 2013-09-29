@@ -138,7 +138,7 @@
         rangeInBody : function(rng,txtRange){
             var node = browser.ie9below || txtRange ? rng.item ? rng.item() : rng.parentElement() : rng.startContainer;
 
-            return node === this.document.body || domUtils.inDoc(node,this.document.body);
+            return node === this.document.body || domUtils.inDoc(node,this.document);
         },
         /**
          * 获取原生seleciton对象
