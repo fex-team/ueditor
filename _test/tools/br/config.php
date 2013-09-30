@@ -66,7 +66,7 @@
              * 设置在源码路径下没有同名文件对应的测试文件
              * @var array
              */
-            public static $special_Case =  array('plugins/config_test.js'=>'../../../ueditor.config.js');
+            public static $special_Case =  array('plugins/ueditor.config.js'=>'../../../ueditor.config.js');
         }
 
 ?>

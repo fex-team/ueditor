@@ -197,12 +197,11 @@ class Kiss
         }
         /**
          * 设置在源码路径下没有同名文件对应的测试文件
-         * @var array
          */
         foreach(Config::$special_Case as $s_caseitem => $s_source){
             //取形如 'plugins/config_test.js' 中 'plugins/config_test'部分
             $s_newName = str_replace(".js","", $s_caseitem );
-            print( "<a href=\"run.php?case=$s_newName\" id=id_case_\"$s_newName\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$s_newName\" onclick=\"run('$s_newName');\$('#id_rerun').html('$s_newName');return false;\">". $s_newName . "</a>\n" );
+            print( "<a href=\"run.php?case=$s_newName\" id=\"id_case_".str_replace('.','_',$s_newName)."\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$s_newName\" onclick=\"run('$s_newName');\$('#id_rerun').html('$s_newName');return false;\">". $s_newName . "</a>\n" );
         }
     }
 
