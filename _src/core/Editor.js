@@ -634,8 +634,17 @@
         },
         blur:function(){
             var sel = this.selection.getNative();
-            sel.empty ? sel.empty() : sel.removeAllRanges();
-            this.fireEvent('blur selectionchange');
+            if(sel.empty){
+                var nativeRng = document.body.createTextRange();
+                nativeRng.moveToElementText(document.body);
+                nativeRng.collapse(true);
+                nativeRng.select();
+                sel.empty()
+            }else{
+                sel.removeAllRanges()
+            }
+
+            //this.fireEvent('blur selectionchange');
         },
         /**
          * 初始化UE事件及部分事件代理

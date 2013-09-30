@@ -1,4 +1,5 @@
 <?php
+require_once 'config.php';
 /**
  * for case running
  *
@@ -193,6 +194,15 @@ class Kiss
                        /*过长的时候屏蔽超出20的部分，因为隐藏的处理，所有用例不能直接使用标签a中的innerHTML，而应该使用title*/
                        . $newName . "</a>\n" );
             }
+        }
+        /**
+         * 设置在源码路径下没有同名文件对应的测试文件
+         * @var array
+         */
+        foreach(Config::$special_Case as $s_caseitem => $s_source){
+            //取形如 'plugins/config_test.js' 中 'plugins/config_test'部分
+            $s_newName = str_replace(".js","", $s_caseitem );
+            print( "<a href=\"run.php?case=$s_newName\" id=id_case_\"$s_newName\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$s_newName\" onclick=\"run('$s_newName');\$('#id_rerun').html('$s_newName');return false;\">". $s_newName . "</a>\n" );
         }
     }
 
