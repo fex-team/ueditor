@@ -378,105 +378,60 @@
 
     function getUEBasePath ( docUrl, confUrl ) {
 
-        var configPath = document.getElementsByTagName('script');
-
-        configPath = configPath[ configPath.length -1 ].src;
-
-        return getBasePath( docUrl || self.document.URL || self.location.href, confUrl || configPath );
+        return getBasePath( docUrl || self.document.URL || self.location.href, confUrl || getConfigFilePath() );
 
     }
 
-    function getBasePath ( documentURL, configURL ) {
+    function getConfigFilePath () {
 
-        var separator = '/',
-            currentDirPattern = /^[.]\/]/,
-            localSeparator = null,
-            curPath = documentURL,
-            curProtocol = null,
-            stack = [];
+        var configPath = document.getElementsByTagName('script');
 
-        function isParentPath ( path ) {
-            return path === '..';
-        }
+        return configPath[ configPath.length -1 ].src;
 
-        function hasProtocol ( path ) {
-            return !!getProtocol( path );
-        }
+    }
 
-        function getProtocol ( path ) {
+    function getBasePath ( docUrl, confUrl ) {
 
-            var protocol = /^[^:]*:\/*/.exec( path );
+        var basePath = confUrl;
 
-            return protocol ? protocol[0] : null;
+        if ( !/^[a-z]+:/i.test( confUrl ) ) {
+
+            docUrl = docUrl.split( "#" )[0].split( "?" )[0].replace( /[^\\\/]+$/, '' );
+
+            basePath = docUrl + "" + confUrl;
 
         }
 
-        function push ( path ) {
+        return optimizationPath( basePath );
 
-            curPath = path;
+    }
 
-            update( path );
-            parse( path );
+    function optimizationPath ( path ) {
 
-        }
+        var protocol = /^[a-z]+:\/\//.exec( path )[ 0 ],
+            separator = '/',
+            tmp = null,
+            res = [];
 
-        function getPath () {
-            return curProtocol + ( stack.concat( [''] ) ).join( separator );
-        }
+        path = path.replace( protocol, "" ).split( "?" )[0].split( "#" )[0];
 
-        function update( path ) {
+        separator = path.indexOf( "\\" ) !== -1 ? '\\' : separator;
 
-            var protocol = getProtocol( path );
+        path = path.replace( /(\/|\\)\.\1/g, separator).split( /\/|\\/ );
 
-            if( protocol ) {
+        path[ path.length - 1 ] = "";
 
-                //根协议
-                curProtocol = protocol;
+        while ( path.length ) {
 
-                //local
-                localSeparator = /\\|\//.exec( path.replace( protocol, '' ) )[0];
-
-                stack = [];
-
+            if ( ( tmp = path.shift() ) === ".." ) {
+                res.pop();
             } else {
-
-                protocol = /\\|\//.exec( path );
-                protocol && ( localSeparator = protocol[0] );
-
+                res.push( tmp );
             }
 
         }
 
-        function parse( path ) {
-
-            var parsedStack = path.replace( currentDirPattern, '' );
-
-            if( hasProtocol( path ) ) {
-                parsedStack = parsedStack.replace( curProtocol , '');
-            }
-
-            parsedStack = parsedStack.split( localSeparator );
-            parsedStack.length = parsedStack.length - 1;
-
-            for(var i= 0,tempPath,l=parsedStack.length,root = stack;i<l;i++){
-                tempPath = parsedStack[i];
-                if(tempPath){
-                    if( isParentPath( tempPath ) ) {
-                        root.pop();
-                    } else {
-                        root.push( tempPath );
-                    }
-                }
-
-            }
-
-
-        }
-
-        push( documentURL );
-        push( configURL );
-
-        return getPath();
+        return protocol + res.join( "/" );
 
     }
 
