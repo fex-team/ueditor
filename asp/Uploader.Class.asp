@@ -19,7 +19,7 @@ Class Uploader
     Private Sub Class_Initialize
         cfgMaxSize = 1 * 1024 * 1024
         cfgAllowType = Array(".png", ".jpg", ".jpeg", ".gif", ".bmp")
-        cfgSavePath = "/upload"
+        cfgSavePath = "upload/"
 
         Set stateString = Server.CreateObject("Scripting.Dictionary")
         stateString.Add "SIZE_LIMIT_EXCCEED", "文件大小超过服务器限制"
@@ -67,18 +67,34 @@ Class Uploader
     End Property
 
     Public Function Upload( filefield )
-        Dim processor, savepath
+        Dim processor, stream, filename
 
         Set processor = new MultiformProcessor
         Set rsFormValues = processor.Process()
 
-        If Request.TotalBytes > cfgMaxSize Then
+        Set stream = rsFormValues.Item( filefield )
+        filename = rsFormValues.Item( "filename" )
+        DoUpload stream, filename
+    End Function
+
+    Public Function UploadBase64( content ) 
+        Dim stream, savepath
+        Set stream = Base64Decode( content )
+
+        DoUpload stream, "Base64Upload.png"
+    End Function
+
+    Private Function DoUpload( stream, filename )
+        Dim savepath
+
+        rsFileSize = stream.Size
+        If rsFileSize > cfgMaxSize Then
             rsState = stateString.Item( "SIZE_LIMIT_EXCCEED" )
             Exit Function
         End If
 
-        rsOriginalFileName = rsFormValues.Item( "filename" )
-        rsFileType = GetExt( rsOriginalFileName )
+        rsOriginalFileName = filename
+        rsFileType = GetExt( filename )
         If CheckExt(rsFileType) = False Then
             rsState = stateString.Item( "TYPE_NOW_ALLOW" )
             Exit Function
@@ -86,16 +102,29 @@ Class Uploader
 
         savepath = GetSavePath()
         CheckOrCreatePath( Server.MapPath(savepath) )
-
-        rsFileName = GetSaveName( rsOriginalFileName )
+        rsFileName = GetSaveName( filename )
         rsFilePath = savepath + rsFileName
 
-        Set fileStream = rsFormValues.Item( filefield )
-        rsFileSize = fileStream.Size
-
-        fileStream.SaveToFile Server.MapPath( rsFilePath )
-        fileStream.Close
+        stream.SaveToFile Server.MapPath( rsFilePath )
+        stream.Close
         rsState = "SUCCESS"
+    End Function
+
+    Private Function Base64Decode( content )
+        dim xml, stream, node
+        Set xml = Server.CreateObject("MSXML2.DOMDocument")
+        Set stream = Server.CreateObject("ADODB.Stream")
+        Set node = xml.CreateElement("tmpNode")
+        node.dataType = "bin.base64"
+        node.Text = content
+        stream.Charset ="gb2312"
+        stream.Type = 1
+        stream.Open()
+        stream.Write( node.nodeTypedValue )
+        Set Base64Decode = stream
+        Set node = Nothing
+        Set stream = Nothing
+        Set xml = Nothing
     End Function
 
     Private Function CheckExt( fileType )
