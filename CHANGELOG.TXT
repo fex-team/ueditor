@@ -3,6 +3,12 @@ UEditor Change List
 Version 1.3.0
     1.ie8以上版本使用w3cRange
     2.编辑器实例上添加isFocus,blur方法
+    3.使用grunt作为打包工具
+    4.修复了过滤规则对于script/style的内容的转码
+    5.新增在chrome下针对图片的拖拽宽高功能
+    6.新增在高端浏览器下拖拽图片上传功能
+    7.asp后台的支持
+    8.
 
 Version 1.2.6.1
     1.查找替换支持正则表达式
