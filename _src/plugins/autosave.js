@@ -23,7 +23,7 @@ UE.plugins['autosave'] = function(){
 
             saveLocalData: function ( key, data ) {
 
-                if ( storage ) {
+                if ( storage && data) {
                     storage.setItem( key, data  );
                     return true;
                 }
@@ -160,7 +160,7 @@ UE.plugins['autosave'] = function(){
             return;
         }
 
-        saveData = me.body.innerHTML;
+        saveData =  me.hasContents() ? me.body.innerHTML : '';
 
         if ( me.fireEvent( "autosavebefore", {
             content: saveData
