@@ -25,7 +25,7 @@ UE.I18N['en'] = {
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
         'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
         'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
-        'music':'Music'
+        'music':'Music', 'drafts': 'Load from Drafts'
     },
     'insertorderedlist':{
         'num':'1,2,3...',

@@ -88,6 +88,7 @@
 ///import plugins/background;
 ///import plugins/music;
 ///import plugins/video;
+///import plugins/autosave;
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;
