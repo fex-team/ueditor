@@ -1,0 +1,26 @@
+{
+  "name": "ueditor",
+  "version": "1.2.6",
+  "description": "UEditor is developed by Baidu Co.ltd. It is lightweight, customizable , focusing on user experience and etc. ",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/campaign/ueditor"
+  },
+  "author": "Baidu Inc.",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "dest": "ueditor",
+  "theme": "default",
+  "server_lang": "php",
+  "devDependencies": {
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.1",
+    "grunt-contrib-jshint": "~0.5.4",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-connect": "~0.3.0",
+    "grunt": "~0.4.1"
+  }
+}
