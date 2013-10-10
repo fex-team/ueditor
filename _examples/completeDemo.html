@@ -47,6 +47,11 @@
         <button onclick=" UE.getEditor('editor').setHeight(300)">设置编辑器的高度为300</button>
     </div>
 
+    <div>
+        <button onclick="getLocalData()">获取草稿箱内容</button>
+        <button onclick="clearLocalData()">清空草稿箱</button>
+    </div>
+
 </div>
 <div>
     <button onclick="createEditor()"/>
@@ -157,6 +162,14 @@
         }
     }
 
+    function getLocalData () {
+        alert(ue.execCommand( "getlocaldata" ));
+    }
+
+    function clearLocalData () {
+        ue.execCommand( "clearlocaldata" );
+        alert("已清空草稿箱")
+    }
 
 </script>
 </html>
