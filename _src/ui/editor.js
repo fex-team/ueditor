@@ -205,9 +205,15 @@
                     popup.showAnchor(popup.anchorEl);
                 },
                 _updateIframe:function () {
-                    editor._iframe = popup.anchorEl;
-                    editor.ui._dialogs.insertframeDialog.open();
-                    popup.hide();
+                    var frame = editor._iframe = popup.anchorEl;
+                    if(domUtils.hasClass(frame, 'ueditor_baidumap')) {
+                        editor.selection.getRange().selectNode(frame).select()
+                        editor.ui._dialogs.mapDialog.open();
+                        popup.hide();
+                    } else {
+                        editor.ui._dialogs.insertframeDialog.open();
+                        popup.hide();
+                    }
                 },
                 _onRemoveButtonClick:function (cmdName) {
                     editor.execCommand(cmdName);
