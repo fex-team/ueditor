@@ -5,6 +5,8 @@ UE.plugins['autosave'] = function(){
         lastSaveTime = null;
 
     me.setOpt( {
+        //默认启用自动保存
+        enableAutoSave: true,
         //默认间隔时间
         saveInterval: 1000*60
     } );
@@ -39,6 +41,12 @@ UE.plugins['autosave'] = function(){
 
                 return "";
 
+            },
+
+            clear: function () {
+
+                storage && storage.clear();
+
             }
 
         };
@@ -52,26 +60,43 @@ UE.plugins['autosave'] = function(){
                 return null;
             }
 
-            document.body.appendChild( container );
             container.addBehavior("#default#userdata");
 
             return {
 
                 getItem: function ( key ) {
 
+                    var result = null;
+
                     try {
+                        document.body.appendChild( container );
                         container.load( LOCAL_FILE );
-                        return container.getAttribute( key );
+                        result = container.getAttribute( key );
+                        document.body.removeChild( container );
                     } catch ( e ) {
-                        return null;
                     }
+
+                    return result;
 
                 },
 
                 setItem: function ( key, value ) {
 
+                    document.body.appendChild( container );
                     container.setAttribute( key, value );
                     container.save( LOCAL_FILE );
+                    document.body.removeChild( container );
+
+                },
+
+                clear: function () {
+
+                    var expiresTime = new Date();
+                    expiresTime.setFullYear( expiresTime.getFullYear() - 1 );
+                    document.body.appendChild( container );
+                    container.expires = expiresTime.toUTCString();
+                    container.save( LOCAL_FILE );
+                    document.body.removeChild( container );
 
                 }
 
@@ -80,6 +105,27 @@ UE.plugins['autosave'] = function(){
         }
 
     } )();
+
+    if ( !me.options.enableAutoSave ) {
+        return;
+    }
+
+    //command
+    me.commands['clearlocaldata'] = {
+
+        execCommand:function (cmd, name) {
+            LocalStorage.clear();
+        }
+
+    };
+
+    me.commands['getlocaldata'] = {
+
+        execCommand:function (cmd, name) {
+            return LocalStorage.getLocalData();
+        }
+
+    };
 
     //开始监听
     me.addListener( "contentchange", function () {

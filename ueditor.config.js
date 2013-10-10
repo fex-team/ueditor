@@ -99,6 +99,8 @@
         //,lang:"zh-cn"
         //,langPath:URL +"lang/"
 
+        //启用自动保存
+        //,enableAutoSave: true
         //自动保存间隔时间
         //,saveInterval: 1000*60
 
