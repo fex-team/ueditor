@@ -17,6 +17,7 @@
             'core/node.js',
             'core/htmlparser.js',
             'core/filternode.js',
+            'core/plugin.js',
             'plugins/defaultfilter.js',
             'plugins/inserthtml.js',
             'plugins/autotypeset.js',

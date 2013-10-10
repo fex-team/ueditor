@@ -46,14 +46,18 @@
         for (var pi in UE.plugins) {
             UE.plugins[pi].call(me);
         }
-        me.langIsReady = true;
 
-        me.fireEvent("langReady");
     }
     function checkCurLang(I18N){
         for(var lang in I18N){
             return lang
         }
+    }
+
+    function langReadied(me){
+        me.langIsReady = true;
+
+        me.fireEvent("langReady");
     }
     /**
      * UEditor编辑器类
@@ -105,7 +109,7 @@
         if(!utils.isEmptyObject(UE.I18N)){
             //修改默认的语言类型
             me.options.lang = checkCurLang(UE.I18N);
-            loadPlugins(me)
+            langReadied(me);
         }else{
             utils.loadFile(document, {
                 src: me.options.langPath + me.options.lang + "/" + me.options.lang + ".js",
@@ -113,7 +117,7 @@
                 type: "text/javascript",
                 defer: "defer"
             }, function () {
-                loadPlugins(me)
+               langReadied(me);
             });
         }
 
@@ -233,7 +237,7 @@
                         (options.initialStyle ? '<style>' + options.initialStyle + '</style>' : '') +
                         '</head><body class=\'view\' ></body>' +
                         '<script type=\'text/javascript\' ' + (ie ? 'defer=\'defer\'' : '' ) +' id=\'_initialScript\'>' +
-                        'setTimeout(function(){window.parent.UE.instants[\'ueditorInstant' + me.uid + '\']._setup(document);},0);' +
+                        'setTimeout(function(){editor = window.parent.UE.instants[\'ueditorInstant' + me.uid + '\'];editor._setup(document);},0);' +
                         'var _tmpScript = document.getElementById(\'_initialScript\');_tmpScript.parentNode.removeChild(_tmpScript);</script></html>';
                 container.appendChild(domUtils.createElement(document, 'iframe', {
                     id: 'ueditor_' + me.uid,
@@ -346,10 +350,10 @@
             try {
                 me.document.execCommand('enableObjectResizing', false, false);
             } catch (e) {
-//                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
-//                    domUtils.preventDefault(evt)
-//                });
             }
+            //加载插件
+            UE.plugin.load(me);
+            //挂接快捷键
             me._bindshortcutKeys();
             me.isReady = 1;
             me.fireEvent('ready');
@@ -385,6 +389,7 @@
                     me.body.style.height = me.iframe.offsetHeight - 20 + 'px'
                 }, 100)
             }
+
             !options.isShow && me.setHide();
             options.readonly && me.setDisabled();
         },
