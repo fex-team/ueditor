@@ -10,7 +10,7 @@ UE.plugins['autosave'] = function(){
     } );
 
     //存储媒介封装
-    var LocalStorage = ( function () {
+    var LocalStorage = UE.LocalStorage = ( function () {
 
         var storage = window.localStorage || getUserData() || null,
             LOCAL_FILE = "localStorage",
@@ -110,7 +110,7 @@ UE.plugins['autosave'] = function(){
     //自动记录
     me.ready( function () {
 
-        me.body.innerHTML = LocalStorage.getLocalData();
+        me.body.innerHTML = LocalStorage.getLocalData() || "";
 
     } );
 
