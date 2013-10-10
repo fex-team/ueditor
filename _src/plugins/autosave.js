@@ -2,7 +2,9 @@
 UE.plugins['autosave'] = function(){
 
     var me = this,
-        lastSaveTime = null;
+        lastSaveTime = null,
+        //auto save key
+        saveKey = me.container.id + "data";
 
     me.setOpt( {
         //默认启用自动保存
@@ -15,37 +17,34 @@ UE.plugins['autosave'] = function(){
     var LocalStorage = UE.LocalStorage = ( function () {
 
         var storage = window.localStorage || getUserData() || null,
-            LOCAL_FILE = "localStorage",
-            saveKey = "ueditor-localdata";
+            LOCAL_FILE = "localStorage";
 
         return {
 
-            saveLocalData: function ( data ) {
+            saveLocalData: function ( key, data ) {
 
                 if ( storage ) {
-
-                    storage.setItem( saveKey, data  );
+                    storage.setItem( key, data  );
                     return true;
-
                 }
 
                 return false;
 
             },
 
-            getLocalData: function () {
+            getLocalData: function ( key ) {
 
                 if ( storage ) {
-                    return storage.getItem( saveKey ) || "";
+                    return storage.getItem( key );
                 }
 
-                return "";
+                return null;
 
             },
 
-            clear: function () {
+            removeItem: function ( key ) {
 
-                storage && storage.clear();
+                storage && storage.removeItem( key );
 
             }
 
@@ -98,6 +97,15 @@ UE.plugins['autosave'] = function(){
                     container.save( LOCAL_FILE );
                     document.body.removeChild( container );
 
+                },
+
+                removeItem: function ( key ) {
+
+                    document.body.appendChild( container );
+                    container.removeAttribute( key );
+                    container.save( LOCAL_FILE );
+                    document.body.removeChild( container );
+
                 }
 
             };
@@ -114,16 +122,32 @@ UE.plugins['autosave'] = function(){
     me.commands['clearlocaldata'] = {
 
         execCommand:function (cmd, name) {
-            LocalStorage.clear();
-        }
+            LocalStorage.removeItem( saveKey );
+        },
+        notNeedUndo: true
 
     };
 
     me.commands['getlocaldata'] = {
 
         execCommand:function (cmd, name) {
-            return LocalStorage.getLocalData();
-        }
+            return LocalStorage.getLocalData( saveKey );
+        },
+        notNeedUndo: true
+
+    };
+
+    //从草稿箱加载数据
+    me.commands['drafts'] = {
+
+        execCommand:function (cmd, name) {
+            me.body.innerHTML = LocalStorage.getLocalData( saveKey );
+            me.focus(true);
+        },
+        queryCommandState: function () {
+            return LocalStorage.getLocalData( saveKey ) === null ? -1 : 0;
+        },
+        notNeedUndo: true
 
     };
 
@@ -144,19 +168,12 @@ UE.plugins['autosave'] = function(){
             return;
         }
 
-        LocalStorage.saveLocalData( saveData );
+        LocalStorage.saveLocalData( saveKey, saveData );
 
         lastSaveTime = new Date();
         me.fireEvent( "autosaveafter", {
             content: saveData
         } );
-
-    } );
-
-    //自动记录
-    me.ready( function () {
-
-        me.body.innerHTML = LocalStorage.getLocalData() || "";
 
     } );
 
