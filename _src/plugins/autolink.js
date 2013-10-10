@@ -8,6 +8,36 @@
  */
     UE.plugins['autolink'] = function() {
         var cont = 0;
+        if(browser.ie && this.options.autolink === false){
+            this.addListener('keyup',function(cmd,evt){
+                var me = this,keyCode = evt.keyCode;
+                if(keyCode == 13 || keyCode == 32){
+                    var rng = me.selection.getRange();
+                    var start = rng.startContainer;
+                    if(keyCode == 13){
+                        if(start.nodeName == 'P'){
+                            var pre = start.previousSibling;
+                            if(pre && pre.nodeType == 1){
+                                var pre = pre.lastChild;
+                                if(pre && pre.nodeName == 'A' && !pre.getAttribute('_href')){
+                                    domUtils.remove(pre,true);
+                                }
+                            }
+                        }
+                    }else if(keyCode == 32){
+                        if(start.nodeType == 3 && /^\s$/.test(start.nodeValue)){
+                            start = start.previousSibling;
+                            if(start && start.nodeName == 'A' && !start.getAttribute('_href')){
+                                domUtils.remove(start,true);
+                            }
+                        }
+                    }
+
+                }
+
+
+            });
+        }
         if (browser.ie) {
             return;
         }
@@ -15,6 +45,7 @@
         me.addListener('reset',function(){
            cont = 0;
         });
+
         me.addListener('keydown', function(type, evt) {
             var keyCode = evt.keyCode || evt.which;
 
