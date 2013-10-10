@@ -16,6 +16,7 @@
 ///import core/node;
 ///import core/htmlparser;
 ///import core/filternode;
+///import core/plugin;
 ///import plugins/emotion;
 ///import plugins/map;
 ///import plugins/scrawl;
