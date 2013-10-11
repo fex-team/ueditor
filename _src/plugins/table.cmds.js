@@ -182,7 +182,7 @@
             var table = getTableItemsByRange(this).table;
             if (table) {
                 var firstRow = table.rows[0];
-                return firstRow.getElementsByTagName('th').length == 0 ? 0 : -1
+                return firstRow.cells[firstRow.cells.length-1].tagName.toLowerCase() != 'th' ? 0 : -1
             }
             return -1;
         },
@@ -200,7 +200,7 @@
             var table = getTableItemsByRange(this).table;
             if (table) {
                 var firstRow = table.rows[0];
-                return firstRow.getElementsByTagName('th').length ? 0 : -1
+                return firstRow.cells[firstRow.cells.length-1].tagName.toLowerCase() == 'th' ? 0 : -1
             }
             return -1;
         },
