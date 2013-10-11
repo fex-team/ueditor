@@ -119,7 +119,7 @@
                 '&height=' + mapHeight,
                 '&markers=' + encodeURIComponent(point.lng + ',' + point.lat),
                 '&markerStyles=' + encodeURIComponent('l,A')].join('');
-            editor.execCommand('inserthtml', '<iframe class="ueditor_baidumap" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + ' frameborder="0" style="width:' + (mapWidth + 4) + 'px;height:' + (mapHeight + 4) + 'px;"></iframe>');
+            editor.execCommand('inserthtml', '<iframe class="ueditor_baidumap" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + ' frameborder="0" width="' + (mapWidth+4) + '" height="' + (mapHeight+4) + '"></iframe>');
         } else {
             var url = "http://api.map.baidu.com/staticimage?center=" + center.lng + ',' + center.lat +
                     "&zoom=" + zoom + "&width=" + size.width + '&height=' + size.height + "&markers=" + point.lng + ',' + point.lat;
