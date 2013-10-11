@@ -4,13 +4,13 @@ UE.plugins['autosave'] = function(){
     var me = this,
         lastSaveTime = null,
         //auto save key
-        saveKey = me.container.id + "data";
+        saveKey = getKey();
 
     me.setOpt( {
         //默认启用自动保存
         enableAutoSave: true,
         //默认间隔时间
-        saveInterval: 1000*60
+        saveInterval: 1000
     } );
 
     //存储媒介封装
@@ -156,25 +156,51 @@ UE.plugins['autosave'] = function(){
 
         var saveData = null;
 
-        if ( lastSaveTime && ( new Date() - lastSaveTime < me.options.saveInterval ) ) {
-            return;
+        if ( me._saveFlag ) {
+            window.clearTimeout( me._saveFlag );
         }
 
-        saveData = me.body.innerHTML;
+        me._saveFlag = window.setTimeout( function () {
 
-        if ( me.fireEvent( "autosavebefore", {
-            content: saveData
-        } ) === false ) {
-            return;
-        }
+            me._saveFlag = null;
 
-        LocalStorage.saveLocalData( saveKey, saveData );
+            if ( !me.hasContents() ) {
+                return;
+            }
 
-        lastSaveTime = new Date();
-        me.fireEvent( "autosaveafter", {
-            content: saveData
-        } );
+            saveData = me.body.innerHTML;
+
+            if ( me.fireEvent( "beforeautosave", {
+                content: saveData
+            } ) === false ) {
+                return;
+            }
+
+            LocalStorage.saveLocalData( saveKey, saveData );
+
+            lastSaveTime = new Date();
+            me.fireEvent( "afterautosave", {
+                content: saveData
+            } );
+
+        }, me.options.saveInterval );
 
     } );
+
+    function getKey () {
+
+        var _suffix = "-drafts-data",
+            key = null;
+
+        if ( me.key ) {
+            key = me.key + _suffix;
+        } else {
+            key = ( me.container.parentNode.id || 'ue-common' ) + _suffix;
+        }
+
+        //页面地址+编辑器ID 保持唯一
+        return ( location.protocol + location.host + location.pathname ).replace( /[.:\/]/g, '_' ) + key;
+
+    }
 
 };
