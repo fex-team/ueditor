@@ -121,7 +121,7 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'inserttitlecol'
                         },
                         {
-                            label:lang.deletetitle,
+                            label:lang.deletetitlecol,
                             cmdName:'deletetitlecol'
                         },
                         '-',
