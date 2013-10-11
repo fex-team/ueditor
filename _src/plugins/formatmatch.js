@@ -1,13 +1,21 @@
-///import core
-///import plugins\removeformat.js
-///commands 格式刷
-///commandsName  FormatMatch
-///commandsTitle  格式刷
 /**
  * 格式刷，只格式inline的
- * @function
- * @name baidu.editor.execCommand
- * @param {String}     cmdName    formatmatch执行格式刷
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 格式刷
+ * @command formatmatch
+ * @method execCommand
+ * @remind 该操作不能复制段落格式
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * //editor是编辑器实例
+ * //获取格式刷
+ * editor.execCommand( 'formatmatch' );
+ * ```
  */
 UE.plugins['formatmatch'] = function(){
 

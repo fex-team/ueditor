@@ -1,13 +1,32 @@
-///import core
-///commands 引用
-///commandsName  BlockQuote
-///commandsTitle  引用
 /**
- * 
- * 引用模块实现
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     blockquote引用
+ * 添加引用
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 添加引用
+ * @command blockquote
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'blockquote' );
+ * ```
+ */
+
+/**
+ * 添加引用
+ * @command blockquote
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { Object } attrs 节点属性
+ * @example
+ * ```javascript
+ * editor.execCommand( 'blockquote',{
+ *     style: "color: red;"
+ * } );
+ * ```
  */
 
 
