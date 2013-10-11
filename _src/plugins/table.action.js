@@ -649,6 +649,13 @@ UE.plugins['table'] = function () {
             }
         });
 
+        //做单元格合并操作时,清除可排序标识
+        me.addListener("afterexeccommand", function (type, cmd) {
+            if( cmd == 'mergeright' || cmd == 'mergedown' || cmd == 'mergecells') {
+                this.execCommand('disablesort');
+            }
+        });
+
         //重写execCommand命令，用于处理框选时的处理
         var oldExecCommand = me.execCommand;
         me.execCommand = function (cmd, datatat) {
