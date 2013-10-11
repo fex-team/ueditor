@@ -1,18 +1,15 @@
-
 UE.plugins['autosave'] = function(){
 
     var me = this,
         lastSaveTime = null,
-        //auto save key
-        saveKey;
-    me.ready(function(){
-        saveKey = me.container.id + "data";
-    })
+    //auto save key
+        saveKey = null;
+
     me.setOpt( {
         //默认启用自动保存
         enableAutoSave: true,
         //默认间隔时间
-        saveInterval: 1000*60
+        saveInterval: 500
     } );
 
     //存储媒介封装
@@ -124,7 +121,7 @@ UE.plugins['autosave'] = function(){
     me.commands['clearlocaldata'] = {
 
         execCommand:function (cmd, name) {
-            LocalStorage.removeItem( saveKey );
+            saveKey && LocalStorage.removeItem( saveKey );
         },
         notNeedUndo: true
 
@@ -133,7 +130,7 @@ UE.plugins['autosave'] = function(){
     me.commands['getlocaldata'] = {
 
         execCommand:function (cmd, name) {
-            return LocalStorage.getLocalData( saveKey );
+            return saveKey ? LocalStorage.getLocalData( saveKey ) : null;
         },
         notNeedUndo: true
 
@@ -143,11 +140,13 @@ UE.plugins['autosave'] = function(){
     me.commands['drafts'] = {
 
         execCommand:function (cmd, name) {
-            me.body.innerHTML = LocalStorage.getLocalData( saveKey );
-            me.focus(true);
+            if ( saveKey ) {
+                me.body.innerHTML = LocalStorage.getLocalData( saveKey );
+                me.focus(true);
+            }
         },
         queryCommandState: function () {
-            return LocalStorage.getLocalData( saveKey ) === null ? -1 : 0;
+            return saveKey ? ( LocalStorage.getLocalData( saveKey ) === null ? -1 : 0 ) : -1;
         },
         notNeedUndo: true
 
@@ -158,24 +157,55 @@ UE.plugins['autosave'] = function(){
 
         var saveData = null;
 
-        if ( lastSaveTime && ( new Date() - lastSaveTime < me.options.saveInterval ) ) {
+        if ( !saveKey ) {
             return;
         }
 
-        saveData =  me.hasContents() ? me.body.innerHTML : '';
-
-        if ( me.fireEvent( "autosavebefore", {
-            content: saveData
-        } ) === false ) {
-            return;
+        if ( me._saveFlag ) {
+            window.clearTimeout( me._saveFlag );
         }
 
-        LocalStorage.saveLocalData( saveKey, saveData );
+        me._saveFlag = window.setTimeout( function () {
 
-        lastSaveTime = new Date();
-        me.fireEvent( "autosaveafter", {
-            content: saveData
-        } );
+            me._saveFlag = null;
+
+            if ( !me.hasContents() ) {
+                return;
+            }
+
+            saveData = me.body.innerHTML;
+
+            if ( me.fireEvent( "beforeautosave", {
+                content: saveData
+            } ) === false ) {
+                return;
+            }
+
+            LocalStorage.saveLocalData( saveKey, saveData );
+
+            lastSaveTime = new Date();
+            me.fireEvent( "afterautosave", {
+                content: saveData
+            } );
+
+        }, me.options.saveInterval );
+
+    } );
+
+    //init save key
+    me.ready( function () {
+
+        var _suffix = "-drafts-data",
+            key = null;
+
+        if ( me.key ) {
+            key = me.key + _suffix;
+        } else {
+            key = ( me.container.parentNode.id || 'ue-common' ) + _suffix;
+        }
+
+        //页面地址+编辑器ID 保持唯一
+        saveKey = ( location.protocol + location.host + location.pathname ).replace( /[.:\/]/g, '_' ) + key;
 
     } );
 
