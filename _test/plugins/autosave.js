@@ -20,13 +20,13 @@ test( '自动保存', function() {
     } );
 
 
-    editor.addListener( "autosavebefore", function ( type, data ) {
+    editor.addListener( "beforeautosave", function ( type, data ) {
         data.content = data.content.toLowerCase();
-        equal( true, true, "成功触发autosavebefore事件" );
+        equal( true, true, "成功触发beforeautosave事件" );
         equal( data.content === "<p>http://www.baidu.com</p>" || data.content==="<p>disable</p>", true, "事件携带数据正确" );
     } );
 
-    editor.addListener( "autosavebefore", function ( type, data ) {
+    editor.addListener( "beforeautosave", function ( type, data ) {
 
         data.content = data.content.toLowerCase();
         if ( data.content==="<p>disable</p>" ) {
@@ -37,10 +37,10 @@ test( '自动保存', function() {
 
     } );
 
-    editor.addListener( "autosaveafter", function ( type, data ) {
+    editor.addListener( "afterautosave", function ( type, data ) {
 
         data.content = data.content.toLowerCase();
-        equal( data.content, "<p>http://www.baidu.com</p>", "成功触发autosaveafter事件" );
+        equal( data.content, "<p>http://www.baidu.com</p>", "成功触发afterautosave事件" );
 
     } );
 
@@ -49,11 +49,16 @@ test( '自动保存', function() {
 
         editor.setContent( '<p>disable</p>' );
         editor.setContent( '<p>http://www.baidu.com</p>' );
-        equal( count, 1, "触发事件次数" );
+
+        window.setTimeout( function () {
+
+            equal( count, 1, "触发事件次数" );
+
+            start();
+        }, 1500 );
 
         UE.delEditor( te.obj[0] );
         container.parentNode.removeChild( container );
-        start();
     } , 500 );
 
 } );
