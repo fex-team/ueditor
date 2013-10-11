@@ -46,14 +46,18 @@
         for (var pi in UE.plugins) {
             UE.plugins[pi].call(me);
         }
-        me.langIsReady = true;
 
-        me.fireEvent("langReady");
     }
     function checkCurLang(I18N){
         for(var lang in I18N){
             return lang
         }
+    }
+
+    function langReadied(me){
+        me.langIsReady = true;
+
+        me.fireEvent("langReady");
     }
     /**
      * UEditor编辑器类
@@ -105,7 +109,7 @@
         if(!utils.isEmptyObject(UE.I18N)){
             //修改默认的语言类型
             me.options.lang = checkCurLang(UE.I18N);
-            loadPlugins(me)
+            langReadied(me);
         }else{
             utils.loadFile(document, {
                 src: me.options.langPath + me.options.lang + "/" + me.options.lang + ".js",
@@ -113,7 +117,7 @@
                 type: "text/javascript",
                 defer: "defer"
             }, function () {
-                loadPlugins(me)
+                langReadied(me);
             });
         }
 
@@ -195,7 +199,7 @@
             var me = this,
                 options = me.options,
                 getStyleValue=function(attr){
-                   return parseInt(domUtils.getComputedStyle(container,attr));
+                    return parseInt(domUtils.getComputedStyle(container,attr));
                 };
             if (utils.isString(container)) {
                 container = document.getElementById(container);
@@ -213,28 +217,28 @@
                 }
 
                 container.style.width = /%$/.test(options.initialFrameWidth) ?  '100%' : options.initialFrameWidth-
-                   getStyleValue("padding-left")- getStyleValue("padding-right") +'px';
+                    getStyleValue("padding-left")- getStyleValue("padding-right") +'px';
                 container.style.height = /%$/.test(options.initialFrameHeight) ?  '100%' : options.initialFrameHeight -
                     getStyleValue("padding-top")- getStyleValue("padding-bottom") +'px';
 
                 container.style.zIndex = options.zIndex;
 
                 var html = ( ie && browser.version < 9  ? '' : '<!DOCTYPE html>') +
-                        '<html xmlns=\'http://www.w3.org/1999/xhtml\' class=\'view\' ><head>' +
-                        '<style type=\'text/css\'>' +
-                        //设置四周的留边
-                        '.view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n' +
-                        //设置默认字体和字号
-                        //font-family不能呢随便改，在safari下fillchar会有解析问题
-                        'body{margin:8px;font-family:sans-serif;font-size:16px;}' +
-                        //设置段落间距
-                        'p{margin:5px 0;}</style>' +
-                        ( options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
-                        (options.initialStyle ? '<style>' + options.initialStyle + '</style>' : '') +
-                        '</head><body class=\'view\' ></body>' +
-                        '<script type=\'text/javascript\' ' + (ie ? 'defer=\'defer\'' : '' ) +' id=\'_initialScript\'>' +
-                        'setTimeout(function(){editor = window.parent.UE.instants[\'ueditorInstant' + me.uid + '\']; editor._setup(document);},0);' +
-                        'var _tmpScript = document.getElementById(\'_initialScript\');_tmpScript.parentNode.removeChild(_tmpScript);</script></html>';
+                    '<html xmlns=\'http://www.w3.org/1999/xhtml\' class=\'view\' ><head>' +
+                    '<style type=\'text/css\'>' +
+                    //设置四周的留边
+                    '.view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n' +
+                    //设置默认字体和字号
+                    //font-family不能呢随便改，在safari下fillchar会有解析问题
+                    'body{margin:8px;font-family:sans-serif;font-size:16px;}' +
+                    //设置段落间距
+                    'p{margin:5px 0;}</style>' +
+                    ( options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
+                    (options.initialStyle ? '<style>' + options.initialStyle + '</style>' : '') +
+                    '</head><body class=\'view\' ></body>' +
+                    '<script type=\'text/javascript\' ' + (ie ? 'defer=\'defer\'' : '' ) +' id=\'_initialScript\'>' +
+                    'setTimeout(function(){editor = window.parent.UE.instants[\'ueditorInstant' + me.uid + '\'];editor._setup(document);},0);' +
+                    'var _tmpScript = document.getElementById(\'_initialScript\');_tmpScript.parentNode.removeChild(_tmpScript);</script></html>';
                 container.appendChild(domUtils.createElement(document, 'iframe', {
                     id: 'ueditor_' + me.uid,
                     width: "100%",
@@ -346,10 +350,10 @@
             try {
                 me.document.execCommand('enableObjectResizing', false, false);
             } catch (e) {
-//                domUtils.on(me.body,browser.ie ? 'resizestart' : 'resize', function( evt ) {
-//                    domUtils.preventDefault(evt)
-//                });
             }
+            //加载插件
+            UE.plugin.load(me);
+            //挂接快捷键
             me._bindshortcutKeys();
             me.isReady = 1;
             me.fireEvent('ready');
@@ -385,6 +389,7 @@
                     me.body.style.height = me.iframe.offsetHeight - 20 + 'px'
                 }, 100)
             }
+
             !options.isShow && me.setHide();
             options.readonly && me.setDisabled();
         },
