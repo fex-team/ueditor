@@ -4,8 +4,10 @@ UE.plugins['autosave'] = function(){
     var me = this,
         lastSaveTime = null,
         //auto save key
+        saveKey;
+    me.ready(function(){
         saveKey = me.container.id + "data";
-
+    })
     me.setOpt( {
         //默认启用自动保存
         enableAutoSave: true,
