@@ -4,13 +4,13 @@ UE.plugins['autosave'] = function(){
     var me = this,
         lastSaveTime = null,
         //auto save key
-        saveKey = getKey();
+        saveKey = null;
 
     me.setOpt( {
         //默认启用自动保存
         enableAutoSave: true,
         //默认间隔时间
-        saveInterval: 1000
+        saveInterval: 500
     } );
 
     //存储媒介封装
@@ -23,7 +23,7 @@ UE.plugins['autosave'] = function(){
 
             saveLocalData: function ( key, data ) {
 
-                if ( storage ) {
+                if ( storage && data) {
                     storage.setItem( key, data  );
                     return true;
                 }
@@ -122,7 +122,7 @@ UE.plugins['autosave'] = function(){
     me.commands['clearlocaldata'] = {
 
         execCommand:function (cmd, name) {
-            LocalStorage.removeItem( saveKey );
+            saveKey && LocalStorage.removeItem( saveKey );
         },
         notNeedUndo: true
 
@@ -131,7 +131,7 @@ UE.plugins['autosave'] = function(){
     me.commands['getlocaldata'] = {
 
         execCommand:function (cmd, name) {
-            return LocalStorage.getLocalData( saveKey );
+            return saveKey ? LocalStorage.getLocalData( saveKey ) : null;
         },
         notNeedUndo: true
 
@@ -141,11 +141,13 @@ UE.plugins['autosave'] = function(){
     me.commands['drafts'] = {
 
         execCommand:function (cmd, name) {
-            me.body.innerHTML = LocalStorage.getLocalData( saveKey );
-            me.focus(true);
+            if ( saveKey ) {
+                me.body.innerHTML = LocalStorage.getLocalData( saveKey );
+                me.focus(true);
+            }
         },
         queryCommandState: function () {
-            return LocalStorage.getLocalData( saveKey ) === null ? -1 : 0;
+            return saveKey ? ( LocalStorage.getLocalData( saveKey ) === null ? -1 : 0 ) : -1;
         },
         notNeedUndo: true
 
@@ -155,6 +157,10 @@ UE.plugins['autosave'] = function(){
     me.addListener( "contentchange", function () {
 
         var saveData = null;
+
+        if ( !saveKey ) {
+            return;
+        }
 
         if ( me._saveFlag ) {
             window.clearTimeout( me._saveFlag );
@@ -187,7 +193,8 @@ UE.plugins['autosave'] = function(){
 
     } );
 
-    function getKey () {
+    //init save key
+    me.ready( function () {
 
         var _suffix = "-drafts-data",
             key = null;
@@ -199,8 +206,8 @@ UE.plugins['autosave'] = function(){
         }
 
         //页面地址+编辑器ID 保持唯一
-        return ( location.protocol + location.host + location.pathname ).replace( /[.:\/]/g, '_' ) + key;
+        saveKey = ( location.protocol + location.host + location.pathname ).replace( /[.:\/]/g, '_' ) + key;
 
-    }
+    } );
 
 };

@@ -10,12 +10,17 @@
  * @param {String} cmdName     cmdName="anchor"插入锚点
  */
 UE.plugin.register('anchor', function (){
-    utils.cssRule('anchor',
-        '.anchorclass{background: url(\''
-            + this.options.themePath
-            + this.options.theme +'/images/anchor.gif\') no-repeat scroll left center transparent;border: 1px dotted #0000FF;cursor: auto;display: inline-block;height: 16px;width: 15px;}',
-        this.document);
+
     return {
+        bindEvents:{
+            'ready':function(){
+                utils.cssRule('anchor',
+                    '.anchorclass{background: url(\''
+                        + this.options.themePath
+                        + this.options.theme +'/images/anchor.gif\') no-repeat scroll left center transparent;border: 1px dotted #0000FF;cursor: auto;display: inline-block;height: 16px;width: 15px;}',
+                    this.document);
+            }
+        },
        outputRule: function(root){
            utils.each(root.getNodesByTagName('img'),function(a){
                var val;
