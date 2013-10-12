@@ -36,7 +36,7 @@
             sorttable.checked = editor.queryCommandState("enablesort") == 1;
             if(editor.queryCommandState("enablesort") == -1) {
                 sorttable.disabled = true;
-                sorttable.title = "有合并单元格，不可排序";
+                sorttable.title = lang.errorMsg;
             } else {
                 sorttable.disabled = false;
                 sorttable.title = "";

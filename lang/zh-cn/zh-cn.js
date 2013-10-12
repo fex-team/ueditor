@@ -510,7 +510,8 @@ UE.I18N['zh-cn'] = {
         },
         captionName:'表格名称',
         titleName:'标题',
-        cellsName:'内容'
+        cellsName:'内容',
+        errorMsg:'有合并单元格，不可排序..'
     },
     'edittip':{
         'static':{

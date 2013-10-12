@@ -527,7 +527,8 @@ UE.I18N['en'] = {
         },
         captionName:'Caption',
         titleName:'Title',
-        cellsName:'text'
+        cellsName:'text',
+        errorMsg:'There are merged cells, can not sort.'
     },
     'edittip':{
         'static':{

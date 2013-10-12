@@ -117,8 +117,6 @@ UE.plugins['table'] = function () {
             //选中的td上的样式
             '.selectTdClass{background-color:#edf5fa !important}' +
                 'table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}' +
-                'table.sortEnabled tr:first-child th,table.sortEnabled tr:first-child td{padding-right:20px;background-repeat: no-repeat;background-position: center right;' +
-                '   background-image:url(' + me.options.themePath + me.options.theme + '/images/sortable.png);}' +
                 //插入的表格的默认样式
                 'table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
                 'td,th{padding: 5px 10px;border: 1px solid #DDD;}' +
@@ -646,13 +644,6 @@ UE.plugins['table'] = function () {
                     }
                     table.setAttribute("width", Math.floor(getTableWidth(me, needIEHack, getDefaultValue(me))))
                 });
-            }
-        });
-
-        //做单元格合并操作时,清除可排序标识
-        me.addListener("afterexeccommand", function (type, cmd) {
-            if( cmd == 'mergeright' || cmd == 'mergedown' || cmd == 'mergecells') {
-                this.execCommand('disablesort');
             }
         });
 
