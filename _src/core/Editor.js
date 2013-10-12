@@ -263,7 +263,9 @@
         if(!utils.isEmptyObject(UE.I18N)){
             //修改默认的语言类型
             me.options.lang = checkCurLang(UE.I18N);
+            UE.plugin.load(me);
             langReadied(me);
+
         }else{
             utils.loadFile(document, {
                 src: me.options.langPath + me.options.lang + "/" + me.options.lang + ".js",
@@ -271,6 +273,7 @@
                 type: "text/javascript",
                 defer: "defer"
             }, function () {
+                UE.plugin.load(me);
                 langReadied(me);
             });
         }
@@ -545,8 +548,7 @@
                 me.document.execCommand('enableObjectResizing', false, false);
             } catch (e) {
             }
-            //加载插件
-            UE.plugin.load(me);
+
             //挂接快捷键
             me._bindshortcutKeys();
             me.isReady = 1;

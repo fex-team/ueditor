@@ -1,9 +1,8 @@
-
 UE.plugins['autosave'] = function(){
 
     var me = this,
         lastSaveTime = null,
-        //auto save key
+    //auto save key
         saveKey = null;
 
     me.setOpt( {
