@@ -1,10 +1,29 @@
-///import core
-///commands 撤销和重做
-///commandsName  Undo,Redo
-///commandsTitle  撤销,重做
 /**
- * @description 回退
- * @author zhanyi
+ * undo redo
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 撤销上一次执行的命令
+ * @command undo
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'undo' );
+ * ```
+ */
+
+/**
+ * 重做上一次执行的命令
+ * @command redo
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'redo' );
+ * ```
  */
 
 UE.plugins['undo'] = function () {

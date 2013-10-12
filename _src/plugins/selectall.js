@@ -1,14 +1,19 @@
-///import core
-///commands 全选
-///commandsName  SelectAll
-///commandsTitle  全选
 /**
- * 选中所有
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName    selectall选中编辑器里的所有内容
- * @author zhanyi
-*/
+ * 全选
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 选中所有内容
+ * @command selectall
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'selectall' );
+ * ```
+ */
 UE.plugins['selectall'] = function(){
     var me = this;
     me.commands['selectall'] = {

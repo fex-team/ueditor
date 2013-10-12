@@ -1,53 +1,84 @@
 /**
+ * 浏览器判断模块
  * @file
- * @name UE.browser
- * @short Browser
- * @desc UEditor中采用的浏览器判断模块
+ * @module UE.browser
+ * @since 1.2.6.1
+ */
+
+/**
+ * 提供浏览器检测的模块
+ * @unfile
+ * @module UE.browser
  */
 var browser = UE.browser = function(){
     var agent = navigator.userAgent.toLowerCase(),
         opera = window.opera,
         browser = {
         /**
-         * 检测浏览器是否为IE
-         * @name ie
-         * @grammar UE.browser.ie  => true|false
+         * @property {boolean} ie 检测当前浏览器是否为IE
+         * @example
+         * ```javascript
+         * if ( UE.browser.ie ) {
+         *     console.log( '当前浏览器是IE' );
+         * }
+         * ```
          */
         ie		: !!window.ActiveXObject,
 
         /**
-         * 检测浏览器是否为Opera
-         * @name opera
-         * @grammar UE.browser.opera  => true|false
+         * @property {boolean} opera 检测当前浏览器是否为Opera
+         * @example
+         * ```javascript
+         * if ( UE.browser.opera ) {
+         *     console.log( '当前浏览器是Opera' );
+         * }
+         * ```
          */
         opera	: ( !!opera && opera.version ),
 
         /**
-         * 检测浏览器是否为webkit内核
-         * @name webkit
-         * @grammar UE.browser.webkit  => true|false
+         * @property {boolean} webkit 检测当前浏览器是否是webkit内核的浏览器
+         * @example
+         * ```javascript
+         * if ( UE.browser.webkit ) {
+         *     console.log( '当前浏览器是webkit内核浏览器' );
+         * }
+         * ```
          */
         webkit	: ( agent.indexOf( ' applewebkit/' ) > -1 ),
 
         /**
-         * 检测浏览器是否为mac系统下的浏览器
-         * @name mac
-         * @grammar UE.browser.mac  => true|false
+         * @property {boolean} mac 检测当前浏览器是否是运行在mac平台下
+         * @example
+         * ```javascript
+         * if ( UE.browser.mac ) {
+         *     console.log( '当前浏览器运行在mac平台下' );
+         * }
+         * ```
          */
         mac	: ( agent.indexOf( 'macintosh' ) > -1 ),
 
         /**
-         * 检测浏览器是否处于怪异模式
-         * @name quirks
-         * @grammar UE.browser.quirks  => true|false
+         * @property {boolean} quirks 检测当前浏览器是否处于“怪异模式”下
+         * @example
+         * ```javascript
+         * if ( UE.browser.quirks ) {
+         *     console.log( '当前浏览器运行处于“怪异模式”' );
+         * }
+         * ```
          */
         quirks : ( document.compatMode == 'BackCompat' )
     };
+
     /**
-     * 检测浏览器是否处为gecko内核
-     * @name gecko
-     * @grammar UE.browser.gecko  => true|false
-     */
+    * @property {boolean} gecko 检测当前浏览器内核是否是gecko内核
+    * @example
+    * ```javascript
+    * if ( UE.browser.gecko ) {
+    *     console.log( '当前浏览器内核是gecko内核' );
+    * }
+    * ```
+    */
     browser.gecko =( navigator.product == 'Gecko' && !browser.webkit && !browser.opera );
 
     var version = 0;
@@ -56,37 +87,63 @@ var browser = UE.browser = function(){
     if ( browser.ie ){
         version = parseFloat( agent.match( /msie (\d+)/ )[1] );
         /**
-         * 检测浏览器是否为 IE9 模式
-         * @name ie9Compat
-         * @grammar UE.browser.ie9Compat  => true|false
+         * @property { boolean } ie9Compat 检测浏览器模式是否为 IE9 兼容模式
+         * @warning 如果浏览器不是IE， 则该值为undefined
+         * @example
+         * ```javascript
+         * if ( UE.browser.ie9Compat ) {
+         *     console.log( '当前浏览器运行在IE9兼容模式下' );
+         * }
+         * ```
          */
         browser.ie9Compat = document.documentMode == 9;
+
         /**
-         * 检测浏览器是否为 IE8 浏览器
-         * @name ie8
-         * @grammar     UE.browser.ie8  => true|false
+         * @property { boolean } ie8 检测浏览器是否是IE8浏览器
+         * @warning 如果浏览器不是IE， 则该值为undefined
+         * @example
+         * ```javascript
+         * if ( UE.browser.ie8 ) {
+         *     console.log( '当前浏览器是IE8浏览器' );
+         * }
+         * ```
          */
         browser.ie8 = !!document.documentMode;
 
         /**
-         * 检测浏览器是否为 IE8 模式
-         * @name ie8Compat
-         * @grammar     UE.browser.ie8Compat  => true|false
+         * @property { boolean } ie8Compat 检测浏览器模式是否为 IE8 兼容模式
+         * @warning 如果浏览器不是IE， 则该值为undefined
+         * @example
+         * ```javascript
+         * if ( UE.browser.ie8Compat ) {
+         *     console.log( '当前浏览器运行在IE8兼容模式下' );
+         * }
+         * ```
          */
         browser.ie8Compat = document.documentMode == 8;
 
         /**
-         * 检测浏览器是否运行在 兼容IE7模式
-         * @name ie7Compat
-         * @grammar     UE.browser.ie7Compat  => true|false
+         * @property { boolean } ie7Compat 检测浏览器模式是否为 IE7 兼容模式
+         * @warning 如果浏览器不是IE， 则该值为undefined
+         * @example
+         * ```javascript
+         * if ( UE.browser.ie7Compat ) {
+         *     console.log( '当前浏览器运行在IE7兼容模式下' );
+         * }
+         * ```
          */
         browser.ie7Compat = ( ( version == 7 && !document.documentMode )
                 || document.documentMode == 7 );
 
         /**
-         * 检测浏览器是否IE6模式或怪异模式
-         * @name ie6Compat
-         * @grammar     UE.browser.ie6Compat  => true|false
+         * @property { boolean } ie6Compat 检测浏览器模式是否为 IE6 模式 或者怪异模式
+         * @warning 如果浏览器不是IE， 则该值为undefined
+         * @example
+         * ```javascript
+         * if ( UE.browser.ie6Compat ) {
+         *     console.log( '当前浏览器运行在IE6模式或者怪异模式下' );
+         * }
+         * ```
          */
         browser.ie6Compat = ( version < 7 || browser.quirks );
 
@@ -105,18 +162,30 @@ var browser = UE.browser = function(){
             version = geckoRelease[0] * 10000 + ( geckoRelease[1] || 0 ) * 100 + ( geckoRelease[2] || 0 ) * 1;
         }
     }
+
     /**
-     * 检测浏览器是否为chrome
-     * @name chrome
-     * @grammar     UE.browser.chrome  => true|false
+     * @property { Number } chrome 检测当前浏览器是否为Chrome, 如果是，则返回Chrome的大版本号
+     * @warning 如果浏览器不是chrome， 则该值为undefined
+     * @example
+     * ```javascript
+     * if ( UE.browser.chrome ) {
+     *     console.log( '当前浏览器是Chrome' );
+     * }
+     * ```
      */
     if (/chrome\/(\d+\.\d)/i.test(agent)) {
         browser.chrome = + RegExp['\x241'];
     }
+
     /**
-     * 检测浏览器是否为safari
-     * @name safari
-     * @grammar     UE.browser.safari  => true|false
+     * @property { Number } safari 检测当前浏览器是否为Safari, 如果是，则返回Safari的大版本号
+     * @warning 如果浏览器不是safari， 则该值为undefined
+     * @example
+     * ```javascript
+     * if ( UE.browser.safari ) {
+     *     console.log( '当前浏览器是Safari' );
+     * }
+     * ```
      */
     if(/(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(agent) && !/chrome/i.test(agent)){
     	browser.safari = + (RegExp['\x241'] || RegExp['\x242']);
@@ -132,27 +201,28 @@ var browser = UE.browser = function(){
         version = parseFloat( agent.match( / applewebkit\/(\d+)/ )[1] );
 
     /**
-     * 浏览器版本判断
-     * IE系列返回值为5,6,7,8,9,10等
-     * gecko系列会返回10900，158900等.
-     * webkit系列会返回其build号 (如 522等).
-     * @name version
-     * @grammar     UE.browser.version  => number
+     * @property { Number } version 检测当前浏览器版本号
+     * @remind
+     * <ul>
+     *     <li>IE系列返回值为5,6,7,8,9,10等</li>
+     *     <li>gecko系列会返回10900，158900等</li>
+     *     <li>webkit系列会返回其build号 (如 522等)</li>
+     * </ul>
      * @example
-     * if ( UE.browser.ie && UE.browser.version == 6 ){
-     *     alert( "Ouch!居然是万恶的IE6!" );
-     * }
+     * ```javascript
+     * console.log( '当前浏览器版本号是： ' + UE.browser.version );
+     * ```
      */
     browser.version = version;
 
     /**
-     * 是否是兼容模式的浏览器
-     * @name isCompatible
-     * @grammar  UE.browser.isCompatible  => true|false
+     * @property { boolean } isCompatible 检测当前浏览器是否能够与UEditor良好兼容
      * @example
-     * if ( UE.browser.isCompatible ){
-     *     alert( "你的浏览器相当不错哦！" );
+     * ```javascript
+     * if ( UE.browser.isCompatible ) {
+     *     console.log( '浏览器与UEditor能够良好兼容' );
      * }
+     * ```
      */
     browser.isCompatible =
         !browser.mobile && (
