@@ -922,60 +922,15 @@
                 tableRow, cell,
                 backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10);
 
-            function replaceTdToTh(rowIndex, cell, tableRow) {
-                if (rowIndex == 0) {
-                    var th = cell.nextSibling || cell.previousSibling;
-                    if (th.tagName == 'TH') {
-                        th = cell.ownerDocument.createElement("th");
-                        th.appendChild(cell.firstChild);
-                        tableRow.insertBefore(th, cell);
-                        domUtils.remove(cell)
-                    }
-                }else{
-                    if (cell.tagName == 'TH') {
-                        var td = cell.ownerDocument.createElement("th");
-                        td.appendChild(cell.firstChild);
-                        tableRow.insertBefore(td, cell);
-                        domUtils.remove(cell)
-                    }
-                }
-            }
-
             var preCell;
-            if (colIndex == 0 || colIndex == this.colsNum) {
-                for (; rowIndex < rowsNum; rowIndex++) {
-                    tableRow = this.table.rows[rowIndex];
-                    preCell = tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
-                    cell = this.cloneCell(sourceCell, true); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
-                    this.setCellContent(cell);
-                    cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
-                    preCell && cell.setAttribute('width', preCell.getAttribute('width'));
-                    if (!colIndex) {
-                        tableRow.insertBefore(cell, tableRow.cells[0]);
-                    } else {
-                        domUtils.insertAfter(tableRow.cells[tableRow.cells.length - 1], cell);
-                    }
-                    replaceTdToTh(rowIndex, cell, tableRow)
-                }
-            } else {
-                for (; rowIndex < rowsNum; rowIndex++) {
-                    var cellInfo = this.indexTable[rowIndex][colIndex];
-                    if (cellInfo.colIndex < colIndex) {
-                        cell = this.getCell(cellInfo.rowIndex, cellInfo.cellIndex);
-                        cell.colSpan = cellInfo.colSpan + 1;
-                    } else {
-                        tableRow = this.table.rows[rowIndex];
-                        preCell = tableRow.cells[cellInfo.cellIndex];
-
-                        cell = this.cloneCell(sourceCell, true);//tableRow.insertCell(cellInfo.cellIndex);
-                        this.setCellContent(cell);
-                        cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
-                        preCell && cell.setAttribute('width', preCell.getAttribute('width'));
-                        //防止IE下报错
-                        preCell ? tableRow.insertBefore(cell, preCell) : tableRow.appendChild(cell);
-                    }
-                    replaceTdToTh(rowIndex, cell, tableRow);
-                }
+            for (; rowIndex < rowsNum; rowIndex++) {
+                tableRow = this.table.rows[rowIndex];
+                preCell = tableRow.cells[0];
+                cell = this.cloneCell('th', true);
+                this.setCellContent(cell);
+                cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
+                preCell && cell.setAttribute('width', preCell.getAttribute('width'));
+                tableRow.insertBefore(cell, tableRow.cells[0]);
             }
             //框选时插入不触发contentchange，需要手动更新索引
             this.update();

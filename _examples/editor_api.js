@@ -64,6 +64,7 @@
             'plugins/table.core.js',
             'plugins/table.cmds.js',
             'plugins/table.action.js',
+            'plugins/table.sort.js',
             'plugins/contextmenu.js',
             'plugins/shortcutmenu.js',
             'plugins/basestyle.js',

@@ -34,6 +34,13 @@
             titleCol.checked = editor.queryCommandState("inserttitlecol") == -1;
             caption.checked = editor.queryCommandState("insertcaption") == -1;
             sorttable.checked = editor.queryCommandState("enablesort") == 1;
+            if(editor.queryCommandState("enablesort") == -1) {
+                sorttable.disabled = true;
+                sorttable.title = lang.errorMsg;
+            } else {
+                sorttable.disabled = false;
+                sorttable.title = "";
+            }
 
             me.createTable(title.checked, titleCol.checked, caption.checked);
             me.setAutoSize();
