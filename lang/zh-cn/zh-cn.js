@@ -422,7 +422,8 @@ UE.I18N['zh-cn'] = {
             lang_city:"城市",
             lang_address:"地址",
             city:{value:"北京"},
-            lang_search:"搜索"
+            lang_search:"搜索",
+            lang_dynamicmap:"插入动态地图"
         },
         cityMsg:"请选择城市",
         errorMsg:"抱歉，找不到该位置！"
@@ -497,9 +498,9 @@ UE.I18N['zh-cn'] = {
     'edittable':{
         'static':{
             'lang_tableStyle':'表格样式',
-            'lang_insertCaption':'添加表格标题行',
-            'lang_insertTitle':'添加表格名称行',
-            'lang_insertTitleCol':'添加表格名称列',
+            'lang_insertCaption':'添加表格名称行',
+            'lang_insertTitle':'添加表格标题行',
+            'lang_insertTitleCol':'添加表格标题列',
             'lang_orderbycontent':"使表格内容可排序",
             'lang_tableSize':'自动调整表格尺寸',
             'lang_autoSizeContent':'按表格文字自适应',
@@ -510,7 +511,8 @@ UE.I18N['zh-cn'] = {
         },
         captionName:'表格名称',
         titleName:'标题',
-        cellsName:'内容'
+        cellsName:'内容',
+        errorMsg:'有合并单元格，不可排序'
     },
     'edittip':{
         'static':{
