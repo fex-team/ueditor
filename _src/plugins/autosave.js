@@ -1,16 +1,9 @@
-UE.plugins['autosave'] = function(){
+UE.plugin.register('autosave', function (){
 
     var me = this,
         lastSaveTime = null,
-    //auto save key
+        //auto save key
         saveKey = null;
-
-    me.setOpt( {
-        //默认启用自动保存
-        enableAutoSave: true,
-        //默认间隔时间
-        saveInterval: 500
-    } );
 
     //存储媒介封装
     var LocalStorage = UE.LocalStorage = ( function () {
@@ -113,100 +106,98 @@ UE.plugins['autosave'] = function(){
 
     } )();
 
-    if ( !me.options.enableAutoSave ) {
-        return;
+    return {
+        defaultOptions: {
+            //默认启用自动保存
+            enableAutoSave: true,
+            //默认间隔时间
+            saveInterval: 500
+        },
+        bindEvents:{
+            'ready':function(){
+
+                var _suffix = "-drafts-data",
+                    key = null;
+
+                if ( me.key ) {
+                    key = me.key + _suffix;
+                } else {
+                    key = ( me.container.parentNode.id || 'ue-common' ) + _suffix;
+                }
+
+                //页面地址+编辑器ID 保持唯一
+                saveKey = ( location.protocol + location.host + location.pathname ).replace( /[.:\/]/g, '_' ) + key;
+
+            },
+
+            'contentchange': function () {
+
+
+                var saveData = null;
+
+                if ( !saveKey ) {
+                    return;
+                }
+
+                if ( me._saveFlag ) {
+                    window.clearTimeout( me._saveFlag );
+                }
+
+                me._saveFlag = window.setTimeout( function () {
+
+                    me._saveFlag = null;
+
+                    if ( !me.hasContents() ) {
+                        return;
+                    }
+
+                    saveData = me.body.innerHTML;
+
+                    if ( me.fireEvent( "beforeautosave", {
+                        content: saveData
+                    } ) === false ) {
+                        return;
+                    }
+
+                    LocalStorage.saveLocalData( saveKey, saveData );
+
+                    lastSaveTime = new Date();
+                    me.fireEvent( "afterautosave", {
+                        content: saveData
+                    } );
+
+                }, me.options.saveInterval );
+
+            }
+        },
+        commands:{
+            'clearlocaldata':{
+                execCommand:function (cmd, name) {
+                    saveKey && LocalStorage.removeItem( saveKey );
+                },
+                notNeedUndo: true
+            },
+
+            'getlocaldata':{
+                execCommand:function (cmd, name) {
+                    return saveKey ? LocalStorage.getLocalData( saveKey ) : null;
+                },
+                notNeedUndo: true
+            },
+
+            'drafts':{
+                execCommand:function (cmd, name) {
+                    if ( saveKey ) {
+                        me.body.innerHTML = LocalStorage.getLocalData( saveKey );
+                        me.focus(true);
+                    }
+                },
+                queryCommandState: function () {
+                    return saveKey ? ( LocalStorage.getLocalData( saveKey ) === null ? -1 : 0 ) : -1;
+                },
+                notNeedUndo: true
+            }
+        }
     }
 
-    //command
-    me.commands['clearlocaldata'] = {
-
-        execCommand:function (cmd, name) {
-            saveKey && LocalStorage.removeItem( saveKey );
-        },
-        notNeedUndo: true
-
-    };
-
-    me.commands['getlocaldata'] = {
-
-        execCommand:function (cmd, name) {
-            return saveKey ? LocalStorage.getLocalData( saveKey ) : null;
-        },
-        notNeedUndo: true
-
-    };
-
-    //从草稿箱加载数据
-    me.commands['drafts'] = {
-
-        execCommand:function (cmd, name) {
-            if ( saveKey ) {
-                me.body.innerHTML = LocalStorage.getLocalData( saveKey );
-                me.focus(true);
-            }
-        },
-        queryCommandState: function () {
-            return saveKey ? ( LocalStorage.getLocalData( saveKey ) === null ? -1 : 0 ) : -1;
-        },
-        notNeedUndo: true
-
-    };
-
-    //开始监听
-    me.addListener( "contentchange", function () {
-
-        var saveData = null;
-
-        if ( !saveKey ) {
-            return;
-        }
-
-        if ( me._saveFlag ) {
-            window.clearTimeout( me._saveFlag );
-        }
-
-        me._saveFlag = window.setTimeout( function () {
-
-            me._saveFlag = null;
-
-            if ( !me.hasContents() ) {
-                return;
-            }
-
-            saveData = me.body.innerHTML;
-
-            if ( me.fireEvent( "beforeautosave", {
-                content: saveData
-            } ) === false ) {
-                return;
-            }
-
-            LocalStorage.saveLocalData( saveKey, saveData );
-
-            lastSaveTime = new Date();
-            me.fireEvent( "afterautosave", {
-                content: saveData
-            } );
-
-        }, me.options.saveInterval );
-
-    } );
-
-    //init save key
-    me.ready( function () {
-
-        var _suffix = "-drafts-data",
-            key = null;
-
-        if ( me.key ) {
-            key = me.key + _suffix;
-        } else {
-            key = ( me.container.parentNode.id || 'ue-common' ) + _suffix;
-        }
-
-        //页面地址+编辑器ID 保持唯一
-        saveKey = ( location.protocol + location.host + location.pathname ).replace( /[.:\/]/g, '_' ) + key;
-
-    } );
-
-};
+});
