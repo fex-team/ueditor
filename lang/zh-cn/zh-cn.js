@@ -422,7 +422,8 @@ UE.I18N['zh-cn'] = {
             lang_city:"城市",
             lang_address:"地址",
             city:{value:"北京"},
-            lang_search:"搜索"
+            lang_search:"搜索",
+            lang_dynamicmap:"插入动态地图"
         },
         cityMsg:"请选择城市",
         errorMsg:"抱歉，找不到该位置！"
@@ -511,7 +512,7 @@ UE.I18N['zh-cn'] = {
         captionName:'表格名称',
         titleName:'标题',
         cellsName:'内容',
-        errorMsg:'有合并单元格，不可排序..'
+        errorMsg:'有合并单元格，不可排序'
     },
     'edittip':{
         'static':{
