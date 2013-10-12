@@ -1,11 +1,31 @@
-///import core
 /**
- * @description 插入内容
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     inserthtml插入内容的命令
- * @param   {String}   html                要插入的内容
- * @author zhanyi
+ * 插入html字符串插件
+ * @file
+ * @since 1.2.6.1
  */
+
+/**
+ * 插入html代码
+ * @command inserthtml
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { String } html 插入的html字符串
+ * @remaind 插入的标签内容是在当前的选区位置上插入，如果当前是闭合状态，那直接插入内容， 如果当前是选中状态，将先清除当前选中内容后，再做插入
+ * @warning 注意:该命令会对当前选区的位置，对插入的内容进行过滤转换处理。 过滤的规则遵循html语意化的原则。
+ * @example
+ * ```javascript
+ * //xxx[BB]xxx 当前选区为非闭合选区，选中BB这两个文本
+ * //执行命令，插入<b>CC</b>
+ * //插入后的效果 xxx<b>CC</b>xxx
+ * //<p>xx|xxx</p> 当前选区为闭合状态
+ * //插入<p>CC</p>
+ * //结果 <p>xx</p><p>CC</p><p>xxx</p>
+ * //<p>xxxx</p>|</p>xxx</p> 当前选区在两个p标签之间
+ * //插入 xxxx
+ * //结果 <p>xxxx</p><p>xxxx</p></p>xxx</p>
+ * ```
+ */
+
 UE.commands['inserthtml'] = {
     execCommand: function (command,html,notNeedFilter){
         var me = this,
