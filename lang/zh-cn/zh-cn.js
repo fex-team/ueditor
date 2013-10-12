@@ -22,7 +22,8 @@ UE.I18N['zh-cn'] = {
         'rowspacingtop':'段前距', 'rowspacingbottom':'段后距', 'highlightcode':'插入代码', 'pagebreak':'分页', 'insertframe':'插入Iframe', 'imagenone':'默认',
         'imageleft':'左浮动', 'imageright':'右浮动', 'attachment':'附件', 'imagecenter':'居中', 'wordimage':'图片转存',
         'lineheight':'行间距','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版', 'webapp':'百度应用',
-        'touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦','music':'音乐',inserttable:'插入表格'
+        'touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦','music':'音乐',inserttable:'插入表格',
+        'drafts': '从草稿箱加载'
     },
     'insertorderedlist':{
         'num':'1,2,3...',
@@ -421,7 +422,8 @@ UE.I18N['zh-cn'] = {
             lang_city:"城市",
             lang_address:"地址",
             city:{value:"北京"},
-            lang_search:"搜索"
+            lang_search:"搜索",
+            lang_dynamicmap:"插入动态地图"
         },
         cityMsg:"请选择城市",
         errorMsg:"抱歉，找不到该位置！"
@@ -496,9 +498,9 @@ UE.I18N['zh-cn'] = {
     'edittable':{
         'static':{
             'lang_tableStyle':'表格样式',
-            'lang_insertCaption':'添加表格标题行',
-            'lang_insertTitle':'添加表格名称行',
-            'lang_insertTitleCol':'添加表格名称列',
+            'lang_insertCaption':'添加表格名称行',
+            'lang_insertTitle':'添加表格标题行',
+            'lang_insertTitleCol':'添加表格标题列',
             'lang_orderbycontent':"使表格内容可排序",
             'lang_tableSize':'自动调整表格尺寸',
             'lang_autoSizeContent':'按表格文字自适应',
@@ -509,7 +511,8 @@ UE.I18N['zh-cn'] = {
         },
         captionName:'表格名称',
         titleName:'标题',
-        cellsName:'内容'
+        cellsName:'内容',
+        errorMsg:'有合并单元格，不可排序'
     },
     'edittip':{
         'static':{

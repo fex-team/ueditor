@@ -2,7 +2,7 @@
 ///commands 右键菜单
 ///commandsName  ContextMenu
 ///commandsTitle  右键菜单
-/**
+/*
  * 右键菜单
  * @function
  * @name baidu.editor.plugins.contextmenu
@@ -121,7 +121,7 @@ UE.plugins['contextmenu'] = function () {
                             cmdName:'inserttitlecol'
                         },
                         {
-                            label:lang.deletetitle,
+                            label:lang.deletetitlecol,
                             cmdName:'deletetitlecol'
                         },
                         '-',

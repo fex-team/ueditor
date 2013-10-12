@@ -16,6 +16,7 @@
 ///import core/node;
 ///import core/htmlparser;
 ///import core/filternode;
+///import core/plugin;
 ///import plugins/emotion;
 ///import plugins/map;
 ///import plugins/scrawl;
@@ -87,6 +88,7 @@
 ///import plugins/background;
 ///import plugins/music;
 ///import plugins/video;
+///import plugins/autosave;
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;

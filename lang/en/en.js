@@ -25,7 +25,7 @@ UE.I18N['en'] = {
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
         'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
         'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
-        'music':'Music'
+        'music':'Music', 'drafts': 'Load from Drafts'
     },
     'insertorderedlist':{
         'num':'1,2,3...',
@@ -439,7 +439,8 @@ UE.I18N['en'] = {
             lang_city:"City",
             lang_address:"Address",
             city:{value:"Beijing"},
-            lang_search:"Search"
+            lang_search:"Search",
+            lang_dynamicmap:"Dynamic map"
         },
         cityMsg:"Please enter the city name!",
         errorMsg:"Can't find the place!"
@@ -527,7 +528,8 @@ UE.I18N['en'] = {
         },
         captionName:'Caption',
         titleName:'Title',
-        cellsName:'text'
+        cellsName:'text',
+        errorMsg:'There are merged cells, can not sort.'
     },
     'edittip':{
         'static':{

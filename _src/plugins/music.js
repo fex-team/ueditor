@@ -1,14 +1,31 @@
-///import core
-///import plugins/inserthtml.js
-///commands 音乐
-///commandsName Music
-///commandsTitle  插入音乐
-///commandsDialog  dialogs\music
+/**
+ * 插入音乐命令
+ * @file
+ */
+
+/**
+ * 插入音乐
+ * @command music
+ * @method execCommand
+ * @param { Object } musicOptions 插入音乐的参数项， 支持的key有： url=>音乐地址；
+ * width=>音乐容器宽度；height=>音乐容器高度；align=>音乐文件的对齐方式， 可选值有: left, center, right, none
+ * @example
+ * ```javascript
+ * //editor是编辑器实例
+ * //在编辑器里插入一个“植物大战僵尸”的APP
+ * editor.execCommand( 'music' , {
+ *     width: 400,
+ *     height: 95,
+ *     align: "center",
+ *     url: "音乐地址"
+ * } );
+ * ```
+ */
 UE.plugins['music'] = function () {
     var me = this,
         div;
 
-    /**
+    /*
      * 创建插入音乐字符窜
      * @param url 音乐地址
      * @param width 音乐宽度

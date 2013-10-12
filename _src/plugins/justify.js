@@ -1,14 +1,32 @@
-///import core
-///commands 段落格式,居左,居右,居中,两端对齐
-///commandsName  JustifyLeft,JustifyCenter,JustifyRight,JustifyJustify
-///commandsTitle  居左对齐,居中对齐,居右对齐,两端对齐
 /**
- * @description 居左右中
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     justify执行对齐方式的命令
- * @param   {String}   align               对齐方式：left居左，right居右，center居中，justify两端对齐
- * @author zhanyi
+ * 段落格式
+ * @file
+ * @since 1.2.6.1
  */
+
+/**
+ * 段落对齐方式
+ * @command justify
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { String } align 对齐方式：left => 居左，right => 居右，center => 居中，justify => 两端对齐
+ * @example
+ * ```javascript
+ * editor.execCommand( 'justify', 'center' );
+ * ```
+ */
+/**
+ * 如果选区所在位置是段落区域，返回当前段落对齐方式
+ * @command justify
+ * @method queryCommandValue
+ * @param { String } cmd 命令字符串
+ * @return { String } 返回段落对齐方式
+ * @example
+ * ```javascript
+ * editor.queryCommandValue( 'justify' );
+ * ```
+ */
+
 UE.plugins['justify']=function(){
     var me=this,
         block = domUtils.isBlockElm,

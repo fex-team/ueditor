@@ -3,6 +3,20 @@ UEditor Change List
 Version 1.3.0
     1.ie8以上版本使用w3cRange
     2.编辑器实例上添加isFocus,blur方法
+    3.使用grunt作为打包工具
+    4.修复了过滤规则对于script/style的内容的转码
+    5.新增在chrome下针对图片的拖拽宽高功能
+    6.新增在高端浏览器下拖拽图片上传功能
+    7.asp后台的支持
+    8.自动寻址功能重构
+    9.修复下拉菜单高度问题
+    10.针对ie默认带有的autolink功能，添加开启禁用选项，创建时传入autolink:false就可禁用ie的autolink功能
+    11.插入动态地图的支持
+    12.表格插入列标题
+    13.添加可排序图标，可排序标识和合并单元格互斥
+    11.添加本地自动保存功能
+    12.API文档更新
+
 
 Version 1.2.6.1
     1.查找替换支持正则表达式
@@ -61,7 +75,7 @@ Version 1.2.5
   . 调整了list中tab键的逻辑
   . 添加了可以限制列表的层级
   . 全屏快捷键 ALT+Z
-  . 添加了uparse.js展示页加载器
+  . 添加了uparseplugin.js展示页加载器
 
 优化修复
   . 优化了插入代码功能
@@ -97,7 +111,7 @@ Version 1.2.3
    . 新增国际化支持
    . 新增涂鸦功能
    . 新增大小写功能
-   . 新增getAllHtml方法，可以将整个页面的内容打出来,可以在ueditor.config.js里通过配置allHtmlEnabled,来配置在提交时是否使用getAllHtml来得到内容
+   . 新增getAllHtml方法，可以将整个页面的内容打出来,可以在ueditor.configplugin.js里通过配置allHtmlEnabled,来配置在提交时是否使用getAllHtml来得到内容
    . 新增插入模板的功能
    . 新增背景功能
    . 新增UE.instants全局对象，下边挂接了所有实例化的编辑器对象
@@ -129,7 +143,7 @@ Version 1.2.2
 Version 1.2.1
 1.插入表情时，按住CTRL键可连续插入多个表情
 2.按住CTRL+Enter提交表单
-3.增加readonly属性在ueditor.config.js，编辑器实例上增加setEnabled,setDisabled方法，设置编辑区域是否可以编辑
+3.增加readonly属性在ueditor.configplugin.js，编辑器实例上增加setEnabled,setDisabled方法，设置编辑区域是否可以编辑
 4.Editor上添加了getPlainTxt方法，得到编辑器的纯文本内容，但会保留段落格式
 5.修正了initialContent赋值失效的问题，赋值顺序以标签内容为先，如果没有再看initialContent内容。
 6.为insertHtml命令添加了过滤机制
@@ -217,7 +231,7 @@ Version 1.1.7.3
 
 
 version 1.1.7.2
-1.去掉了iframe.css 改为在ueditor.config.js中配置，避免css文件找不到的问题
+1.去掉了iframe.css 改为在ueditor.configplugin.js中配置，避免css文件找不到的问题
 2.给下拉菜单添加了默认的文字说明
 3.Ueditor.css去掉了对外部页面css的影响
 4.修正了ie9下，编辑器的高度不随着内容缩短的问题
@@ -243,7 +257,7 @@ version 1.1.7.2
 24.优化了源码模式下的代码格式
 
 version 1.1.6.1
-1.去掉了iframe.css 改为在ueditor.config.js中配置，避免css文件找不到的问题
+1.去掉了iframe.css 改为在ueditor.configplugin.js中配置，避免css文件找不到的问题
 2.给下拉菜单添加了默认的文字说明
 3.Ueditor.css去掉了对外部页面css的影响
 4.修正了ie9下，编辑器的高度不随着内容缩短的问题
@@ -263,7 +277,7 @@ version 1.1.6
 5. tab按键功能
 6. 支持多级列表
 7. 超链接可以在非ie下去除下划线
-8. 字体，字号，在editor-config.js中可配置
+8. 字体，字号，在editor-configplugin.js中可配置
 
 
 
@@ -274,7 +288,7 @@ version 1.1.5
 4.插入分页符
 5.整合浮动toolbar为autofloat插件
 6.初始化的值会在第一次操作前清除，而且不在有延迟感
-7.配置项都放到了editor-config.js中
+7.配置项都放到了editor-configplugin.js中
 8.修正了多实例的问题
 9.插入iframe功能
 10.粘贴过滤掉内容会有提示，没过滤任何内容不会出现提示

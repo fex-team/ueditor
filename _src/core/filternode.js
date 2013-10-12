@@ -1,10 +1,25 @@
 /**
+ * UE过滤节点的静态方法
  * @file
- * @name UE.filterNode
- * @short filterNode
- * @desc 根据给定的规则过滤节点
- * @import editor.js,core/utils.js
- * @anthor zhanyi
+ */
+
+/**
+ * UEditor公用空间，UEditor所有的功能都挂载在该空间下
+ * @module UE
+ */
+
+
+/**
+ * 根据传入节点和过滤规则过滤相应节点
+ * @module UE
+ * @since 1.2.6.1
+ * @method filterNode
+ * @param { Object } root 指定root节点
+ * @param { Object } rules 过滤规则json对象
+ * @example
+ * ```javascript
+ * UE.filterNode(root,editor.options.filterRules);
+ * ```
  */
 var filterNode = UE.filterNode = function () {
     function filterNode(node,rules){
