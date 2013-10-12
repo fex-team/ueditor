@@ -524,9 +524,11 @@ test('enablesort,disablesort', function () {
 
         setTimeout(function () {
             equal(editor.body.firstChild.attributes['data-sort'].nodeValue, 'sortEnabled', 'sortEnabled');
+            equal(domUtils.hasClass(editor.body.firstChild, 'sortEnabled'), true, 'sortEnabled');
             editor.execCommand('disablesort');
             setTimeout(function () {
                 equal(editor.body.firstChild.attributes['data-sort'].nodeValue, 'sortDisabled', 'sortDisabled');
+                equal(domUtils.hasClass(editor.body.firstChild, 'sortEnabled'), false, 'sortDisabled');
                 start();
             }, 20);
         }, 20);
