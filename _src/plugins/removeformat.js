@@ -1,17 +1,23 @@
-///import core
-///commands 清除格式
-///commandsName  RemoveFormat
-///commandsTitle  清除格式
 /**
- * @description 清除格式
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     removeformat清除格式命令
- * @param   {String}   tags                以逗号隔开的标签。如：span,a
- * @param   {String}   style               样式
- * @param   {String}   attrs               属性
- * @param   {String}   notIncluedA    是否把a标签切开
- * @author zhanyi
+ * 清除格式
+ * @file
+ * @since 1.2.6.1
  */
+
+/**
+ * 清除文字样式
+ * @command removeformat
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param   {String}   tags     以逗号隔开的标签。如：strong
+ * @param   {String}   style    样式如：color
+ * @param   {String}   attrs    属性如:width
+ * @example
+ * ```javascript
+ * editor.execCommand( 'removeformat', 'strong','color','width' );
+ * ```
+ */
+
 UE.plugins['removeformat'] = function(){
     var me = this;
     me.setOpt({

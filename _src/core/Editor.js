@@ -1,18 +1,32 @@
 /**
+ * 编辑器主类，包含编辑器提供的大部分公用接口
  * @file
- * @name UE.Editor
- * @short Editor
- * @import editor.js,core/utils.js,core/EventBase.js,core/browser.js,core/dom/dtd.js,core/dom/domUtils.js,core/dom/Range.js,core/dom/Selection.js,plugins/serialize.js
- * @desc 编辑器主类，包含编辑器提供的大部分公用接口
+ * @module UE
+ * @class Editor
+ * @since 1.2.6.1
  */
+
+/**
+ * UEditor公用空间，UEditor所有的功能都挂载在该空间下
+ * @unfile
+ * @module UE
+ */
+
+/**
+ * UEditor的核心类，为用户提供与编辑器交互的接口。
+ * @unfile
+ * @module UE
+ * @class Editor
+ */
+
 (function () {
     var uid = 0, _selectionChangeTimer;
 
     /**
+     * 获取编辑器的html内容，赋值到编辑器所在表单的textarea文本域里面
      * @private
-     * @ignore
-     * @param form  编辑器所在的form元素
-     * @param editor  编辑器实例对象
+     * @method setValue
+     * @param { UE.Editor } editor 编辑器事例
      */
     function setValue(form, editor) {
         var textarea;
@@ -59,16 +73,156 @@
 
         me.fireEvent("langReady");
     }
+
     /**
-     * UEditor编辑器类
-     * @name Editor
-     * @desc 创建一个跟编辑器实例
-     * - ***container*** 编辑器容器对象
-     * - ***iframe*** 编辑区域所在的iframe对象
-     * - ***window*** 编辑区域所在的window
-     * - ***document*** 编辑区域所在的document对象
-     * - ***body*** 编辑区域所在的body对象
-     * - ***selection*** 编辑区域的选区对象
+     * 编辑器准备就绪后会触发该事件
+     * @module UE
+     * @class Editor
+     * @event ready
+     * @remind render方法执行完成之后,会触发该事件
+     * @remind
+     * @example
+     * ```javascript
+     * editor.addListener( 'ready', function( editor ) {
+     *     editor.execCommand( 'focus' ); //编辑器家在完成后，让编辑器拿到焦点
+     * } );
+     * ```
+     */
+    /**
+     * 执行destroy方法,会触发该事件
+     * @module UE
+     * @class Editor
+     * @event destroy
+     * @see UE.Editor:destroy()
+     */
+    /**
+     * 执行reset方法,会触发该事件
+     * @module UE
+     * @class Editor
+     * @event reset
+     * @see UE.Editor:reset()
+     */
+    /**
+     * 执行focus方法,会触发该事件
+     * @module UE
+     * @class Editor
+     * @event focus
+     * @see UE.Editor:focus(Boolean)
+     */
+    /**
+     * 语言加载完成会触发该事件
+     * @module UE
+     * @class Editor
+     * @event langReady
+     */
+    /**
+     * 运行命令之后会触发该命令
+     * @module UE
+     * @class Editor
+     * @event beforeExecCommand
+     */
+    /**
+     * 运行命令之后会触发该命令
+     * @module UE
+     * @class Editor
+     * @event afterExecCommand
+     */
+    /**
+     * 运行命令之前会触发该命令
+     * @module UE
+     * @class Editor
+     * @event firstBeforeExecCommand
+     */
+    /**
+     * 在getContent方法执行之前会触发该事件
+     * @module UE
+     * @class Editor
+     * @event beforeGetContent
+     * @see UE.Editor:getContent()
+     */
+    /**
+     * 在getContent方法执行之后会触发该事件
+     * @module UE
+     * @class Editor
+     * @event afterGetContent
+     * @see UE.Editor:getContent()
+     */
+    /**
+     * 在getAllHtml方法执行时会触发该事件
+     * @module UE
+     * @class Editor
+     * @event getAllHtml
+     * @see UE.Editor:getAllHtml()
+     */
+    /**
+     * 在setContent方法执行之前会触发该事件
+     * @module UE
+     * @class Editor
+     * @event beforeSetContent
+     * @see UE.Editor:setContent(String)
+     */
+    /**
+     * 在setContent方法执行之后会触发该事件
+     * @module UE
+     * @class Editor
+     * @event afterSetContent
+     * @see UE.Editor:setContent(String)
+     */
+    /**
+     * 每当编辑器内部选区发生改变时，将触发该事件
+     * @event selectionchange
+     * @warning 该事件的触发非常频繁，不建议在该事件的处理过程中做重量级的处理
+     * @example
+     * ```javascript
+     * editor.addListener( 'selectionchange', function( editor ) {
+     *     console.log('选区发生改变');
+     * }
+     */
+    /**
+     * 在所有selectionchange的监听函数执行之前，会触发该事件
+     * @module UE
+     * @class Editor
+     * @event beforeSelectionChange
+     * @see UE.Editor:selectionchange
+     */
+    /**
+     * 在所有selectionchange的监听函数执行完之后，会触发该事件
+     * @module UE
+     * @class Editor
+     * @event afterSelectionChange
+     * @see UE.Editor:selectionchange
+     */
+    /**
+     * 编辑器内容发生改变时会触发该事件
+     * @module UE
+     * @class Editor
+     * @event contentChange
+     */
+
+
+    /**
+     * 以默认参数构建一个编辑器实例
+     * @constructor
+     * @remind 通过 改构造方法实例化的编辑器,不带ui层.需要render到一个容器,编辑器实例才能正常渲染到页面
+     * @example
+     * ```javascript
+     * var editor = new UE.Editor();
+     * editor.execCommand('blod');
+     * ```
+     * @see UE.Config
+     */
+
+    /**
+     * 以给定的参数集合创建一个编辑器实例，对于未指定的参数，将应用默认参数。
+     * @constructor
+     * @remind 通过 改构造方法实例化的编辑器,不带ui层.需要render到一个容器,编辑器实例才能正常渲染到页面
+     * @param { Object } setting 创建编辑器的参数
+     * @example
+     * ```javascript
+     * var editor = new UE.Editor();
+     * editor.execCommand('blod');
+     * ```
+     * @see UE.Config
      */
     var Editor = UE.Editor = function (options) {
         var me = this;
@@ -127,17 +281,20 @@
         UE.instants['ueditorInstant' + me.uid] = me;
     };
     Editor.prototype = {
+
         /**
-         * 当编辑器ready后执行传入的fn,如果编辑器已经完成ready，就马上执行fn，fn的中的this是编辑器实例。
-         * 大部分的实例接口都需要放在该方法内部执行，否则在IE下可能会报错。
-         * @name ready
-         * @grammar editor.ready(fn) fn是当编辑器渲染好后执行的function
+         * 编辑器对外提供的监听ready事件的接口， 通过调用该方法，达到的效果与监听ready事件是一致的
+         * @method ready
+         * @param { Function } fn 编辑器ready之后所执行的回调, 如果在注册事件之前编辑器已经ready，将会
+         * 立即触发该回调。
+         * @remind 需要等待编辑器加载完成后才能执行的代码,可以使用该方法传入
          * @example
-         * var editor = new UE.ui.Editor();
-         * editor.render("myEditor");
-         * editor.ready(function(){
-         *     editor.setContent("欢迎使用UEditor！");
-         * })
+         * ```javascript
+         * editor.ready( function( editor ) {
+         *     editor.setContent('初始化完毕');
+         * } );
+         * ```
+         * @see UE.Editor.event:ready
          */
         ready: function (fn) {
             var me = this;
@@ -145,10 +302,32 @@
                 me.isReady ? fn.apply(me) : me.addListener('ready', fn);
             }
         },
+
         /**
-         * 为编辑器设置默认参数值。若用户配置为空，则以默认配置为准
-         * @grammar editor.setOpt(key,value);      //传入一个键、值对
-         * @grammar editor.setOpt({ key:value});   //传入一个json对象
+         * 该方法是提供给插件里面使用，设置配置项默认值
+         * @method setOpt
+         * @warning 三处设置配置项的优先级: 实例化时传入参数 > setOpt()设置 > config文件里设置
+         * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
+         * @param { String } key 编辑器的可接受的选项名称
+         * @param { * } val  该选项可接受的值
+         * @example
+         * ```javascript
+         * editor.setOpt( 'initContent', '欢迎使用编辑器' );
+         * ```
+         */
+
+        /**
+         * 该方法是提供给插件里面使用，以{key:value}集合的方式设置插件内用到的配置项默认值
+         * @method setOpt
+         * @warning 三处设置配置项的优先级: 实例化时传入参数 > setOpt()设置 > config文件里设置
+         * @warning 该方法仅供编辑器插件内部和编辑器初始化时调用，其他地方不能调用。
+         * @param { Object } options 将要设置的选项的键值对对象
+         * @example
+         * ```javascript
+         * editor.setOpt( {
+         *     'initContent': '欢迎使用编辑器'
+         * } );
+         * ```
          */
         setOpt: function (key, val) {
             var obj = {};
@@ -159,10 +338,14 @@
             }
             utils.extend(this.options, obj, true);
         },
+
         /**
-         * 销毁编辑器实例对象
-         * @name destroy
-         * @grammar editor.destroy();
+         * 销毁编辑器实例，使用textarea代替
+         * @method destroy
+         * @example
+         * ```javascript
+         * editor.destroy();
+         * ```
          */
         destroy: function () {
 
@@ -192,11 +375,21 @@
             }
             UE.delEditor(key);
         },
+
         /**
-         * 渲染编辑器的DOM到指定容器，必须且只能调用一次
-         * @name render
-         * @grammar editor.render(containerId);    //可以指定一个容器ID
-         * @grammar editor.render(containerDom);   //也可以直接指定容器对象
+         * 渲染编辑器的DOM到指定容器
+         * @method render
+         * @param { String } containerId 指定一个容器ID
+         * @remind 执行该方法,会触发ready事件
+         * @warning 必须且只能调用一次
+         */
+
+        /**
+         * 渲染编辑器的DOM到指定容器
+         * @method render
+         * @param { Element } containerDom 直接指定容器对象
+         * @remind 执行该方法,会触发ready事件
+         * @warning 必须且只能调用一次
          */
         render: function (container) {
             var me = this,
@@ -264,11 +457,12 @@
                 })
             }
         },
+
         /**
          * 编辑器初始化
+         * @method _setup
          * @private
-         * @ignore
-         * @param {Element} doc 编辑器Iframe中的文档对象
+         * @param { Element } doc 编辑器Iframe中的文档对象
          */
         _setup: function (doc) {
 
@@ -395,17 +589,24 @@
             !options.isShow && me.setHide();
             options.readonly && me.setDisabled();
         },
+
         /**
-         * 同步编辑器的数据，为提交数据做准备，主要用于你是手动提交的情况
-         * @name sync
-         * @grammar editor.sync(); //从编辑器的容器向上查找，如果找到就同步数据
-         * @grammar editor.sync(formID); //formID制定一个要同步数据的form的id,编辑器的数据会同步到你指定form下
-         * @desc
-         * 后台取得数据得键值使用你容器上得''name''属性，如果没有就使用参数传入的''textarea''
+         * 同步数据到编辑器所在的form
+         * 从编辑器的容器节点向上查找form元素，若找到，就同步编辑内容到找到的form里，为提交数据做准备，主要用于是手动提交的情况
+         * 后台取得数据的键值，使用你容器上的name属性，如果没有就使用参数里的textarea项
+         * @method sync
          * @example
+         * ```javascript
          * editor.sync();
          * form.sumbit(); //form变量已经指向了form元素
-         *
+         * ```
+         */
+
+        /**
+         * 根据传入的formId，在页面上查找要同步数据的表单，若找到，就同步编辑内容到找到的form里，为提交数据做准备
+         * 后台取得数据的键值，该键值默认使用给定的编辑器容器的name属性，如果没有name属性则使用参数项里给定的“textarea”项
+         * @method sync
+         * @param { String } formID 指定一个要同步数据的form的id,编辑器的数据会同步到你指定form下
          */
         sync: function (formId) {
             var me = this,
@@ -415,10 +616,16 @@
                     }, true);
             form && setValue(form, me);
         },
+
         /**
          * 设置编辑器高度
-         * @name setHeight
-         * @grammar editor.setHeight(number);  //纯数值，不带单位
+         * @method setHeight
+         * @remind 当配置项autoHeightEnabled为真时,该方法无效
+         * @param { Number } number 设置的高度值，纯数值，不带单位
+         * @example
+         * ```javascript
+         * editor.setHeight(number);
+         * ```
          */
         setHeight: function (height,notSetHeight) {
             if (height !== parseInt(this.iframe.parentNode.style.height)) {
@@ -429,6 +636,29 @@
             this.body.style.height = height + 'px';
         },
 
+        /**
+         * 为编辑器的编辑命令提供快捷键
+         * 这个接口是为插件扩展提供的接口,主要是为新添加的插件，如果需要添加快捷键，所提供的接口
+         * @method addshortcutkey
+         * @param { Object } keyset 命令名和快捷键键值对对象，多个按钮的快捷键用“＋”分隔
+         * @example
+         * ```javascript
+         * editor.addshortcutkey({
+         *     "Bold" : "ctrl+66",//^B
+         *     "Italic" : "ctrl+73", //^I
+         * });
+         * ```
+         */
+        /**
+         * 这个接口是为插件扩展提供的接口,主要是为新添加的插件，如果需要添加快捷键，所提供的接口
+         * @method addshortcutkey
+         * @param { String } cmd 触发快捷键时，响应的命令
+         * @param { String } keys 快捷键的字符串，多个按钮用“＋”分隔
+         * @example
+         * ```javascript
+         * editor.addshortcutkey("Underline", "ctrl+85"); //^U
+         * ```
+         */
         addshortcutkey: function (cmd, keys) {
             var obj = {};
             if (keys) {
@@ -438,6 +668,12 @@
             }
             utils.extend(this.shortcutkeys, obj)
         },
+
+        /**
+         * 对编辑器设置keydown事件监听，绑定快捷键和命令，当快捷键组合触发成功，会响应对应的命令
+         * @method _bindshortcutKeys
+         * @private
+         */
         _bindshortcutKeys: function () {
             var me = this, shortcutkeys = this.shortcutkeys;
             me.addListener('keydown', function (type, e) {
@@ -464,17 +700,36 @@
                 }
             });
         },
+
         /**
-         * 获取编辑器内容
-         * @name getContent
-         * @grammar editor.getContent()  => String //若编辑器中只包含字符"&lt;p&gt;&lt;br /&gt;&lt;/p/&gt;"会返回空。
-         * @grammar editor.getContent(fn)  => String
+         * 获取编辑器的内容
+         * @method getContent
+         * @warning 该方法获取到的是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @return { String } 编辑器的内容字符串, 如果编辑器的内容为空，或者是空的标签内容（如:”&lt;p&gt;&lt;br/&gt;&lt;/p&gt;“）， 则返回空字符串
          * @example
-         * getContent默认是会现调用hasContents来判断编辑器是否为空，如果是，就直接返回空字符串
-         * 你也可以传入一个fn来接替hasContents的工作，定制判断的规则
-         * editor.getContent(function(){
-         *     return false //编辑器没有内容 ，getContent直接返回空
-         * })
+         * ```javascript
+         * //编辑器html内容:<p>1<strong>2<em>34</em>5</strong>6</p>
+         * var content = editor.getContent(); //返回值:<p>1<strong>2<em>34</em>5</strong>6</p>
+         * ```
+         */
+
+        /**
+         * 获取编辑器的内容。 可以通过参数定义编辑器内置的判空规则
+         * @method getContent
+         * @param { Function } fn 自定的判空规则， 要求该方法返回一个boolean类型的值，
+         *                      代表当前编辑器的内容是否空，
+         *                      如果返回true， 则该方法将直接返回空字符串；如果返回false，则编辑器将返回
+         *                      经过内置过滤规则处理后的内容。
+         * @remind 该方法在处理包含有初始化内容的时候能起到很好的作用。
+         * @warning 该方法获取到的是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @return { String } 编辑器的内容字符串
+         * @example
+         * ```javascript
+         * // editor 是一个编辑器的实例
+         * var content = editor.getContent( function ( editor ) {
+         *      return editor.body.innerHTML === '欢迎使用UEditor'; //返回空字符串
+         * } );
+         * ```
          */
         getContent: function (cmd, fn,notSetCursor,ignoreBlank,formatter) {
             var me = this;
@@ -491,10 +746,15 @@
             me.fireEvent('aftergetcontent', cmd);
             return  root.toHtml(formatter);
         },
+
         /**
          * 取得完整的html代码，可以直接显示成完整的html文档
-         * @name getAllHtml
-         * @grammar editor.getAllHtml()  => String
+         * @method getAllHtml
+         * @return { String } 编辑器的内容html文档字符串
+         * @eaxmple
+         * ```javascript
+         * editor.getAllHtml(); //返回格式大致是: <html><head>...</head><body>...</body></html>
+         * ```
          */
         getAllHtml: function () {
             var me = this,
@@ -515,10 +775,16 @@
                 + (headHtmlForIE9 || me.document.getElementsByTagName('head')[0].innerHTML) + headHtml.join('\n') + '</head>'
                 + '<body ' + (ie && browser.version < 9 ? 'class="view"' : '') + '>' + me.getContent(null, null, true) + '</body></html>';
         },
+
         /**
          * 得到编辑器的纯文本内容，但会保留段落格式
-         * @name getPlainTxt
-         * @grammar editor.getPlainTxt()  => String
+         * @method getPlainTxt
+         * @return { String } 编辑器带段落格式的纯文本内容字符串
+         * @example
+         * ```javascript
+         * //编辑器html内容:<p><strong>1</strong></p><p><strong>2</strong></p>
+         * console.log(editor.getPlainTxt()); //输出:"1\n2\n
+         * ```
          */
         getPlainTxt: function () {
             var reg = new RegExp(domUtils.fillChar, 'g'),
@@ -535,8 +801,13 @@
 
         /**
          * 获取编辑器中的纯文本内容,没有段落格式
-         * @name getContentTxt
-         * @grammar editor.getContentTxt()  => String
+         * @method getContentTxt
+         * @return { String } 编辑器不带段落格式的纯文本内容字符串
+         * @example
+         * ```javascript
+         * //编辑器html内容:<p><strong>1</strong></p><p><strong>2</strong></p>
+         * console.log(editor.getPlainTxt()); //输出:"12
+         * ```
          */
         getContentTxt: function () {
             var reg = new RegExp(domUtils.fillChar, 'g');
@@ -545,15 +816,29 @@
         },
 
         /**
-         * 将html设置到编辑器中, 如果是用于初始化时给编辑器赋初值，则必须放在ready方法内部执行
-         * @name setContent
-         * @grammar editor.setContent(html)
+         * 设置编辑器的内容，可修改编辑器当前的html内容
+         * @method setContent
+         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @warning 该方法会触发selectionchange事件
+         * @param { String } html 要插入的html内容
          * @example
-         * var editor = new UE.ui.Editor()
-         * editor.ready(function(){
-         *     //需要ready后执行，否则可能报错
-         *     editor.setContent("欢迎使用UEditor！");
-         * })
+         * ```javascript
+         * editor.getContent('<p>test</p>');
+         * ```
+         */
+
+        /**
+         * 设置编辑器的内容，可修改编辑器当前的html内容
+         * @method setContent
+         * @warning 通过该方法插入的内容，是经过编辑器内置的过滤规则进行过滤后得到的内容
+         * @warning 该方法会触发selectionchange事件
+         * @param { String } html 要插入的html内容
+         * @param { Boolean } isAppendTo 若传入true，不清空原来的内容，在最后插入内容，否则，清空内容再插入
+         * @example
+         * ```javascript
+         * //假设设置前的编辑器内容是 <p>old text</p>
+         * editor.setContent('<p>new text</p>', true); //插入的结果是<p>old text</p><p>new text</p>
+         * ```
          */
         setContent: function (html, isAppendTo, notFireSelectionchange) {
             var me = this;
@@ -619,9 +904,22 @@
         },
 
         /**
+         * 让编辑器获得焦点，默认focus到编辑器头部
+         * @method focus
+         * @example
+         * ```javascript
+         * editor.focus()
+         * ```
+         */
+
+        /**
          * 让编辑器获得焦点，toEnd确定focus位置
-         * @name focus
-         * @grammar editor.focus([toEnd])   //默认focus到编辑器头部，toEnd为true时focus到内容尾部
+         * @method focus
+         * @param { Boolean } toEnd 默认focus到编辑器头部，toEnd为true时focus到内容尾部
+         * @example
+         * ```javascript
+         * editor.focus(true)
+         * ```
          */
         focus: function (toEnd) {
             try {
@@ -655,8 +953,8 @@
         },
         /**
          * 初始化UE事件及部分事件代理
+         * @method _initEvents
          * @private
-         * @ignore
          */
         _initEvents: function () {
             var me = this,
@@ -676,16 +974,18 @@
         },
         /**
          * 触发事件代理
+         * @method _proxyDomEvent
          * @private
-         * @ignore
+         * @return { * } fireEvent的返回值
+         * @see UE.EventBase:fireEvent(String)
          */
         _proxyDomEvent: function (evt) {
             return this.fireEvent(evt.type.replace(/^on/, ''), evt);
         },
         /**
          * 变化选区
+         * @method _selectionChange
          * @private
-         * @ignore
          */
         _selectionChange: function (delay, evt) {
             var me = this;
@@ -741,6 +1041,15 @@
                 }
             }, delay || 50);
         },
+
+        /**
+         * 执行编辑命令
+         * @method _callCmdFn
+         * @private
+         * @param { String } fnName 函数名称
+         * @param { * } args 传给命令函数的参数
+         * @return { * } 返回命令函数运行的返回值
+         */
         _callCmdFn: function (fnName, args) {
             var cmdName = args[0].toLowerCase(),
                 cmd, cmdFn;
@@ -756,8 +1065,14 @@
 
         /**
          * 执行编辑命令cmdName，完成富文本编辑效果
-         * @name execCommand
-         * @grammar editor.execCommand(cmdName)   => {*}
+         * @method execCommand
+         * @param { String } cmdName 需要执行的命令
+         * @remind 具体命令的使用请参考<a href="#COMMAND.LIST">命令列表</a>
+         * @return { * } 返回命令函数运行的返回值
+         * @example
+         * ```javascript
+         * editor.execCommand(cmdName);
+         * ```
          */
         execCommand: function (cmdName) {
             cmdName = cmdName.toLowerCase();
@@ -783,14 +1098,18 @@
             !me._ignoreContentChange && me._selectionChange();
             return result;
         },
+
         /**
          * 根据传入的command命令，查选编辑器当前的选区，返回命令的状态
-         * @name  queryCommandState
-         * @grammar editor.queryCommandState(cmdName)  => (-1|0|1)
-         * @desc
-         * * ''-1'' 当前命令不可用
-         * * ''0'' 当前命令可用
-         * * ''1'' 当前命令已经执行过了
+         * @method  queryCommandState
+         * @param { String } cmdName 需要查询的命令名称
+         * @remind 具体命令的使用请参考<a href="#COMMAND.LIST">命令列表</a>
+         * @return { Number } number 返回放前命令的状态，返回值三种情况：(-1|0|1)
+         * @example
+         * ```javascript
+         * editor.queryCommandState(cmdName)  => (-1|0|1)
+         * ```
+         * @see COMMAND.LIST
          */
         queryCommandState: function (cmdName) {
             return this._callCmdFn('queryCommandState', arguments);
@@ -798,22 +1117,39 @@
 
         /**
          * 根据传入的command命令，查选编辑器当前的选区，根据命令返回相关的值
-         * @name  queryCommandValue
+         * @method queryCommandValue
+         * @param { String } cmdName 需要查询的命令名称
+         * @remind 具体命令的使用请参考<a href="#COMMAND.LIST">命令列表</a>
+         * @remind 只有部分插件有此方法
+         * @return { * } 返回每个命令特定的当前状态值
          * @grammar editor.queryCommandValue(cmdName)  =>  {*}
+         * @see COMMAND.LIST
          */
         queryCommandValue: function (cmdName) {
             return this._callCmdFn('queryCommandValue', arguments);
         },
+
         /**
-         * 检查编辑区域中是否有内容，若包含tags中的节点类型，直接返回true
-         * @name  hasContents
-         * @desc
-         * 默认有文本内容，或者有以下节点都不认为是空
-         * <code>{table:1,ul:1,ol:1,dl:1,iframe:1,area:1,base:1,col:1,hr:1,img:1,embed:1,input:1,link:1,meta:1,param:1}</code>
-         * @grammar editor.hasContents()  => (true|false)
-         * @grammar editor.hasContents(tags)  =>  (true|false)  //若文档中包含tags数组里对应的tag，直接返回true
+         * 检查编辑区域中是否有内容
+         * @method  hasContents
+         * @remind 默认有文本内容，或者有以下节点都不认为是空
+         * table,ul,ol,dl,iframe,area,base,col,hr,img,embed,input,link,meta,param
+         * @return { Boolean } 检查有内容返回true，否则返回false
          * @example
-         * editor.hasContents(['span']) //如果编辑器里有这些，不认为是空
+         * ```javascript
+         * editor.hasContents()
+         * ```
+         */
+
+        /**
+         * 检查编辑区域中是否有内容，若包含参数tags中的节点类型，直接返回true
+         * @method  hasContents
+         * @param { Array } tags 传入数组判断时用到的节点类型
+         * @return { Boolean } 若文档中包含tags数组里对应的tag，返回true，否则返回false
+         * @example
+         * ```javascript
+         * editor.hasContents(['span']);
+         * ```
          */
         hasContents: function (tags) {
             if (tags) {
@@ -838,17 +1174,28 @@
             }
             return false;
         },
+
         /**
          * 重置编辑器，可用来做多个tab使用同一个编辑器实例
-         * @name  reset
-         * @desc
-         * * 清空编辑器内容
-         * * 清空回退列表
-         * @grammar editor.reset()
+         * @method  reset
+         * @remind 此方法会清空编辑器内容，清空回退列表，会触发reset事件
+         * @example
+         * ```javascript
+         * editor.reset()
+         * ```
          */
         reset: function () {
             this.fireEvent('reset');
         },
+
+        /**
+         * 设置当前编辑区域可以编辑
+         * @method setEnabled
+         * @example
+         * ```javascript
+         * editor.setEnabled()
+         * ```
+         */
         setEnabled: function () {
             var me = this, range;
             if (me.body.contentEditable == 'false') {
@@ -869,14 +1216,33 @@
                 me.fireEvent('selectionchange');
             }
         },
-        /**
-         * 设置当前编辑区域可以编辑
-         * @name enable
-         * @grammar editor.enable()
-         */
         enable: function () {
             return this.setEnabled();
         },
+
+        /** 设置当前编辑区域不可编辑
+         * @method setDisabled
+         */
+
+        /** 设置当前编辑区域不可编辑,except中的命令除外
+         * @method setDisabled
+         * @param { String } except 例外命令的字符串
+         * @remind 即使设置了disable，此处配置的例外命令仍然可以执行
+         * @example
+         * ```javascript
+         * editor.setDisabled('bold'); //禁用工具栏中除加粗之外的所有功能
+         * ```
+         */
+
+        /** 设置当前编辑区域不可编辑,except中的命令除外
+         * @method setDisabled
+         * @param { Array } except 例外命令的字符串数组，数组中的命令仍然可以执行
+         * @remind 即使设置了disable，此处配置的例外命令仍然可以执行
+         * @example
+         * ```javascript
+         * editor.setDisabled(['bold','insertimage']); //禁用工具栏中除加粗和插入图片之外的所有功能
+         * ```
+         */
         setDisabled: function (except) {
             var me = this;
             except = except ? utils.isArray(except) ? except : [except] : [];
@@ -895,22 +1261,15 @@
                 me.fireEvent('selectionchange');
             }
         },
-        /** 设置当前编辑区域不可编辑,except中的命令除外
-         * @name disable
-         * @grammar editor.disable()
-         * @grammar editor.disable(except)  //例外的命令，也即即使设置了disable，此处配置的命令仍然可以执行
-         * @example
-         * //禁用工具栏中除加粗和插入图片之外的所有功能
-         * editor.disable(['bold','insertimage']);//可以是单一的String,也可以是Array
-         */
         disable: function (except) {
             return this.setDisabled(except);
         },
+
         /**
          * 设置默认内容
-         * @ignore
+         * @method _setDefaultContent
          * @private
-         * @param  {String} cont 要存入的内容
+         * @param  { String } cont 要存入的内容
          */
         _setDefaultContent: function () {
             function clear() {
@@ -932,10 +1291,14 @@
                 me.addListener('firstBeforeExecCommand focus', clear);
             }
         }(),
+
         /**
-         * show方法的兼容版本
-         * @private
-         * @ignore
+         * 显示编辑器
+         * @method setShow
+         * @example
+         * ```javascript
+         * editor.setShow()
+         * ```
          */
         setShow: function () {
             var me = this, range = me.selection.getRange();
@@ -955,18 +1318,16 @@
             }
 
         },
-        /**
-         * 显示编辑器
-         * @name show
-         * @grammar editor.show()
-         */
         show: function () {
             return this.setShow();
         },
         /**
-         * hide方法的兼容版本
-         * @private
-         * @ignore
+         * 隐藏编辑器
+         * @method setHide
+         * @example
+         * ```javascript
+         * editor.setHide()
+         * ```
          */
         setHide: function () {
             var me = this;
@@ -975,20 +1336,19 @@
             }
             me.container.style.display = 'none'
         },
-        /**
-         * 隐藏编辑器
-         * @name hide
-         * @grammar editor.hide()
-         */
         hide: function () {
             return this.setHide();
         },
+
         /**
-         * 根据制定的路径，获取对应的语言资源
-         * @name  getLang
-         * @grammar editor.getLang(path)  =>  （JSON|String) 路径根据的是lang目录下的语言文件的路径结构
+         * 根据指定的路径，获取对应的语言资源
+         * @method getLang
+         * @param { String } path 路径根据的是lang目录下的语言文件的路径结构
+         * @return { Object | String } 根据路径返回语言资源的Json格式对象或者语言字符串
          * @example
-         * editor.getLang('contextMenu.delete') //如果当前是中文，那返回是的是删除
+         * ```javascript
+         * editor.getLang('contextMenu.delete'); //如果当前是中文，那返回是的是'删除'
+         * ```
          */
         getLang: function (path) {
             var lang = UE.I18N[this.options.lang];
@@ -1002,12 +1362,27 @@
             }
             return lang;
         },
+
         /**
-         * 计算编辑器当前内容的长度
-         * @name  getContentLength
-         * @grammar editor.getContentLength(ingoneHtml,tagNames)  =>
+         * 计算编辑器html内容字符串的长度
+         * @method  getContentLength
+         * @return { Number } 返回计算的长度
          * @example
-         * editor.getLang(true)
+         * ```javascript
+         * //编辑器html内容<p><strong>132</strong></p>
+         * editor.getContentLength() //返回27
+         * ```
+         */
+        /**
+         * 计算编辑器当前纯文本内容的长度
+         * @method  getContentLength
+         * @param { Boolean } ingoneHtml 传入true时，只按照纯文本来计算
+         * @return { Number } 返回计算的长度，内容中有hr/img/iframe标签，长度加1
+         * @example
+         * ```javascript
+         * //编辑器html内容<p><strong>132</strong></p>
+         * editor.getContentLength() //返回3
+         * ```
          */
         getContentLength: function (ingoneHtml, tagNames) {
             var count = this.getContent(false,false,true).length;
@@ -1020,31 +1395,75 @@
             }
             return count;
         },
+
+        /**
+         * 注册输入过滤规则
+         * @method  addInputRule
+         * @param { Function } rule 要添加的过滤规则
+         * @example
+         * ```javascript
+         * editor.addInputRule(function(root){
+         *   $.each(root.getNodesByTagName('div'),function(i,node){
+         *       node.tagName="p";
+         *   });
+         * });
+         * ```
+         */
         addInputRule: function (rule) {
             this.inputRules.push(rule);
         },
+
+        /**
+         * 执行注册的过滤规则
+         * @method  filterInputRule
+         * @param { UE.uNode } root 要过滤的uNode节点
+         * @remind 执行editor.setContent方法和执行'inserthtml'命令后，会运行该过滤函数
+         * @example
+         * ```javascript
+         * editor.filterInputRule(editor.body);
+         * ```
+         * @see UE.Editor:addInputRule
+         */
         filterInputRule: function (root) {
             for (var i = 0, ci; ci = this.inputRules[i++];) {
                 ci.call(this, root)
             }
         },
+
+        /**
+         * 注册输出过滤规则
+         * @method  addOutputRule
+         * @param { Function } rule 要添加的过滤规则
+         * @example
+         * ```javascript
+         * editor.addOutputRule(function(root){
+         *   $.each(root.getNodesByTagName('p'),function(i,node){
+         *       node.tagName="div";
+         *   });
+         * });
+         * ```
+         */
         addOutputRule: function (rule) {
             this.outputRules.push(rule)
         },
+
+        /**
+         * 根据输出过滤规则，过滤编辑器内容
+         * @method  filterOutputRule
+         * @remind 执行editor.getContent方法的时候，会先运行该过滤函数
+         * @param { UE.uNode } root 要过滤的uNode节点
+         * @example
+         * ```javascript
+         * editor.filterOutputRule(editor.body);
+         * ```
+         * @see UE.Editor:addOutputRule
+         */
         filterOutputRule: function (root) {
             for (var i = 0, ci; ci = this.outputRules[i++];) {
                 ci.call(this, root)
             }
         }
-        /**
-         * 得到dialog实例对象
-         * @name getDialog
-         * @grammar editor.getDialog(dialogName) => Object
-         * @example
-         * var dialog = editor.getDialog("insertimage");
-         * dialog.open();   //打开dialog
-         * dialog.close();  //关闭dialog
-         */
+
     };
     utils.inherits(Editor, EventBase);
 })();

@@ -5,36 +5,24 @@
  */
 
 /**
- * 插入时间
+ * 插入时间，默认格式：12:59:59
  * @command time
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } format 时间格式
- * @remind 时间的替换规则
- *  hh：替换成小时
- *  ii：替换成分钟
- *  ss：替换成秒钟
  * @example
  * ```javascript
- * editor.execCommand( 'time'); //按照默认格式插入当前时间,插入结果:12:59:59
- * editor.execCommand( 'time', '[当前时间:hh.ii.ss]' ); //按照格式参数插入时间,插入结果:[当前时间:17.28.22]
+ * editor.execCommand( 'time');
  * ```
  */
+
 /**
- * 插入日期
+ * 插入日期，默认格式：2013-08-30
  * @command date
  * @method execCommand
  * @param { String } cmd 命令字符串
- * @param { String } format 日期格式
- * @remind 时间格式的替换规则
- *  yyyy：替换成4位年,如1993
- *  yy：替换成2位年,如93
- *  mm：替换成月份
- *  dd：替换成日期
  * @example
  * ```javascript
- * editor.execCommand( 'date'); //按照默认格式插入当前日期,插入结果:2013-09-06
- * editor.execCommand( 'date', '[当前日期:yyyy/dd/mm]' ); //按照格式参数插入日期,插入结果:[当前日期:2013/09/06]
+ * editor.execCommand( 'date');
  * ```
  */
 UE.commands['time'] = UE.commands["date"] = {

@@ -1,13 +1,7 @@
-///import core
-///commands 输入的方向
-///commandsName  DirectionalityLtr,DirectionalityRtl
-///commandsTitle  从左向右输入,从右向左输入
 /**
- * 输入的方向
- * @function
- * @name baidu.editor.execCommand
- * @param {String}   cmdName    directionality执行函数的参数
- * @param {String}    forward    ltr从左向右输入，rtl从右向左输入
+ * 设置文字输入的方向的插件
+ * @file
+ * @since 1.2.6.1
  */
 (function() {
     var block = domUtils.isBlockElm ,
@@ -77,6 +71,30 @@
             }
             return range.moveToBookmark( bookmark2 ).moveToBookmark( bookmark );
         };
+
+    /**
+     * 文字输入方向
+     * @command directionality
+     * @method execCommand
+     * @param { String } cmdName 命令字符串
+     * @param { String } forward 传入'ltr'表示从左向右输入，传入'rtl'表示从右向左输入
+     * @example
+     * ```javascript
+     * editor.execCommand( 'directionality', 'ltr');
+     * ```
+     */
+
+    /**
+     * 查询当前选区的文字输入方向
+     * @command directionality
+     * @method queryCommandValue
+     * @param { String } cmdName 命令字符串
+     * @return { String } 返回'ltr'表示从左向右输入，返回'rtl'表示从右向左输入
+     * @example
+     * ```javascript
+     * editor.queryCommandValue( 'directionality');
+     * ```
+     */
     UE.commands['directionality'] = {
         execCommand : function( cmdName,forward ) {
             var range = this.selection.getRange();

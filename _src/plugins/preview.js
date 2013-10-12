@@ -1,12 +1,18 @@
-///import core
-///commands 预览
-///commandsName  Preview
-///commandsTitle  预览
 /**
  * 预览
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     preview预览编辑器内容
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 预览
+ * @command preview
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * editor.execCommand( 'preview' );
+ * ```
  */
 UE.commands['preview'] = {
     execCommand : function(){
