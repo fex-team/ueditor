@@ -78,10 +78,24 @@ Class Uploader
     End Function
 
     Public Function UploadBase64( content ) 
-        Dim stream, savepath
+        Dim stream
         Set stream = Base64Decode( content )
 
         DoUpload stream, "Base64Upload.png"
+    End Function
+
+    Public Function UploadRemote( url )
+        Dim stream, filename
+        filename = Right( url, Len(url) - InStrRev(url, "/") )
+
+        Set stream = CrawlImage( url )
+
+        If Not IsNull(stream) Then
+            DoUpload stream, filename
+        Else
+            rsState = "Failed"
+        End If
+        Set stream = Nothing
     End Function
 
     Private Function DoUpload( stream, filename )
@@ -125,6 +139,23 @@ Class Uploader
         Set node = Nothing
         Set stream = Nothing
         Set xml = Nothing
+    End Function
+
+    Private Function CrawlImage( url )
+        Dim http, stream
+        Set http = Server.CreateObject("Microsoft.XMLHTTP")
+        http.Open "GET", url, false
+        http.Send
+        If http.Status = 200 Then
+            Set stream = Server.CreateObject("ADODB.Stream")
+            stream.Type = 1
+            stream.Open()
+            stream.Write http.ResponseBody
+            Set CrawlImage = stream
+        Else
+            Set CrawlImage = null
+        End If
+        Set http = Nothing
     End Function
 
     Private Function CheckExt( fileType )
