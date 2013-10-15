@@ -478,6 +478,8 @@ test("blur()", function () {
         ok(editor.isFocus());
         editor.blur();
         ok(!editor.isFocus());
+        editor.blur();//多次使用不报错
+        ok(!editor.isFocus());
         UE.delEditor('ue');
         document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
         start();
