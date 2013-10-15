@@ -78,7 +78,7 @@
             'plugins/webapp.js',
             'plugins/template.js',
             'plugins/music.js',
-            'plugins/dropfile.js',
+            'plugins/autoupload.js',
             'plugins/autosave.js',
             'ui/ui.js',
             'ui/uiutils.js',
