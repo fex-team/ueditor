@@ -1,6 +1,6 @@
 module( ".path" );
 
-/*trace 879*/
+/*trace 3683*/
 test( '路径查找测试', function () {
     equal( UE.getUEBasePath( 'http://www.baidu.com/', './ueditor.config.js' ), 'http://www.baidu.com/', 'WEB路径-当前目录下' );
     equal( UE.getUEBasePath( 'http://www.baidu.com/abc/def/', '../ueditor.config.js' ), 'http://www.baidu.com/abc/', 'WEB路径-父目录1' );

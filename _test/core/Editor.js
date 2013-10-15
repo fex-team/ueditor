@@ -462,6 +462,8 @@ test("isFocus()", function () {
     editor.ready(function () {
         editor.focus();
         ok(editor.isFocus());
+        UE.delEditor('ue');
+        document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
         start();
     });
 });
@@ -476,7 +478,8 @@ test("blur()", function () {
         ok(editor.isFocus());
         editor.blur();
         ok(!editor.isFocus());
-
+        UE.delEditor('ue');
+        document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
         start();
     });
 });
