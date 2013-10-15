@@ -446,7 +446,6 @@ test('trace 3097 标题行中backspace键', function () {
 });
 
 test('拖拽', function () {
-    //todo ie9,10改range bug trace
     if (ua.browser.ie && ua.browser.ie < 8) return;
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -494,7 +493,6 @@ test('拖拽_row-resize鼠标显示', function () {
     stop();
 });
 test('拖拽-最右边的单元格', function () {
-    //todo ie9,10改range bug trace
     if (ua.browser.ie && ua.browser.ie < 8) return;
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -519,7 +517,6 @@ test('拖拽-最右边的单元格', function () {
     stop();
 });
 test('拖拽-最下边的单元格', function () {
-    //todo ie9,10改range bug trace
     if (ua.browser.ie && ua.browser.ie < 8) return;
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -674,7 +671,6 @@ test('trace 3059 表格右浮动', function () {
 });
 
 test('trace 3378：拖拽后tab，不影响表格样式', function () {
-    //todo ie9,10改range bug trace
     if (ua.browser.ie && ua.browser.ie < 8) return;
     var editor = te.obj[0];
     var range = te.obj[1];

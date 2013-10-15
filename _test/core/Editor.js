@@ -166,7 +166,7 @@ test("setDisabled,setEnabled", function () {
                 setTimeout(function () {
                     equal(editor.body.contentEditable, 'true', 'setEnabled');
                     equal(ua.getChildHTML(editor.body), '<p>欢迎使用ueditor!</p>', '内容恢复');
-                    if (!ua.browser.ie || ua.browser.ie < 9) {//todo ie9,10改range 之后，ie9,10这里的前后range不一致，focus时是text，setEnabled后是p
+                    if (!ua.browser.ie || ua.browser.ie < 9) {// ie9,10改range 之后，ie9,10这里的前后range不一致，focus时是text，setEnabled后是p
                         equal(editor.selection.getRange().startContainer.outerHTML, startContainer, '检查range');
                     }
                     equal(editor.selection.getRange().startOffset, startOffset, '检查range');

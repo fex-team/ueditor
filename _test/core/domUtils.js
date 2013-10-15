@@ -508,6 +508,21 @@ test( 'on- 给不同的dom元素绑定相同的事件', function() {
     ua.mouseover( te.dom[2] );
     ua.mouseover( te.dom[1] );
 } );
+test( 'on-多事件的字符串参数', function() {
+    var domUtils = te.obj[3];
+    expect( 2 );
+    var div2 = document.body.appendChild( document.createElement( 'div' ) );
+    div2.id = 'test2';
+    te.dom.push( div2 );
+    var handle = function( e ) {
+        ok( true, e.type + ' event triggered' );
+    };
+    domUtils.on( te.dom[2], 'mouseover mousedown', handle);
+
+
+    ua.mouseover( te.dom[2] );
+    ua.mousedown( te.dom[2] );
+} );
 test( 'un- 给不同的dom元素绑定相同的事件,解除一个，另一个仍然有效', function() {
     var domUtils = te.obj[3];
     expect( 1 );
@@ -523,6 +538,24 @@ test( 'un- 给不同的dom元素绑定相同的事件,解除一个，另一个�
     ua.mouseover( te.dom[2] );
     ua.mouseover( te.dom[1] );
 } );
+test( 'un-多事件的字符串参数', function() {
+    var domUtils = te.obj[3];
+    expect( 0 );
+    var div2 = document.body.appendChild( document.createElement( 'div' ) );
+    div2.id = 'test2';
+    te.dom.push( div2 );
+    var handle = function( e ) {
+        ok( false, e.type + ' 没有注销' );
+    };
+    domUtils.on( te.dom[2], 'mouseover mousedown', handle);
+
+    domUtils.un(te.dom[2],'mouseover mousedown',handle);
+    ua.mouseover( te.dom[2] );
+    ua.mousedown( te.dom[2] );
+    stop();
+    setTimeout(function(){start()},2000)
+} );
+
 /*绑定多个事件*/
 test( 'on', function() {
     var domUtils = te.obj[3];
