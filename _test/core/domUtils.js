@@ -1235,8 +1235,10 @@ test( 'hasClass', function() {
 test( 'addClass', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
-    div.innerHTML = '<div class="div_class div_class2 div_class3" name="div_name" style="color:red;font-size:12px"></div>';
-    domUtils.addClass(div.firstChild,'div_class4')
+    div.innerHTML = '<div name="div_name" style="color:red;font-size:12px"></div>';
+    domUtils.addClass(div.firstChild,'div_class div_class2 div_class3');
+    equal(utils.trim(div.firstChild.className),div.firstChild.className,'判断是否有前后空格');
+    domUtils.addClass(div.firstChild,'div_class4');
     equal(div.firstChild.className,'div_class div_class2 div_class3 div_class4','增加class4');
     domUtils.addClass(div.firstChild,'div_class4');
     equal(div.firstChild.className,'div_class div_class2 div_class3 div_class4','再增加class4');
