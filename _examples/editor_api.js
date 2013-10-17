@@ -80,6 +80,7 @@
             'plugins/music.js',
             'plugins/dropfile.js',
             'plugins/autosave.js',
+            'plugins/charts.js',
             'ui/ui.js',
             'ui/uiutils.js',
             'ui/uibase.js',
