@@ -6,6 +6,10 @@
  * To change this template use File | Settings | File Templates.
  */
 module( 'plugins.defaultfilter' );
+
+//test('',function(){
+//   stop();
+//});
 test( '对代码的行号不处理', function () {
     var editor = te.obj[0];
     editor.setContent( '<td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td>');
@@ -182,7 +186,14 @@ test( '转换script标签', function () {
     var html = br+'<div type="text/javascript" cdata_tag=\"script\"  style="display:none">ueditor</div>';
     ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
-
+test( 'trace 3698 1.3.0 版本修复: script(style)标签里面的内容不转码', function () {
+    var editor = te.obj[0];
+    editor.setContent('<script type="text/plain" id="myEditor" name="myEditor">var ue=UE.getEditor("editor");</script>');
+    equal(editor.document.getElementById('myEditor').innerHTML,'var ue=UE.getEditor("editor");','内容不转码')
+    // todo 1.3.0 trace 3698
+    editor.setContent('<style type="text/css" id="myEditor">        .clear {            clear: both;        }     </style>');
+    equal(editor.document.getElementById('myEditor').innerHTML,'        .clear {            clear: both;        }     ','内容不转码');
+} );
 test( '转换style标签:style data不为空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css">sdf</style>' );
