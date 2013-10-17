@@ -14,13 +14,32 @@
     //上传图片框中的描述表单名称，
     $title = htmlspecialchars($_POST['pictitle'], ENT_QUOTES);
     $path = htmlspecialchars($_POST['dir'], ENT_QUOTES);
+    $globalConfig = include( "UploadConfig.php" );
+    $imgSavePathConfig = $globalConfig[ 'imageSavePath' ];
+
+    //获取存储目录
+    if ( isset( $_GET[ 'fetch' ] ) ) {
+
+        header( 'Content-Type: text/javascript' );
+        echo 'updateSavePath('. json_encode($imgSavePathConfig) .');';
+        return;
+
+    }
 
     //上传配置
     $config = array(
-        "savePath" => ($path == "1" ? "upload/" : "upload1/"),
+        "savePath" => $imgSavePathConfig,
         "maxSize" => 1000, //单位KB
         "allowFiles" => array(".gif", ".png", ".jpg", ".jpeg", ".bmp")
     );
+
+    //上传目录验证
+    if ( !in_array( $path, $config[ 'savePath' ] ) ) {
+        echo "{'state':'非法上传目录'}";
+        return;
+    }
+
+    $config[ 'savePath' ] = $path . '/';
 
     //生成上传实例对象并完成上传
     $up = new Uploader("upfile", $config);

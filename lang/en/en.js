@@ -248,7 +248,8 @@ UE.I18N['en'] = {
             'imgSearchReset':{value:"Clear"},
             'upload':{style:'background: url(upload.png);'},
             'duiqi':{style:'background: url(imglabel.png) -12px 2px no-repeat;'},
-            'lang_savePath':'Select savePath:'
+            'lang_savePath':'Select savePath:',
+            'lang_load_savePath': 'Loading...'
         },
         'netError':"Network error,please check the config!",
         'noUploadImage':"No pictures has been uploaded！",
