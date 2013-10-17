@@ -287,5 +287,11 @@ UE.plugins['undo'] = function () {
             }
         }
     });
-
+    //扩展实例，添加关闭和开启命令undo
+    me.stopCmdUndo = function(){
+        me.__hasEnterExecCommand = true;
+    };
+    me.startCmdUndo = function(){
+        me.__hasEnterExecCommand = false;
+    }
 };
