@@ -369,11 +369,15 @@
         close: function (ok){
             if (this.fireEvent('close', ok) !== false) {
                 //还原环境
-                document.documentElement.style.overflowX = this._originalContext.html.overflowX;
-                document.documentElement.style.overflowY = this._originalContext.html.overflowY;
-                document.body.style.overflowX = this._originalContext.body.overflowX;
-                document.body.style.overflowY = this._originalContext.body.overflowY;
-                delete this._originalContext;
+                if ( this._fullscreen ) {
+
+                    document.documentElement.style.overflowX = this._originalContext.html.overflowX;
+                    document.documentElement.style.overflowY = this._originalContext.html.overflowY;
+                    document.body.style.overflowX = this._originalContext.body.overflowX;
+                    document.body.style.overflowY = this._originalContext.body.overflowY;
+                    delete this._originalContext;
+
+                }
                 this._hide();
             }
         }
