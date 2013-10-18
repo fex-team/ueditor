@@ -9,11 +9,19 @@
     margin-bottom: 6px;
 }
 
+.edui-default .edui-dialog-fullscreen-flag {
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
 .edui-default .edui-dialog-body {
     position: relative;
-
     padding:2px 0 0 2px;
     _zoom: 1;
+}
+
+.edui-default .edui-dialog-fullscreen-flag .edui-dialog-body {
+    padding: 0;
 }
 
 .edui-default .edui-dialog-shadow {
