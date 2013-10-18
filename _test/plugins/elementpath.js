@@ -180,8 +180,7 @@ test('图片', function () {
         setTimeout(function () {
             range.selectNode(body.firstChild.lastChild).select();
             var eles = editor.queryCommandValue('elementpath');
-            //todo ie9,10改range bug trace
-                ua.checkElementPath(eles, ['body', 'p', 'img'], '选中图片');
+            ua.checkElementPath(eles, ['body', 'p', 'img'], '选中图片');
             div.parentNode.removeChild(div);
             start();
         }, 20)
@@ -201,8 +200,7 @@ test('锚点', function () {
         setTimeout(function () {
             range.selectNode(body.firstChild.lastChild).select();
             var eles = editor.queryCommandValue('elementpath');
-            //todo ie9,10改range bug trace
-                ua.checkElementPath(eles, ['body', 'p', 'anchor'], '选中锚点');
+            ua.checkElementPath(eles, ['body', 'p', 'anchor'], '选中锚点');
             div.parentNode.removeChild(div);
             start();
         }, 20)

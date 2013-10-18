@@ -12,7 +12,6 @@ module("plugins.list");
  * */
 
 test('回车将p转成列表', function () {
-    //todo ie9,10改range bug trace
     var editor = te.obj[0];
     var range = te.obj[1];
     var br = ua.browser.ie ? '' : '<br>';

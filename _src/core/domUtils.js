@@ -721,7 +721,8 @@ var domUtils = dom.domUtils = {
      * ```
      */
     on:function (element, type, handler) {
-        var types = utils.isArray(type) ? type : [type],
+
+        var types = utils.isArray(type) ? type : type.split(/\s+/),
             k = types.length;
         if (k) while (k--) {
             type = types[k];
@@ -779,7 +780,7 @@ var domUtils = dom.domUtils = {
      * ```
      */
     un:function (element, type, handler) {
-        var types = utils.isArray(type) ? type : [type],
+        var types = utils.isArray(type) ? type : type.split(/\s+/),
             k = types.length;
         if (k) while (k--) {
             type = types[k];
@@ -1632,9 +1633,10 @@ var domUtils = dom.domUtils = {
         classNames = utils.trim(classNames).replace(/[ ]{2,}/g,' ').split(' ');
         for(var i = 0,ci,cls = elm.className;ci=classNames[i++];){
             if(!new RegExp('\\b' + ci + '\\b').test(cls)){
-                elm.className += ' ' + ci;
+                cls += ' ' + ci;
             }
         }
+        elm.className = utils.trim(cls);
     },
     /**
      * 判断元素element是否包含给定的样式类名className
