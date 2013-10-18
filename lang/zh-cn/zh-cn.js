@@ -152,6 +152,8 @@ UE.I18N['zh-cn'] = {
         'splittocols':"拆分成列",
         'splittorows':"拆分成行",
         'tablesort':'表格排序',
+        'enablesort':'设置表格可排序',
+        'disablesort':'取消表格可排序',
         'reversecurrent':'逆序当前',
         'orderbyasc':'按ASCII字符升序',
         'reversebyasc':'按ASCII字符降序',
