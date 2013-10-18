@@ -158,6 +158,23 @@
                 dialogWrapNode.style.height = vpRect.height + "px";
                 dialogWrapNode.style.left = 0;
 
+                //保存环境的overflow值
+                this._originalContext = {
+                    html: {
+                        overflowX: document.documentElement.style.overflowX,
+                        overflowY: document.documentElement.style.overflowY
+                    },
+                    body: {
+                        overflowX: document.body.style.overflowX,
+                        overflowY: document.body.style.overflowY
+                    }
+                };
+
+                document.documentElement.style.overflowX = 'hidden';
+                document.documentElement.style.overflowY = 'hidden';
+                document.body.style.overflowX = 'hidden';
+                document.body.style.overflowY = 'hidden';
+
             }
 
             this._show();
@@ -351,6 +368,12 @@
         },
         close: function (ok){
             if (this.fireEvent('close', ok) !== false) {
+                //还原环境
+                document.documentElement.style.overflowX = this._originalContext.html.overflowX;
+                document.documentElement.style.overflowY = this._originalContext.html.overflowY;
+                document.body.style.overflowX = this._originalContext.body.overflowX;
+                document.body.style.overflowY = this._originalContext.body.overflowY;
+                delete this._originalContext;
                 this._hide();
             }
         }

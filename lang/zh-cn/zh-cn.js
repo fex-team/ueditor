@@ -320,7 +320,25 @@ UE.I18N['zh-cn'] = {
     },
     'charts':{
         'static':{
-            'lang_input_anchorName':'锚点名字：'
+            'lang_data_source':'数据源：',
+            'lang_chart_format': '图表格式：',
+            'lang_data_align': '数据对齐方式',
+            'lang_chart_align_same': '数据源与图表X轴Y轴一致',
+            'lang_chart_align_reverse': '数据源与图表X轴Y轴相反',
+            'lang_chart_title': '图表标题',
+            'lang_chart_main_title': '主标题：',
+            'lang_chart_sub_title': '子标题：',
+            'lang_chart_x_title': 'X轴标题：',
+            'lang_chart_y_title': 'Y轴标题：',
+            'lang_chart_tip': '提示文字',
+            'lang_cahrt_tip_prefix': '提示文字前缀：',
+            'lang_cahrt_tip_description': '仅饼图有效， 当鼠标移动到饼图中相应的块上时，提示框内的文字的前缀',
+            'lang_chart_data_unit': '数据单位',
+            'lang_chart_data_unit_title': '单位：',
+            'lang_chart_data_unit_description': '显示在每个数据点上的数据的单位， 比如： 温度的单位 ℃',
+            'lang_chart_type': '图表类型：',
+            'lang_prev_btn': '上一个',
+            'lang_next_btn': '下一个'
         }
     },
     'attachment':{

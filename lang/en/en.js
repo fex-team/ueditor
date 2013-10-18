@@ -335,6 +335,29 @@ UE.I18N['en'] = {
             'lang_input_anchorName':'Anchor Name:'
         }
     },
+    'charts':{
+        'static':{
+            'lang_data_source':'Data source:',
+            'lang_chart_format': 'Chart format:',
+            'lang_data_align': 'Align',
+            'lang_chart_align_same': 'Consistent with the X-axis Y-axis',
+            'lang_chart_align_reverse': 'X-axis Y-axis opposite',
+            'lang_chart_title': 'Title',
+            'lang_chart_main_title': 'main title:',
+            'lang_chart_sub_title': 'sub title:',
+            'lang_chart_x_title': 'X-axis title:',
+            'lang_chart_y_title': 'Y-axis title:',
+            'lang_chart_tip': 'Prompt',
+            'lang_cahrt_tip_prefix': 'prefix:',
+            'lang_cahrt_tip_description': '仅饼图有效， 当鼠标移动到饼图中相应的块上时，提示框内的文字的前缀',
+            'lang_chart_data_unit': 'Unit',
+            'lang_chart_data_unit_title': 'unit:',
+            'lang_chart_data_unit_description': '显示在每个数据点上的数据的单位， 比如： 温度的单位 ℃',
+            'lang_chart_type': 'Chart type:',
+            'lang_prev_btn': 'Previous',
+            'lang_next_btn': 'Next'
+        }
+    },
     attachment:{
         'static':{
             'lang_input_fileStatus':' No file uploaded!',
