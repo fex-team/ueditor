@@ -767,7 +767,28 @@
             var numCols = this.colsNum,
                 table = this.table,
                 row = table.insertRow(rowIndex), cell,
-                width = parseInt((table.offsetWidth - numCols * 20 - numCols - 1) / numCols, 10);
+                isInsertTitle = typeof sourceCell == 'string' && sourceCell.toUpperCase() == 'TH';
+
+            function replaceTdToTh(colIndex, cell, tableRow) {
+                if (colIndex == 0) {
+                    var tr = tableRow.nextSibling || tableRow.previousSibling,
+                        th = tr.cells[colIndex];
+                    if (th.tagName == 'TH') {
+                        th = cell.ownerDocument.createElement("th");
+                        th.appendChild(cell.firstChild);
+                        tableRow.insertBefore(th, cell);
+                        domUtils.remove(cell)
+                    }
+                }else{
+                    if (cell.tagName == 'TH') {
+                        var td = cell.ownerDocument.createElement("td");
+                        td.appendChild(cell.firstChild);
+                        tableRow.insertBefore(td, cell);
+                        domUtils.remove(cell)
+                    }
+                }
+            }
+
             //首行直接插入,无需考虑部分单元格被rowspan的情况
             if (rowIndex == 0 || rowIndex == this.rowsNum) {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
@@ -775,6 +796,7 @@
                     this.setCellContent(cell);
                     cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     row.appendChild(cell);
+                    if(!isInsertTitle) replaceTdToTh(colIndex, cell, row);
                 }
             } else {
                 var infoRow = this.indexTable[rowIndex],
@@ -790,6 +812,7 @@
                         this.setCellContent(cell);
                         row.appendChild(cell);
                     }
+                    if(!isInsertTitle) replaceTdToTh(colIndex, cell, row);
                 }
             }
             //框选时插入不触发contentchange，需要手动更新索引。
@@ -858,10 +881,12 @@
             this.update();
         },
         insertCol:function (colIndex, sourceCell, defaultValue) {
+            debugger;
             var rowsNum = this.rowsNum,
                 rowIndex = 0,
                 tableRow, cell,
-                backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10);
+                backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10),
+                isInsertTitleCol = typeof sourceCell == 'string' && sourceCell.toUpperCase() == 'TH';
 
             function replaceTdToTh(rowIndex, cell, tableRow) {
                 if (rowIndex == 0) {
@@ -896,7 +921,7 @@
                     } else {
                         domUtils.insertAfter(tableRow.cells[tableRow.cells.length - 1], cell);
                     }
-                    replaceTdToTh(rowIndex, cell, tableRow)
+                    if(!isInsertTitleCol) replaceTdToTh(rowIndex, cell, tableRow)
                 }
             } else {
                 for (; rowIndex < rowsNum; rowIndex++) {
@@ -915,28 +940,8 @@
                         //防止IE下报错
                         preCell ? tableRow.insertBefore(cell, preCell) : tableRow.appendChild(cell);
                     }
-                    replaceTdToTh(rowIndex, cell, tableRow);
+                    if(!isInsertTitleCol) replaceTdToTh(rowIndex, cell, tableRow);
                 }
-            }
-            //框选时插入不触发contentchange，需要手动更新索引
-            this.update();
-            this.updateWidth(backWidth, defaultValue || {tdPadding:10, tdBorder:1});
-        },
-        insertThCol:function (colIndex, sourceCell, defaultValue) {
-            var rowsNum = this.rowsNum,
-                rowIndex = 0,
-                tableRow, cell,
-                backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10);
-
-            var preCell;
-            for (; rowIndex < rowsNum; rowIndex++) {
-                tableRow = this.table.rows[rowIndex];
-                preCell = tableRow.cells[0];
-                cell = this.cloneCell('th', true);
-                this.setCellContent(cell);
-                cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
-                preCell && cell.setAttribute('width', preCell.getAttribute('width'));
-                tableRow.insertBefore(cell, tableRow.cells[0]);
             }
             //框选时插入不触发contentchange，需要手动更新索引
             this.update();
@@ -949,7 +954,7 @@
                 table.setAttribute("width", tmpWidth);
                 return;
             }
-            var tds = domUtils.getElementsByTagName(this.table, "td");
+            var tds = domUtils.getElementsByTagName(this.table, "td th");
             utils.each(tds, function (td) {
                 td.setAttribute("width", width);
             })

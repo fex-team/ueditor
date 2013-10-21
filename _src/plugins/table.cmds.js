@@ -225,7 +225,7 @@
         execCommand: function (cmd) {
             var table = getTableItemsByRange(this).table;
             if (table) {
-                getUETable(table).insertThCol(0, 'th');
+                getUETable(table).insertCol(0, 'th');
             }
             resetTdWidth(table, this);
             var th = table.getElementsByTagName('th')[0];
@@ -326,7 +326,8 @@
         queryCommandState: function () {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
-            return cell && cell.tagName == "TD" && getUETable(tableItems.table).rowsNum < this.options.maxRowNum ? 0 : -1;
+            return cell && (cell.tagName == "TD" || (cell.tagName == 'TH' && tableItems.tr !== tableItems.table.rows[0])) &&
+                getUETable(tableItems.table).rowsNum < this.options.maxRowNum ? 0 : -1;
         },
         execCommand: function () {
             var rng = this.selection.getRange(),
@@ -421,7 +422,8 @@
         queryCommandState: function (cmd) {
             var tableItems = getTableItemsByRange(this),
                 cell = tableItems.cell;
-            return cell && (cell.tagName == "TD" || cell.tagName == 'TH') && getUETable(tableItems.table).colsNum < this.options.maxColNum ? 0 : -1;
+            return cell && (cell.tagName == "TD" || (cell.tagName == 'TH' && cell !== tableItems.tr.cells[0])) &&
+                getUETable(tableItems.table).colsNum < this.options.maxColNum ? 0 : -1;
         },
         execCommand: function (cmd) {
             var rng = this.selection.getRange(),
@@ -828,7 +830,7 @@
             return getSelectedArr(this).length > 1 ? 0 : -1;
         },
         execCommand: function (cmd, value) {
-            var table, cells, ut;
+            var cells, ut;
             cells = getSelectedArr(this);
             ut = getUETable(cells[0]);
             ut.setBackground(cells, value);
