@@ -54,7 +54,8 @@
         'scrawl':'~/dialogs/scrawl/scrawl.html',
         'music':'~/dialogs/music/music.html',
         'template':'~/dialogs/template/template.html',
-        'background':'~/dialogs/background/background.html'
+        'background':'~/dialogs/background/background.html',
+        'charts': '~/dialogs/charts/charts.html'
     };
     //为工具栏添加按钮，以下都是统一的按钮触发命令，所以写在一起
     var btnCmds = ['undo', 'redo', 'formatmatch',
@@ -182,7 +183,7 @@
     var dialogBtns = {
         noOk:['searchreplace', 'help', 'spechars', 'webapp'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-            'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background']
+            'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background', 'charts']
 
     };
 
@@ -207,6 +208,7 @@
                                 className:'edui-for-' + cmd,
                                 title:title,
                                 holdScroll: cmd === 'insertimage',
+                                fullscreen: cmd === 'charts',
                                 closeDialog:editor.getLang("closeDialog")
                             }, type == 'ok' ? {
                                 buttons:[
