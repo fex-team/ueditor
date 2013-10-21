@@ -48,6 +48,9 @@
                     me.close(false);
                 }
             });
+
+            this.fullscreen && this.initResizeEvent();
+
             if (this.buttons) {
                 for (var i=0; i<this.buttons.length; i++) {
                     if (!(this.buttons[i] instanceof Button)) {
@@ -55,6 +58,43 @@
                     }
                 }
             }
+        },
+        initResizeEvent: function () {
+
+            var me = this;
+
+            domUtils.on( window, "resize", function () {
+
+                if ( me._hidden ) {
+                    return;
+                }
+
+                if ( me.__resizeTimer ) {
+                    window.clearTimeout( me.__resizeTimer );
+                }
+
+                me.__resizeTimer = window.setTimeout( function () {
+
+                    me.__resizeTimer = null;
+
+                    var dialogWrapNode = me.getDom(),
+                        contentNode = me.getDom('content'),
+                        wrapRect = UE.ui.uiUtils.getClientRect( dialogWrapNode ),
+                        contentRect = UE.ui.uiUtils.getClientRect( contentNode ),
+                        vpRect = uiUtils.getViewportRect();
+
+                    contentNode.style.width = ( vpRect.width - wrapRect.width + contentRect.width ) + "px";
+                    contentNode.style.height = ( vpRect.height - wrapRect.height + contentRect.height ) + "px";
+
+                    dialogWrapNode.style.width = vpRect.width + "px";
+                    dialogWrapNode.style.height = vpRect.height + "px";
+
+                    me.fireEvent( "resize" );
+
+                }, 100 );
+
+            } );
+
         },
         fitSize: function (){
             var popBodyEl = this.getDom('body');
@@ -84,20 +124,59 @@
             el.style.top = Math.max(top, 0) + 'px';
         },
         showAtCenter: function (){
-            this.getDom().style.display = '';
+
             var vpRect = uiUtils.getViewportRect();
-            var popSize = this.fitSize();
-            var titleHeight = this.getDom('titlebar').offsetHeight | 0;
-            var left = vpRect.width / 2 - popSize.width / 2;
-            var top = vpRect.height / 2 - (popSize.height - titleHeight) / 2 - titleHeight;
-            var popEl = this.getDom();
-            this.safeSetOffset({
-                left: Math.max(left | 0, 0),
-                top: Math.max(top | 0, 0)
-            });
-            if (!domUtils.hasClass(popEl, 'edui-state-centered')) {
-                popEl.className += ' edui-state-centered';
+
+            if ( !this.fullscreen ) {
+                this.getDom().style.display = '';
+                var popSize = this.fitSize();
+                var titleHeight = this.getDom('titlebar').offsetHeight | 0;
+                var left = vpRect.width / 2 - popSize.width / 2;
+                var top = vpRect.height / 2 - (popSize.height - titleHeight) / 2 - titleHeight;
+                var popEl = this.getDom();
+                this.safeSetOffset({
+                    left: Math.max(left | 0, 0),
+                    top: Math.max(top | 0, 0)
+                });
+                if (!domUtils.hasClass(popEl, 'edui-state-centered')) {
+                    popEl.className += ' edui-state-centered';
+                }
+            } else {
+
+                var dialogWrapNode = this.getDom(),
+                    contentNode = this.getDom('content');
+                dialogWrapNode.style.left = "-100000px";
+                dialogWrapNode.style.display = "block";
+
+                var wrapRect = UE.ui.uiUtils.getClientRect( dialogWrapNode ),
+                    contentRect = UE.ui.uiUtils.getClientRect( contentNode );
+
+                contentNode.style.width = ( vpRect.width - wrapRect.width + contentRect.width ) + "px";
+                contentNode.style.height = ( vpRect.height - wrapRect.height + contentRect.height ) + "px";
+
+                dialogWrapNode.style.width = vpRect.width + "px";
+                dialogWrapNode.style.height = vpRect.height + "px";
+                dialogWrapNode.style.left = 0;
+
+                //保存环境的overflow值
+                this._originalContext = {
+                    html: {
+                        overflowX: document.documentElement.style.overflowX,
+                        overflowY: document.documentElement.style.overflowY
+                    },
+                    body: {
+                        overflowX: document.body.style.overflowX,
+                        overflowY: document.body.style.overflowY
+                    }
+                };
+
+                document.documentElement.style.overflowX = 'hidden';
+                document.documentElement.style.overflowY = 'hidden';
+                document.body.style.overflowX = 'hidden';
+                document.body.style.overflowY = 'hidden';
+
             }
+
             this._show();
         },
         getContentHtml: function (){
@@ -123,7 +202,7 @@
                     '</div>';
             }
 
-            return '<div id="##" class="%%"><div class="%%-wrap"><div id="##_body" class="%%-body">' +
+            return '<div id="##" class="%%"><div '+ ( !this.fullscreen ? 'class="%%"' : 'class="%%-wrap edui-dialog-fullscreen-flag"' ) +'><div id="##_body" class="%%-body">' +
                 '<div class="%%-shadow"></div>' +
                 '<div id="##_titlebar" class="%%-titlebar">' +
                 '<div class="%%-draghandle" onmousedown="$$._onTitlebarMouseDown(event, this);">' +
@@ -258,8 +337,11 @@
         },
         _hide: function (){
             if (!this._hidden) {
-                this.getDom().style.display = 'none';
-                this.getDom().style.zIndex = '';
+                var wrapNode = this.getDom();
+                wrapNode.style.display = 'none';
+                wrapNode.style.zIndex = '';
+                wrapNode.style.width = '';
+                wrapNode.style.height = '';
                 this._hidden = true;
                 this.fireEvent('hide');
             }
@@ -286,6 +368,16 @@
         },
         close: function (ok){
             if (this.fireEvent('close', ok) !== false) {
+                //还原环境
+                if ( this._fullscreen ) {
+
+                    document.documentElement.style.overflowX = this._originalContext.html.overflowX;
+                    document.documentElement.style.overflowY = this._originalContext.html.overflowY;
+                    document.body.style.overflowX = this._originalContext.body.overflowX;
+                    document.body.style.overflowY = this._originalContext.body.overflowY;
+                    delete this._originalContext;
+
+                }
                 this._hide();
             }
         }
