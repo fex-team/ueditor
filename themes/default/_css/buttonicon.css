@@ -409,3 +409,11 @@
 .edui-default  .edui-for-drafts  .edui-icon {
     background-position: -560px 0;
 }
+
+.edui-default  .edui-for-inserttitlecol  .edui-icon {
+    background-position: -673px -76px;
+}
+
+.edui-default  .edui-for-deletetitlecol  .edui-icon {
+    background-position: -698px -76px;
+}
