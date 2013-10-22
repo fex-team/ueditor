@@ -410,6 +410,10 @@
     background-position: -560px 0;
 }
 
+.edui-default  .edui-for-charts  .edui-icon {
+    background: url( ../images/charts.png ) no-repeat 2px 3px!important;
+}
+
 .edui-default  .edui-for-inserttitlecol  .edui-icon {
     background-position: -673px -76px;
 }
