@@ -15,7 +15,7 @@ test( '插入锚点后切换源码', function() {
         editor.execCommand( 'source' );     /*切到源码模式下会有一个超时*/
         setTimeout( function() {
             var tas = editor.iframe.parentNode.getElementsByTagName( 'textarea' );
-            if(ua.browser.chrome){
+            if(ua.browser.webkit){
                 ok( editor.iframe.nextSibling.textContent.indexOf( '<a name="hello"' ) !=-1, '查看是否转换成功' );
             }
             else{
