@@ -63,8 +63,8 @@
     function createMap() {
         map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
         var centerArr = centerParam.split(',');
-        var point = new BMap.Point(centerArr[0], centerArr[1]);//定义一个中心点坐标
-        map.centerAndZoom(point, zoomParam);//设定地图的中心点和坐标并将地图显示在地图容器中
+        var point = new BMap.Point(parseFloat(centerArr[0]), parseFloat(centerArr[1]));//定义一个中心点坐标
+        map.centerAndZoom(point, parseInt(zoomParam));//设定地图的中心点和坐标并将地图显示在地图容器中
     }
 
     //地图事件设置函数：
