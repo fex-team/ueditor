@@ -25,7 +25,7 @@ UE.I18N['en'] = {
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
         'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
         'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
-        'music':'Music', 'drafts': 'Load from Drafts'
+        'music':'Music', 'charts': 'charts','drafts': 'Load from Drafts'
     },
     'insertorderedlist':{
         'num':'1,2,3...',
@@ -250,7 +250,8 @@ UE.I18N['en'] = {
             'imgSearchReset':{value:"Clear"},
             'upload':{style:'background: url(upload.png);'},
             'duiqi':{style:'background: url(imglabel.png) -12px 2px no-repeat;'},
-            'lang_savePath':'Select savePath:'
+            'lang_savePath':'Select savePath:',
+            'lang_load_savePath': 'Loading...'
         },
         'netError':"Network error,please check the config!",
         'noUploadImage':"No pictures has been uploaded！",
@@ -334,6 +335,29 @@ UE.I18N['en'] = {
     anchor:{
         'static':{
             'lang_input_anchorName':'Anchor Name:'
+        }
+    },
+    'charts':{
+        'static':{
+            'lang_data_source':'Data source:',
+            'lang_chart_format': 'Chart format:',
+            'lang_data_align': 'Align',
+            'lang_chart_align_same': 'Consistent with the X-axis Y-axis',
+            'lang_chart_align_reverse': 'X-axis Y-axis opposite',
+            'lang_chart_title': 'Title',
+            'lang_chart_main_title': 'main title:',
+            'lang_chart_sub_title': 'sub title:',
+            'lang_chart_x_title': 'X-axis title:',
+            'lang_chart_y_title': 'Y-axis title:',
+            'lang_chart_tip': 'Prompt',
+            'lang_cahrt_tip_prefix': 'prefix:',
+            'lang_cahrt_tip_description': '仅饼图有效， 当鼠标移动到饼图中相应的块上时，提示框内的文字的前缀',
+            'lang_chart_data_unit': 'Unit',
+            'lang_chart_data_unit_title': 'unit:',
+            'lang_chart_data_unit_description': '显示在每个数据点上的数据的单位， 比如： 温度的单位 ℃',
+            'lang_chart_type': 'Chart type:',
+            'lang_prev_btn': 'Previous',
+            'lang_next_btn': 'Next'
         }
     },
     attachment:{
