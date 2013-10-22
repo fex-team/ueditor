@@ -91,7 +91,7 @@
     function setMapListener() {
         var editor = parent.editor, containerIframe;
         for (var key in parent.document.getElementsByTagName('iframe')) {
-            if (parent.document.getElementsByTagName('iframe')[key].contentWindow === window) {
+            if (parent.document.getElementsByTagName('iframe')[key].contentWindow == window) {
                 containerIframe = parent.document.getElementsByTagName('iframe')[key];
                 break;
             }
@@ -110,7 +110,6 @@
                 replace(new RegExp('([?#&])center=([^?#&]+)', 'i'), '$1center=' + encodeURIComponent(center.lng + ',' + center.lat)).
                 replace(new RegExp('([?#&])markers=([^?#&]+)', 'i'), '$1markers=' + encodeURIComponent(marker.lng + ',' + marker.lat)).
                 replace(new RegExp('([?#&])zoom=([^?#&]+)', 'i'), '$1zoom=' + encodeURIComponent(zoom));
-
             editor.fireEvent('saveScene');
         }
     }
