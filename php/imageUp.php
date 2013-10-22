@@ -33,6 +33,12 @@
         "allowFiles" => array(".gif", ".png", ".jpg", ".jpeg", ".bmp")
     );
 
+    if ( empty( $path ) ) {
+
+        $path = $config[ 'savePath' ][ 0 ];
+
+    }
+
     //上传目录验证
     if ( !in_array( $path, $config[ 'savePath' ] ) ) {
         echo "{'state':'非法上传目录'}";
