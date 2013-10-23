@@ -32,7 +32,11 @@ public class imageUp : IHttpHandler
 
         string pathbase = null;
         string path = up.getOtherInfo(context, "dir");
-        if (Config.ImageSavePath.Count(x => x == path) == 0)
+        if (String.IsNullOrEmpty(path)) 
+        {
+            path = Config.ImageSavePath[0];
+        } 
+        else if (Config.ImageSavePath.Count(x => x == path) == 0)
         {
             context.Response.Write("{ 'state' : '非法上传目录' }");
             return;

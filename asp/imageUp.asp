@@ -24,7 +24,9 @@
     End If
 
     path = Request.Form("dir")
-    If IsInArray(path, allowPaths) = False Then
+    If( IsEmpty(path) ) Then 
+        path = allowPaths(0)
+    ElseIf IsInArray(path, allowPaths) = False Then
         Response.Write("{ 'state' : '非法上传目录！' }")
         Response.End
     End If
@@ -50,7 +52,7 @@
     Function IsInArray(arr, elem)
         IsInArray = false
         For Each i In arr
-            If arr[i] = elem Then IsInArray = true
+            If i = elem Then IsInArray = true
         Next
     End Function
 %>
