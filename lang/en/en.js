@@ -155,6 +155,8 @@ UE.I18N['en'] = {
         'splittocols':"Split to Cols",
         'splittorows':"Split to Rows",
         'tablesort':'Table sorting',
+        'enablesort':'Sorting Enable',
+        'disablesort':'Sorting Disable',
         'reversecurrent':'Reverse current',
         'orderbyasc':'Order By ASCII',
         'reversebyasc':'Reverse By ASCII',

@@ -132,7 +132,6 @@ UE.plugin.register('autosave', function (){
 
             'contentchange': function () {
 
-
                 var saveData = null;
 
                 if ( !saveKey ) {
@@ -148,6 +147,8 @@ UE.plugin.register('autosave', function (){
                     me._saveFlag = null;
 
                     if ( !me.hasContents() ) {
+                        //这里不能调用命令来删除， 会造成事件死循环
+                        saveKey && LocalStorage.removeItem( saveKey );
                         return;
                     }
 
@@ -173,7 +174,9 @@ UE.plugin.register('autosave', function (){
         commands:{
             'clearlocaldata':{
                 execCommand:function (cmd, name) {
-                    saveKey && LocalStorage.removeItem( saveKey );
+                    if ( saveKey && LocalStorage.getLocalData( saveKey ) ) {
+                        LocalStorage.removeItem( saveKey )
+                    }
                 },
                 notNeedUndo: true
             },

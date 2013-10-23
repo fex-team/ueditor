@@ -65,7 +65,7 @@
 
             domUtils.on( window, "resize", function () {
 
-                if ( me._hidden ) {
+                if ( me._hidden || me._hidden === undefined ) {
                     return;
                 }
 
