@@ -74,6 +74,7 @@
 ///import plugins/table.core;
 ///import plugins/table.cmds;
 ///import plugins/table.action;
+///import plugins/table.sort;
 ///import plugins/contextmenu;
 ///import plugins/shortcutmenu;
 ///import plugins/pagebreak;

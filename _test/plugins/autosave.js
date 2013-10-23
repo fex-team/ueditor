@@ -2,7 +2,7 @@ module( 'plugins.autosave' );
 
 //这个插件是针对非ie的，单测用例同样只针对非ie,仍需手动测试检验ie与非ie下效果是否一致
 test( '自动保存', function() {
-
+    expect(4);
     var container = te.obj[0].container,
         editor = null,
         count = 0;
