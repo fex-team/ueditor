@@ -380,7 +380,8 @@ var domUtils = dom.domUtils = {
      * @return { Node } 新插入的节点
      */
     insertAfter:function (node, newNode) {
-        return node.parentNode.insertBefore(newNode, node.nextSibling);
+        return node.nextSibling ? node.parentNode.insertBefore(newNode, node.nextSibling):
+            node.parentNode.appendChild(newNode);
     },
 
     /**

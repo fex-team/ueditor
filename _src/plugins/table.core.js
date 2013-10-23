@@ -440,7 +440,13 @@
                     endColIndex:endInfo.colIndex + endInfo.colSpan - 1
                 };
             }
-
+            //给第一行设置firstRow的样式名称,在排序图标的样式上使用到
+            if(!domUtils.hasClass(this.table.rows[0], "firstRow")) {
+                domUtils.addClass(this.table.rows[0], "firstRow");
+                for(var i = 1; i< this.table.rows.length; i++) {
+                    domUtils.removeClasses(this.table.rows[i], "firstRow");
+                }
+            }
         },
         /**
          * 获取单元格的索引信息
@@ -761,7 +767,28 @@
             var numCols = this.colsNum,
                 table = this.table,
                 row = table.insertRow(rowIndex), cell,
-                width = parseInt((table.offsetWidth - numCols * 20 - numCols - 1) / numCols, 10);
+                isInsertTitle = typeof sourceCell == 'string' && sourceCell.toUpperCase() == 'TH';
+
+            function replaceTdToTh(colIndex, cell, tableRow) {
+                if (colIndex == 0) {
+                    var tr = tableRow.nextSibling || tableRow.previousSibling,
+                        th = tr.cells[colIndex];
+                    if (th.tagName == 'TH') {
+                        th = cell.ownerDocument.createElement("th");
+                        th.appendChild(cell.firstChild);
+                        tableRow.insertBefore(th, cell);
+                        domUtils.remove(cell)
+                    }
+                }else{
+                    if (cell.tagName == 'TH') {
+                        var td = cell.ownerDocument.createElement("td");
+                        td.appendChild(cell.firstChild);
+                        tableRow.insertBefore(td, cell);
+                        domUtils.remove(cell)
+                    }
+                }
+            }
+
             //首行直接插入,无需考虑部分单元格被rowspan的情况
             if (rowIndex == 0 || rowIndex == this.rowsNum) {
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
@@ -769,6 +796,7 @@
                     this.setCellContent(cell);
                     cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     row.appendChild(cell);
+                    if(!isInsertTitle) replaceTdToTh(colIndex, cell, row);
                 }
             } else {
                 var infoRow = this.indexTable[rowIndex],
@@ -784,6 +812,7 @@
                         this.setCellContent(cell);
                         row.appendChild(cell);
                     }
+                    if(!isInsertTitle) replaceTdToTh(colIndex, cell, row);
                 }
             }
             //框选时插入不触发contentchange，需要手动更新索引。
@@ -852,10 +881,12 @@
             this.update();
         },
         insertCol:function (colIndex, sourceCell, defaultValue) {
+            debugger;
             var rowsNum = this.rowsNum,
                 rowIndex = 0,
                 tableRow, cell,
-                backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10);
+                backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10),
+                isInsertTitleCol = typeof sourceCell == 'string' && sourceCell.toUpperCase() == 'TH';
 
             function replaceTdToTh(rowIndex, cell, tableRow) {
                 if (rowIndex == 0) {
@@ -890,7 +921,7 @@
                     } else {
                         domUtils.insertAfter(tableRow.cells[tableRow.cells.length - 1], cell);
                     }
-                    replaceTdToTh(rowIndex, cell, tableRow)
+                    if(!isInsertTitleCol) replaceTdToTh(rowIndex, cell, tableRow)
                 }
             } else {
                 for (; rowIndex < rowsNum; rowIndex++) {
@@ -909,28 +940,8 @@
                         //防止IE下报错
                         preCell ? tableRow.insertBefore(cell, preCell) : tableRow.appendChild(cell);
                     }
-                    replaceTdToTh(rowIndex, cell, tableRow);
+                    if(!isInsertTitleCol) replaceTdToTh(rowIndex, cell, tableRow);
                 }
-            }
-            //框选时插入不触发contentchange，需要手动更新索引
-            this.update();
-            this.updateWidth(backWidth, defaultValue || {tdPadding:10, tdBorder:1});
-        },
-        insertThCol:function (colIndex, sourceCell, defaultValue) {
-            var rowsNum = this.rowsNum,
-                rowIndex = 0,
-                tableRow, cell,
-                backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10);
-
-            var preCell;
-            for (; rowIndex < rowsNum; rowIndex++) {
-                tableRow = this.table.rows[rowIndex];
-                preCell = tableRow.cells[0];
-                cell = this.cloneCell('th', true);
-                this.setCellContent(cell);
-                cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
-                preCell && cell.setAttribute('width', preCell.getAttribute('width'));
-                tableRow.insertBefore(cell, tableRow.cells[0]);
             }
             //框选时插入不触发contentchange，需要手动更新索引
             this.update();
@@ -943,7 +954,7 @@
                 table.setAttribute("width", tmpWidth);
                 return;
             }
-            var tds = domUtils.getElementsByTagName(this.table, "td");
+            var tds = domUtils.getElementsByTagName(this.table, "td th");
             utils.each(tds, function (td) {
                 td.setAttribute("width", width);
             })
@@ -1094,48 +1105,6 @@
             var tds = this.table.getElementsByTagName("td"),
                 range = this.getCellsRange(tds[0], tds[tds.length - 1]);
             this.setSelected(range);
-        },
-        sortTable:function (sortByCellIndex, compareFn) {
-            var table = this.table,
-                rows = table.rows,
-                trArray = [],
-                flag = rows[0].cells[0].tagName === "TH",
-                lastRowIndex = 0;
-            if(this.selectedTds.length){
-                var range = this.cellsRange,
-                    len = range.endRowIndex + 1;
-                for (var i = range.beginRowIndex; i < len; i++) {
-                    trArray[i] = rows[i];
-                }
-                trArray.splice(0,range.beginRowIndex);
-                lastRowIndex = (range.endRowIndex +1) === this.rowsNum ? 0 : range.endRowIndex +1;
-            }else{
-                for (var i = 0,len = rows.length; i < len; i++) {
-                    trArray[i] = rows[i];
-                }
-            }
-            //th不参与排序
-            flag && trArray.splice(0, 1);
-            trArray = utils.sort(trArray,function (tr1, tr2) {
-                var txt = function(node){
-                    return node.innerText||node.textContent;
-                };
-                return compareFn ? (typeof compareFn === "number" ? compareFn : compareFn.call(this, tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex])) : function () {
-                    var value1 = txt(tr1.cells[sortByCellIndex]),
-                        value2 = txt(tr2.cells[sortByCellIndex]);
-                    return value1.localeCompare(value2);
-                }();
-            });
-            var fragment = table.ownerDocument.createDocumentFragment();
-            for (var j = 0, len = trArray.length; j < len; j++) {
-                fragment.appendChild(trArray[j]);
-            }
-            var tbody = table.getElementsByTagName("tbody")[0];
-            if(!lastRowIndex){
-                tbody.appendChild(fragment);
-            }else{
-                tbody.insertBefore(fragment,rows[lastRowIndex- range.endRowIndex + range.beginRowIndex - 1])
-            }
         },
         setBackground:function (cells, value) {
             if (typeof value === "string") {
