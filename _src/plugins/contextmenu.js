@@ -187,50 +187,44 @@ UE.plugins['contextmenu'] = function () {
                     icon:'tablesort',
                     subMenu:[
                         {
+                            label:lang.enablesort,
+                            cmdName:'enablesort',
+                            query: function(){
+                                return me.queryCommandState('enablesort') == 1 ? -1:0;
+                            }
+                        },
+                        {
+                            label:lang.disablesort,
+                            cmdName:'disablesort',
+                            query: function(){
+                                return me.queryCommandState('disablesort') == 1 ? -1:0;
+                            }
+                        },
+                        '-',
+                        {
                             label:lang.reversecurrent,
                             cmdName:'sorttable',
-                            value:1
+                            value:'reversecurrent'
                         },
                         {
                             label:lang.orderbyasc,
-                            cmdName:'sorttable'
+                            cmdName:'sorttable',
+                            value:'orderbyasc'
                         },
                         {
                             label:lang.reversebyasc,
                             cmdName:'sorttable',
-                            exec:function(){
-                                this.execCommand("sorttable",function(td1,td2){
-                                    var value1 = td1.innerHTML,
-                                        value2 = td2.innerHTML;
-                                    return value2.localeCompare(value1);
-                                });
-                            }
+                            value:'reversebyasc'
                         },
                         {
                             label:lang.orderbynum,
                             cmdName:'sorttable',
-                            exec:function(){
-                                this.execCommand("sorttable",function(td1,td2){
-                                    var value1 = td1[browser.ie ? 'innerText':'textContent'].match(/\d+/),
-                                        value2 = td2[browser.ie ? 'innerText':'textContent'].match(/\d+/);
-                                    if(value1) value1 = +value1[0];
-                                    if(value2) value2 = +value2[0];
-                                    return (value1||0) - (value2||0);
-                                });
-                            }
+                            value:'orderbynum'
                         },
                         {
                             label:lang.reversebynum,
                             cmdName:'sorttable',
-                            exec:function(){
-                                this.execCommand("sorttable",function(td1,td2){
-                                    var value1 = td1[browser.ie ? 'innerText':'textContent'].match(/\d+/),
-                                        value2 = td2[browser.ie ? 'innerText':'textContent'].match(/\d+/);
-                                    if(value1) value1 = +value1[0];
-                                    if(value2) value2 = +value2[0];
-                                    return (value2||0) - (value1||0);
-                                });
-                            }
+                            value:'reversebynum'
                         }
                     ]
                 },
