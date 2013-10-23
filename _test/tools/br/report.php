@@ -34,6 +34,7 @@ function report()
     foreach ($_POST as $key => $value) {
         if ($key == 'config')
             continue;
+        echo $key.'        ';
         $info = explode(";", $value);
         if ($filter!='' && (substr_count($key, $filter) == 0 || strpos($key, $filter) > 0))
             continue;
@@ -43,7 +44,7 @@ function report()
         $tests++;
         $failure = (int)($info[0]);
         $case = $suite->appendChild($dom->createElement('testcase'));
-        $case->setAttribute("name", $key);
+        $case->setAttribute("name", str_replace('_','.',$key));
         $case->setAttribute("time", $casetime);
         $case->setAttribute("cov", $info[2]);
         $case->setAttribute('failNumber', $info[0]);
