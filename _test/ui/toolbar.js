@@ -13,7 +13,7 @@ test( 'toolbar显示', function() {
             return function (editor, title){
                 var ui = new baidu.editor.ui.Button({
                     className: 'edui-for-' + cmd,
-                    title: title || editor.options.labelMap[cmd] || '',
+                    title: title || editor.options.labelMap || editor.getLang('labelMap') || '',
                     onclick: function (){
                         editor.execCommand(cmd);
                     },
@@ -39,7 +39,7 @@ test( 'toolbar显示', function() {
             return function (editor, title){
                 var ui = new baidu.editor.ui.Button({
                     className: 'edui-for-' + cmd,
-                    title: title || editor.options.labelMap[cmd] || '',
+                    title: title || editor.options.labelMap || editor.getLang('labelMap')  || '',
                     onclick: function (){
                         editor.execCommand(cmd);
                     },
@@ -98,7 +98,7 @@ test( 'toolbar显示', function() {
         }
     }
     var link = toolbarShow.childNodes[0].firstChild;
-    equal(link.className,theme,'mouseover效果');
+    equal(link.className,'edui-'+editor.options.theme,'mouseover效果');
     if(ua.browser.ie){
         ua.mouseenter(link);
     }
@@ -107,7 +107,7 @@ test( 'toolbar显示', function() {
     }
     setTimeout(function (){
         link = document.getElementById('editor').firstChild.childNodes[0].firstChild;
-        equal(link.className,theme+' edui-state-hover','mouseover效果');
+        equal(link.className,'edui-'+editor.options.theme+' edui-state-hover','mouseover效果');
         if(ua.browser.ie){
             ua.mouseleave(link);
         }
@@ -116,12 +116,11 @@ test( 'toolbar显示', function() {
         }
         setTimeout(function (){
             link = document.getElementById('editor').firstChild.childNodes[0].firstChild;
-            equal(link.className,'edui-'+editor.options.theme,'mouseout效果');
+            equal(link.className,'edui-'+editor.options.theme ,'mouseout效果');
             toolbarUi.dispose();
             equal(document.getElementById('editor').childNodes.length,0,'成功销毁');
             start();
         }, 400);
-
     }, 300);
     stop();
 } );
@@ -131,7 +130,7 @@ test( 'toolbar点击', function() {
             return function (editor, title){
                 var ui = new baidu.editor.ui.Button({
                     className: 'edui-for-' + cmd,
-                    title: title || editor.options.labelMap[cmd] || '',
+                    title: title || editor.options.labelMap || editor.getLang('labelMap') || '',
                     onclick: function (){
                         editor.execCommand(cmd, {href:'http://www.google.com/'});
                     },
@@ -157,7 +156,7 @@ test( 'toolbar点击', function() {
             return function (editor, title){
                 var ui = new baidu.editor.ui.Button({
                     className: 'edui-for-' + cmd,
-                    title: title || editor.options.labelMap[cmd] || '',
+                    title: title ||editor.options.labelMap || editor.getLang('labelMap') || '',
                     onclick: function (){
                         editor.execCommand(cmd);
                     },
@@ -213,7 +212,7 @@ test( 'toolbar点击', function() {
     var range = new baidu.editor.dom.Range( document );
     editor.body = document.getElementById('editor').nextSibling;
     range.selectNode(document.body.lastChild).select();
-
+    editor.document = editor.body;
     ua.click(linkButton);
     setTimeout(function (){
         equal(document.body.lastChild.firstChild.firstChild.attributes['href'].nodeValue,'http://www.google.com/','点击link按钮后，生成连接');
@@ -223,5 +222,4 @@ test( 'toolbar点击', function() {
         start();
     }, 300);
     stop();
-
 } );
