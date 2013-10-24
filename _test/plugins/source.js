@@ -321,7 +321,7 @@ test('在font,b,i标签中输入，会自动转换标签 ', function () {
             if (ua.browser.gecko || ua.browser.ie)
                 equal($(editor.body.firstChild.firstChild).css('font-size'), '3px', '检查style');
             else
-                equal($(editor.body.firstChild.firstChild).css('font-size'), '12px', '检查style');
+                equal($(editor.body.firstChild.firstChild).css('font-size'), '16px', '检查style');
             var EMstyle = $(editor.body.firstChild.firstChild).css('color');
             ok(EMstyle == 'rgb(255, 0, 0)' || EMstyle == 'red' || EMstyle == '#ff0000', '检查style');
             equal(ua.getChildHTML(editor.body.firstChild.firstChild), '<strong><em>x</em></strong>', 'b转成strong,i转成em ');

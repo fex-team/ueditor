@@ -79,20 +79,21 @@ test('表格右键菜单', function () {
         setTimeout(function () {
             range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild.firstChild, 0).collapse(true).select();
             ua.contextmenu(editor.body.firstChild.firstChild.firstChild);
+// 点开右键菜单
             equal(document.getElementsByClassName("edui-menu-body").length, 5, '获得edui-menu-body名称的class个数5');
             var menuBody = document.getElementsByClassName("edui-menu-body")[0];
             equal(menuBody.childNodes.length, 13, '第一个menu11个items2个分隔线');
-            var innerText = lang.selectall + lang.cleardoc + lang.table + "表格排序" + "边框底纹" + lang.aligntd + lang.aligntable + lang.insertparagraphbefore + lang.insertparagraphafter + lang['copy'] + lang['paste'];
+            var innerText = lang.selectall + lang.cleardoc + lang.table + lang.tablesort + lang.borderbk+ lang.aligntd + lang.aligntable + lang.insertparagraphbefore + lang.insertparagraphafter + lang['copy'] + lang['paste'];
             if (browser.gecko) {
                 equal(menuBody.textContent, innerText, '检查menu显示的字符');
             }
             else {
                 equal(menuBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), innerText, '检查menu显示的字符');
             }
-//
+
             var menutableBody = document.getElementsByClassName("edui-menu-body")[1];
             var forTable = document.getElementsByClassName('edui-for-table');
-
+//点开'表格'子菜单
             if (ua.browser.ie) {
                 ua.mouseenter(forTable[forTable.length - 1]);
             } else {
@@ -101,8 +102,8 @@ test('表格右键菜单', function () {
             setTimeout(function () {
                 lang = editor.getLang("contextMenu");
                 equal(menutableBody.parentNode.parentNode.parentNode.style.display, 'none', '显示submenu,检查submenu的display值:""');
-                equal(menutableBody.childNodes.length, 15, '11个items4个分隔线');
-                var innerText = lang.deletetable + lang.insertcol + lang.insertcolnext + lang.insertrow + lang.insertrownext + lang.insertcaption + lang.inserttitle + lang.mergeright + lang.mergedown + lang.edittd + lang.edittable;
+                equal(menutableBody.childNodes.length, 16, '12个items4个分隔线');
+                var innerText = lang.deletetable + lang.insertcol + lang.insertcolnext + lang.insertrow + lang.insertrownext + lang.insertcaption + lang.inserttitle + lang.inserttitlecol + lang.mergeright + lang.mergedown + lang.edittd + lang.edittable;
                 if (browser.gecko) {
                     equal(menutableBody.textContent, innerText, '检查menu显示的字符');
                 }
@@ -219,11 +220,11 @@ test('trace 3044：表格名称中右键', function () {
                 lang = editor.getLang("contextMenu");
                 menutableBody = document.getElementsByClassName("edui-menu-body")[1];
                 if (ua.browser.ie == 8) {
-                    equal(menutableBody.childNodes.length, 7, '7个子项目,其中有2条分隔线');
+                    equal(menutableBody.childNodes.length, 8, '8个子项目,其中有2条分隔线');
                 } else {
-                    equal(menutableBody.childNodes.length, 5, '5个子项目');
+                    equal(menutableBody.childNodes.length, 6, '6个子项目');
                 }
-                var innerText = lang.deletetable + lang.deletecaption + lang.inserttitle + lang.edittd + lang.edittable;
+                var innerText = lang.deletetable + lang.deletecaption + lang.inserttitle+lang.inserttitlecol + lang.edittd + lang.edittable;
                 if (browser.gecko) {
                     equal(menutableBody.textContent, innerText, '检查menu显示的字符');
                 } else {
@@ -423,7 +424,9 @@ test('表格逆序当前', function () {
             editor.ready(function () {
                 lang = editor.getLang("contextMenu");
                 ua.click(menutable.childNodes[0]);
-                equal(ua.getChildHTML(editor.body), '<table><tbody><tr><td class=\" selecttdclass\">ackson</td><td>4</td><td>承祜</td></tr><tr><td class=\" selecttdclass\">{}</td><td>2</td><td>胤礼</td></tr><tr><td class=\" selecttdclass\">&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '表格内容逆序-选区不闭合');
+                ua.manualDeleteFillData(editor.body);
+                ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td class=\"selectTdClass\">ackson</td><td>4</td><td>承祜</td></tr><tr><td class=\"selectTdClass\">{}</td><td>2</td><td>胤礼</td></tr><tr><td class=\"selectTdClass\">&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '表格内容逆序-选区不闭合');
+
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
@@ -459,7 +462,8 @@ test('按ASCII字符排序', function () {
         setTimeout(function () {
             lang = editor.getLang("contextMenu");
             ua.click(menutable.childNodes[1]);
-            equal(ua.getChildHTML(editor.body), '<table><tbody><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr><tr><td>michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '选区闭合');
+            ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '选区闭合');
+
             var tds = editor.body.getElementsByTagName('td');
             var ut = editor.getUETable(editor.body.firstChild);
             var cellsRange = ut.getCellsRange(tds[0], tds[6]);
@@ -476,7 +480,8 @@ test('按ASCII字符排序', function () {
             setTimeout(function () {
                 lang = editor.getLang("contextMenu");
                 ua.click(menutable.childNodes[2]);
-                equal(ua.getChildHTML(editor.body), '<table><tbody><tr><td class=\" selecttdclass\">ackson</td><td>4</td><td>承祜</td></tr><tr><td class=\" selecttdclass\">{}</td><td>2</td><td>胤礼</td></tr><tr><td class=\" selecttdclass\">&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '表格内容逆序-选区不闭合');
+                ua.manualDeleteFillData(editor.body);
+                ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td class=\" selecttdclass \">ackson</td><td>4</td><td>承祜</td></tr><tr><td class=\" selecttdclass\">{}</td><td>2</td><td>胤礼</td></tr><tr><td class=\" selecttdclass\">&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '表格内容逆序-选区不闭合');
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                     UE.delEditor('ue');
@@ -544,7 +549,8 @@ test('trace 3384：按数值大小排序', function () {
         setTimeout(function () {
             lang = editor.getLang("contextMenu");
             ua.click(menutable.childNodes[3]);
-            equal(ua.getChildHTML(editor.body), '<table><tbody><tr><td>michael</td><td>1</td><td>康熙</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr></tbody></table>', '选区闭合');
+            ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td>Michael</td><td>1</td><td>康熙</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr></tbody></table>', '选区不闭合');
+
             var tds = editor.body.getElementsByTagName('td');
             var ut = editor.getUETable(editor.body.firstChild);
             var cellsRange = ut.getCellsRange(tds[1], tds[7]);
@@ -565,7 +571,7 @@ test('trace 3384：按数值大小排序', function () {
                 ua.click(menutable.childNodes[4]);
                 // todo 1.2.6.1 trace 3510
                 if(!ua.browser.gecko){
-                    equal(ua.getChildHTML(editor.body), '<table><tbody><tr><td>&amp;*</td><td class=\" selecttdclass\">3</td><td>襄嫔</td></tr><tr><td>{}</td><td class=\" selecttdclass\">2</td><td>胤礼</td></tr><tr><td>michael</td><td class=\" selecttdclass\">1</td><td>康熙</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr></tbody></table>', '选区不闭合');
+                    ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td>&amp;*</td><td class=\" selecttdclass\">3</td><td>襄嫔</td></tr><tr><td>{}</td><td class=\" selecttdclass\">2</td><td>胤礼</td></tr><tr><td>Michael</td><td class=\" selecttdclass\">1</td><td>康熙</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr></tbody></table>', '选区不闭合');
                 }
                 setTimeout(function () {
                     document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
@@ -602,12 +608,13 @@ test('trace 3088：检查表格属性', function () {
             setTimeout(function () {
                 var menutable = document.getElementsByClassName("edui-menu-body")[1];
                 var forTable = document.getElementsByClassName('edui-for-table');
+                //点开'表格属性'(表格子菜单的最后一项)
                 if (ua.browser.ie&&ua.browser.ie<9) {
                     ua.mouseenter(forTable[forTable.length - 1]);
-                    ua.click(menutable.childNodes[6]);
+                    ua.click(menutable.childNodes[menutable.childNodes.length-1]);
                 } else {
                     ua.mouseover(forTable[forTable.length - 1]);
-                    ua.click(menutable.childNodes[4]);
+                    ua.click(menutable.childNodes[menutable.childNodes.length-1]);
                 }
                 lang = editor.getLang("contextMenu");
                 setTimeout(function () {
@@ -680,7 +687,7 @@ test('trace 3099：清除边框颜色', function () {
                 ua.mouseover(forTable[forTable.length - 1]);
             }
             lang = editor.getLang("contextMenu");
-            ua.click(menutable.childNodes[14]);
+            ua.click(menutable.childNodes[menutable.childNodes.length-1]);//点开表格属性
             setTimeout(function () {
                 var iframe = document.getElementsByTagName('iframe');
                 var iframe1 ;
@@ -701,7 +708,6 @@ test('trace 3099：清除边框颜色', function () {
                     else {
                         equal(tds[0].style.borderColor, 'rgb(255, 0, 0)', '边框颜色设置为红色');
                     }
-
                     range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
                     ua.contextmenu(editor.body.firstChild);
                     menutable = document.getElementsByClassName("edui-menu-body")[1];
@@ -712,7 +718,7 @@ test('trace 3099：清除边框颜色', function () {
                         ua.mouseover(forTable[forTable.length - 1]);
                     }
                     lang = editor.getLang("contextMenu");
-                    ua.click(menutable.childNodes[14]);
+                    ua.click(menutable.childNodes[menutable.childNodes.length-1]);
                     setTimeout(function () {
                         iframe = document.getElementsByTagName('iframe');
                         iframe1 = null;
@@ -743,7 +749,6 @@ test('trace 3099：清除边框颜色', function () {
         }, 200);
     });
 });
-
 test('标题行中右插入列', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
@@ -767,9 +772,9 @@ test('标题行中右插入列', function () {
         }
         setTimeout(function () {
             lang = editor.getLang("contextMenu");
-            equal(menutable.childNodes.length, 12, '12个子项目');
+            equal(menutable.childNodes.length, 13, '13个子项目');
             /*trace 3197：没有后插行选项*/
-            var innerText = lang.deletetable + lang.insertcol + lang.insertcolnext + lang.insertcaption + lang.deletetitle + lang.mergeright + lang.edittd + lang.edittable;
+            var innerText = lang.deletetable + lang.insertcol + lang.insertcolnext + lang.insertcaption + lang.deletetitle +lang.inserttitlecol+ lang.mergeright + lang.edittd + lang.edittable;
             if (browser.gecko) {
                 equal(menutable.textContent, innerText, '检查menu显示的字符');
             } else {
@@ -786,6 +791,7 @@ test('标题行中右插入列', function () {
         });
     });
 });
+
 
 /*trace 3060*/
 test('trace 3060：单元格对齐方式', function () {
@@ -977,7 +983,7 @@ test('trace 3210：添加单元格背景色', function () {
                 ua.mouseover(forTable[forTable.length - 1]);
             }
             lang = editor.getLang("contextMenu");
-            ua.click(menutable.childNodes[12]);
+            ua.click(menutable.childNodes[menutable.childNodes.length-2]);
             var iframe = document.getElementsByTagName('iframe');
             var i = iframe.length - 1;
             for (var iframe1 in iframe) {

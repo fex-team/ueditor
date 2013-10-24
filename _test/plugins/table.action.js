@@ -919,8 +919,8 @@ test('点击一行的最左边,选中一行', function () {
 //            //me.body.style.cursor
             var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
             equal(selectedTds.length, 2, '选中一行');
-            equal(selectedTds[0].className, ' selectTdClass', '检查样式');
-            equal(selectedTds[1].className, ' selectTdClass', '检查样式');
+            equal(selectedTds[0].className, 'selectTdClass', '检查样式');
+            equal(selectedTds[1].className, 'selectTdClass', '检查样式');
             equal(selectedTds[0].innerHTML, 'hello1', '检查内容');
             equal(selectedTds[1].innerHTML, 'hello2', '检查内容');
             //todo trace 3571
@@ -997,9 +997,9 @@ test('点击一列的最上边,选中一列', function () {
             var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
             equal(selectedTds.length, 3, '选中一列');
             equal(selectedTds[0].innerHTML, 'hello', '检查内容');
-            equal(selectedTds[0].className, ' selectTdClass', '检查样式');
-            equal(selectedTds[1].className, ' selectTdClass', '检查样式');
-            equal(selectedTds[2].className, ' selectTdClass', '检查样式');
+            equal(selectedTds[0].className, 'selectTdClass', '检查样式');
+            equal(selectedTds[1].className, 'selectTdClass', '检查样式');
+            equal(selectedTds[2].className, 'selectTdClass', '检查样式');
 
             //todo trace 3571
 //    ua.click(tds[2],{clientX:370,clientY:9,shiftKey:true});

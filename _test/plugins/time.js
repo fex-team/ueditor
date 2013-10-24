@@ -55,7 +55,7 @@ test( '表格插入时间和日期', function () {
     range.setStart( td[1], 0 ).collapse( 1 ).select();
     editor.execCommand( 'time','hh.ii.ss' );
     ua.manualDeleteFillData(td[1]);
-    equal( td[1].innerHTML, h + '.' + min + '.' + sec+(ua.browser.ie>8?' ':''));
+    equal( td[1].innerHTML, h + '.' + min + '.' + sec);
     /*选中一段内容插入日期*/
     range.setStart( td[2], 0 ).collapse( 1 ).select();
     var year = date.getFullYear();

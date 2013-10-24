@@ -389,10 +389,10 @@ test('原表格非第一行带th，插入列', function () {
     setTimeout(function(){
         var trs = editor.body.getElementsByTagName('tr');
         range.setStart(trs[1].cells[0], 0).collapse(true).select();
-        editor.execCommand('insertcol');
+        editor.execCommand('insertcolnext');
         trs = editor.body.getElementsByTagName('tr');
         equal(trs[1].childNodes.length, 3, '插入一列');
-        equal(trs[1].cells[0].tagName.toLowerCase(), 'td', '除第一行以外，插入的不能是th');
+        equal(trs[1].cells[1].tagName.toLowerCase(), 'td', '除第一行以外，插入的不能是th');
         start();
     }, 20);
 });
@@ -579,14 +579,14 @@ test('interlacetable', function () {
     stop();
     setTimeout(function () {
         equal(editor.body.firstChild.attributes['interlaced'].nodeValue, 'enabled', '');
-        equal(editor.body.getElementsByTagName('tr')[0].className, 'ue-table-interlace-color-single', '');
+        equal(editor.body.getElementsByTagName('tr')[0].className, 'ue-table-interlace-color-single firstRow', '');
         equal(editor.body.getElementsByTagName('tr')[1].className, 'ue-table-interlace-color-double', '');
         tds = editor.body.getElementsByTagName('td');
         range.setStart(tds[0], 0).collapse(1).select();
         editor.execCommand('uninterlacetable');
         setTimeout(function () {
             equal(editor.body.firstChild.attributes['interlaced'].nodeValue, 'disabled', '');
-            equal(editor.body.getElementsByTagName('tr')[0].className, '', '');
+            equal(editor.body.getElementsByTagName('tr')[0].className, 'firstRow', '');
             start();
         }, 20);
     }, 20);
