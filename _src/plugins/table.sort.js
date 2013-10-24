@@ -63,7 +63,9 @@ UE.UETable.prototype.sortTable = function (sortByCellIndex, compareFn) {
     flag && trArray.splice(0, 1);
     trArray = utils.sort(trArray,function (tr1, tr2) {
         var result;
-        if (compareFn && typeof compareFn === "number") {
+        if (compareFn && typeof compareFn === "function") {
+            result = compareFn.call(this, tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex]);
+        } else if (compareFn && typeof compareFn === "number") {
             result = 1;
         } else if (compareFn && typeof compareFn === "string" && Fn[compareFn]) {
             result = Fn[compareFn].call(this, tr1.cells[sortByCellIndex], tr2.cells[sortByCellIndex]);
