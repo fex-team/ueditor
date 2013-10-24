@@ -19,11 +19,8 @@ UE.commands['preview'] = {
         var w = window.open('', '_blank', ''),
             d = w.document;
         d.open();
-        d.write('<html><head><script src="'+this.options.UEDITOR_HOME_URL+'ueditor.parse.js"></script><script>' +
-            "setTimeout(function(){uParse('div',{" +
-            "    'highlightJsUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCore.js'," +
-                "    'highlightCssUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCoreDefault.css'" +
-            "})},300)" +
+        d.write('<!DOCTYPE html><html><head><meta charset="utf-8"><style type="text/css">.edui-charts-table{display: none;}</style><script src="'+this.options.UEDITOR_HOME_URL+'ueditor.parse.js"></script><script>' +
+            "setTimeout(function(){uParse('div',{rootPath: '"+ this.options.UEDITOR_HOME_URL +"'})},300)" +
             '</script></head><body><div>'+this.getContent(null,null,true)+'</div></body></html>');
         d.close();
     },
