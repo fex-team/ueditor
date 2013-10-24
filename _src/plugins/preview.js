@@ -21,8 +21,7 @@ UE.commands['preview'] = {
         d.open();
         d.write('<html><head><script src="'+this.options.UEDITOR_HOME_URL+'ueditor.parse.js"></script><script>' +
             "setTimeout(function(){uParse('div',{" +
-            "    'highlightJsUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCore.js'," +
-                "    'highlightCssUrl':'"+this.options.UEDITOR_HOME_URL+"third-party/SyntaxHighlighter/shCoreDefault.css'" +
+                "rootPath : '"+this.options.UEDITOR_HOME_URL+ "'" +
             "})},300)" +
             '</script></head><body><div>'+this.getContent(null,null,true)+'</div></body></html>');
         d.close();
