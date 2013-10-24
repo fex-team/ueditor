@@ -881,7 +881,6 @@
             this.update();
         },
         insertCol:function (colIndex, sourceCell, defaultValue) {
-            debugger;
             var rowsNum = this.rowsNum,
                 rowIndex = 0,
                 tableRow, cell,
