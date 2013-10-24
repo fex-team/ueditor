@@ -106,7 +106,7 @@ module.exports = function ( grunt ) {
                 files: [
                     {
 
-                        src: [ 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**', 'ueditor.parse.js' ],
+                        src: [ 'themes/iframe.css', 'themes/default/dialogbase.css', 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**', 'ueditor.parse.js' ],
                         dest: disDir
 
                     }
