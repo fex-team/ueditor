@@ -212,8 +212,21 @@
                 updateSavePath( editor.options.savePath );
             } else {
                 //远程加载
-                var scriptNode = document.createElement('script');
-                scriptNode.src = editor.options.imageUrl + '?fetch=1'
+                var scriptNode = document.createElement('script'),
+                    reqAddress = editor.options.imageUrl.split( "#" ),
+                    uri = reqAddress[0].split( "?" );
+
+                if ( uri.length > 1 ) {
+                    uri = uri[ 0 ] + "?" + uri.slice( 1 ).join("?") + ( !!uri? "&fetch=1" : "fetch=1" );
+                } else {
+                    uri = uri[ 0 ] + "?fetch=1";
+                }
+
+                if ( reqAddress.length > 1 ) {
+                    uri += "#" + reqAddress.slice( 1 ).join("#");
+                }
+
+                scriptNode.src = uri;
                 document.body.appendChild( scriptNode );
             }
 
