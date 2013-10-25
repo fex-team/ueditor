@@ -1,6 +1,9 @@
 (function(){
     UE = window.UE || {};
-    var isIE = !!window.ActiveXObject;
+    var isIE = !!window.ActiveXObject,
+        trim = function (str) {
+            return str.replace(/(^[ \t\n\r]+)|([ \t\n\r]+$)/g, '');
+        };
     //定义utils工具
     var utils = {
             removeLastbs : function(url){
@@ -122,6 +125,49 @@
                 if(inArray(arr,item)==-1){
                     arr.push(item)
                 }
+            },
+            trim:trim,
+            hasClass: function (element, className) {
+                className = className.replace(/(^[ ]+)|([ ]+$)/g, '').replace(/[ ]{2,}/g, ' ').split(' ');
+                for (var i = 0, ci, cls = element.className; ci = className[i++];) {
+                    if (!new RegExp('\\b' + ci + '\\b', 'i').test(cls)) {
+                        return false;
+                    }
+                }
+                return i - 1 == className.length;
+            },
+            addClass:function (elm, classNames) {
+                if(!elm)return;
+                classNames = trim(classNames).replace(/[ ]{2,}/g,' ').split(' ');
+                for(var i = 0,ci,cls = elm.className;ci=classNames[i++];){
+                    if(!new RegExp('\\b' + ci + '\\b').test(cls)){
+                        cls += ' ' + ci;
+                    }
+                }
+                elm.className = utils.trim(cls);
+            },
+            removeClass:function (elm, classNames) {
+                classNames = utils.isArray(classNames) ? classNames :
+                    trim(classNames).replace(/[ ]{2,}/g,' ').split(' ');
+                for(var i = 0,ci,cls = elm.className;ci=classNames[i++];){
+                    cls = cls.replace(new RegExp('\\b' + ci + '\\b'),'')
+                }
+                cls = trim(cls).replace(/[ ]{2,}/g,' ');
+                if(cls){
+                    elm.className = cls;
+                }else{
+                    elm.removeAttribute('class');
+                }
+            },
+            on: isIE ? function (element, type, fn) {
+                element.attachEvent(type, fn);
+            } : function (element, type, fn) {
+                element.addEventListener(type, fn);
+            },
+            un: isIE ? function (element, type, fn) {
+                element.detachEvent(type, fn);
+            } : function (element, type, fn) {
+                element.removeEventListener(type, fn);
             },
             loadFile : function () {
                 var tmpList = [];
