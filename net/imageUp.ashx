@@ -30,7 +30,6 @@ public class imageUp : IHttpHandler
         Hashtable info = new Hashtable();
         Uploader up = new Uploader();
 
-        string pathbase = null;
         string path = up.getOtherInfo(context, "dir");
         if (String.IsNullOrEmpty(path)) 
         {
@@ -42,7 +41,7 @@ public class imageUp : IHttpHandler
             return;
         }
 
-        info = up.upFile(context, pathbase, filetype, size);                   //获取上传状态
+        info = up.upFile(context, path + '/', filetype, size);                   //获取上传状态
 
         string title = up.getOtherInfo(context, "pictitle");                   //获取图片描述
         string oriName = up.getOtherInfo(context, "fileName");                //获取原始文件名
