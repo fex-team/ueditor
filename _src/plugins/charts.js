@@ -47,6 +47,7 @@ UE.plugin.register('charts', function (){
                     }
 
                     tableNode.setAttribute( "data-chart", flagText.join( ";" ) );
+                    UE.dom.domUtils.addClass( tableNode, "edui-charts-table" );
 
                     this.fireEvent( 'contentchange' );
 
