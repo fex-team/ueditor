@@ -5,65 +5,7 @@
 var tableData = [],
     //编辑器页面table
     editorTable = null,
-    chartsConfig = [
-        {
-            chart: {
-                type: 'line'
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: false
-                    },
-                    enableMouseTracking: true
-                }
-            }
-        }, {
-            chart: {
-                type: 'line'
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true
-                    },
-                    enableMouseTracking: false
-                }
-            }
-        }, {
-            chart: {
-                type: 'area'
-            }
-        }, {
-            chart: {
-                type: 'bar'
-            }
-        }, {
-            chart: {
-                type: 'column'
-            }
-        }, {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        color: '#000000',
-                        connectorColor: '#000000',
-                        formatter: function() {
-                            return '<b>'+ this.point.name +'</b>: '+ ( Math.round( this.point.percentage*100 ) / 100 ) +' %';
-                        }
-                    }
-                }
-            }
-        }
-    ],
+    chartsConfig = window.typeConfig,
     resizeTimer = null,
     //初始默认图表类型
     currentChartType = 0;
@@ -360,7 +302,7 @@ function setUserConfig ( config ) {
     config.xTitle && ( form[ 'x-title' ].value = config.xTitle );
     config.yTitle && ( form[ 'y-title' ].value = config.yTitle );
     config.suffix && ( form[ 'unit' ].value = config.suffix );
-    config.dataFormat == "-1" && ( form[ 'charts-format' ][ 1 ].checked );
+    config.dataFormat == "-1" && ( form[ 'charts-format' ][ 1 ].checked = true );
     config.tip && ( form[ 'tip' ].value = config.tip );
     currentChartType = config.chartType || 0;
 
