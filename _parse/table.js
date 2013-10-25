@@ -1,5 +1,6 @@
 UE.parse.register('table', function (utils) {
-    var root = this.root,
+    var me = this,
+        root = this.root,
         tables = root.getElementsByTagName('table');
     if (tables.length) {
         var selector = this.selector;
@@ -36,10 +37,10 @@ UE.parse.register('table', function (utils) {
                     var target = e.target || e.srcElement,
                         cell = findParentByTagName(target, ['td', 'th']);
                     var table = findParentByTagName(target, 'table'),
-                        colIndex = indexOf(table.rows[0].cells, cell),
+                        colIndex = utils.indexOf(table.rows[0].cells, cell),
                         sortType = table.getAttribute('data-sort-type');
                     if(colIndex != -1) {
-                        sortTable(table, colIndex, sortType);
+                        sortTable(table, colIndex, me.tableSortCompareFn || sortType);
                         updateTable(table);
                     }
                 });
@@ -57,15 +58,6 @@ UE.parse.register('table', function (utils) {
                 current = current.parentNode;
             }
             return null;
-        }
-        //查找项在数组中的索引
-        function indexOf(arr, item) {
-            for (var i = 0; i < arr.length; i++) {
-                if(arr[i] === item) {
-                    return i;
-                }
-            }
-            return -1;
         }
         //表格排序
         function sortTable(table, sortByCellIndex, compareFn) {
