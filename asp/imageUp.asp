@@ -1,5 +1,5 @@
 <%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %> 
-<!--#include file="UploadConfig.asp"-->
+<!--#include file="config.asp"-->
 <!--#include file="Uploader.Class.asp"-->
 <!--#include file="json.asp"-->
 
