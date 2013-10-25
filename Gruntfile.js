@@ -6,26 +6,20 @@ module.exports = function ( grunt ) {
         Util = {
 
             jsBasePath: '_src/',
+            parseBasePath: 'parse/',
             cssBasePath: 'themes/default/_css/',
 
-            fetchScripts: function () {
+            fetchScripts: function ( readFile, basePath) {
 
-                var sources = fs.readFileSync( "_examples/editor_api.js" );
-
-                sources = /\[([^\]]+)\]/.exec( sources );
-
+                var sources = fs.readFileSync( readFile );
+                sources = /\[([^\]]+\.js'[^\]]+)\]/.exec( sources );
                 sources = sources[1].replace( /\/\/.*\n/g, '\n' ).replace( /'|"|\n|\t|\s/g, '' );
-
                 sources = sources.split( "," );
-
                 sources.forEach( function ( filepath, index ) {
-
-                    sources[ index ] = Util.jsBasePath + filepath;
-
+                    sources[ index ] = basePath + filepath;
                 } );
 
                 return sources;
-
             },
 
             fetchStyles: function () {
@@ -36,9 +30,7 @@ module.exports = function ( grunt ) {
                     src = [];
 
                 while ( filepath = pattern.exec( sources ) ) {
-
                     src.push( this.cssBasePath + filepath[ 1 ].replace( /'|"/g, "" ) );
-
                 }
 
                 return src;
@@ -68,12 +60,20 @@ module.exports = function ( grunt ) {
                 options: {
                     banner: banner + '(function(){\n\n',
                     footer: '\n\n})()',
-                    process: function(src, filepath) {
+                    process: function(src) {
                         return src.replace('/_css/', '/css/');
                     }
                 },
-                src: Util.fetchScripts(),
+                src: Util.fetchScripts( "_examples/editor_api.js", Util.jsBasePath ),
                 dest: disDir + '<%= pkg.name %>.all.js'
+            },
+            parse: {
+                options: {
+                    banner: banner + '(function(){\n\n',
+                    footer: '\n\n})()'
+                },
+                src: Util.fetchScripts( "ueditor.parse.js", Util.parseBasePath ),
+                dest: disDir + '<%= pkg.name %>.parse.js'
             },
             css: {
                 src: Util.fetchStyles(),
@@ -99,6 +99,10 @@ module.exports = function ( grunt ) {
             dest: {
                 src: disDir + '<%= pkg.name %>.all.js',
                 dest: disDir + '<%= pkg.name %>.all.min.js'
+            },
+            dest1: {
+                src: disDir + '<%= pkg.name %>.parse.js',
+                dest: disDir + '<%= pkg.name %>.parse.min.js'
             }
         },
         copy: {
@@ -106,7 +110,7 @@ module.exports = function ( grunt ) {
                 files: [
                     {
 
-                        src: [ 'themes/iframe.css', 'themes/default/dialogbase.css', 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**', 'ueditor.parse.js' ],
+                        src: [ 'themes/iframe.css', 'themes/default/dialogbase.css', 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**' ],
                         dest: disDir
 
                     }
