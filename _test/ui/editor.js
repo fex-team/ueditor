@@ -42,9 +42,12 @@ test('拖拽', function(){
                 var height = parseInt($(this.document.getElementById(me.ui.id)).css('height'));
                 equal(parseInt($(this.document.getElementById(me.ui.id)).css('width')),parseInt(editorWidth) + offset - 2 -editorBorderHeight + border,'宽');
                 ok(height==bd||height==bd-1,'高'+height);
-                sc = document.getElementById('sc');
-                sc.parentNode.removeChild(sc);
-                start();
+                setTimeout(function () {
+                    UE.delEditor('sc');
+                    sc = document.getElementById('sc');
+                    sc && sc.parentNode.removeChild(sc);
+                    start();
+                }, 100);
             },1800);
         },100);
     });
@@ -64,7 +67,7 @@ test('编辑器皮肤',function(){
         equal(document.getElementById(id+'_toolbarbox').className,'edui-editor-toolbarbox edui-default','第一个editor toolbar的classname');
         equal(document.getElementById(id+'_iframeholder').className,'edui-editor-iframeholder edui-default','第一个editor iframeholder的classname');
         equal(document.getElementById(id+'_bottombar').className,'edui-editor-bottomContainer edui-default','第一个editor bottombar的classname');
-        equal(document.getElementById(id+'_scalelayer').className,' edui-default','第一个editor scalelayer的classname');
+        equal(document.getElementById(id+'_scalelayer').className,'edui-default','第一个editor scalelayer的classname');
         sc1 = document.getElementById('sc1');
         sc1.parentNode.removeChild(sc1);
         var ue2 = new baidu.editor.ui.Editor({theme:'modern'});
@@ -78,7 +81,7 @@ test('编辑器皮肤',function(){
             equal(document.getElementById(id+'_toolbarbox').className,'edui-editor-toolbarbox edui-modern','第二个editor toolbar的classname');
             equal(document.getElementById(id+'_iframeholder').className,'edui-editor-iframeholder edui-modern','第二个editor iframeholder的classname');
             equal(document.getElementById(id+'_bottombar').className,'edui-editor-bottomContainer edui-modern','第二个editor bottombar的classname');
-            equal(document.getElementById(id+'_scalelayer').className,' edui-modern','第二个editor scalelayer的classname');
+            equal(document.getElementById(id+'_scalelayer').className,'edui-modern','第二个editor scalelayer的classname');
             sc2 = document.getElementById('sc2');
             sc2.parentNode.removeChild(sc2);
             start();
