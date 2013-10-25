@@ -106,7 +106,7 @@ module.exports = function ( grunt ) {
                 files: [
                     {
 
-                        src: [ 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**', 'ueditor.parse.js' ],
+                        src: [ 'themes/iframe.css', 'themes/default/dialogbase.css', 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**', 'ueditor.parse.js' ],
                         dest: disDir
 
                     }
@@ -116,6 +116,13 @@ module.exports = function ( grunt ) {
 
                 expand: true,
                 src: 'php/**',
+                dest: disDir
+
+            },
+            asp: {
+
+                expand: true,
+                src: 'asp/**',
                 dest: disDir
 
             },
@@ -139,7 +146,7 @@ module.exports = function ( grunt ) {
             options: {
                 charset: encode
             },
-            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.php', disDir + '**/*.ashx', disDir + '**/*.cs']
+            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.php', disDir + '**/*.asp', disDir + '**/*.ashx', disDir + '**/*.cs']
 
         }
 

@@ -7,6 +7,7 @@ Class Uploader
     Private cfgMaxSize
     Private cfgAllowType
     Private cfgSavePath
+    Private cfgFileField
     Private stateString
     Private rsOriginalFileName
     Private rsFileName
@@ -38,6 +39,10 @@ Class Uploader
         cfgSavePath = path
     End Property
 
+    Public Property Let FileField(ByVal field)
+        cfgFileField = field
+    End Property
+
     Public Property Get OriginalFileName
         OriginalFileName = rsOriginalFileName
     End Property
@@ -66,13 +71,19 @@ Class Uploader
         Set FormValues = rsFormValues
     End Property
 
-    Public Function Upload( filefield )
-        Dim processor, stream, filename
+    Public Function UploadForm()
+        ProcessForm()
+        SaveFile()
+    End Function
 
+    Public Function ProcessForm()        
         Set processor = new MultiformProcessor
         Set rsFormValues = processor.Process()
+    End Function
 
-        Set stream = rsFormValues.Item( filefield )
+    Public Function SaveFile()
+        Dim stream, filename    
+        Set stream = rsFormValues.Item( cfgFileField )
         filename = rsFormValues.Item( "filename" )
         DoUpload stream, filename
     End Function
