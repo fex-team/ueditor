@@ -1,9 +1,6 @@
 (function(){
     UE = window.UE || {};
-    var isIE = !!window.ActiveXObject,
-        trim = function (str) {
-            return str.replace(/(^[ \t\n\r]+)|([ \t\n\r]+$)/g, '');
-        };
+    var isIE = !!window.ActiveXObject;
     //定义utils工具
     var utils = {
             removeLastbs : function(url){
@@ -126,7 +123,20 @@
                     arr.push(item)
                 }
             },
-            trim:trim,
+            trim: function (str) {
+                return str.replace(/(^[ \t\n\r]+)|([ \t\n\r]+$)/g, '');
+            },
+            indexOf: function (array, item, start) {
+                var index = -1;
+                start = this.isNumber(start) ? start : 0;
+                this.each(array, function (v, i) {
+                    if (i >= start && v === item) {
+                        index = i;
+                        return false;
+                    }
+                });
+                return index;
+            },
             hasClass: function (element, className) {
                 className = className.replace(/(^[ ]+)|([ ]+$)/g, '').replace(/[ ]{2,}/g, ' ').split(' ');
                 for (var i = 0, ci, cls = element.className; ci = className[i++];) {
@@ -138,7 +148,7 @@
             },
             addClass:function (elm, classNames) {
                 if(!elm)return;
-                classNames = trim(classNames).replace(/[ ]{2,}/g,' ').split(' ');
+                classNames = this.trim(classNames).replace(/[ ]{2,}/g,' ').split(' ');
                 for(var i = 0,ci,cls = elm.className;ci=classNames[i++];){
                     if(!new RegExp('\\b' + ci + '\\b').test(cls)){
                         cls += ' ' + ci;
@@ -147,27 +157,70 @@
                 elm.className = utils.trim(cls);
             },
             removeClass:function (elm, classNames) {
-                classNames = utils.isArray(classNames) ? classNames :
-                    trim(classNames).replace(/[ ]{2,}/g,' ').split(' ');
+                classNames = this.isArray(classNames) ? classNames :
+                    this.trim(classNames).replace(/[ ]{2,}/g,' ').split(' ');
                 for(var i = 0,ci,cls = elm.className;ci=classNames[i++];){
                     cls = cls.replace(new RegExp('\\b' + ci + '\\b'),'')
                 }
-                cls = trim(cls).replace(/[ ]{2,}/g,' ');
+                cls = this.trim(cls).replace(/[ ]{2,}/g,' ');
                 if(cls){
                     elm.className = cls;
                 }else{
                     elm.removeAttribute('class');
                 }
             },
-            on: isIE ? function (element, type, fn) {
-                element.attachEvent(type, fn);
-            } : function (element, type, fn) {
-                element.addEventListener(type, fn);
+            on: function (element, type, handler) {
+                var types = this.isArray(type) ? type : type.split(/\s+/),
+                    k = types.length;
+                if (k) while (k--) {
+                    type = types[k];
+                    if (element.addEventListener) {
+                        element.addEventListener(type, handler, false);
+                    } else {
+                        if (!handler._d) {
+                            handler._d = {
+                                els : []
+                            };
+                        }
+                        var key = type + handler.toString(),index = utils.indexOf(handler._d.els,element);
+                        if (!handler._d[key] || index == -1) {
+                            if(index == -1){
+                                handler._d.els.push(element);
+                            }
+                            if(!handler._d[key]){
+                                handler._d[key] = function (evt) {
+                                    return handler.call(evt.srcElement, evt || window.event);
+                                };
+                            }
+
+
+                            element.attachEvent('on' + type, handler._d[key]);
+                        }
+                    }
+                }
+                element = null;
             },
-            un: isIE ? function (element, type, fn) {
-                element.detachEvent(type, fn);
-            } : function (element, type, fn) {
-                element.removeEventListener(type, fn);
+            off: function (element, type, handler) {
+                var types = this.isArray(type) ? type : type.split(/\s+/),
+                    k = types.length;
+                if (k) while (k--) {
+                    type = types[k];
+                    if (element.removeEventListener) {
+                        element.removeEventListener(type, handler, false);
+                    } else {
+                        var key = type + handler.toString();
+                        try{
+                            element.detachEvent('on' + type, handler._d ? handler._d[key] : handler);
+                        }catch(e){}
+                        if (handler._d && handler._d[key]) {
+                            var index = utils.indexOf(handler._d.els,element);
+                            if(index!=-1){
+                                handler._d.els.splice(index,1);
+                            }
+                            handler._d.els.length == 0 && delete handler._d[key];
+                        }
+                    }
+                }
             },
             loadFile : function () {
                 var tmpList = [];
