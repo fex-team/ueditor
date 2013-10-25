@@ -14,7 +14,7 @@
     //上传图片框中的描述表单名称，
     $title = htmlspecialchars($_POST['pictitle'], ENT_QUOTES);
     $path = htmlspecialchars($_POST['dir'], ENT_QUOTES);
-    $globalConfig = include( "UploadConfig.php" );
+    $globalConfig = include( "config.php" );
     $imgSavePathConfig = $globalConfig[ 'imageSavePath' ];
 
     //获取存储目录
