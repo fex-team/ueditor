@@ -23,7 +23,8 @@ Sub UploadBackground
     up.MaxSize = 1 * 1024 * 1024
     up.AllowType = Array(".gif", ".png", ".jpg", ".jpeg", ".bmp")
     up.SavePath = tmpPath
-    up.Upload( "upfile" )
+    up.FileField = "upfile"
+    up.UploadForm()
     Response.Write "<script>parent.ue_callback('" + up.FilePath + "','" + up.State + "')</script>"
 End Sub
 

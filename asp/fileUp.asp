@@ -18,7 +18,8 @@
     up.MaxSize = 10 * 1024 * 1024
     up.AllowType = Array(".rar" , ".doc" , ".docx" , ".zip" , ".pdf" , ".txt" , ".swf" , ".wmv")
     up.SavePath = "upload/"
-    up.Upload( "upfile" )
+    up.FileField = "upfile"
+    up.UploadForm()
 
     Session.CodePage = 65001
     Response.AddHeader "Content-Type", "text/html;charset=utf-8"

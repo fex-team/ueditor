@@ -23,19 +23,21 @@
         Response.End
     End If
 
-    path = Request.Form("dir")
-    If( IsEmpty(path) ) Then 
-        path = allowPaths(0)
-    ElseIf IsInArray(path, allowPaths) = False Then
-        Response.Write("{ 'state' : '非法上传目录！' }")
-        Response.End
-    End If
-
     Set up = new Uploader
     up.MaxSize = 10 * 1024 * 1024
     up.AllowType = Array(".gif", ".png", ".jpg", ".jpeg", ".bmp")
-    up.SavePath = path
-    up.Upload( "upfile" )
+    up.ProcessForm()
+
+    path = up.FormValues.Item("dir")
+    If( IsEmpty(path) ) Then 
+        path = allowPaths(0)
+    ElseIf IsInArray(allowPaths, path) = False Then
+        Response.Write("{ 'state' : '非法上传目录！' }")
+        Response.End
+    End If
+    up.FileField = "upfile"
+    up.SavePath = path + "/"
+    up.SaveFile()
 
     Session.CodePage = 65001
     Response.AddHeader "Content-Type", "text/html;charset=utf-8"
