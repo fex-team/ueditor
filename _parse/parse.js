@@ -110,7 +110,7 @@
             },
             inArray : function(arr,item){
                 var index = -1;
-                _each(arr,function(v,i){
+                this.each(arr,function(v,i){
                     if(v === item){
                         index = i;
                         return false;
@@ -119,7 +119,7 @@
                 return index;
             },
             pushItem : function(arr,item){
-                if(inArray(arr,item)==-1){
+                if(this.inArray(arr,item)==-1){
                     arr.push(item)
                 }
             },
