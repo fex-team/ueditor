@@ -5,7 +5,6 @@ UE.plugin.register('charts', function (){
     return {
         bindEvents: {
             'chartserror': function () {
-                alert(3344455);
             }
         },
         commands:{

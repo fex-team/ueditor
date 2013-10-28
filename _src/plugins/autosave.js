@@ -1,7 +1,10 @@
 UE.plugin.register('autosave', function (){
 
     var me = this,
-        lastSaveTime = null,
+        //无限循环保护
+        lastSaveTime = new Date(),
+        //最小保存间隔时间
+        MIN_TIME = 20,
         //auto save key
         saveKey = null;
 
@@ -106,6 +109,40 @@ UE.plugin.register('autosave', function (){
 
     } )();
 
+    function save ( editor ) {
+
+        var saveData = null;
+
+        if ( new Date() - lastSaveTime < MIN_TIME ) {
+            return;
+        }
+
+        lastSaveTime = new Date();
+
+        editor._saveFlag = null;
+
+        if ( !editor.hasContents() ) {
+            //这里不能调用命令来删除， 会造成事件死循环
+            saveKey && LocalStorage.removeItem( saveKey );
+            return;
+        }
+
+        saveData = me.body.innerHTML;
+
+        if ( editor.fireEvent( "beforeautosave", {
+            content: saveData
+        } ) === false ) {
+            return;
+        }
+
+        LocalStorage.saveLocalData( saveKey, saveData );
+
+        editor.fireEvent( "afterautosave", {
+            content: saveData
+        } );
+
+    }
+
     return {
         defaultOptions: {
             //默认启用自动保存
@@ -132,8 +169,6 @@ UE.plugin.register('autosave', function (){
 
             'contentchange': function () {
 
-                var saveData = null;
-
                 if ( !saveKey ) {
                     return;
                 }
@@ -142,32 +177,20 @@ UE.plugin.register('autosave', function (){
                     window.clearTimeout( me._saveFlag );
                 }
 
-                me._saveFlag = window.setTimeout( function () {
+                if ( me.options.saveInterval > 0 ) {
 
-                    me._saveFlag = null;
+                    me._saveFlag = window.setTimeout( function () {
 
-                    if ( !me.hasContents() ) {
-                        //这里不能调用命令来删除， 会造成事件死循环
-                        saveKey && LocalStorage.removeItem( saveKey );
-                        return;
-                    }
+                        save( me );
 
-                    saveData = me.body.innerHTML;
+                    }, me.options.saveInterval );
 
-                    if ( me.fireEvent( "beforeautosave", {
-                        content: saveData
-                    } ) === false ) {
-                        return;
-                    }
+                } else {
 
-                    LocalStorage.saveLocalData( saveKey, saveData );
+                    save(me);
 
-                    lastSaveTime = new Date();
-                    me.fireEvent( "afterautosave", {
-                        content: saveData
-                    } );
+                }
 
-                }, me.options.saveInterval );
 
             }
         },
