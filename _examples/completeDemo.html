@@ -33,8 +33,8 @@
         <button onclick="getPlainTxt()">获得带格式的纯文本</button>
         <button onclick="hasContent()">判断是否有内容</button>
         <button onclick="setFocus()">使编辑器获得焦点</button>
-        <button onmousedown="isFocus(event)" >编辑器是否获得焦点</button>
-        <button onmousedown="blur(event)" >编辑器失去焦点</button>
+        <button onmousedown="isFocus(event)" style="color:red">new 编辑器是否获得焦点</button>
+        <button onmousedown="setblur(event)" style="color:red">new 编辑器失去焦点</button>
 
     </div>
     <div>
@@ -48,8 +48,8 @@
     </div>
 
     <div>
-        <button onclick="getLocalData()">获取草稿箱内容</button>
-        <button onclick="clearLocalData()">清空草稿箱</button>
+        <button onclick="getLocalData()" style="color:red">new 获取草稿箱内容</button>
+        <button onclick="clearLocalData()" style="color:red">new 清空草稿箱</button>
     </div>
 
 </div>
@@ -69,7 +69,7 @@
         alert(ue.isFocus());
         UE.dom.domUtils.preventDefault(e)
     }
-    function blur(e){
+    function setblur(e){
         ue.blur();
         UE.dom.domUtils.preventDefault(e)
     }

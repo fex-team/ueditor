@@ -145,8 +145,6 @@ UE.plugin.register('autosave', function (){
 
     return {
         defaultOptions: {
-            //默认启用自动保存
-            enableAutoSave: true,
             //默认间隔时间
             saveInterval: 500
         },
