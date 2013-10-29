@@ -33,13 +33,16 @@ UE.plugin.register('section', function (){
 
     return {
         bindMultiEvents:{
-            /* 初始化、拖拽、粘贴、执行setcontent之后，触发updateSections事件 */
+            /* 初始化、拖拽、粘贴、执行setcontent之后 */
             'type': 'ready drop paste aftersetcontent',
-            'handler': function(e){
+            'handler':function(e){
                 me.fireEvent('updateSections');
             }
         },
         bindEvents:{
+            'aftersetcontent': function () {
+                me.fireEvent('updateSections');
+            },
             /* 执行paragraph命令之后 */
             'afterexeccommand': function (cmd) {
                 if(cmd == 'paragraph') {
@@ -238,7 +241,7 @@ UE.plugin.register('section', function (){
                             'endAddress':section.endAddress
                         };
                     address.endAddress[address.endAddress.length - 1]++;
-                    range.moveToAddress(address).scrollToView();
+                    range.moveToAddress(address).select().scrollToView();
                     return true;
                 },
                 notNeedUndo: true
