@@ -150,11 +150,17 @@ class Kiss
          */
         $ms = explode( ',' , $matcher );
         if ( sizeof( $ms ) > 1 ) {
+//            foreach ( $ms as $matcher1 ) {
+//                if ( $this->match( $matcher1 ) )
+//                    return true;
+//            }
+//            return false;
+            //这里把或的逻辑改成与
             foreach ( $ms as $matcher1 ) {
-                if ( $this->match( $matcher1 ) )
-                    return true;
+                if ( !$this->match( $matcher1 ) )
+                    return false;
             }
-            return false;
+            return true;
         }
 
         /**
