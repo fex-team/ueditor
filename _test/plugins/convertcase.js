@@ -1,17 +1,20 @@
 module("plugins.convertcase");
 
 test('闭合选择', function () {
-    var editor = te.obj[0];
-    var range = te.obj[1];
-    var body = editor.body;
-    editor.setContent('<p>hello</p>');
-    setTimeout(function () {
-        range.setStart(body.firstChild, 1).collapse(true).select();
-        editor.execCommand("touppercase");
-        equal(editor.getContent(), "<p>hello</p>", "闭合选择--up");
-        start();
-    }, 50);
     stop();
+
+    setTimeout(function () {
+        var editor = te.obj[0];
+        var range = te.obj[1];
+        var body = editor.body;
+        editor.setContent('<p>hello</p>');
+        setTimeout(function () {
+            range.setStart(body.firstChild, 1).collapse(true).select();
+            editor.execCommand("touppercase");
+            equal(editor.getContent(), "<p>hello</p>", "闭合选择--up");
+            start();
+        }, 50);
+    }, 100);
 });
 test('非闭合选择----字符串全选', function () {
     var editor = te.obj[0];

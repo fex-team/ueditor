@@ -125,7 +125,14 @@ function run( kiss, runnext ) {
     /* 隐藏报告区 */
     $( 'div#id_reportarea' ).empty().hide();
     /* 展示执行区 */
-    $( 'div#id_runningarea' ).empty().css( 'display', 'block' ).append( '<iframe id="' + fid + '" src="' + url + '" class="runningframe"></iframe>' );
+//    if(ua.browser.ie){
+//        if(document.frames['running'] ){
+//            document.frames['running'].location.href = '';
+//            document.frames['running'].location.reload();
+//        }
+//    }
+
+    $( 'div#id_runningarea' ).empty().css( 'display', 'block' ).append( '<iframe name = "running" id="' + fid + '" src="' + url + '" class="runningframe"></iframe>' );
     wb.kissstart = new Date().getTime();
 };
 // 需要根据一次批量执行整合所有文件的覆盖率情况
