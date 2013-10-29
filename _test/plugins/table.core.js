@@ -213,26 +213,6 @@ test("selectTable", function () {
 
 });
 
-test("active trace 3715 sortTable", function () {
-    var table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
-            "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
-            "<tr><td>21</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>"),
-        ut = new UT(table);
-    ut.sortTable(1, function (a, b) {
-        return 1;//逆序
-    });
-    var value = table.rows[0].cells[0].innerHTML;
-    equal(value, "21", "单元格被逆序");
-
-    ut.sortTable(0, function (td1, td2) {
-        var value1 = parseInt(td1.innerHTML, 10),
-            value2 = parseInt(td2.innerHTML, 10);
-        return value2 - value1;
-    })
-    value = table.rows[0].cells[0].innerHTML;
-    equal(value, "21", "按数值从大到小排列");
-});
-
 test("setBackground", function () {
     var table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
             "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
