@@ -32,23 +32,14 @@ UE.plugin.register('section', function (){
     var me = this;
 
     return {
+        bindMultiEvents:{
+            /* 初始化、拖拽、粘贴、执行setcontent之后，触发updateSections事件 */
+            'type': 'ready drop paste aftersetcontent',
+            'handler': function(e){
+                me.fireEvent('updateSections');
+            }
+        },
         bindEvents:{
-            /* 初始化 */
-            'ready': function () {
-                me.fireEvent('updateSections');
-            },
-            /* 拖拽 */
-            'drop': function () {
-                me.fireEvent('updateSections');
-            },
-            /* 粘贴 */
-            'paste': function () {
-                me.fireEvent('updateSections');
-            },
-            /* 执行setcontent之后 */
-            'aftersetcontent': function () {
-                me.fireEvent('updateSections');
-            },
             /* 执行paragraph命令之后 */
             'afterexeccommand': function (cmd) {
                 if(cmd == 'paragraph') {

@@ -36,6 +36,14 @@ UE.plugin = function(){
                                         editor.addListener(eventName,fn);
                                     });
                                     break;
+                                case 'bindmultievents':
+                                    utils.each(utils.isArray(v) ? v:[v],function(event){
+                                        var types = utils.trim(event.type).split(' ');
+                                        utils.each(types,function(eventName){
+                                            editor.addListener(eventName, event.handler);
+                                        });
+                                    });
+                                    break;
                                 case 'commands':
                                     utils.each(v,function(execFn,execName){
                                         editor.commands[execName] = execFn
