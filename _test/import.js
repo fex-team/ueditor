@@ -90,6 +90,7 @@
 ///import plugins/music;
 ///import plugins/video;
 ///import plugins/autosave;
+///import plugins/charts;
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;
