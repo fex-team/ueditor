@@ -38,7 +38,7 @@ UE.plugin = function(){
                                     break;
                                 case 'bindmultievents':
                                     utils.each(utils.isArray(v) ? v:[v],function(event){
-                                        var types = utils.trim(event.type).split(' ');
+                                        var types = utils.trim(event.type).split(/\s+/);
                                         utils.each(types,function(eventName){
                                             editor.addListener(eventName, event.handler);
                                         });
