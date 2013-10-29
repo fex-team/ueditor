@@ -939,7 +939,7 @@
         },
         blur:function(){
             var sel = this.selection.getNative();
-            if(sel.empty){
+            if(sel.empty && browser.ie){
                 var nativeRng = document.body.createTextRange();
                 nativeRng.moveToElementText(document.body);
                 nativeRng.collapse(true);
