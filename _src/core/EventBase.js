@@ -55,7 +55,7 @@ EventBase.prototype = {
      * @see UE.EventBase:fireEvent(String)
      */
     addListener:function (types, listener) {
-        types = utils.trim(types).split(' ');
+        types = utils.trim(types).split(/\s+/);
         for (var i = 0, ti; ti = types[i++];) {
             getListener(this, ti, true).push(listener);
         }
@@ -73,7 +73,7 @@ EventBase.prototype = {
      * ```
      */
     removeListener:function (types, listener) {
-        types = utils.trim(types).split(' ');
+        types = utils.trim(types).split(/\s+/);
         for (var i = 0, ti; ti = types[i++];) {
             utils.removeItem(getListener(this, ti) || [], listener);
         }
