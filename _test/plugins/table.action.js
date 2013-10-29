@@ -10,11 +10,13 @@
 //    stop()
 //});
 test('框选', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
+    var editor = te.obj[0];
+    var range = te.obj[1];
+//    var div = document.body.appendChild(document.createElement('div'));
+//    div.id = 'ue';
+//    var editor = UE.getEditor('ue');
+//    editor.ready(function () {
+//        var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('<p></p>');
         setTimeout(function () {
             range.setStart(editor.body.firstChild, 0).collapse(true).select();
@@ -41,16 +43,16 @@ test('框选', function () {
                         ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
                     else
                         ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
-                    setTimeout(function () {
-                        UE.delEditor('ue');
-                        te.dom.push(document.getElementById('ue'));
-                        te.dom.push(document.getElementById('edui_fixedlayer'));
+//                    setTimeout(function () {
+//                        UE.delEditor('ue');
+//                        te.dom.push(document.getElementById('ue'));
+//                        te.dom.push(document.getElementById('edui_fixedlayer'));
                         start();
-                    }, 500);
+//                    }, 500);
                 }, 20);
             }, 20);
         }, 50);
-    });
+//    });
     stop();
 });
 
@@ -191,7 +193,7 @@ test('从外面粘贴表格到表格-表格中不能粘完整的表格', functio
         start();
     }, 50);
 });
-test('从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容', function () {
+test('active ie9 trace 3729 从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');
@@ -206,7 +208,7 @@ test('从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容',
     /*粘贴*/
     stop();
     setTimeout(function () {
-        //todo ie9 使用 div[browser.ie ? 'innerText' : 'textContent'] 会多一个换行,用textContent没有
+        //todo ie9 使用 div[browser.ie ? 'innerText' : 'textContent'] 会多一个换行,用textContent没有 trace 3729
         equal(html.html, 'hello1', '在caption中粘贴,只粘贴文本内容');
         start();
     }, 50);
