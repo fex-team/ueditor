@@ -176,9 +176,6 @@ UE.plugin.register('section', function (){
                         }
                     }
 
-//            var range = me.selection.getRange();
-//            range.setStartBefore(startNode).setEndAfter(endNode).select();
-
                     me.fireEvent('updateSections');
 
                     /* 获取地址的包含关系 */
