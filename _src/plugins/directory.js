@@ -1,6 +1,6 @@
 UE.plugins['directory'] = function () {
 
-    // 目录节点对象
+    /* 目录节点对象 */
     function Section(option){
         this.tag = '';
         this.level = -1,
@@ -27,12 +27,12 @@ UE.plugins['directory'] = function () {
 
     var me = this;
 
-    // 监听编辑器操作，触发updateSections事件
-    me.addListener('ready drop paste afterexecCommand keydown', function (type, e, cmd) {
+    /* 监听编辑器操作，触发updateSections事件 */
+    me.addListener('ready drop paste afterexeccommand keydown', function (type, e) {
         var me= this;
 
         switch(type){
-            // 键盘按下
+            /* 键盘按下 */
             case 'keydown':
                 var me = this,
                     range = me.selection.getRange();
@@ -45,13 +45,13 @@ UE.plugins['directory'] = function () {
                     }
                 }
                 break;
-            // 执行paragraph命令之后
-            case 'afterexecCommand':
-                if(cmd == 'paragraph') {
-                    me.fireEvent('paragraph');
+            /* 执行paragraph命令之后 */
+            case 'afterexeccommand':
+                if(e == 'paragraph') {
+                    me.fireEvent('updateSections');
                 }
                 break;
-            // 编辑器加载完成、拖拽和粘贴
+            /* 编辑器加载完成、拖拽和粘贴 */
             case 'ready':
             case 'drop':
             case 'paste':
@@ -61,7 +61,7 @@ UE.plugins['directory'] = function () {
 
     });
 
-    me.commands['getsection'] = {
+    me.commands['getsections'] = {
         execCommand: function (cmd, levels) {
             var levelFn = levels || ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
@@ -126,27 +126,50 @@ UE.plugins['directory'] = function () {
             }
             traversal(me.body, Directory);
             return Directory;
-        }
+        },
+        notNeedUndo: true
     };
 
     me.commands['movesection'] = {
         execCommand: function (cmd, sourceSection, targetSection, isAfter) {
+
             var me = this,
-                targetAddress = targetSection.startAddress,
-                target = getNodeFromAddress(targetAddress, me.body);
-            if(!targetAddress || !target || isContainsAddress(sourceSection.startAddress, sourceSection.endAddress, targetAddress)) return false;
+                targetAddress,
+                target;
+
+            if(!sourceSection || !targetSection || targetSection.level == -1) return;
+
+            targetAddress = isAfter ? targetSection.endAddress:targetSection.startAddress;
+            target = getNodeFromAddress(targetAddress, me.body);
+
+            /* 判断目标地址是否被源章节包含 */
+            if(!targetAddress || !target || isContainsAddress(sourceSection.startAddress, sourceSection.endAddress, targetAddress)) return;
 
             var startNode = getNodeFromAddress(sourceSection.startAddress, me.body),
                 endNode = getNodeFromAddress(sourceSection.endAddress, me.body),
-                current = startNode,
+                current,
                 nextNode;
 
-            while ( current && !(domUtils.getPosition( current, endNode ) & domUtils.POSITION_FOLLOWING) ) {
-                nextNode = current.nextSibling;
-                target.parentNode.insertBefore(current, target);
-                if(current == endNode) break;
-                current = nextNode;
+            if(isAfter) {
+                current = endNode;
+                while ( current && !(domUtils.getPosition( startNode, current ) & domUtils.POSITION_FOLLOWING) ) {
+                    nextNode = current.previousSibling;
+                    domUtils.insertAfter(target, current);
+                    if(current == startNode) break;
+                    current = nextNode;
+                }
+            } else {
+                current = startNode;
+                while ( current && !(domUtils.getPosition( current, endNode ) & domUtils.POSITION_FOLLOWING) ) {
+                    nextNode = current.nextSibling;
+                    target.parentNode.insertBefore(current, target);
+                    if(current == endNode) break;
+                    current = nextNode;
+                }
             }
+
+//            var range = me.selection.getRange();
+//            range.setStartBefore(startNode).setEndAfter(endNode).select();
 
             me.fireEvent('updateSections');
 
@@ -224,7 +247,8 @@ UE.plugins['directory'] = function () {
             range.moveToAddress(address).select();
             if(!noScroll) range.scrollToView(me.options.autoHeightEnabled ? window:me.window);
             return true;
-        }
+        },
+        notNeedUndo: true
     };
 
     me.commands['scrolltosection'] = {
@@ -239,7 +263,8 @@ UE.plugins['directory'] = function () {
             address.endAddress[address.endAddress.length - 1]++;
             range.moveToAddress(address).scrollToView();
             return true;
-        }
+        },
+        notNeedUndo: true
     };
 
 
