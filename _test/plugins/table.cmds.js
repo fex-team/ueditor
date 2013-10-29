@@ -1063,3 +1063,30 @@ test('trace 713：合并最后一列单元格后再前插入列', function () {
     }, 50);
     stop();
 });
+
+
+test('inserttitlecol, deletetitlecol', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent( '<p></p>' );
+    range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
+    editor.execCommand( 'inserttable', {numCols:2, numRows:2});
+    var tds = editor.body.getElementsByTagName('td');
+    range.setStart(tds[0],0).collapse(true).select();
+    editor.execCommand('inserttitlecol');
+    stop();
+    setTimeout(function(){
+        var trs = editor.body.firstChild.getElementsByTagName('tr');
+        equal(trs[0].children.length,3,'表格增加一列');
+        for(var i = 0; i< trs.length;i++){
+            equal(trs[i].childNodes[0].tagName.toLowerCase(),'th','增加的th');
+        }
+        range.setStart(tds[0],0).collapse(true).select();
+        editor.execCommand('deletetitlecol');
+        setTimeout(function(){
+            equal(trs[0].children.length,2,'表格减少一列');
+            equal(editor.body.firstChild.getElementsByTagName('tr')[0].firstChild.tagName.toLowerCase(),'td','第一列不是标题');
+            start();
+        },20);
+    },20);
+});

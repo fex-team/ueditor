@@ -85,6 +85,7 @@ test('enablesort,disablesort', function () {
             setTimeout(function () {
                 equal(editor.body.firstChild.attributes['data-sort'].nodeValue, 'sortDisabled', 'sortDisabled');
                 equal(domUtils.hasClass(editor.body.firstChild, 'sortEnabled'), false, 'sortDisabled');
+                equal(domUtils.hasClass(editor.body.firstChild.rows[0], 'firstRow'), true, '给第一行添加firstRow的类');
                 start();
             }, 20);
         }, 20);
