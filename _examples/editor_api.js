@@ -81,6 +81,7 @@
             'plugins/autoupload.js',
             'plugins/autosave.js',
             'plugins/charts.js',
+            'plugins/directory.js',
             'ui/ui.js',
             'ui/uiutils.js',
             'ui/uibase.js',
