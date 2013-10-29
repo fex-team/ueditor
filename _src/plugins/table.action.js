@@ -243,7 +243,8 @@ UE.plugins['table'] = function () {
             if (domUtils.findParentByTagName(rng.startContainer, 'caption', true)) {
                 var div = me.document.createElement("div");
                 div.innerHTML = html.html;
-                html.html = div[browser.ie ? 'innerText' : 'textContent'];
+                //trace:3729
+                html.html = div[browser.ie9below ? 'innerText' : 'textContent'];
                 return;
             }
             var table = getUETableBySelected(me);
