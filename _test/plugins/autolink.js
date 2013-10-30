@@ -152,7 +152,7 @@ test('trace 2121', function () {
 });
 test('autofloat:false 禁用IE中的自动加超链接功能', function () {
     //在IE中回车/空格自动加连接,这里模拟加连接以后,测试keyup时把添加的链接去掉
-    if (ua.browser.ie) {
+    if (ua.browser.ie>8) {//这个用例中,ie8不好模拟startContainer.nodeName = p,用下面的用例测是一样的
         var div = document.body.appendChild(document.createElement('div'));
         div.id = 'ue';
         var editor = UE.getEditor('ue', {autolink: false});

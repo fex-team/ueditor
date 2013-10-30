@@ -5,18 +5,81 @@
  * Time: 下午4:40
  * To change this template use File | Settings | File Templates.
  */
-
+//test('trace 3047 ,3545 全屏插入表格', function () {
+//    if (ua.browser.gecko)return;//TODO 1.2.6
+////    if (ua.browser.ie && ua.browser.ie < 9)return;//TODO 1.2.6
+//    var div = document.body.appendChild(document.createElement('div'));
+//    $(div).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+//    var editor = te.obj[2];
+//    editor.render(div);
+//    stop();
+//    editor.ready(function () {
+//        editor.setContent('<p></p>');
+//        editor.ui.setFullScreen(!editor.ui.isFullScreen());
+//        editor.execCommand('inserttable');
+//        var width1 = editor.body.getElementsByTagName('td')[0].width;
+//        setTimeout(function () {
+//            editor.ui.setFullScreen(!editor.ui.isFullScreen());
+//            setTimeout(function () {
+//                var width2 = editor.body.getElementsByTagName('td')[0].width;
+//                ok((width1 - width2) > 10, '页面宽度自适应');
+//                div.parentNode.removeChild(div);
+//                start();
+//            }, 500);
+//        }, 500);
+//    });
+//});
+//test('拖拽-最右边的单元格', function () {
+//    if (ua.browser.ie && ua.browser.ie < 8) return;
+//    var editor = te.obj[0];
+//    var range = te.obj[1];
+//    editor.setContent('<p></p>');
+//    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+//    editor.execCommand('inserttable');
+//    ua.manualDeleteFillData(editor.body);
+//    var tds = te.obj[0].body.getElementsByTagName('td');
+//    var width1 = tds[4].width;
+//    ua.mousemove(tds[4], {clientX: 492, clientY: 21});
+//    ua.mousedown(tds[4], {clientX: 492, clientY: 21});
+//    setTimeout(function () {
+//        equal(editor.body.style.cursor, 'col-resize', '检查鼠标显示');
+//        ua.mousemove(tds[4], {clientX: 481, clientY: 21});
+//        ua.mouseup(tds[4], {clientX: 481, clientY: 21});
+//        setTimeout(function () {
+//            var width2 = te.obj[0].body.getElementsByTagName('td')[4].width;
+//            ok(width1 - width2 > 10, '拖拽后单元格宽度改变');
+//            start();
+//        }, 200);
+//    }, 20);
+//    stop();
+//});
+//test('backspace事件:deletecol', function () {
+//    var editor = te.obj[0];
+//    var range = te.obj[1];
+//    editor.setContent('<p></p>');
+//    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+//    editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+//    var trs = editor.body.firstChild.getElementsByTagName('tr');
+//    var ut = editor.getUETable(editor.body.firstChild);
+//    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[2].cells[0]);
+//    ut.setSelected(cellsRange);
+//    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+//    ua.keydown(editor.body, {'keyCode': 8});
+//    stop();
+//    setTimeout(function () {
+//        equal(editor.body.getElementsByTagName('tr')[0].getElementsByTagName('td').length, 2, '删除整列');
+//        equal(editor.selection.getRange().collapsed, true, '检查光标');
+//        equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
+//        start();
+//    }, 100);
+//});
 //test('', function () {
 //    stop()
 //});
 test('框选', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-//    var div = document.body.appendChild(document.createElement('div'));
-//    div.id = 'ue';
-//    var editor = UE.getEditor('ue');
-//    editor.ready(function () {
-//        var range = new baidu.editor.dom.Range(editor.document);
+
         editor.setContent('<p></p>');
         setTimeout(function () {
             range.setStart(editor.body.firstChild, 0).collapse(true).select();
@@ -43,16 +106,10 @@ test('框选', function () {
                         ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
                     else
                         ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
-//                    setTimeout(function () {
-//                        UE.delEditor('ue');
-//                        te.dom.push(document.getElementById('ue'));
-//                        te.dom.push(document.getElementById('edui_fixedlayer'));
                         start();
-//                    }, 500);
                 }, 20);
             }, 20);
         }, 50);
-//    });
     stop();
 });
 
@@ -365,11 +422,6 @@ test('backspace事件:deletecol', function () {
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols: 3, numRows: 3});
-//    expect(5);
-//    editor.addListener('saveScene', function () {
-//        ok(true);
-//
-//    });
     var trs = editor.body.firstChild.getElementsByTagName('tr');
     var ut = editor.getUETable(editor.body.firstChild);
     var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[2].cells[0]);
@@ -378,14 +430,12 @@ test('backspace事件:deletecol', function () {
     ua.keydown(editor.body, {'keyCode': 8});
     stop();
     setTimeout(function () {
-        equal(te.obj[0].body.getElementsByTagName('tr')[0].getElementsByTagName('td').length, 2, '删除整列');
-        equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
-        equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+        equal(editor.body.getElementsByTagName('tr')[0].getElementsByTagName('td').length, 2, '删除整列');
+        equal(editor.selection.getRange().collapsed, true, '检查光标');
+        equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
         start();
-    }, 20);
-
+    }, 100);
 });
-
 test('backspace事件:delcells', function () {
     //TODO
 });
