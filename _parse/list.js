@@ -17,7 +17,6 @@ UE.parse.register('list',function(utils){
         listDefaultPaddingLeft : '20'
     });
 
-    debugger
     var root = this.root,
         ols = root.getElementsByTagName('ol'),
         uls = root.getElementsByTagName('ul'),

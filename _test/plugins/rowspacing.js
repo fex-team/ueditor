@@ -43,13 +43,15 @@ test( '闭合清除段前距等样式，查看状态反射', function () {
 
 /*trace 1026*/
 test( '设置段后距后设置字体颜色', function () {
-    var editor = te.obj[2];
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
-    editor.render(div);
+    var editor = te.obj[0];
+    var range = te.obj[1];
+//    var editor = te.obj[2];
+//    var div = document.body.appendChild( document.createElement( 'div' ) );
+//    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+//    editor.render(div);
     stop();
-    setTimeout(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
+//    setTimeout(function(){
+//        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello1<a href="">hello</a></p><p>hello2</p>' );
         range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
         editor.execCommand( 'rowspacing', 15 ,'bottom');
@@ -59,21 +61,23 @@ test( '设置段后距后设置字体颜色', function () {
             /*闭合的方式去查看行距的状态反射*/
             range.setStart( editor.body.firstChild.firstChild, 1 ).collapse( true ).select();
             equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
-            div.parentNode.removeChild(div);
+//            div.parentNode.removeChild(div);
             start();
         },50);
-    },50);
+//    },50);
 } );
 
 test( '设置段后距后设置加粗等多种样式', function () {
-    var editor = te.obj[2];
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
-    editor.render(div);
+    var editor = te.obj[0];
+    var range = te.obj[1];
+//    var editor = te.obj[2];
+//    var div = document.body.appendChild( document.createElement( 'div' ) );
+//    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+//    editor.render(div);
     stop();
-    editor.ready(function(){
+//    editor.ready(function(){
         setTimeout(function(){
-            var range = new baidu.editor.dom.Range( editor.document );
+//            var range = new baidu.editor.dom.Range( editor.document );
             editor.setContent( '<p>hello1</p><p>hello2</p>' );
             setTimeout(function(){
             range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
@@ -82,23 +86,25 @@ test( '设置段后距后设置加粗等多种样式', function () {
                 editor.execCommand( 'bold' );
                 editor.execCommand( 'underline' );
                 equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
-                div.parentNode.removeChild(div);
+//                div.parentNode.removeChild(div);
                 start();
             },50);
             },50);
         },100);
-    });
+//    });
 } );
 
 test( '非闭合去除加粗等样式', function () {
-    var editor = te.obj[2];
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
-    editor.render(div);
+    var editor = te.obj[0];
+    var range = te.obj[1];
+//    var editor = te.obj[2];
+//    var div = document.body.appendChild( document.createElement( 'div' ) );
+//    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+//    editor.render(div);
     stop();
-    editor.ready(function(){
-        setTimeout(function(){
-            var range = new baidu.editor.dom.Range( editor.document );
+//    editor.ready(function(){
+//        setTimeout(function(){
+//            var range = new baidu.editor.dom.Range( editor.document );
             editor.setContent( '<p>hello1</p><p>hello2</p>' );
             setTimeout(function(){
             range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
@@ -109,23 +115,25 @@ test( '非闭合去除加粗等样式', function () {
                 equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
                 editor.execCommand( 'removeformat' );
                 equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 5, '去除样式后查看段后距' );
-                div.parentNode.removeChild(div);
+//                div.parentNode.removeChild(div);
                 start();
             },50);
             },50);
-        },100);
-    });
+//        },100);
+//    });
 } );
 
 test( '闭合去除样式', function () {
-    var editor = te.obj[2];
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
-    editor.render(div);
+    var editor = te.obj[0];
+    var range = te.obj[1];
+//    var editor = te.obj[2];
+//    var div = document.body.appendChild( document.createElement( 'div' ) );
+//    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+//    editor.render(div);
     stop();
-    editor.ready(function(){
-
-        var range = new baidu.editor.dom.Range( editor.document );
+//    editor.ready(function(){
+//
+//        var range = new baidu.editor.dom.Range( editor.document );
         editor.setContent( '<p>hello1</p><p>hello2</p>' );
         setTimeout(function(){
         range.setStart( editor.body.firstChild, 0 ).setEnd( editor.body.lastChild, 1 ).select();
@@ -146,11 +154,11 @@ test( '闭合去除样式', function () {
             /*第一行的样式应当仍然在*/
             range.setStart( editor.body.firstChild, 0 ).collapse( true ).select();
             equal( editor.queryCommandValue( 'rowspacing' ,'bottom'), 15, '查看段后距' );
-            div.parentNode.removeChild(div);
+//            div.parentNode.removeChild(div);
             start();
         },50);
         },50);
-    });
+//    });
 } );
 
 test( '表格中设置段距', function () {
