@@ -403,7 +403,9 @@ test('对表格中的文本添加颜色和下划线', function () {
             ut.setSelected(range);
             setTimeout(function () {
                 editor.execCommand('underline');
+                setTimeout(function () {
                 ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色');
+                equal('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色');
                 ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); ">hello2</span>', editor.document, trs[0].lastChild, '第2个单元格有前景色');
                 ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); ">hello3</span>', editor.document, trs[1].firstChild, '第3个单元格有前景色');
                 equal(trs[1].firstChild.getAttribute('colspan'), 2, 'colspan为2');
@@ -411,6 +413,7 @@ test('对表格中的文本添加颜色和下划线', function () {
                 equal(editor.queryCommandState('forecolor'), 0, '非underline和line-through返回0');
                 setTimeout(function () {
                     start();
+                }, 100);
                 }, 100);
             }, 100);
         }, 100);
