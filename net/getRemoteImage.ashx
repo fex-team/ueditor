@@ -18,7 +18,7 @@ public class getRemoteImage : IHttpHandler
 
     public void ProcessRequest(HttpContext context)
     {
-        string savePath = context.Server.MapPath("upload/");       //保存文件地址
+        string savePath = "upload/";       //保存文件地址
         string[] filetype = { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };             //文件允许格式
         int fileSize = 3000;                                                        //文件大小限制，单位kb
 
@@ -29,7 +29,7 @@ public class getRemoteImage : IHttpHandler
         ArrayList tmpNames = new ArrayList();
         WebClient wc = new WebClient();
         HttpWebResponse res;
-        String tmpName = String.Empty;
+        String filename = String.Empty;
         String imgUrl = String.Empty;
         String currentType = String.Empty;
 
@@ -81,16 +81,18 @@ public class getRemoteImage : IHttpHandler
                 }
                 res.Close();
 
+                var filepath = savePath + DateTime.Now.ToString("yyyy-MM-dd") + "/";
+                
                 //创建保存位置
-                if (!Directory.Exists(savePath))
+                if (!Directory.Exists(context.Server.MapPath(filepath)))
                 {
-                    Directory.CreateDirectory(savePath);
+                    Directory.CreateDirectory(context.Server.MapPath(filepath));
                 }
 
                 //写入文件
-                tmpName = DateTime.Now.ToString("yyyy-MM-dd") + "/" + System.Guid.NewGuid() + currentType;
-                wc.DownloadFile(imgUrl, savePath + tmpName);
-                tmpNames.Add("upload/" + tmpName);
+                filename = filepath + System.Guid.NewGuid() + currentType;
+                wc.DownloadFile(imgUrl, context.Server.MapPath(filename));
+                tmpNames.Add(filename);
             }
         }
         catch (Exception)

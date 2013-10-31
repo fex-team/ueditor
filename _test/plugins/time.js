@@ -8,6 +8,7 @@ test( '插入时间和日期', function () {
     range.setStart( body.firstChild, 0 ).collapse( 1 ).select();
     var date = new Date();
     var h = date.getHours();
+    h = (h < 10) ? ('0' + h) : h;
     var min = date.getMinutes();
     min = (min < 10) ? ('0' + min) : min;
     var sec = date.getSeconds();
@@ -45,6 +46,7 @@ test( '表格插入时间和日期', function () {
     range.setStart( td[0], 0 ).collapse( 1 ).select();
     var date = new Date();
     var h = date.getHours();
+    h = (h < 10) ? ('0' + h) : h;
     var min = date.getMinutes();
     min = (min < 10) ? ('0' + min) : min;
     var sec = date.getSeconds();
