@@ -53,26 +53,7 @@
 //    }, 20);
 //    stop();
 //});
-//test('backspace事件:deletecol', function () {
-//    var editor = te.obj[0];
-//    var range = te.obj[1];
-//    editor.setContent('<p></p>');
-//    range.setStart(editor.body.firstChild, 0).collapse(true).select();
-//    editor.execCommand('inserttable', {numCols: 3, numRows: 3});
-//    var trs = editor.body.firstChild.getElementsByTagName('tr');
-//    var ut = editor.getUETable(editor.body.firstChild);
-//    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[2].cells[0]);
-//    ut.setSelected(cellsRange);
-//    range.setStart(trs[0].cells[0], 0).collapse(true).select();
-//    ua.keydown(editor.body, {'keyCode': 8});
-//    stop();
-//    setTimeout(function () {
-//        equal(editor.body.getElementsByTagName('tr')[0].getElementsByTagName('td').length, 2, '删除整列');
-//        equal(editor.selection.getRange().collapsed, true, '检查光标');
-//        equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
-//        start();
-//    }, 100);
-//});
+
 //test('', function () {
 //    stop()
 //});

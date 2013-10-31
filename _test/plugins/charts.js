@@ -25,8 +25,8 @@ test( '图表命令检测', function() {
 
     editor.ready( function () {
 
-        var firstTd = editor.body.getElementsByTagName("td")[0],
-            range = editor.selection.getRange();
+        var firstTd = editor.body.getElementsByTagName("td")[0];
+        var range = new baidu.editor.dom.Range(editor.document);
 
         range.selectNode( firstTd).collapse(true).select();
 
@@ -37,9 +37,9 @@ test( '图表命令检测', function() {
         //设置数据格式合法的表格
         editor.setContent('<table width="992"><tbody><tr class="firstRow"><th valign="null" width="141"><br></th><th width="141">a</th><th width="141">b</th><th width="142">c</th><th width="142">d</th><th width="142">e</th><th width="142">f</th></tr><tr><th valign="null" width="141">1999</th><td valign="top" width="141">1</td><td valign="top" width="141">2</td><td valign="top" width="142">3</td><td valign="top" width="142">4</td><td valign="top" width="142">5</td><td valign="top" width="142">6</td></tr></tbody></table>');
 
-        firstTd = editor.container.getElementsByTagName("td")[0];
+        firstTd = editor.body.getElementsByTagName("td")[0];
 
-        range.selectNode( firstTd).collapse(true).select();
+        range.setStart( firstTd,0).collapse(true).select();
 
         equal( editor.queryCommandState( 'charts' ) != -1, true, '数据合法， 状态可用' );
 
