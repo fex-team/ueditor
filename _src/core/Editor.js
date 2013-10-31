@@ -926,9 +926,23 @@
                 var me = this,
                     rng = me.selection.getRange();
                 if (toEnd) {
-                    rng.setStartAtLast(me.body.lastChild).setCursor(false, true);
+                    var node = me.body.lastChild;
+                    if(node && node.nodeType == 1 && !dtd.$empty[node.tagName]){
+                        if(domUtils.isEmptyBlock(node)){
+                            rng.setStartAtFirst(node)
+                        }else{
+                            rng.setStartAtLast(node)
+                        }
+                        rng.collapse(true);
+                    }
+                    rng.setCursor(true);
                 } else {
+                    var node = me.body.firstChild;
+                    if(node && node.nodeType == 1 && !dtd.$empty[node.tagName]){
+                        rng.setStartAtFirst(node).collapse(true);
+                    }
                     rng.select(true);
+
                 }
                 this.fireEvent('focus selectionchange');
             } catch (e) {
