@@ -43,10 +43,12 @@ UE.plugin.register('background', function () {
                 }
                 html += '}</style> ';
                 headHtml.push(html);
+            },
+            'beforesetcontent': function () {
+                me.execCommand('background', {});
             }
         },
         inputRule: function (root) {
-            me.execCommand('background', {});
             utils.each(root.getNodesByTagName('p'), function (p) {
                 var styles = p.getAttr('data-background');
                 if (styles) {
@@ -84,7 +86,8 @@ UE.plugin.register('background', function () {
                         ele = me.document.getElementById(cssRuleId),
                         styles = (ele ? ele.innerHTML : '').match(/body[\s]*\{(.*)\}/);
                     return styles ? stringToObj(styles[1]) : null;
-                }
+                },
+                notNeedUndo: true
             }
         }
     }
