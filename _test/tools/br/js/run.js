@@ -126,13 +126,17 @@ function run( kiss, runnext ) {
     $( 'div#id_reportarea' ).empty().hide();
     /* 展示执行区 */
     if(ua.browser.ie){
-        if(document.frames['running'] ){
-            document.frames['running'].location.href = '';
-            document.frames['running'].location.reload();
+        if($( 'div#id_runningarea' )[0].getElementsByTagName('iframe').length){
+            var iframe_old = $( 'div#id_runningarea' )[0].getElementsByTagName('iframe')[0];
+            iframe_old.src = '';
         }
-    }
 
-    $( 'div#id_runningarea' ).empty().css( 'display', 'block' ).append( '<iframe name = "running" id="' + fid + '" src="' + url + '" class="runningframe"></iframe>' );
+    }
+    var iframe =document.createElement('iframe');
+    iframe.src= url;
+    iframe.id= fid;
+    iframe.className= "runningframe";
+    $( 'div#id_runningarea' ).empty().css( 'display', 'block' ).append( iframe);
     wb.kissstart = new Date().getTime();
 };
 // 需要根据一次批量执行整合所有文件的覆盖率情况
