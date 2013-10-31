@@ -7,25 +7,29 @@ module( 'plugins.image' );
  */
 /*trace1491 修改动图的宽高*/
 test( 'trace1491 修改动图的宽高', function () {
-    setTimeout(function(){
+    setTimeout(function () {
+        expect(3);
         var editor = te.obj[0];
         var range = te.obj[1];
         var body = editor.body;
-        editor.setContent( '<p><br></p>' );
-        range.setStart( body.firstChild, 0 ).collapse( 1 ).select();
-        editor.execCommand( 'insertimage', {src:'../data/test.JPG'} );
-        ua.manualDeleteFillData( editor.body );
-        range.selectNode( body.firstChild.firstChild ).select();
-        var img = body.getElementsByTagName( 'img' )[0];
-        editor.execCommand( 'insertimage', {src:'../data/test.JPG', width:50, height:80} );
-        img.onload = function () {
-            equal( $( img ).attr( 'width' ), '50', '比较width' );
-            equal( $( img ).attr( 'height' ), '80', '比较width' );
-            start();
-        };
-        ok(/data\/test\.JPG/.test( img.getAttribute( 'src' )), '比较src' );
-    },100);
-
+        editor.setContent('<p><br></p>');
+        setTimeout(function () {
+            range.setStart(body.firstChild, 0).collapse(1).select();
+            editor.execCommand('insertimage', {src: '../data/test.JPG'});
+            setTimeout(function () {
+                ua.manualDeleteFillData(editor.body);
+                range.selectNode(body.firstChild.firstChild).select();
+                var img = body.getElementsByTagName('img')[0];
+                editor.execCommand('insertimage', {src: '../data/test.JPG', width: 50, height: 80});
+                setTimeout(function () {
+                    equal($(img).attr('width'), '50', '比较width');
+                    equal($(img).attr('height'), '80', '比较width');
+                    ok(/data\/test\.JPG/.test(img.getAttribute('src')), '比较src');
+                    start();
+                }, 500);
+            }, 100);
+        }, 100);
+    }, 100);
     stop();
 } );
 test( '插入新图像', function () {

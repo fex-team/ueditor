@@ -2,7 +2,7 @@ module( 'plugins.autosave' );
 
 test( '自动保存', function() {
 
-    expect(6);
+    expect(8);
 
     var container = te.obj[0].container,
         editor = null,
@@ -43,9 +43,9 @@ test( '自动保存', function() {
         data.content = data.content.toLowerCase();
         equal( data.content, "<p>http://www.baidu.com</p>", "成功触发afterautosave事件" );
 
-//        equal( editor.execCommand( "getlocaldata" ) !== null, true, "getlocaldata命令正常" );
-//        editor.execCommand( "clearlocaldata" );
-//        equal( editor.execCommand( "getlocaldata" ) === null, true, "clearlocaldata命令正常" );
+        equal( editor.execCommand( "getlocaldata" ) !== null, true, "getlocaldata命令正常" );
+        editor.execCommand( "clearlocaldata" );
+        equal( editor.execCommand( "getlocaldata" ) === null, true, "clearlocaldata命令正常" );
 
     } );
 
