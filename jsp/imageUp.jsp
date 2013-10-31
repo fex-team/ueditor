@@ -1,13 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-         pageEncoding="utf-8"%>
-    <%@ page import="java.util.Properties" %>
-    <%@ page import="java.util.List" %>
-    <%@ page import="java.util.Iterator" %>
-    <%@ page import="java.util.Arrays" %>
-    <%@ page import="java.io.FileInputStream" %>
-    <%@ page import="ueditor.Uploader" %>
+    <%@ page language="java" contentType="text/html; charset=utf-8"
+             pageEncoding="utf-8"%>
+        <%@ page import="java.util.Properties" %>
+        <%@ page import="java.util.List" %>
+        <%@ page import="java.util.Iterator" %>
+        <%@ page import="java.util.Arrays" %>
+        <%@ page import="java.io.FileInputStream" %>
+        <%@ page import="ueditor.Uploader" %>
 
-        <%
+            <%
 
 request.setCharacterEncoding("utf-8");
 response.setCharacterEncoding("utf-8");
@@ -51,8 +51,15 @@ if ( request.getParameter( "fetch" ) != null ) {
 
 }
 
+Uploader up = new Uploader(request);
+
 //获取前端提交的path路径
 String dir = request.getParameter( "dir" );
+
+//普通请求中拿不到参数， 则从上传表单中拿
+if ( dir == null ) {
+	dir = up.getParameter("dir");
+}
 
 if ( dir == null || "".equals( dir ) ) {
 
@@ -67,7 +74,6 @@ if ( dir == null || "".equals( dir ) ) {
 
 }
 
-Uploader up = new Uploader(request);
 up.setSavePath( dir );
 String[] fileType = {".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp"};
 up.setAllowFiles(fileType);
