@@ -2,7 +2,7 @@ function run( kiss, runnext ) {
 
     window.document.title = kiss;
     var wb = window.brtest = window.brtest || {};
-    wb.timeout = wb.timeout || 60000;
+    wb.timeout = wb.timeout || 100000;
     wb.breakOnError = /breakonerror=true/gi.test( location.search )
         || $( 'input#id_control_breakonerror' ).attr( 'checked' );
     wb.runnext = /batchrun=true/gi.test( location.search ) || runnext
@@ -125,10 +125,14 @@ function run( kiss, runnext ) {
     /* 隐藏报告区 */
     $( 'div#id_reportarea' ).empty().hide();
     /* 展示执行区 */
-    if(ua.browser.ie){
+    if(ua.browser.ie){//释放iframe里面占用的内存
         if($( 'div#id_runningarea' )[0].getElementsByTagName('iframe').length){
             var iframe_old = $( 'div#id_runningarea' )[0].getElementsByTagName('iframe')[0];
-            iframe_old.src = '';
+            iframe_old.src = "javascript:false";
+            iframe_old.contentWindow.document.write('');
+            iframe_old.contentWindow.close();
+            CollectGarbage();
+            iframe_old.parentNode.removeChild(iframe_old);
         }
 
     }

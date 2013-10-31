@@ -145,7 +145,7 @@ test('b,i标签，切换源码后自动转换成strong和em', function () {
     equal(editor.getContent(), '<p><strong>加粗的内容</strong><em>斜体的内容<strong>加粗且斜体</strong></em></p>');
 });
 
-test('trace 1734 range的更新/特殊符号的转换', function () {
+test('activ trace 3739 trace 1734 range的更新/特殊符号的转换', function () {
     var editor = te.obj[0];
     editor.setContent('<p>"<></p>');
     setTimeout(function () {
