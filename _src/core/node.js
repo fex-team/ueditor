@@ -42,6 +42,12 @@
         this.attrs = obj.attrs || {};
         this.children = obj.children;
     };
+
+    var notTransAttrs = {
+        'href':1,
+        'src':1
+    };
+
     var indentChar = '    ',
         breakChar = '\n';
 
@@ -110,7 +116,7 @@
             attrhtml = [];
             var attrs = node.attrs;
             for (var a in attrs) {
-                attrhtml.push(a + (attrs[a] !== undefined ? '="' + utils.unhtml(attrs[a]) + '"' : ''))
+                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? utils.html(attrs[a]) : utils.unhtml(attrs[a])) + '"' : ''))
             }
             attrhtml = attrhtml.join(' ');
         }

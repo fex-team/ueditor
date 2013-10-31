@@ -5,8 +5,7 @@
  */
 
 UE.plugins['video'] = function (){
-    var me =this,
-        div;
+    var me =this;
 
     /*
      * 创建插入视频字符窜
@@ -25,7 +24,7 @@ UE.plugins['video'] = function (){
 
                 :
                 '<embed type="application/x-shockwave-flash" class="edui-faked-video" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
-                ' src="' + url + '" width="' + width  + '" height="' + height  + '"'  + (align ? ' style="float:' + align + '"': '') +
+                ' src="' +  utils.html(url) + '" width="' + width  + '" height="' + height  + '"'  + (align ? ' style="float:' + align + '"': '') +
                 ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" >';
     }
 

@@ -160,7 +160,7 @@ UE.plugins['defaultfilter'] = function () {
                     case 'a':
                         if (val = node.getAttr('_href')) {
                             node.setAttr({
-                                'href': val,
+                                'href': utils.html(val),
                                 '_href': ''
                             })
                         }
