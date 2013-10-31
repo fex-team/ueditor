@@ -374,6 +374,7 @@
             'insertcode.js',
             'table.js',
             'charts.js',
+            'background.js',
             'list.js'
         ],
         baseURL = '../_parse/';

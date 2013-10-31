@@ -90,7 +90,7 @@
             if(range.collapsed){
                 obj.textValue = text.value;
             }
-            editor.execCommand('link',obj );
+            editor.execCommand('link',utils.clearEmptyAttrs(obj) );
             dialog.close();
         }
     }

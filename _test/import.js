@@ -93,7 +93,7 @@
 ///import plugins/charts;
 ///import plugins/autoupload;
 ///import plugins/section;
-
+///import plugins/charts;
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;
