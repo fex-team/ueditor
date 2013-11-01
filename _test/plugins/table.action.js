@@ -315,9 +315,9 @@ test('backspace事件:删除caption', function () {
         editor.execCommand('insertcaption');
         ua.keydown(editor.body, {'keyCode': 8});
         setTimeout(function () {
-            equal(te.obj[0].body.getElementsByTagName('caption').length, 0, '删除caption');
-            equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
-            equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+            equal(editor.body.getElementsByTagName('caption').length, 0, '删除caption');
+            equal(editor.selection.getRange().collapsed, true, '检查光标');
+            equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
             start();
         }, 20);
     }, 50);
@@ -342,9 +342,9 @@ test('backspace事件:deleterow', function () {
         range.setStart(trs[0].cells[0], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode': 8});
         setTimeout(function () {
-            equal(te.obj[0].body.getElementsByTagName('tr').length, 2, '删除整行');
-            equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
-            equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+            equal(editor.body.getElementsByTagName('tr').length, 2, '删除整行');
+            equal(editor.selection.getRange().collapsed, true, '检查光标');
+            equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
             start();
         }, 100);
     }, 50);
@@ -368,11 +368,11 @@ test('backspace事件:deletecol', function () {
         equal(editor.selection.getRange().collapsed, true, '检查光标');
         equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
         start();
-    }, 100);
+    }, 200);
 });
-test('backspace事件:delcells', function () {
-    //TODO
-});
+//test('backspace事件:delcells', function () {
+//    //TODO
+//});
 test('表格名称中backspace键', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
