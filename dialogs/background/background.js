@@ -236,6 +236,7 @@
 
     dialog.onok = function () {
         updateBackground();
+        editor.fireEvent('saveScene');
     };
     dialog.oncancel = function () {
         editor.execCommand('background', backupStyle);
