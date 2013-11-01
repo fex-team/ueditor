@@ -52,7 +52,7 @@ UEditor是由百度web前端研发部开发所见即所得富文本web编辑器�
 
 ## 二次开发文档 ##
 
-1. [使用grunt打包源代码](_doc/使用grunt打包源代码.md "使用grunt打包源代码")
+1. 注意：正式使用时，需要在build目录下运行merge.bat （运行需要java支持），这个操作会自动把_src的源代码合并到editor_all.js和editor_min.js这样也页面使用自己修改的编辑器的时候，就可以只引用editor_all.js。
 
 2. [增加一个简单按钮](_doc/增加一个简单按钮.md "增加一个简单按钮")
 
