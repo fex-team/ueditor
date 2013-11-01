@@ -238,7 +238,6 @@ test('ctrl+i', function () {
     editor.setContent('<p>没有加粗的文本</p>');
     range.selectNode(body.firstChild).select();
     var p = body.firstChild;
-    editor.focus();
     setTimeout(function () {
         ua.keydown(editor.body, {'keyCode': 73, 'ctrlKey': true});
         editor.focus();
@@ -257,7 +256,6 @@ test('ctrl+u', function () {
     editor.setContent('<p>没有加粗的文本</p>');
     setTimeout(function () {
         range.selectNode(body.firstChild).select();
-        editor.focus();
         setTimeout(function () {
             var html = '<span style="text-decoration: underline;">没有加粗的文本</span>';
             ua.checkHTMLSameStyle(html, editor.document, body.firstChild, '文本被添加了下划线');
@@ -276,7 +274,6 @@ test('ctrl+b', function () {
 
     editor.setContent('<p>没有加粗的文本</p>');
     range.selectNode(body.firstChild).select();
-    editor.focus();
     setTimeout(function () {
         ua.keydown(editor.body, {'keyCode': 66, 'ctrlKey': true});
         setTimeout(function () {

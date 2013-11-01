@@ -143,6 +143,41 @@ function run( kiss, runnext ) {
     $( 'div#id_runningarea' ).empty().css( 'display', 'block' ).append( iframe);
     wb.kissstart = new Date().getTime();
 };
+function match(fileName, matcher )
+{
+    if ( matcher == '*' )
+        return true;
+    var len = matcher.length;
+
+    /**
+     * 处理多选分支，有一个成功则成功，filter后面参数使用|切割
+     * @var unknown_type
+     */
+    var ms = matcher.split( ',');
+    if ( ms.length > 1 ) {
+        //这里把或的逻辑改成与
+        for ( var matcher1 in ms ) {
+            if ( !match(fileName, ms[matcher1] ) )
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * 处理反向选择分支
+     */
+    if ( matcher.substr(  0 , 1 ) == '!' ) {
+        var m = matcher.substr( 1 );
+        if ( fileName.substr( 0 , m.length ) == m )
+            return false;
+        return true;
+    }
+
+    if ( len > fileName.length  ) {
+        return false;
+    }
+    return fileName.substr(  0 , len ) == matcher;
+}
 // 需要根据一次批量执行整合所有文件的覆盖率情况
 function covcalc() {
     function covmerge( cc, covinfo ) {
@@ -178,7 +213,7 @@ function covcalc() {
         if ( !cc.hasOwnProperty( file ) ) {
             continue;
         }
-        if(file.indexOf(filter)!=-1)
+        if(match(file,filter))
             files.push( file );
     }
     files.sort();
@@ -235,6 +270,7 @@ function covcalc() {
         if ( brkisses[kiss] == undefined )
             brkisses[kiss] = '0;0;_;0;0';
         var info = brkisses[kiss].split( ';_;' );// 覆盖率的处理在最后环节加入到用例的测试结果中
+
         brkisses[kiss] = info[0] + ';' + percentage + ';' + info[1]+';'+recordCovForBrowser;
     }
 }
