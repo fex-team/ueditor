@@ -20,11 +20,13 @@ UE.parse.register('table', function (utils) {
                 selector + ' td p{margin:0;padding:0;}',
             document);
         //填充空的单元格
+
         utils.each('td th caption'.split(' '), function (tag) {
             var cells = root.getElementsByTagName(tag);
-            cells.legnth && utils.each(cells, function (node) {
+            cells.length && utils.each(cells, function (node) {
                 if (!node.firstChild) {
                     node.innerHTML = '&nbsp;';
+
                 }
             })
         });
