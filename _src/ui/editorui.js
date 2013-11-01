@@ -261,7 +261,7 @@
                                 }
                             },
                             theme:editor.options.theme,
-                            disabled:cmd == 'scrawl' && editor.queryCommandState("scrawl") == -1
+                            disabled:(cmd == 'scrawl' && editor.queryCommandState("scrawl") == -1) || ( cmd == 'charts' )
                         });
                         editorui.buttons[cmd] = ui;
                         editor.addListener('selectionchange', function () {
