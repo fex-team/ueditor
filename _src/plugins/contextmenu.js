@@ -188,17 +188,11 @@ UE.plugins['contextmenu'] = function () {
                     subMenu:[
                         {
                             label:lang.enablesort,
-                            cmdName:'enablesort',
-                            query: function(){
-                                return me.queryCommandState('enablesort') == 1 ? -1:0;
-                            }
+                            cmdName:'enablesort'
                         },
                         {
                             label:lang.disablesort,
-                            cmdName:'disablesort',
-                            query: function(){
-                                return me.queryCommandState('disablesort') == 1 ? -1:0;
-                            }
+                            cmdName:'disablesort'
                         },
                         '-',
                         {
