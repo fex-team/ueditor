@@ -1709,6 +1709,5 @@ UserAction = {
     }
 };
 var ua = UserAction;
-debugger
 var upath = ua.commonData.currentPath();
 var cpath = ua.commonData.datadir;
