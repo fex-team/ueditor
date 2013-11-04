@@ -61,7 +61,7 @@
     <!--</target>-->
 
     <target name="executeplugin" depends="init,coverage">
-        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=plugins,!plugins/table"
+        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=plugins"
              dest="/tmp/${git.user}_${git.project}plugin.php"/>
     </target>
     <target name="getreportplugin" depends="init,coverage,executeplugin">
