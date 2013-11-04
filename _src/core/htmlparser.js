@@ -24,7 +24,7 @@
  */
 
 var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
-    var re_tag = /<(?:(?:\/([^>]+)>)|(?:!--([\S|\s]*?)-->)|(?:([^\s\/>]+)\s*((?:(?:"[^"]*")|(?:'[^']*')|[^"'<>])*)\/?>))/g,
+    var re_tag = /<(?:(?:\/([^>]+)>)|(?:!--([\S|\s]*?)-->)|(?:([^\s\/>]+)\s*((?:(?:"[^"]*")|(?:'[^']*')|[^"'<>\/])*)\/?>))/g,
         re_attr = /([\w\-:.]+)(?:(?:\s*=\s*(?:(?:"([^"]*)")|(?:'([^']*)')|([^\s>]+)))|(?=\s|$))/g;
 
     //ie下取得的html可能会有\n存在，要去掉，在处理replace(/[\t\r\n]*/g,'');代码高量的\n不能去除
@@ -43,7 +43,10 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
         });
     }
 
-
+    var notTransAttrs = {
+        'href':1,
+        'src':1
+    };
 
     var uNode = UE.uNode,
         needParentNode = {
@@ -107,7 +110,7 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
         if (htmlattr) {
             var attrs = {}, match;
             while (match = re_attr.exec(htmlattr)) {
-                attrs[match[1].toLowerCase()] = utils.unhtml(match[2] || match[3] || match[4])
+                attrs[match[1].toLowerCase()] = notTransAttrs[match[1].toLowerCase()] ? encodeURI(decodeURI(match[2] || match[3] || match[4])) : utils.unhtml(match[2] || match[3] || match[4])
             }
             elm.attrs = attrs;
         }
