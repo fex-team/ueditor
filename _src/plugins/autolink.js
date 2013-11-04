@@ -106,28 +106,62 @@ UE.plugin.register('autolink',function(){
             }
         }:{}
     },function(){
+        var keyCodes = {
+            37:1, 38:1, 39:1, 40:1,
+            13:1,32:1
+        };
+        function checkIsCludeLink(node){
+            if(node.nodeType == 3){
+                return null
+            }
+            if(node.nodeName == 'A'){
+                return node;
+            }
+            var lastChild = node.lastChild;
 
+            while(lastChild){
+                if(lastChild.nodeName == 'A'){
+                    return lastChild;
+                }
+                if(lastChild.nodeType == 3){
+                    return null
+                }
+                lastChild = lastChild.lastChild;
+            }
+        }
         browser.ie && this.addListener('keyup',function(cmd,evt){
             var me = this,keyCode = evt.keyCode;
-            if(keyCode == 13 || keyCode == 32){
+            if(keyCodes[keyCode]){
                 var rng = me.selection.getRange();
                 var start = rng.startContainer;
+
                 if(keyCode == 13){
-                    if(start.nodeName == 'P'){
+                    while(start && !domUtils.isBody(start) && !domUtils.isBlockElm(start)){
+                        start = start.parentNode;
+                    }
+                    if(start && !domUtils.isBody(start) && start.nodeName == 'P'){
                         var pre = start.previousSibling;
                         if(pre && pre.nodeType == 1){
-                            var pre = pre.lastChild;
-                            if(pre && pre.nodeName == 'A' && !pre.getAttribute('_href')){
+                            var pre = checkIsCludeLink(pre);
+                            if(pre && !pre.getAttribute('_href')){
                                 domUtils.remove(pre,true);
                             }
                         }
                     }
-                }else if(keyCode == 32){
+                }else if(keyCode == 32 ){
                     if(start.nodeType == 3 && /^\s$/.test(start.nodeValue)){
                         start = start.previousSibling;
                         if(start && start.nodeName == 'A' && !start.getAttribute('_href')){
                             domUtils.remove(start,true);
                         }
+                    }
+                }else {
+                    start = domUtils.findParentByTagName(start,'a',true);
+                    if(start && !start.getAttribute('_href')){
+                        var bk = rng.createBookmark();
+
+                        domUtils.remove(start,true);
+                        rng.moveToBookmark(bk).select(true)
                     }
                 }
 

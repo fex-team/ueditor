@@ -48,6 +48,12 @@
         'src':1
     };
 
+    var notTransTagName = {
+        pre:1,
+        style:1,
+        script:1
+    }
+
     var indentChar = '    ',
         breakChar = '\n';
 
@@ -107,7 +113,7 @@
     }
 
     function isText(node, arr) {
-        arr.push(node.parentNode.tagName == 'pre' ? node.data : node.data.replace(/[ ]{2}/g,' &nbsp;'))
+        arr.push(notTransTagName[node.parentNode.tagName] ? node.data : node.data.replace(/[ ]{2}/g,' &nbsp;'))
     }
 
     function isElement(node, arr, formatter, current) {
@@ -116,7 +122,7 @@
             attrhtml = [];
             var attrs = node.attrs;
             for (var a in attrs) {
-                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? utils.html(attrs[a]) : utils.unhtml(attrs[a])) + '"' : ''))
+                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? encodeURI(decodeURI(attrs[a])) : utils.unhtml(attrs[a])) + '"' : ''))
             }
             attrhtml = attrhtml.join(' ');
         }
