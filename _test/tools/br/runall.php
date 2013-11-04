@@ -27,7 +27,16 @@ function run( $b , $debug = false )
     if ( !array_key_exists( "ci" , $_GET ) )
         $url .= "^&mail=true";
 
-    if ( array_key_exists( "filter" , $_GET ) )
+    if(strstr($b,'ie8main')){
+        if(array_key_exists( "ie8main" , $_GET )){
+            $url .= "^&filter={$_GET['ie8main']}";
+        }
+    }else if(strstr($b,'ie8supp')){
+        if(array_key_exists( "ie8supp" , $_GET )){
+            $url .= "^&filter={$_GET['ie8supp']}";
+        }
+    }
+    else if ( array_key_exists( "filter" , $_GET ) )
         $url .= "^&filter={$_GET['filter']}";
 //    if( $b!='ie6') {
         if ( array_key_exists( 'cov' , $_GET ) )
