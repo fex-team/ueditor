@@ -427,23 +427,24 @@ UE.plugins['table'] = function () {
             utils.each(domUtils.getElementsByTagName(me.document, 'table'), function (table) {
                 if (me.fireEvent("excludetable", table) === true) return;
                 table.ueTable = new UT(table);
-                utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
-
-                    if (domUtils.isEmptyBlock(td) && td !== start) {
-                        domUtils.fillNode(me.document, td);
-                        if (browser.ie && browser.version == 6) {
-                            td.innerHTML = '&nbsp;'
-                        }
-                    }
-                });
-                utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
-                    if (domUtils.isEmptyBlock(th) && th !== start) {
-                        domUtils.fillNode(me.document, th);
-                        if (browser.ie && browser.version == 6) {
-                            th.innerHTML = '&nbsp;'
-                        }
-                    }
-                });
+                //trace:3742
+//                utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
+//
+//                    if (domUtils.isEmptyBlock(td) && td !== start) {
+//                        domUtils.fillNode(me.document, td);
+//                        if (browser.ie && browser.version == 6) {
+//                            td.innerHTML = '&nbsp;'
+//                        }
+//                    }
+//                });
+//                utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
+//                    if (domUtils.isEmptyBlock(th) && th !== start) {
+//                        domUtils.fillNode(me.document, th);
+//                        if (browser.ie && browser.version == 6) {
+//                            th.innerHTML = '&nbsp;'
+//                        }
+//                    }
+//                });
                 table.onmouseover = function () {
                     me.fireEvent('tablemouseover', table);
                 };
