@@ -395,7 +395,7 @@ test('表格名称中backspace键', function () {
     ua.keydown(editor.body, {'keyCode': 8});
     stop();
     setTimeout(function () {
-        editor = te.obj[0];
+//        editor = te.obj[0];
         equal(editor.body.getElementsByTagName('caption').length, 0, '删除caption');
         equal(editor.body.getElementsByTagName('table').length, 1, '不会增加表格数量');
         equal(editor.body.getElementsByTagName('tr').length, 3, '不会增加表格行数量');
