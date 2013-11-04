@@ -87,6 +87,7 @@ function run( kiss, runnext ) {
                 wb.kisses['config'] = location.search.substring( 1 );
 //                var url = /mail=true/.test( location.search ) ? 'record.php' : 'report.php';
                 var url = 'report.php';
+                debugger
                 covcalc();
                 /**
                  * 启动时间，结束时间，校验点失败数，校验点总数
@@ -204,7 +205,7 @@ function covcalc() {
     var filter = '';
     var ls = location.search.split('&');
     for( var i = 0; i < ls.length; i++){
-        if(ls[i].indexOf('filter')!=-1){
+        if(ls[i].indexOf('filter')!=-1&&ls[i].indexOf('filterRun')==-1){
             filter = ls[i].split('=')[1];
         }
 

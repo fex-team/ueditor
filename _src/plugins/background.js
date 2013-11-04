@@ -44,7 +44,7 @@ UE.plugin.register('background', function () {
                 html += '}</style> ';
                 headHtml.push(html);
             },
-            'beforesetcontent': function () {
+            'aftersetcontent': function () {
                 me.execCommand('background', {});
             }
         },

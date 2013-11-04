@@ -14,10 +14,17 @@ function match($fileName, $matcher )
         return true;
     $len = strlen( $matcher );
 
-    /**
-     * 处理多选分支，有一个成功则成功，filter后面参数使用|切割
-     * @var unknown_type
-     */
+
+    $as = explode( ';' , $matcher );
+    if ( sizeof( $as ) > 1 ) {
+
+        //这里把或的逻辑改成与
+        foreach ( $as as $matcher1 ) {
+            if ( match($fileName, $matcher1 ) )
+                return true;
+        }
+        return false;
+    }
     $ms = explode( ',' , $matcher );
     if ( sizeof( $ms ) > 1 ) {
         //这里把或的逻辑改成与
@@ -66,7 +73,7 @@ function report()
     $failures = 0;
     $tests = 0;
     $time = 0;
-    $filter = $config['filter'];
+    $filter = $config['filterRun'];
     foreach ($_POST as $key => $value) {
         if ($key == 'config')
             continue;

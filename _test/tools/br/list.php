@@ -1,6 +1,9 @@
 <?php
 header( "Content-type: text/html; charset=utf-8" );
+//被测&统计概率的部分
 $filter = array_key_exists( 'filter' , $_GET ) ? $_GET[ 'filter' ] : '*';
+//跑的用例
+$filterRun = array_key_exists( 'filterRun' , $_GET ) ? $_GET[ 'filterRun' ] : $filter;
 $quirk = array_key_exists( 'quirk' , $_GET );
 if ( !$quirk ) {
     ?>
@@ -55,7 +58,7 @@ if ( !$quirk ) {
 <?php
     /*分析所有源码与测试代码js文件一一对应的文件并追加到当前列表中*/
     require_once "case.class.php";
-    Kiss::listcase( $filter );
+    Kiss::listcase( $filter ,$filterRun );
     ?>
     <div style="clear: both; overflow: hidden"></div>
 </div>

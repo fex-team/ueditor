@@ -148,13 +148,19 @@ class Kiss
          * 处理多选分支，有一个成功则成功，filter后面参数使用|切割
          * @var unknown_type
          */
+        $as = explode( ';' , $matcher );
+        if ( sizeof( $as ) > 1 ) {
+
+            //这里把或的逻辑改成与
+            foreach ( $as as $matcher1 ) {
+                if ( $this->match( $matcher1 ) )
+                    return true;
+            }
+            return false;
+        }
         $ms = explode( ',' , $matcher );
         if ( sizeof( $ms ) > 1 ) {
-//            foreach ( $ms as $matcher1 ) {
-//                if ( $this->match( $matcher1 ) )
-//                    return true;
-//            }
-//            return false;
+
             //这里把或的逻辑改成与
             foreach ( $ms as $matcher1 ) {
                 if ( !$this->match( $matcher1 ) )
@@ -179,7 +185,7 @@ class Kiss
         return substr( $this->name , 0 , $len ) == $matcher;
     }
 
-    public static function listcase( $matcher = "*" , $projroot = '../../../' )
+    public static function listcase( $filter = "*" , $filterRun = '*',$projroot = '../../../' )
     {
         $srcpath = $projroot . '_src/';
         $testpath = $projroot . '_test/';
@@ -193,7 +199,7 @@ class Kiss
             $c = new Kiss( $projroot , $name );
             if ( $c->empty )
                 continue;
-            if ( $c->match( $matcher ) ) {
+            if ( $c->match( $filterRun ) ) {
                 $newName = explode( '\\.' , $name );
                 $newName = $newName[ count( $newName ) - 1 ];
                 print( "<a href=\"run.php?case=$name\" id=\"$c->case_id\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$name\" onclick=\"run('$name');\$('#id_rerun').html('$name');return false;\">"
