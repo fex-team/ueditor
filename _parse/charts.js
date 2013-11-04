@@ -40,7 +40,7 @@ UE.parse.register('charts',function( utils ){
 
         for ( var i = 0, tableNode; tableNode = tables[ i ]; i++ ) {
 
-            if ( tableNode.hasAttribute( "data-chart" ) ) {
+            if ( tableNode.getAttribute( "data-chart" ) !== null ) {
 
                 data.push( formatData( tableNode ) );
 
