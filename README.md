@@ -62,9 +62,9 @@ ueditor 官网: [http://ueditor.baidu.com](http://ueditor.baidu.com "ueditor 官
 
 ueditor API 文档: [http://ueditor.baidu.com/doc](http://ueditor.baidu.com/doc "ueditor API 文档")
 
-ueditor github 地址: [https://github.com/campaign/ueditor](https://github.com/campaign/ueditor "ueditor github 地址")
-
 ueditor 论坛: [http://www.ueditorbbs.com](http://www.ueditorbbs.com "ueditor 论坛")
+
+ueditor github 地址: [https://github.com/campaign/ueditor](https://github.com/campaign/ueditor "ueditor github 地址")
 
 ## 联系我们 ##
 
