@@ -58,6 +58,26 @@ UE.plugin.register('charts', function (){
 
                 }
             }
+        },
+        inputRule:function(root){
+            utils.each(root.getNodesByTagName('table'),function( tableNode ){
+
+                if ( tableNode.getAttr("data-chart") !== undefined ) {
+                    tableNode.setAttr("style");
+                }
+
+            })
+
+        },
+        outputRule:function(root){
+            utils.each(root.getNodesByTagName('table'),function( tableNode ){
+
+                if ( tableNode.getAttr("data-chart") !== undefined ) {
+                    tableNode.setAttr("style", "display: none;");
+                }
+
+            })
+
         }
     }
 

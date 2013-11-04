@@ -154,7 +154,6 @@ UE.plugins['defaultfilter'] = function () {
                         if (val = node.getAttr('cdata_tag')) {
                             node.tagName = val;
                             node.setAttr({cdata_tag: '',style:''});
-                            debugger
                             node.innerText(utils.html(node.innerText()),true)
                         }
                         break;

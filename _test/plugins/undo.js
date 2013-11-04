@@ -1,5 +1,8 @@
 module("plugins.undo");
 
+//test('', function () {
+//    stop()
+//});
 /*trace 856*/
 test('trace 856 输入文本后撤销按钮不亮', function () {
     var editor = te.obj[0];
@@ -457,7 +460,6 @@ test('ctrl+z/y', function () {
     editor.setContent('<p>没有加粗的文本</p>');
     range.selectNode(body.firstChild).select();
     var p = body.firstChild;
-    editor.focus();
     setTimeout(function () {
         ua.keydown(editor.body, {'keyCode': 66, 'ctrlKey': true});
         setTimeout(function () {

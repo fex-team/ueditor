@@ -315,9 +315,9 @@ test('backspace事件:删除caption', function () {
         editor.execCommand('insertcaption');
         ua.keydown(editor.body, {'keyCode': 8});
         setTimeout(function () {
-            equal(te.obj[0].body.getElementsByTagName('caption').length, 0, '删除caption');
-            equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
-            equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+            equal(editor.body.getElementsByTagName('caption').length, 0, '删除caption');
+            equal(editor.selection.getRange().collapsed, true, '检查光标');
+            equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
             start();
         }, 20);
     }, 50);
@@ -330,9 +330,9 @@ test('backspace事件:deleterow', function () {
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols: 3, numRows: 3});
 //    expect(5);                    //TODO 1.2.6
-    editor.addListener('saveScene', function () {
-        ok(true);
-    });
+//    editor.addListener('saveScene', function () {
+//        ok(true);
+//    });
     stop();
     setTimeout(function () {
         var trs = editor.body.firstChild.getElementsByTagName('tr');
@@ -342,9 +342,9 @@ test('backspace事件:deleterow', function () {
         range.setStart(trs[0].cells[0], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode': 8});
         setTimeout(function () {
-            equal(te.obj[0].body.getElementsByTagName('tr').length, 2, '删除整行');
-            equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
-            equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
+            equal(editor.body.getElementsByTagName('tr').length, 2, '删除整行');
+            equal(editor.selection.getRange().collapsed, true, '检查光标');
+            equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
             start();
         }, 100);
     }, 50);
@@ -356,23 +356,28 @@ test('backspace事件:deletecol', function () {
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+    stop();
+    setTimeout(function(){
+
     var trs = editor.body.firstChild.getElementsByTagName('tr');
     var ut = editor.getUETable(editor.body.firstChild);
     var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[2].cells[0]);
     ut.setSelected(cellsRange);
     range.setStart(trs[0].cells[0], 0).collapse(true).select();
-    ua.keydown(editor.body, {'keyCode': 8});
-    stop();
+    ua.keydown(trs[0].cells[0], {'keyCode': 8});
+  
     setTimeout(function () {
         equal(editor.body.getElementsByTagName('tr')[0].getElementsByTagName('td').length, 2, '删除整列');
-        equal(editor.selection.getRange().collapsed, true, '检查光标');
+       equal(editor.selection.getRange().collapsed, true, '检查光标');
         equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
         start();
-    }, 100);
+    }, 200);
+},100);
 });
-test('backspace事件:delcells', function () {
-    //TODO
-});
+
+//test('backspace事件:delcells', function () {
+//    //TODO
+//});
 test('表格名称中backspace键', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -390,7 +395,7 @@ test('表格名称中backspace键', function () {
     ua.keydown(editor.body, {'keyCode': 8});
     stop();
     setTimeout(function () {
-        editor = te.obj[0];
+//        editor = te.obj[0];
         equal(editor.body.getElementsByTagName('caption').length, 0, '删除caption');
         equal(editor.body.getElementsByTagName('table').length, 1, '不会增加表格数量');
         equal(editor.body.getElementsByTagName('tr').length, 3, '不会增加表格行数量');
@@ -399,7 +404,7 @@ test('表格名称中backspace键', function () {
         equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
         start();
 
-    }, 50);
+    }, 200);
 });
 test('trace 3097 标题行中backspace键', function () {
     var editor = te.obj[0];
