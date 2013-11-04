@@ -165,7 +165,7 @@ UE.plugin.register('autosave', function (){
 
             },
 
-            'contentchanged': function () {
+            'contentchange': function () {
 
                 if ( !saveKey ) {
                     return;

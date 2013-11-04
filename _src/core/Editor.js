@@ -889,8 +889,6 @@
             }
             me.fireEvent('aftersetcontent');
             me.fireEvent('contentchange');
-            //自动保存专用， 其他地方请不要触发改事件！！！
-            me.fireEvent('contentchanged');
 
             !notFireSelectionchange && me._selectionChange();
             //清除保存的选区
