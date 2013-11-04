@@ -1419,6 +1419,12 @@ test( 'isFillChar', function() {
     if(ua.browser.ie){
         ok(domUtils.isFillChar(div.lastChild));
     }
+    var node = document.createTextNode(domUtils.fillChar + 'sdfsdf');
+    ok(domUtils.isFillChar(node,true));
+    ok(!domUtils.isFillChar(node));
+    node = document.createTextNode(domUtils.fillChar +domUtils.fillChar);
+    ok(domUtils.isFillChar(node,true));
+    ok(domUtils.isFillChar(node))
 } );
 
 
