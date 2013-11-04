@@ -31,7 +31,7 @@ function run( $b , $debug = false )
         $filterR = array_key_exists( $b , $_GET )?$_GET[$b]:$_GET['filter'];
         if(strstr($b,'main')||strstr($b,'supp')){
             $url .= "^&filterRun={$filterR}^&filter={$_GET['filter']}";
-        }else if(strstr($b,'supp')){
+        }else {
             $url .= "^&filterRun={$_GET['filter']}^&filter={$_GET['filter']}";
 
         }
