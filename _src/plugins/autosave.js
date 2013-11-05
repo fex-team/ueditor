@@ -117,15 +117,15 @@ UE.plugin.register('autosave', function (){
             return;
         }
 
-        lastSaveTime = new Date();
-
-        editor._saveFlag = null;
-
         if ( !editor.hasContents() ) {
             //这里不能调用命令来删除， 会造成事件死循环
             saveKey && LocalStorage.removeItem( saveKey );
             return;
         }
+
+        lastSaveTime = new Date();
+
+        editor._saveFlag = null;
 
         saveData = me.body.innerHTML;
 
