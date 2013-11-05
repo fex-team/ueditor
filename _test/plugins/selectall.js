@@ -53,3 +53,20 @@ test( 'ctrl+a', function() {
     }, 150 );
     stop();
 } );
+test('contextmenu 右键全选', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+    editor.setContent('asdfg');
+    ua.contextmenu(editor.body);
+    var lang = editor.getLang("contextMenu");
+    var menuBody = document.getElementsByClassName("edui-menu-body")[0];
+    equal(editor.selection.getRange().collapsed, true, '检查选区--闭合');
+    ua.click(menuBody.childNodes[0]);
+    setTimeout(function () {
+        equal(editor.selection.getRange().collapsed, false, '检查选区--非闭合');
+        document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+        te.dom.push(editor.container);
+        start();
+    }, 50);
+});

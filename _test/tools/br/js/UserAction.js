@@ -1706,6 +1706,13 @@ UserAction = {
             return true;
     }, checkSameHtml:function (stringA, stringB, scholium) {
         ok(this.checkSameNode(UE.htmlparser(stringA), UE.htmlparser(stringB)), scholium);
+    },
+    getContextmenuIndexByName:function(contextmenu,name){
+        for(var i=0;i<contextmenu.length;i++){
+            if(contextmenu[i].innerText ==name || contextmenu[i].textContent ==name)
+                return i;
+        }
+        return 0;
     }
 };
 var ua = UserAction;

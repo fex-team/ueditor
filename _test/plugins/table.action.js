@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-//
+
 //test('', function () {
 //    stop()
 //});
@@ -26,9 +26,9 @@ test('框选', function () {
                 var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                 var tds = editor.body.getElementsByTagName('td');
                 equal(selectedTds.length, 4, '框选');
-                if (ua.browser.ie && ua.browser.ie < 9)
-                    ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
-                else
+//                if (ua.browser.ie && ua.browser.ie < 9)
+//                    ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
+//                else
                     ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
                 range.setStart(tds[4], 0).collapse(true).select();
                 ua.mousedown(tds[4], {button: 2});
@@ -36,9 +36,9 @@ test('框选', function () {
                     var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                     var tds = editor.body.getElementsByTagName('td');
                     equal(selectedTds.length, 4, '右键框选不变');
-                    if (ua.browser.ie && ua.browser.ie < 9)
-                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
-                    else
+//                    if (ua.browser.ie && ua.browser.ie < 9)
+//                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
+//                    else
                         ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
                         start();
                 }, 20);
@@ -131,10 +131,10 @@ test('tableDragable-双击', function () {//tableClicked
                     var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                     var tds = editor.body.getElementsByTagName('td');
                     equal(selectedTds.length, 9, '全选');
-                    if (ua.browser.ie && ua.browser.ie < 9)
-                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range');
-                    else
-                        ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
+//                    if (ua.browser.ie && ua.browser.ie < 9)
+//                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range');
+//                    else
+                    ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
                     setTimeout(function () {
                         UE.delEditor('ue');
                         te.dom.push(document.getElementById('ue'));
@@ -147,8 +147,6 @@ test('tableDragable-双击', function () {//tableClicked
     });
     stop();
 });
-
-
 test('从外面粘贴表格', function () {
     var editor = te.obj[0];
     var range = te.obj[1];

@@ -92,3 +92,166 @@ test('enablesort,disablesort', function () {
     }, 50);
     stop();
 });
+test('contextMenu 表格逆序当前', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    var html = '<table><tbody><tr><td>Michael</td><td>1</td><td>康熙</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr></tbody></table>';
+    editor.setContent(html);
+    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutable = document.getElementsByClassName("edui-menu-body")[2];
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        equal(menutable.childNodes.length, 7, '7个子项目');
+        if (browser.gecko) {
+            equal(menutable.textContent, lang.enablesort+lang.reversecurrent+lang.orderbyasc+lang.reversebyasc+lang.orderbynum+lang.reversebynum, '检查menu显示的字符');
+        }
+        else {
+            equal(menutable.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), lang.enablesort+lang.reversecurrent+lang.orderbyasc+lang.reversebyasc+lang.orderbynum+lang.reversebynum, '检查menu显示的字符');
+        }
+        var reverseIndex = ua.getContextmenuIndexByName(menutable.childNodes,lang.reversecurrent);
+        ua.click(menutable.childNodes[reverseIndex]);//逆序
+        ua.manualDeleteFillData(editor.body);
+        ua.checkSameHtml(editor.body.firstChild.firstChild.innerHTML,'<tr class=\"firstRow\"><td>&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr>', '表格内容逆序-选区闭合');
+        var tds = editor.body.getElementsByTagName('td');
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(tds[0], tds[6]);
+        ut.setSelected(cellsRange);
+        range.setStart(tds[0], 0).collapse(true).select();
+        ua.contextmenu(editor.body.firstChild);
+        menutable = document.getElementsByClassName("edui-menu-body")[2];
+        setTimeout(function () {
+            lang = editor.getLang("contextMenu");
+            ua.click(menutable.childNodes[reverseIndex]);
+            ua.manualDeleteFillData(editor.body);
+            ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td class=\"selectTdClass\">ackson</td><td>4</td><td>承祜</td></tr><tr><td class=\"selectTdClass\">{}</td><td>2</td><td>胤礼</td></tr><tr><td class=\"selectTdClass\">&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '表格内容逆序-选区不闭合');
+
+            setTimeout(function () {
+                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                te.dom.push(editor.container);
+                start();
+            }, 20);
+        },20);
+    },20);
+});
+
+test('contextMenu 按ASCII字符排序', function () {
+    if(ua.browser.ie||ua.browser.gecko)return;////todo 1.2.6.1 #3316
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    var html = '<table><tbody><tr><td>Michael</td><td>1</td><td>康熙</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr></tbody></table>';
+    editor.setContent(html);
+    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutable = document.getElementsByClassName("edui-menu-body")[2];//表格排序
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        var AsciiIndex = ua.getContextmenuIndexByName(menutable.childNodes,lang.orderbyasc);
+        ua.click(menutable.childNodes[AsciiIndex]);//ASCII升
+        ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '选区闭合');
+        var tds = editor.body.getElementsByTagName('td');
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(tds[0], tds[6]);
+        ut.setSelected(cellsRange);
+        range.setStart(tds[0], 0).collapse(true).select();
+        ua.contextmenu(editor.body.firstChild);
+        menutable = document.getElementsByClassName("edui-menu-body")[2];
+        forTable = document.getElementsByClassName('edui-for-table');
+        if (ua.browser.ie) {
+            ua.mouseenter(forTable[forTable.length - 1]);
+        } else {
+            ua.mouseover(forTable[forTable.length - 1]);
+        }
+        setTimeout(function () {
+            lang = editor.getLang("contextMenu");
+            ua.click(menutable.childNodes[AsciiIndex+1]);//ASCII降
+            ua.manualDeleteFillData(editor.body);
+            ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td class=\" selecttdclass \">ackson</td><td>4</td><td>承祜</td></tr><tr><td class=\" selecttdclass\">{}</td><td>2</td><td>胤礼</td></tr><tr><td class=\" selecttdclass\">&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '表格内容逆序-选区不闭合');
+            setTimeout(function () {
+                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                te.dom.push(editor.container);
+//
+                start();
+            }, 200);
+        }, 200);
+    }, 200);
+});
+
+test('contextMenu 按数值大小排序', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    var html = '<table><tbody><tr><td>Michael</td><td>1</td><td>康熙</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr></tbody></table>';
+    editor.setContent(html);
+    range.setStart(editor.body.getElementsByTagName('td')[1], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutable = document.getElementsByClassName("edui-menu-body")[2];
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        var numIndex = ua.getContextmenuIndexByName(menutable.childNodes,lang.orderbynum);
+        ua.click(menutable.childNodes[numIndex]);//num升
+        ua.manualDeleteFillData(editor.body);
+        ua.checkSameHtml(editor.body.innerHTML, '<table data-sort-type=\"orderbynum\"><tbody><tr class=\"firstRow\"><td>Michael</td><td>1</td><td>康熙</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr></tbody></table>', '选区闭合');
+        setTimeout(function () {
+            document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+            te.dom.push(editor.container);
+            start();
+        }, 200);
+    }, 200);
+});
+test('contextMenu trace 3384: 按数值大小排序', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    var html = '<table><tbody><tr><td>Michael</td><td>1</td><td>康熙</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr></tbody></table>';
+    editor.setContent(html);
+    range.setStart(editor.body.getElementsByTagName('td')[1], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutable = document.getElementsByClassName("edui-menu-body")[2];
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        var numIndex = ua.getContextmenuIndexByName(menutable.childNodes,lang.orderbynum);
+        ua.click(menutable.childNodes[numIndex]);//num升
+        ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td>Michael</td><td>1</td><td>康熙</td></tr><tr><td>{}</td><td>2</td><td>胤礼</td></tr><tr><td>&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr></tbody></table>', '选区不闭合');
+
+        var tds = editor.body.getElementsByTagName('td');
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(tds[1], tds[7]);
+        ut.setSelected(cellsRange);
+        range.setStart(tds[1], 0).collapse(true).select();
+        ua.contextmenu(editor.body.firstChild);
+        menutable = document.getElementsByClassName("edui-menu-body")[2];
+        forTable = document.getElementsByClassName('edui-for-table');
+
+        if (ua.browser.ie) {
+            ua.mouseenter(forTable[forTable.length - 1]);
+        } else {
+            ua.mouseover(forTable[forTable.length - 1]);
+        }
+        setTimeout(function () {
+
+            lang = editor.getLang("contextMenu");
+            ua.click(menutable.childNodes[numIndex+1]);//num降
+            // todo 1.2.6.1 trace 3510
+            if(!ua.browser.gecko){
+                ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td>&amp;*</td><td class=\" selecttdclass\">3</td><td>襄嫔</td></tr><tr><td>{}</td><td class=\" selecttdclass\">2</td><td>胤礼</td></tr><tr><td>Michael</td><td class=\" selecttdclass\">1</td><td>康熙</td></tr><tr><td>ackson</td><td>4</td><td>承祜</td></tr></tbody></table>', '选区不闭合');
+            }
+            setTimeout(function () {
+                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                te.dom.push(editor.container);
+
+                start();
+            }, 200);
+        }, 200);
+    }, 200);
+});
