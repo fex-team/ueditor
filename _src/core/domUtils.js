@@ -1987,7 +1987,13 @@ var domUtils = dom.domUtils = {
      * @returns { Boolean } 节点是否是填充节点
      */
     isFillChar:function (node,isInStart) {
-        return node.nodeType == 3 && !node.nodeValue.replace(new RegExp((isInStart ? '^' : '' ) + domUtils.fillChar), '').length
+        if(node.nodeType != 3)
+            return false;
+        var text = node.nodeValue;
+        if(isInStart){
+            return new RegExp('^' + domUtils.fillChar).test(text)
+        }
+        return !text.replace(new RegExp(domUtils.fillChar,'g'), '').length
     },
     isStartInblock:function (range) {
         var tmpRange = range.cloneRange(),
