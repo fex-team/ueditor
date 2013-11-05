@@ -17,6 +17,20 @@ UE.plugin.register('background', function () {
         return obj;
     }
 
+    function setBackground(obj) {
+        if (obj) {
+            var styles = [];
+            for (var name in obj) {
+                if (obj.hasOwnProperty(name)) {
+                    styles.push(name + ":" + obj[name] + '; ');
+                }
+            }
+            utils.cssRule(cssRuleId, styles.length ? ('body{' + styles.join("") + '}') : '', me.document);
+        } else {
+            utils.cssRule(cssRuleId, '', me.document)
+        }
+    }
+
     return {
         bindEvents: {
             'getAllHtml': function (type, headHtml) {
@@ -45,7 +59,7 @@ UE.plugin.register('background', function () {
                 headHtml.push(html);
             },
             'aftersetcontent': function () {
-                me.execCommand('background', {});
+                setBackground({});
             }
         },
         inputRule: function (root) {
@@ -68,18 +82,7 @@ UE.plugin.register('background', function () {
         commands: {
             'background': {
                 execCommand: function (cmd, obj) {
-                    var me = this;
-                    if (obj) {
-                        var styles = [];
-                        for (var name in obj) {
-                            if (obj.hasOwnProperty(name)) {
-                                styles.push(name + ":" + obj[name] + '; ');
-                            }
-                        }
-                        utils.cssRule(cssRuleId, styles.length ? ('body{' + styles.join("") + '}') : '', me.document);
-                    } else {
-                        utils.cssRule(cssRuleId, '', me.document)
-                    }
+                    setBackground(obj);
                 },
                 queryCommandValue: function () {
                     var me = this,
