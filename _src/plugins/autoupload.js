@@ -35,7 +35,7 @@ UE.plugin.register('autoupload', function (){
                 if(window.FormData && window.FileReader) {
                     domUtils.on(me.body, 'paste drop', function(e){
                         var hasImg = false,
-                            items = (e.type == 'paste') ? e.clipboardData.items:e.dataTransfer.files, //获取粘贴板文件列表或者拖放文件列表
+                            items = (e.type == 'paste') ? (e.clipboardData && e.clipboardData.items):(e.dataTransfer && e.dataTransfer.files), //获取粘贴板文件列表或者拖放文件列表
                             len = items.length,
                             file;
                         while (len--){
