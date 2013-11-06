@@ -13,7 +13,8 @@
         var tabs = $G('tabHeads').children;
         for (var i = 0; i < tabs.length; i++) {
             domUtils.on(tabs[i], "click", function (e) {
-                var target = e.target || e.which;
+                alert('1234');
+                var target = e.target || e.srcElement;
                 for (var j = 0; j < tabs.length; j++) {
                     if(tabs[j] == target){
                         tabs[j].className = "focus";
