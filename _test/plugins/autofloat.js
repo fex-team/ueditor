@@ -29,7 +29,7 @@ test( '检查toolbar是否浮动在页面顶端', function() {
                     setTimeout(function () {
                         var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;//不同浏览器兼容
 ////                //ie6下，工具栏浮动不到正确位置
-                        if (ua.browser.ie != 6)
+                        if (ua.browser.ie != 6&&!ua.browser.gecko)
                             equal(scrollTop, $(me.ui.getDom('toolbarbox')).offset().top - 60, '检查toolbar是否在页面顶端');
                         window.scrollTo(screenX, screenY - $(document.body).height());
                         setTimeout(function () {

@@ -1090,3 +1090,460 @@ test('inserttitlecol, deletetitlecol', function () {
         },20);
     },20);
 });
+/*trace 3216*/
+test('contextMenu trace 3216：前插入行', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+
+    stop();
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    editor.execCommand('inserttable');
+    var tds = editor.body.getElementsByTagName('td');
+    tds[0].innerHTML = 'asd';
+    range.setStart(tds[0], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutable = document.getElementsByClassName("edui-menu-body")[1];
+    var forTable = document.getElementsByClassName('edui-for-table');
+    if (ua.browser.ie) {
+        ua.mouseenter(forTable[forTable.length - 1]);
+    } else {
+        ua.mouseover(forTable[forTable.length - 1]);
+    }
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        ua.click(menutable.childNodes[4]);
+        equal(editor.body.getElementsByTagName('tr').length, 6, '前插入行后有6行');
+        equal(ua.getChildHTML(editor.body.getElementsByTagName('td')[5]), 'asd', '原单元格中文本未改变');
+        setTimeout(function () {
+            document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+            te.dom.push(editor.container);
+            start();
+        }, 200);
+    }, 200);
+});
+test('contextMenu 选区背景隔行', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    editor.execCommand('inserttable');
+    var trs = editor.body.firstChild.getElementsByTagName('tr');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[1]);
+    ut.setSelected(cellsRange);
+    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+    var forTable = document.getElementsByClassName('edui-for-table');
+    if (ua.browser.ie) {
+        ua.mouseenter(forTable[forTable.length - 1]);
+    } else {
+        ua.mouseover(forTable[forTable.length - 1]);
+    }
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        equal(menutableBody.childNodes.length, 4, '4个子项目');
+        if (browser.gecko) {
+            equal(menutableBody.textContent, '表格隔行变色选区背景隔行红蓝相间三色渐变', '检查menu显示的字符');
+        }
+        else {
+            equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), '表格隔行变色选区背景隔行红蓝相间三色渐变', '检查menu显示的字符');
+        }
+        ua.click(menutableBody.childNodes[1]);
+        ut.clearSelected();
+        trs = editor.body.getElementsByTagName('tr');
+        if (ua.browser.ie == 8) {
+            equal(trs[0].cells[0].style.backgroundColor, '#bbb', '第一行');
+            equal(trs[1].cells[1].style.backgroundColor, '#ccc', '第二行');
+        } else {
+            equal(trs[0].cells[0].style.backgroundColor, 'rgb(187, 187, 187)', '第一行');
+            equal(trs[1].cells[1].style.backgroundColor, 'rgb(204, 204, 204)', '第二行');
+        }
+        cellsRange = ut.getCellsRange(trs[0].cells[2], trs[1].cells[3]);
+        ut.setSelected(cellsRange);
+        range.setStart(trs[0].cells[2], 0).collapse(true).select();
+        ua.contextmenu(editor.body.firstChild);
+        menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+        forTable = document.getElementsByClassName('edui-for-table');
+        if (ua.browser.ie) {
+            ua.mouseenter(forTable[forTable.length - 1]);
+        } else {
+            ua.mouseover(forTable[forTable.length - 1]);
+        }
+        setTimeout(function () {
+            lang = editor.getLang("contextMenu");
+            equal(menutableBody.childNodes.length, 4, '4个子项目');
+            ua.click(menutableBody.childNodes[2]);
+            ut.clearSelected();
+            trs = editor.body.getElementsByTagName('tr');
+            equal(trs[0].cells[2].style.backgroundColor, 'red', '第一行');
+            equal(trs[1].cells[3].style.backgroundColor, 'blue', '第二行');
+            ut = editor.getUETable(editor.body.firstChild);
+            cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[3]);
+            ut.setSelected(cellsRange);
+            range.setStart(trs[0].cells[0], 0).collapse(true).select();
+            ua.contextmenu(editor.body.firstChild);
+            menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+            forTable = document.getElementsByClassName('edui-for-table');
+            if (ua.browser.ie) {
+                ua.mouseenter(forTable[forTable.length - 1]);
+            } else {
+                ua.mouseover(forTable[forTable.length - 1]);
+            }
+            setTimeout(function () {
+                lang = editor.getLang("contextMenu");
+                ua.click(menutableBody.childNodes[2]);
+                trs = editor.body.getElementsByTagName('tr');
+                equal(trs[1].cells[2].style.backgroundColor, '', '取消背景隔行');
+                setTimeout(function () {
+                    document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                    te.dom.push(editor.container);
+                    start();
+                }, 200);
+            }, 200);
+        }, 200);
+    }, 200);
+});
+
+test('contextMenu 三色渐变', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+
+    stop();
+
+    editor.execCommand('cleardoc');
+    editor.execCommand('inserttable');
+    var tds = editor.body.getElementsByTagName('td');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(tds[0], tds[16]);
+    ut.setSelected(cellsRange);
+    range.setStart(tds[0], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutable = document.getElementsByClassName("edui-menu-body")[3];
+    var forTable = document.getElementsByClassName('edui-for-table');
+    if (ua.browser.ie) {
+        ua.mouseenter(forTable[forTable.length - 1]);
+    } else {
+        ua.mouseover(forTable[forTable.length - 1]);
+    }
+    ua.click(menutable.childNodes[3]);
+    ut.clearSelected();
+    tds = editor.body.getElementsByTagName('td');
+    if (ua.browser.ie == 8) {
+        equal(tds[0].style.backgroundColor, '#aaa', '第一行');
+        equal(tds[6].style.backgroundColor, '#bbb', '第二行');
+        equal(tds[11].style.backgroundColor, '#ccc', '第二行');
+    } else {
+        equal(tds[0].style.backgroundColor, 'rgb(170, 170, 170)', '第一行');
+        equal(tds[6].style.backgroundColor, 'rgb(187, 187, 187)', '第二行');
+        equal(tds[11].style.backgroundColor, 'rgb(204, 204, 204)', '第二行');
+    }
+    setTimeout(function () {
+        document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+        te.dom.push(editor.container);
+        start();
+    }, 20);
+});
+/*trace 3099*/
+test('contextMenu trace 3099: 清除边框颜色', function () {
+//    if (ua.browser.ie >8 )return;
+
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    stop();
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        var lang = editor.getLang("contextMenu");
+        editor.execCommand('cleardoc');
+        editor.execCommand('inserttable');
+        setTimeout(function () {
+            range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+            ua.contextmenu(editor.body.firstChild);
+            var menutable = document.getElementsByClassName("edui-menu-body")[1];
+            var forTable = document.getElementsByClassName('edui-for-table');
+            if (ua.browser.ie&&ua.browser.ie<9) {
+                ua.mouseenter(forTable[forTable.length - 1]);
+            } else {
+                ua.mouseover(forTable[forTable.length - 1]);
+            }
+            lang = editor.getLang("contextMenu");
+            ua.click(menutable.childNodes[menutable.childNodes.length-1]);//点开表格属性
+            setTimeout(function () {
+                var iframe = document.getElementsByTagName('iframe');
+                var iframe1 ;
+                for (var i = iframe.length-1; i >-1; i--) {
+                    if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
+                        iframe1 = iframe[i];
+                        break;
+                    }
+                }
+
+                iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
+                var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+                ua.click(buttonBody);
+                setTimeout(function () {
+                    var tds = editor.body.getElementsByTagName('td');
+                    if (ua.browser.ie == 8)
+                        equal(tds[0].style.borderColor, '#ff0000', '边框颜色设置为红色');
+                    else {
+                        equal(tds[0].style.borderColor, 'rgb(255, 0, 0)', '边框颜色设置为红色');
+                    }
+                    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+                    ua.contextmenu(editor.body.firstChild);
+                    menutable = document.getElementsByClassName("edui-menu-body")[1];
+                    forTable = document.getElementsByClassName('edui-for-table');
+                    if (ua.browser.ie&&ua.browser.ie<9) {
+                        ua.mouseenter(forTable[forTable.length - 1]);
+                    } else {
+                        ua.mouseover(forTable[forTable.length - 1]);
+                    }
+                    lang = editor.getLang("contextMenu");
+                    ua.click(menutable.childNodes[menutable.childNodes.length-1]);
+                    setTimeout(function () {
+                        iframe = document.getElementsByTagName('iframe');
+                        iframe1 = null;
+                        for (var i = iframe.length-1; i >-1; i--) {
+                            if (iframe[i].id.indexOf('edui') != -1) {
+                                iframe1 = iframe[i];
+                                break;
+                            }
+                        }
+                        ua.click(iframe1.contentDocument.getElementById('J_tone'));
+                        setTimeout(function () {
+                            var div_nocolor = document.getElementsByClassName('edui-colorpicker-nocolor');
+                            ua.click(div_nocolor[0]);
+                            var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[1].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+                            ua.click(buttonBody);
+                            tds = editor.body.getElementsByTagName('td');
+                            equal(tds[0].style.borderColor, '', '边框颜色被清除');
+                            setTimeout(function () {
+                                UE.delEditor('ue');
+                                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                                te.dom.push(document.getElementById('ue'));
+                                start();
+                            }, 200);
+                        }, 200);
+                    }, 200);
+                }, 200);
+            }, 500);
+        }, 200);
+    });
+});
+test('contextMenu 标题行中右插入列', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    editor.execCommand('inserttable');
+    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+    editor.execCommand('inserttitle');
+    range.setStart(editor.body.getElementsByTagName('th')[0], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutable = document.getElementsByClassName("edui-menu-body")[1];
+    var forTable = document.getElementsByClassName('edui-for-table');
+    if (ua.browser.ie) {
+        ua.mouseenter(forTable[forTable.length - 1]);
+    } else {
+        ua.mouseover(forTable[forTable.length - 1]);
+    }
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        equal(menutable.childNodes.length, 12, '12个子项目');//当光标在th[0]时,由于标题变更13->12 (少了前插入列)
+        /*trace 3197：没有后插行选项*/
+        var innerText = lang.deletetable +  lang.insertcolnext + lang.insertcaption + lang.deletetitle +lang.inserttitlecol+ lang.mergeright + lang.edittd + lang.edittable;
+        if (browser.gecko) {
+            equal(menutable.textContent, innerText, '检查menu显示的字符');
+        } else {
+            equal(menutable.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), innerText, '检查menu显示的字符');
+        }
+        ua.click(menutable.childNodes[2]);
+        equal(editor.body.getElementsByTagName('tr')[0].cells.length, 6, '左插入列后有6列');
+        setTimeout(function () {
+            document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+            te.dom.push(editor.container);
+            start();
+        }, 200);
+    });
+});
+/*trace 3060*/
+test('contextMenu trace 3060：单元格对齐方式', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    editor.execCommand('inserttable');
+    editor.body.getElementsByTagName('td')[0].innerHTML = 'asd';
+    range.setStart(editor.body.firstChild.firstChild.firstChild.firstChild, 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutableBody = document.getElementsByClassName("edui-for-aligntd")[0];
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        ua.click(menutableBody.childNodes[0]);
+        var div = document.getElementsByClassName('edui-cellalignpicker-body')[0];
+        equal(div.childNodes[0].getElementsByTagName('td').length, 9, '9种单元格对齐方式');
+        ua.click(div.childNodes[0].childNodes[0].childNodes[1].childNodes[2].firstChild);
+        setTimeout(function () {
+            var tds = editor.body.getElementsByTagName('td');
+            equal(tds[0].align, 'right', '水平居右');
+            equal(tds[0].vAlign, 'middle', '垂直居中');
+            equal(editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase(), 'td', '光标位于单元格中');
+            setTimeout(function () {
+                te.dom.push(editor.container);
+                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                start();
+            }, 20);
+        }, 200);
+    }, 200);
+//    });
+});
+/*trace 3315*/
+/*trace 3411*/
+test('contextMenu trace 3315：表格隔行变色', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    stop();
+    var lang = editor.getLang("contextMenu");
+    editor.execCommand('cleardoc');
+    editor.execCommand('inserttable');
+    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+    ua.contextmenu(editor.body.firstChild);
+    var menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+    var forTable = document.getElementsByClassName('edui-for-table');
+    if (ua.browser.ie) {
+        ua.mouseenter(forTable[forTable.length - 1]);
+    } else {
+        ua.mouseover(forTable[forTable.length - 1]);
+    }
+    setTimeout(function () {
+        lang = editor.getLang("contextMenu");
+        equal(menutableBody.childNodes.length, 1, '1个子项目');
+        if (browser.gecko) {
+            equal(menutableBody.textContent, '表格隔行变色', '检查menu显示的字符');
+        }
+        else {
+            equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), '表格隔行变色', '检查menu显示的字符');
+        }
+        ua.click(menutableBody.childNodes[0]);
+        //        equal(editor.body.getElementsByTagName('table')[0].interlaced,'enabled','表格隔行变色');
+        var trs = editor.body.getElementsByTagName('tr');
+        for (var i = 0; i < trs.length; i++) {
+            if (i % 2 == 0) {
+                ok(trs[i].className.indexOf('ue-table-interlace-color-single')>-1,'第' + i + '行：浅色行');
+            } else {
+                ok(trs[i].className.indexOf('ue-table-interlace-color-double')>-1,'第' + i + '行：深色行');
+            }
+        }
+        range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+        ua.contextmenu(editor.body.firstChild);
+        menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+        forTable = document.getElementsByClassName('edui-for-table');
+        if (ua.browser.ie) {
+            ua.mouseenter(forTable[forTable.length - 1]);
+        } else {
+            ua.mouseover(forTable[forTable.length - 1]);
+        }
+        setTimeout(function () {
+            lang = editor.getLang("contextMenu");
+            equal(menutableBody.childNodes.length, 1, '2个子项目');
+            if (browser.gecko) {
+                equal(menutableBody.textContent, '取消表格隔行变色', '检查menu显示的字符');
+            }
+            else {
+                equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), '取消表格隔行变色', '检查menu显示的字符');
+            }
+            ua.click(menutableBody.childNodes[0]);
+            //            equal(editor.body.getElementsByTagName('table')[0].interlaced,'disabled','取消表格隔行变色');
+            ok(editor.body.getElementsByTagName('tr')[0].className.indexOf('ue-table-interlace-color')<0, '取消表格隔行变色');
+            setTimeout(function () {
+                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                te.dom.push(editor.container);
+                start();
+            }, 200);
+        }, 200);
+    }, 200);
+    stop();
+});
+
+/*trace 3210*/
+test('contextMenu trace 3210：添加单元格背景色', function () {
+//    if (ua.browser.ie > 8)return;
+
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue');
+    stop();
+    editor.ready(function () {
+        var lang = editor.getLang("contextMenu");
+        var range = new baidu.editor.dom.Range(editor.document);
+        setTimeout(function () {
+            editor.execCommand('cleardoc');
+            editor.execCommand('inserttable');
+            stop();
+            var tds = editor.body.getElementsByTagName('td');
+            var ut = editor.getUETable(editor.body.firstChild);
+            var cellsRange = ut.getCellsRange(tds[0], tds[6]);
+            ut.setSelected(cellsRange);
+            range.setStart(tds[0], 0).collapse(true).select();
+            ua.contextmenu(editor.body.firstChild);
+            var menutable = document.getElementsByClassName("edui-menu-body")[1];
+            var forTable = document.getElementsByClassName('edui-for-table');
+            if (ua.browser.ie&&ua.browser.ie<9) {
+                ua.mouseenter(forTable[forTable.length - 1]);
+            } else {
+                ua.mouseover(forTable[forTable.length - 1]);
+            }
+            lang = editor.getLang("contextMenu");
+            ua.click(menutable.childNodes[menutable.childNodes.length-2]);
+            var iframe = document.getElementsByTagName('iframe');
+            var i = iframe.length - 1;
+            for (var iframe1 in iframe) {
+                if (iframe[i].id.indexOf('edui') != -1) {
+                    iframe1 = iframe[i];
+                    break;
+                } else {
+                    i--;
+                }
+            }
+            setTimeout(function () {
+                iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
+                var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittd edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+                ua.click(buttonBody);
+                equal(tds[2].style.backgroundColor, '', '背景色不变');
+                if (ua.browser.ie == 8) {
+                    equal(tds[0].style.backgroundColor, '#ff0000', '背景色不变');
+                    equal(tds[6].style.backgroundColor, '#ff0000', '背景色不变');
+                } else {
+                    equal(tds[0].style.backgroundColor, 'rgb(255, 0, 0)', '背景色不变');
+                    equal(tds[6].style.backgroundColor, 'rgb(255, 0, 0)', '背景色不变');
+                }
+                setTimeout(function () {
+                    editor.execCommand('source');
+                    setTimeout(function () {
+                        editor.execCommand('source');
+                        equal(tds[2].style.backgroundColor, '', '背景色不变');
+                        if (ua.browser.ie == 8) {
+                            equal(tds[0].style.backgroundColor, '#ff0000', '背景色不变');
+                            equal(tds[6].style.backgroundColor, '#ff0000', '背景色不变');
+                        } else {
+                            equal(tds[0].style.backgroundColor, 'rgb(255, 0, 0)', '背景色不变');
+                            equal(tds[6].style.backgroundColor, 'rgb(255, 0, 0)', '背景色不变');
+                        }
+                        setTimeout(function () {
+                            UE.delEditor('ue');
+//                            te.dom.push(editor.container);
+                            document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                            te.dom.push(document.getElementById('ue'));
+                            start();
+                        }, 20);
+                    }, 100);
+                }, 100);
+            }, 500);
+        }, 100);
+    });
+});
