@@ -62,8 +62,7 @@
     /* 初始化颜色选择器 */
     function initColorPicker() {
         var me = editor,
-            cp = $G("colorPicker"),
-            bkcolor = "";
+            cp = $G("colorPicker");
 
         /* 生成颜色选择器ui对象 */
         var popup = new UE.ui.Popup({
@@ -71,16 +70,12 @@
                 noColorText: me.getLang("clearColor"),
                 editor: me,
                 onpickcolor: function (t, color) {
-                    domUtils.setStyle(cp, "background-color", color);
-                    bkcolor = color;
-                    updateFormState('colored');
+                    updateFormState('colored', color);
                     updateBackground();
                     UE.ui.Popup.postHide();
                 },
                 onpicknocolor: function (t, color) {
-                    domUtils.setStyle(cp, "background-color", "transparent");
-                    bkcolor = "";
-                    updateFormState('nocolor', null, '');
+                    updateFormState('colored', 'transparent');
                     updateBackground();
                     UE.ui.Popup.postHide();
                 }

@@ -59,7 +59,7 @@ UE.plugin.register('background', function () {
                 headHtml.push(html);
             },
             'aftersetcontent': function () {
-                setBackground({});
+                setBackground();
             }
         },
         inputRule: function (root) {
