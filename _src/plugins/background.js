@@ -5,7 +5,8 @@
  */
 UE.plugin.register('background', function () {
     var me = this,
-        cssRuleId = 'editor_background';
+        cssRuleId = 'editor_background',
+        isSetColored;
 
     function stringToObj(str) {
         var obj = {}, styles = str.split(';');
@@ -59,14 +60,16 @@ UE.plugin.register('background', function () {
                 headHtml.push(html);
             },
             'aftersetcontent': function () {
-                setBackground();
+                if(isSetColored == false) setBackground();
             }
         },
         inputRule: function (root) {
+            isSetColored = false;
             utils.each(root.getNodesByTagName('p'), function (p) {
                 var styles = p.getAttr('data-background');
                 if (styles) {
-                    me.execCommand('background', stringToObj(styles));
+                    isSetColored = true;
+                    setBackground(stringToObj(styles));
                     p.parentNode.removeChild(p);
                 }
             })

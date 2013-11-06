@@ -32,14 +32,18 @@ UE.plugin.register('section', function (){
     var me = this;
 
     return {
-        bindMultiEvents:{
-            /* 初始化、拖拽、粘贴、执行setcontent之后 */
-            'type': 'ready drop paste aftersetcontent',
-            'handler':function(e){
-                me.fireEvent('updateSections');
-            }
-        },
         bindEvents:{
+            /* 初始化、拖拽、粘贴、执行setcontent之后 */
+            'ready': function (){
+                me.fireEvent('updateSections');
+                domUtils.on(me.body, 'drop paste aftersetcontent', function(){
+                    me.fireEvent('updateSections');
+                });
+            },
+            /* 执行setcontent之后 */
+            'aftersetcontent': function(e){
+                me.fireEvent('updateSections');
+            },
             'aftersetcontent': function () {
                 me.fireEvent('updateSections');
             },
@@ -57,7 +61,7 @@ UE.plugin.register('section', function (){
                     me.fireEvent('updateSections');
                 } else {
                     var keyCode = e.keyCode || e.which;
-                    if(keyCode == 13 || keyCode == 8 || keyCode == 48) {
+                    if(keyCode == 13 || keyCode == 8 || keyCode == 46) {
                         me.fireEvent('updateSections');
                     }
                 }
