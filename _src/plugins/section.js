@@ -44,13 +44,13 @@ UE.plugin.register('section', function (){
                 me.fireEvent('updateSections');
             },
             /* 执行paragraph命令之后 */
-            'afterexeccommand': function (cmd) {
+            'afterexeccommand': function (type, cmd) {
                 if(cmd == 'paragraph') {
                     me.fireEvent('updateSections');
                 }
             },
             /* 部分键盘操作，触发updateSections事件 */
-            'keydown': function (type, e) {
+            'keyup': function (type, e) {
                 var me = this,
                     range = me.selection.getRange();
                 if(range.collapsed != true) {

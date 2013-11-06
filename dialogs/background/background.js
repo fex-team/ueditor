@@ -46,15 +46,16 @@
             updateFormState();
         }
 
-        domUtils.on($G('nocolorRadio'), 'click', updateBackground);
-        domUtils.on($G('coloredRadio'), 'click', updateBackground);
-        domUtils.on($G('url'), 'change', updateBackground);
-        domUtils.on($G('repeatType'), 'change', function () {
+        var updateHandler = function () {
             updateFormState();
             updateBackground();
-        });
-        domUtils.on($G('x'), 'change', updateBackground);
-        domUtils.on($G('y'), 'change', updateBackground);
+        }
+        domUtils.on($G('nocolorRadio'), 'click', updateBackground);
+        domUtils.on($G('coloredRadio'), 'click', updateBackground);
+        domUtils.on($G('url'), 'keyup', updateHandler);
+        domUtils.on($G('repeatType'), 'change', updateHandler);
+        domUtils.on($G('x'), 'keyup', updateBackground);
+        domUtils.on($G('y'), 'keyup', updateBackground);
 
         initColorPicker();
     }
