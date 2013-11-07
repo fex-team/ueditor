@@ -109,7 +109,7 @@
         $('.selectIcon').click(function(e){
             var $target = $(this),
                     address = $target.parent().attr('data-address');
-            ue.execCommand('selectsection', dirmap[address]);
+            ue.execCommand('selectsection', dirmap[address], true);
         });
         // 章节上移
         $('.moveUp,.moveDown').click(function(e){

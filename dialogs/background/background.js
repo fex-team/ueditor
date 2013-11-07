@@ -13,7 +13,8 @@
         var tabs = $G('tabHeads').children;
         for (var i = 0; i < tabs.length; i++) {
             domUtils.on(tabs[i], "click", function (e) {
-                var target = e.target || e.which;
+                alert('1234');
+                var target = e.target || e.srcElement;
                 for (var j = 0; j < tabs.length; j++) {
                     if(tabs[j] == target){
                         tabs[j].className = "focus";
@@ -46,15 +47,16 @@
             updateFormState();
         }
 
-        domUtils.on($G('nocolorRadio'), 'click', updateBackground);
-        domUtils.on($G('coloredRadio'), 'click', updateBackground);
-        domUtils.on($G('url'), 'change', updateBackground);
-        domUtils.on($G('repeatType'), 'change', function () {
+        var updateHandler = function () {
             updateFormState();
             updateBackground();
-        });
-        domUtils.on($G('x'), 'change', updateBackground);
-        domUtils.on($G('y'), 'change', updateBackground);
+        }
+        domUtils.on($G('nocolorRadio'), 'click', updateBackground);
+        domUtils.on($G('coloredRadio'), 'click', updateBackground);
+        domUtils.on($G('url'), 'keyup', updateHandler);
+        domUtils.on($G('repeatType'), 'change', updateHandler);
+        domUtils.on($G('x'), 'keyup', updateBackground);
+        domUtils.on($G('y'), 'keyup', updateBackground);
 
         initColorPicker();
     }
@@ -62,8 +64,7 @@
     /* 初始化颜色选择器 */
     function initColorPicker() {
         var me = editor,
-            cp = $G("colorPicker"),
-            bkcolor = "";
+            cp = $G("colorPicker");
 
         /* 生成颜色选择器ui对象 */
         var popup = new UE.ui.Popup({
@@ -71,16 +72,12 @@
                 noColorText: me.getLang("clearColor"),
                 editor: me,
                 onpickcolor: function (t, color) {
-                    domUtils.setStyle(cp, "background-color", color);
-                    bkcolor = color;
-                    updateFormState('colored');
+                    updateFormState('colored', color);
                     updateBackground();
                     UE.ui.Popup.postHide();
                 },
                 onpicknocolor: function (t, color) {
-                    domUtils.setStyle(cp, "background-color", "transparent");
-                    bkcolor = "";
-                    updateFormState('nocolor', null, '');
+                    updateFormState('colored', 'transparent');
                     updateBackground();
                     UE.ui.Popup.postHide();
                 }
