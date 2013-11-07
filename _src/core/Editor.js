@@ -743,7 +743,7 @@
             me.fireEvent('beforegetcontent');
             var root = UE.htmlparser(me.body.innerHTML,ignoreBlank);
             me.filterOutputRule(root);
-            me.fireEvent('aftergetcontent', cmd);
+            me.fireEvent('aftergetcontent', cmd,root);
             return  root.toHtml(formatter);
         },
 
@@ -937,16 +937,21 @@
                     }
                     rng.setCursor(true);
                 } else {
-                    var node = me.body.firstChild;
-                    if(node && node.nodeType == 1 && !dtd.$empty[node.tagName]){
-                        rng.setStartAtFirst(node).collapse(true);
+                    if(!rng.collapsed && domUtils.isBody(rng.startContainer) && rng.startOffset == 0){
+
+                        var node = me.body.firstChild;
+                        if(node && node.nodeType == 1 && !dtd.$empty[node.tagName]){
+                            rng.setStartAtFirst(node).collapse(true);
+                        }
                     }
+
                     rng.select(true);
 
                 }
                 this.fireEvent('focus selectionchange');
             } catch (e) {
             }
+
         },
         isFocus:function(){
             return this.selection.isFocus();
