@@ -487,6 +487,9 @@ var domUtils = dom.domUtils = {
     getNextDomNode:function (node, startFromChild, filterFn, guard) {
         return getDomNode(node, 'firstChild', 'nextSibling', startFromChild, filterFn, guard);
     },
+    getPreDomNode:function (node, startFromChild, filterFn, guard) {
+        return getDomNode(node, 'lastChild', 'previousSibling', startFromChild, filterFn, guard);
+    },
     /**
      * 检测节点node是否属是UEditor定义的bookmark节点
      * @method isBookmarkNode

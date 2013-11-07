@@ -937,16 +937,21 @@
                     }
                     rng.setCursor(true);
                 } else {
-                    var node = me.body.firstChild;
-                    if(node && node.nodeType == 1 && !dtd.$empty[node.tagName]){
-                        rng.setStartAtFirst(node).collapse(true);
+                    if(!rng.collapsed && domUtils.isBody(rng.startContainer) && rng.startOffset == 0){
+
+                        var node = me.body.firstChild;
+                        if(node && node.nodeType == 1 && !dtd.$empty[node.tagName]){
+                            rng.setStartAtFirst(node).collapse(true);
+                        }
                     }
+
                     rng.select(true);
 
                 }
                 this.fireEvent('focus selectionchange');
             } catch (e) {
             }
+
         },
         isFocus:function(){
             return this.selection.isFocus();

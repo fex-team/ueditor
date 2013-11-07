@@ -7,179 +7,141 @@
  * @description 查找替换
  * @author zhanyi
  */
-UE.plugins['searchreplace'] = function(){
 
-    var currentRange,
-        first,
+UE.plugin.register('searchreplace',function(){
+    var first = 1,
         me = this;
-    me.addListener('reset',function(){
-        currentRange = null;
-        first = null;
-    });
-    me.commands['searchreplace'] = {
-        execCommand : function(cmdName,opt){
-            var me = this,
-                sel = me.selection,
-                range,
-                nativeRange,
-                num = 0,
-                opt = utils.extend(opt,{
-                    all : false,
-                    casesensitive : false,
-                    dir : 1
-                },true);
-            var searchStr = opt.searchStr;
-            if(browser.ie){
-                me.focus();
-                while(1){
-                    var tmpRange;
-                    nativeRange = me.document.selection.createRange();
-                    tmpRange = nativeRange.duplicate();
-                    tmpRange.moveToElementText(me.document.body);
-                    if(opt.all){
-                        first = 0;
-                        opt.dir = 1;
-                        if(currentRange){
-                            tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',currentRange);
-                        }else{
-                            tmpRange.moveToElementText(me.document.body);
-                        }
-
-                    }else{
-                        tmpRange.setEndPoint(opt.dir == -1 ? 'EndToStart' : 'StartToEnd',nativeRange);
-                        if(opt.hasOwnProperty("replaceStr")){
-                            tmpRange.setEndPoint(opt.dir == -1 ? 'StartToEnd' : 'EndToStart',nativeRange);
-                        }
-                    }
-                    nativeRange = tmpRange.duplicate();
-
-                    if(/^\/[^/]+\/\w*$/.test(opt.searchStr)){
-                        var str = tmpRange.text,
-                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g' + (opt.casesensitive ? '':'i'));
-                        var match = str.match(reg);
-                        if(match && match.length){
-                            searchStr = opt.dir < 0 ? match[match.length -1] : match[0];
-                        }else{
-                            currentRange = null;
-                            return num;
-                        }
-                    }
-                    if(!tmpRange.findText(searchStr,opt.dir,opt.casesensitive ? 4 : 0)){
-                        currentRange = null;
-                        tmpRange = me.document.selection.createRange();
-                        tmpRange.scrollIntoView();
-                        currentRange = null;
-                        return num;
-                    }
-                    tmpRange.select();
-                    //替换
-                    if(opt.hasOwnProperty("replaceStr")){
-                        range = sel.getRange();
-                        range.deleteContents().insertNode(range.document.createTextNode(opt.replaceStr)).select();
-                        currentRange = me.document.selection.createRange()
-                    }
-                    num++;
-                    if(!opt.all){
-                        break;
-                    }
+    function findTextInString(textContent,opt,currentIndex){
+        var reg = new RegExp(opt.searchStr,'g' + (opt.casesensitive ? '' : 'i')),
+            indexArr = [],match;
+        while(match = reg.exec(textContent)){
+            indexArr.push(match.index);
+            if(currentIndex !== null){
+                if(opt.dir == 1 && match.index >= currentIndex || opt.dir == -1 && match.index <= currentIndex - opt.searchStr.length){
+                    return match.index;
                 }
-            }else{
-
-                var w = me.window,nativeSel = sel.getNative();
-                while(1){
-                    if(opt.all){
-                        if(currentRange){
-                            currentRange.collapse(false);
-                            nativeRange = currentRange;
-                        }else{
-                            nativeRange  = me.document.createRange();
-                            nativeRange.setStart(me.document.body,0);
-                            nativeRange.collapse(true);
-                        }
-
-                        nativeSel.removeAllRanges();
-                        nativeSel.addRange( nativeRange );
-                        first = 0;
-                        opt.dir = 1;
-                    }else{
-                        //safari弹出层，原生已经找不到range了，所以需要先选回来，再取原生
-                        if(browser.safari){
-                            me.selection.getRange().select();
-
-                        }
-                        var nativeSel = w.getSelection();
-                        if(!nativeSel.rangeCount){
-                            nativeRange = currentRange || me._bakNativeRange;
-                        }else{
-                            nativeRange = nativeSel.getRangeAt(0);
-                        }
-
-                        if(opt.hasOwnProperty("replaceStr")){
-                            nativeRange.collapse(opt.dir == 1 ? true : false);
-                        }
-                    }
-
-                    //如果是第一次并且海选中了内容那就要清除，为find做准备
-
-                    if(!first){
-                        nativeRange.collapse( opt.dir <0 ? true : false);
-                        nativeSel.removeAllRanges();
-                        nativeSel.addRange( nativeRange );
-                    }else{
-                        nativeSel.removeAllRanges();
-                    }
-                    //是正则查找
-
-                    if(/^\/[^/]+\/\w*$/.test(opt.searchStr)){
-                        var tmpRange = nativeRange.cloneRange();
-                        //向前查找
-                        if(opt.dir < 0 ){
-                            nativeRange.collapse(true);
-                            nativeRange.setStart(me.body,0);
-                        }else{
-                            nativeRange.setEnd(me.body,me.body.childNodes.length);
-                        }
-                        var str = nativeRange + '',
-                            reg = new RegExp(opt.searchStr.replace(/^\/|\/\w*$/g,''),'g' + (opt.casesensitive ? '':'i'));
-                        var match = str.match(reg);
-                        if(match && match.length){
-                            searchStr = opt.dir < 0 ? match[match.length -1] : match[0];
-                        }else{
-                            currentRange = null;
-                            return num;
-                        }
-                        nativeSel.removeAllRanges();
-                        nativeRange = tmpRange;
-                        nativeSel.addRange(nativeRange);
-                    }
-                    if(!w.find(searchStr,opt.casesensitive,opt.dir < 0 ? true : false) ) {
-                        currentRange = null;
-                        nativeSel.removeAllRanges();
-                        return num;
-                    }
-                    first = 0;
-                    range = w.getSelection().getRangeAt(0);
-                    if(!range.collapsed){
-
-                        if(opt.hasOwnProperty("replaceStr")){
-                            range.deleteContents();
-                            var text = w.document.createTextNode(opt.replaceStr);
-                            range.insertNode(text);
-                            range.selectNode(text);
-                            nativeSel.addRange(range);
-
-                        }
-                        currentRange = range.cloneRange();
-                    }
-                    num++;
-                    if(!opt.all){
-                        break;
-                    }
-                }
-
             }
+        }
+        return  !indexArr.length || currentIndex != null ? -1 :
+                opt.dir == -1 ? indexArr[indexArr.length-1] : indexArr[0];
+    }
+    function findTextBlockElm(node,currentIndex,opt){
+        var textContent,index,methodName = opt.all || opt.dir == 1 ? 'getNextDomNode' : 'getPreDomNode';
+        if(domUtils.isBody(node)){
+            node = node.firstChild;
+        }
+        var first = 1;
+        while(node){
+            textContent = node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent'];
+            index = findTextInString(textContent,opt,first ? currentIndex : null );
+            first = 0;
+            if(index!=-1){
+                return {
+                    'node':node,
+                    'index':index
+                }
+            }
+            node = domUtils[methodName](node);
+        }
+    }
+    function findNTextInBlockElm(node,index,str){
+        var currentIndex = 0,
+            currentNode = node.firstChild,
+            currentNodeLength = 0,
+            result;
+        while(currentNode){
+            if(currentNode.nodeType == 3){
+                currentNodeLength = currentNode.nodeValue.replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length;
+                currentIndex += currentNodeLength;
+                if(currentIndex >= index){
+                    return {
+                        'node':currentNode,
+                        'index': currentNodeLength - (currentIndex - index)
+                    }
+                }
+            }else if(!dtd.$empty[currentNode.tagName]){
+                currentNodeLength = currentNode[browser.ie ? 'innerText' : 'textContent'].replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length
+                currentIndex += currentNodeLength;
+                if(currentIndex >= index){
+                    result = findNTextInBlockElm(currentNode,currentNodeLength - (currentIndex - index),str);
+                    if(result){
+                        return result;
+                    }
+                }
+            }
+            currentNode = domUtils.getNextDomNode(currentNode);
+        }
+    }
+
+    function searchReplace(me,opt){
+        var rng = me.selection.getRange(),
+            startBlockNode,
+            searchStr = opt.searchStr,
+            span = me.document.createElement('span');
+        span.innerHTML = '$$ueditor_searchreplace_key$$';
+
+        //判断是不是第一次选中
+        rng.select();
+        var rngText = me.selection.getText();
+        if(new RegExp('^' + opt.searchStr + '$',(opt.casesensitive ? '' : 'i')).test(rngText)){
+            rng.collapse(opt.dir == -1)
+        }
+
+        rng.insertNode(span);
+        rng.enlargeToBlockElm(true);
+        startBlockNode = rng.startContainer;
+        var currentIndex = startBlockNode[browser.ie ? 'innerText' : 'textContent'].indexOf('$$ueditor_searchreplace_key$$');
+        domUtils.remove(span);
+        var result = findTextBlockElm(startBlockNode,currentIndex,opt);
+        if(result){
+            var rngStart = findNTextInBlockElm(result.node,result.index,searchStr);
+            var rngEnd = findNTextInBlockElm(result.node,result.index + searchStr.length,searchStr);
+            rng.setStart(rngStart.node,rngStart.index).setEnd(rngEnd.node,rngEnd.index);
+
+            if(opt.replaceStr !== undefined){
+                replaceText(rng,opt.replaceStr)
+            }
+            rng.select();
             return true;
         }
-    };
 
-};
+    }
+    function replaceText(rng,str){
+        str = me.document.createTextNode(str);
+        rng.deleteContents().insertNode(str)
+    }
+    return {
+        commands:{
+            'searchreplace':{
+                execCommand:function(cmdName,opt){
+                    utils.extend(opt,{
+                        all : false,
+                        casesensitive : false,
+                        dir : 1
+                    },true);
+                    var num = 0;
+                    if(opt.all){
+                        var rng = me.selection.getRange(),
+                            first = me.body.firstChild
+                        if(first && first.nodeType == 1){
+                            rng.setStart(first,0)
+                        }else if(first.nodType == 3){
+                            rng.setStartBefore(first)
+                        }
+                        rng.collapse(true).select(true);
+
+                        while(searchReplace(this,opt)){
+                            num++;
+                        }
+                    }else{
+                        if(searchReplace(this,opt)){
+                            num++
+                        }
+                    }
+
+                    return num;
+                }
+            }
+        }
+    }
+});
