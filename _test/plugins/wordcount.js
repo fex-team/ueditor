@@ -25,12 +25,13 @@ test('空格', function () {
         equal(editor.getContentLength(true), 22, '清空后编辑器中22个空格');
 });
 
-test('超出最大', function () {
+test('active trace 3744 超出最大', function () {
 
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
-    var editor = UE.getEditor('ue', {'UEDITOR_HOME_URL': '../../../', 'wordCount': true, 'maximumWords': 10, 'autoFloatEnabled': false});
+    var editor = UE.getEditor('ue', {'UEDITOR_HOME_URL': '../../../', 'wordCount': true, 'maximumWords': 10,'initialContent':'','autoFloatEnabled': false});
     editor.ready(function () {
+
         expect(2);
         editor.addListener("wordcountoverflow", function () {
             ok(true, "超出最大");

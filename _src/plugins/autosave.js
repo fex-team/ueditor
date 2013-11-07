@@ -82,17 +82,17 @@ UE.plugin.register('autosave', function (){
                     document.body.removeChild( container );
 
                 },
-
-                clear: function () {
-
-                    var expiresTime = new Date();
-                    expiresTime.setFullYear( expiresTime.getFullYear() - 1 );
-                    document.body.appendChild( container );
-                    container.expires = expiresTime.toUTCString();
-                    container.save( LOCAL_FILE );
-                    document.body.removeChild( container );
-
-                },
+//               暂时没有用到
+//                clear: function () {
+//
+//                    var expiresTime = new Date();
+//                    expiresTime.setFullYear( expiresTime.getFullYear() - 1 );
+//                    document.body.appendChild( container );
+//                    container.expires = expiresTime.toUTCString();
+//                    container.save( LOCAL_FILE );
+//                    document.body.removeChild( container );
+//
+//                },
 
                 removeItem: function ( key ) {
 
@@ -117,15 +117,15 @@ UE.plugin.register('autosave', function (){
             return;
         }
 
-        lastSaveTime = new Date();
-
-        editor._saveFlag = null;
-
         if ( !editor.hasContents() ) {
             //这里不能调用命令来删除， 会造成事件死循环
             saveKey && LocalStorage.removeItem( saveKey );
             return;
         }
+
+        lastSaveTime = new Date();
+
+        editor._saveFlag = null;
 
         saveData = me.body.innerHTML;
 
