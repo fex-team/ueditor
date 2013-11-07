@@ -1,5 +1,6 @@
 module("plugins.font");
 
+//test('stop',function(){stop();});
 test('trace1583:applyInlineStyle--MergeToParent', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -130,6 +131,7 @@ test('background--不同字号', function () {
         editor.execCommand('fontsize', '30px');
         range = editor.selection.getRange();
         range.insertNode(editor.document.createTextNode('hello'));
+        stop();
         setTimeout(function () {
             ua.manualDeleteFillData(editor.body);
             /*去掉空白字符*/
@@ -145,22 +147,18 @@ test('background--不同字号', function () {
 test('trace 937：为第一个有样式的字加删除线', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-
     editor.setContent('<p><span style="color: red">欢</span>迎光临</p>');
     range.selectNode(editor.body.firstChild).select();
     editor.execCommand('strikethrough');
     var p1 = editor.document.createElement('p');
     p1.innerHTML = '<span style="text-decoration: line-through;"><span style="text-decoration: line-through; color: red;">欢</span>迎光临</span>';
-
     ok(ua.haveSameAllChildAttribs(editor.body.firstChild, p1), '查看添加了下划线后的样式');
-
 });
 
 /*trace 918*/
 test('trace 918：字体的状态反射', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-
     editor.setContent('<p>欢迎你回来</p>');
     var p = editor.body.firstChild;
     range.selectNode(p).select();
@@ -317,8 +315,6 @@ test('trace 809：闭合时改变前景色和删除线，再输入文本', funct
 test('trace 805：切换删除线和下划线，前景色没了', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-
-    var range = new baidu.editor.dom.Range(editor.document);
     editor.setContent('<p><strong>你好早安</strong></p>');
     var text = editor.body.firstChild.firstChild.firstChild;
     range.selectNode(text).select();
@@ -358,7 +354,7 @@ test('trace 802：为设置了字体的文本添加删除线', function () {
 test('trace 744：设置超链接背景色后切换到源码再切回来', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-
+    stop();
     editor.setContent('<p>hello<a href="www.baidu.com">baidu</a></p>');
     range.selectNode(editor.body.firstChild).select();
     editor.execCommand('backcolor', 'rgb(255,0,0)');
@@ -380,7 +376,6 @@ test('对表格中的文本添加颜色和下划线', function () {
     var range = te.obj[1];
 
     stop();
-    var range = new baidu.editor.dom.Range(editor.document);
     editor.setContent('<table><tbody><tr><td>hello1</td><td>hello2</td></tr><tr><td colspan="2">hello3</td></tr></tbody></table>');
     setTimeout(function () {
         var trs = editor.body.firstChild.getElementsByTagName('tr');
@@ -404,16 +399,18 @@ test('对表格中的文本添加颜色和下划线', function () {
             setTimeout(function () {
                 editor.execCommand('underline');
                 setTimeout(function () {
-                ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色');
-                equal('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', editor.document, trs[0].firstChild, '第一个单元格有下划线和前景色');
-                ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); ">hello2</span>', editor.document, trs[0].lastChild, '第2个单元格有前景色');
-                ua.checkHTMLSameStyle('<span style="color: rgb(255, 100, 100); ">hello3</span>', editor.document, trs[1].firstChild, '第3个单元格有前景色');
-                equal(trs[1].firstChild.getAttribute('colspan'), 2, 'colspan为2');
-                equal(editor.queryCommandState('underline'), true, '状态是underline');
-                equal(editor.queryCommandState('forecolor'), 0, '非underline和line-through返回0');
-                setTimeout(function () {
-                    start();
-                }, 100);
+                    var tds = editor.body.firstChild.getElementsByTagName('td');
+                    trs = editor.body.firstChild.getElementsByTagName('tr');
+                    ua.checkSameHtml('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', tds[0].innerHTML, '第一个单元格有下划线和前景色');
+//                    equal('<span style="color: rgb(255, 100, 100); text-decoration: underline; ">hello1</span>', tds[0].innerHTML, '第一个单元格有下划线和前景色');
+                    ua.checkSameHtml('<span style="color: rgb(255, 100, 100); ">hello2</span>',  tds[1].innerHTML, '第2个单元格有前景色');
+                    ua.checkSameHtml('<span style="color: rgb(255, 100, 100); ">hello3</span>',  tds[2].innerHTML, '第3个单元格有前景色');
+                    equal(trs[1].firstChild.getAttribute('colspan'), 2, 'colspan为2');
+                    equal(editor.queryCommandState('underline'), true, '状态是underline');
+                    equal(editor.queryCommandState('forecolor'), 0, '非underline和line-through返回0');
+                    setTimeout(function () {
+                        start();
+                    }, 100);
                 }, 100);
             }, 100);
         }, 100);
