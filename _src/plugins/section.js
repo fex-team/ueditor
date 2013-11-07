@@ -49,7 +49,7 @@ UE.plugin.register('section', function (){
             },
             /* 执行paragraph命令之后 */
             'afterexeccommand': function (type, cmd) {
-                if(cmd == 'paragraph') {
+                if(cmd == 'paragraph' || cmd == 'undo' || cmd == 'redo') {
                     me.fireEvent('updateSections');
                 }
             },
