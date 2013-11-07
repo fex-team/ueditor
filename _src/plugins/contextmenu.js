@@ -16,11 +16,6 @@ UE.plugins['contextmenu'] = function () {
             items = me.options.contextMenu || [
                 {label:lang['selectall'], cmdName:'selectall'},
                 {
-                    label:lang.deletecode,
-                    cmdName:'highlightcode',
-                    icon:'deletehighlightcode'
-                },
-                {
                     label:lang.cleardoc,
                     cmdName:'cleardoc',
                     exec:function () {
