@@ -51,7 +51,8 @@ test( '选中多个单元格插入列表', function() {
         var ut = editor.getUETable(editor.body.firstChild);
         var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
         ut.setSelected(cellsRange);
-        range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+        if(ua.browser.ie&&ua.browser.ie<9)
+            range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
         var tds = body.firstChild.getElementsByTagName( 'td' );
         editor.execCommand( 'inserthtml', '<ol><li>hello</li></ol>' );
         equal( tds[0].firstChild.tagName.toLowerCase(), 'ol', '插入列表' );
@@ -73,10 +74,11 @@ test( '表格中插入图片', function() {
     setTimeout(function(){
         var trs = editor.body.firstChild.getElementsByTagName( 'tr' );
 
-            var ut = editor.getUETable(editor.body.firstChild);
-            var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
-            ut.setSelected(cellsRange);
-        range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+        var ut = editor.getUETable(editor.body.firstChild);
+        var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[0].cells[1]);
+        ut.setSelected(cellsRange);
+        if (ua.browser.ie && ua.browser.ie<9)
+            range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
         var tds = body.firstChild.getElementsByTagName( 'td' );
         editor.execCommand( 'inserthtml', '<img style="float:left"/>' );
         equal( tds[0].firstChild.tagName.toLowerCase(), 'img', '插入图片' );
@@ -100,7 +102,8 @@ test( '选中多个单元格插入超链接', function() {
         var ut = editor.getUETable(editor.body.firstChild);
         var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
         ut.setSelected(cellsRange);
-        range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
+        if(ua.browser.ie&&ua.browser.ie<9)
+            range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
         editor.execCommand( 'link', {href:'http://www.baidu.com/'} );
         var tds = body.firstChild.getElementsByTagName( 'td' );
         equal( tds[0].firstChild.tagName.toLowerCase(), 'a', '插入超链接' );
