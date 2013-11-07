@@ -5,7 +5,8 @@
  */
 UE.plugin.register('background', function () {
     var me = this,
-        cssRuleId = 'editor_background';
+        cssRuleId = 'editor_background',
+        isSetColored;
 
     function stringToObj(str) {
         var obj = {}, styles = str.split(';');
@@ -15,6 +16,20 @@ UE.plugin.register('background', function () {
             key && (obj[key] = utils.trim(v.substr(index + 1) || ''));
         });
         return obj;
+    }
+
+    function setBackground(obj) {
+        if (obj) {
+            var styles = [];
+            for (var name in obj) {
+                if (obj.hasOwnProperty(name)) {
+                    styles.push(name + ":" + obj[name] + '; ');
+                }
+            }
+            utils.cssRule(cssRuleId, styles.length ? ('body{' + styles.join("") + '}') : '', me.document);
+        } else {
+            utils.cssRule(cssRuleId, '', me.document)
+        }
     }
 
     return {
@@ -45,14 +60,16 @@ UE.plugin.register('background', function () {
                 headHtml.push(html);
             },
             'aftersetcontent': function () {
-                me.execCommand('background', {});
+                if(isSetColored == false) setBackground();
             }
         },
         inputRule: function (root) {
+            isSetColored = false;
             utils.each(root.getNodesByTagName('p'), function (p) {
                 var styles = p.getAttr('data-background');
                 if (styles) {
-                    me.execCommand('background', stringToObj(styles));
+                    isSetColored = true;
+                    setBackground(stringToObj(styles));
                     p.parentNode.removeChild(p);
                 }
             })
@@ -68,18 +85,7 @@ UE.plugin.register('background', function () {
         commands: {
             'background': {
                 execCommand: function (cmd, obj) {
-                    var me = this;
-                    if (obj) {
-                        var styles = [];
-                        for (var name in obj) {
-                            if (obj.hasOwnProperty(name)) {
-                                styles.push(name + ":" + obj[name] + '; ');
-                            }
-                        }
-                        utils.cssRule(cssRuleId, styles.length ? ('body{' + styles.join("") + '}') : '', me.document);
-                    } else {
-                        utils.cssRule(cssRuleId, '', me.document)
-                    }
+                    setBackground(obj);
                 },
                 queryCommandValue: function () {
                     var me = this,

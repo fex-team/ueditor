@@ -75,7 +75,7 @@ function Music() {
             $G('J_resultBar').innerHTML = '<div class="loading"></div>';
 
             utils.loadFile(document, {
-                src:me.dataUrl + '&query=' + param + '&page_size=' + me.total + '&callback=music.callback()&.r=' + Math.random(),
+                src:me.dataUrl + '&query=' + param + '&page_size=' + me.total + '&callback=music.callback&.r=' + Math.random(),
                 tag:"script",
                 type:"text/javascript",
                 defer:"defer"
