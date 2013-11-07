@@ -142,6 +142,7 @@ foreach (Config::getBrowserSet($configBrowserSet) as $key => $value) {
         echo "wait for report : $file\r\n<br />";
         return;
     }
+//    Config::StopOne($key);
     $xmlDoc = new DOMDocument('1.0', 'utf-8');
     $xmlDoc->load($file);
     $xmlDom = $xmlDoc->documentElement;
