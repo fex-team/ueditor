@@ -32,20 +32,19 @@ UE.plugin.register('section', function (){
     var me = this;
 
     return {
+        bindMultiEvents:{
+            type: 'aftersetcontent aftergetscene',
+            handler: function(){
+                me.fireEvent('updateSections');
+            }
+        },
         bindEvents:{
             /* 初始化、拖拽、粘贴、执行setcontent之后 */
             'ready': function (){
                 me.fireEvent('updateSections');
-                domUtils.on(me.body, 'drop paste aftersetcontent aftergetscene', function(){
+                domUtils.on(me.body, 'drop paste', function(){
                     me.fireEvent('updateSections');
                 });
-            },
-            /* 执行setcontent之后 */
-            'aftersetcontent': function(e){
-                me.fireEvent('updateSections');
-            },
-            'aftersetcontent': function () {
-                me.fireEvent('updateSections');
             },
             /* 执行paragraph命令之后 */
             'afterexeccommand': function (type, cmd) {
