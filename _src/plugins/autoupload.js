@@ -35,18 +35,21 @@ UE.plugin.register('autoupload', function (){
                 if(window.FormData && window.FileReader) {
                     domUtils.on(me.body, 'paste drop', function(e){
                         var hasImg = false,
-                            items = (e.type == 'paste') ? (e.clipboardData && e.clipboardData.items):(e.dataTransfer && e.dataTransfer.files), //获取粘贴板文件列表或者拖放文件列表
-                            len = items.length,
-                            file;
-                        while (len--){
-                            file = items[len];
-                            if(file.getAsFile) file = file.getAsFile();
-                            if(file && file.size > 0 && /image\/\w+/i.test(file.type) ) {
-                                sendAndInsertImage(file, me);
-                                hasImg = true;
+                            items = (e.type == 'paste') ? (e.clipboardData && e.clipboardData.items):(e.dataTransfer && e.dataTransfer.files); //获取粘贴板文件列表或者拖放文件列表
+                        if(items){
+                            var len = items.length,
+                                file;
+                            while (len--){
+                                file = items[len];
+                                if(file.getAsFile) file = file.getAsFile();
+                                if(file && file.size > 0 && /image\/\w+/i.test(file.type) ) {
+                                    sendAndInsertImage(file, me);
+                                    hasImg = true;
+                                }
                             }
+                            hasImg && e.preventDefault();
                         }
-                        hasImg && e.preventDefault();
+
                     });
                     //取消拖放图片时出现的文字光标位置提示
                     domUtils.on(me.body, 'dragover', function (e) {
