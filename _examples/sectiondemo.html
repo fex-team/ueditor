@@ -8,8 +8,9 @@
     <script type="text/javascript" charset="utf-8" src="../lang/zh-cn/zh-cn.js"></script>
     <script type="text/javascript" charset="utf-8" src="../third-party/jquery-1.10.2.min.js"></script>
     <style>
-        ul{
-            padding-left:20px;
+        #directionContainer ul{
+            margin:0px;
+            padding: 0px 0px 0px 20px;
         }
         .main{
             width:1024px;
@@ -39,8 +40,12 @@
             height:20px;
             padding: 4px;
         }
-        .sectionItem:hover{
-            background: #ffffaa;
+        .sectionItem span{
+            *zoom:1;
+            display:inline-block;
+        }
+        .itemTitle{
+            _float:left;
         }
         .selectIcon,.deleteIcon,.moveUp,.moveDown{
             float:right;
@@ -138,7 +143,7 @@
                 for(var i = 0; i< section.children.length; i++) {
                     child = section.children[i];
                     //设置目录节点内容标签
-                    $itemContent = $('<div class="sectionItem"></div>').html($('<span>' + child['title'] + '</span>'));
+                    $itemContent = $('<div class="sectionItem"></div>').html($('<span class="itemTitle">' + child['title'] + '</span>'));
                     $itemContent.attr('data-address', child['startAddress'].join(','));
                     $itemContent.append($('<span class="deleteIcon">删</span>' +
                             '<span class="selectIcon">选</span>' +

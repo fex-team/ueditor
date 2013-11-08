@@ -36,7 +36,7 @@ UE.plugin.register('section', function (){
             /* 初始化、拖拽、粘贴、执行setcontent之后 */
             'ready': function (){
                 me.fireEvent('updateSections');
-                domUtils.on(me.body, 'drop paste aftersetcontent', function(){
+                domUtils.on(me.body, 'drop paste aftersetcontent aftergetscene', function(){
                     me.fireEvent('updateSections');
                 });
             },
@@ -49,7 +49,7 @@ UE.plugin.register('section', function (){
             },
             /* 执行paragraph命令之后 */
             'afterexeccommand': function (type, cmd) {
-                if(cmd == 'paragraph' || cmd == 'undo' || cmd == 'redo') {
+                if(cmd == 'paragraph') {
                     me.fireEvent('updateSections');
                 }
             },
@@ -246,6 +246,7 @@ UE.plugin.register('section', function (){
                         };
                     address.endAddress[address.endAddress.length - 1]++;
                     range.moveToAddress(address).select().scrollToView();
+                    me.fireEvent('updateSections');
                     return true;
                 },
                 notNeedUndo: true
