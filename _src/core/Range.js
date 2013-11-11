@@ -1175,7 +1175,17 @@
             }
             return this;
         },
-
+        enlargeToBlockElm:function(ignoreEnd){
+            while(!domUtils.isBlockElm(this.startContainer)){
+                this.setStartBefore(this.startContainer);
+            }
+            if(!ignoreEnd){
+                while(!domUtils.isBlockElm(this.endContainer)){
+                    this.setEndAfter(this.endContainer);
+                }
+            }
+            return this;
+        },
         /**
          * 调整Range的边界，使其"缩小"到最合适的位置
          * @method adjustmentBoundary

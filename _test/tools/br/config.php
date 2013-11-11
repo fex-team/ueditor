@@ -2,8 +2,6 @@
         class Config
         {
                 public static $BROWSERS = array(
-                    'ie8main' => array( '10.81.58.64@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
-                  ,
                     'ie8supp' => array( '10.81.58.63@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
                 ,
                     'firefox' => array( '10.81.58.86@8500' , "C:\\Program Files\\mozilla firefox\\firefox.exe" )
@@ -15,6 +13,8 @@
 //                , 'ie6' => array( '10.81.58.86@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
 
                 , 'chrome' => array( '10.81.58.63@8500' , "C:\\Documents and Settings\\geqa1\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe" )
+                ,
+                    'ie8main' => array( '10.81.58.63@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
 //                , 'ie7' => array( '10.81.58.87@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
 //                , 'opera' => array( '10.81.58.64@8500' , "C:\\Program Files\\Opera\\opera.exe" )
 //                , 'safari' => array( '10.81.58.63@8500' , "C:\\Program Files\\Safari\\Safari.exe" )
@@ -51,7 +51,11 @@
                                 Staf::process( "free all" );
                         }
                 }
-
+            public static function StopOne($key){
+                $host = Config::$BROWSERS[$key][0];
+                require_once 'lib/Staf.php';
+                Staf::process_stop( '' , $host , true );
+            }
                 /**
                  * 源码路径配置，会在所有位置寻找源码
                  * @var ArrayIterator::String
