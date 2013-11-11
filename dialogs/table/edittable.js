@@ -34,13 +34,13 @@
             titleCol.checked = editor.queryCommandState("inserttitlecol") == -1;
             caption.checked = editor.queryCommandState("insertcaption") == -1;
             sorttable.checked = editor.queryCommandState("enablesort") == 1;
-            if(editor.queryCommandState("enablesort") == -1) {
-                sorttable.disabled = true;
-                sorttable.title = lang.errorMsg;
-            } else {
-                sorttable.disabled = false;
-                sorttable.title = "";
-            }
+
+            var enablesortState = editor.queryCommandState("enablesort"),
+                disablesortState = editor.queryCommandState("disablesort");
+
+            sorttable.checked = !!(enablesortState < 0 && disablesortState >=0);
+            sorttable.disabled = !!(enablesortState < 0 && disablesortState < 0);
+            sorttable.title = enablesortState < 0 && disablesortState < 0 ? lang.errorMsg:'';
 
             me.createTable(title.checked, titleCol.checked, caption.checked);
             me.setAutoSize();
@@ -175,7 +175,7 @@
         getColor:function () {
             var start = editor.selection.getStart(), color,
                 cell = domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
-            color = domUtils.getComputedStyle(cell, "border-color");
+            color = cell && domUtils.getComputedStyle(cell, "border-color");
             if (!color)  color = "#DDDDDD";
             return color;
         },
