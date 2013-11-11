@@ -5,30 +5,6 @@
 
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script src="../ueditor.parse.js" type="text/javascript"></script>
-    <script>
-        // 语法
-        // uParse(selector,[option])
-        /*
-            selector支持
-            id,class,tagName
-         */
-        /*
-            目前支持的参数
-            option:
-            highlightJsUrl 代码高亮相关js的路径 如果展示有代码高亮，必须给定该属性
-            highlightCssUrl 代码高亮相关css的路径 如果展示有代码高亮，必须给定该属性
-            liiconpath 自定义列表样式的图标路径，可以不给定，默认'http://bs.baidu.com/listicon/',
-            listDefaultPaddingLeft : 自定义列表样式的左边宽度 默认'20',
-            customRule 可以传入你自己的处理规则函数，函数第一个参数是容器节点
-         */
-
-        uParse('.content',{
-            rootPath : '../'
-        })
-        uParse('.content_background',{
-            rootPath : '../'
-        })
-    </script>
     <title></title>
 </head>
 <body>
@@ -193,7 +169,31 @@
             <br/>
         </p>
     </div>
+
+    <script>
+        // 语法
+        // uParse(selector,[option])
+        /*
+         selector支持
+         id,class,tagName
+         */
+        /*
+         目前支持的参数
+         option:
+         highlightJsUrl 代码高亮相关js的路径 如果展示有代码高亮，必须给定该属性
+         highlightCssUrl 代码高亮相关css的路径 如果展示有代码高亮，必须给定该属性
+         liiconpath 自定义列表样式的图标路径，可以不给定，默认'http://bs.baidu.com/listicon/',
+         listDefaultPaddingLeft : 自定义列表样式的左边宽度 默认'20',
+         customRule 可以传入你自己的处理规则函数，函数第一个参数是容器节点
+         */
+
+        uParse('.content',{
+            rootPath : '../'
+        })
+        uParse('.content_background',{
+            rootPath : '../'
+        })
+    </script>
+
 </body>
-
-
 </html>

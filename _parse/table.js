@@ -149,10 +149,10 @@ UE.parse.register('table', function (utils) {
         function updateTable(table) {
             //给第一行设置firstRow的样式名称,在排序图标的样式上使用到
             if(!utils.hasClass(table.rows[0], "firstRow")) {
-                utils.addClass(table.rows[0], "firstRow");
                 for(var i = 1; i< table.rows.length; i++) {
                     utils.removeClass(table.rows[i], "firstRow");
                 }
+                utils.addClass(table.rows[0], "firstRow");
             }
         }
     }

@@ -222,7 +222,7 @@ UE.plugin.register('section', function (){
                         nextNode;
 
                     if(!keepChildren) {
-                        while ( current && endNode.parentNode && !(domUtils.getPosition( current, endNode ) & domUtils.POSITION_FOLLOWING) ) {
+                        while ( current && domUtils.inDoc(endNode, me.document) && !(domUtils.getPosition( current, endNode ) & domUtils.POSITION_FOLLOWING) ) {
                             nextNode = current.nextSibling;
                             domUtils.remove(current);
                             current = nextNode;
@@ -240,12 +240,11 @@ UE.plugin.register('section', function (){
                     var me = this,
                         range = me.selection.getRange(),
                         address = {
-                            'startAddress':section.startAddress,
-                            'endAddress':section.endAddress
+                            'startAddress':utils.clone(section.startAddress, []),
+                            'endAddress':utils.clone(section.endAddress, [])
                         };
                     address.endAddress[address.endAddress.length - 1]++;
                     range.moveToAddress(address).select().scrollToView();
-                    me.fireEvent('updateSections');
                     return true;
                 },
                 notNeedUndo: true
