@@ -28,6 +28,13 @@ UE.plugin.register('autoupload', function (){
         xhr.send(fd);
     };
 
+    function getPasteImage(e){
+        return e.clipboardData && e.clipboardData.items && e.clipboardData.items.length == 1 && /^image\//.test(e.clipboardData.items[0].type) ? e.clipboardData.items:null;
+    }
+    function getDropImage(e){
+        return  e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files:null;
+    }
+
     return {
         bindEvents:{
             //插入粘贴板的图片，拖放插入图片
@@ -35,7 +42,13 @@ UE.plugin.register('autoupload', function (){
                 if(window.FormData && window.FileReader) {
                     domUtils.on(me.body, 'paste drop', function(e){
                         var hasImg = false,
-                            items = (e.type == 'paste') ? (e.clipboardData && e.clipboardData.items):(e.dataTransfer && e.dataTransfer.files); //获取粘贴板文件列表或者拖放文件列表
+                            items;
+                        //获取粘贴板文件列表或者拖放文件列表
+                        if(e.type == 'paste') {
+                            items = e.type == 'paste' ? getPasteImage(e):getDropImage(e);
+                        } else {
+
+                        }
                         if(items){
                             var len = items.length,
                                 file;
