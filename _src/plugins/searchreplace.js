@@ -81,11 +81,14 @@ UE.plugin.register('searchreplace',function(){
         span.innerHTML = '$$ueditor_searchreplace_key$$';
 
         //判断是不是第一次选中
-        rng.select();
-        var rngText = me.selection.getText();
-        if(new RegExp('^' + opt.searchStr + '$',(opt.casesensitive ? '' : 'i')).test(rngText)){
-            rng.collapse(opt.dir == -1)
+        if(!rng.collapsed){
+            rng.select();
+            var rngText = me.selection.getText();
+            if(new RegExp('^' + opt.searchStr + '$',(opt.casesensitive ? '' : 'i')).test(rngText)){
+                rng.collapse(opt.dir == -1)
+            }
         }
+
 
         rng.insertNode(span);
         rng.enlargeToBlockElm(true);
