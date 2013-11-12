@@ -25,7 +25,7 @@ var filterWord = UE.filterWord = function () {
 
     //是否是word过来的内容
     function isWordDocument( str ) {
-        return /(class="?Mso|style="[^"]*\bmso\-|w:WordDocument|<v:)/ig.test( str );
+        return /(class="?Mso|style="[^"]*\bmso\-|w:WordDocument|<(v|o):|lang=)/ig.test( str );
     }
     //去掉小数
     function transUnit( v ) {
@@ -36,7 +36,7 @@ var filterWord = UE.filterWord = function () {
     }
 
     function filterPasteWord( str ) {
-        return str.replace( /[\t\r\n]+/g, "" )
+        return str.replace(/[\t\r\n]+/g,' ')
                 .replace( /<!--[\s\S]*?-->/ig, "" )
                 //转换图片
                 .replace(/<v:shape [^>]*>[\s\S]*?.<\/v:shape>/gi,function(str){
@@ -65,7 +65,9 @@ var filterWord = UE.filterWord = function () {
                     return name == 'class' && val == 'MsoListParagraph' ? str : ''
                 })
                 //清除多余的font/span不能匹配&nbsp;有可能是空格
-                .replace( /<(font|span)[^>]*>\s*<\/\1>/gi, '' )
+                .replace( /<(font|span)[^>]*>(\s*)<\/\1>/gi, function(a,b,c){
+                    return c.replace(/(?:[\t\r\n]+)|[ ]/g,'&nbsp;')
+                })
                 //处理style的问题
                 .replace( /(<[a-z][^>]*)\sstyle=(["'])([^\2]*?)\2/gi, function( str, tag, tmp, style ) {
                     var n = [],
