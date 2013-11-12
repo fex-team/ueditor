@@ -163,11 +163,8 @@
                     cls = cls.replace(new RegExp('\\b' + ci + '\\b'),'')
                 }
                 cls = this.trim(cls).replace(/[ ]{2,}/g,' ');
-                if(cls){
-                    elm.className = cls;
-                }else{
-                    elm.removeAttribute('class');
-                }
+                elm.className = cls;
+                !cls && elm.removeAttribute('className');
             },
             on: function (element, type, handler) {
                 var types = this.isArray(type) ? type : type.split(/\s+/),

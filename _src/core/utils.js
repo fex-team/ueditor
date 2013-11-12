@@ -947,6 +947,7 @@ var utils = UE.utils = {
         }else{
             node = doc.createElement('style');
             node.id = key;
+            node.innerHTML = style;
             doc.getElementsByTagName('head')[0].appendChild(node);
         }
     },

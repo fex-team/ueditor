@@ -6,13 +6,14 @@
 UE.plugin.register('background', function () {
     var me = this,
         cssRuleId = 'editor_background',
-        isSetColored;
+        isSetColored,
+        reg = new RegExp('body[\\s]*\\{(.+)\\}', 'i');
 
     function stringToObj(str) {
         var obj = {}, styles = str.split(';');
         utils.each(styles, function (v) {
             var index = v.indexOf(':'),
-                key = utils.trim(v.substr(0, index));
+                key = utils.trim(v.substr(0, index)).toLowerCase();
             key && (obj[key] = utils.trim(v.substr(index + 1) || ''));
         });
         return obj;
@@ -76,8 +77,7 @@ UE.plugin.register('background', function () {
         },
         outputRule: function (root) {
             var me = this,
-                ele = me.document.getElementById(cssRuleId),
-                styles = (ele ? ele.innerHTML : '').match(/body[\s]*\{(.*)\}/);
+                styles = (utils.cssRule(cssRuleId, me.document) || '').replace(/\n/g, '').match(reg);
             if (styles) {
                 root.appendChild(UE.uNode.createElement('<p style="display:none;" data-background="' + styles[1] + '"><br/></p>'));
             }
@@ -89,8 +89,7 @@ UE.plugin.register('background', function () {
                 },
                 queryCommandValue: function () {
                     var me = this,
-                        ele = me.document.getElementById(cssRuleId),
-                        styles = (ele ? ele.innerHTML : '').match(/body[\s]*\{(.*)\}/);
+                        styles = (utils.cssRule(cssRuleId, me.document) || '').replace(/\n*/g, '').match(reg);
                     return styles ? stringToObj(styles[1]) : null;
                 },
                 notNeedUndo: true

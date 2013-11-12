@@ -32,24 +32,23 @@ UE.plugin.register('section', function (){
     var me = this;
 
     return {
+        bindMultiEvents:{
+            type: 'aftersetcontent aftergetscene',
+            handler: function(){
+                me.fireEvent('updateSections');
+            }
+        },
         bindEvents:{
             /* 初始化、拖拽、粘贴、执行setcontent之后 */
             'ready': function (){
                 me.fireEvent('updateSections');
-                domUtils.on(me.body, 'drop paste aftersetcontent', function(){
+                domUtils.on(me.body, 'drop paste', function(){
                     me.fireEvent('updateSections');
                 });
             },
-            /* 执行setcontent之后 */
-            'aftersetcontent': function(e){
-                me.fireEvent('updateSections');
-            },
-            'aftersetcontent': function () {
-                me.fireEvent('updateSections');
-            },
             /* 执行paragraph命令之后 */
             'afterexeccommand': function (type, cmd) {
-                if(cmd == 'paragraph' || cmd == 'undo' || cmd == 'redo') {
+                if(cmd == 'paragraph') {
                     me.fireEvent('updateSections');
                 }
             },
@@ -223,7 +222,7 @@ UE.plugin.register('section', function (){
                         nextNode;
 
                     if(!keepChildren) {
-                        while ( current && endNode.parentNode && !(domUtils.getPosition( current, endNode ) & domUtils.POSITION_FOLLOWING) ) {
+                        while ( current && domUtils.inDoc(endNode, me.document) && !(domUtils.getPosition( current, endNode ) & domUtils.POSITION_FOLLOWING) ) {
                             nextNode = current.nextSibling;
                             domUtils.remove(current);
                             current = nextNode;
@@ -241,8 +240,8 @@ UE.plugin.register('section', function (){
                     var me = this,
                         range = me.selection.getRange(),
                         address = {
-                            'startAddress':section.startAddress,
-                            'endAddress':section.endAddress
+                            'startAddress':utils.clone(section.startAddress, []),
+                            'endAddress':utils.clone(section.endAddress, [])
                         };
                     address.endAddress[address.endAddress.length - 1]++;
                     range.moveToAddress(address).select().scrollToView();

@@ -17,6 +17,8 @@ UE.parse.register('table', function (utils) {
                 selector + ' caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
                 selector + ' th{border-top:1px solid #BBB;background:#F7F7F7;}' +
                 selector + ' table tr.firstRow th{border-top:2px solid #BBB;background:#F7F7F7;}' +
+                selector + ' tr.ue-table-interlace-color-single td{ background: #fcfcfc; }' +
+                selector + ' tr.ue-table-interlace-color-double td{ background: #f7faff; }' +
                 selector + ' td p{margin:0;padding:0;}',
             document);
         //填充空的单元格
@@ -149,10 +151,10 @@ UE.parse.register('table', function (utils) {
         function updateTable(table) {
             //给第一行设置firstRow的样式名称,在排序图标的样式上使用到
             if(!utils.hasClass(table.rows[0], "firstRow")) {
-                utils.addClass(table.rows[0], "firstRow");
                 for(var i = 1; i< table.rows.length; i++) {
                     utils.removeClass(table.rows[i], "firstRow");
                 }
+                utils.addClass(table.rows[0], "firstRow");
             }
         }
     }

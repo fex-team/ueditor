@@ -34,15 +34,15 @@
             titleCol.checked = editor.queryCommandState("inserttitlecol") == -1;
             caption.checked = editor.queryCommandState("insertcaption") == -1;
             sorttable.checked = editor.queryCommandState("enablesort") == 1;
-            if(editor.queryCommandState("enablesort") == -1) {
-                sorttable.disabled = true;
-                sorttable.title = lang.errorMsg;
-            } else {
-                sorttable.disabled = false;
-                sorttable.title = "";
-            }
 
-            me.createTable(title.checked, titleCol.checked, caption.checked);
+            var enablesortState = editor.queryCommandState("enablesort"),
+                disablesortState = editor.queryCommandState("disablesort");
+
+            sorttable.checked = !!(enablesortState < 0 && disablesortState >=0);
+            sorttable.disabled = !!(enablesortState < 0 && disablesortState < 0);
+            sorttable.title = enablesortState < 0 && disablesortState < 0 ? lang.errorMsg:'';
+
+            me.createTable(title.checked, titleCol.checked, caption.checked, sorttable.checked);
             me.setAutoSize();
             me.setColor(me.getColor());
 
@@ -69,7 +69,7 @@
             });
         },
 
-        createTable:function (hasTitle, hasTitleCol, hasCaption) {
+        createTable:function (hasTitle, hasTitleCol, hasCaption, isSortable) {
             var arr = [];
             arr.push("<table id='J_example'>");
             if (hasCaption) {
@@ -77,17 +77,17 @@
             }
             if (hasTitle) {
                 arr.push("<tr>");
-                if(hasTitleCol) { arr.push("<th>" + lang.titleName + "</th>") }
+                if(hasTitleCol) { arr.push("<th>" + lang.titleName + (isSortable ? "^":"") + "</th>"); }
                 for (var j = 0; j < 5; j++) {
-                    arr.push("<th>" + lang.titleName + "</th>")
+                    arr.push("<th>" + lang.titleName + (isSortable ? "^":"") + "</th>");
                 }
                 arr.push("</tr>");
             }
             for (var i = 0; i < 6; i++) {
                 arr.push("<tr>");
-                if(hasTitleCol) { arr.push("<th>" + lang.titleName + "</th>") }
+                if(hasTitleCol) { arr.push("<th>" + lang.titleName + (i == 0 && isSortable && !hasTitle ? "^":"") + "</th>") }
                 for (var k = 0; k < 5; k++) {
-                    arr.push("<td>" + lang.cellsName + "</td>")
+                    arr.push("<td>" + lang.cellsName + (i == 0 && isSortable && !hasTitle ? "^":"") + "</td>")
                 }
                 arr.push("</tr>");
             }
@@ -175,7 +175,7 @@
         getColor:function () {
             var start = editor.selection.getStart(), color,
                 cell = domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
-            color = domUtils.getComputedStyle(cell, "border-color");
+            color = cell && domUtils.getComputedStyle(cell, "border-color");
             if (!color)  color = "#DDDDDD";
             return color;
         },
