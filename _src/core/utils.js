@@ -921,7 +921,7 @@ var utils = UE.utils = {
             indexList[key] = index;
         }
         sheetStyle.cssText = style;
-    }() : function (key, style, doc) {
+    }: function (key, style, doc) {
         var head, node;
         if(style === undefined || style && style.nodeType && style.nodeType == 9){
             //获取样式
