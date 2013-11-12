@@ -1,6 +1,6 @@
 module( 'plugins.music' );
 
-test( 'active trace 3745 音乐', function () {
+test( 'active trace 3745 3780 音乐', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p>hello</p>' );

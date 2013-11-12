@@ -40,11 +40,13 @@ test( 'ie active trace 3751 3748 设置 背景色', function() {
     editor.execCommand('background',backgroundStyle);
     stop();
     setTimeout(function(){
-        same(editor.queryCommandValue('background'),backgroundStyle,'setContent 背景色');
+        equal(editor.queryCommandValue('background')['background-repeat'],'no-repeat');
+        equal(editor.queryCommandValue('background')['background-color'].toLowerCase(),'#4f81bd');
+        same(editor.queryCommandValue('background')['background-position'],"center center");
         editor.execCommand('source');
         setTimeout(function(){
-            ua.checkSameHtml(editor.getContent(),'<p><br/></p><p style="display:none;" data-background="background-repeat:no-repeat; background-position:center center; background-color:#4F81BD; "><br/></p>','source查看 背景色');
-//            equal(editor.getContent(),'<p><br/></p><p style="display:none;" data-background="background-repeat:no-repeat; background-position:center center; background-color:#4F81BD; "><br/></p>','source查看 背景色');
+            ua.checkSameHtml(editor.body.lastChild.outerHTML,'<p style="display:none;" data-background="background-repeat:no-repeat; background-position:center center; background-color:#4F81BD; "><br/></p>','source查看 背景色');
+//            equal(editor.body.lastChild.outerHTML,'<p style="display:none;" data-background="background-repeat:no-repeat; background-position:center center; background-color:#4F81BD; "><br/></p>','source查看 背景色');
         start();
         },50);
     },50);

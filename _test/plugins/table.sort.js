@@ -33,7 +33,8 @@ test("active trace 3715 sortTable", function () {
     ut.sortTable(0, 'reversebynum');
     equal(table.getAttribute('data-sort-type'), "reversebynum", "data-sort-type属性是否设置成功");
 });
-test('sorttable', function () {
+test('active trace 3779 sorttable', function () {
+    if(ua.browser.ie&&ua.browser.ie>8)return;//todo
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<table width="1310"><tbody><tr><td width="634" valign="top">1</td><td width="634" valign="top"></td></tr><tr><td width="634" valign="top">2</td><td width="634" valign="top"></td></tr></tbody></table>');
@@ -42,7 +43,7 @@ test('sorttable', function () {
         range.setStart(tds[0], 0).collapse(1).select();
         editor.execCommand('sorttable', 1);
         ua.manualDeleteFillData(editor.body);
-        var tds = editor.body.getElementsByTagName('td');
+        tds = editor.body.getElementsByTagName('td');
         equal(tds[0].innerHTML, 2, '');
         equal(tds[2].innerHTML, 1, '');
         start();

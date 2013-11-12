@@ -1,5 +1,7 @@
 module('plugins.table');
 
+
+//test('',function(){stop()})
 /*trace992，合并单元格后多了一个td*/
 test('向右合并--拆分成列', function () {
     var editor = te.obj[0];
@@ -983,7 +985,8 @@ test('trace 3195：合并单元格后删除列再撤销', function () {
 });
 
 /*trace 3231*/
-test('trace 3231：向右合并--拆分成列', function () {
+test('active trace 3779 trace 3231：向右合并--拆分成列', function () {
+    if(ua.browser.ie&& ua.browser.ie>8)return;//todo
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<p></p>');
@@ -1246,91 +1249,133 @@ test('contextMenu 三色渐变', function () {
         start();
     }, 20);
 });
+
+/*trace 3210*/
+test('contextMenu trace 3210：添加单元格背景色', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p></p>');
+    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+    editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+    var trs = editor.body.firstChild.getElementsByTagName('tr');
+    var ut = editor.getUETable(editor.body.firstChild);
+    var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[1]);
+    ut.setSelected(cellsRange);
+    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+    editor.execCommand('edittd','#ff0000');
+    stop();
+    setTimeout(function () {
+        var tds = editor.body.firstChild.getElementsByTagName('td');
+        equal(tds[2].style.backgroundColor, '', '背景色不变');
+        equal(ua.formatColor(tds[0].style.backgroundColor), '#ff0000', '添加单元格背景色');
+        equal(ua.formatColor(tds[4].style.backgroundColor), '#ff0000', '添加单元格背景色');
+        start();
+    }, 50);
+
+});
 /*trace 3099*/
 test('contextMenu trace 3099: 清除边框颜色', function () {
-//    if (ua.browser.ie >8 )return;
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p></p>');
+    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+    editor.execCommand('inserttable', {numCols: 3, numRows: 3});
+    var trs = editor.body.firstChild.getElementsByTagName('tr');
 
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    range.setStart(trs[0].cells[0], 0).collapse(true).select();
+    editor.execCommand('edittable','#ff0000');
     stop();
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        var lang = editor.getLang("contextMenu");
-        editor.execCommand('cleardoc');
-        editor.execCommand('inserttable');
+    setTimeout(function () {
+        var tds = editor.body.firstChild.getElementsByTagName('td');
+        equal(ua.formatColor(tds[0].style.borderColor), '#ff0000', '添加边框颜色');
+        equal(ua.formatColor(tds[2].style.borderColor), '#ff0000', '添加边框颜色');
+        editor.execCommand('edittable','');
         setTimeout(function () {
-            range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-            ua.contextmenu(editor.body.firstChild);
-            var menutable = document.getElementsByClassName("edui-menu-body")[1];
-            var forTable = document.getElementsByClassName('edui-for-table');
-            if (ua.browser.ie&&ua.browser.ie<9) {
-                ua.mouseenter(forTable[forTable.length - 1]);
-            } else {
-                ua.mouseover(forTable[forTable.length - 1]);
-            }
-            lang = editor.getLang("contextMenu");
-            ua.click(menutable.childNodes[menutable.childNodes.length-1]);//点开表格属性
-            setTimeout(function () {
-                var iframe = document.getElementsByTagName('iframe');
-                var iframe1 ;
-                for (var i = iframe.length-1; i >-1; i--) {
-                    if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
-                        iframe1 = iframe[i];
-                        break;
-                    }
-                }
-
-                iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
-                var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
-                ua.click(buttonBody);
-                setTimeout(function () {
-                    var tds = editor.body.getElementsByTagName('td');
-                    if (ua.browser.ie == 8)
-                        equal(tds[0].style.borderColor, '#ff0000', '边框颜色设置为红色');
-                    else {
-                        equal(tds[0].style.borderColor, 'rgb(255, 0, 0)', '边框颜色设置为红色');
-                    }
-                    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
-                    ua.contextmenu(editor.body.firstChild);
-                    menutable = document.getElementsByClassName("edui-menu-body")[1];
-                    forTable = document.getElementsByClassName('edui-for-table');
-                    if (ua.browser.ie&&ua.browser.ie<9) {
-                        ua.mouseenter(forTable[forTable.length - 1]);
-                    } else {
-                        ua.mouseover(forTable[forTable.length - 1]);
-                    }
-                    lang = editor.getLang("contextMenu");
-                    ua.click(menutable.childNodes[menutable.childNodes.length-1]);
-                    setTimeout(function () {
-                        iframe = document.getElementsByTagName('iframe');
-                        iframe1 = null;
-                        for (var i = iframe.length-1; i >-1; i--) {
-                            if (iframe[i].id.indexOf('edui') != -1) {
-                                iframe1 = iframe[i];
-                                break;
-                            }
-                        }
-                        ua.click(iframe1.contentDocument.getElementById('J_tone'));
-                        setTimeout(function () {
-                            var div_nocolor = document.getElementsByClassName('edui-colorpicker-nocolor');
-                            ua.click(div_nocolor[0]);
-                            var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[1].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
-                            ua.click(buttonBody);
-                            tds = editor.body.getElementsByTagName('td');
-                            equal(tds[0].style.borderColor, '', '边框颜色被清除');
-                            setTimeout(function () {
-                                UE.delEditor('ue');
-                                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
-                                te.dom.push(document.getElementById('ue'));
-                                start();
-                            }, 200);
-                        }, 200);
-                    }, 200);
-                }, 200);
-            }, 500);
-        }, 200);
-    });
+            equal(tds[0].style.borderColor, '', '边框颜色被清除');
+            start();
+        }, 50);
+    }, 50);
+//    var div = document.body.appendChild(document.createElement('div'));
+//    div.id = 'ue';
+//    var editor = UE.getEditor('ue');
+//    stop();
+//    editor.ready(function () {
+//        var range = new baidu.editor.dom.Range(editor.document);
+//        var lang = editor.getLang("contextMenu");
+//        editor.execCommand('cleardoc');
+//        editor.execCommand('inserttable');
+//        setTimeout(function () {
+//            range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+//            ua.contextmenu(editor.body.firstChild);
+//            var menutable = document.getElementsByClassName("edui-menu-body")[1];
+//            var forTable = document.getElementsByClassName('edui-for-table');
+//            if (ua.browser.ie&&ua.browser.ie<9) {
+//                ua.mouseenter(forTable[forTable.length - 1]);
+//            } else {
+//                ua.mouseover(forTable[forTable.length - 1]);
+//            }
+//            lang = editor.getLang("contextMenu");
+//            ua.click(menutable.childNodes[menutable.childNodes.length-1]);//点开表格属性
+//            setTimeout(function () {
+//                var iframe = document.getElementsByTagName('iframe');
+//                var iframe1 ;
+//                for (var i = iframe.length-1; i >-1; i--) {
+//                    if (iframe[i].id && iframe[i].id.indexOf('edui') != -1) {
+//                        iframe1 = iframe[i];
+//                        break;
+//                    }
+//                }
+//
+//                iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
+//                var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+//                ua.click(buttonBody);
+//                setTimeout(function () {
+//                    var tds = editor.body.getElementsByTagName('td');
+//                    if (ua.browser.ie == 8)
+//                        equal(tds[0].style.borderColor, '#ff0000', '边框颜色设置为红色');
+//                    else {
+//                        equal(tds[0].style.borderColor, 'rgb(255, 0, 0)', '边框颜色设置为红色');
+//                    }
+//                    range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
+//                    ua.contextmenu(editor.body.firstChild);
+//                    menutable = document.getElementsByClassName("edui-menu-body")[1];
+//                    forTable = document.getElementsByClassName('edui-for-table');
+//                    if (ua.browser.ie&&ua.browser.ie<9) {
+//                        ua.mouseenter(forTable[forTable.length - 1]);
+//                    } else {
+//                        ua.mouseover(forTable[forTable.length - 1]);
+//                    }
+//                    lang = editor.getLang("contextMenu");
+//                    ua.click(menutable.childNodes[menutable.childNodes.length-1]);
+//                    setTimeout(function () {
+//                        iframe = document.getElementsByTagName('iframe');
+//                        iframe1 = null;
+//                        for (var i = iframe.length-1; i >-1; i--) {
+//                            if (iframe[i].id.indexOf('edui') != -1) {
+//                                iframe1 = iframe[i];
+//                                break;
+//                            }
+//                        }
+//                        ua.click(iframe1.contentDocument.getElementById('J_tone'));
+//                        setTimeout(function () {
+//                            var div_nocolor = document.getElementsByClassName('edui-colorpicker-nocolor');
+//                            ua.click(div_nocolor[0]);
+//                            var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittable edui-default edui-state-centered')[1].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+//                            ua.click(buttonBody);
+//                            tds = editor.body.getElementsByTagName('td');
+//                            equal(tds[0].style.borderColor, '', '边框颜色被清除');
+//                            setTimeout(function () {
+//                                UE.delEditor('ue');
+//                                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+//                                te.dom.push(document.getElementById('ue'));
+//                                start();
+//                            }, 200);
+//                        }, 200);
+//                    }, 200);
+//                }, 200);
+//            }, 1000);
+//        }, 200);
+//    });
 });
 test('contextMenu 标题行中右插入列', function () {
     var editor = te.obj[0];
@@ -1468,82 +1513,4 @@ test('contextMenu trace 3315：表格隔行变色', function () {
         }, 200);
     }, 200);
     stop();
-});
-
-/*trace 3210*/
-test('contextMenu trace 3210：添加单元格背景色', function () {
-//    if (ua.browser.ie > 8)return;
-
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    stop();
-    editor.ready(function () {
-        var lang = editor.getLang("contextMenu");
-        var range = new baidu.editor.dom.Range(editor.document);
-        setTimeout(function () {
-            editor.execCommand('cleardoc');
-            editor.execCommand('inserttable');
-            stop();
-            var tds = editor.body.getElementsByTagName('td');
-            var ut = editor.getUETable(editor.body.firstChild);
-            var cellsRange = ut.getCellsRange(tds[0], tds[6]);
-            ut.setSelected(cellsRange);
-            range.setStart(tds[0], 0).collapse(true).select();
-            ua.contextmenu(editor.body.firstChild);
-            var menutable = document.getElementsByClassName("edui-menu-body")[1];
-            var forTable = document.getElementsByClassName('edui-for-table');
-            if (ua.browser.ie&&ua.browser.ie<9) {
-                ua.mouseenter(forTable[forTable.length - 1]);
-            } else {
-                ua.mouseover(forTable[forTable.length - 1]);
-            }
-            lang = editor.getLang("contextMenu");
-            ua.click(menutable.childNodes[menutable.childNodes.length-2]);
-            var iframe = document.getElementsByTagName('iframe');
-            var i = iframe.length - 1;
-            for (var iframe1 in iframe) {
-                if (iframe[i].id.indexOf('edui') != -1) {
-                    iframe1 = iframe[i];
-                    break;
-                } else {
-                    i--;
-                }
-            }
-            setTimeout(function () {
-                iframe1.contentDocument.getElementById('J_tone').value = '#ff0000';
-                var buttonBody = document.getElementsByClassName('edui-dialog edui-for-edittd edui-default edui-state-centered')[0].firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.firstChild.firstChild;
-                ua.click(buttonBody);
-                equal(tds[2].style.backgroundColor, '', '背景色不变');
-                if (ua.browser.ie == 8) {
-                    equal(tds[0].style.backgroundColor, '#ff0000', '背景色不变');
-                    equal(tds[6].style.backgroundColor, '#ff0000', '背景色不变');
-                } else {
-                    equal(tds[0].style.backgroundColor, 'rgb(255, 0, 0)', '背景色不变');
-                    equal(tds[6].style.backgroundColor, 'rgb(255, 0, 0)', '背景色不变');
-                }
-                setTimeout(function () {
-                    editor.execCommand('source');
-                    setTimeout(function () {
-                        editor.execCommand('source');
-                        equal(tds[2].style.backgroundColor, '', '背景色不变');
-                        if (ua.browser.ie == 8) {
-                            equal(tds[0].style.backgroundColor, '#ff0000', '背景色不变');
-                            equal(tds[6].style.backgroundColor, '#ff0000', '背景色不变');
-                        } else {
-                            equal(tds[0].style.backgroundColor, 'rgb(255, 0, 0)', '背景色不变');
-                            equal(tds[6].style.backgroundColor, 'rgb(255, 0, 0)', '背景色不变');
-                        }
-                        setTimeout(function () {
-                            UE.delEditor('ue');
-//                            te.dom.push(editor.container);
-                            document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
-                            te.dom.push(document.getElementById('ue'));
-                            start();
-                        }, 20);
-                    }, 100);
-                }, 100);
-            }, 500);
-        }, 100);
-    });
 });

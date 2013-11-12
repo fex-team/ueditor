@@ -122,7 +122,7 @@ UE.plugin.register('charts', function (){
 
             for ( var j = 1, cell; cell = row.cells[ j ]; j++ ) {
 
-                var value = utils.trim( ( cell.innerText || cell.textContent ) );
+                var value = utils.trim( ( cell.innerText || cell.textContent || '' ) );
 
                 value = value.replace( new RegExp( UE.dom.domUtils.fillChar, 'g' ), '' ).replace( /^\s+|\s+$/g, '' );
 
