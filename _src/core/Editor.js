@@ -982,6 +982,11 @@
             me._proxyDomEvent = utils.bind(me._proxyDomEvent, me);
             domUtils.on(doc, ['click', 'contextmenu', 'mousedown', 'keydown', 'keyup', 'keypress', 'mouseup', 'mouseover', 'mouseout', 'selectstart'], me._proxyDomEvent);
             domUtils.on(win, ['focus', 'blur'], me._proxyDomEvent);
+            domUtils.on(me.body,'drop',function(e){
+                //阻止ff下默认的弹出新页面打开图片
+                if(browser.gecko && e.stopPropagation) { e.stopPropagation(); }
+                me.fireEvent('contentchange')
+            });
             domUtils.on(doc, ['mouseup', 'keydown'], function (evt) {
                 //特殊键不触发selectionchange
                 if (evt.type == 'keydown' && (evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)) {

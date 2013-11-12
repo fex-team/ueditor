@@ -451,6 +451,9 @@ UE.plugins['table'] = function () {
                 table.onmousemove = function () {
                     me.fireEvent('tablemousemove', table);
                     me.options.tableDragable && toggleDragButton(true, this, me);
+                    utils.defer(function(){
+                        me.fireEvent('contentchange',50)
+                    },true)
                 };
                 table.onmouseout = function () {
                     me.fireEvent('tablemouseout', table);

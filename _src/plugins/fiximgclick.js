@@ -105,6 +105,7 @@ UE.plugins['fiximgclick'] = (function () {
                             me.dragId = -1;
                         }
                         domUtils.un(me.doc,'mousemove', me.proxy(me._eventHandler, me));
+                        me.editor.fireEvent('contentchange');
                         break;
                     default:
                         break;
@@ -116,7 +117,7 @@ UE.plugins['fiximgclick'] = (function () {
                 domUtils.setStyles(me.target, {
                     'width': me.resizer.style.width,
                     'height': me.resizer.style.height
-                })
+                });
                 me.attachTo(me.target);
             },
             updateContainerStyle: function (dir, offset) {
