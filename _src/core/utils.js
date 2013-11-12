@@ -888,39 +888,39 @@ var utils = UE.utils = {
      * @grammar UE.utils.cssRule('body',document) => 返回指定key的样式，并且指定是哪个document
      * @grammar UE.utils.cssRule('body','') =>null //清空给定的key值的背景颜色
      */
-    cssRule:browser.ie ? function () {
-        var indexList = {}, index;
-        return function(key, style, doc){
-            if(style === undefined || style && style.nodeType && style.nodeType == 9){
-                //获取样式
-                doc = style && style.nodeType && style.nodeType == 9 ? style : (doc || document);
-                index = indexList[key];
-                if(index !==  undefined){
-                    return doc.styleSheets[index].cssText
-                }
-                return undefined;
-            }
-            doc = doc || document;
+    cssRule:browser.ie ? function (key, style, doc) {
+        var indexList, index;
+        if(style === undefined || style && style.nodeType && style.nodeType == 9){
+            //获取样式
+            doc = style && style.nodeType && style.nodeType == 9 ? style : (doc || document);
+            indexList = doc.indexList || (doc.indexList = {});
             index = indexList[key];
-            //清除样式
-            if(style === ''){
-                if(index!== undefined){
-                    doc.styleSheets[index].cssText = '';
-                    delete indexList[key];
-                    return true
-                }
-                return false;
+            if(index !==  undefined){
+                return doc.styleSheets[index].cssText
             }
-
-            //添加样式
-            if(index!== undefined){
-                sheetStyle =  doc.styleSheets[index];
-            }else{
-                sheetStyle = doc.createStyleSheet('', index = doc.styleSheets.length);
-                indexList[key] = index;
-            }
-            sheetStyle.cssText = style;
+            return undefined;
         }
+        doc = doc || document;
+        indexList = doc.indexList || (doc.indexList = {});
+        index = indexList[key];
+        //清除样式
+        if(style === ''){
+            if(index!== undefined){
+                doc.styleSheets[index].cssText = '';
+                delete indexList[key];
+                return true
+            }
+            return false;
+        }
+
+        //添加样式
+        if(index!== undefined){
+            sheetStyle =  doc.styleSheets[index];
+        }else{
+            sheetStyle = doc.createStyleSheet('', index = doc.styleSheets.length);
+            indexList[key] = index;
+        }
+        sheetStyle.cssText = style;
     }() : function (key, style, doc) {
         var head, node;
         if(style === undefined || style && style.nodeType && style.nodeType == 9){
