@@ -292,7 +292,7 @@ test('检查表格属性', function () {
                         break;
                     }
                 }
-                equal(iframe1.contentDocument.getElementById('J_tone').value, '#DDDDDD', '默认边框颜色');
+                equal(iframe1.contentDocument.getElementById('J_tone').value.toLowerCase(), '#dddddd', '默认边框颜色');
                 equal(iframe1.contentDocument.getElementById('J_title').checked, false, '无标题行');
                 equal(iframe1.contentDocument.getElementById('J_caption').checked, true, '有名称');
                 equal(iframe1.contentDocument.getElementById('J_autoSizePage').checked, true, '页面自适应');
