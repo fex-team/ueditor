@@ -132,7 +132,8 @@ UE.plugins['paste'] = function () {
                 }
                 utils.each(me.body.querySelectorAll('div'), function (node) {
                     if (domUtils.isEmptyBlock(node)) {
-                        domUtils.remove(node)
+                        //word的空格会被去掉的
+                        //domUtils.remove(node)
                     }
                 })
             }

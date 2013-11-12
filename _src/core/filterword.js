@@ -21,7 +21,8 @@ var filterWord = UE.filterWord = function () {
     }
 
     function filterPasteWord( str ) {
-        return str.replace( /[\t\r\n]+/g, "" )
+        //console.log('str:',str);
+        return str.replace( /[\t\r\n]+/g, " " )
                 .replace( /<!--[\s\S]*?-->/ig, "" )
                 //转换图片
                 .replace(/<v:shape [^>]*>[\s\S]*?.<\/v:shape>/gi,function(str){
@@ -50,7 +51,8 @@ var filterWord = UE.filterWord = function () {
                     return name == 'class' && val == 'MsoListParagraph' ? str : ''
                 })
                 //清除多余的font/span不能匹配&nbsp;有可能是空格
-                .replace( /<(font|span)[^>]*>\s*<\/\1>/gi, '' )
+                //bug 会导致word 粘贴后 单词间空格被去掉
+                .replace( /<(font|span)[^>]*>\s*<\/\1>/gi, ' ' )
                 //处理style的问题
                 .replace( /(<[a-z][^>]*)\sstyle=(["'])([^\2]*?)\2/gi, function( str, tag, tmp, style ) {
                     var n = [],
@@ -162,6 +164,8 @@ var filterWord = UE.filterWord = function () {
     }
 
     return function ( html ) {
-        return (isWordDocument( html ) ? filterPasteWord( html ) : html);
+        var r= (isWordDocument( html ) ? filterPasteWord( html ) : html);
+        //console.log('filter:',r);
+        return r;
     };
 }();
