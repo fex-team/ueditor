@@ -65,7 +65,9 @@ UE.parse.register('charts',function( utils ){
 
             for ( var j = 0, cell; cell = row.cells[ j ]; j++ ) {
 
-                rowData.push( ( cell.innerText || cell.textContent ) | 0 );
+                //trace 3730
+                var value = ( cell.innerText || cell.textContent );
+                rowData.push( cell.tagName == 'TH' ? value:(value | 0) );
 
             }
 
