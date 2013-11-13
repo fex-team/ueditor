@@ -77,9 +77,9 @@ UE.plugin.register('background', function () {
         },
         outputRule: function (root) {
             var me = this,
-                styles = (utils.cssRule(cssRuleId, me.document) || '').replace(/\n\r\t+/g, ' ').match(reg);
+                styles = (utils.cssRule(cssRuleId, me.document) || '').replace(/[\n\r]+/g, '').match(reg);
             if (styles) {
-                root.appendChild(UE.uNode.createElement('<p style="display:none;" data-background="' + styles[1] + '"><br/></p>'));
+                root.appendChild(UE.uNode.createElement('<p style="display:none;" data-background="' + styles[1].replace(/"/g, '') + '"><br/></p>'));
             }
         },
         commands: {
@@ -89,7 +89,7 @@ UE.plugin.register('background', function () {
                 },
                 queryCommandValue: function () {
                     var me = this,
-                        styles = (utils.cssRule(cssRuleId, me.document) || '').replace(/\n\r\t+/g, ' ').match(reg);
+                        styles = (utils.cssRule(cssRuleId, me.document) || '').replace(/[\n\r]+/g, '').match(reg);
                     return styles ? stringToObj(styles[1]) : null;
                 },
                 notNeedUndo: true
