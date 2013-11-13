@@ -79,7 +79,7 @@ UE.plugin.register('background', function () {
             var me = this,
                 styles = (utils.cssRule(cssRuleId, me.document) || '').replace(/[\n\r]+/g, '').match(reg);
             if (styles) {
-                root.appendChild(UE.uNode.createElement('<p style="display:none;" data-background="' + styles[1].replace(/"/g, '') + '"><br/></p>'));
+                root.appendChild(UE.uNode.createElement('<p style="display:none;" data-background="' + utils.trim(styles[1].replace(/"/g, '').replace(/[\s]+/g, ' ')) + '"><br/></p>'));
             }
         },
         commands: {
