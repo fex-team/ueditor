@@ -15,7 +15,6 @@ UE.plugins['autoheight'] = function () {
     }
 
     var bakOverflow,
-        span, tmpNode,
         lastHeight = 0,
         options = me.options,
         currentHeight,
@@ -25,27 +24,16 @@ UE.plugins['autoheight'] = function () {
         var me = this;
         clearTimeout(timer);
         if(isFullscreen)return;
-        timer = setTimeout(function () {
-            if (!me.queryCommandState || me.queryCommandState && me.queryCommandState('source') != 1) {
-                if (!span) {
-                    span = me.document.createElement('span');
-                    //trace:1764
-                    span.style.cssText = 'display:block;width:0;margin:0;padding:0;border:0;clear:both;';
-                    span.innerHTML = '.';
-                }
-                tmpNode = span.cloneNode(true);
-                me.body.appendChild(tmpNode);
-                currentHeight = Math.max(domUtils.getXY(tmpNode).y + tmpNode.offsetHeight,Math.max(options.minFrameHeight, options.initialFrameHeight));
+        if (!me.queryCommandState || me.queryCommandState && me.queryCommandState('source') != 1) {
+            timer = setTimeout(function(){
+                var node = me.body.lastChild;
+                currentHeight = Math.max(domUtils.getXY(node).y + node.offsetHeight + 25 ,Math.max(options.minFrameHeight, options.initialFrameHeight)) ;
                 if (currentHeight != lastHeight) {
-
                     me.setHeight(currentHeight,true);
-
                     lastHeight = currentHeight;
                 }
-                domUtils.remove(tmpNode);
-
-            }
-        }, 50);
+            },50)
+        }
     }
     var isFullscreen;
     me.addListener('fullscreenchanged',function(cmd,f){
