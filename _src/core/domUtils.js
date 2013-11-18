@@ -2287,8 +2287,8 @@ var domUtils = dom.domUtils = {
      * </script>
      * ```
      */
-    isTagNode:function (node, tagName) {
-        return node.nodeType == 1 && new RegExp('^' + node.tagName + '$','i').test(tagName)
+    isTagNode:function (node, tagNames) {
+        return node.nodeType == 1 && new RegExp('\\b' + node.tagName + '\\b','i').test(tagNames)
     },
 
     /**

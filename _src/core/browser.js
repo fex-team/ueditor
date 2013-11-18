@@ -10,6 +10,7 @@
  * @unfile
  * @module UE.browser
  */
+"Mozilla/5.0 (Windows NT 6.1; Trident/7.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; EIE10;ENUSWOL; rv:11.0) like Gecko"
 var browser = UE.browser = function(){
     var agent = navigator.userAgent.toLowerCase(),
         opera = window.opera,
@@ -23,7 +24,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        ie		: !!window.ActiveXObject,
+        ie		:  /(msie\s|trident.*rv:)([\w.]+)/.test(agent),
 
         /**
          * @property {boolean} opera 检测当前浏览器是否为Opera
@@ -79,13 +80,16 @@ var browser = UE.browser = function(){
     * }
     * ```
     */
-    browser.gecko =( navigator.product == 'Gecko' && !browser.webkit && !browser.opera );
+    browser.gecko =( navigator.product == 'Gecko' && !browser.webkit && !browser.opera && !browser.ie);
 
     var version = 0;
 
     // Internet Explorer 6.0+
     if ( browser.ie ){
-        version = parseFloat( agent.match( /msie (\d+)/ )[1] );
+
+        version =  (agent.match(/(msie\s|trident.*rv:)([\w.]+)/)[2] || 0) * 1;
+
+        browser.ie11Compat = document.documentMode == 11;
         /**
          * @property { boolean } ie9Compat 检测浏览器模式是否为 IE9 兼容模式
          * @warning 如果浏览器不是IE， 则该值为undefined
