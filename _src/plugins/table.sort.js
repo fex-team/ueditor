@@ -136,7 +136,10 @@ UE.plugins['tablesort'] = function () {
                 ut = getUETable(tableItems.table),
                 cellInfo = ut.getCellInfo(cell);
             ut.sortTable(cellInfo.cellIndex, fn);
-            range.moveToBookmark(bk).select();
+            range.moveToBookmark(bk);
+            try{
+                range.select();
+            }catch(e){}
         }
     };
 
