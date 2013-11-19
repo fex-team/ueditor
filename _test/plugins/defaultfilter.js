@@ -192,7 +192,7 @@ test( 'trace 3698 1.3.0 版本修复: script(style)标签里面的内容不转�
     equal(editor.document.getElementById('myEditor').innerHTML,'var ue=UE.getEditor("editor");','内容不转码')
     // todo 1.3.0 trace 3698
     editor.setContent('<style type="text/css" id="myEditor">        .clear {            clear: both;        }     </style>');
-    equal(editor.document.getElementById('myEditor').innerHTML,'        .clear {            clear: both;        }     ','内容不转码');
+    equal(editor.getContent(),'<p><br/></p><style type="text/css" id="myEditor">.clear {            clear: both;        }</style>','内容不转码');
 } );
 test( '转换style标签:style data不为空', function () {
     var editor = te.obj[0];

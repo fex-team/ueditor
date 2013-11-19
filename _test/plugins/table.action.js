@@ -182,7 +182,7 @@ test('从外面粘贴表格到表格-表格中不能粘完整的表格', functio
         start();
     }, 50);
 });
-test('active ie9 trace 3729 从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容', function () {
+test('  trace 3729 从外面粘贴表格到表格-在caption中粘贴,只粘贴文本内容', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('');

@@ -7,7 +7,7 @@
  */
 module( "plugins.keystrokes" );
 
-test('active trace 3714跨节点输入tab键',function(){
+test('trace 3714跨节点输入tab键',function(){
     var editor = te.obj[0];
     editor.setContent( '<h1>hello<br></h1><p>he<img src="http://img.baidu.com/hi/jx2/j_0015.gif" />oll</p>' );
     var range = te.obj[1];
@@ -16,8 +16,8 @@ test('active trace 3714跨节点输入tab键',function(){
         ua.keydown(editor.body,{'keyCode':9});
         ua.keyup(editor.body,{'keyCode':9});
         setTimeout(function(){
-            equal(te.obj[0].undoManger.list.length,2,'');
-            var html = '<h1>hello<br></h1><p>&nbsp;&nbsp;&nbsp;&nbsp;he<img src=\"http://img.baidu.com/hi/jx2/j_0015.gif\" _src=\"http://img.baidu.com/hi/jx2/j_0015.gif\">oll</p>';
+            equal(te.obj[0].undoManger.list.length,1,'');
+            var html = '<h1>hello<br></h1><p>&nbsp;&nbsp;&nbsp;&nbsp;oll</p>';
             equal(ua.getChildHTML(te.obj[0].body),html,'跨节点输入tab键');
             start();
         },20);
