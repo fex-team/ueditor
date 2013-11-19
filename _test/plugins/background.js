@@ -24,7 +24,7 @@ test( 'getAllHtml能取到背景', function() {
     });
     stop();
 } );
-test( 'active trace 3744 setContent 背景色', function() {
+test( ' trace 3744 setContent 背景色', function() {
     var editor = te.obj[0];
     editor.setContent('<p> <br/></p><p style="display:none;" data-background="background-repeat:no-repeat; background-position:center center; background-color:#8064A2; ">    <br/></p>');
     stop();
@@ -33,7 +33,7 @@ test( 'active trace 3744 setContent 背景色', function() {
         start();
     },50);
 });
-test( 'ie active trace 3751 3748 设置 背景色', function() {
+test( ' trace 3751 3748 设置 背景色', function() {
     var editor = te.obj[0];
     var backgroundStyle = {'background-repeat': "no-repeat", 'background-position': "center center", 'background-color': "#4F81BD"};
     editor.setContent('<p><br/></p>');
@@ -41,8 +41,8 @@ test( 'ie active trace 3751 3748 设置 背景色', function() {
     stop();
     setTimeout(function(){
         equal(editor.queryCommandValue('background')['background-repeat'],'no-repeat');
-        equal(editor.queryCommandValue('background')['background-color'].toLowerCase(),'#4f81bd');
-        same(editor.queryCommandValue('background')['background-position'],"center center");
+        equal(ua.formatColor(editor.queryCommandValue('background')['background-color'].toLowerCase()),'#4f81bd');
+        ok(/center/.test(editor.queryCommandValue('background')['background-position']));
         editor.execCommand('source');
         setTimeout(function(){
             ua.checkSameHtml(editor.body.lastChild.outerHTML,'<p style="display:none;" data-background="background-repeat:no-repeat; background-position:center center; background-color:#4F81BD; "><br/></p>','source查看 背景色');

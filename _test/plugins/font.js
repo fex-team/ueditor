@@ -106,8 +106,8 @@ test('underline and linethrough', function () {
         var body = editor.body;
         ua.manualDeleteFillData(editor.body);
         range.selectNode(body.firstChild.firstChild.nextSibling).select();
-        equal(editor.queryCommandValue('underline'), 'underline', 'query command value is underline');
-        equal(editor.queryCommandValue('strikethrough'), 'underline', 'query command value is not strike');
+        ok(/underline/.test(editor.queryCommandValue('underline')), 'query command value is underline');
+        ok(/underline/.test(editor.queryCommandValue('strikethrough')), 'query command value is underline');
         ok(editor.queryCommandState('underline'), 'query underline state');
         editor.execCommand('strikethrough');
         var html = 'hello<a href="http://www.baidu.com/" _href=\"http://www.baidu.com/\" style="text-decoration: line-through" >baidu</a>test';
