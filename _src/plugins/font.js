@@ -467,7 +467,7 @@ UE.plugins['font'] = function () {
                         while (tmpNode && !domUtils.isBlockElm(tmpNode) && !domUtils.isBody(tmpNode)) {
                             if (tmpNode.nodeType == 1) {
                                 value = domUtils.getComputedStyle(tmpNode, style);
-
+                                console.log(value)
                                 if (value != 'none') {
                                     return value;
                                 }
@@ -481,6 +481,7 @@ UE.plugins['font'] = function () {
                         var tmp = startNode, val;
                         while (tmp && dtd.$inline[tmp.tagName]) {
                             if (val = domUtils.getComputedStyle(tmp, 'border')) {
+
                                 if (/1px/.test(val) && /solid/.test(val)) {
                                     return val;
                                 }
@@ -513,8 +514,8 @@ UE.plugins['font'] = function () {
                     if (cmdName == 'fontborder') {
                         return /1px/.test(val) && /solid/.test(val)
                     } else {
-                        return  val == (cmdName == 'underline' ?
-                            'underline' : 'line-through');
+                        return  cmdName == 'underline' ? /underline/.test(val) : /line\-through/.test(val);
+
                     }
 
                 }
