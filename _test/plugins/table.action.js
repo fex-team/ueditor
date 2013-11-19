@@ -313,7 +313,7 @@ test('backspace事件:删除caption', function () {
             equal(editor.selection.getRange().collapsed, true, '检查光标');
             equal(editor.selection.getRange().startContainer, editor.body.getElementsByTagName('td')[0], '检查光标');
             start();
-        }, 100);
+        }, 500);
     }, 50);
 });
 
