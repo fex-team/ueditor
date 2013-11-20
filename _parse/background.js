@@ -4,9 +4,11 @@ UE.parse.register('background', function (utils) {
         p = root.getElementsByTagName('p'),
         styles;
 
-    for (var i = 0; i < p.length; i++) {
-        styles = p[i].getAttribute('data-background');
-        if (styles) p[i].parentNode.removeChild(p[i]);
+    for (var i = 0,ci; ci = p[i++];) {
+        styles = ci.getAttribute('data-background');
+        if (styles){
+            ci.parentNode.removeChild(ci);
+        }
     }
 
     //追加默认的表格样式
