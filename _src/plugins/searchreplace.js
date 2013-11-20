@@ -11,18 +11,19 @@
 UE.plugin.register('searchreplace',function(){
     var me = this;
     function findTextInString(textContent,opt,currentIndex){
-        var reg = new RegExp(opt.searchStr,'g' + (opt.casesensitive ? '' : 'i')),
-            indexArr = [],match;
+        var reg = new RegExp(opt.searchStr,'g' + (opt.casesensitive ? '' : 'i')),match;
+        if(opt.dir == -1){
+            textContent = textContent.split('').reverse().join('');
+            currentIndex = textContent.length - currentIndex;
+        }
         while(match = reg.exec(textContent)){
-            indexArr.push(match.index);
             if(currentIndex !== null){
-                if(opt.dir == 1 && match.index >= currentIndex || opt.dir == -1 && match.index <= currentIndex - opt.searchStr.length){
-                    return match.index;
+                if(match.index >= currentIndex){
+                    return opt.dir == -1 ? textContent.length - match.index - opt.searchStr.length : match.index;
                 }
             }
         }
-        return  !indexArr.length || currentIndex != null ? -1 :
-                opt.dir == -1 ? indexArr[indexArr.length-1] : indexArr[0];
+        return  -1
     }
     function findTextBlockElm(node,currentIndex,opt){
         var textContent,index,methodName = opt.all || opt.dir == 1 ? 'getNextDomNode' : 'getPreDomNode';
