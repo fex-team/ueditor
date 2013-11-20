@@ -14,6 +14,12 @@ window.onload = function () {
 
     editorTable = domUtils.findParentByTagName( editor.selection.getRange().startContainer, 'table', true);
 
+    //未找到表格， 显示错误页面
+    if ( !editorTable ) {
+        document.body.innerHTML = "<div class='edui-charts-not-data'>未找到数据</div>";
+        return;
+    }
+
     //初始化图表类型选择
     initChartsTypeView();
     renderTable( editorTable );
@@ -468,7 +474,7 @@ function getTableInputValue () {
 
 function getCellValue ( cell ) {
 
-    var value = utils.trim( ( cell.innerText || cell.textContent ) );
+    var value = utils.trim( ( cell.innerText || cell.textContent || '' ) );
 
     return value.replace( new RegExp( UE.dom.domUtils.fillChar, 'g' ), '' ).replace( /^\s+|\s+$/g, '' );
 

@@ -850,7 +850,7 @@ var utils = UE.utils = {
                 doReady(doc);
             } else {
                 doc.isReady && doReady(doc);
-                if (browser.ie) {
+                if (browser.ie && browser.version != 11) {
                     (function () {
                         if (doc.isReady) return;
                         try {
@@ -888,7 +888,7 @@ var utils = UE.utils = {
      * @grammar UE.utils.cssRule('body',document) => 返回指定key的样式，并且指定是哪个document
      * @grammar UE.utils.cssRule('body','') =>null //清空给定的key值的背景颜色
      */
-    cssRule:browser.ie ? function (key, style, doc) {
+    cssRule:browser.ie && browser.version != 11 ? function (key, style, doc) {
         var indexList, index;
         if(style === undefined || style && style.nodeType && style.nodeType == 9){
             //获取样式

@@ -981,17 +981,21 @@ UE.plugins['list'] = function () {
                         }
                         var nodeStyle = getStyle(startParent) || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
                         if (startParent.tagName.toLowerCase() == tag && nodeStyle == style) {
-                            for (var i = 0, ci, tmpFrag = me.document.createDocumentFragment(); ci = frag.childNodes[i++];) {
+                            for (var i = 0, ci, tmpFrag = me.document.createDocumentFragment(); ci = frag.firstChild;) {
                                 if(domUtils.isTagNode(ci,'ol ul')){
-                                    utils.each(domUtils.getElementsByTagName(ci,'li'),function(li){
-                                        while(li.firstChild){
-                                            tmpFrag.appendChild(li.firstChild);
-                                        }
-
-                                    });
+//                                  删除时，子列表不处理
+//                                  utils.each(domUtils.getElementsByTagName(ci,'li'),function(li){
+//                                        while(li.firstChild){
+//                                            tmpFrag.appendChild(li.firstChild);
+//                                        }
+//
+//                                    });
+                                    tmpFrag.appendChild(ci);
                                 }else{
                                     while (ci.firstChild) {
+
                                         tmpFrag.appendChild(ci.firstChild);
+                                        domUtils.remove(ci);
                                     }
                                 }
 

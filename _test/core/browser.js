@@ -32,6 +32,11 @@ test( 'browser', function() {
                 equal( version, browser.version, 'check ie version' );
                 ok( browser.isCompatible, 'is compatible' );
                 break;
+            case 11:
+                ok( browser.ie11Compat, 'ie11 document Mode' );
+                equal( version, browser.version, 'check ie version' );
+                ok( browser.isCompatible, 'is compatible' );
+                break;
         }
     }
     /*opera*/

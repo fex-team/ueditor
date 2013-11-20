@@ -985,7 +985,7 @@ test('trace 3195：合并单元格后删除列再撤销', function () {
 });
 
 /*trace 3231*/
-test('active trace 3779 trace 3231：向右合并--拆分成列', function () {
+test(' trace 3779 trace 3231：向右合并--拆分成列', function () {
     if(ua.browser.ie&& ua.browser.ie>8)return;//todo
     var editor = te.obj[0];
     var range = te.obj[1];
