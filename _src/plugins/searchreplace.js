@@ -9,8 +9,7 @@
  */
 
 UE.plugin.register('searchreplace',function(){
-    var first = 1,
-        me = this;
+    var me = this;
     function findTextInString(textContent,opt,currentIndex){
         var reg = new RegExp(opt.searchStr,'g' + (opt.casesensitive ? '' : 'i')),
             indexArr = [],match;
@@ -85,7 +84,14 @@ UE.plugin.register('searchreplace',function(){
             rng.select();
             var rngText = me.selection.getText();
             if(new RegExp('^' + opt.searchStr + '$',(opt.casesensitive ? '' : 'i')).test(rngText)){
-                rng.collapse(opt.dir == -1)
+                if(opt.replaceStr != undefined){
+                    replaceText(rng,opt.replaceStr);
+                    rng.select();
+                    return true;
+                }else{
+                    rng.collapse(opt.dir == -1)
+                }
+
             }
         }
 
@@ -94,6 +100,7 @@ UE.plugin.register('searchreplace',function(){
         rng.enlargeToBlockElm(true);
         startBlockNode = rng.startContainer;
         var currentIndex = startBlockNode[browser.ie ? 'innerText' : 'textContent'].indexOf('$$ueditor_searchreplace_key$$');
+        rng.setStartBefore(span);
         domUtils.remove(span);
         var result = findTextBlockElm(startBlockNode,currentIndex,opt);
         if(result){
@@ -106,12 +113,16 @@ UE.plugin.register('searchreplace',function(){
             }
             rng.select();
             return true;
+        }else{
+            rng.setCursor()
         }
 
     }
     function replaceText(rng,str){
+        me.fireEvent('saveScene');
         str = me.document.createTextNode(str);
-        rng.deleteContents().insertNode(str)
+        rng.deleteContents().insertNode(str);
+        me.fireEvent('saveScene');
     }
     return {
         commands:{
@@ -125,10 +136,10 @@ UE.plugin.register('searchreplace',function(){
                     var num = 0;
                     if(opt.all){
                         var rng = me.selection.getRange(),
-                            first = me.body.firstChild
+                            first = me.body.firstChild;
                         if(first && first.nodeType == 1){
                             rng.setStart(first,0)
-                        }else if(first.nodType == 3){
+                        }else if(first.nodeType == 3){
                             rng.setStartBefore(first)
                         }
                         rng.collapse(true).select(true);
@@ -143,7 +154,8 @@ UE.plugin.register('searchreplace',function(){
                     }
 
                     return num;
-                }
+                },
+                notNeedUndo:1
             }
         }
     }
