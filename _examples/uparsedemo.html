@@ -184,15 +184,14 @@
          listDefaultPaddingLeft : 自定义列表样式的左边宽度 默认'20',
          customRule 可以传入你自己的处理规则函数，函数第一个参数是容器节点
          */
-        window.onload = function(){
-            setTimeout(function(){
-                uParse('.content',{
-                    rootPath : '../'
-                })
-                uParse('.content_background',{
-                    rootPath : '../'
-                })
-            },200)
+
+        window.loadFilesDone = function(){
+            uParse('.content',{
+                rootPath : '../'
+            })
+            uParse('.content_background',{
+                rootPath : '../'
+            })
         }
 
     </script>
