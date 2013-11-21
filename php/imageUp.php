@@ -41,7 +41,8 @@
 
     //上传目录验证
     if ( !in_array( $path, $config[ 'savePath' ] ) ) {
-        echo "{'state':'非法上传目录'}";
+        //非法上传目录
+        echo '{"state":"\u975e\u6cd5\u4e0a\u4f20\u76ee\u5f55"}';
         return;
     }
 
