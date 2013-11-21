@@ -199,14 +199,16 @@ UE.plugin.register('autosave', function (){
                         LocalStorage.removeItem( saveKey )
                     }
                 },
-                notNeedUndo: true
+                notNeedUndo: true,
+                ignoreContentChange:true
             },
 
             'getlocaldata':{
                 execCommand:function (cmd, name) {
                     return saveKey ? LocalStorage.getLocalData( saveKey ) : null;
                 },
-                notNeedUndo: true
+                notNeedUndo: true,
+                ignoreContentChange:true
             },
 
             'drafts':{
@@ -219,7 +221,8 @@ UE.plugin.register('autosave', function (){
                 queryCommandState: function () {
                     return saveKey ? ( LocalStorage.getLocalData( saveKey ) === null ? -1 : 0 ) : -1;
                 },
-                notNeedUndo: true
+                notNeedUndo: true,
+                ignoreContentChange:true
             }
         }
     }

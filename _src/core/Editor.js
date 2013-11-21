@@ -1111,15 +1111,15 @@
                 if (me.queryCommandState.apply(me,arguments) != -1) {
                     me.fireEvent('beforeexeccommand', cmdName);
                     result = this._callCmdFn('execCommand', arguments);
-                    !me._ignoreContentChange && me.fireEvent('contentchange');
+                    (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
                     me.fireEvent('afterexeccommand', cmdName);
                 }
                 me.__hasEnterExecCommand = false;
             } else {
                 result = this._callCmdFn('execCommand', arguments);
-                !me._ignoreContentChange && me.fireEvent('contentchange')
+                (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange')
             }
-            !me._ignoreContentChange && me._selectionChange();
+            (!cmd.ignoreContentChange && !me._ignoreContentChange) && me._selectionChange();
             return result;
         },
 
