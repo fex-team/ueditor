@@ -76,10 +76,10 @@ test('通过选区路径取range', function () {
         editor.execCommand('elementpath', '3');
         setTimeout(function () {
             range = editor.selection.getRange();
-            if (ua.browser.gecko||ua.browser.ie>8) {
+            if (ua.browser.gecko||ua.browser.ie>9) {
                 ua.checkResult(range, tbodys[0], tbodys[0], 1, 2, false, '取range--tr');
             } else {
-                if (ua.browser.ie&&ua.browser.ie<9)
+                if (ua.browser.ie&&ua.browser.ie<10)
                     ua.checkResult(range, tds[2].firstChild, tds[3].lastChild, 0, 2, false, '取range--tr');
                 else
                     ua.checkResult(range, tds[2].firstChild, editor.body, 0, 1, false, '取range--tr');
@@ -111,7 +111,7 @@ test('通过选区路径取range', function () {
                     start();
                 }, 20);
             }, 20);
-        }, 20);
+        }, 100);
     }, 20);
     }, 50);
 });

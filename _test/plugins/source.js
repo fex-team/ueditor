@@ -145,7 +145,7 @@ test('b,i标签，切换源码后自动转换成strong和em', function () {
     equal(editor.getContent(), '<p><strong>加粗的内容</strong><em>斜体的内容<strong>加粗且斜体</strong></em></p>');
 });
 
-test('activ trace 3739 trace 1734 range的更新/特殊符号的转换', function () {
+test(' trace 3739 trace 1734 range的更新/特殊符号的转换', function () {
     var editor = te.obj[0];
     editor.setContent('<p>"<></p>');
     setTimeout(function () {
@@ -164,7 +164,7 @@ test('activ trace 3739 trace 1734 range的更新/特殊符号的转换', functio
                 editor.execCommand('source');
                 setTimeout(function () {
                     editor.execCommand('source');
-                    equal(editor.getContent(), "<p>&#39;<img src=\"http://nsclick.baidu.com/u.gif?&amp;asdf=&quot;sdf&amp;asdfasdfs;asdf\"/></p>");
+                    equal(editor.getContent(), "<p>&#39;<img src=\"http://nsclick.baidu.com/u.gif?&amp;asdf=%22sdf&amp;asdfasdfs;asdf\"/></p>");
                     start();
                 }, 100);
             }, 100);

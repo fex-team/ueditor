@@ -11,7 +11,7 @@ function getTable(str) {
     return div.firstChild;
 }
 UT = UE.UETable;
-test("active trace 3715 sortTable", function () {
+test(" trace 3715 sortTable", function () {
     var table = getTable("<tr><td>01</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
             "<tr><td>11</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>" +
             "<tr><td>21</td><td>2</td><td>3</td><td>4</td><td>6</td><td>7</td></tr>"),

@@ -68,18 +68,20 @@
      listDefaultPaddingLeft : 自定义列表样式的左边宽度 默认'20',
      customRule 可以传入你自己的处理规则函数，函数第一个参数是容器节点
      */
+    window.loadFilesDone = function(){
+        uParse('#content1',{
+            rootPath : '../'
+        })
+        uParse('#content2',{
+            rootPath : '../',
+            tableSortCompareFn: function(td1, td2){
+                var value1 = td1.innerText||td1.textContent,
+                        value2 = td2.innerText||td2.textContent;
+                return parseInt(value1) % 10 > parseInt(value2) % 10;
+            }
+        })
+    };
 
-    uParse('#content1',{
-        rootPath : '../'
-    })
-    uParse('#content2',{
-        rootPath : '../',
-        tableSortCompareFn: function(td1, td2){
-            var value1 = td1.innerText||td1.textContent,
-                    value2 = td2.innerText||td2.textContent;
-            return parseInt(value1) % 10 > parseInt(value2) % 10;
-        }
-    })
 </script>
 
 </body>

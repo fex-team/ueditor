@@ -25,7 +25,7 @@ test('空格', function () {
         equal(editor.getContentLength(true), 22, '清空后编辑器中22个空格');
 });
 
-test('active trace 3744 超出最大', function () {
+test(' trace 3744 超出最大', function () {
 
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';

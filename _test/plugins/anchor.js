@@ -28,7 +28,7 @@ test( '插入锚点后切换源码', function() {
             setTimeout( function() {
                 start();
             }, 50 );
-        }, 100);
+        }, 200);
     }, 20 );
 } );
 
