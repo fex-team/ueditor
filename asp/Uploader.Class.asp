@@ -23,8 +23,8 @@ Class Uploader
         cfgSavePath = "upload/"
 
         Set stateString = Server.CreateObject("Scripting.Dictionary")
-        stateString.Add "SIZE_LIMIT_EXCCEED", "\u6587\u4ef6\u5927\u5c0f\u8d85\u8fc7\u670d\u52a1\u5668\u9650\u5236"
-        stateString.Add "TYPE_NOW_ALLOW", "\u6587\u4ef6\u7c7b\u578b\u4e0d\u5141\u8bb8"
+        stateString.Add "SIZE_LIMIT_EXCCEED", "文件大小超过服务器限制"
+        stateString.Add "TYPE_NOW_ALLOW", "文件类型不允许"
     End Sub
 
     Public Property Let MaxSize(ByVal size)
