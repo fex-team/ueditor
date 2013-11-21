@@ -44,11 +44,7 @@ UE.plugin.register('autoupload', function (){
                         var hasImg = false,
                             items;
                         //获取粘贴板文件列表或者拖放文件列表
-                        if(e.type == 'paste') {
-                            items = e.type == 'paste' ? getPasteImage(e):getDropImage(e);
-                        } else {
-
-                        }
+                        items = e.type == 'paste' ? getPasteImage(e):getDropImage(e);
                         if(items){
                             var len = items.length,
                                 file;

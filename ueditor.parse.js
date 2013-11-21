@@ -8,9 +8,21 @@
             'list.js'
         ],
         baseURL = '../_parse/';
-    for (var i=0,pi;pi = paths[i++];) {
-        var script  = document.createElement('script');
-        script.src = baseURL + pi;
-        document.getElementsByTagName('head')[0].appendChild(script);
+    var i = 0;
+    function loadFile (url) {
+            var element = document.createElement('script');
+            element.src = url;
+            element.onload = element.onreadystatechange = function () {
+                if (!this.readyState || /loaded|complete/.test(this.readyState)) {
+                    element.onload = element.onreadystatechange = null;
+                    if(paths[i]){
+                        loadFile(baseURL +paths[i++]);
+                    }else{
+                        window.loadFilesDone && window.loadFilesDone()
+                    }
+                }
+            };
+            document.getElementsByTagName("head")[0].appendChild(element);
     }
+    loadFile(baseURL + paths[i++]);
 })();

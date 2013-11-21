@@ -12,11 +12,15 @@
 
     If action = "get" Then
     	Set fso = Server.CreateObject("Scripting.FileSystemObject")
-    	Set folder = fso.GetFolder(Server.MapPath(path))
-    	For Each subFolder In folder.SubFolders
-    		For Each file In subFolder.Files
-    			Response.Write path + subFolder.Name + "/" + file.Name + seperator
-    		Next
-    	Next
+        If fso.FolderExists(Server.MapPath(path)) = False Then
+            Response.Write ""
+        Else
+        	Set folder = fso.GetFolder(Server.MapPath(path))
+        	For Each subFolder In folder.SubFolders
+        		For Each file In subFolder.Files
+        			Response.Write path + subFolder.Name + "/" + file.Name + seperator
+        		Next
+        	Next
+        End If
     End If
 %>
