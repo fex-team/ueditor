@@ -171,7 +171,7 @@ Class Uploader
 
     Private Function CheckExt( fileType )
         For Each ext In cfgAllowType
-            If fileType = ext Then 
+            If UCase(fileType) = UCase(ext) Then 
                 CheckExt = true
                 Exit Function
             End If
@@ -332,7 +332,7 @@ Class MultiformProcessor
                 Exit Do 'Load Finished
             End If
 
-            'Decode the header
+            'Decode the headerf
             header = GetString( stream, pBgn, pEnd )
 
             'Test if the block is a file block
