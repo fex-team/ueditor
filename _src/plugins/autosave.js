@@ -205,7 +205,7 @@ UE.plugin.register('autosave', function (){
 
             'getlocaldata':{
                 execCommand:function (cmd, name) {
-                    return saveKey ? LocalStorage.getLocalData( saveKey ) : null;
+                    return saveKey ? LocalStorage.getLocalData( saveKey ) || '' : '';
                 },
                 notNeedUndo: true,
                 ignoreContentChange:true
@@ -214,7 +214,7 @@ UE.plugin.register('autosave', function (){
             'drafts':{
                 execCommand:function (cmd, name) {
                     if ( saveKey ) {
-                        me.body.innerHTML = LocalStorage.getLocalData( saveKey );
+                        me.body.innerHTML = LocalStorage.getLocalData( saveKey ) || '<p>'+(browser.ie ? '&nbsp;' : '<br/>')+'</p>';
                         me.focus(true);
                     }
                 },
