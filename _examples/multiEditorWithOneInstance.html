@@ -18,19 +18,19 @@
         <td width="10%">
             编辑区域一
         </td>
-        <td class="content"><script id="editor1" type="text/plain" style="width:1024px;height:200px;">内容1</script></td>
+        <td class="content" id="content1"><script id="editor1" type="text/plain" style="width:1024px;height:200px;">内容1</script></td>
     </tr>
     <tr>
         <td>
             编辑区域二
         </td>
-        <td class="content">内容2</td>
+        <td class="content" id="content2">内容2</td>
     </tr>
     <tr>
         <td>
             编辑区域三
         </td>
-        <td class="content">内容3</td>
+        <td class="content" id="content3">内容3</td>
     </tr>
 </table>
 
@@ -43,11 +43,12 @@
         })
     });
     $('.content').click(function(e){
-        var $target = $(e.target);
+        var $target = $(this);
         var content = $target.html();
         var currentParnet = ue.container.parentNode.parentNode;
         var currentContent = ue.getContent();
-        $target.html('').append(ue.container.parentNode);
+        $target.html('');
+        $target.append(ue.container.parentNode);
         ue.reset();
         setTimeout(function(){
             ue.setContent(content);

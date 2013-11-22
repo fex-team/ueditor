@@ -23,7 +23,7 @@
 </body>
 <script type="text/javascript">
     function getParam(name) {
-        return location.href.match(new RegExp('[?#&]' + name + '=([^?#&]+)', 'i')) ? decodeURIComponent(RegExp.$1) : '';
+        return location.href.match(new RegExp('[?#&]' + name + '=([^?#&]+)', 'i')) ? RegExp.$1 : '';
     }
     var map, marker;
     var centerParam = getParam('center');
@@ -107,9 +107,9 @@
                 center = map.getCenter(),
                 marker = window.marker.getPoint();
             containerIframe.src = containerIframe.src.
-                replace(new RegExp('([?#&])center=([^?#&]+)', 'i'), '$1center=' + encodeURIComponent(center.lng + ',' + center.lat)).
-                replace(new RegExp('([?#&])markers=([^?#&]+)', 'i'), '$1markers=' + encodeURIComponent(marker.lng + ',' + marker.lat)).
-                replace(new RegExp('([?#&])zoom=([^?#&]+)', 'i'), '$1zoom=' + encodeURIComponent(zoom));
+                replace(new RegExp('([?#&])center=([^?#&]+)', 'i'), '$1center=' + center.lng + ',' + center.lat).
+                replace(new RegExp('([?#&])markers=([^?#&]+)', 'i'), '$1markers=' + marker.lng + ',' + marker.lat).
+                replace(new RegExp('([?#&])zoom=([^?#&]+)', 'i'), '$1zoom=' + zoom);
             editor.fireEvent('saveScene');
         }
     }
