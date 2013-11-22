@@ -6,7 +6,7 @@ module.exports = function ( grunt ) {
         Util = {
 
             jsBasePath: '_src/',
-            parseBasePath: 'parse/',
+            parseBasePath: '_parse/',
             cssBasePath: 'themes/default/_css/',
 
             fetchScripts: function ( readFile, basePath) {
