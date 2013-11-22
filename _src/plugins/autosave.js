@@ -199,27 +199,30 @@ UE.plugin.register('autosave', function (){
                         LocalStorage.removeItem( saveKey )
                     }
                 },
-                notNeedUndo: true
+                notNeedUndo: true,
+                ignoreContentChange:true
             },
 
             'getlocaldata':{
                 execCommand:function (cmd, name) {
-                    return saveKey ? LocalStorage.getLocalData( saveKey ) : null;
+                    return saveKey ? LocalStorage.getLocalData( saveKey ) || '' : '';
                 },
-                notNeedUndo: true
+                notNeedUndo: true,
+                ignoreContentChange:true
             },
 
             'drafts':{
                 execCommand:function (cmd, name) {
                     if ( saveKey ) {
-                        me.body.innerHTML = LocalStorage.getLocalData( saveKey );
+                        me.body.innerHTML = LocalStorage.getLocalData( saveKey ) || '<p>'+(browser.ie ? '&nbsp;' : '<br/>')+'</p>';
                         me.focus(true);
                     }
                 },
                 queryCommandState: function () {
                     return saveKey ? ( LocalStorage.getLocalData( saveKey ) === null ? -1 : 0 ) : -1;
                 },
-                notNeedUndo: true
+                notNeedUndo: true,
+                ignoreContentChange:true
             }
         }
     }

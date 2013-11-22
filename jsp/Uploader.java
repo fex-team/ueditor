@@ -67,15 +67,24 @@ public class Uploader {
 		
 		HashMap<String, String> tmp = this.errorInfo;
 		tmp.put("SUCCESS", "SUCCESS"); //默认成功
-		tmp.put("NOFILE", "未包含文件上传域");
-		tmp.put("TYPE", "不允许的文件格式");
-		tmp.put("SIZE", "文件大小超出限制");
-		tmp.put("ENTYPE", "请求类型ENTYPE错误");
-		tmp.put("REQUEST", "上传请求异常");
-		tmp.put("FILE", "未找到上传文件");
-		tmp.put("IO", "IO异常");
-		tmp.put("DIR", "目录创建失败");
-		tmp.put("UNKNOWN", "未知错误");
+		// 未包含文件上传域
+		tmp.put("NOFILE", "\\u672a\\u5305\\u542b\\u6587\\u4ef6\\u4e0a\\u4f20\\u57df");
+		// 不允许的文件格式
+		tmp.put("TYPE", "\\u4e0d\\u5141\\u8bb8\\u7684\\u6587\\u4ef6\\u683c\\u5f0f");
+		// 文件大小超出限制
+		tmp.put("SIZE", "\\u6587\\u4ef6\\u5927\\u5c0f\\u8d85\\u51fa\\u9650\\u5236");
+		// 请求类型错误
+		tmp.put("ENTYPE", "\\u8bf7\\u6c42\\u7c7b\\u578b\\u9519\\u8bef");
+		// 上传请求异常
+		tmp.put("REQUEST", "\\u4e0a\\u4f20\\u8bf7\\u6c42\\u5f02\\u5e38");
+		// 未找到上传文件
+		tmp.put("FILE", "\\u672a\\u627e\\u5230\\u4e0a\\u4f20\\u6587\\u4ef6");
+        // IO异常
+		tmp.put("IO", "IO\\u5f02\\u5e38");
+		// 目录创建失败
+		tmp.put("DIR", "\\u76ee\\u5f55\\u521b\\u5efa\\u5931\\u8d25");
+        // 未知错误
+		tmp.put("UNKNOWN", "\\u672a\\u77e5\\u9519\\u8bef");
 	
 	}
 

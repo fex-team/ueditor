@@ -95,7 +95,10 @@ UE.plugins['autofloat'] = function() {
 
     me.addListener('ready', function(){
         if(checkHasUI(me)){
-
+            //加载了ui组件，但在new时，没有加载ui，导致编辑器实例上没有ui类，所以这里做判断
+            if(!me.ui){
+                return;
+            }
             getPosition = uiUtils.getClientRect;
             toolbarBox = me.ui.getDom('toolbarbox');
             orgTop = getPosition(toolbarBox).top;
