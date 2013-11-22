@@ -369,7 +369,7 @@
         close: function (ok){
             if (this.fireEvent('close', ok) !== false) {
                 //还原环境
-                if ( this._fullscreen ) {
+                if ( this.fullscreen ) {
 
                     document.documentElement.style.overflowX = this._originalContext.html.overflowX;
                     document.documentElement.style.overflowY = this._originalContext.html.overflowY;
