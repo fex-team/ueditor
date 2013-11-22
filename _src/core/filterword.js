@@ -66,7 +66,7 @@ var filterWord = UE.filterWord = function () {
                 })
                 //清除多余的font/span不能匹配&nbsp;有可能是空格
                 .replace( /<(font|span)[^>]*>(\s*)<\/\1>/gi, function(a,b,c){
-                    return c.replace(/(?:[\t\r\n]+)|[ ]/g,'&nbsp;')
+                    return c.replace(/[\t\r\n ]+/g,' ')
                 })
                 //处理style的问题
                 .replace( /(<[a-z][^>]*)\sstyle=(["'])([^\2]*?)\2/gi, function( str, tag, tmp, style ) {
