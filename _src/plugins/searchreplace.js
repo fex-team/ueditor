@@ -11,11 +11,15 @@
 UE.plugin.register('searchreplace',function(){
     var me = this;
     function findTextInString(textContent,opt,currentIndex){
-        var reg = new RegExp(opt.searchStr,'g' + (opt.casesensitive ? '' : 'i')),match;
+        var str = opt.searchStr;
         if(opt.dir == -1){
             textContent = textContent.split('').reverse().join('');
+            str = str.split('').reverse().join('');
             currentIndex = textContent.length - currentIndex;
+
         }
+        var reg = new RegExp(str,'g' + (opt.casesensitive ? '' : 'i')),match;
+
         while(match = reg.exec(textContent)){
             if(currentIndex !== null){
                 if(match.index >= currentIndex){
@@ -144,7 +148,6 @@ UE.plugin.register('searchreplace',function(){
                             rng.setStartBefore(first)
                         }
                         rng.collapse(true).select(true);
-
                         while(searchReplace(this,opt)){
                             num++;
                         }
