@@ -46,7 +46,7 @@ test('自动保存', function () {
 
         equal(editor.execCommand("getlocaldata") !== null, true, "getlocaldata命令正常");
         editor.execCommand("clearlocaldata");
-        equal(editor.execCommand("getlocaldata") === null, true, "clearlocaldata命令正常");
+        equal(editor.execCommand("getlocaldata") === "", true, "clearlocaldata命令正常");
 
     });
 

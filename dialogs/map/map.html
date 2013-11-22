@@ -114,12 +114,12 @@
         if($G('is_dynamic').checked) {
             var URL = editor.options.UEDITOR_HOME_URL,
                 url = [URL + (/\/$/.test(URL) ? '':'/') + "dialogs/map/show.html" +
-                    '#center=' + encodeURIComponent(center.lng + ',' + center.lat),
-                    '&zoom=' + encodeURIComponent(zoom),
+                    '#center=' + center.lng + ',' + center.lat,
+                    '&zoom=' + zoom,
                     '&width=' + mapWidth,
                     '&height=' + mapHeight,
-                    '&markers=' + encodeURIComponent(point.lng + ',' + point.lat),
-                    '&markerStyles=' + encodeURIComponent('l,A')].join('');
+                    '&markers=' + point.lng + ',' + point.lat,
+                    '&markerStyles=' + 'l,A'].join('');
             editor.execCommand('inserthtml', '<iframe class="ueditor_baidumap" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + ' frameborder="0" width="' + (mapWidth+4) + '" height="' + (mapHeight+4) + '"></iframe>');
         } else {
             var url = "http://api.map.baidu.com/staticimage?center=" + center.lng + ',' + center.lat +
