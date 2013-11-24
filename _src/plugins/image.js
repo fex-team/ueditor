@@ -120,7 +120,8 @@ UE.commands['imagefloat'] = {
         }
         startNode = range.getClosedNode();
         if (startNode && startNode.nodeType == 1 && startNode.tagName == 'IMG') {
-            floatStyle = startNode.getAttribute('align')||domUtils.getComputedStyle(startNode, 'float');
+            floatStyle = domUtils.getComputedStyle(startNode, 'float') || startNode.getAttribute('align');
+
             if (floatStyle == 'none') {
                 floatStyle = domUtils.getComputedStyle(startNode.parentNode, 'text-align') == 'center' ? 'center' : floatStyle;
             }
