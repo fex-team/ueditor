@@ -51,10 +51,10 @@ UE.plugins['shortcutmenu'] = function () {
 
         if (type == 'contextmenu') {
             domUtils.preventDefault (e);
-            if (browser.ie) {
+            if (browser.ie9below) {
                 var ieRange;
                 try {
-                    ieRange = me.selection.getNative ().createRange ();
+                    ieRange = me.selection.getNative().createRange();
                 } catch (e) {
                     return;
                 }
