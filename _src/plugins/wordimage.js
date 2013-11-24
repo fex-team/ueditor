@@ -11,15 +11,13 @@ UE.plugin.register('wordimage',function(){
         commands : {
             'wordimage':{
                 execCommand:function () {
-                    images = domUtils.getElementsByTagName(me.body, "img");
+                    var images = domUtils.getElementsByTagName(me.body, "img");
                     var urlList = [];
                     for (var i = 0, ci; ci = images[i++];) {
                         var url = ci.getAttribute("word_img");
                         url && urlList.push(url);
                     }
-                    if (images.length) {
-                        this["word_img"] = urlList;
-                    }
+                    return urlList;
                 },
                 queryCommandState:function () {
                     images = domUtils.getElementsByTagName(me.body, "img");
@@ -29,7 +27,8 @@ UE.plugin.register('wordimage',function(){
                         }
                     }
                     return -1;
-                }
+                },
+                notNeedUndo:true
             }
         },
         inputRule : function (root) {

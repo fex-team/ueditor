@@ -241,8 +241,8 @@
                                 if (dialog) {
                                     switch (cmd) {
                                         case "wordimage":
-                                            editor.execCommand("wordimage", "word_img");
-                                            if (editor.word_img) {
+                                            var images = editor.execCommand("wordimage");
+                                            if (images && images.length) {
                                                 dialog.render();
                                                 dialog.open();
                                             }
