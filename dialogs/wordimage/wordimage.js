@@ -12,6 +12,7 @@ var wordImage = {};
 //(function(){
 var g = baidu.g,
 	flashObj,flashContainer;
+
 wordImage.init = function(opt, callbacks) {
 	showLocalPath("localPath");
 	//createCopyButton("clipboard","localPath");
@@ -28,6 +29,7 @@ function addOkListener() {
 	dialog.onok = function() {
 		if (!imageUrls.length) return;
 		var images = domUtils.getElementsByTagName(editor.document,"img");
+        editor.fireEvent('saveScene');
 		for (var i = 0,img; img = images[i++];) {
 			var src = img.getAttribute("word_img");
 			if (!src) continue;
@@ -41,7 +43,9 @@ function addOkListener() {
 					break;
 				}
 			}
+
 		}
+        editor.fireEvent('saveScene');
         hideFlash();
 	};
     dialog.oncancel = function(){
@@ -63,6 +67,7 @@ function showLocalPath(id) {
     //单张编辑
     var img = editor.selection.getRange().getClosedNode();
     var images = editor.execCommand('wordimage');
+    console.log(images)
     if(images.length==1 || img && img.tagName == 'IMG'){
         g(id).value = images[0];
         return;
