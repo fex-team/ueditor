@@ -122,7 +122,7 @@
             attrhtml = [];
             var attrs = node.attrs;
             for (var a in attrs) {
-                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? encodeURI(decodeURI(attrs[a])) : utils.unhtml(attrs[a])) + '"' : ''))
+                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? attrs[a] : utils.unhtml(attrs[a])) + '"' : ''))
             }
             attrhtml = attrhtml.join(' ');
         }
