@@ -97,8 +97,17 @@ module.exports = function ( grunt ) {
                 closurePath: './closure-compiler',
                 js: disDir + '<%= pkg.name %>.all.js',
                 jsOutputFile: disDir + '<%= pkg.name %>.all.min.js',
-                options: {},
-                banner: banner
+                options: {
+                    debug: false
+                }
+            },
+            parse: {
+                closurePath: './closure-compiler',
+                js: disDir + '<%= pkg.name %>.parse.js',
+                jsOutputFile: disDir + '<%= pkg.name %>.parse.min.js',
+                options: {
+                    debug: false
+                }
             }
         },
         copy: {
