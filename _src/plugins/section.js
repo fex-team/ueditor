@@ -192,7 +192,7 @@ UE.plugin.register('section', function (){
                             if(i >= addressTarget.length) break;
                             if(addressTarget[i] < startAddress[i]) {
                                 isBeforeEndAddress = true;
-                                break;s
+                                break;
                             } else if(addressTarget[i] > startAddress[i]) {
                                 break;
                             }
