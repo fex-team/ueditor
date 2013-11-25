@@ -6,7 +6,7 @@ module.exports = function ( grunt ) {
         Util = {
 
             jsBasePath: '_src/',
-            parseBasePath: 'parse/',
+            parseBasePath: '_parse/',
             cssBasePath: 'themes/default/_css/',
 
             fetchScripts: function ( readFile, basePath) {
@@ -92,17 +92,18 @@ module.exports = function ( grunt ) {
                 ext: '.min.css'
             }
         },
-        uglify: {
-            options: {
-                banner: banner
+        'closure-compiler': {
+            frontend: {
+                closurePath: './closure-compiler',
+                js: disDir + '<%= pkg.name %>.all.js',
+                jsOutputFile: disDir + '<%= pkg.name %>.all.min.js',
+                options: {}
             },
-            dest: {
-                src: disDir + '<%= pkg.name %>.all.js',
-                dest: disDir + '<%= pkg.name %>.all.min.js'
-            },
-            dest1: {
-                src: disDir + '<%= pkg.name %>.parse.js',
-                dest: disDir + '<%= pkg.name %>.parse.min.js'
+            parse: {
+                closurePath: './closure-compiler',
+                js: disDir + '<%= pkg.name %>.parse.js',
+                jsOutputFile: disDir + '<%= pkg.name %>.parse.min.js',
+                options: {}
             }
         },
         copy: {
@@ -158,13 +159,13 @@ module.exports = function ( grunt ) {
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-closure-compiler');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:'+server, 'transcoding' ];
+        var tasks = [ 'concat', 'cssmin', 'closure-compiler', 'copy:base', 'copy:'+server, 'transcoding' ];
 
         //config修改
         updateConfigFile();

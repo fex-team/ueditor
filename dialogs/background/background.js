@@ -51,8 +51,15 @@
             updateBackground();
         }
         domUtils.on($G('nocolorRadio'), 'click', updateBackground);
-        domUtils.on($G('coloredRadio'), 'click', updateBackground);
-        domUtils.on($G('url'), 'keyup', updateHandler);
+        domUtils.on($G('coloredRadio'), 'click', updateHandler);
+        domUtils.on($G('url'), 'keyup', function(){
+            if($G('url').value && $G('alignment').style.display == "none") {
+                utils.each($G('repeatType').children, function(item){
+                    item.selected = ('repeat' == item.getAttribute('value') ? 'selected':false);
+                });
+            }
+            updateHandler();
+        });
         domUtils.on($G('repeatType'), 'change', updateHandler);
         domUtils.on($G('x'), 'keyup', updateBackground);
         domUtils.on($G('y'), 'keyup', updateBackground);
