@@ -67,7 +67,6 @@ function showLocalPath(id) {
     //单张编辑
     var img = editor.selection.getRange().getClosedNode();
     var images = editor.execCommand('wordimage');
-    console.log(images)
     if(images.length==1 || img && img.tagName == 'IMG'){
         g(id).value = images[0];
         return;
