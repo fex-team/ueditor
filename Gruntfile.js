@@ -153,6 +153,11 @@ module.exports = function ( grunt ) {
             },
             src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.php', disDir + '**/*.asp', disDir + '**/*.ashx', disDir + '**/*.cs']
 
+        },
+        clean: {
+            build: [
+                disDir + '<%= pkg.name %>.*.js.report.txt'
+            ]
         }
 
     } );
@@ -160,12 +165,13 @@ module.exports = function ( grunt ) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-closure-compiler');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'closure-compiler', 'copy:base', 'copy:'+server, 'transcoding' ];
+        var tasks = [ 'concat', 'cssmin', 'closure-compiler', 'copy:base', 'copy:'+server, 'transcoding', 'clean' ];
 
         //config修改
         updateConfigFile();
