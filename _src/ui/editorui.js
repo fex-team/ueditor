@@ -173,6 +173,7 @@
                 editorui.buttons[cmd] = ui;
                 editor.addListener('selectionchange', function () {
                     ui.setDisabled(editor.queryCommandState(cmd) == -1);
+                    ui.setColor(editor.queryCommandValue(cmd));
                 });
                 return ui;
             };
