@@ -21,7 +21,7 @@
     * 安装结束后，会在ueditor目录下出现一个node_modules文件夹
 
 4. 下载
-    * 下载[closure-compiler.zip](http://pan.baidu.com/s/11kWPP)并解压到uedior根目录，设置好后ueditor目录下可以找到closure-compiler/build/compiler.jar文件
+    * 下载[closure-compiler.zip](http://bs.baidu.com/uploadfile/47901385374533.zip)并解压到uedior根目录，设置好后ueditor目录下可以找到closure-compiler/build/compiler.jar文件
 
 5. 执行打包命令
     * 以终端方式（windows用户用cmd）进入ueditor源码根目录，执行```grunt```
