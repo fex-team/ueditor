@@ -92,18 +92,14 @@ module.exports = function ( grunt ) {
                 ext: '.min.css'
             }
         },
-        'closure-compiler': {
-            frontend: {
-                closurePath: './closure-compiler',
-                js: disDir + '<%= pkg.name %>.all.js',
-                jsOutputFile: disDir + '<%= pkg.name %>.all.min.js',
-                options: {}
+        gcc: {
+            dist: {
+                src: disDir + '<%= pkg.name %>.all.js',
+                dest: disDir + '<%= pkg.name %>.all.min.js'
             },
             parse: {
-                closurePath: './closure-compiler',
-                js: disDir + '<%= pkg.name %>.parse.js',
-                jsOutputFile: disDir + '<%= pkg.name %>.parse.min.js',
-                options: {}
+                src: disDir + '<%= pkg.name %>.parse.js',
+                dest: disDir + '<%= pkg.name %>.parse.min.js'
             }
         },
         copy: {
@@ -153,25 +149,19 @@ module.exports = function ( grunt ) {
             },
             src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.php', disDir + '**/*.asp', disDir + '**/*.ashx', disDir + '**/*.cs']
 
-        },
-        clean: {
-            build: [
-                disDir + '<%= pkg.name %>.*.js.report.txt'
-            ]
         }
 
     } );
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-closure-compiler');
-    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-gcc');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'closure-compiler', 'copy:base', 'copy:'+server, 'transcoding', 'clean' ];
+        var tasks = [ 'concat', 'cssmin', 'gcc', 'copy:base', 'copy:'+server, 'transcoding' ];
 
         //config修改
         updateConfigFile();

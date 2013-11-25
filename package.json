@@ -6,9 +6,8 @@
     "dependencies": {
         "grunt": "~0.4.1",
         "grunt-contrib-concat": "~0.3.0",
-        "grunt-closure-compiler": "~0.0.21",
-        "grunt-contrib-clean": "~0.5.0",
         "grunt-contrib-cssmin": "~0.6.0",
+        "grunt-gcc": "~0.2.2",
         "grunt-contrib-copy": "~0.4.0",
         "grunt-transcoding": "~0.1.1"
     },
