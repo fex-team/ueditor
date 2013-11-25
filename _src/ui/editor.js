@@ -393,7 +393,6 @@
                 '</div>';
         },
         showWordImageDialog:function () {
-            this.editor.execCommand("wordimage", "word_img");
             this._dialogs['wordimageDialog'].open();
         },
         renderToolbarBoxHtml:function () {

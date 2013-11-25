@@ -85,9 +85,10 @@ test("sync", function () {
     });
 });
 test("hide,show", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor(div);
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     editor.ready(function () {
         equal(editor.body.getElementsByTagName('span').length, 0, '初始没有书签');
         editor.hide();
@@ -99,9 +100,7 @@ test("hide,show", function () {
             setTimeout(function () {
                 equal($(te.dom[0]).css('display'), 'block', '显示编辑器');
                 var br = ua.browser.ie ? '' : '<br>';
-                equal(ua.getChildHTML(editor.body), '<p>' + br + '</p>', '删除书签');
-                UE.delEditor('ue');
-                te.dom.push(document.getElementById('ue'));
+                equal(ua.getChildHTML(editor.body), '<p>tool</p>', '删除书签');
                 start();
             }, 50);
         }, 50);
@@ -110,17 +109,16 @@ test("hide,show", function () {
 });
 
 test("_setDefaultContent--focus", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor(div);
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     editor.ready(function () {
         editor._setDefaultContent('hello');
         editor.fireEvent('focus');
         setTimeout(function () {
             var br = ua.browser.ie ? '' : '<br>';
             equal(ua.getChildHTML(editor.body), '<p>' + br + '</p>', 'focus');
-            UE.delEditor('ue');
-            te.dom.push(document.getElementById('ue'));
             start();
         }, 50);
     });
@@ -128,26 +126,26 @@ test("_setDefaultContent--focus", function () {
 });
 
 test("_setDefaultContent--firstBeforeExecCommand", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor(div);
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     editor.ready(function () {
         editor._setDefaultContent('hello');
         editor.fireEvent('firstBeforeExecCommand');
         setTimeout(function () {
             var br = ua.browser.ie ? '' : '<br>';
             equal(ua.getChildHTML(editor.body), '<p>' + br + '</p>', 'firstBeforeExecCommand');
-            UE.delEditor('ue');
-            te.dom.push(document.getElementById('ue'));
             start();
         }, 50);
     });
     stop();
 });
 test("setDisabled,setEnabled", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     editor.ready(function () {
         editor.setContent('<p>欢迎使用ueditor!</p>');
         editor.focus();
@@ -171,11 +169,7 @@ test("setDisabled,setEnabled", function () {
                     }
                     equal(editor.selection.getRange().startOffset, startOffset, '检查range');
                     equal(editor.selection.getRange().collapsed, collapse, '检查range');
-                    setTimeout(function () {
-                        UE.delEditor('ue');
-                        te.dom.push(document.getElementById('ue'));
                         start();
-                    }, 100);
                 }, 50);
             }, 50);
         }, 50);
@@ -238,9 +232,10 @@ test('destroy', function () {
 //} );
 //
 test("testBindshortcutKeys", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     expect(1);
     editor.ready(function () {
         editor.addshortcutkey({
@@ -256,8 +251,6 @@ test("testBindshortcutKeys", function () {
         }
         ua.keydown(editor.body, {keyCode: 67, ctrlKey: true});
         setTimeout(function () {
-            UE.delEditor('ue');
-            te.dom.push(document.getElementById('ue'));
             start();
         }, 200);
     });
@@ -335,7 +328,10 @@ test('getContent--2个参数，第一个参数为参数为函数', function () {
 //    equal( editor.getContent().toLowerCase(), '<p>你好  </p>', "删除不可见字符" );
 //} );
 test("setContent", function () {
-    var editor = UE.getEditor('test1');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -353,16 +349,15 @@ test("setContent", function () {
         var div2 = document.createElement('div');
         div2.innerHTML = editor.body.innerHTML;
         ua.haveSameAllChildAttribs(div2, div_new, 'check contents');
-        setTimeout(function () {
-            UE.delEditor('test1');
-            document.getElementById('test1') && te.dom.push(document.getElementById('test1'));
             start();
-        }, 200);
     });
 });
 
 test("setContent 追加", function () {
-    var editor = UE.getEditor('test1');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -380,11 +375,7 @@ test("setContent 追加", function () {
         var div2 = document.createElement('div');
         div2.innerHTML = editor.body.innerHTML;
         ua.haveSameAllChildAttribs(div2, div_new, 'check contents');
-        setTimeout(function () {
-            UE.delEditor('test1');
-            document.getElementById('test1') && te.dom.push(document.getElementById('test1'));
             start();
-        }, 200);
     }, 50);
 });
 //test( "focus", function() {
@@ -399,37 +390,38 @@ test("setContent 追加", function () {
 //    editor.focus();
 //} );
 test("focus(false)", function () {
-    var editor = UE.getEditor('test1');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent("<p>hello1</p><p>hello2</p>");
         editor.focus(false);
         setTimeout(function () {
+            var range = editor.selection.getRange();
+            equal(range.startOffset, 0, "focus(false)焦点在最前面");
+            equal(range.endOffset, 0, "focus(false)焦点在最前面");
             if (ua.browser.gecko || (ua.browser.ie && ua.browser.ie > 8)) {
-                equal(editor.selection.getRange().startContainer, editor.body.firstChild, "focus(false)焦点在最前面");
-                equal(editor.selection.getRange().endContainer, editor.body.firstChild, "focus(false)焦点在最前面");
+                equal(range.startContainer, editor.body.firstChild, "focus(false)焦点在最前面");
+                equal(range.endContainer, editor.body.firstChild, "focus(false)焦点在最前面");
             }
             else {
-                equal(editor.selection.getRange().startContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
-                equal(editor.selection.getRange().endContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
+                equal(range.startContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
+                equal(range.endContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
             }
-            equal(editor.selection.getRange().startOffset, 0, "focus(false)焦点在最前面");
-            equal(editor.selection.getRange().endOffset, 0, "focus(false)焦点在最前面");
-            UE.delEditor('test1');
-            document.getElementById('test1') && te.dom.push(document.getElementById('test1'));
             start();
         }, 100);
     });
 });
 
 test("focus(true)", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent("<p>hello1</p><p>hello2</p>");
         editor.focus(true);
         setTimeout(function () {
@@ -446,33 +438,31 @@ test("focus(true)", function () {
                 equal(editor.selection.getRange().startOffset, editor.body.lastChild.lastChild.length, "focus( true)焦点在最后面");
                 equal(editor.selection.getRange().endOffset, editor.body.lastChild.lastChild.length, "focus( true)焦点在最后面");
             }
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
             start();
         }, 100);
     });
 });
 
 test("isFocus()", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
         setTimeout(function () {
             ok(editor.isFocus());
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
             start();
         }, 100);
     });
 });
 
 test("blur()", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -481,15 +471,14 @@ test("blur()", function () {
         ok(!editor.isFocus());
         editor.blur();//多次使用不报错
         ok(!editor.isFocus());
-        UE.delEditor('ue');
-        document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
         start();
     });
 });
 test("_initEvents,_proxyDomEvent--click", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -497,11 +486,7 @@ test("_initEvents,_proxyDomEvent--click", function () {
         stop();
         editor.addListener('click', function () {
             ok(true, 'click event dispatched');
-            setTimeout(function () {
-                UE.delEditor('ue');
-                document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
                 start();
-            }, 100);
         });
         ua.click(editor.document);
     });
@@ -554,9 +539,10 @@ test("_initEvents,_proxyDomEvent--click", function () {
 
 /*按钮高亮、正常和灰色*/
 test("queryCommandState", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -568,16 +554,15 @@ test("queryCommandState", function () {
         r.setStart(p, 1).setEnd(p, 2).select();
         setTimeout(function () {
             equal(editor.queryCommandState('bold'), 0, '加粗状态为0');
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
             start();
         }, 100);
     });
 });
 test("queryCommandValue", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -586,17 +571,14 @@ test("queryCommandValue", function () {
         var p = editor.document.getElementsByTagName("p")[0];
         range.selectNode(p).select();
         equal(editor.queryCommandValue('justify'), 'left', 'text align is left');
-        setTimeout(function () {
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
             start();
-        }, 100);
     });
 });
 test("execCommand", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -620,18 +602,15 @@ test("execCommand", function () {
         var div1 = document.createElement('div');
         div1.innerHTML = editor.body.innerHTML;
         ok(ua.haveSameAllChildAttribs(div_new, div1), 'check style');
-        setTimeout(function () {
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
             start();
-        }, 100);
     });
 });
 
 test("hasContents", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -641,11 +620,7 @@ test("hasContents", function () {
         ok(editor.hasContents(), "has contents");
         editor.setContent('<p><br/></p>');
         ok(!editor.hasContents(), '空p认为是空');
-        setTimeout(function () {
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
             start();
-        }, 100);
     });
 });
 //test( "hasContents--只有空格", function() {
@@ -659,9 +634,10 @@ test("hasContents", function () {
 
 /*参数是对原有认为是空的标签的一个扩展，即原来的dtd认为br为空，加上这个参数可以认为br存在时body也不是空*/
 test("hasContents--有参数", function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
@@ -671,11 +647,7 @@ test("hasContents--有参数", function () {
         editor.setContent('<p><br></p>');
         ok(!editor.hasContents(['']), "为空");
         ok(editor.hasContents(['br']), "不为空");
-        setTimeout(function () {
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
             start();
-        }, 100);
     });
 });
 //test( 'getContentTxt--文本前后中间有空格', function() {
@@ -687,55 +659,48 @@ test("hasContents--有参数", function () {
 //} );
 
 test('trace 1964 getPlainTxt--得到有格式的编辑器的纯文本内容', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
         editor.setContent('<p>&nbsp;</p><p>&nbsp; hell\no<br/>hello</p>');
         var html = (ua.browser.ie > 0 && ua.browser.ie < 9) ? "\n  hell o\nhello\n" : "\n  hello\nhello\n";
         equal(editor.getPlainTxt(), html, '得到编辑器的纯文本内容，但会保留段落格式');
-        setTimeout(function () {
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
             start();
-        }, 100);
     });
 });
 
 test('getContentTxt--文本前后的空格,&nbs p转成空格', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
+
     stop();
     editor.ready(function () {
         editor.focus();
         editor.setContent('&nbsp;&nbsp;你 好&nbsp;&nbsp; ');
         equal(editor.getContentTxt(), '  你 好   ');
         equal(editor.getContentTxt().length, 8, '8个字符，空格不被过滤');
-        setTimeout(function () {
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
+
             start();
-        }, 100);
     });
 });
 test('getAllHtml', function () {
-
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[1];
+    var container =  te.dom[0];
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
     stop();
     editor.ready(function () {
         editor.focus();
         var html = editor.getAllHtml();
         ok(/iframe.css/.test(html), '引入样式');
-        setTimeout(function () {
-            UE.delEditor('ue');
-            document.getElementById('ue') && te.dom.push(document.getElementById('ue'));
+
             start();
-        },100);
     });
 });
 test('2个实例采用2个配置文件', function () {
@@ -772,7 +737,7 @@ test('2个实例采用2个配置文件', function () {
                     document.getElementById('div1') && te.dom.push(document.getElementById('div1'));
                     document.getElementById('div2') && te.dom.push(document.getElementById('div2'));
                     start();
-                }, 100);
+                }, 300);
             });
         });
     }, 100);

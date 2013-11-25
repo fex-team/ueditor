@@ -124,6 +124,10 @@ UE.plugin.register('autolink',function(){
                     return lastChild;
                 }
                 if(lastChild.nodeType == 3){
+                    if(domUtils.isWhitespace(lastChild)){
+                        lastChild = lastChild.previousSibling;
+                        continue;
+                    }
                     return null
                 }
                 lastChild = lastChild.lastChild;
