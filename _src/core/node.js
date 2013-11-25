@@ -45,7 +45,9 @@
 
     var notTransAttrs = {
         'href':1,
-        'src':1
+        'src':1,
+        '_src':1,
+        '_href':1
     };
 
     var notTransTagName = {
@@ -122,7 +124,7 @@
             attrhtml = [];
             var attrs = node.attrs;
             for (var a in attrs) {
-                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? attrs[a] : utils.unhtml(attrs[a])) + '"' : ''))
+                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? utils.html(attrs[a]) : utils.unhtml(attrs[a])) + '"' : ''))
             }
             attrhtml = attrhtml.join(' ');
         }
