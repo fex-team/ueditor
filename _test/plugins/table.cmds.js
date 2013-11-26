@@ -1399,7 +1399,7 @@ test('contextMenu 标题行中右插入列', function () {
         lang = editor.getLang("contextMenu");
         equal(menutable.childNodes.length, 13, '13个子项目');//当光标在th[0]时,由于标题变更13->12 (少了前插入列)
         /*trace 3197：没有后插行选项*/
-        var innerText = lang.deletetable +  lang.insertcolnext + lang.insertcaption + lang.deletetitle +lang.inserttitlecol+ lang.mergeright + lang.edittd + lang.edittable;
+        var innerText = lang.deletetable +  lang.insertcolnext + lang.insertcaption + lang.deletetitle +lang.inserttitlecol+ lang.mergeright + lang.edittd + lang.edittable+lang.setbordervisible;
         if (browser.gecko) {
             equal(menutable.textContent, innerText, '检查menu显示的字符');
         } else {
