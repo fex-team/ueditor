@@ -877,7 +877,20 @@
             }
         }
     };
-
+    UE.commands["setbordervisible"] = {
+        queryCommandState: function (cmd) {
+            var table = getTableItemsByRange(this).table;
+            if (!table) return -1;
+            return 0;
+        },
+        execCommand: function () {
+            var table = getTableItemsByRange(this).table;
+            utils.each(domUtils.getElementsByTagName(table,'td'),function(td){
+                td.style.borderWidth = '1px';
+                td.style.borderStyle = 'solid';
+            })
+        }
+    };
     function resetTdWidth(table, editor) {
         var tds = domUtils.getElementsByTagName(table,'td th');
         utils.each(tds, function (td) {

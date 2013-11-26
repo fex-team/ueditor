@@ -121,6 +121,7 @@ UE.I18N['zh-cn'] = {
         'tablecenter':'居中显示',
         'tableright':'右浮动',
         'edittd':"单元格属性",
+        'setbordervisible':'设置表格边线可见',
         'justifyleft':'左对齐',
         'justifyright':'右对齐',
         'justifycenter':'居中对齐',

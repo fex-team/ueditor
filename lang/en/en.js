@@ -124,6 +124,7 @@ UE.I18N['en'] = {
         'tableright':'Right float',
         'aligntd':'Cell alignment',
         'edittd':"Cell property",
+        'setbordervisible':'Set the table edge visible',
         'table':"Table",
         'justifyleft':'Justify Left',
         'justifyright':'Justify Right',
