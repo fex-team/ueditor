@@ -3,10 +3,12 @@
 <script>
   window.loadFilesDone = function(){
       uParse('.content',{
+          'rootPath': '../',
           'highlightJsUrl':'../third-party/SyntaxHighlighter/shCore.js',
           'highlightCssUrl':'../third-party/SyntaxHighlighter/shCoreDefault.css'
       })
   }
+
 </script>
 <?php
     //获取数据
