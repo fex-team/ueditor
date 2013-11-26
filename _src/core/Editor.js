@@ -1109,10 +1109,12 @@
             if (!cmd.notNeedUndo && !me.__hasEnterExecCommand) {
                 me.__hasEnterExecCommand = true;
                 if (me.queryCommandState.apply(me,arguments) != -1) {
+                    me.fireEvent('saveScene');
                     me.fireEvent('beforeexeccommand', cmdName);
                     result = this._callCmdFn('execCommand', arguments);
                     (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
                     me.fireEvent('afterexeccommand', cmdName);
+                    me.fireEvent('saveScene');
                 }
                 me.__hasEnterExecCommand = false;
             } else {

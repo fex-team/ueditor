@@ -189,8 +189,8 @@ UE.plugins['undo'] = function () {
         this.undoManger.save.apply(this.undoManger,args);
     });
 
-    me.addListener('beforeexeccommand', saveScene);
-    me.addListener('afterexeccommand', saveScene);
+//    me.addListener('beforeexeccommand', saveScene);
+//    me.addListener('afterexeccommand', saveScene);
 
     me.addListener('reset', function (type, exclude) {
         if (!exclude) {

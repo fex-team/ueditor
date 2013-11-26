@@ -87,7 +87,6 @@ function run( kiss, runnext ) {
                 wb.kisses['config'] = location.search.substring( 1 );
 //                var url = /mail=true/.test( location.search ) ? 'record.php' : 'report.php';
                 var url = 'report.php';
-                debugger
                 covcalc();
                 /**
                  * 启动时间，结束时间，校验点失败数，校验点总数

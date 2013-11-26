@@ -61,6 +61,15 @@ EventBase.prototype = {
         }
     },
 
+    on : function(types, listener){
+      return this.addListener(types,listener);
+    },
+    off : function(types, listener){
+        return this.removeListener(types, listener)
+    },
+    trigger:function(){
+        return this.fireEvent.apply(this,arguments);
+    },
     /**
      * 移除事件监听器
      * @method removeListener
