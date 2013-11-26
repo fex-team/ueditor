@@ -20,12 +20,9 @@
     * 这个命令会根据package.json文件，安装打包需要的grunt和grunt插件
     * 安装结束后，会在ueditor目录下出现一个node_modules文件夹
 
-4. 下载
-    * 下载[closure-compiler.zip](http://bs.baidu.com/uploadfile/47901385374533.zip)并解压到uedior根目录，设置好后ueditor目录下可以找到closure-compiler/build/compiler.jar文件
-
-5. 执行打包命令
+4. 执行打包命令
     * 以终端方式（windows用户用cmd）进入ueditor源码根目录，执行```grunt```
-    * 这个命令会根据Gruntfile.js执行打包打包的任务
+    * 这个命令会根据Gruntfile.js执行打包打包的任务，运行过程 **需要java环境** 支持
     * 命令完成后，ueditor目录下会出现dist/目录，里面有你要的打包好的ueditor文件夹，默认是utf8-php文件夹
 
 ## 打包其他版本
