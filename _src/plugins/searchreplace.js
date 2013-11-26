@@ -21,10 +21,8 @@ UE.plugin.register('searchreplace',function(){
         var reg = new RegExp(str,'g' + (opt.casesensitive ? '' : 'i')),match;
 
         while(match = reg.exec(textContent)){
-            if(currentIndex !== null){
-                if(match.index >= currentIndex){
-                    return opt.dir == -1 ? textContent.length - match.index - opt.searchStr.length : match.index;
-                }
+            if(match.index >= currentIndex){
+                return opt.dir == -1 ? textContent.length - match.index - opt.searchStr.length : match.index;
             }
         }
         return  -1
@@ -37,7 +35,7 @@ UE.plugin.register('searchreplace',function(){
         var first = 1;
         while(node){
             textContent = node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent'];
-            index = findTextInString(textContent,opt,first ? currentIndex : null );
+            index = findTextInString(textContent,opt,currentIndex );
             first = 0;
             if(index!=-1){
                 return {
@@ -46,6 +44,10 @@ UE.plugin.register('searchreplace',function(){
                 }
             }
             node = domUtils[methodName](node);
+            if(node){
+                currentIndex = opt.dir == -1 ? (node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent']).length : 0;
+            }
+
         }
     }
     function findNTextInBlockElm(node,index,str){
