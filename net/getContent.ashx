@@ -26,9 +26,7 @@ public class getContent : IHttpHandler {
         context.Response.Write(
 
             "<script>window.loadFilesDone = function(){uParse('.content',{"+
-                  "'rootPath': '../',"+
-                  "'highlightJsUrl':'../third-party/SyntaxHighlighter/shCore.js',"+
-                  "'highlightCssUrl':'../third-party/SyntaxHighlighter/shCoreDefault.css'"+
+                  "'rootPath': '../'"+
               "})}"+
             "</script>");
 
