@@ -22,7 +22,7 @@
 
 4. 执行打包命令
     * 以终端方式（windows用户用cmd）进入ueditor源码根目录，执行```grunt```
-    * 这个命令会根据Gruntfile.js执行打包打包的任务
+    * 这个命令会根据Gruntfile.js执行打包打包的任务，运行过程 **需要java环境** 支持
     * 命令完成后，ueditor目录下会出现dist/目录，里面有你要的打包好的ueditor文件夹，默认是utf8-php文件夹
 
 ## 打包其他版本
