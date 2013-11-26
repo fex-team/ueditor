@@ -25,6 +25,7 @@ public class getContent : IHttpHandler {
         context.Response.Write("<script src='../ueditor.parse.js' type='text/javascript'></script>");
         context.Response.Write(
             "<script>uParse('.content',{"+
+                  "'rootPath': '../',"+
                   "'highlightJsUrl':'../third-party/SyntaxHighlighter/shCore.js',"+
                   "'highlightCssUrl':'../third-party/SyntaxHighlighter/shCoreDefault.css'"+
               "})"+
