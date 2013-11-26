@@ -142,14 +142,14 @@
                     popEl.className += ' edui-state-centered';
                 }
             } else {
-
                 var dialogWrapNode = this.getDom(),
                     contentNode = this.getDom('content');
-                dialogWrapNode.style.left = "-100000px";
+
                 dialogWrapNode.style.display = "block";
 
                 var wrapRect = UE.ui.uiUtils.getClientRect( dialogWrapNode ),
                     contentRect = UE.ui.uiUtils.getClientRect( contentNode );
+                dialogWrapNode.style.left = "-100000px";
 
                 contentNode.style.width = ( vpRect.width - wrapRect.width + contentRect.width ) + "px";
                 contentNode.style.height = ( vpRect.height - wrapRect.height + contentRect.height ) + "px";
