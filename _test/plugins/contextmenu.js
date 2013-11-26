@@ -96,8 +96,8 @@ test('表格右键菜单', function () {
             setTimeout(function () {
                 lang = editor.getLang("contextMenu");
                 equal(menutableBody.parentNode.parentNode.parentNode.style.display, 'none', '显示submenu,检查submenu的display值:""');
-                equal(menutableBody.childNodes.length, 16, '12个items4个分隔线');
-                var innerText = lang.deletetable + lang.insertcol + lang.insertcolnext + lang.insertrow + lang.insertrownext + lang.insertcaption + lang.inserttitle + lang.inserttitlecol + lang.mergeright + lang.mergedown + lang.edittd + lang.edittable;
+                equal(menutableBody.childNodes.length, 17, '13个items4个分隔线');
+                var innerText = lang.deletetable + lang.insertcol + lang.insertcolnext + lang.insertrow + lang.insertrownext + lang.insertcaption + lang.inserttitle + lang.inserttitlecol + lang.mergeright + lang.mergedown + lang.edittd + lang.edittable+lang.setbordervisible;
                 if (browser.gecko) {
                     equal(menutableBody.textContent, innerText, '检查menu显示的字符');
                 }
@@ -149,11 +149,11 @@ test('trace 3044：表格名称中右键', function () {
                 lang = editor.getLang("contextMenu");
                 menutableBody = document.getElementsByClassName("edui-menu-body")[1];
                 if (ua.browser.ie == 8) {
-                    equal(menutableBody.childNodes.length, 8, '8个子项目,其中有2条分隔线');
+                    equal(menutableBody.childNodes.length, 9, '9个子项目,其中有2条分隔线');
                 } else {
-                    equal(menutableBody.childNodes.length, 6, '6个子项目');
+                    equal(menutableBody.childNodes.length, 7, '7个子项目');
                 }
-                var innerText = lang.deletetable + lang.deletecaption + lang.inserttitle+lang.inserttitlecol + lang.edittd + lang.edittable;
+                var innerText = lang.deletetable + lang.deletecaption + lang.inserttitle+lang.inserttitlecol + lang.edittd + lang.edittable+lang.setbordervisible;
                 if (browser.gecko) {
                     equal(menutableBody.textContent, innerText, '检查menu显示的字符');
                 } else {
@@ -196,13 +196,13 @@ test('trace 3088：检查表格属性', function () {
             setTimeout(function () {
                 var menutable = document.getElementsByClassName("edui-menu-body")[1];
                 var forTable = document.getElementsByClassName('edui-for-table');
-                //点开'表格属性'(表格子菜单的最后一项)
+                //点开'表格属性'(表格子菜单的倒数第二项)
                 if (ua.browser.ie&&ua.browser.ie<9) {
                     ua.mouseenter(forTable[forTable.length - 1]);
-                    ua.click(menutable.childNodes[menutable.childNodes.length-1]);
+                    ua.click(menutable.childNodes[menutable.childNodes.length-2]);
                 } else {
                     ua.mouseover(forTable[forTable.length - 1]);
-                    ua.click(menutable.childNodes[menutable.childNodes.length-1]);
+                    ua.click(menutable.childNodes[menutable.childNodes.length-2]);
                 }
                 lang = editor.getLang("contextMenu");
                 setTimeout(function () {
