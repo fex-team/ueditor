@@ -25,9 +25,9 @@ public class getContent : IHttpHandler {
         context.Response.Write("<script src='../ueditor.parse.js' type='text/javascript'></script>");
         context.Response.Write(
 
-            "<script>window.loadFilesDone = function(){uParse('.content',{"+
+            "<script>uParse('.content',{"+
                   "'rootPath': '../'"+
-              "})}"+
+              "})"+
             "</script>");
 
         context.Response.Write("第1个编辑器的值");
