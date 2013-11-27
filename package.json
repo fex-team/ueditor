@@ -9,7 +9,8 @@
         "grunt-contrib-cssmin": "~0.6.0",
         "grunt-gcc": "~0.2.2",
         "grunt-contrib-copy": "~0.4.0",
-        "grunt-transcoding": "~0.1.1"
+        "grunt-transcoding": "~0.1.1",
+        "grunt-text-replace": "~0.3.9"
     },
     "devDependencies": {
         "grunt": "~0.4.1"
