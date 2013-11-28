@@ -32,7 +32,15 @@ UE.plugin.register('background', function () {
             utils.cssRule(cssRuleId, '', me.document)
         }
     }
+    //重写editor.hasContent方法
 
+    var orgFn = me.hasContents;
+    me.hasContents = function(){
+        if(me.queryCommandValue('background')){
+            return true
+        }
+        return orgFn.apply(me,arguments);
+    };
     return {
         bindEvents: {
             'getAllHtml': function (type, headHtml) {

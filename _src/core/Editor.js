@@ -1119,9 +1119,9 @@
                 me.__hasEnterExecCommand = false;
             } else {
                 result = this._callCmdFn('execCommand', arguments);
-                (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange')
+                (!me.__hasEnterExecCommand && !cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange')
             }
-            (!cmd.ignoreContentChange && !me._ignoreContentChange) && me._selectionChange();
+            (!me.__hasEnterExecCommand && !cmd.ignoreContentChange && !me._ignoreContentChange) && me._selectionChange();
             return result;
         },
 
