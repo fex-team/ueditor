@@ -107,7 +107,7 @@ module.exports = function ( grunt ) {
                 files: [
                     {
 
-                        src: [ 'index.html', 'themes/iframe.css', 'themes/default/dialogbase.css', 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**' ],
+                        src: [ '*.html', 'themes/iframe.css', 'themes/default/dialogbase.css', 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**' ],
                         dest: disDir
 
                     }
@@ -153,7 +153,7 @@ module.exports = function ( grunt ) {
         replace: {
 
             fileEncode: {
-                src: [ disDir+'**/*.html', disDir+'**/*.php', disDir+'**/*.jsp', disDir+'**/*.net', disDir+'**/*.asp' ],
+                src: [ disDir+'**/*.html', disDir+'**/*.css', disDir+'**/*.php', disDir+'**/*.jsp', disDir+'**/*.net', disDir+'**/*.asp' ],
                 overwrite: true,
                 replacements: [ {
                     from: /utf-8/gi,
