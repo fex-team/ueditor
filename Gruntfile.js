@@ -174,7 +174,13 @@ module.exports = function ( grunt ) {
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'gcc', 'copy:base', 'copy:'+server, 'transcoding', 'replace' ];
+        var tasks = [ 'concat', 'cssmin', 'gcc', 'copy:base', 'copy:'+server ];
+
+        if ( encode === 'gbk' ) {
+            tasks.push( 'replace' );
+        }
+
+        tasks.push( 'transcoding' );
 
         //config修改
         updateConfigFile();
