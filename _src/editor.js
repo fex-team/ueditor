@@ -14,6 +14,6 @@ UE.instants = {};
 
 UE.I18N = {};
 
-UE.version = "1.3.0";
+UE.version = "1.3.5";
 
 var dom = UE.dom = {};
