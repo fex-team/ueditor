@@ -197,6 +197,8 @@ module.exports = function ( grunt ) {
 
         if ( encode === 'gbk' ) {
             tasks.push( 'replace' );
+        } else {
+            tasks.push( 'replace:demo' );
         }
 
         tasks.push( 'transcoding' );
