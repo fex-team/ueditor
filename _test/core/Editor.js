@@ -1,8 +1,36 @@
 module("core.Editor");
 
-//test('', function () {
-//    stop();
-//});
+test('contentchange在命令调用时的触发机制',function(){
+    var editor = te.obj[1];
+    editor.commands['test1'] = {
+        execCommand:function(){
+
+        }
+    };
+    editor.commands['test'] = {
+        execCommand:function(){
+            editor.execCommand('test1')
+        }
+    };
+    var count = 0;
+    editor.on('contentchange',function(){
+        count++;
+    });
+    editor.execCommand('test');
+    equals(count,1);
+    editor.commands['test'] = {
+        execCommand:function(){
+            editor.execCommand('test1')
+        },
+        ignoreContentChange:true
+    };
+    count = 0;
+    editor.execCommand('test');
+    equals(count,0);
+});
+test('', function () {
+    stop();
+});
 test("initialStyle", function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
@@ -792,3 +820,5 @@ test('绑定事件', function () {
 //        },100);
 //    });
 //});
+
+
