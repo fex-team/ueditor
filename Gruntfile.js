@@ -113,6 +113,14 @@ module.exports = function ( grunt ) {
                     }
                 ]
             },
+            demo: {
+                files: [
+                    {
+                        src: '_examples/completeDemo.html',
+                        dest: disDir + 'index.html'
+                    }
+                ]
+            },
             php: {
 
                 expand: true,
@@ -159,6 +167,17 @@ module.exports = function ( grunt ) {
                     from: /utf-8/gi,
                     to: 'gbk'
                 } ]
+            },
+            demo:{
+                src: disDir+'index.html',
+                overwrite: true,
+                replacements: [ {
+                    from: /\.\.\//gi,
+                    to: ''
+                },{
+                    from: 'editor_api.js',
+                    to: '<%= pkg.name %>.all.min.js'
+                } ]
             }
 
         }
@@ -174,7 +193,7 @@ module.exports = function ( grunt ) {
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'gcc', 'copy:base', 'copy:'+server ];
+        var tasks = [ 'concat', 'cssmin', 'gcc', 'copy:base', 'copy:demo', 'copy:'+server ];
 
         if ( encode === 'gbk' ) {
             tasks.push( 'replace' );
