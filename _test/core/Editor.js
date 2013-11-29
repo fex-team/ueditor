@@ -1,5 +1,7 @@
 module("core.Editor");
-
+//test('', function () {
+//    stop();
+//});
 test('contentchange在命令调用时的触发机制',function(){
     var editor = te.obj[1];
     editor.commands['test1'] = {
@@ -28,9 +30,7 @@ test('contentchange在命令调用时的触发机制',function(){
     editor.execCommand('test');
     equals(count,0);
 });
-test('', function () {
-    stop();
-});
+
 test("initialStyle", function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
