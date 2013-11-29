@@ -432,7 +432,9 @@
                     }
 
                     document.documentElement.style.overflow = 'hidden';
-                    document.body.style.overflow = 'hidden';
+                    //修复，滚动条不收起的问题
+
+                    window.scrollTo(0,window.scrollY);
                     this._bakCssText = this.getDom().style.cssText;
                     this._bakCssText1 = this.getDom('iframeholder').style.cssText;
                     editor.iframe.parentNode.style.width = '';
