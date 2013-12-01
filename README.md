@@ -9,7 +9,7 @@ UEditor是由百度web前端研发部开发所见即所得富文本web编辑器�
 
 ### 第一步：下载编辑器 ###
 
-到官网下载ueditor最新版: [[官网地址]](http://ueditor.baidu.com/website/download.html#ueditor "官网地址") [[1.2.6.1下载地址]](http://ueditor.baidu.com/build/build_down.php?t=1_2_6_1-utf8-php "ueditor1.2.6.1下载地址")
+到官网下载ueditor最新版: [[官网地址]](http://ueditor.baidu.com/website/download.html#ueditor "官网地址") [[1.3.5下载地址]](http://ueditor.baidu.com/build/build_down.php?t=1_3_5-src"ueditor1.3.5下载地址")
 
 ### 第二步：创建demo文件 ###
 解压下载的包，在解压后的目录创建demo.html文件，填入下面的html代码
