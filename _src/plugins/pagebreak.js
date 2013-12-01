@@ -1,10 +1,7 @@
-///import core
-///commands 添加分页功能
-///commandsName  PageBreak
-///commandsTitle  分页
 /**
- * @description 添加分页功能
- * @author zhanyi
+ * 分页功能插件
+ * @file
+ * @since 1.2.6.1
  */
 UE.plugins['pagebreak'] = function () {
     var me = this,
@@ -50,6 +47,21 @@ UE.plugins['pagebreak'] = function () {
         })
 
     });
+
+    /**
+     * 插入分页符
+     * @command pagebreak
+     * @method execCommand
+     * @param { String } cmd 命令字符串
+     * @remind 在表格中插入分页符会把表格切分成两部分
+     * @remind 获取编辑器内的数据时， 编辑器会把分页符转换成“_ueditor_page_break_tag_”字符串，
+     *          以便于提交数据到服务器端后处理分页。
+     * @example
+     * ```javascript
+     * editor.execCommand( 'pagebreak'); //插入一个hr标签，带有样式类名pagebreak
+     * ```
+     */
+
     me.commands['pagebreak'] = {
         execCommand:function () {
             var range = me.selection.getRange(),hr = me.document.createElement('hr');

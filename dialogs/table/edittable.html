@@ -12,13 +12,20 @@
             <h3><var id="lang_tableStyle"></var></h3>
             <ul>
                 <li>
-                    <label><input type="checkbox" id="J_title" name="style"/><var id="lang_insertCaption"></var></label>
+                    <label onselectstart="return false"><input type="checkbox" id="J_title" name="style"/><var id="lang_insertTitle"></var></label>
                 </li>
                 <li>
-                    <label><input type="checkbox" id="J_caption" name="style"/><var id="lang_insertTitle"></var></label>
+                    <label onselectstart="return false"><input type="checkbox" id="J_titleCol" name="style"/><var id="lang_insertTitleCol"></var></label>
                 </li>
             </ul>
-            <label><input type="checkbox" id="J_sorttable" name="style"/><var id="lang_orderbycontent"></var></label>
+            <ul>
+                <li>
+                    <label onselectstart="return false"><input type="checkbox" id="J_caption" name="style"/><var id="lang_insertCaption"></var></label>
+                </li>
+                <li>
+                    <label onselectstart="return false"><input type="checkbox" id="J_sorttable" name="style"/><var id="lang_orderbycontent"></var></label>
+                </li>
+            </ul>
             <div class="clear"></div>
         </div>
         <div class="section">

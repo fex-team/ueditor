@@ -7,6 +7,7 @@
  */
 (function () {
     var title = $G("J_title"),
+        titleCol = $G("J_titleCol"),
         caption = $G("J_caption"),
         sorttable = $G("J_sorttable"),
         autoSizeContent = $G("J_autoSizeContent"),
@@ -30,13 +31,23 @@
                 });
 
             title.checked = editor.queryCommandState("inserttitle") == -1;
+            titleCol.checked = editor.queryCommandState("inserttitlecol") == -1;
             caption.checked = editor.queryCommandState("insertcaption") == -1;
+            sorttable.checked = editor.queryCommandState("enablesort") == 1;
 
-            me.createTable(title.checked, caption.checked);
+            var enablesortState = editor.queryCommandState("enablesort"),
+                disablesortState = editor.queryCommandState("disablesort");
+
+            sorttable.checked = !!(enablesortState < 0 && disablesortState >=0);
+            sorttable.disabled = !!(enablesortState < 0 && disablesortState < 0);
+            sorttable.title = enablesortState < 0 && disablesortState < 0 ? lang.errorMsg:'';
+
+            me.createTable(title.checked, titleCol.checked, caption.checked);
             me.setAutoSize();
             me.setColor(me.getColor());
 
             domUtils.on(title, "click", me.titleHanler);
+            domUtils.on(titleCol, "click", me.titleColHanler);
             domUtils.on(caption, "click", me.captionHanler);
             domUtils.on(sorttable, "click", me.sorttableHanler);
             domUtils.on(autoSizeContent, "click", me.autoSizeContentHanler);
@@ -58,21 +69,24 @@
             });
         },
 
-        createTable:function (hasTitle, hasCaption) {
-            var arr = [];
+        createTable:function (hasTitle, hasTitleCol, hasCaption) {
+            var arr = [],
+                sortSpan = '<span>^</span>';
             arr.push("<table id='J_example'>");
             if (hasCaption) {
                 arr.push("<caption>" + lang.captionName + "</caption>")
             }
             if (hasTitle) {
                 arr.push("<tr>");
+                if(hasTitleCol) { arr.push("<th>" + lang.titleName + "</th>"); }
                 for (var j = 0; j < 5; j++) {
-                    arr.push("<th>" + lang.titleName + "</th>")
+                    arr.push("<th>" + lang.titleName + "</th>");
                 }
                 arr.push("</tr>");
             }
             for (var i = 0; i < 6; i++) {
                 arr.push("<tr>");
+                if(hasTitleCol) { arr.push("<th>" + lang.titleName + "</th>") }
                 for (var k = 0; k < 5; k++) {
                     arr.push("<td>" + lang.cellsName + "</td>")
                 }
@@ -80,16 +94,17 @@
             }
             arr.push("</table>");
             preview.innerHTML = arr.join("");
+            this.updateSortSpan();
         },
-
         titleHanler:function () {
             var example = $G("J_example"),
-                 frg=document.createDocumentFragment(),
-                color = domUtils.getComputedStyle(domUtils.getElementsByTagName(example, "td")[0], "border-color");
+                frg=document.createDocumentFragment(),
+                color = domUtils.getComputedStyle(domUtils.getElementsByTagName(example, "td")[0], "border-color"),
+                colCount = example.rows[0].children.length;
 
             if (title.checked) {
                 example.insertRow(0);
-                for (var i = 0, node; i < 5; i++) {
+                for (var i = 0, node; i < colCount; i++) {
                     node = document.createElement("th");
                     node.innerHTML = lang.titleName;
                     frg.appendChild(node);
@@ -100,6 +115,27 @@
                 domUtils.remove(example.rows[0]);
             }
             me.setColor(color);
+            me.updateSortSpan();
+        },
+        titleColHanler:function () {
+            var example = $G("J_example"),
+                color = domUtils.getComputedStyle(domUtils.getElementsByTagName(example, "td")[0], "border-color"),
+                colArr = example.rows,
+                colCount = colArr.length;
+
+            if (titleCol.checked) {
+                for (var i = 0, node; i < colCount; i++) {
+                    node = document.createElement("th");
+                    node.innerHTML = lang.titleName;
+                    colArr[i].insertBefore(node, colArr[i].children[0]);
+                }
+            } else {
+                for (var i = 0; i < colCount; i++) {
+                    domUtils.remove(colArr[i].children[0]);
+                }
+            }
+            me.setColor(color);
+            me.updateSortSpan();
         },
         captionHanler:function () {
             var example = $G("J_example");
@@ -112,20 +148,7 @@
             }
         },
         sorttableHanler:function(){
-            var example = $G("J_example"),
-                row = example.rows[0];
-            if (sorttable.checked) {
-                for(var i = 0,cell;cell = row.cells[i++];){
-                    var span = document.createElement("span");
-                    span.innerHTML = "^";
-                    cell.appendChild(span);
-                }
-            } else {
-                var spans = domUtils.getElementsByTagName(example,"span");
-                utils.each(spans,function(span){
-                    span.parentNode.removeChild(span);
-                })
-            }
+            me.updateSortSpan();
         },
         autoSizeContentHanler:function () {
             var example = $G("J_example");
@@ -139,11 +162,26 @@
             });
             example.setAttribute('width', '100%');
         },
+        updateSortSpan: function(){
+            var example = $G("J_example"),
+                row = example.rows[0];
 
+            var spans = domUtils.getElementsByTagName(example,"span");
+            utils.each(spans,function(span){
+                span.parentNode.removeChild(span);
+            });
+            if (sorttable.checked) {
+                utils.each(row.cells, function(cell, i){
+                    var span = document.createElement("span");
+                    span.innerHTML = "^";
+                    cell.appendChild(span);
+                });
+            }
+        },
         getColor:function () {
             var start = editor.selection.getStart(), color,
                 cell = domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
-            color = domUtils.getComputedStyle(cell, "border-color");
+            color = cell && domUtils.getComputedStyle(cell, "border-color");
             if (!color)  color = "#DDDDDD";
             return color;
         },
@@ -174,6 +212,7 @@
 
         var checks = {
             title:"inserttitle deletetitle",
+            titleCol:"inserttitlecol deletetitlecol",
             caption:"insertcaption deletecaption",
             sorttable:"enablesort disablesort"
         };

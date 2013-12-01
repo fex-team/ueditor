@@ -1,16 +1,31 @@
 /**
+ * UE过滤word的静态方法
  * @file
- * @name UE.filterWord
- * @short filterWord
- * @desc 用来过滤word粘贴过来的字符串
- * @import editor.js,core/utils.js
- * @anthor zhanyi
+ */
+
+/**
+ * UEditor公用空间，UEditor所有的功能都挂载在该空间下
+ * @module UE
+ */
+
+
+/**
+ * 根据传入html字符串过滤word
+ * @module UE
+ * @since 1.2.6.1
+ * @method filterWord
+ * @param { String } html html字符串
+ * @return { String } 已过滤后的结果字符串
+ * @example
+ * ```javascript
+ * UE.filterWord(html);
+ * ```
  */
 var filterWord = UE.filterWord = function () {
 
     //是否是word过来的内容
     function isWordDocument( str ) {
-        return /(class="?Mso|style="[^"]*\bmso\-|w:WordDocument|<v:)/ig.test( str );
+        return /(class="?Mso|style="[^"]*\bmso\-|w:WordDocument|<(v|o):|lang=)/ig.test( str );
     }
     //去掉小数
     function transUnit( v ) {
@@ -21,7 +36,7 @@ var filterWord = UE.filterWord = function () {
     }
 
     function filterPasteWord( str ) {
-        return str.replace( /[\t\r\n]+/g, "" )
+        return str.replace(/[\t\r\n]+/g,' ')
                 .replace( /<!--[\s\S]*?-->/ig, "" )
                 //转换图片
                 .replace(/<v:shape [^>]*>[\s\S]*?.<\/v:shape>/gi,function(str){
@@ -50,7 +65,9 @@ var filterWord = UE.filterWord = function () {
                     return name == 'class' && val == 'MsoListParagraph' ? str : ''
                 })
                 //清除多余的font/span不能匹配&nbsp;有可能是空格
-                .replace( /<(font|span)[^>]*>\s*<\/\1>/gi, '' )
+                .replace( /<(font|span)[^>]*>(\s*)<\/\1>/gi, function(a,b,c){
+                    return c.replace(/[\t\r\n ]+/g,' ')
+                })
                 //处理style的问题
                 .replace( /(<[a-z][^>]*)\sstyle=(["'])([^\2]*?)\2/gi, function( str, tag, tmp, style ) {
                     var n = [],

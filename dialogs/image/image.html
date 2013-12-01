@@ -57,10 +57,7 @@
                     <div><div id="upload" style="display: none" ></div><div id="duiqi"></div><div id="localFloat"></div></div>
 
                     <div class="saveDir">
-                        <var id="lang_savePath" ></var>：<select id="savePath">
-                            <option value="1">upload</option>
-                            <option value="2">upload1</option>
-                        </select>
+                        <var id="lang_savePath" ></var><span id="saveDirSelector"><var id="lang_load_savePath"></var></span>
                     </div>
                 </div>
                 <div id="imgManager" class="panel">
@@ -95,7 +92,8 @@
     <script type="text/javascript">
         //全局变量
         var imageUrls = [],          //用于保存从服务器返回的图片信息数组
-            selectedImageCount = 0;  //当前已选择的但未上传的图片数量
+            selectedImageCount = 0,  //当前已选择的但未上传的图片数量
+            savePathComplete = false; //保存目录已经就绪
 
         editor.setOpt({
             imageFieldName:"upfile",
@@ -182,8 +180,16 @@
                     flashObj.addCustomizedParams(config.id,config.data);
                 }
             };
+
+            initSavePath();
+
             imageUploader.init(flashOptions,callbacks);
             $G("upload").onclick = function () {
+
+                if ( !savePathComplete ) {
+                    alert('请等待保存目录就绪!')
+                    return;
+                }
                 /**
                  * 接口imageUploader.setPostParams()可以在提交时设置本次上传提交的参数（包括所有图片）
                  * 参数为json对象{"key1":"value1","key2":"value2"}，其中key即为向后台post提交的name，value即为值。
@@ -199,6 +205,53 @@
             };
 
         });
+
+        function initSavePath () {
+
+            if ( editor.options.savePath && editor.options.savePath.length > 0 ) {
+                updateSavePath( editor.options.savePath );
+            } else {
+                //远程加载
+                var scriptNode = document.createElement('script'),
+                    reqAddress = editor.options.imageUrl.split( "#" ),
+                    uri = reqAddress[0].split( "?" );
+
+                if ( uri.length > 1 ) {
+                    uri = uri[ 0 ] + "?" + uri.slice( 1 ).join("?") + ( !!uri? "&fetch=1" : "fetch=1" );
+                } else {
+                    uri = uri[ 0 ] + "?fetch=1";
+                }
+
+                if ( reqAddress.length > 1 ) {
+                    uri += "#" + reqAddress.slice( 1 ).join("#");
+                }
+
+                scriptNode.src = uri;
+                document.body.appendChild( scriptNode );
+            }
+
+        }
+
+        function updateSavePath ( pathArr ) {
+
+            var selector = $G( "saveDirSelector" ),
+                htmlStr = [ '<select id="savePath">' ],
+                dirs = pathArr;
+
+            for ( var i = 0, len = dirs.length; i < len; i++ ) {
+
+                htmlStr.push( '<option value="'+ dirs[ i ] +'">'+ dirs[ i ] +'</option>' );
+
+            }
+
+            htmlStr.push( '</select>' );
+
+            selector.innerHTML = htmlStr.join( "" );
+
+            savePathComplete = true;
+
+        }
+
     </script>
 </body>
 </html>

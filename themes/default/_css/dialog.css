@@ -9,11 +9,19 @@
     margin-bottom: 6px;
 }
 
+.edui-default .edui-dialog-fullscreen-flag {
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
 .edui-default .edui-dialog-body {
     position: relative;
-
     padding:2px 0 0 2px;
     _zoom: 1;
+}
+
+.edui-default .edui-dialog-fullscreen-flag .edui-dialog-body {
+    padding: 0;
 }
 
 .edui-default .edui-dialog-shadow {
@@ -173,6 +181,7 @@
 .edui-default .edui-for-spechars .edui-dialog-content {
     width: 620px;
     height: 500px;
+    *width: 630px;
     *height: 570px;
 }
 
@@ -259,7 +268,7 @@
 .edui-default .edui-for-edittable .edui-dialog-content {
     width: 540px;
     _width:590px;
-    height: 285px;
+    height: 335px;
 }
 
 /*edittip-dialog*/
@@ -283,4 +292,12 @@
 .edui-default .edui-for-music .edui-dialog-content {
     width: 515px;
     height: 360px;
+}
+
+/*preview-dialog*/
+.edui-default .edui-for-preview .edui-dialog-content {
+    width: 620px;
+    height: 500px;
+    *width: 630px;
+    *height: 570px;
 }

@@ -6,13 +6,13 @@
  * To change this template use File | Settings | File Templates.
  */
 
-//editor.execCommand("wordimage","word_img");
 
 
 var wordImage = {};
 //(function(){
 var g = baidu.g,
 	flashObj,flashContainer;
+
 wordImage.init = function(opt, callbacks) {
 	showLocalPath("localPath");
 	//createCopyButton("clipboard","localPath");
@@ -29,6 +29,7 @@ function addOkListener() {
 	dialog.onok = function() {
 		if (!imageUrls.length) return;
 		var images = domUtils.getElementsByTagName(editor.document,"img");
+        editor.fireEvent('saveScene');
 		for (var i = 0,img; img = images[i++];) {
 			var src = img.getAttribute("word_img");
 			if (!src) continue;
@@ -37,12 +38,14 @@ function addOkListener() {
 					img.src = editor.options.wordImagePath + url.url;
 					img.setAttribute("_src", editor.options.wordImagePath + url.url);  //同时修改"_src"属性
 					img.setAttribute("title",url.title);
-                    parent.baidu.editor.dom.domUtils.removeAttributes(img, ["word_img","style","width","height"]);
+                    domUtils.removeAttributes(img, ["word_img","style","width","height"]);
 					editor.fireEvent("selectionchange");
 					break;
 				}
 			}
+
 		}
+        editor.fireEvent('saveScene');
         hideFlash();
 	};
     dialog.oncancel = function(){
@@ -63,14 +66,15 @@ function addUploadListener() {
 function showLocalPath(id) {
     //单张编辑
     var img = editor.selection.getRange().getClosedNode();
-    if(editor.word_img.length==1 || img && img.tagName == 'IMG'){
-        g(id).value = editor.word_img[0];
+    var images = editor.execCommand('wordimage');
+    if(images.length==1 || img && img.tagName == 'IMG'){
+        g(id).value = images[0];
         return;
     }
-	var path = editor.word_img[0];
+	var path = images[0];
     var leftSlashIndex  = path.lastIndexOf("/")||0,  //不同版本的doc和浏览器都可能影响到这个符号，故直接判断两种
-            rightSlashIndex = path.lastIndexOf("\\")||0,
-            separater = leftSlashIndex > rightSlashIndex ? "/":"\\" ;
+        rightSlashIndex = path.lastIndexOf("\\")||0,
+        separater = leftSlashIndex > rightSlashIndex ? "/":"\\" ;
 
 	path = path.substring(0, path.lastIndexOf(separater)+1);
 	g(id).value = path;

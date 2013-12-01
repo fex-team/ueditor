@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script src="../ueditor.parse.js" type="text/javascript"></script>
+    <script>
+        // 语法
+        // uParse(selector,[option])
+        /*
+         selector支持
+         id,class,tagName
+         */
+        /*
+         目前支持的参数
+         option:
+         highlightJsUrl 代码高亮相关js的路径 如果展示有代码高亮，必须给定该属性
+         highlightCssUrl 代码高亮相关css的路径 如果展示有代码高亮，必须给定该属性
+         liiconpath 自定义列表样式的图标路径，可以不给定，默认'http://bs.baidu.com/listicon/',
+         listDefaultPaddingLeft : 自定义列表样式的左边宽度 默认'20',
+         customRule 可以传入你自己的处理规则函数，函数第一个参数是容器节点
+         */
+
+        window.loadFilesDone = function(){
+            uParse('.content',{
+                rootPath : '../'
+            })
+            uParse('.content_background',{
+                rootPath : '../'
+            })
+        }
+    </script>
+    <title></title>
+</head>
+<body>
+<h1>解析编辑的内容</h1>
+<div class="content" style="width:200px">
+    <ol class=" list-paddingleft-2" style="list-style-type: decimal;">
+        <li>
+            <p>
+                asdfsadf
+            </p>
+        </li>
+        <ol class=" list-paddingleft-2" style="list-style-type: lower-alpha;">
+            <li>
+                <p>
+                    asfd
+                </p>
+            </li>
+            <ol class=" list-paddingleft-2" style="list-style-type: lower-roman;">
+                <li>
+                    <p>
+                        asdf
+                    </p>
+                </li>
+                <ol class=" list-paddingleft-2" style="list-style-type: upper-alpha;">
+                    <li>
+                        <p>
+                            asdf
+                        </p>
+                    </li>
+                    <ol class=" list-paddingleft-2" style="list-style-type: upper-roman;">
+                        <li>
+                            <p>
+                                asdf
+                            </p>
+                        </li>
+                        <ol class="custom_num list-paddingleft-1">
+                            <li class="list-num-1-1 list-num-paddingleft-1">
+                                <p>
+                                    asdf&nbsp;&nbsp;&nbsp;&nbsp;
+                                </p>
+                            </li>
+                        </ol>
+                    </ol>
+                </ol>
+            </ol>
+        </ol>
+    </ol>
+    <ul class=" list-paddingleft-2" style="list-style-type: disc;">
+        <li>
+            <p>
+                asdf
+            </p>
+        </li>
+        <ul class=" list-paddingleft-2" style="list-style-type: square;">
+            <li>
+                <p>
+                    sadf
+                </p>
+            </li>
+            <ul class="custom_dash list-paddingleft-1">
+                <li class="list-dash list-dash-paddingleft">
+                    <p>
+                        sdfsadf
+                    </p>
+                </li>
+                <ul class="custom_dot list-paddingleft-2">
+                    <li class="list-dot list-dot-paddingleft">
+                        <p>
+                            <br/>
+                        </p>
+                    </li>
+                </ul>
+            </ul>
+        </ul>
+    </ul>
+    <p>
+        这里可以书写，编辑器的初始内容
+    </p>
+        <pre class="brush:js;toolbar:false">bindEvents:{
+            &#39;ready&#39;:function(){
+                utils.cssRule(&#39;anchor&#39;,
+                    &#39;.anchorclass{background: url(\&#39;&#39;
+                        + this.options.themePath
+                        + this.options.theme +&#39;/images/anchor.gif\&#39;) no-repeat scroll left center transparent;border: 1px dotted #0000FF;cursor: auto;display: inline-block;height: 16px;width: 15px;}&#39;,
+                    this.document);
+            }
+        },</pre>
+    <p>
+        <br />
+    </p>
+</div>
+<div id="content" class="content">
+    <table width="992" data-sort="sortEnabled" class="sortEnabled" interlaced="enabled"><caption><span style="color: rgb(146, 208, 80);">asdf</span><br/></caption><tbody><tr class="ue-table-interlace-color-single firstRow"><th valign="null" width="198"><br/></th><th width="198"><br/></th><th width="198"><br/></th><th width="198"><br/></th><th width="199"><br/></th></tr><tr class="ue-table-interlace-color-double"><th valign="null" width="198"><br/></th><td valign="top" width="198"><br/></td><td valign="top" width="198"><br/></td><td valign="top" width="198"><br/></td><td valign="top" width="199"><br/></td></tr><tr class="ue-table-interlace-color-single"><th valign="null" width="198"><br/></th><td valign="top" width="198"><br/></td><td valign="top" width="198"><br/></td><td valign="top" width="198"><br/></td><td valign="top" width="199"><br/></td></tr><tr class="ue-table-interlace-color-double"><th valign="null" width="198"><br/></th><td valign="top" width="198"><br/></td><td valign="top" width="198"><br/></td><td valign="top" width="198"><br/></td><td valign="top" width="199"><br/></td></tr></tbody></table>
+    <table width="992" data-chart="title:sdf;subTitle:sdf;xTitle:sdfdgfdfg;yTitle:sdgsdgdfg;suffix:ggg;tip:;dataFormat:1;chartType:1" class="edui-charts-table">
+        <caption></caption>
+        <tbody>
+        <tr class="firstRow">
+            <th valign="null" width="99"></th>
+            <th width="99"></th>
+            <th width="99"></th>
+            <th width="99"></th>
+            <th width="99"></th>
+            <th width="99"></th>
+            <th width="99"></th>
+            <th width="99"></th>
+            <th width="99"></th>
+            <th width="100"></th>
+        </tr>
+        <tr>
+            <th valign="null" width="99"></th>
+            <td valign="top" width="99">
+                1
+            </td>
+            <td valign="top" width="99">
+                6
+            </td>
+            <td valign="top" width="99">
+                o
+            </td>
+            <td valign="top" width="99">
+                6
+            </td>
+            <td valign="top" width="99">
+                6
+            </td>
+            <td valign="top" width="99">
+                6
+            </td>
+            <td valign="top" width="99">
+                6
+            </td>
+            <td valign="top" width="99">
+                6
+            </td>
+            <td valign="top" width="100">
+                6
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<textarea class="content">asdfasdfasdfasdfasdfadsfa</textarea>
+</body>
+
+
+</html>

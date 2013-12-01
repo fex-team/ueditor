@@ -16,6 +16,7 @@
 ///import core/node;
 ///import core/htmlparser;
 ///import core/filternode;
+///import core/plugin;
 ///import plugins/emotion;
 ///import plugins/map;
 ///import plugins/scrawl;
@@ -73,6 +74,7 @@
 ///import plugins/table.core;
 ///import plugins/table.cmds;
 ///import plugins/table.action;
+///import plugins/table.sort;
 ///import plugins/contextmenu;
 ///import plugins/shortcutmenu;
 ///import plugins/pagebreak;
@@ -87,6 +89,11 @@
 ///import plugins/background;
 ///import plugins/music;
 ///import plugins/video;
+///import plugins/autosave;
+///import plugins/charts;
+///import plugins/autoupload;
+///import plugins/section;
+///import plugins/charts;
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;

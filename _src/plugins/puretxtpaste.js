@@ -1,7 +1,7 @@
 /**
- * @description 纯文本粘贴
- * @name puretxtpaste
- * @author zhanyi
+ * 纯文本粘贴插件
+ * @file
+ * @since 1.2.6.1
  */
 
 UE.plugins['pasteplain'] = function(){
@@ -64,6 +64,28 @@ UE.plugins['pasteplain'] = function(){
     //暂时这里支持一下老版本的属性
     var pasteplain = me.options.pasteplain;
 
+    /**
+     * 启用或取消纯文本粘贴模式
+     * @command pasteplain
+     * @method execCommand
+     * @param { String } cmd 命令字符串
+     * @example
+     * ```javascript
+     * editor.queryCommandState( 'pasteplain' );
+     * ```
+     */
+
+    /**
+     * 查询当前是否处于纯文本粘贴模式
+     * @command pasteplain
+     * @method queryCommandState
+     * @param { String } cmd 命令字符串
+     * @return { int } 如果处于纯文本模式，返回1，否则，返回0
+     * @example
+     * ```javascript
+     * editor.queryCommandState( 'pasteplain' );
+     * ```
+     */
     me.commands['pasteplain'] = {
         queryCommandState: function (){
             return pasteplain ? 1 : 0;

@@ -47,7 +47,7 @@ public String getFileType(String fileName){
 	Iterator<String> type = Arrays.asList(fileType).iterator();
 	while(type.hasNext()){
 		String t = type.next();
-		if(fileName.endsWith(t)){
+		if(fileName.toLowerCase().endsWith(t)){
 			return t;
 		}
 	}

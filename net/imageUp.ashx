@@ -1,15 +1,24 @@
 <%@ WebHandler Language="C#" Class="imageUp" %>
 <%@ Assembly Src="Uploader.cs" %>
+<%@ Assembly Src="Config.cs" %>
 
 using System;
 using System.Web;
 using System.IO;
 using System.Collections;
+using System.Linq;
 
 public class imageUp : IHttpHandler
 {
     public void ProcessRequest(HttpContext context)
     {
+        if (!String.IsNullOrEmpty(context.Request.QueryString["fetch"]))
+        {
+            context.Response.AddHeader("Content-Type", "text/javascript;charset=utf-8");
+            context.Response.Write(String.Format("updateSavePath([{0}]);", String.Join(", ", Config.ImageSavePath.Select(x => "\"" + x + "\""))));
+            return;
+        }
+
         context.Response.ContentType = "text/plain";
 
         //上传配置
@@ -20,19 +29,20 @@ public class imageUp : IHttpHandler
         //上传图片
         Hashtable info = new Hashtable();
         Uploader up = new Uploader();
-        
-        string pathbase = null;
-        int path=Convert.ToInt32( up.getOtherInfo(context, "dir"));
-        if (path == 1)
+
+        string path = up.getOtherInfo(context, "dir");
+        if (String.IsNullOrEmpty(path)) 
         {
-            pathbase = "upload/" ;                  
-            
-        }else{
-            pathbase = "upload1/";
+            path = Config.ImageSavePath[0];
+        } 
+        else if (Config.ImageSavePath.Count(x => x == path) == 0)
+        {
+            context.Response.Write("{ 'state' : '非法上传目录' }");
+            return;
         }
-        
-        info = up.upFile(context, pathbase, filetype, size);                   //获取上传状态
-        
+
+        info = up.upFile(context, path + '/', filetype, size);                   //获取上传状态
+
         string title = up.getOtherInfo(context, "pictitle");                   //获取图片描述
         string oriName = up.getOtherInfo(context, "fileName");                //获取原始文件名
 

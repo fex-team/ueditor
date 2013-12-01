@@ -1,13 +1,33 @@
-///import core
-///import plugins\inserthtml.js
-///commands 插入图片，操作图片的对齐方式
-///commandsName  InsertImage,ImageNone,ImageLeft,ImageRight,ImageCenter
-///commandsTitle  图片,默认,居左,居右,居中
-///commandsDialog  dialogs\image
 /**
- * Created by .
- * User: zhanyi
- * for image
+ * 图片插入、排版插件
+ * @file
+ * @since 1.2.6.1
+ */
+
+/**
+ * 图片对齐方式
+ * @command imagefloat
+ * @method execCommand
+ * @remind 值center为独占一行居中
+ * @param { String } cmd 命令字符串
+ * @param { String } align 对齐方式，可传left、right、none、center
+ * @remaind center表示图片独占一行
+ * @example
+ * ```javascript
+ * editor.execCommand( 'imagefloat', 'center' );
+ * ```
+ */
+
+/**
+ * 如果选区所在位置是图片区域
+ * @command imagefloat
+ * @method queryCommandValue
+ * @param { String } cmd 命令字符串
+ * @return { String } 返回图片对齐方式
+ * @example
+ * ```javascript
+ * editor.queryCommandValue( 'imagefloat' );
+ * ```
  */
 
 UE.commands['imagefloat'] = {
@@ -100,7 +120,8 @@ UE.commands['imagefloat'] = {
         }
         startNode = range.getClosedNode();
         if (startNode && startNode.nodeType == 1 && startNode.tagName == 'IMG') {
-            floatStyle = startNode.getAttribute('align')||domUtils.getComputedStyle(startNode, 'float');
+            floatStyle = domUtils.getComputedStyle(startNode, 'float') || startNode.getAttribute('align');
+
             if (floatStyle == 'none') {
                 floatStyle = domUtils.getComputedStyle(startNode.parentNode, 'text-align') == 'center' ? 'center' : floatStyle;
             }
@@ -127,6 +148,37 @@ UE.commands['imagefloat'] = {
         return -1;
     }
 };
+
+
+/**
+ * 插入图片
+ * @command insertimage
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @param { Object } opt 属性键值对，这些属性都将被复制到当前插入图片
+ * @remind 该命令第二个参数可接受一个图片配置项对象的数组，可以插入多张图片，
+ * 此时数组的每一个元素都是一个Object类型的图片属性集合。
+ * @example
+ * ```javascript
+ * editor.execCommand( 'insertimage', {
+ *     src:'a/b/c.jpg',
+ *     width:'100',
+ *     height:'100'
+ * } );
+ * ```
+ * @example
+ * ```javascript
+ * editor.execCommand( 'insertimage', [{
+ *     src:'a/b/c.jpg',
+ *     width:'100',
+ *     height:'100'
+ * },{
+ *     src:'a/b/d.jpg',
+ *     width:'100',
+ *     height:'100'
+ * }] );
+ * ```
+ */
 
 UE.commands['insertimage'] = {
     execCommand:function (cmd, opt) {

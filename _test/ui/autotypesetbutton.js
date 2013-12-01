@@ -31,7 +31,7 @@ test( 'AutoTypeSetButton/AutoTypeSetPicker', function() {
                 equal(AutoPickerBodyInput[i].checked,editor.options.autotypeset[inputName],inputName+":"+editor.options.autotypeset[inputName]);
             }
         }
-    //更改两个input 的选择
+        //更改两个input 的选择
         var flagChecked = document.getElementsByClassName("edui-autotypesetpicker-body")[0].getElementsByTagName("input")[0].checked ;
         document.getElementsByClassName("edui-autotypesetpicker-body")[0].getElementsByTagName("input")[0].checked = !flagChecked;
         document.getElementById("imageBlockLineValue"+editor.uid).childNodes[2].checked = true;
@@ -45,8 +45,8 @@ test( 'AutoTypeSetButton/AutoTypeSetPicker', function() {
         autotypesetButton.popup.hide();
         start();
 
-     });
-stop();
+    });
+    stop();
 
 
 } );

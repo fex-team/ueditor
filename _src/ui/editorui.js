@@ -41,7 +41,7 @@
         'gmap':'~/dialogs/gmap/gmap.html',
         'insertvideo':'~/dialogs/video/video.html',
         'help':'~/dialogs/help/help.html',
-       //'highlightcode':'~/dialogs/highlightcode/highlightcode.html',
+        'preview':'~/dialogs/preview/preview.html',
         'emotion':'~/dialogs/emotion/emotion.html',
         'wordimage':'~/dialogs/wordimage/wordimage.html',
         'attachment':'~/dialogs/attachment/attachment.html',
@@ -54,16 +54,17 @@
         'scrawl':'~/dialogs/scrawl/scrawl.html',
         'music':'~/dialogs/music/music.html',
         'template':'~/dialogs/template/template.html',
-        'background':'~/dialogs/background/background.html'
+        'background':'~/dialogs/background/background.html',
+        'charts': '~/dialogs/charts/charts.html'
     };
     //为工具栏添加按钮，以下都是统一的按钮触发命令，所以写在一起
     var btnCmds = ['undo', 'redo', 'formatmatch',
         'bold', 'italic', 'underline', 'fontborder', 'touppercase', 'tolowercase',
         'strikethrough', 'subscript', 'superscript', 'source', 'indent', 'outdent',
         'blockquote', 'pasteplain', 'pagebreak',
-        'selectall', 'print', 'preview', 'horizontal', 'removeformat', 'time', 'date', 'unlink',
+        'selectall', 'print','horizontal', 'removeformat', 'time', 'date', 'unlink',
         'insertparagraphbeforetable', 'insertrow', 'insertcol', 'mergeright', 'mergedown', 'deleterow',
-        'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable'];
+        'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable', 'drafts'];
 
     for (var i = 0, ci; ci = btnCmds[i++];) {
         ci = ci.toLowerCase();
@@ -180,9 +181,9 @@
 
 
     var dialogBtns = {
-        noOk:['searchreplace', 'help', 'spechars', 'webapp'],
+        noOk:['searchreplace', 'help', 'spechars', 'webapp','preview'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-            'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background']
+            'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background', 'charts']
 
     };
 
@@ -207,6 +208,7 @@
                                 className:'edui-for-' + cmd,
                                 title:title,
                                 holdScroll: cmd === 'insertimage',
+                                fullscreen: /charts|preview/.test(cmd),
                                 closeDialog:editor.getLang("closeDialog")
                             }, type == 'ok' ? {
                                 buttons:[
@@ -239,8 +241,8 @@
                                 if (dialog) {
                                     switch (cmd) {
                                         case "wordimage":
-                                            editor.execCommand("wordimage", "word_img");
-                                            if (editor.word_img) {
+                                            var images = editor.execCommand("wordimage");
+                                            if (images && images.length) {
                                                 dialog.render();
                                                 dialog.open();
                                             }
@@ -259,7 +261,7 @@
                                 }
                             },
                             theme:editor.options.theme,
-                            disabled:cmd == 'scrawl' && editor.queryCommandState("scrawl") == -1
+                            disabled:(cmd == 'scrawl' && editor.queryCommandState("scrawl") == -1) || ( cmd == 'charts' )
                         });
                         editorui.buttons[cmd] = ui;
                         editor.addListener('selectionchange', function () {

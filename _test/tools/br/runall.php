@@ -27,15 +27,23 @@ function run( $b , $debug = false )
     if ( !array_key_exists( "ci" , $_GET ) )
         $url .= "^&mail=true";
 
-    if ( array_key_exists( "filter" , $_GET ) )
-        $url .= "^&filter={$_GET['filter']}";
+    if(array_key_exists(  "filter" , $_GET  )){
+        $filterR = array_key_exists( $b , $_GET )?$_GET[$b]:$_GET['filter'];
+        if(strstr($b,'main')||strstr($b,'supp')){
+            $url .= "^&filterRun={$filterR}^&filter={$_GET['filter']}";
+        }else {
+            $url .= "^&filterRun={$_GET['filter']}^&filter={$_GET['filter']}";
+
+        }
+    }
+
 //    if( $b!='ie6') {
         if ( array_key_exists( 'cov' , $_GET ) )
             $url .= "^&cov={$_GET['cov']}";
 //    }
     //	else
     //	$url .= "^&cov=true";
-
+print $url;
     if ( $b == 'baidu' ) {
         $url = "--'$url'";
     }
@@ -105,7 +113,7 @@ if ( $b != 'all' ) {
     $browsers = array_key_exists( 'browserSet' , $_GET )?Config::getBrowserSet($_GET[ 'browserSet' ]):Config::$BROWSERS;
     foreach ( $browsers as $b => $i ) {
         run( $b );
-        sleep(30);
+        sleep(60);
     }
 }
 ?>

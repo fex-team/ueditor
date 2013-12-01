@@ -43,12 +43,14 @@ public  class Uploader
             //格式验证
             if (checkType(filetype))
             {
-                state = "不允许的文件类型";
+                //不允许的文件类型
+                state = "\u4e0d\u5141\u8bb8\u7684\u6587\u4ef6\u7c7b\u578b";
             }
             //大小验证
             if (checkSize(size))
             {
-                state = "文件大小超出网站限制";
+                //文件大小超出网站限制
+                state = "\u6587\u4ef6\u5927\u5c0f\u8d85\u51fa\u7f51\u7ad9\u9650\u5236";
             }
             //保存图片
             if (state == "SUCCESS")
@@ -60,7 +62,8 @@ public  class Uploader
         }
         catch (Exception e)
         {
-            state = "未知错误";
+            // 未知错误
+            state = "\u672a\u77e5\u9519\u8bef";
             URL = "";
         }
         return getUploadInfo();

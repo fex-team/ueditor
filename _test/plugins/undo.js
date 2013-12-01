@@ -1,23 +1,21 @@
 module("plugins.undo");
 
+//test('', function () {
+//    stop()
+//});
 /*trace 856*/
 test('trace 856 输入文本后撤销按钮不亮', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        editor.setContent('<p></p>');
-        range.setStart(editor.body.firstChild, 0).collapse(true).select();
-        ua.keydown(editor.body);
-        range.insertNode(editor.document.createTextNode('hello'));
-        ua.keydown(editor.body);
-        setTimeout(function () {
-            equal(editor.queryCommandState('undo'), 0, '模拟输入文本后撤销按钮应当高亮');
-            UE.delEditor('ue');
-            start();
-        }, 500);
-    });
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<p></p>');
+    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+    ua.keydown(editor.body);
+    range.insertNode(editor.document.createTextNode('hello'));
+    ua.keydown(editor.body);
+    setTimeout(function () {
+        equal(editor.queryCommandState('undo'), 0, '模拟输入文本后撤销按钮应当高亮');
+        start();
+    }, 500);
     stop();
 });
 
@@ -27,8 +25,8 @@ test('trace 583,1726 插入表格、表情,撤销', function () {
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:2, numRows:2});
-    editor.execCommand('insertimage', {src:'http://img.baidu.com/hi/jx2/j_0001.gif', width:50, height:50});
+    editor.execCommand('inserttable', {numCols: 2, numRows: 2});
+    editor.execCommand('insertimage', {src: 'http://img.baidu.com/hi/jx2/j_0001.gif', width: 50, height: 50});
     editor.execCommand('Undo');
     editor.execCommand('Undo');
     ua.manualDeleteFillData(editor.body);
@@ -41,7 +39,7 @@ test('trace 595 撤销合并单元格后再合并单元格', function () {
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:3, numRows:3});
+    editor.execCommand('inserttable', {numCols: 3, numRows: 3});
     var tds = editor.body.firstChild.getElementsByTagName('td');
     for (var i = 0; i < 5; i++) {
         tds[i].innerHTML = 'hello';
@@ -92,13 +90,13 @@ test('trace 599 插入表格、表情、超链接、表情,撤销2次', function
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:2, numRows:2});        //插入表格
+    editor.execCommand('inserttable', {numCols: 2, numRows: 2});        //插入表格
     range.setStart(editor.body.lastChild, 0).collapse(true).select();
-    editor.execCommand('insertimage', {src:'http://img.baidu.com/hi/jx2/j_0001.gif', width:50, height:50});    //插入表情
+    editor.execCommand('insertimage', {src: 'http://img.baidu.com/hi/jx2/j_0001.gif', width: 50, height: 50});    //插入表情
     range.setStartAfter(editor.body.lastChild).collapse(true).select();
-    editor.execCommand('link', {href:'http://www.baidu.com/'});       //插入超链接
+    editor.execCommand('link', {href: 'http://www.baidu.com/'});       //插入超链接
     range.setStartAfter(editor.body.lastChild).collapse(true).select();
-    editor.execCommand('insertimage', {src:'http://img.baidu.com/hi/jx2/j_0001.gif', width:50, height:50});   //插入表情
+    editor.execCommand('insertimage', {src: 'http://img.baidu.com/hi/jx2/j_0001.gif', width: 50, height: 50});   //插入表情
 
     editor.execCommand('Undo');
     editor.execCommand('Undo');
@@ -111,40 +109,33 @@ test('trace 599 插入表格、表情、超链接、表情,撤销2次', function
 
 /*trace 617*/
 test('trace 617 插入文本、分割线、文本,撤销2次，撤销掉分割线', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        editor.setContent('<p></p>');
+    var editor = te.obj[0];
+    var range = te.obj[1];
 
-        //输入文本
-        range.setStart(editor.body.firstChild, 0).collapse(true).select();
-        ua.keydown(editor.body);
-        range.insertNode(editor.document.createTextNode('hello'));
-        if (!ua.browser.ie)
-            ua.compositionstart(editor.body);
-        ua.keyup(editor.body);
-        //输入分割符
-        range.setStartAfter(editor.body.lastChild).collapse(true).select();
-        editor.execCommand('Horizontal');
-        //输入文本
-        range.setStartAfter(editor.body.lastChild).collapse(true).select();
-        ua.keydown(editor.body);
-        range.insertNode(editor.document.createTextNode('hello'));
-        if (!ua.browser.ie)
-            ua.compositionend(editor.body);
-        ua.keyup(editor.body);
+    editor.setContent('<p></p>');
 
-        editor.execCommand('Undo');
-        editor.execCommand('Undo');
-        equal(editor.body.getElementsByTagName('hr').length, 0, '分割线已删除');
-        setTimeout(function () {
-            UE.delEditor('ue');
-            start()
-        }, 500);
-    });
-    stop();
+    //输入文本
+    range.setStart(editor.body.firstChild, 0).collapse(true).select();
+    ua.keydown(editor.body);
+    range.insertNode(editor.document.createTextNode('hello'));
+    if (!ua.browser.ie)
+        ua.compositionstart(editor.body);
+    ua.keyup(editor.body);
+    //输入分割符
+    range.setStartAfter(editor.body.lastChild).collapse(true).select();
+    editor.execCommand('Horizontal');
+    //输入文本
+    range.setStartAfter(editor.body.lastChild).collapse(true).select();
+    ua.keydown(editor.body);
+    range.insertNode(editor.document.createTextNode('hello'));
+    if (!ua.browser.ie)
+        ua.compositionend(editor.body);
+    ua.keyup(editor.body);
+
+    editor.execCommand('Undo');
+    editor.execCommand('Undo');
+    equal(editor.body.getElementsByTagName('hr').length, 0, '分割线已删除');
+
 });
 
 /*trace 632*/
@@ -153,7 +144,7 @@ test('trace 632 合并单元格后撤销再合并单元格不会丢字', functio
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:4, numRows:4});
+    editor.execCommand('inserttable', {numCols: 4, numRows: 4});
     var tds = editor.body.firstChild.getElementsByTagName('td');
     for (var i = 0; i < 6; i++) {
         tds[i].innerHTML = 'hello';
@@ -195,7 +186,7 @@ test('trace 685 合并单元格后,删除行,再撤销,再删除行', function (
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:4, numRows:4});
+    editor.execCommand('inserttable', {numCols: 4, numRows: 4});
 
     //选择第一行的4格单元格，合并
     setTimeout(function () {
@@ -243,7 +234,7 @@ test('trace 718 合并单元格后,删除列,再撤销,再删除列', function (
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:4, numRows:4});
+    editor.execCommand('inserttable', {numCols: 4, numRows: 4});
 
     //选择中间的4格单元格，合并
     setTimeout(function () {
@@ -282,7 +273,7 @@ test('trace 743 合并单元格后,删除列,再撤销', function () {
     var range = te.obj[1];
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
-    editor.execCommand('inserttable', {numCols:4, numRows:4});
+    editor.execCommand('inserttable', {numCols: 4, numRows: 4});
 
     //第一行的4格单元格，合并
     setTimeout(function () {
@@ -324,29 +315,26 @@ test('trace 743 合并单元格后,删除列,再撤销', function () {
 
 /*trace 942*/
 test('trace 942 用格式刷后撤销', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        editor.setContent('<p><strong>hello</strong></p><p><a href="http://www.baidu.com/">hello</a></p>');
-
-        range.setStart(editor.body.firstChild.firstChild.firstChild, 2).setEnd(editor.body.firstChild.firstChild.firstChild, 4).select();
-        editor.addListener('mouseup', function () {
-            ua.manualDeleteFillData(editor.body);
-            //从浏览器复制了不可见的空文本
-            equal(editor.body.lastChild.firstChild.innerHTML.toLowerCase(), 'h<strong></strong>ello');
-            setTimeout(function () {
-                UE.delEditor('ue');
-                start();
-            }, 500);
-
-        });
-        editor.execCommand('formatmatch');
-        range.setStart(editor.body.lastChild.firstChild.firstChild, 1).collapse(true).select();
-        ua.mouseup(editor.body);
-    });
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var flag = true;
     stop();
+    expect(1);
+    editor.setContent('<p><strong>hello</strong></p><p><a href="http://www.baidu.com/">hello</a></p>');
+
+    range.setStart(editor.body.firstChild.firstChild.firstChild, 2).setEnd(editor.body.firstChild.firstChild.firstChild, 4).select();
+    editor.addListener('mouseup', function () {
+        ua.manualDeleteFillData(editor.body);
+        //从浏览器复制了不可见的空文本
+        equal(editor.body.lastChild.firstChild.innerHTML.toLowerCase(), 'h<strong></strong>ello');
+
+    });
+    editor.execCommand('formatmatch');
+    range.setStart(editor.body.lastChild.firstChild.firstChild, 1).collapse(true).select();
+    ua.mouseup(editor.body);
+    setTimeout(function () {
+        start();
+    }, 100);
 });
 
 test('undo--redo', function () {
@@ -370,55 +358,73 @@ test('undo--redo', function () {
     else
         equal(ua.getChildHTML(editor.body), '<p><img anchorname=\"hello\" class=\"anchorclass\">' + spase + '</p>', '');
 });
+test('reset,index', function () {
+    var editor = te.obj[0];
+    editor.setContent('<p></p>');
+    editor.focus();
+    editor.execCommand('anchor', 'hello');
+    var listLength = editor.undoManger.list.length;
+    ok(listLength > 0, '检查undoManger.list');
+    equal(editor.undoManger.index, 1, '检查undoManger.index');
+    editor.undoManger.undo();
+    equal(editor.undoManger.list.length, listLength, 'undo操作,undoManger.list不变');
+    equal(editor.undoManger.index, 0, 'undo操作,undoManger.index-1');
+    var spase = ua.browser.ie ? '&nbsp;' : '<br>';
+    equal(ua.getChildHTML(editor.body), '<p>' + spase + '</p>', '检查内容');
+    editor.reset();
+    equal(editor.undoManger.list.length, 0, 'reset,undoManger.list清空');
+    equal(editor.undoManger.index, 0, 'reset,undoManger.index清空');
+    editor.undoManger.redo();
+    ua.manualDeleteFillData(editor.body);
+    var spase = ua.browser.ie ? '&nbsp;' : '<br>';
+    equal(ua.getChildHTML(editor.body), '<p>' + spase + '</p>', '检查内容');
 
+});
 /*trace 1068  格式刷图片*/
 test('trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动图片刷默认样式的图片', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
+    var editor = te.obj[0];
+    var range = te.obj[1];
+
     var num = 0;
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        var body = editor.body;
-        editor.setContent('<p><br></p>');
-        range.setStart(body.firstChild, 0).collapse(1).select();
-        editor.execCommand('insertimage', {src:'http://img.baidu.com/hi/jx2/j_0001.gif', width:50, height:51});
-        range.selectNode(editor.body.getElementsByTagName('img')[0]).select();
-        editor.execCommand('imagefloat', 'none');
-        range.setStart(body.firstChild, 0).collapse(1).select();
-        editor.execCommand('insertimage', {src:'http://img.baidu.com/hi/jx2/j_0002.gif', width:50, height:51});
-        range.selectNode(editor.body.getElementsByTagName('img')[0]).select();
-        editor.execCommand('imagefloat', 'left');
-        // equal(ua.getFloatStyle(body.getElementsByTagName( 'img' )[0]), "left", '左浮动' );
-        //  equal(ua.getFloatStyle(body.getElementsByTagName( 'img' )[1]), "none", '默认' );
-        range.selectNode(body.getElementsByTagName('img')[1]).select();
-        editor.addListener('mouseup', function () {
-            equal(editor.queryCommandState('formatmatch'), 0, '刷后状态为0');
-            if(num==1){
-                equal(ua.getFloatStyle(body.getElementsByTagName('img')[0]), "none", '默认刷左浮动');
-                editor.execCommand('Undo');
-                equal(ua.getFloatStyle(body.getElementsByTagName('img')[0]), "left", '撤销后，左浮动还原');
-                range.selectNode(body.getElementsByTagName('img')[0]).select();
-                editor.execCommand('formatmatch');
-                range.selectNode(body.getElementsByTagName('img')[1]).select();
-                num = 2;
-                ua.mouseup(editor.body);
+
+    var body = editor.body;
+    editor.setContent('<p><br></p>');
+    range.setStart(body.firstChild, 0).collapse(1).select();
+    editor.execCommand('insertimage', {src: 'http://img.baidu.com/hi/jx2/j_0001.gif', width: 50, height: 51});
+    range.selectNode(editor.body.getElementsByTagName('img')[0]).select();
+    editor.execCommand('imagefloat', 'none');
+    range.setStart(body.firstChild, 0).collapse(1).select();
+    editor.execCommand('insertimage', {src: 'http://img.baidu.com/hi/jx2/j_0002.gif', width: 50, height: 51});
+    range.selectNode(editor.body.getElementsByTagName('img')[0]).select();
+    editor.execCommand('imagefloat', 'left');
+    // equal(ua.getFloatStyle(body.getElementsByTagName( 'img' )[0]), "left", '左浮动' );
+    //  equal(ua.getFloatStyle(body.getElementsByTagName( 'img' )[1]), "none", '默认' );
+    range.selectNode(body.getElementsByTagName('img')[1]).select();
+    editor.addListener('mouseup', function () {
+        equal(editor.queryCommandState('formatmatch'), 0, '刷后状态为0');
+        if (num == 1) {
+            equal(ua.getFloatStyle(body.getElementsByTagName('img')[0]), "none", '默认刷左浮动');
+            editor.execCommand('Undo');
+            equal(ua.getFloatStyle(body.getElementsByTagName('img')[0]), "left", '撤销后，左浮动还原');
+            range.selectNode(body.getElementsByTagName('img')[0]).select();
+            editor.execCommand('formatmatch');
+            range.selectNode(body.getElementsByTagName('img')[1]).select();
+            num = 2;
+            ua.mouseup(editor.body);
+        }
+        else if (num == 2) {
+            if (!ua.browser.opera) {
+                equal(ua.getFloatStyle(body.getElementsByTagName('img')[1]), 'left', '左浮动刷默认');
             }
-            else if(num==2){
-                if (!ua.browser.opera) {
-                    equal(ua.getFloatStyle(body.getElementsByTagName('img')[1]), 'left', '左浮动刷默认');
-                }
-                setTimeout(function () {
-                    UE.delEditor('ue');
-                    start();
-                }, 500);
-            }
-        });
-        editor.execCommand('formatmatch');
-        range.selectNode(body.getElementsByTagName('img')[0]).select();
-        num =1;
-        ua.mouseup(body.getElementsByTagName('img')[0]);
+            setTimeout(function () {
+                start();
+            }, 100);
+        }
     });
+    editor.execCommand('formatmatch');
+    range.selectNode(body.getElementsByTagName('img')[0]).select();
+    num = 1;
+    ua.mouseup(body.getElementsByTagName('img')[0]);
     stop();
 });
 
@@ -447,35 +453,30 @@ test('trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动图
 //		});
 
 test('ctrl+z/y', function () {
-    var div = document.body.appendChild(document.createElement('div'));
-    div.id = 'ue';
-    var editor = UE.getEditor('ue');
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        var body = editor.body;
-        editor.setContent('<p>没有加粗的文本</p>');
-        range.selectNode(body.firstChild).select();
-        var p = body.firstChild;
-        editor.focus();
+    var editor = te.obj[0];
+    var range = te.obj[1];
+
+    var body = editor.body;
+    editor.setContent('<p>没有加粗的文本</p>');
+    range.selectNode(body.firstChild).select();
+    var p = body.firstChild;
+    setTimeout(function () {
+        ua.keydown(editor.body, {'keyCode': 66, 'ctrlKey': true});
         setTimeout(function () {
-            ua.keydown(editor.body, {'keyCode':66, 'ctrlKey':true});
+            equal(ua.getChildHTML(p), '<strong>没有加粗的文本</strong>');
+            ua.keydown(editor.body, {'keyCode': 90, 'ctrlKey': true});
             setTimeout(function () {
-                equal(ua.getChildHTML(p), '<strong>没有加粗的文本</strong>');
-                ua.keydown(editor.body, {'keyCode':90, 'ctrlKey':true});
+                editor.focus();
+                equal(ua.getChildHTML(body.firstChild), '没有加粗的文本');
+                ua.keydown(editor.body, {'keyCode': 89, 'ctrlKey': true});
+                editor.focus();
                 setTimeout(function () {
-                    editor.focus();
-                    equal(ua.getChildHTML(body.firstChild), '没有加粗的文本');
-                    ua.keydown(editor.body, {'keyCode':89, 'ctrlKey':true});
-                    editor.focus();
-                    setTimeout(function () {
-                        equal(ua.getChildHTML(body.firstChild), '<strong>没有加粗的文本</strong>');
-                        UE.delEditor('ue');
-                        start();
-                    },500);
+                    equal(ua.getChildHTML(body.firstChild), '<strong>没有加粗的文本</strong>');
+                    start();
                 }, 100);
-            }, 150);
-        }, 100);
-    });
+            }, 100);
+        }, 150);
+    }, 100);
     stop();
 });
 

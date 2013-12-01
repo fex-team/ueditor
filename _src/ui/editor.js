@@ -35,6 +35,8 @@
                 //提供编辑器实时宽高(全屏时宽高不变化)
                 editor.ui._actualFrameWidth = editor.options.initialFrameWidth;
 
+                UE.browser.ie && UE.browser.version === 6 && editor.container.ownerDocument.execCommand("BackgroundImageCache", false, true);
+
                 //display bottom-bar label based on config
                 if (editor.options.elementPathEnabled) {
                     editor.ui.getDom('elementpath').innerHTML = '<div class="edui-editor-breadcrumb">' + editor.getLang("elementPathTip") + ':</div>';
@@ -203,9 +205,15 @@
                     popup.showAnchor(popup.anchorEl);
                 },
                 _updateIframe:function () {
-                    editor._iframe = popup.anchorEl;
-                    editor.ui._dialogs.insertframeDialog.open();
-                    popup.hide();
+                    var frame = editor._iframe = popup.anchorEl;
+                    if(domUtils.hasClass(frame, 'ueditor_baidumap')) {
+                        editor.selection.getRange().selectNode(frame).select();
+                        editor.ui._dialogs.mapDialog.open();
+                        popup.hide();
+                    } else {
+                        editor.ui._dialogs.insertframeDialog.open();
+                        popup.hide();
+                    }
                 },
                 _onRemoveButtonClick:function (cmdName) {
                     editor.execCommand(cmdName);
@@ -385,7 +393,6 @@
                 '</div>';
         },
         showWordImageDialog:function () {
-            this.editor.execCommand("wordimage", "word_img");
             this._dialogs['wordimageDialog'].open();
         },
         renderToolbarBoxHtml:function () {
@@ -425,7 +432,9 @@
                     }
 
                     document.documentElement.style.overflow = 'hidden';
-                    document.body.style.overflow = 'hidden';
+                    //修复，滚动条不收起的问题
+
+                    window.scrollTo(0,window.scrollY);
                     this._bakCssText = this.getDom().style.cssText;
                     this._bakCssText1 = this.getDom('iframeholder').style.cssText;
                     editor.iframe.parentNode.style.width = '';
@@ -756,7 +765,7 @@
                     editor.container.style.width = opt.initialFrameWidth + (/%$/.test(opt.initialFrameWidth) ? '' : 'px');
                     editor.container.style.zIndex = opt.zIndex;
                     oldRender.call(editor, editor.ui.getDom('iframeholder'));
-
+                    editor.fireEvent("afteruiready");
                 }
             })
         };

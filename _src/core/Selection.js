@@ -1,11 +1,16 @@
-///import editor.js
-///import core/browser.js
-///import core/dom/dom.js
-///import core/dom/dtd.js
-///import core/dom/domUtils.js
-///import core/dom/Range.js
 /**
- * @class baidu.editor.dom.Selection    Selection类
+ * 选集
+ * @file
+ * @module UE.dom
+ * @class Selection
+ * @since 1.2.6.1
+ */
+
+/**
+ * 选区集合
+ * @unfile
+ * @module UE.dom
+ * @class Selection
  */
 (function () {
 
@@ -73,7 +78,7 @@
         return  {container:child, offset:position > 0 ? -distance : child.nodeValue.length + distance}
     }
 
-    /**
+    /*
      * 将ieRange转换为Range对象
      * @param {Range}   ieRange    ieRange对象
      * @param {Range}   range      Range对象
@@ -93,7 +98,7 @@
         return range;
     }
 
-    /**
+    /*
      * 获得ieRange
      * @param {Selection} sel    Selection对象
      * @return {ieRange}    得到ieRange
@@ -116,7 +121,7 @@
     var Selection = dom.Selection = function ( doc ) {
         var me = this, iframe;
         me.document = doc;
-        if ( browser.ie9under ) {
+        if ( browser.ie9below ) {
             iframe = domUtils.getWindow( doc ).frameElement;
             domUtils.on( iframe, 'beforedeactivate', function () {
                 me._bakIERange = me.getIERange();
@@ -135,27 +140,39 @@
     };
 
     Selection.prototype = {
+
+        rangeInBody : function(rng,txtRange){
+            var node = browser.ie9below || txtRange ? rng.item ? rng.item() : rng.parentElement() : rng.startContainer;
+
+            return node === this.document.body || domUtils.inDoc(node,this.document);
+        },
+
         /**
          * 获取原生seleciton对象
-         * @public
-         * @function
-         * @name    baidu.editor.dom.Selection.getNative
-         * @return {Selection}    获得selection对象
+         * @method getNative
+         * @return { Object } 获得selection对象
+         * @example
+         * ```javascript
+         * editor.selection.getNative();
+         * ```
          */
         getNative:function () {
             var doc = this.document;
             try {
-                return !doc ? null : browser.ie9under ? doc.selection : domUtils.getWindow( doc ).getSelection();
+                return !doc ? null : browser.ie9below ? doc.selection : domUtils.getWindow( doc ).getSelection();
             } catch ( e ) {
                 return null;
             }
         },
+
         /**
          * 获得ieRange
-         * @public
-         * @function
-         * @name    baidu.editor.dom.Selection.getIERange
-         * @return {ieRange}    返回ie原生的Range
+         * @method getIERange
+         * @return { Object } 返回ie原生的Range
+         * @example
+         * ```javascript
+         * editor.selection.getIERange();
+         * ```
          */
         getIERange:function () {
             var ieRange = _getIERange( this );
@@ -169,9 +186,7 @@
 
         /**
          * 缓存当前选区的range和选区的开始节点
-         * @public
-         * @function
-         * @name    baidu.editor.dom.Selection.cache
+         * @method cache
          */
         cache:function () {
             this.clear();
@@ -180,6 +195,15 @@
             this._cachedStartElementPath = this.getStartElementPath();
         },
 
+        /**
+         * 获取选区开始位置的父节点到body
+         * @method getStartElementPath
+         * @return { Array } 返回父节点集合
+         * @example
+         * ```javascript
+         * editor.selection.getStartElementPath();
+         * ```
+         */
         getStartElementPath:function () {
             if ( this._cachedStartElementPath ) {
                 return this._cachedStartElementPath;
@@ -190,32 +214,42 @@
             }
             return [];
         },
+
         /**
          * 清空缓存
-         * @public
-         * @function
-         * @name    baidu.editor.dom.Selection.clear
+         * @method clear
          */
         clear:function () {
             this._cachedStartElementPath = this._cachedRange = this._cachedStartElement = null;
         },
+
         /**
          * 编辑器是否得到了选区
+         * @method isFocus
          */
         isFocus:function () {
             try {
-                return browser.ie9under && _getIERange( this ) || !browser.ie9under && this.getNative().rangeCount ? true : false;
+                if(browser.ie9below){
+
+                    var nativeRange = _getIERange(this);
+                    return !!(nativeRange && this.rangeInBody(nativeRange));
+                }else{
+                    return !!this.getNative().rangeCount;
+                }
             } catch ( e ) {
                 return false;
             }
 
         },
+
         /**
          * 获取选区对应的Range
-         * @public
-         * @function
-         * @name    baidu.editor.dom.Selection.getRange
-         * @returns {baidu.editor.dom.Range}    得到Range对象
+         * @method getRange
+         * @return { Object } 得到Range对象
+         * @example
+         * ```javascript
+         * editor.selection.getRange();
+         * ```
          */
         getRange:function () {
             var me = this;
@@ -239,7 +273,7 @@
             }
             var range = new baidu.editor.dom.Range( me.document );
 
-            if ( browser.ie9under ) {
+            if ( browser.ie9below ) {
                 var nativeRange = me.getIERange();
                 if ( nativeRange ) {
                     //备份的_bakIERange可能已经实效了，dom树发生了变化比如从源码模式切回来，所以try一下，实效就放到body开始位置
@@ -274,19 +308,21 @@
 
         /**
          * 获取开始元素，用于状态反射
-         * @public
-         * @function
-         * @name    baidu.editor.dom.Selection.getStart
-         * @return {Element}     获得开始元素
+         * @method getStart
+         * @return { Element } 获得开始元素
+         * @example
+         * ```javascript
+         * editor.selection.getStart();
+         * ```
          */
         getStart:function () {
             if ( this._cachedStartElement ) {
                 return this._cachedStartElement;
             }
-            var range = browser.ie9under ? this.getIERange() : this.getRange(),
+            var range = browser.ie9below ? this.getIERange() : this.getRange(),
                 tmpRange,
                 start, tmp, parent;
-            if ( browser.ie9under ) {
+            if ( browser.ie9below ) {
                 if ( !range ) {
                     //todo 给第一个值可能会有问题
                     return this.document.body.firstChild;
@@ -319,23 +355,35 @@
             }
             return start;
         },
+
         /**
          * 得到选区中的文本
-         * @public
-         * @function
-         * @name    baidu.editor.dom.Selection.getText
-         * @return  {String}    选区中包含的文本
+         * @method getText
+         * @return { String } 选区中包含的文本
+         * @example
+         * ```javascript
+         * editor.selection.getText();
+         * ```
          */
         getText:function () {
             var nativeSel, nativeRange;
             if ( this.isFocus() && (nativeSel = this.getNative()) ) {
-                nativeRange = browser.ie9under ? nativeSel.createRange() : nativeSel.getRangeAt( 0 );
-                return browser.ie9under ? nativeRange.text : nativeRange.toString();
+                nativeRange = browser.ie9below ? nativeSel.createRange() : nativeSel.getRangeAt( 0 );
+                return browser.ie9below ? nativeRange.text : nativeRange.toString();
             }
             return '';
         },
+
+        /**
+         * 清除选区
+         * @method clearRange
+         * @example
+         * ```javascript
+         * editor.selection.clearRange();
+         * ```
+         */
         clearRange : function(){
-            this.getNative()[browser.ie9under ? 'empty' : 'removeAllRanges']();
+            this.getNative()[browser.ie9below ? 'empty' : 'removeAllRanges']();
         }
     };
 })();

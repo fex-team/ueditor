@@ -1,22 +1,7 @@
-///import core
-///commands 有序列表,无序列表
-///commandsName  InsertOrderedList,InsertUnorderedList
-///commandsTitle  有序列表,无序列表
 /**
- * 有序列表
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     insertorderlist插入有序列表
- * @param   {String}   style               值为：decimal,lower-alpha,lower-roman,upper-alpha,upper-roman
- * @author zhanyi
- */
-/**
- * 无序链接
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     insertunorderlist插入无序列表
- * * @param   {String}   style            值为：circle,disc,square
- * @author zhanyi
+ * 有序列表,无序列表插件
+ * @file
+ * @since 1.2.6.1
  */
 
 UE.plugins['list'] = function () {
@@ -863,6 +848,75 @@ UE.plugins['list'] = function () {
             start = start.parentNode;
         }
     }
+
+    /**
+     * 有序列表，与“insertunorderedlist”命令互斥
+     * @command insertorderedlist
+     * @method execCommand
+     * @param { String } command 命令字符串
+     * @param { String } style 插入的有序列表类型，值为：decimal,lower-alpha,lower-roman,upper-alpha,upper-roman,cn,cn1,cn2,num,num1,num2
+     * @example
+     * ```javascript
+     * editor.execCommand( 'insertunorderedlist','decimal');
+     * ```
+     */
+    /**
+     * 查询当前选区内容是否有序列表
+     * @command insertorderedlist
+     * @method queryCommandState
+     * @param { String } cmd 命令字符串
+     * @return { int } 如果当前选区是有序列表返回1，否则返回0
+     * @example
+     * ```javascript
+     * editor.queryCommandState( 'insertorderedlist' );
+     * ```
+     */
+    /**
+     * 查询当前选区内容是否有序列表
+     * @command insertorderedlist
+     * @method queryCommandValue
+     * @param { String } cmd 命令字符串
+     * @return { String } 返回当前有序列表的类型，值为null或decimal,lower-alpha,lower-roman,upper-alpha,upper-roman,cn,cn1,cn2,num,num1,num2
+     * @example
+     * ```javascript
+     * editor.queryCommandValue( 'insertorderedlist' );
+     * ```
+     */
+
+    /**
+     * 无序列表，与“insertorderedlist”命令互斥
+     * @command insertunorderedlist
+     * @method execCommand
+     * @param { String } command 命令字符串
+     * @param { String } style 插入的无序列表类型，值为：circle,disc,square,dash,dot
+     * @example
+     * ```javascript
+     * editor.execCommand( 'insertunorderedlist','circle');
+     * ```
+     */
+    /**
+     * 查询当前是否有word文档粘贴进来的图片
+     * @command insertunorderedlist
+     * @method insertunorderedlist
+     * @param { String } command 命令字符串
+     * @return { int } 如果当前选区是无序列表返回1，否则返回0
+     * @example
+     * ```javascript
+     * editor.queryCommandState( 'insertunorderedlist' );
+     * ```
+     */
+    /**
+     * 查询当前选区内容是否有序列表
+     * @command insertunorderedlist
+     * @method queryCommandValue
+     * @param { String } command 命令字符串
+     * @return { String } 返回当前无序列表的类型，值为null或circle,disc,square,dash,dot
+     * @example
+     * ```javascript
+     * editor.queryCommandValue( 'insertunorderedlist' );
+     * ```
+     */
+
     me.commands['insertorderedlist'] =
     me.commands['insertunorderedlist'] = {
             execCommand:function (command, style) {
@@ -927,17 +981,21 @@ UE.plugins['list'] = function () {
                         }
                         var nodeStyle = getStyle(startParent) || domUtils.getComputedStyle(startParent, 'list-style-type') || (command.toLowerCase() == 'insertorderedlist' ? 'decimal' : 'disc');
                         if (startParent.tagName.toLowerCase() == tag && nodeStyle == style) {
-                            for (var i = 0, ci, tmpFrag = me.document.createDocumentFragment(); ci = frag.childNodes[i++];) {
+                            for (var i = 0, ci, tmpFrag = me.document.createDocumentFragment(); ci = frag.firstChild;) {
                                 if(domUtils.isTagNode(ci,'ol ul')){
-                                    utils.each(domUtils.getElementsByTagName(ci,'li'),function(li){
-                                        while(li.firstChild){
-                                            tmpFrag.appendChild(li.firstChild);
-                                        }
-
-                                    });
+//                                  删除时，子列表不处理
+//                                  utils.each(domUtils.getElementsByTagName(ci,'li'),function(li){
+//                                        while(li.firstChild){
+//                                            tmpFrag.appendChild(li.firstChild);
+//                                        }
+//
+//                                    });
+                                    tmpFrag.appendChild(ci);
                                 }else{
                                     while (ci.firstChild) {
+
                                         tmpFrag.appendChild(ci.firstChild);
+                                        domUtils.remove(ci);
                                     }
                                 }
 

@@ -2,15 +2,22 @@
         class Config
         {
                 public static $BROWSERS = array(
-                  'firefox' => array( '10.81.58.86@8500' , "C:\\Program Files\\mozilla firefox\\firefox.exe" )
+                    'ie8supp' => array( '10.81.58.64@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
+                , 'ie9main' => array( '10.81.96.46' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
+
+                ,
+                    'firefox' => array( '10.81.58.86@8500' , "C:\\Program Files\\mozilla firefox\\firefox.exe" )
 //                    'firefox' => array( '10.81.96.46@8500' , "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" )
 //                , '360ie8' => array('10.81.58.64@8500',"C:\\Program Files\\360\\360se\\360SE.exe")
 //                , '360ie7' => array( '10.81.58.87@8500' , "C:\\Program Files\\360\\360se\\360SE.exe" )
 
-                , 'ie9' => array( '10.81.96.46@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
+
 //                , 'ie6' => array( '10.81.58.86@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
-//                , 'ie8' => array( '10.81.58.64@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
+
                 , 'chrome' => array( '10.81.58.63@8500' , "C:\\Documents and Settings\\geqa1\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe" )
+                ,
+                    'ie8main' => array( '10.81.58.64@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
+                , 'ie9supp' => array( '10.81.96.46' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
 //                , 'ie7' => array( '10.81.58.87@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
 //                , 'opera' => array( '10.81.58.64@8500' , "C:\\Program Files\\Opera\\opera.exe" )
 //                , 'safari' => array( '10.81.58.63@8500' , "C:\\Program Files\\Safari\\Safari.exe" )
@@ -47,7 +54,11 @@
                                 Staf::process( "free all" );
                         }
                 }
-
+            public static function StopOne($key){
+                $host = Config::$BROWSERS[$key][0];
+                require_once 'lib/Staf.php';
+                Staf::process_stop( '' , $host , true );
+            }
                 /**
                  * 源码路径配置，会在所有位置寻找源码
                  * @var ArrayIterator::String
@@ -61,6 +72,11 @@
                  * @var string
                  */
                 public static $COVERAGE_PATH = "../../coverage/";
+            /**
+             * 设置在源码路径下没有同名文件对应的测试文件
+             * @var array
+             */
+            public static $special_Case =  array('plugins/ueditor.config.js'=>'../../../ueditor.config.js');
         }
 
 ?>

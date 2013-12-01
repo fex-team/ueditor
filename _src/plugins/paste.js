@@ -133,7 +133,7 @@ UE.plugins['paste'] = function () {
                 }
                 utils.each(me.body.querySelectorAll('div'), function (node) {
                     if (domUtils.isEmptyBlock(node)) {
-                        domUtils.remove(node)
+                        domUtils.remove(node,true)
                     }
                 })
             }

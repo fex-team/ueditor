@@ -121,7 +121,8 @@ UE.plugins['table'] = function () {
                 'table{margin-bottom:10px;border-collapse:collapse;display:table;}' +
                 'td,th{padding: 5px 10px;border: 1px solid #DDD;}' +
                 'caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}' +
-                'th{border-top:2px solid #BBB;background:#F7F7F7;}' +
+                'th{border-top:1px solid #BBB;background-color:#F7F7F7;}' +
+                'table tr.firstRow th{border-top-width:2px;}' +
                 '.ue-table-interlace-color-single{ background-color: #fcfcfc; } .ue-table-interlace-color-double{ background-color: #f7faff; }' +
                 'td p{margin:0;padding:0;}', me.document);
 
@@ -242,7 +243,8 @@ UE.plugins['table'] = function () {
             if (domUtils.findParentByTagName(rng.startContainer, 'caption', true)) {
                 var div = me.document.createElement("div");
                 div.innerHTML = html.html;
-                html.html = div[browser.ie ? 'innerText' : 'textContent'];
+                //trace:3729
+                html.html = div[browser.ie9below ? 'innerText' : 'textContent'];
                 return;
             }
             var table = getUETableBySelected(me);
@@ -425,29 +427,33 @@ UE.plugins['table'] = function () {
             utils.each(domUtils.getElementsByTagName(me.document, 'table'), function (table) {
                 if (me.fireEvent("excludetable", table) === true) return;
                 table.ueTable = new UT(table);
-                utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
-
-                    if (domUtils.isEmptyBlock(td) && td !== start) {
-                        domUtils.fillNode(me.document, td);
-                        if (browser.ie && browser.version == 6) {
-                            td.innerHTML = '&nbsp;'
-                        }
-                    }
-                });
-                utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
-                    if (domUtils.isEmptyBlock(th) && th !== start) {
-                        domUtils.fillNode(me.document, th);
-                        if (browser.ie && browser.version == 6) {
-                            th.innerHTML = '&nbsp;'
-                        }
-                    }
-                });
+                //trace:3742
+//                utils.each(domUtils.getElementsByTagName(me.document, 'td'), function (td) {
+//
+//                    if (domUtils.isEmptyBlock(td) && td !== start) {
+//                        domUtils.fillNode(me.document, td);
+//                        if (browser.ie && browser.version == 6) {
+//                            td.innerHTML = '&nbsp;'
+//                        }
+//                    }
+//                });
+//                utils.each(domUtils.getElementsByTagName(me.document, 'th'), function (th) {
+//                    if (domUtils.isEmptyBlock(th) && th !== start) {
+//                        domUtils.fillNode(me.document, th);
+//                        if (browser.ie && browser.version == 6) {
+//                            th.innerHTML = '&nbsp;'
+//                        }
+//                    }
+//                });
                 table.onmouseover = function () {
                     me.fireEvent('tablemouseover', table);
                 };
                 table.onmousemove = function () {
                     me.fireEvent('tablemousemove', table);
                     me.options.tableDragable && toggleDragButton(true, this, me);
+                    utils.defer(function(){
+                        me.fireEvent('contentchange',50)
+                    },true)
                 };
                 table.onmouseout = function () {
                     me.fireEvent('tablemouseout', table);
@@ -777,7 +783,7 @@ UE.plugins['table'] = function () {
             if (onDrag && dragTd) {
                 singleClickState = 0;
                 me.body.style.webkitUserSelect = 'none';
-                me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
+                me.selection.getNative()[browser.ie9below ? 'empty' : 'removeAllRanges']();
                 pos = mouseCoords(evt);
                 toggleDraggableState(me, true, onDrag, pos, target);
                 if (onDrag == "h") {
@@ -1355,7 +1361,7 @@ UE.plugins['table'] = function () {
         //拖拽状态下的mouseUP
         if ( onDrag && dragTd ) {
 
-            me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
+            me.selection.getNative()[browser.ie9below ? 'empty' : 'removeAllRanges']();
 
             singleClickState = 0;
             dragLine = me.document.getElementById('ue_tableDragLine');
@@ -1431,7 +1437,7 @@ UE.plugins['table'] = function () {
             var ut = getUETable(currentTd);
             if (startTd != currentTd) {
                 me.document.body.style.webkitUserSelect = 'none';
-                me.selection.getNative()[browser.ie ? 'empty' : 'removeAllRanges']();
+                me.selection.getNative()[browser.ie9below ? 'empty' : 'removeAllRanges']();
                 var range = ut.getCellsRange(startTd, currentTd);
                 ut.setSelected(range);
             } else {
@@ -1796,7 +1802,7 @@ UE.plugins['table'] = function () {
             if (td[0]) {
                 if (flag) {
                     color = (td[0].style.borderColor).replace(/\s/g, "");
-                    if (/(#ffffff)|(rgb\(255,f55,255\))/ig.test(color))
+                    if (/(#ffffff)|(rgb\(255,255,255\))/ig.test(color))
                         domUtils.addClass(node, "noBorderTable")
                 } else {
                     domUtils.removeClasses(node, "noBorderTable")

@@ -1,12 +1,6 @@
-///import core
-///commands 选区路径
-///commandsName  ElementPath,elementPathEnabled
-///commandsTitle  选区路径
 /**
- * 选区路径
- * @function
- * @name baidu.editor.execCommand
- * @param {String}     cmdName     elementpath选区路径
+ * 选取路径命令
+ * @file
  */
 UE.plugins['elementpath'] = function(){
     var currentLevel,

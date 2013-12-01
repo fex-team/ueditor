@@ -2,7 +2,7 @@
 ///commands       弹出菜单
 // commandsName  popupmenu
 ///commandsTitle  弹出菜单
-/**
+/*
  * 弹出菜单
  * @function
  * @name baidu.editor.plugins.popupmenu
@@ -51,10 +51,10 @@ UE.plugins['shortcutmenu'] = function () {
 
         if (type == 'contextmenu') {
             domUtils.preventDefault (e);
-            if (browser.ie) {
+            if (browser.ie9below) {
                 var ieRange;
                 try {
-                    ieRange = me.selection.getNative ().createRange ();
+                    ieRange = me.selection.getNative().createRange();
                 } catch (e) {
                     return;
                 }
@@ -64,10 +64,6 @@ UE.plugins['shortcutmenu'] = function () {
 
                 }
             }
-        }
-
-        if (type == "keydown") {
-            menu && !menu.isHidden && menu.hide ();
         }
     });
 

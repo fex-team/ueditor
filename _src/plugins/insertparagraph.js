@@ -1,12 +1,20 @@
-///import core
-///commands 插入空行
-///commandsName  insertparagraph
-///commandsTitle  插入空行
 /**
- * 插入空行
- * @function
- * @name baidu.editor.execCommand
- * @param   {String}   cmdName     insertparagraph
+ * 插入段落
+ * @file
+ * @since 1.2.6.1
+ */
+
+
+/**
+ * 插入段落
+ * @command insertparagraph
+ * @method execCommand
+ * @param { String } cmd 命令字符串
+ * @example
+ * ```javascript
+ * //editor是编辑器实例
+ * editor.execCommand( 'insertparagraph' );
+ * ```
  */
 
 UE.commands['insertparagraph'] = {

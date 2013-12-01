@@ -1,11 +1,39 @@
-///import editor.js
-///import core/utils.js
-///import core/dom/dom.js
-///import core/dom/dtd.js
-///import core/htmlparser.js
-//模拟的节点类
-//by zhanyi
+/**
+ * 编辑器模拟的节点类
+ * @file
+ * @module UE
+ * @class uNode
+ * @since 1.2.6.1
+ */
+
+/**
+ * UEditor公用空间，UEditor所有的功能都挂载在该空间下
+ * @unfile
+ * @module UE
+ */
+
 (function () {
+
+    /**
+     * 编辑器模拟的节点类
+     * @unfile
+     * @module UE
+     * @class uNode
+     */
+
+    /**
+     * 通过一个键值对，创建一个uNode对象
+     * @constructor
+     * @param { Object } attr 传入要创建的uNode的初始属性
+     * @example
+     * ```javascript
+     * var node = new uNode({
+     *     type:'element',
+     *     tagName:'span',
+     *     attrs:{style:'font-size:14px;'}
+     * }
+     * ```
+     */
     var uNode = UE.uNode = function (obj) {
         this.type = obj.type;
         this.data = obj.data;
@@ -14,6 +42,20 @@
         this.attrs = obj.attrs || {};
         this.children = obj.children;
     };
+
+    var notTransAttrs = {
+        'href':1,
+        'src':1,
+        '_src':1,
+        '_href':1
+    };
+
+    var notTransTagName = {
+        pre:1,
+        style:1,
+        script:1
+    }
+
     var indentChar = '    ',
         breakChar = '\n';
 
@@ -42,10 +84,10 @@
             })
         }
     };
-    uNode.createText = function (data) {
+    uNode.createText = function (data,noTrans) {
         return new UE.uNode({
             type:'text',
-            'data':utils.unhtml(data || '')
+            'data':noTrans ? data : utils.unhtml(data || '')
         })
     };
     function nodeToHtml(node, arr, formatter, current) {
@@ -73,7 +115,7 @@
     }
 
     function isText(node, arr) {
-        arr.push(node.parentNode.tagName == 'pre' ? node.data : node.data.replace(/[ ]{2}/g,' &nbsp;'))
+        arr.push(notTransTagName[node.parentNode.tagName] ? node.data : node.data.replace(/[ ]{2}/g,' &nbsp;'))
     }
 
     function isElement(node, arr, formatter, current) {
@@ -82,7 +124,13 @@
             attrhtml = [];
             var attrs = node.attrs;
             for (var a in attrs) {
-                attrhtml.push(a + (attrs[a] !== undefined ? '="' + utils.unhtml(attrs[a]) + '"' : ''))
+                //这里就针对
+                //<p>'<img src='http://nsclick.baidu.com/u.gif?&asdf=\"sdf&asdfasdfs;asdf'></p>
+                //这里边的\"做转换，要不用innerHTML直接被截断了，属性src
+                //有可能做的不够
+                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? utils.html(attrs[a]).replace(/["]/g, function (a) {
+                   return '&quot;'
+                }) : utils.unhtml(attrs[a])) + '"' : ''))
             }
             attrhtml = attrhtml.join(' ');
         }
@@ -166,11 +214,55 @@
 
     }
     uNode.prototype = {
+
+        /**
+         * 当前节点对象，转换成html文本
+         * @method toHtml
+         * @return { String } 返回转换后的html字符串
+         * @example
+         * ```javascript
+         * node.toHtml();
+         * ```
+         */
+
+        /**
+         * 当前节点对象，转换成html文本
+         * @method toHtml
+         * @param { Boolean } formatter 是否格式化返回值
+         * @return { String } 返回转换后的html字符串
+         * @example
+         * ```javascript
+         * node.toHtml( true );
+         * ```
+         */
         toHtml:function (formatter) {
             var arr = [];
             nodeToHtml(this, arr, formatter, 0);
             return arr.join('')
         },
+
+        /**
+         * 获取节点的html内容
+         * @method innerHTML
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接返回当前节点
+         * @return { String } 返回节点的html内容
+         * @example
+         * ```javascript
+         * var htmlstr = node.innerHTML();
+         * ```
+         */
+
+        /**
+         * 设置节点的html内容
+         * @method innerHTML
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接返回当前节点
+         * @param { String } htmlstr 传入要设置的html内容
+         * @return { UE.uNode } 返回节点本身
+         * @example
+         * ```javascript
+         * node.innerHTML('<span>text</span>');
+         * ```
+         */
         innerHTML:function (htmlstr) {
             if (this.type != 'element' || dtd.$empty[this.tagName]) {
                 return this;
@@ -196,7 +288,30 @@
                 return tmpRoot.toHtml();
             }
         },
-        innerText:function (textStr) {
+
+        /**
+         * 获取节点的纯文本内容
+         * @method innerText
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接返回当前节点
+         * @return { String } 返回节点的存文本内容
+         * @example
+         * ```javascript
+         * var textStr = node.innerText();
+         * ```
+         */
+
+        /**
+         * 设置节点的纯文本内容
+         * @method innerText
+         * @warning 假如节点的type不是'element'，或节点的标签名称不在dtd列表里，直接返回当前节点
+         * @param { String } textStr 传入要设置的文本内容
+         * @return { UE.uNode } 返回节点本身
+         * @example
+         * ```javascript
+         * node.innerText('<span>text</span>');
+         * ```
+         */
+        innerText:function (textStr,noTrans) {
             if (this.type != 'element' || dtd.$empty[this.tagName]) {
                 return this;
             }
@@ -207,29 +322,69 @@
                     }
                 }
                 this.children = [];
-                this.appendChild(uNode.createText(textStr));
+                this.appendChild(uNode.createText(textStr,noTrans));
                 return this;
             } else {
                 return this.toHtml().replace(/<[^>]+>/g, '');
             }
         },
+
+        /**
+         * 获取当前对象的data属性
+         * @method getData
+         * @return { Object } 若节点的type值是elemenet，返回空字符串，否则返回节点的data属性
+         * @example
+         * ```javascript
+         * node.getData();
+         * ```
+         */
         getData:function () {
             if (this.type == 'element')
                 return '';
             return this.data
         },
+
+        /**
+         * 获取当前节点下的第一个子节点
+         * @method firstChild
+         * @return { UE.uNode } 返回第一个子节点
+         * @example
+         * ```javascript
+         * node.firstChild(); //返回第一个子节点
+         * ```
+         */
         firstChild:function () {
 //            if (this.type != 'element' || dtd.$empty[this.tagName]) {
 //                return this;
 //            }
             return this.children ? this.children[0] : null;
         },
+
+        /**
+         * 获取当前节点下的最后一个子节点
+         * @method lastChild
+         * @return { UE.uNode } 返回最后一个子节点
+         * @example
+         * ```javascript
+         * node.lastChild(); //返回最后一个子节点
+         * ```
+         */
         lastChild:function () {
 //            if (this.type != 'element' || dtd.$empty[this.tagName] ) {
 //                return this;
 //            }
             return this.children ? this.children[this.children.length - 1] : null;
         },
+
+        /**
+         * 获取和当前节点有相同父亲节点的前一个节点
+         * @method previousSibling
+         * @return { UE.uNode } 返回前一个节点
+         * @example
+         * ```javascript
+         * node.children[2].previousSibling(); //返回子节点node.children[1]
+         * ```
+         */
         previousSibling : function(){
             var parent = this.parentNode;
             for (var i = 0, ci; ci = parent.children[i]; i++) {
@@ -239,6 +394,16 @@
             }
 
         },
+
+        /**
+         * 获取和当前节点有相同父亲节点的后一个节点
+         * @method nextSibling
+         * @return { UE.uNode } 返回后一个节点,找不到返回null
+         * @example
+         * ```javascript
+         * node.children[2].nextSibling(); //如果有，返回子节点node.children[3]
+         * ```
+         */
         nextSibling : function(){
             var parent = this.parentNode;
             for (var i = 0, ci; ci = parent.children[i++];) {
@@ -247,6 +412,18 @@
                 }
             }
         },
+
+        /**
+         * 用新的节点替换当前节点
+         * @method replaceChild
+         * @param { UE.uNode } target 要替换成该节点参数
+         * @param { UE.uNode } source 要被替换掉的节点
+         * @return { UE.uNode } 返回替换之后的节点对象
+         * @example
+         * ```javascript
+         * node.replaceChild(newNode, childNode); //用newNode替换childNode,childNode是node的子节点
+         * ```
+         */
         replaceChild:function (target, source) {
             if (this.children) {
                 if(target.parentNode){
@@ -262,6 +439,17 @@
                 }
             }
         },
+
+        /**
+         * 在节点的子节点列表最后位置插入一个节点
+         * @method appendChild
+         * @param { UE.uNode } node 要插入的节点
+         * @return { UE.uNode } 返回刚插入的子节点
+         * @example
+         * ```javascript
+         * node.appendChild( newNode ); //在node内插入子节点newNode
+         * ```
+         */
         appendChild:function (node) {
             if (this.type == 'root' || (this.type == 'element' && !dtd.$empty[this.tagName])) {
                 if (!this.children) {
@@ -283,6 +471,18 @@
 
 
         },
+
+        /**
+         * 在传入节点的前面插入一个节点
+         * @method insertBefore
+         * @param { UE.uNode } target 要插入的节点
+         * @param { UE.uNode } source 在该参数节点前面插入
+         * @return { UE.uNode } 返回刚插入的子节点
+         * @example
+         * ```javascript
+         * node.parentNode.insertBefore(newNode, node); //在node节点后面插入newNode
+         * ```
+         */
         insertBefore:function (target, source) {
             if (this.children) {
                 if(target.parentNode){
@@ -298,6 +498,18 @@
 
             }
         },
+
+        /**
+         * 在传入节点的后面插入一个节点
+         * @method insertAfter
+         * @param { UE.uNode } target 要插入的节点
+         * @param { UE.uNode } source 在该参数节点后面插入
+         * @return { UE.uNode } 返回刚插入的子节点
+         * @example
+         * ```javascript
+         * node.parentNode.insertAfter(newNode, node); //在node节点后面插入newNode
+         * ```
+         */
         insertAfter:function (target, source) {
             if (this.children) {
                 if(target.parentNode){
@@ -313,6 +525,18 @@
                 }
             }
         },
+
+        /**
+         * 从当前节点的子节点列表中，移除节点
+         * @method removeChild
+         * @param { UE.uNode } node 要移除的节点引用
+         * @param { Boolean } keepChildren 是否保留移除节点的子节点，若传入true，自动把移除节点的子节点插入到移除的位置
+         * @return { * } 返回刚移除的子节点
+         * @example
+         * ```javascript
+         * node.removeChild(childNode,true); //在node的子节点列表中移除child节点，并且吧child的子节点插入到移除的位置
+         * ```
+         */
         removeChild:function (node,keepChildren) {
             if (this.children) {
                 for (var i = 0, ci; ci = this.children[i]; i++) {
@@ -331,9 +555,32 @@
                 }
             }
         },
+
+        /**
+         * 获取当前节点所代表的元素属性，即获取attrs对象下的属性值
+         * @method getAttr
+         * @param { String } attrName 要获取的属性名称
+         * @return { * } 返回attrs对象下的属性值
+         * @example
+         * ```javascript
+         * node.getAttr('title');
+         * ```
+         */
         getAttr:function (attrName) {
             return this.attrs && this.attrs[attrName.toLowerCase()]
         },
+
+        /**
+         * 设置当前节点所代表的元素属性，即设置attrs对象下的属性值
+         * @method setAttr
+         * @param { String } attrName 要设置的属性名称
+         * @param { * } attrVal 要设置的属性值，类型视设置的属性而定
+         * @return { * } 返回attrs对象下的属性值
+         * @example
+         * ```javascript
+         * node.setAttr('title','标题');
+         * ```
+         */
         setAttr:function (attrName, attrVal) {
             if (!attrName) {
                 delete this.attrs;
@@ -359,6 +606,16 @@
 
             }
         },
+
+        /**
+         * 获取当前节点在父节点下的位置索引
+         * @method getIndex
+         * @return { Number } 返回索引数值，如果没有父节点，返回-1
+         * @example
+         * ```javascript
+         * node.getIndex();
+         * ```
+         */
         getIndex:function(){
             var parent = this.parentNode;
             for(var i= 0,ci;ci=parent.children[i];i++){
@@ -368,6 +625,17 @@
             }
             return -1;
         },
+
+        /**
+         * 在当前节点下，根据id查找节点
+         * @method getNodeById
+         * @param { String } id 要查找的id
+         * @return { UE.uNode } 返回找到的节点
+         * @example
+         * ```javascript
+         * node.getNodeById('textId');
+         * ```
+         */
         getNodeById:function (id) {
             var node;
             if (this.children && this.children.length) {
@@ -378,6 +646,17 @@
                 }
             }
         },
+
+        /**
+         * 在当前节点下，根据元素名称查找节点列表
+         * @method getNodesByTagName
+         * @param { String } tagNames 要查找的元素名称
+         * @return { Array } 返回找到的节点列表
+         * @example
+         * ```javascript
+         * node.getNodesByTagName('span');
+         * ```
+         */
         getNodesByTagName:function (tagNames) {
             tagNames = utils.trim(tagNames).replace(/[ ]{2,}/g, ' ').split(' ');
             var arr = [], me = this;
@@ -390,22 +669,44 @@
             });
             return arr;
         },
+
+        /**
+         * 根据样式名称，获取节点的样式值
+         * @method getStyle
+         * @param { String } name 要获取的样式名称
+         * @return { String } 返回样式值
+         * @example
+         * ```javascript
+         * node.getStyle('font-size');
+         * ```
+         */
         getStyle:function (name) {
             var cssStyle = this.getAttr('style');
             if (!cssStyle) {
                 return ''
             }
-            var reg = new RegExp(name + ':([^;]+)','i');
+            var reg = new RegExp('(^|;)\\s*' + name + ':([^;]+)','i');
             var match = cssStyle.match(reg);
             if (match && match[0]) {
-                return match[1]
+                return match[2]
             }
             return '';
         },
+
+        /**
+         * 给节点设置样式
+         * @method setStyle
+         * @param { String } name 要设置的的样式名称
+         * @param { String } val 要设置的的样值
+         * @example
+         * ```javascript
+         * node.setStyle('font-size', '12px');
+         * ```
+         */
         setStyle:function (name, val) {
             function exec(name, val) {
-                var reg = new RegExp(name + ':([^;]+;?)', 'gi');
-                cssStyle = cssStyle.replace(reg, '');
+                var reg = new RegExp('(^|;)\\s*' + name + ':([^;]+;?)', 'gi');
+                cssStyle = cssStyle.replace(reg, '$1');
                 if (val) {
                     cssStyle = name + ':' + utils.unhtml(val) + ';' + cssStyle
                 }
@@ -425,6 +726,18 @@
             }
             this.setAttr('style', utils.trim(cssStyle))
         },
+
+        /**
+         * 传入一个函数，递归遍历当前节点下的所有节点
+         * @method traversal
+         * @param { Function } fn 遍历到节点的时，传入节点作为参数，运行此函数
+         * @example
+         * ```javascript
+         * traversal(node, function(){
+         *     console.log(node.type);
+         * });
+         * ```
+         */
         traversal:function(fn){
             if(this.children && this.children.length){
                 nodeTraversal(this,fn);

@@ -1,4 +1,25 @@
 module( 'core.domUtils' );
+
+test( 'isBoundaryNode--node是firstChild',function(){
+
+    if(ua.browser.ie){
+        var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
+        var div = body.appendChild(document.createElement('div'));
+    }else{
+        var div = te.dom[1].contentWindow.document.firstChild.lastChild.appendChild(document.createElement('div'));
+    }
+    div.innerHTML = "<span>sss</span>aaa<p>ppp</p>";
+    var node = div.firstChild.nextSibling;
+    equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
+    equal( domUtils.isBoundaryNode(node, "lastChild"), 0 );
+    node = div.firstChild.firstChild;
+    equal( domUtils.isBoundaryNode(node, "firstChild"), 1 );
+    equal( domUtils.isBoundaryNode(node, "lastChild"), 0 );
+    node = div.lastChild.lastChild;
+    equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
+    equal( domUtils.isBoundaryNode(node, "lastChild"), 1 );
+} );
+
 test( 'getPosition--A和B是同一个节点', function() {
     var div = te.dom[2];
     div.innerHTML = "<span>span</span><img  /><b>bbb</b>xxx";
@@ -487,6 +508,21 @@ test( 'on- 给不同的dom元素绑定相同的事件', function() {
     ua.mouseover( te.dom[2] );
     ua.mouseover( te.dom[1] );
 } );
+test( 'on-多事件的字符串参数', function() {
+    var domUtils = te.obj[3];
+    expect( 2 );
+    var div2 = document.body.appendChild( document.createElement( 'div' ) );
+    div2.id = 'test2';
+    te.dom.push( div2 );
+    var handle = function( e ) {
+        ok( true, e.type + ' event triggered' );
+    };
+    domUtils.on( te.dom[2], 'mouseover mousedown', handle);
+
+
+    ua.mouseover( te.dom[2] );
+    ua.mousedown( te.dom[2] );
+} );
 test( 'un- 给不同的dom元素绑定相同的事件,解除一个，另一个仍然有效', function() {
     var domUtils = te.obj[3];
     expect( 1 );
@@ -502,6 +538,24 @@ test( 'un- 给不同的dom元素绑定相同的事件,解除一个，另一个�
     ua.mouseover( te.dom[2] );
     ua.mouseover( te.dom[1] );
 } );
+test( 'un-多事件的字符串参数', function() {
+    var domUtils = te.obj[3];
+    expect( 0 );
+    var div2 = document.body.appendChild( document.createElement( 'div' ) );
+    div2.id = 'test2';
+    te.dom.push( div2 );
+    var handle = function( e ) {
+        ok( false, e.type + ' 没有注销' );
+    };
+    domUtils.on( te.dom[2], 'mouseover mousedown', handle);
+
+    domUtils.un(te.dom[2],'mouseover mousedown',handle);
+    ua.mouseover( te.dom[2] );
+    ua.mousedown( te.dom[2] );
+    stop();
+    setTimeout(function(){start()},2000)
+} );
+
 /*绑定多个事件*/
 test( 'on', function() {
     var domUtils = te.obj[3];
@@ -874,7 +928,16 @@ test( 'mergeChild--非span', function() {
     div_new.firstChild.appendChild( document.createTextNode( 'b2' ) );
     ok( ua.haveSameAllChildAttribs( div, div_new ), '父节点和子节点属性相同，则删子节点' );
 } );
-
+test( 'mergeChild--span--attrs', function() {
+    var div = te.dom[2];
+    var domUtils = baidu.editor.dom.domUtils;
+    var div_new = document.createElement( 'div' );
+    div_new.id = 'test';
+    div.innerHTML = '<span style="background-color:blue;"><span style="font-size:12px;color:red">span_1<span style="font-size:12px">span_2</span></span></span>';
+    var html = '<span style="font-size: 12px; color: red; background-color: blue;">span_1<span style="font-size: 12px; color: red; background-color: red;">span_2</span></span>';
+    domUtils.mergeChild( div.firstChild ,'span',{style:'background-color:red'});
+    ua.checkSameHtml(div.innerHTML,html,'mergeChild-给子节点中的span添加样式');
+} );
 test( 'getElementsByTagName', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
@@ -1030,7 +1093,17 @@ test( 'setAttributes--设置class,style', function() {
     div_new.innerHTML = '<div class="div_class" id="div_id" style="color:red;font-size:12px"></div>';
     ok( ua.haveSameAllChildAttribs( div, div_new ), 'check attributes' );
 } );
-
+test( 'setAttributes--设置innerHTML,value', function() {
+    var div = te.dom[2];
+    var domUtils = baidu.editor.dom.domUtils;
+    div.innerHTML = '<div></div>';
+    domUtils.setAttributes( div.firstChild, {'innerHTML':'setAttributes_test','id':'div_id','value':'abcd'} );
+    var div_new = document.createElement( 'div' );
+    div_new.id = 'test';
+    div_new.innerHTML = '<div id="div_id" >setAttributes_test</div>';
+    div_new.firstChild.value="abcd";
+    ok( ua.haveSameAllChildAttribs( div, div_new ), 'check attributes' );
+} );
 test( 'getComputedStyle', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
@@ -1061,7 +1134,7 @@ test( 'getComputedStyle-border', function() {
     equal( domUtils.getComputedStyle( div.lastChild, 'border-color' ), 'red' );
 } );
 //修复ie下的一个bug，如果在body上强制设了字体大小，h1的字体大小就会继承body的字体，而没有办法取到真是的字体大小
-test( 'getComputedStyle-在body上设置字体大小', function() {
+test( 'getComputedStyle-在body上设置字体大小,检查h1字体大小', function() {
     var domUtils = baidu.editor.dom.domUtils;
     var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
     var div = document.body.appendChild( document.createElement( 'div' ) );
@@ -1073,8 +1146,9 @@ test( 'getComputedStyle-在body上设置字体大小', function() {
         var h1 = body.appendChild( editor.document.createElement( 'h1' ) );
 //    editor.body.style['fontSize'] = '10px';
 //   h1的字体大小不是10px
-        var fontSize = '32px';
+        var fontSize = (ua.browser.ie&&ua.browser.ie<9)?'33px':'32px';//todo 1.2.7 trace 3588
         equal( domUtils.getComputedStyle( h1, 'font-size' ), fontSize, 'body的fontSize属性不应当覆盖p的fontSize属性' );
+        te.dom.push(div);
 //    editor.setContent( '<h2>这是h2的文本<a>这是一个超链接</a></h2>' );
         start();
     });
@@ -1161,8 +1235,10 @@ test( 'hasClass', function() {
 test( 'addClass', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
-    div.innerHTML = '<div class="div_class div_class2 div_class3" name="div_name" style="color:red;font-size:12px"></div>';
-    domUtils.addClass(div.firstChild,'div_class4')
+    div.innerHTML = '<div name="div_name" style="color:red;font-size:12px"></div>';
+    domUtils.addClass(div.firstChild,'div_class div_class2 div_class3');
+    equal(utils.trim(div.firstChild.className),div.firstChild.className,'判断是否有前后空格');
+    domUtils.addClass(div.firstChild,'div_class4');
     equal(div.firstChild.className,'div_class div_class2 div_class3 div_class4','增加class4');
     domUtils.addClass(div.firstChild,'div_class4');
     equal(div.firstChild.className,'div_class div_class2 div_class3 div_class4','再增加class4');
@@ -1343,6 +1419,12 @@ test( 'isFillChar', function() {
     if(ua.browser.ie){
         ok(domUtils.isFillChar(div.lastChild));
     }
+    var node = document.createTextNode(domUtils.fillChar + 'sdfsdf');
+    ok(domUtils.isFillChar(node,true));
+    ok(!domUtils.isFillChar(node));
+    node = document.createTextNode(domUtils.fillChar +domUtils.fillChar);
+    ok(domUtils.isFillChar(node,true));
+    ok(domUtils.isFillChar(node))
 } );
 
 

@@ -53,6 +53,8 @@ test('通过选区路径取range', function () {
     var range = te.obj[1];
     editor.options.elementPathEnabled = true;
     editor.setContent('<table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>45</td></tr></tbody></table>');
+    stop();
+    setTimeout(function () {
     var tds = editor.body.getElementsByTagName('td');
     var trs = editor.body.getElementsByTagName('tr');
     var tbodys = editor.body.getElementsByTagName('tbody');
@@ -60,13 +62,12 @@ test('通过选区路径取range', function () {
     range.setStart(tds[3].firstChild, 0).collapse(true).select();
     editor.queryCommandValue('elementpath');
     editor.execCommand('elementpath', '4');
-    stop();
     setTimeout(function () {
         range = editor.selection.getRange();
-        if (ua.browser.gecko) {
+        if (ua.browser.gecko||ua.browser.ie>8) {
             ua.checkResult(range, trs[1], trs[1], 1, 2, false, '取range--td');
         } else {
-            if (ua.browser.ie)
+            if (ua.browser.ie&&ua.browser.ie<9)
                 ua.checkResult(range, tds[3].firstChild, tds[3].lastChild, 0, 2, false, '取range--td');
             else
                 ua.checkResult(range, tds[3].firstChild, editor.body, 0, 1, false, '取range--td');
@@ -75,10 +76,10 @@ test('通过选区路径取range', function () {
         editor.execCommand('elementpath', '3');
         setTimeout(function () {
             range = editor.selection.getRange();
-            if (ua.browser.gecko) {
+            if (ua.browser.gecko||ua.browser.ie>9) {
                 ua.checkResult(range, tbodys[0], tbodys[0], 1, 2, false, '取range--tr');
             } else {
-                if (ua.browser.ie)
+                if (ua.browser.ie&&ua.browser.ie<10)
                     ua.checkResult(range, tds[2].firstChild, tds[3].lastChild, 0, 2, false, '取range--tr');
                 else
                     ua.checkResult(range, tds[2].firstChild, editor.body, 0, 1, false, '取range--tr');
@@ -87,10 +88,10 @@ test('通过选区路径取range', function () {
             editor.execCommand('elementpath', '2');
             setTimeout(function () {
                 range = editor.selection.getRange();
-                if (ua.browser.gecko) {
+                if (ua.browser.gecko||ua.browser.ie>8) {
                     ua.checkResult(range, table[0], table[0], 0, 1, false, '取range--tbody');
                 } else {
-                    if (ua.browser.ie)
+                    if (ua.browser.ie&&ua.browser.ie<9)
                         ua.checkResult(range, tds[0].firstChild, tds[3].lastChild, 0, 2, false, '取range--tbody');
                     else
                         ua.checkResult(range, editor.body, editor.body, 0, 1, false, '取range--tbody');
@@ -102,7 +103,7 @@ test('通过选区路径取range', function () {
                 setTimeout(function () {
                     range = editor.selection.getRange();
                     var p = editor.body.firstChild;
-                    if (ua.browser.gecko) {
+                    if (ua.browser.gecko||ua.browser.ie>8) {
                         ua.checkResult(range, editor.body, editor.body, 0, 1, false, '取range--p');
                     } else {
                         ua.checkResult(range, p.firstChild, p.firstChild, 0, 5, false, '取range--p');
@@ -110,8 +111,9 @@ test('通过选区路径取range', function () {
                     start();
                 }, 20);
             }, 20);
-        }, 20);
+        }, 100);
     }, 20);
+    }, 50);
 });
 
 test('trace 1539:列表', function () {
@@ -178,8 +180,7 @@ test('图片', function () {
         setTimeout(function () {
             range.selectNode(body.firstChild.lastChild).select();
             var eles = editor.queryCommandValue('elementpath');
-            if (!ua.browser.ie || ua.browser.ie < 9)//todo ie9,10改range bug trace
-                ua.checkElementPath(eles, ['body', 'p', 'img'], '选中图片');
+            ua.checkElementPath(eles, ['body', 'p', 'img'], '选中图片');
             div.parentNode.removeChild(div);
             start();
         }, 20)
@@ -199,8 +200,7 @@ test('锚点', function () {
         setTimeout(function () {
             range.selectNode(body.firstChild.lastChild).select();
             var eles = editor.queryCommandValue('elementpath');
-            if (!ua.browser.ie || ua.browser.ie < 9)//todo ie9,10改range bug trace
-                ua.checkElementPath(eles, ['body', 'p', 'anchor'], '选中锚点');
+            ua.checkElementPath(eles, ['body', 'p', 'anchor'], '选中锚点');
             div.parentNode.removeChild(div);
             start();
         }, 20)

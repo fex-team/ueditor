@@ -3,7 +3,7 @@
 ///import plugins\image.js
 ///commandsName  snapscreen
 ///commandsTitle  截屏
-/**
+/*
  * 截屏插件
  */
 UE.plugins['snapscreen'] = function(){

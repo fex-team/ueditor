@@ -6,6 +6,24 @@
  * To change this template use File | Settings | File Templates.
  */
 module( 'plugins.defaultfilter' );
+
+//test('',function(){
+//   stop();
+//});
+test( '对代码的行号不处理', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td>');
+//    var br = ua.browser.ie?'':'<br>';
+    var html = '<table><tbody><tr><td class=\"gutter\"><div class=\"line number1 index0 alt2\">1</div><div class=\"line number2 index1 alt1\">2</div></td></tr></tbody></table>';
+    ua.checkSameHtml(editor.body.innerHTML,html,'table补全,对代码的行号不处理')
+} );
+test( '空td,th,caption', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<table><caption></caption><tbody><tr><th></th><th></th></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table>' );
+    var br = ua.browser.ie?'':'<br>';
+    var html = '<table><caption>'+br+'</caption><tbody><tr><th>'+br+'</th><th>'+br+'</th></tr><tr><td>'+br+'</td><td>'+br+'</td></tr><tr><td>'+br+'</td><td>'+br+'</td></tr></tbody></table>';
+    ua.checkSameHtml(editor.body.innerHTML,html,'空td,th,caption,添加text')
+} );
 test( '转换a标签', function () {
     var editor = te.obj[0];
     editor.setContent( '<a href="http://elearning.baidu.com/url/RepositoryEntry/68616197" target="_blank">' );
@@ -34,18 +52,34 @@ test( '删span中的white-space标签', function () {
 //    var html = '<p style="list-style: none;">hello</p>';
 //    ua.checkSameHtml(html,editor.body.innerHTML,'删p中的margin|padding标签');
 //} );
-test( '给空p加br', function () {
+test( '给空p加br&&转对齐样式', function () {
     var editor = te.obj[0];
-    editor.setContent( '<p style="list-style: none;" ></p>' );
+    editor.setContent( '<p align ="center" ></p>' );
     var br = ua.browser.ie?'&nbsp;':'<br>';
-//    var html = '<p style="list-style: none;">'+br+'</p>';
-    equal(editor.body.firstChild.innerHTML,br)
+//    "<p style=\"text-align:center;list-style: none;\"><br></p>"
+    var html = '<p style=\"text-align:center;\">'+br+'</p>';
+    ua.checkSameHtml(editor.body.innerHTML,html, '给空p加br&&转对齐样式');
 } );
 test( '删div', function () {
     var editor = te.obj[0];
     editor.setContent( '<div class="socore" ><div class="sooption" style="padding: 1px;" ><p>视频</p></div></div>' );
     var html = '<p>视频</p>';
     ua.checkSameHtml(html,editor.body.innerHTML,'删div');
+} );
+test( 'allowDivTransToP--false 不转div', function () {
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id ='ue';
+    var editor = UE.getEditor('ue',{allowDivTransToP:false});
+    stop();
+    editor.ready(function(){
+        var html = '<div class="socore" ><div class="sooption" style="padding: 1px;" >视频</div></div>';
+        editor.setContent( html );
+        var padding = (ua.browser.ie&&ua.browser.ie<9)?'PADDING-BOTTOM: 1px; PADDING-LEFT: 1px; PADDING-RIGHT: 1px; PADDING-TOP: 1px':'padding: 1px;';
+        var html_a =  '<div class="socore" ><div class="sooption" style="'+padding+'" >视频</div></div>';
+        ua.checkSameHtml(html_a,editor.body.innerHTML,'不转div');
+        UE.delEditor('ue');
+        start();
+    });
 } );
 test( 'li', function () {
     var editor = te.obj[0];
@@ -147,31 +181,39 @@ test("getContent--转换空格，nbsp与空格相间显示", function() {
 });
 test( '转换script标签', function () {
     var editor = te.obj[0];
+    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
     editor.setContent( '<script type="text/javascript">ueditor</script>' );
-    var html = '<p><br></p><div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换script标签');
+    var html = br+'<div type="text/javascript" cdata_tag=\"script\"  style="display:none">ueditor</div>';
+    ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
-
+test( 'trace 3698 1.3.0 版本修复: script(style)标签里面的内容不转码', function () {
+    var editor = te.obj[0];
+    editor.setContent('<script type="text/plain" id="myEditor" name="myEditor">var ue=UE.getEditor("editor");</script>');
+    equal(editor.document.getElementById('myEditor').innerHTML,'var ue=UE.getEditor("editor");','内容不转码')
+    // todo 1.3.0 trace 3698
+    editor.setContent('<style type="text/css" id="myEditor">        .clear {            clear: both;        }     </style>');
+    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
+    ua.checkSameHtml(editor.getContent(),br+'<style type="text/css" id="myEditor">.clear {            clear: both;        }</style>','内容不转码');
+} );
 test( '转换style标签:style data不为空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css">sdf</style>' );
-    var br = ua.browser.ie?'&nbsp;':'<br>';
-    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" cdata_data="sdf"></div>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
-    ua.checkSameHtml(html,editor.body.innerHTML);
+    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
+    var html = br+'<div type="text/css" cdata_tag="style" style="display:none">sdf</div>';
+    ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 test( '转换style标签:style data不空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css"></style>' );
-    var br = ua.browser.ie?'&nbsp;':'<br>';
-    var html = '<p>'+br+'</p><div type="text/css" cdata_tag="style" ></div>';
-    ua.checkHTMLSameStyle(html,editor.document,editor.body,'转换style标签');
-    ua.checkSameHtml(html,editor.body.innerHTML);
+    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
+    var html = br+'<div type="text/css" cdata_tag="style" style="display:none"></div>';
+
+    ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 test( 'div出编辑器转换', function () {
     var editor = te.obj[0];
     var str =  '<script type="text/javascript">ueditor</script>' ;
-    var html = '<div type="text/javascript" cdata_tag=\"script\" cdata_data=\"ueditor\"></div>';
+    var html = '<div type="text/javascript" cdata_tag=\"script\" >ueditor</div>';
     editor.body.innerHTML = html;
     editor.execCommand( 'source' );
     stop();

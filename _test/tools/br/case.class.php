@@ -1,4 +1,5 @@
 <?php
+require_once 'config.php';
 /**
  * for case running
  *
@@ -147,13 +148,25 @@ class Kiss
          * 处理多选分支，有一个成功则成功，filter后面参数使用|切割
          * @var unknown_type
          */
-        $ms = explode( ',' , $matcher );
-        if ( sizeof( $ms ) > 1 ) {
-            foreach ( $ms as $matcher1 ) {
+        $as = explode( ';' , $matcher );
+        if ( sizeof( $as ) > 1 ) {
+
+            //这里把或的逻辑改成与
+            foreach ( $as as $matcher1 ) {
                 if ( $this->match( $matcher1 ) )
                     return true;
             }
             return false;
+        }
+        $ms = explode( ',' , $matcher );
+        if ( sizeof( $ms ) > 1 ) {
+
+            //这里把或的逻辑改成与
+            foreach ( $ms as $matcher1 ) {
+                if ( !$this->match( $matcher1 ) )
+                    return false;
+            }
+            return true;
         }
 
         /**
@@ -172,7 +185,7 @@ class Kiss
         return substr( $this->name , 0 , $len ) == $matcher;
     }
 
-    public static function listcase( $matcher = "*" , $projroot = '../../../' )
+    public static function listcase( $filter = "*" , $filterRun = '*',$projroot = '../../../' )
     {
         $srcpath = $projroot . '_src/';
         $testpath = $projroot . '_test/';
@@ -186,13 +199,21 @@ class Kiss
             $c = new Kiss( $projroot , $name );
             if ( $c->empty )
                 continue;
-            if ( $c->match( $matcher ) ) {
+            if ( $c->match( $filterRun ) ) {
                 $newName = explode( '\\.' , $name );
                 $newName = $newName[ count( $newName ) - 1 ];
                 print( "<a href=\"run.php?case=$name\" id=\"$c->case_id\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$name\" onclick=\"run('$name');\$('#id_rerun').html('$name');return false;\">"
                        /*过长的时候屏蔽超出20的部分，因为隐藏的处理，所有用例不能直接使用标签a中的innerHTML，而应该使用title*/
                        . $newName . "</a>\n" );
             }
+        }
+        /**
+         * 设置在源码路径下没有同名文件对应的测试文件
+         */
+        foreach(Config::$special_Case as $s_caseitem => $s_source){
+            //取形如 'plugins/config_test.js' 中 'plugins/config_test'部分
+            $s_newName = str_replace(".js","", $s_caseitem );
+            print( "<a href=\"run.php?case=$s_newName\" id=\"id_case_".str_replace('.','_',$s_newName)."\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$s_newName\" onclick=\"run('$s_newName');\$('#id_rerun').html('$s_newName');return false;\">". $s_newName . "</a>\n" );
         }
     }
 

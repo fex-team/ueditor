@@ -7,6 +7,49 @@ if (substr_count($_POST['config'], "browser") == 0) {
     return;
 }
 
+
+function match($fileName, $matcher )
+{
+    if ( $matcher == '*' )
+        return true;
+    $len = strlen( $matcher );
+
+
+    $as = explode( ';' , $matcher );
+    if ( sizeof( $as ) > 1 ) {
+
+        //这里把或的逻辑改成与
+        foreach ( $as as $matcher1 ) {
+            if ( match($fileName, $matcher1 ) )
+                return true;
+        }
+        return false;
+    }
+    $ms = explode( ',' , $matcher );
+    if ( sizeof( $ms ) > 1 ) {
+        //这里把或的逻辑改成与
+        foreach ( $ms as $matcher1 ) {
+            if ( !match($fileName, $matcher1 ) )
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * 处理反向选择分支
+     */
+    if ( substr( $matcher , 0 , 1 ) == '!' ) {
+        $m = substr( $matcher , 1 );
+        if ( substr( $fileName , 0 , strlen( $m ) ) == $m )
+            return false;
+        return true;
+    }
+
+    if ( $len > strlen( $fileName ) ) {
+        return false;
+    }
+    return substr( $fileName , 0 , $len ) == $matcher;
+}
 function report()
 {
     /**
@@ -30,20 +73,23 @@ function report()
     $failures = 0;
     $tests = 0;
     $time = 0;
-    $filter = $config['filter'];
+    $filter = $config['filterRun'];
     foreach ($_POST as $key => $value) {
         if ($key == 'config')
             continue;
+        echo $key.'        ';
         $info = explode(";", $value);
-        if ($filter!='' && (substr_count($key, $filter) == 0 || strpos($key, $filter) > 0))
+
+        if ($filter!='' && (!match($key,$filter))){
             continue;
+        }
         //errornum + ',' + allnum + ','+ kissPerc || 0 + ',' + wb.kissstart + ','+ wb.kissend;
         $casetime = ($info[4] - $info[3]) / 1000;
         $time += $casetime;
         $tests++;
         $failure = (int)($info[0]);
         $case = $suite->appendChild($dom->createElement('testcase'));
-        $case->setAttribute("name", $key);
+        $case->setAttribute("name", str_replace('_','.',$key));
         $case->setAttribute("time", $casetime);
         $case->setAttribute("cov", $info[2]);
         $case->setAttribute('failNumber', $info[0]);
@@ -68,9 +114,11 @@ function report()
     $suite->setAttribute('failures', $failures);
     $suite->setAttribute('tests', $tests);
 
-    if (!is_dir("report_{$config['filter']}"))
-        mkdir("report_{$config['filter']}");
-    $dom->save("report_{$config['filter']}/{$config['browser']}.xml");
+//    $dirName = "report_{$config['filter']}";
+    $dirName = str_replace('/','_',"report_{$config['filter']}");
+    if (!is_dir($dirName))
+        mkdir($dirName);
+    $dom->save($dirName."/{$config['browser']}.xml");
 }
 include 'config.php';
 $config;
@@ -86,13 +134,15 @@ report();
 
 $dom = new DOMDocument('1.0', 'utf-8');
 $testsuites = $dom->appendChild($dom->createElement('testsuites'));
-
+$dirName = str_replace('/','_',"report_{$config['filter']}");
 foreach (Config::getBrowserSet($configBrowserSet) as $key => $value) {
-    $file = "report_{$config['filter']}/$key.xml";
+
+    $file = $dirName."/$key.xml";
     if (!file_exists($file)) {
         echo "wait for report : $file\r\n<br />";
         return;
     }
+//    Config::StopOne($key);
     $xmlDoc = new DOMDocument('1.0', 'utf-8');
     $xmlDoc->load($file);
     $xmlDom = $xmlDoc->documentElement;
