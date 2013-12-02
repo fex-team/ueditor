@@ -1,0 +1,69 @@
+@charset "utf-8";
+.wrapper{ width: 623px;margin: 10px auto;zoom:1;position: relative;}
+.tabbody{ height:325px;_height:330px;}/*tab样式框大小*/
+.panel { position: absolute;width:100%; height:100%;background: #fff;}
+
+#remote{ z-index: 200;}
+#remote table{border-collapse: collapse;width: 620px; height: 300px; margin-top: 5px;}
+#remote td.label{text-align: center;width: 80px; }
+#remote td{height: 40px;}
+td input {
+    width: 150px;
+    height: 21px;
+    line-height: 21px;
+    background: #FFF;
+    border: 1px solid #d7d7d7;
+}
+#url {width: 520px;margin-bottom: 2px;}
+#preview{width: 260px; height: 260px; position: absolute;top:50px; left: 341px; z-index: 9999;background-color: #eee}
+.lock{
+    position: absolute;
+    width: 45px;
+    height: 40px;
+    top: 68px;
+    left: 260px;
+    background: url("../../themes/default/images/lock.gif") 3px -4px no-repeat;
+    line-height: 40px;
+    padding-top:10px;
+}
+.saveDir{
+    /*width: 132px;*/
+    /*text-align: right;*/
+    height: 40px;
+    line-height: 40px;
+    margin-left: 30px;
+    float: left;
+}
+.saveDir select{
+    height: 30px;
+}
+#duiqi{ width: 62px; height: 38px;float: left}
+#remoteFloat div,#localFloat div{cursor:pointer;opacity: 0.5;filter: alpha(opacity = 50);margin-left:1px;width:38px;height:36px;float:left;}
+#remoteFloat .focus,#localFloat .focus{opacity: 1;filter: alpha(opacity = 100)}
+#maskIframe{ width: 620px; height: 325px; position: absolute;z-index: 100; }
+#flashContainer { margin: 6px;position: relative;}
+#upload{width: 100px;height: 30px;float: right; margin:3px 6px 0 0;cursor: pointer;}
+#imageList{width: 620px;height: 315px; margin-top: 10px;overflow:hidden;overflow-y: auto;}
+#imageList img{cursor: pointer ;border: 2px solid #fff}
+#imgManager #imageList div{float: left;width: 100px;height: 100px;margin: 5px 10px;}
+#imgSearchTxt{padding-left:2px;margin-left:15px;background: #FFF;width:200px;height:21px;line-height:21px;border: 1px solid #d7d7d7;}
+#searchList{width: 620px;overflow: auto;zoom:1;height: 270px;}
+#searchList div{float: left;width: 116px;height: 135px;margin: 5px 15px;_margin:5px 10px;}
+#searchList img{margin: 2px 8px;cursor: pointer;border: 2px solid #fff} /*不用缩略图*/
+#searchList p{margin-left: 10px;_margin-left:8px;}
+#imgType{
+    width: 65px;
+    height: 23px;
+    line-height: 22px;
+    border: 1px solid #d7d7d7;
+}
+#imgSearchBtn,#imgSearchReset{
+    width: 100%;
+    height: 25px;
+    margin: 0 3px;
+    line-height: 25px;
+    background: #eee;
+    border: 1px solid #d7d7d7;
+    cursor: pointer
+}
+.msg{margin-left: 5px;}

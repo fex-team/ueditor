@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UEditor Docs</title>
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/markdown.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/docs.css"/>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top ue-docs-nav" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/ueditor" class="navbar-brand">UEditor</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <!--<li class="dropdown">-->
+                    <!--<a href="#dropdown" class="dropdown-toggle" data-toggle="dropdown">使用文档 <b class="caret"></b></a>-->
+                    <!--<ul class="dropdown-menu">-->
+                        <!--<li><a href="#md=使用grunt打包源代码">使用grunt打包源代码</a></li>-->
+                        <!--<li class="divider"></li>-->
+                        <!--<li><a href="#md=增加一个简单的按钮">增加一个简单的按钮</a></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li class="dropdown">-->
+                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">二次开发 <b class="caret"></b></a>-->
+                    <!--<ul class="dropdown-menu">-->
+                        <!--<li><a href="#md=使用grunt打包源代码">使用grunt打包源代码</a></li>-->
+                        <!--<li class="divider"></li>-->
+                        <!--<li><a href="#md=增加一个简单的按钮">增加一个简单的按钮</a></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <li>
+                    <a href="demo" target="_blank">演示</a>
+                </li>
+                <li>
+                    <a href="http://ueditor.baidu.com" target="_blank">官网</a>
+                </li>
+                <li>
+                    <a href="http://www.ueditorbbs.com" target="_blank">论坛</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="ue-docs-caption">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>UEditor文档</h1>
+                <p>UEditor富文本编辑器，轻量，可定制，注重用户体验。</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container ue-docs-container">
+    <div class="row">
+        <div class="col-md-3">
+            <div id="guidebar" class="ue-sidebar hidden-print" role="complementary">
+                <ul class="nav ue-sidenav"></ul>
+            </div>
+        </div>
+        <div class="col-md-9 ue-docs-main" role="main">
+            <div id="show" class="col-md-9">
+                没找到文档
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="content">
+    <div class="container">
+
+    </div>
+</div>
+<script src="js/list.js"></script>
+<script>
+    $(function(){
+        var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1];
+        activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
+        activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id'];
+
+        $.each(docList, function(ckey, c){
+            var $category = $('<li>'),
+                    $item = $('<ul class = "nav">');
+
+            $category.append('<a href="#">' + c.title + '</a>');
+            $.each(c.list, function(vkey, v){
+                var $li = $('<li><a href="#' + c.id + '-' + v.id + '">' + v.title + '</a></li>');
+                if (c.id==activeCate && v.id==activeDoc) {
+                    $('#guidebar .nav .nav>li').removeClass('active');
+                    $li.addClass('active');
+                    updateDocContent(v.title);
+                }
+                $item.append($li);
+            });
+            if ($item.find('li')) $category.append($item);
+
+            $category.appendTo('#guidebar>ul');
+        });
+
+        $('#guidebar .nav .nav>li>a').click(function(){
+            $('#guidebar .nav li').removeClass('active');
+            $(this).parent().addClass('active').parent().parent().addClass('active');
+            updateDocContent($(this).text());
+        });
+
+        function updateDocContent(activeMd){
+            $.get('doc/' + activeMd + '.md',function(s){
+                var html = markdown.toHTML(s)
+                        .replace(/src=\"images\//g, 'src=\"doc/images/')
+                        .replace(/<code>/g, '<pre>')
+                        .replace(/<\/code>/g, '</pre>');
+                $('#show').html(html);
+            });
+        };
+    })
+</script>
+</body>
+</html>

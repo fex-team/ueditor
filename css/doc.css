@@ -1,0 +1,118 @@
+#container {
+    height: 100%;
+}
+#left{
+    height: 100%;
+    /*background-color:#E8F5FE;*/
+    float:left;
+    width:200px;
+    border:1px solid #A9C9E2;
+    height:300px;
+}
+#right{
+    /*background-color:#F2FDDB;*/
+    border:1px solid #A5CF3D;
+    height:300px;
+}
+
+/*body{*/
+    /*background: #eeeeee;*/
+/*}*/
+
+.ue-sidenav {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-shadow: 0 1px 0 #fff;
+    background-color: #f7f5fa;
+    border-radius: 5px;
+}
+
+/* header */
+/*.ue-docs-nav{*/
+    /*background: #006DAE;*/
+    /*border-color: #0061ae;*/
+/*}*/
+/*.ue-docs-nav .navbar-brand {*/
+    /*color: #ffffff;*/
+/*}*/
+/*.ue-docs-nav .navbar-collapse {*/
+    /*background: #006DAE;*/
+/*}*/
+/*.ue-docs-nav .navbar-toggle {*/
+    /*border-color: #006DAE;*/
+/*}*/
+/*.ue-docs-nav .navbar-collapse,*/
+/*.ue-docs-nav .navbar-form {*/
+    /*border-color: #ffffff;*/
+/*}*/
+/*.ue-docs-nav .navbar-toggle {*/
+    /*border-color: #ffffff;*/
+/*}*/
+/*.ue-docs-nav .navbar-toggle:hover,*/
+/*.ue-docs-nav .navbar-toggle:focus {*/
+    /*background-color: #0061ae;*/
+/*}*/
+/*.ue-docs-nav .navbar-toggle {*/
+    /*border-color: #0061ae;*/
+/*}*/
+/*.ue-docs-nav .navbar-toggle {*/
+    /*border-color: #0061ae;*/
+/*}*/
+/*.ue-docs-nav .navbar-nav>.open>a,*/
+/*.ue-docs-nav .navbar-nav>.open>a:hover,*/
+/*.ue-docs-nav .navbar-nav>.open>a:focus {*/
+    /*color: #fff;*/
+    /*background-color: #005eae;*/
+/*}*/
+/*.ue-docs-nav .navbar-nav>li>a {*/
+    /*color: #ffffff;*/
+/*}*/
+/*.ue-docs-nav .navbar-nav>.dropdown>a .caret {*/
+    /*border-top-color: #ffffff;*/
+    /*border-bottom-color: #ffffff;*/
+/*}*/
+
+/*container*/
+.ue-docs-container{
+    margin-top: 60px;
+}
+
+/*sidebar*/
+/*.ue-docs-nav .container,*/
+/*.container{*/
+    /*width:1024px;*/
+/*}*/
+.ue-sidebar .nav .nav > li > a {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 30px;
+    font-size: 90%;
+}
+/*.ue-sidebar > .nav > li > a{*/
+    /*background: #006DAE;*/
+    /*color: #ffffff;*/
+/*}*/
+/*.ue-sidebar .nav .nav > li.active,*/
+/*.ue-sidebar .nav .nav > li.active > a {*/
+    /*background: #ffffff;*/
+/*}*/
+.ue-sidebar .nav li .nav {
+    display: none;
+}
+.ue-sidebar .nav li.active .nav {
+    display: block;
+}
+
+/*main*/
+.ue-docs-main{
+    background: #ffffff;
+    font-family: "微软雅黑", Microsoft YaHei;
+    /*margin-left: -16px;*/
+}
+.ue-docs-main h1,
+.ue-docs-main h2,
+.ue-docs-main h3{
+    font-family: "微软雅黑", Microsoft YaHei;
+}
