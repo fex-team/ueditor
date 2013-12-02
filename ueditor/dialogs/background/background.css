@@ -1,0 +1,25 @@
+.wrapper{ width: 424px;margin: 10px auto; zoom:1;position: relative}
+.tabbody{height:225px;}
+.tabbody .panel { position: absolute;width:100%; height:100%;background: #fff; display: none;}
+.tabbody .focus { display: block;}
+
+body{font-size: 12px;color: #888;overflow: hidden;}
+input,label{vertical-align:middle}
+.clear{clear: both;}
+.pl{padding-left: 18px;padding-left: 23px\9;}
+
+#imageList {width: 420px;height: 215px;margin-top: 10px;overflow: hidden;overflow-y: auto;}
+#imageList div {float: left;width: 100px;height: 95px;margin: 5px 10px;}
+#imageList img {cursor: pointer;border: 2px solid white;}
+
+.bgarea{margin: 10px;padding: 5px;height: 84%;border: 1px solid #A8A297;}
+.content div{margin: 10px 0 10px 5px;}
+.content .iptradio{margin: 0px 5px 5px 0px;}
+.txt{width:280px;}
+
+.wrapcolor{height: 19px;}
+div.color{float: left;margin: 0;}
+#colorPicker{width: 17px;height: 17px;border: 1px solid #CCC;display: inline-block;border-radius: 3px;box-shadow: 2px 2px 5px #D3D6DA;margin: 0;float: left;}
+div.alignment,#custom{margin-left: 23px;margin-left: 28px\9;}
+#custom input{height: 15px;min-height: 15px;width:20px;}
+#repeatType{width:100px;}

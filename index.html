@@ -1,493 +1,114 @@
-<!DOCTYPE html>
-<html lang="zh">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>UEditor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="web editor">
-    <meta name="author" content="campaign">
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/prettify.js"></script>
-    <script src="ueditor.config.js"></script>
-    <script src="ueditor.all.min.js"></script>
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/prettify.css" rel="stylesheet">
-    <style type="text/css">
-        body {
-            padding-top: 60px;
-            padding-bottom: 40px;
-        }
-
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>UEditor Docs</title>
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/markdown.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/doc.css"/>
 </head>
-
 <body>
-sdfasdf
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="brand" href="#">UEditor</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <li class="active"><a href="#">DEMO</a></li>
-                    <li><a target="_blank" href="http://www.ueditorbbs.com">论坛</a></li>
-                    <li><a target="_blank" href="http://www.ueditorbbs.com/forum.php?mod=forumdisplay&fid=48">技术文档</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
+<div class="navbar navbar-inverse navbar-fixed-top ue-docs-nav" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/ueditor" class="navbar-brand">UEditor</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="demo" target="_blank">演示</a>
+                </li>
+                <li>
+                    <a href="http://ueditor.baidu.com" target="_blank">官网</a>
+                </li>
+                <li>
+                    <a href="http://www.ueditorbbs.com" target="_blank">论坛</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="ue-docs-caption">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>UEditor文档</h1>
+                <p>UEditor富文本编辑器，轻量，可定制，注重用户体验。</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container ue-docs-container">
+    <div class="row">
+        <div class="col-md-3">
+            <div id="guidebar" class="ue-sidebar hidden-print" role="complementary">
+                <ul class="nav ue-sidenav"></ul>
+            </div>
+        </div>
+        <div class="col-md-9 ue-docs-main" role="main">
+            <div id="show" class="col-md-9">
+                没找到文档
+            </div>
         </div>
     </div>
 </div>
 
-<div class="container">
 
-    <!-- Main hero unit for a primary marketing message or call to action -->
-    <div class="hero-unit">
-        <h1>UEditor富文本编辑器</h1>
-        <p>UEditor是一款功能丰富且注重编辑体验的Web编辑器</p>
-        <p><a href="http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=17298&page=1&extra=#pid22437" target="_blank" class="btn btn-primary btn-large">下载1.2.6</a></p>
+<div class="content">
+    <div class="container">
+
     </div>
-    <div class="page-header">
-        <h1>UEditor 1.2.6 展示<small>  最新更新时间<span class="text-warning">5.12</span>日</small></h1>
-    </div>
-
-
-    <hr>
-
-
-    <h3>常用功能</h3>
-    <div class="navbar">
-        <div class="navbar-inner">
-            <ul class="nav">
-                <li  class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        获得内容
-                        <span class="caret"></span>
-                    </a>
-                    <ul id='getcontentlist' class="dropdown-menu"  >
-                        <li><a href="#" data-toggle="modal">完整html内容</a></li>
-                        <li><a href="#" data-toggle="modal" >纯文本内容</a></li>
-                        <li><a href="#" data-toggle="modal" >带格式的纯文本内容</a></li>
-                        <li><a href="#" data-toggle="modal" >当前选中的文本内容</a></li>
-                    </ul>
-                </li>
-                <li class="divider-vertical"></li>
-                <li  >
-                    <div id="contentebled" class="btn-group" data-toggle="buttons-radio">
-                        <button class="btn" title="禁用编辑"><i class="icon-ban-circle"></i></button>
-                        <button class="btn active" title="允许编辑" ><i class="icon-pencil"></i></button>
-                    </div>
-                </li>
-                <li class="divider-vertical"></li>
-                <li  class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        定制过滤规则
-                        <span class="caret"></span>
-                    </a>
-                    <ul id='filterRules' class="dropdown-menu" role="menu" >
-                        <li class="active"><a href="#" data-toggle="modal" >不过滤</a></li>
-                        <li><a href="#" data-toggle="modal" >定制过滤规则</a></li>
-                        <li><a href="#" data-toggle="modal" >纯文本过滤规则</a></li>
-                    </ul>
-                </li>
-                <li class="divider-vertical"></li>
-                <li  class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        设置内容
-                        <span class="caret"></span>
-                    </a>
-                    <ul id='setContent' class="dropdown-menu" role="menu" >
-                        <li ><a href="#" data-toggle="modal" >覆盖整个内容</a></li>
-                        <li><a href="#" data-toggle="modal" >在当前位置插入</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <ul class="nav nav-tabs" id="editortab">
-        <li class="active"><a href="#full">全部</a></li>
-        <li><a href="#standard">标准</a></li>
-    </ul>
-    <h6 class="text-error text-right">demo展示不支持文件上传等操作</h6>
-    <div class="tab-content">
-        <div class="tab-pane active" id="full" >
-            <script style="width:99%;height:400px;" type="text/plain" id="fulleditor"></script>
-        </div>
-        <div class="tab-pane" id="standard">
-            <script style="width:99%;height:400px;" type="text/plain" id="standardeditor"></script>
-        </div>
-    </div>
-
-
-
-
-    <hr>
-    <div id="getcontentmodal" class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Modal header</h3>
-        </div>
-        <div class="modal-body">
-            <p>One fine body…</p>
-        </div>
-    </div>
-    <div id="setcontentmodal" class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Modal header</h3>
-        </div>
-        <div class="modal-body">
-            <textarea style="width:97%;height:300px" ></textarea>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-primary writecontent" >写入内容</a>
-        </div>
-    </div>
-
-    <div id="filtermodal" class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>过滤规则</h3>
-        </div>
-        <div class="modal-body">
-           <div class="content">
-               <ol>
-                   <li>去掉了标签的属性，只保留必要的，比如src,href等</li>
-                   <li>div会转换成p标签，嵌套div层级会变成1层</li>
-                   <li>删除了script style meta iframe embed object等标签</li>
-               </ol>
-           </div>
-
-            <p class="alert alert-info ">在尝试一下粘贴吧，会发现不同哦</p>
-        </div>
-    </div>
-    <footer>
-        <p>&copy;  战毅</p>
-    </footer>
-
-</div> <!-- /container -->
+</div>
+<script src="js/list.js"></script>
 <script>
     $(function(){
-        var activeEditor =  UE.getEditor('fulleditor');
-        activeEditor.ready(function(){
+        var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1];
+        activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
+        activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id'];
 
-            this.addListener('mousedown',function(){
+        $.each(docList, function(ckey, c){
+            var $category = $('<li>'),
+                    $item = $('<ul class = "nav">');
 
-                $('.dropdown-menu').dropdown('hide')
-            })
+            $category.append('<a href="#">' + c.title + '</a>');
+            $.each(c.list, function(vkey, v){
+                var $li = $('<li><a href="#' + c.id + '-' + v.id + '">' + v.title + '</a></li>');
+                if (c.id==activeCate && v.id==activeDoc) {
+                    $('#guidebar .nav .nav>li').removeClass('active');
+                    $li.addClass('active');
+                    updateDocContent(v.title);
+                }
+                $item.append($li);
+            });
+            if ($item.find('li')) $category.append($item);
+
+            $category.appendTo('#guidebar>ul');
         });
-        UE.getEditor('standardeditor',{
-            toolbars:[
-                ['fullscreen', 'source', '|', 'undo', 'redo', '|',
-                    'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist','|',
-                  'paragraph', 'fontfamily', 'fontsize', '|',
-                  '|',
-                    'justifyleft', 'justifycenter', 'justifyright',  '|',
-                    'link', 'unlink',
-                    'insertimage', 'emotion',
-                 '|',
-                    'inserttable']
-            ],
-            elementPathEnabled:false
-        }).ready(function(){
 
-                    this.addListener('mousedown',function(){
-
-                        $('.dropdown-menu').dropdown('hide')
-                    })
-                });
-
-        function getActiveEditor(){
-            return activeEditor;
-        }
-
-
-        $('#editortab a').click(function (e) {
-            var $this = $(this);
-
-            e.preventDefault();
-            activeEditor = UE.getEditor($this.attr('href').replace(/#/,'') + 'editor')
-            $this.tab('show');
-
-
-
-        })
-        $('#getcontentlist a').click(function(){
-            var $this = $(this),
-                    $content = $('#getcontentmodal .modal-body'),
-                    $title = $('#getcontentmodal h3');
-            var content= '';
-            switch($this.text()){
-                case '完整html内容' :
-                    content = UE.utils.unhtml(UE.htmlparser(activeEditor.getContent()).toHtml(true));
-                    $title.html('完整html内容');
-                    break;
-                case '纯文本内容' :
-                    content = activeEditor.getContentTxt();
-                    $title.html('纯文本内容');
-                    break;
-                case '带格式的纯文本内容' :
-                    content = activeEditor.getPlainTxt();
-                    $title.html('带格式的纯文本内容');
-                    break;
-                case '当前选中的文本内容':
-                    activeEditor.selection.getRange().select();
-                    content =  activeEditor.selection.getText()
-                    $title.html('当前选中的文本内容');
-            }
-            $content.html('').append($('<pre></pre>')
-                    .addClass('prettyprint linenums')
-                    .html(content));
-            prettyPrint();
-            $('#getcontentmodal').modal('show')
+        $('#guidebar .nav .nav>li>a').click(function(){
+            $('#guidebar .nav li').removeClass('active');
+            $(this).parent().addClass('active').parent().parent().addClass('active');
+            updateDocContent($(this).text());
         });
-        $('#contentebled button').click(function(){
-            switch($(this).attr('title')){
-                case '禁用编辑':
-                    activeEditor.setDisabled();
-                    break;
-                case '允许编辑':
-                    activeEditor.setEnabled();
-            }
-        });
-        $('#filterRules li').click(function(){
-            var $this = $(this),
-                    $content = $('#filtermodal .modal-body .content'),
-                    $title = $('#filtermodal h3'),
-                    filterRules = null;
-            $('#filterRules li').removeClass('active');
-            switch($this.text()){
-                case '不过滤' :
-                    $content.html('<p>不做任何过滤操作</p>')
-                    $title.html('不过滤');
-                    filterRules =null;
-                    break;
-                case '百度百科过滤规则' :
-                    $content.html('<ol><li>去掉了标签的属性，只保留必要的，比如src,href等</li><li>div会转换成p标签，嵌套div层级会变成1层</li> <li>删除了script style meta iframe embed object等标签</li></ol>')
-                    $title.html('百度百科过滤规则');
-                    filterRules =  {
-                        span:function(node){
-                            if(/Wingdings|Symbol/.test(node.getStyle('font-family'))){
-                                return true;
-                            }else{
-                                node.parentNode.removeChild(node,true)
-                            }
-                        },
-                        p: function(node){
-                            var listTag;
-                            if(node.getAttr('class') == 'MsoListParagraph'){
-                                listTag = 'MsoListParagraph'
-                            }
-                            node.setAttr();
-                            if(listTag){
-                                node.setAttr('class','MsoListParagraph')
-                            }
-                            if(!node.firstChild()){
-                                node.innerHTML(UE.browser.ie ? '&nbsp;' : '<br>')
-                            }
-                        },
-                        div: function (node) {
-                            var tmpNode, p = UE.uNode.createElement('p');
-                            while (tmpNode = node.firstChild()) {
-                                if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
-                                    p.appendChild(tmpNode);
-                                } else {
-                                    if (p.firstChild()) {
-                                        node.parentNode.insertBefore(p, node);
-                                        p = UE.uNode.createElement('p');
-                                    } else {
-                                        node.parentNode.insertBefore(tmpNode, node);
-                                    }
-                                }
-                            }
-                            if (p.firstChild()) {
-                                node.parentNode.insertBefore(p, node);
-                            }
-                            node.parentNode.removeChild(node);
-                        },
-                        //$:{}表示不保留任何属性
-                        br: {$: {}},
-                        a: function (node) {
-                            if(!node.firstChild()){
-                                node.parentNode.removeChild(node);
-                                return;
-                            }
-                            node.setAttr();
-                            node.setAttr('href', '#')
-                        },
-                        strong: {$: {}},
-                        b:function(node){
-                            node.tagName = 'strong'
-                        },
-                        i:function(node){
-                            node.tagName = 'em'
-                        },
-                        em: {$: {}},
-                        img: function (node) {
-                            var src = node.getAttr('src');
-                            node.setAttr();
-                            node.setAttr({'src':src})
-                        },
-                        ol:{$: {}},
-                        ul: {$: {}},
 
-                        dl:function(node){
-                            node.tagName = 'ul';
-                            node.setAttr()
-                        },
-                        dt:function(node){
-                            node.tagName = 'li';
-                            node.setAttr()
-                        },
-                        dd:function(node){
-                            node.tagName = 'li';
-                            node.setAttr()
-                        },
-                        li: function (node) {
-
-                            var className = node.getAttr('class');
-                            if (!className || !/list\-/.test(className)) {
-                                node.setAttr()
-                            }
-                            var tmpNodes = node.getNodesByTagName('ol ul');
-                            UE.utils.each(tmpNodes,function(n){
-                                node.parentNode.insertAfter(n,node);
-
-                            })
-
-                        },
-                        table: function (node) {
-                            UE.utils.each(node.getNodesByTagName('table'), function (t) {
-                                UE.utils.each(t.getNodesByTagName('tr'), function (tr) {
-                                    var p = UE.uNode.createElement('p'), child, html = [];
-                                    while (child = tr.firstChild()) {
-                                        html.push(child.innerHTML());
-                                        tr.removeChild(child);
-                                    }
-                                    p.innerHTML(html.join('&nbsp;&nbsp;'));
-                                    t.parentNode.insertBefore(p, t);
-                                })
-                                t.parentNode.removeChild(t)
-                            });
-                            var val = node.getAttr('width');
-                            node.setAttr();
-                            if (val) {
-                                node.setAttr('width', val);
-                            }
-                        },
-                        tbody: {$: {}},
-                        caption: {$: {}},
-                        th: {$: {}},
-                        td: {$: {valign: 1, align: 1,rowspan:1,colspan:1,width:1,height:1}},
-                        tr: {$: {}},
-                        h3: {$: {}},
-                        h2: {$: {}},
-                        //黑名单，以下标签及其子节点都会被过滤掉
-                        '-': 'script style meta iframe embed object'
-                    };
-                    break;
-                case '纯文本过滤规则' :
-                    $content.html('<p>只保留文本内容和段落格式</p>')
-                    $title.html('纯文本过滤规则');
-                    function transP(node){
-                        node.tagName = 'p';
-                        node.setStyle();
-                    }
-                    filterRules = {
-                        //直接删除及其字节点内容
-                        '-' : 'script style object iframe embed input select',
-                        'p': {$:{}},
-                        'br':{$:{}},
-                        div: function (node) {
-                            var tmpNode, p = UE.uNode.createElement('p');
-                            while (tmpNode = node.firstChild()) {
-                                if (tmpNode.type == 'text' || !UE.dom.dtd.$block[tmpNode.tagName]) {
-                                    p.appendChild(tmpNode);
-                                } else {
-                                    if (p.firstChild()) {
-                                        node.parentNode.insertBefore(p, node);
-                                        p = UE.uNode.createElement('p');
-                                    } else {
-                                        node.parentNode.insertBefore(tmpNode, node);
-                                    }
-                                }
-                            }
-                            if (p.firstChild()) {
-                                node.parentNode.insertBefore(p, node);
-                            }
-                            node.parentNode.removeChild(node);
-                        },
-                        ol: function (node) {
-                            node.parentNode.removeChild(node,true)
-                        },
-                        ul: function (node) {
-                            node.parentNode.removeChild(node,true)
-                        },
-
-                        dl:function(node){
-                            node.parentNode.removeChild(node,true)
-                        },
-                        dt:function(node){
-                            node.parentNode.removeChild(node,true)
-                        },
-                        dd:function(node){
-                            node.parentNode.removeChild(node,true)
-                        },
-                        'li': function(node){
-                            node.parentNode.removeChild(node,true)
-                        },
-                        'caption':transP,
-                        'th':transP,
-                        'tr':transP,
-                        'h1':transP,'h2':transP,'h3':transP,'h4':transP,'h5':transP,'h6':transP,
-                        'td':function(node){
-                            //没有内容的td直接删掉
-                            var txt = !!node.innerText();
-                            if(txt){
-                                node.parentNode.insertAfter(UE.uNode.createText(' &nbsp; &nbsp;'),node);
-                            }
-                            node.parentNode.removeChild(node,node.innerText())
-                        }
-                    }
-                    break;
-            }
-            $this.addClass('active');
-            $('#filtermodal').modal('show');
-            activeEditor.options.filterRules = filterRules;
-        });
-        var setType = 0, $content = $('#setcontentmodal textarea');
-         $('#setContent li').click(function(){
-             var $this = $(this),
-
-                 $title = $('#setcontentmodal h3');
-
-             switch($this.text()){
-                 case '覆盖整个内容' :
-                     $title.html('覆盖整个内容');
-                     setType = 0;
-                     break;
-                 case '在当前位置插入' :
-                     $title.html('在当前位置插入');
-                     setType = 1;
-             }
-             $('#setcontentmodal').modal('show')
-         })
-        $('#setcontentmodal .writecontent').click(function(e){
-            e.preventDefault();
-            if(!setType){
-                activeEditor.setContent($content.val())
-            }else{
-                activeEditor.execCommand('inserthtml',$content.val())
-            }
-            $('#setcontentmodal').modal('hide')
-        })
+        function updateDocContent(activeMd){
+            $.get('doc/' + activeMd + '.md',function(s){
+                var html = markdown.toHTML(s)
+                        .replace(/src=\"images\//g, 'src=\"doc/images/')
+                        .replace(/<code>/g, '<pre>')
+                        .replace(/<\/code>/g, '</pre>');
+                $('#show').html(html);
+            });
+        };
     })
-</script>
-<script type="text/javascript">
-    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F24ffe23d700c89a9bd81461fdff77d65' type='text/javascript'%3E%3C/script%3E"));
 </script>
 </body>
 </html>
