@@ -7,7 +7,7 @@ var docList = [
             {id:'deploy_asp_server',title:'ASP支持说明'},
             {
                 id:'uparse_use',
-                title:'编辑内容展示使用uparse'
+                title:'编辑内容展示'
             }
         ]
     },
