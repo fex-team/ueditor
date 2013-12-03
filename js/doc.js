@@ -8,7 +8,7 @@ $(function(){
         var $category = $('<li>'),
             $item = $('<ul class = "nav">');
 
-        $category.append('<a href="JavaScript:void(0)">' + c.title + '</a>');
+        $category.append('<a href="javascript:void(0)">' + c.title + '</a>');
         $.each(c.list, function(vkey, v){
             var $li = $('<li><a href="#' + c.id + '-' + v.id + '">' + v.title + '</a></li>');
             if (c.id==activeCate && v.id==activeDoc) {
