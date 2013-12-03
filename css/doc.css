@@ -1197,6 +1197,9 @@ h1[id] {
 
 
 /* 自定义 */
+h1, h2, h3, h4{
+    font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+}
 .ue-docs-caption{
     background: #563D7C;
     color: #ffffff;
@@ -1213,6 +1216,9 @@ h1[id] {
     text-align: left;
     margin-left: 50px;
     font-size: 21px;
+}
+.ue-docs-main #main{
+    width: 100%;
 }
 .ue-docs-main pre,
 .ue-docs-main code{
