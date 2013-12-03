@@ -43,9 +43,10 @@ $(function(){
                     return '<a class="mardwodnlink" href="#' + mdToPath[m] + '"';
                 });
             $('#show').html(html);
+            /* 设置其他markdown的链接 */
             $('#show .mardwodnlink').click(function(){
                 $('#guidebar .nav .nav>li>a[href=' + $(this).attr('href') + ']').trigger('click');
-//                window.scrollTo(0, 1);
+                //window.scrollTo(0, 1);
             });
             $('#show pre,#show code').addClass("prettyprint");
             prettyPrint();
