@@ -40,7 +40,8 @@ $(function(){
                 .replace(/<\/code>/g, '</pre>')
                 .replace(/\<pre\>([^ \s]+)\b/g, '<pre class="sh_$1">');
             $('#show').html(html);
-            $('#show pre,#show code').each(function(i, e) {window.hljs.highlightBlock(e);});
+            $('#show pre,#show code').addClass("prettyprint");
+            prettyPrint();
         });
     };
 })
