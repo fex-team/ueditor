@@ -1214,3 +1214,20 @@ h1[id] {
     margin-left: 50px;
     font-size: 21px;
 }
+.ue-docs-main pre,
+.ue-docs-main code{
+    padding:10px;
+}
+.ue-docs-main img{
+    display: block;
+}
+.ue-docs-main ul{
+    padding-left:15px;
+}
+.ue-footer{
+    padding:15px 0px;
+    text-align: center;
+    /*color:#ddd;*/
+    /*background: #563D7C;*/
+    background: #e7e7e7;
+}
