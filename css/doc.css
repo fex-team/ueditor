@@ -1201,6 +1201,7 @@ h1[id] {
     background: #563D7C;
     color: #ffffff;
     width:100%;
+    padding:30px 0px;
 }
 .ue-docs-caption h1{
     text-align: left;
