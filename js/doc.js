@@ -3,7 +3,7 @@ $(function(){
     activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
     activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id'];
 
-    /* 便利数据对象，生成导航的目录树 */
+    /* 遍历数据对象，生成导航的目录树 */
     $.each(docList, function(ckey, c){
         var $category = $('<li>'),
             $item = $('<ul class = "nav">');
