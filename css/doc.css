@@ -1214,3 +1214,7 @@ h1[id] {
     margin-left: 50px;
     font-size: 21px;
 }
+.ue-docs-main pre,
+.ue-docs-main code{
+    padding:10px;
+}
