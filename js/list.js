@@ -4,7 +4,11 @@ var docList = [
         title: '使用教程',
         list: [
             {id:'deploy_tutorial',title:'部署编辑器'},
-            {id:'deploy_asp_server',title:'ASP支持说明'}
+            {id:'deploy_asp_server',title:'ASP支持说明'},
+            {
+                id:'uparse_use',
+                title:'编辑内容展示使用uparse'
+            }
         ]
     },
     {

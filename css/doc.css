@@ -1231,3 +1231,8 @@ h1[id] {
     /*background: #563D7C;*/
     background: #e7e7e7;
 }
+
+.ue-docs-main h2{
+    padding-bottom: 9px;
+    border-bottom: 1px solid #eee;
+}
