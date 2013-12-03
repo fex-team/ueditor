@@ -1,5 +1,5 @@
 $(function(){
-    var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1];
+    var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1], mdToPath = {};
     activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
     activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id'];
 
@@ -17,6 +17,7 @@ $(function(){
                 updateDocContent(v.title);
             }
             $item.append($li);
+            mdToPath[v.title] = c.id + '-' + v.id;
         });
         if ($item.find('li')) $category.append($item);
 
@@ -37,8 +38,15 @@ $(function(){
                 .replace(/src=\"images\//g, 'src=\"doc/images/')
                 .replace(/<code>/g, '<pre>')
                 .replace(/<\/code>/g, '</pre>')
-                .replace(/\<pre\>([^ \s]+)\b/g, '<pre class="sh_$1">');
+                .replace(/\<pre\>([^ \s]+)\b/g, '<pre class="sh_$1">')
+                .replace(/\<a href=\"([^\.^\"]*)\.md\"/, function(s, m){
+                    return '<a class="mardwodnlink" href="#' + mdToPath[m] + '"';
+                });
             $('#show').html(html);
+            $('#show .mardwodnlink').click(function(){
+                $('#guidebar .nav .nav>li>a[href=' + $(this).attr('href') + ']').trigger('click');
+//                window.scrollTo(0, 1);
+            });
             $('#show pre,#show code').addClass("prettyprint");
             prettyPrint();
         });
