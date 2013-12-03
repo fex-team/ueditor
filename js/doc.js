@@ -38,7 +38,7 @@ $(function(){
                 .replace(/src=\"images\//g, 'src=\"doc/images/')
                 .replace(/<code>/g, '<pre>')
                 .replace(/<\/code>/g, '</pre>')
-                .replace(/\<pre\>([^ \s]+)\b/g, '<pre class="sh_$1">')
+                .replace(/\<pre\>([^ \s]+)\b/g, '<pre class="prettyprint lang-$1">')
                 .replace(/\<a href=\"([^\.^\"]*)\.md\"/, function(s, m){
                     return '<a class="mardwodnlink" href="#' + mdToPath[m] + '"';
                 });
@@ -49,6 +49,14 @@ $(function(){
                 //window.scrollTo(0, 1);
             });
             $('#show pre,#show code').addClass("prettyprint");
+            $('#show pre,#show code').each(function(index,node){
+
+                var lang = $(node).attr('class').match(/(javascript|js|css|html)/);
+                if(lang &&lang[0]){
+                    var html = beautify($(node).html(),lang[0])
+                    $(node).html(html)
+                }
+            });
             prettyPrint();
         });
     };
