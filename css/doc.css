@@ -1218,3 +1218,12 @@ h1[id] {
 .ue-docs-main code{
     padding:10px;
 }
+.ue-docs-main ul{
+    padding-left:15px;
+}
+.ue-footer{
+    padding:15px 0px;
+    text-align: center;
+    /*color:#ddd;*/
+    /*background: #563D7C;*/
+}

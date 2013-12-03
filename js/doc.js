@@ -1,4 +1,3 @@
-var hljs= window.hljs;
 $(function(){
     var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1];
     activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
@@ -9,7 +8,7 @@ $(function(){
         var $category = $('<li>'),
             $item = $('<ul class = "nav">');
 
-        $category.append('<a href="#">' + c.title + '</a>');
+        $category.append('<a href="JavaScript:void(0)">' + c.title + '</a>');
         $.each(c.list, function(vkey, v){
             var $li = $('<li><a href="#' + c.id + '-' + v.id + '">' + v.title + '</a></li>');
             if (c.id==activeCate && v.id==activeDoc) {
@@ -44,4 +43,4 @@ $(function(){
             prettyPrint();
         });
     };
-})
+});
