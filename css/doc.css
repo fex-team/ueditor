@@ -1218,6 +1218,9 @@ h1[id] {
 .ue-docs-main code{
     padding:10px;
 }
+.ue-docs-main img{
+    display: block;
+}
 .ue-docs-main ul{
     padding-left:15px;
 }
