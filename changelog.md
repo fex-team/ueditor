@@ -3,11 +3,12 @@
 
 ###bug修复
 1.	script/style标签内容，在ie下的编辑状态显示内容问题
-2.	修复预览窗口没有滚动条问题
+2.	修复预览窗口没有滚动条问题 [出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=28231&extra=page%3D1)
 3.	修复在ie67下自动寻址的问题
 4.	修复ff下图片拖拽大小不触发contentchange问题
-5.	修复注释被删除的问题，包括在script中的[参考](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=12509&extra=page%3D1)
-6.	
+5.	修复注释被删除的问题，包括在script中的[出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=12509&extra=page%3D1)
+6.	修复在源码模式下不能使用setContent的问题，[出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=26910&extra=page%3D1)
+7.	
 
 ##1.3.5
 
