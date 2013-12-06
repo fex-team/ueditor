@@ -402,7 +402,9 @@
 
         var basePath = confUrl;
 
-        if ( !/^[a-z]+:/i.test( confUrl ) ) {
+        if(/^(\/|\\\\)/.test(confUrl)){
+            basePath = /^.+?\w(\/|\\\\)/.exec(docUrl)[0] + confUrl.replace(/^(\/|\\\\)/,'');
+        }else if ( !/^[a-z]+:/i.test( confUrl ) ) {
 
             docUrl = docUrl.split( "#" )[0].split( "?" )[0].replace( /[^\\\/]+$/, '' );
 
