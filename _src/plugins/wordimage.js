@@ -50,4 +50,4 @@ UE.plugin.register('wordimage',function(){
             })
         }
     }
-})
+});
