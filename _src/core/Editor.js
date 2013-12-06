@@ -848,7 +848,6 @@
             me.filterInputRule(root);
             html = root.toHtml();
 
-
             me.body.innerHTML = (isAppendTo ? me.body.innerHTML : '') + html;
 
 

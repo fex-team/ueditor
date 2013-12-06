@@ -24,7 +24,8 @@ UE.plugins['defaultfilter'] = function () {
                     case 'script':
                         node.setAttr({
                             cdata_tag: node.tagName,
-                            cdata_data: (node.innerText() || '')
+                            cdata_data: (node.innerHTML() || ''),
+                            '_ue_custom_node_':'true'
                         });
                         node.tagName = 'div';
                         node.innerHTML('');
@@ -127,9 +128,9 @@ UE.plugins['defaultfilter'] = function () {
                 }
 
             }
-            if(node.type == 'comment'){
-                node.parentNode.removeChild(node);
-            }
+//            if(node.type == 'comment'){
+//                node.parentNode.removeChild(node);
+//            }
         })
 
     });
@@ -154,7 +155,7 @@ UE.plugins['defaultfilter'] = function () {
                         if (val = node.getAttr('cdata_tag')) {
                             node.tagName = val;
                             node.appendChild(UE.uNode.createText(node.getAttr('cdata_data')));
-                            node.setAttr({cdata_tag: '', cdata_data: ''});
+                            node.setAttr({cdata_tag: '', cdata_data: '','_ue_custom_node_':''});
                         }
                         break;
                     case 'a':

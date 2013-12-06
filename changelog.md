@@ -6,6 +6,8 @@
 2.	修复预览窗口没有滚动条问题
 3.	修复在ie67下自动寻址的问题
 4.	修复ff下图片拖拽大小不触发contentchange问题
+5.	修复注释被删除的问题，包括在script中的[参考](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=12509&extra=page%3D1)
+6.	
 
 ##1.3.5
 
