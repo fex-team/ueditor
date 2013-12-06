@@ -47,7 +47,8 @@
         'href':1,
         'src':1,
         '_src':1,
-        '_href':1
+        '_href':1,
+        'cdata_data':1
     };
 
     var notTransTagName = {

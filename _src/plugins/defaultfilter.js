@@ -6,6 +6,8 @@ UE.plugins['defaultfilter'] = function () {
     me.setOpt('allowDivTransToP',true);
     //默认的过滤处理
     //进入编辑器的内容处理
+
+    var guid = 0;
     me.addInputRule(function (root) {
         var allowDivTransToP = this.options.allowDivTransToP;
         var val;
@@ -24,10 +26,10 @@ UE.plugins['defaultfilter'] = function () {
                     case 'script':
                         node.setAttr({
                             cdata_tag: node.tagName,
-                            style:'display:none'
+                            cdata_data: (node.innerText() || '')
                         });
                         node.tagName = 'div';
-                        //node.removeChild(node.firstChild());
+                        node.innerHTML('');
                         break;
                     case 'a':
                         if (val = node.getAttr('href')) {
@@ -153,8 +155,8 @@ UE.plugins['defaultfilter'] = function () {
                     case 'div':
                         if (val = node.getAttr('cdata_tag')) {
                             node.tagName = val;
-                            node.setAttr({cdata_tag: '',style:''});
-                            node.innerText(utils.html(node.innerText()),true)
+                            node.appendChild(UE.uNode.createText(node.getAttr('cdata_data')));
+                            node.setAttr({cdata_tag: '', cdata_data: ''});
                         }
                         break;
                     case 'a':
