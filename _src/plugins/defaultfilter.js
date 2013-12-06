@@ -6,8 +6,6 @@ UE.plugins['defaultfilter'] = function () {
     me.setOpt('allowDivTransToP',true);
     //默认的过滤处理
     //进入编辑器的内容处理
-
-    var guid = 0;
     me.addInputRule(function (root) {
         var allowDivTransToP = this.options.allowDivTransToP;
         var val;
