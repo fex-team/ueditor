@@ -1,4 +1,8 @@
 #UEditor Change List
+##1.3.6
+
+###bug修复
+1.script/style标签内容，在ie下的编辑状态显示内容问题
 
 ##1.3.5
 
