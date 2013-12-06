@@ -86,7 +86,7 @@
         var opt = this.options;
         var sourceMode = false;
         var sourceEditor;
-
+        var orgSetContent;
         opt.sourceEditor = browser.ie  ? 'textarea' : (opt.sourceEditor || 'codemirror');
 
         me.setOpt({
@@ -168,6 +168,17 @@
                     sourceEditor = createSourceEditor(me.iframe.parentNode);
 
                     sourceEditor.setContent(content);
+
+                    orgSetContent = me.setContent;
+
+                    me.setContent = function(html){
+                        //这里暂时不触发事件，防止报错
+                        var root = UE.htmlparser(html);
+                        me.filterInputRule(root);
+                        html = root.toHtml();
+                        sourceEditor.setContent(html);
+                    };
+
                     setTimeout(function (){
                         sourceEditor.select();
                         me.addListener('fullscreenchanged', function(){
@@ -190,6 +201,9 @@
                         }
                         return a.replace(/(^[\n\r\t]*)|([\n\r\t]*$)/g,'')
                     });
+
+                    me.setContent = orgSetContent;
+
                     me.setContent(cont);
                     sourceEditor.dispose();
                     sourceEditor = null;
@@ -201,6 +215,8 @@
                         me.body.innerHTML = '<p>'+(browser.ie?'':'<br/>')+'</p>';
                         first = me.body.firstChild;
                     }
+
+
                     //要在ifm为显示时ff才能取到selection,否则报错
                     //这里不能比较位置了
                     me.undoManger && me.undoManger.save(true);
