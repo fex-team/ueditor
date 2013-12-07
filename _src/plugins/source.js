@@ -98,7 +98,7 @@
 
         var bakCssText;
         //解决在源码模式下getContent不能得到最新的内容问题
-        var oldGetContent = me.getContent,
+        var oldGetContent,
             bakAddress;
 
         /**
@@ -187,7 +187,9 @@
                             }catch(e){}
                         });
                     });
+
                     //重置getContent，源码模式下取值也能是最新的数据
+                    oldGetContent = me.getContent;
                     me.getContent = function (){
                         return sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
                     };
