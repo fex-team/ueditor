@@ -8,7 +8,7 @@
 4.	修复ff下图片拖拽大小不触发contentchange问题
 5.	修复注释被删除的问题，包括在script中的[出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=12509&extra=page%3D1)
 6.	修复在源码模式下不能使用setContent的问题，[出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=26910&extra=page%3D1)
-7.	
+7.	修复在给定宽度为100%时，ie11在拖动窗口大小时，编辑区域不随着变化的问题
 
 ##1.3.5
 

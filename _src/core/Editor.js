@@ -448,7 +448,8 @@
                 setTimeout(function(){
                     if( /%$/.test(options.initialFrameWidth)){
                         options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
-                        container.style.width = options.initialFrameWidth + 'px';
+                        //如果这里给定宽度，会导致ie在拖动窗口大小时，编辑区域不随着变化
+//                        container.style.width = options.initialFrameWidth + 'px';
                     }
                     if(/%$/.test(options.initialFrameHeight)){
                         options.minFrameHeight = options.initialFrameHeight = container.offsetHeight;
