@@ -1030,7 +1030,7 @@
             }
             clearTimeout(_selectionChangeTimer);
             _selectionChangeTimer = setTimeout(function () {
-                if (!me.selection.getNative()) {
+                if (!me.selection || !me.selection.getNative()) {
                     return;
                 }
                 //修复一个IE下的bug: 鼠标点击一段已选择的文本中间时，可能在mouseup后的一段时间内取到的range是在selection的type为None下的错误值.
