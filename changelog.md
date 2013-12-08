@@ -10,6 +10,7 @@
 6.	修复在源码模式下不能使用setContent的问题，[出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=26910&extra=page%3D1)
 7.	修复在给定宽度为100%时，ie11在拖动窗口大小时，编辑区域不随着变化的问题
 8.	修复在ie67下destroy方法调用报错
+9.	修复在插入代码模式下，ie9+以上的浏览器键盘操作(enter/tab等)错误或者失效的问题
 
 ##1.3.5
 
