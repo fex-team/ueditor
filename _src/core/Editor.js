@@ -440,6 +440,7 @@
                     width: "100%",
                     height: "100%",
                     frameborder: "0",
+                    scrolling : 'no',
                     src: 'javascript:void(function(){document.open();' + (options.customDomain && document.domain != location.hostname ?  'document.domain="' + document.domain + '";' : '') +
                         'document.write("' + html + '");document.close();}())'
                 }));
@@ -481,7 +482,6 @@
             me.window = doc.defaultView || doc.parentWindow;
             me.iframe = me.window.frameElement;
             me.body = doc.body;
-
             me.selection = new dom.Selection(doc);
             //gecko初始化就能得到range,无法判断isFocus了
             var geckoSel;
@@ -633,7 +633,6 @@
                 this.iframe.parentNode.style.height = height + 'px';
             }
             !notSetHeight && (this.options.minFrameHeight = this.options.initialFrameHeight = height);
-
             this.body.style.height = height + 'px';
         },
 
