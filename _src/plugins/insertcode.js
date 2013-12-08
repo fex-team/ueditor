@@ -239,7 +239,6 @@ UE.plugins['insertcode'] = function() {
         preview:1,
         insertparagraph:1,
         elementpath:1,
-        highlightcode:1,
         insertcode:1,
         inserthtml:1,
         selectall:1
