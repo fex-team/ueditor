@@ -397,7 +397,7 @@
 
         var basePath = confUrl;
 
-        if ( /^\\|\//.test(confUrl) ) {
+        if ( /^\//.test(confUrl) ) {
             //处理 / 开头的绝对路径的情况
             basePath = /^[a-z]+:\/\/[^\/]+/i.exec(docUrl)[0] + confUrl;
 
