@@ -67,6 +67,21 @@ UE.plugins['defaultfilter'] = function () {
 //                            node.setAttr('style', cssStyle)
 //
 //                        }
+                        //p标签不允许嵌套
+                        utils.each(node.children,function(n){
+                            if(n.type == 'element' && n.tagName == 'p'){
+                                var next = n.nextSibling();
+                                node.parentNode.insertAfter(n,node);
+                                var last = n;
+                                while(next){
+                                    var tmp = next.nextSibling();
+                                    node.parentNode.insertAfter(next,last);
+                                    last = next;
+                                    next = tmp;
+                                }
+                                return false;
+                            }
+                        });
                         if (!node.firstChild()) {
                             node.innerHTML(browser.ie ? '&nbsp;' : '<br/>')
                         }
