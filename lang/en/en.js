@@ -21,7 +21,7 @@ UE.I18N['en'] = {
         'insertvideo':'Video', 'help':'Help', 'justifyleft':'JustifyLeft', 'justifyright':'JustifyRight', 'justifycenter':'JustifyCenter',
         'justifyjustify':'Justify', 'forecolor':'FontColor', 'backcolor':'BackColor', 'insertorderedlist':'OL',
         'insertunorderedlist':'UL', 'fullscreen':'FullScreen', 'directionalityltr':'EnterFromLeft', 'directionalityrtl':'EnterFromRight',
-        'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'highlightcode':'Code', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
+        'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
         'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
         'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
@@ -173,8 +173,7 @@ UE.I18N['en'] = {
         'copy':"Copy(Ctrl + c)",
         'copymsg':"Please use 'Ctrl + c' instead!",
         'paste':"Paste(Ctrl + v)",
-        'pastemsg':"Please use 'Ctrl + v' instead!",
-        'highlightcode':'Insert code'
+        'pastemsg':"Please use 'Ctrl + v' instead!"
     },
 
     'anthorMsg':"Link",
@@ -393,12 +392,6 @@ UE.I18N['en'] = {
         'failCheck':'Authentication fails, the upload is skipped!',
         'fileCanceling':'Cancel, please wait...',
         'stopUploading':'Upload has stopped...'
-    },
-    highlightcode:{
-        'static':{
-            'lang_input_selectLang':'Select Language'
-        },
-        importCode:'Please enter the code!'
     },
     emotion:{
         'static':{

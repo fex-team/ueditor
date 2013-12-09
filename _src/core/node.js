@@ -55,7 +55,7 @@
         pre:1,
         style:1,
         script:1
-    }
+    };
 
     var indentChar = '    ',
         breakChar = '\n';
@@ -116,7 +116,7 @@
     }
 
     function isText(node, arr) {
-        arr.push(notTransTagName[node.parentNode.tagName] ? node.data : node.data.replace(/[ ]{2}/g,' &nbsp;'))
+        arr.push(notTransTagName[node.parentNode.tagName] ? utils.html(node.data) : node.data.replace(/[ ]{2}/g,' &nbsp;'))
     }
 
     function isElement(node, arr, formatter, current) {

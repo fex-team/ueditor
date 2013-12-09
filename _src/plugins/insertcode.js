@@ -239,7 +239,6 @@ UE.plugins['insertcode'] = function() {
         preview:1,
         insertparagraph:1,
         elementpath:1,
-        highlightcode:1,
         insertcode:1,
         inserthtml:1,
         selectall:1
@@ -262,7 +261,7 @@ UE.plugins['insertcode'] = function() {
             if(!rng.collapsed){
                rng.deleteContents();
             }
-            if(!browser.ie ){
+            if(!browser.ie || browser.ie9above){
                 var tmpNode = me.document.createElement('br'),pre;
                 rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true);
                 var next = tmpNode.nextSibling;
@@ -373,66 +372,6 @@ UE.plugins['insertcode'] = function() {
             me.fireEvent('saveScene');
             if(evt.shiftKey){
 
-//                if(!rng.collapsed){
-//                    var bk = rng.createBookmark();
-//                    var start = bk.start.previousSibling;
-//                    if(start === pre.firstChild){
-//                        start.nodeValue = start.nodeValue.replace(/^\s{4}/,'');
-//                    }else{
-//                        while(start){
-//                            if(domUtils.isBr(start)){
-//                                start = start.nextSibling;
-//                                start.nodeValue = start.nodeValue.replace(/^\s{4}/,'');
-//                                break;
-//                            }
-//                            while(start.previousSibling && start.previousSibling.nodeType == 3){
-//                                start.nodeValue = start.previousSibling.nodeValue + start.nodeValue;
-//                                domUtils.remove(start.previousSibling)
-//                            }
-//                            start = start.previousSibling;
-//                        }
-//                    }
-//
-//                    var end = bk.end;
-//                    start = bk.start.nextSibling;
-//
-//                    while(start && start !== end){
-//                        if(domUtils.isBr(start) && start.nextSibling){
-//                            if(start.nextSibling === end){
-//                                break;
-//                            }
-//                            start = start.nextSibling;
-//                            while(start.nextSibling && start.nextSibling.nodeType == 3){
-//                                start.nodeValue += start.nextSibling.nodeValue;
-//                                domUtils.remove(start.nextSibling)
-//                            }
-//
-//                            start.nodeValue = start.nodeValue.replace(/^\s{4}/,'');
-//                        }
-//
-//                        start = start.nextSibling;
-//                    }
-//                    rng.moveToBookmark(bk).select();
-//                }else{
-//                    var bk = rng.createBookmark();
-//                    var start = bk.start.previousSibling;
-//                    if(start === pre.firstChild){
-//                        start.nodeValue = start.nodeValue.replace(/^\s{4}/,'');
-//                    }else{
-//                        while(start){
-//                            if(domUtils.isBr(start)){
-//                                start = start.nextSibling;
-//                                start.nodeValue = start.nodeValue.replace(/^\s{4}/,'');
-//                                break;
-//                            }
-//                            while(start.previousSibling && start.previousSibling.nodeType == 3){
-//                                start.nodeValue = start.previousSibling.nodeValue + start.nodeValue;
-//                                domUtils.remove(start.previousSibling)
-//                            }
-//                            start = start.previousSibling;
-//                        }
-//                    }
-//                }
             }else{
                 if(!rng.collapsed){
                     var bk = rng.createBookmark();
