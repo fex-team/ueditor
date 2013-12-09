@@ -113,6 +113,8 @@
             action: 'get',
             onsuccess: function (r) {
                 var data = r.responseText.split('ue_separate_ue');
+                if(data.length && data[0]=='') data.shift();
+                if(data.length && data[data.length-1]=='') data.pop();
                 callback(data.length ? data:lang.noUploadImage);
             },
             onerror: function () {

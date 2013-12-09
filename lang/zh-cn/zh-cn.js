@@ -213,7 +213,7 @@ UE.I18N['zh-cn'] = {
     'background':{
         'static':{
             'lang_background_normal':'背景设置',
-            'lang_background_local':'本地图片',
+            'lang_background_local':'在线图片',
             'lang_background_set':'选项',
             'lang_background_none':'无背景色',
             'lang_background_colored':'有背景色',

@@ -216,7 +216,7 @@ UE.I18N['en'] = {
     'background':{
         'static':{
             'lang_background_normal':'Normal',
-            'lang_background_local':'Local',
+            'lang_background_local':'Online',
             'lang_background_set':'Background Set',
             'lang_background_none':'No Background',
             'lang_background_colored':'Colored Background',

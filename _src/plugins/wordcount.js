@@ -12,6 +12,7 @@
 
 UE.plugins['wordcount'] = function(){
     var me = this;
+    me.setOpt('wordCount',true);
     me.addListener('contentchange',function(){
         me.fireEvent('wordcount');
     });
