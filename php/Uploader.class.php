@@ -159,7 +159,12 @@ class Uploader
      */
     private function getName()
     {
-        return $this->fileName = time() . rand( 1 , 10000 ) . $this->getFileExt();
+        if ($this->config[ "keepOriginName" ]=="on") {
+            $str = "_".$this->oriName;
+        } else {
+            $str = $this->getFileExt();
+        }
+        return $this->fileName = time() . rand( 1 , 10000 ) . $str;
     }
 
     /**
