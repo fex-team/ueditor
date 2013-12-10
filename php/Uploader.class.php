@@ -159,7 +159,7 @@ class Uploader
      */
     private function getName()
     {
-        if ($this->config[ "keepOriginName" ]=="on") {
+        if ($this->config[ "keepOriginName" ]=="1") {
             $count = 0;
             $dir = $this->getFolder();
             $ext = $this->getFileExt();
