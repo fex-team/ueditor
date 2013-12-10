@@ -159,7 +159,20 @@ class Uploader
      */
     private function getName()
     {
-        return $this->fileName = time() . rand( 1 , 10000 ) . $this->getFileExt();
+        if ($this->config[ "keepOriginName" ]=="1") {
+            $count = 0;
+            $dir = $this->getFolder();
+            $ext = $this->getFileExt();
+            $oriName = substr($this->oriName, 0, strrpos($this->oriName, '.'));
+
+            $fileName = $oriName.$ext;
+            while( file_exists($dir.'/'.$fileName) ){
+                $fileName = $oriName.'_'.(++$count).$ext;
+            }
+        } else {
+            $fileName = time().rand(1, 10000).$this->getFileExt();
+        }
+        return $this->fileName = $fileName;
     }
 
     /**
