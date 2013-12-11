@@ -38,17 +38,17 @@
         //,savePath: [ 'upload1', 'upload2', 'upload3' ]    //图片保存在服务器端的目录， 默认为空， 此时在上传图片时会向服务器请求保存图片的目录列表，
                                                             // 如果用户不希望发送请求， 则可以在这里设置与服务器端能够对应上的目录名称列表
                                                             //比如： savePath: [ 'upload1', 'upload2' ]
-        ,imageNameFormat: "{filename}" //格式化文件名,可配的参数模板如下
-                                                                // {filename}  //文件名
-                                                                // {rand:6}    //随机数,后面的数字是随机数的位数
-                                                                // {time}      //时间戳
-                                                                // {yyyy}      //四位年份
-                                                                // {yy}        //两位年份
-                                                                // {mm}        //两位月份
-                                                                // {dd}        //两位日期
-                                                                // {hh}        //两位小时
-                                                                // {ii}        //两位分钟
-                                                                // {ss}        //两位秒
+        //,imageNameFormat: "{filename}{rand:6}"            //格式化文件名,可配的参数模板如下
+                                                            // {filename}  //文件名
+                                                            // {rand:6}    //随机数,后面的数字是随机数的位数
+                                                            // {time}      //时间戳
+                                                            // {yyyy}      //四位年份
+                                                            // {yy}        //两位年份
+                                                            // {mm}        //两位月份
+                                                            // {dd}        //两位日期
+                                                            // {hh}        //两位小时
+                                                            // {ii}        //两位分钟
+                                                            // {ss}        //两位秒
 
 
         //涂鸦图片配置区
@@ -59,7 +59,7 @@
         ,fileUrl:URL+"php/fileUp.php"               //附件上传提交地址
         ,filePath:URL + "php/"                   //附件修正地址，同imagePath
         //,fileFieldName:"upfile"                    //附件提交的表单名，若此处修改，需要在后台对应文件修改对应参数
-        //,fileNameFormat: "{filename}{rand:6}{conflict:_%d}"  //是否保留原文件名,可配置参数请参考imageNameFormat配置项
+        //,fileNameFormat: "{filename}{rand:6}"  //是否保留原文件名,可配置参数请参考imageNameFormat配置项
 
         //远程抓取配置区
         //,catchRemoteImageEnable:true               //是否开启远程图片抓取,默认开启
