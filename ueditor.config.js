@@ -38,10 +38,9 @@
         //,savePath: [ 'upload1', 'upload2', 'upload3' ]    //图片保存在服务器端的目录， 默认为空， 此时在上传图片时会向服务器请求保存图片的目录列表，
                                                             // 如果用户不希望发送请求， 则可以在这里设置与服务器端能够对应上的目录名称列表
                                                             //比如： savePath: [ 'upload1', 'upload2' ]
-        ,imageNameFormat: "{filename}{rand:6}{conflict:_%d}" //格式化文件名,可配的参数模板如下
+        ,imageNameFormat: "{filename}" //格式化文件名,可配的参数模板如下
                                                                 // {filename}  //文件名
                                                                 // {rand:6}    //随机数,后面的数字是随机数的位数
-                                                                // {conflict:_%d}     //冲突字符串,%d会替换成自增的数字
                                                                 // {time}      //时间戳
                                                                 // {yyyy}      //四位年份
                                                                 // {yy}        //两位年份

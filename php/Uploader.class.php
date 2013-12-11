@@ -166,7 +166,7 @@ class Uploader
 
             $ext = $this->getFileExt();
             $oriName = substr($this->oriName, 0, strrpos($this->oriName, '.'));
-            $randNum = rand(1, 100000000).rand(1, 100000000).rand(1, 100000000).rand(1, 100000000);
+            $randNum = rand(1, 10000000000);
 
             $d = split('-', date("Y-y-m-d-H-i-s"));
             $format = str_replace("{yyyy}", $d[0], $format);
@@ -176,6 +176,7 @@ class Uploader
             $format = str_replace("{hh}", $d[4], $format);
             $format = str_replace("{ii}", $d[5], $format);
             $format = str_replace("{ss}", $d[6], $format);
+            $format = str_replace("{time}", $timeStamp, $format);
             $format = str_replace("{filename}", $oriName, $format);
 
             if(preg_match("/\{rand\:([\d]*)\}/i", $format, $matches)) {
@@ -183,21 +184,12 @@ class Uploader
             }
 
             $fileName = $format.$ext;
-            if(preg_match("/\{conflict\:([^\}]*)\}/i", $format, $matches)) {
-                $fileName = preg_replace("/\{conflict\:[^\}]*\}/i", '', $fileName);
-
-                if( file_exists($dir.'/'.$fileName) ){
-                    do {
-                        $conflict = $matches[1];
-                        $conflict = str_replace("%d", ++$count, $conflict);
-                        $fileName = $format.$ext;
-                        $fileName = preg_replace("/\{conflict\:[^\}]*\}/i", $conflict, $fileName);
-                    } while (file_exists($dir.'/'.$fileName));
-                }
+            while (file_exists($dir.'/'.$fileName)){
+                $fileName = $format.'_'.(++$count).$ext;
             }
         } else {
             do{
-                $fileName = $timeStamp.rand(1, 10000).$this->getFileExt();
+                $fileName = time().rand(1, 10000).$this->getFileExt();
             } while (file_exists($dir.'/'.$fileName));
         }
         return $this->fileName = $fileName;
