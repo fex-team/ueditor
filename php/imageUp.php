@@ -31,7 +31,7 @@
         "savePath" => $imgSavePathConfig,
         "maxSize" => 1000, //单位KB
         "allowFiles" => array(".gif", ".png", ".jpg", ".jpeg", ".bmp"),
-        "keepOriginName" => $_POST['keepOriginName']
+        "format" => $_POST['format']
     );
 
     if ( empty( $path ) ) {
