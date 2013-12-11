@@ -162,7 +162,7 @@ class Uploader
         $count = 0;
         $dir = $this->getFolder();
         $timeStamp = time();
-        if ($format = $this->config[ "format" ]) {
+        if ($format = $this->config[ "fileNameFormat" ]) {
 
             $ext = $this->getFileExt();
             $oriName = substr($this->oriName, 0, strrpos($this->oriName, '.'));
