@@ -5,6 +5,8 @@
 
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script src="../ueditor.parse.js"></script>
+    <!--<link href="../third-party/video-js/video-js.css" rel="stylesheet">-->
+    <!--<script src="../third-party/video-js/video.js"></script>-->
     <title></title>
 </head>
 <body>
@@ -14,6 +16,15 @@
         <p>
             这里可以书写，编辑器的初始内容
         </p>
+        <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="640" height="264"
+               poster="http://video-js.zencoder.com/oceans-clip.png"
+               data-setup="{}" src="http://video-js.zencoder.com/oceans-clip.mp4">
+            <source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
+            <source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' />
+            <source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' />
+            <track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track><!-- Tracks need an ending tag thanks to IE9 -->
+            <track kind="subtitles" src="demo.captions.vtt" srclang="en" label="English"></track><!-- Tracks need an ending tag thanks to IE9 -->
+        </video>
         <pre class="brush:js;toolbar:false;">
                moveToBookmark:function (bookmark) {
             var start = bookmark.id ? this.document.getElementById(bookmark.start) : bookmark.start,

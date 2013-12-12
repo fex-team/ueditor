@@ -5,7 +5,8 @@
             'table.js',
             'charts.js',
             'background.js',
-            'list.js'
+            'list.js',
+            'video.js'
         ];
 
     function getUEBasePath ( docUrl, confUrl ) {
