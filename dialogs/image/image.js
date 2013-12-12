@@ -63,7 +63,8 @@ var imageUploader = {},
         g("searchList").innerHTML = "<p class='msg'>" + lang.imageLoading + "</p>";
         var key = imgSearchInput.value,
             type = $G("imgType").value,
-            url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + encodeToGb2312(key) + type + "&" + +new Date;
+            keepOriginName = editor.options.keepOriginName ? "1":"0",
+            url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + encodeToGb2312(key) + type + "&keeporiginname=" + keepOriginName + "&" + +new Date;
         var reqCallBack = function (data) {
             try {
                 var imgObjs = data.data;
