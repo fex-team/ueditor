@@ -130,6 +130,15 @@ Class Uploader
         rsFileName = GetSaveName( filename )
         rsFilePath = savepath + rsFileName
 
+        Set fs = Server.CreateObject("Scripting.FileSystemObject")
+        ai = 1
+        testPath = rsFilePath
+        Do While fs.FileExists( Server.MapPath( testPath ) )
+            testPath = GetNameWithoutExt( rsFilePath ) & "_" & ai & GetExt( rsFilePath )
+            ai = ai + 1
+        Loop
+        rsFilePath = testPath
+
         stream.SaveToFile Server.MapPath( rsFilePath )
         stream.Close
         rsState = "SUCCESS"
@@ -183,20 +192,50 @@ Class Uploader
         GetExt = Right( file, Len(file) - InStrRev(file, ".") + 1 )
     End Function
 
+    Private Function GetNameWithoutExt( file )
+        GetNameWithoutExt = Left( file, InStrRev(file, ".") - 1 )
+    End Function
+
     Private Function GetSavePath()
         GetSavePath = cfgSavePath & GetFormatedDate() & "/"
     End Function
 
     Private Function GetSaveName( ByVal filename )
-        GetSaveName = TimeStamp() & "_" & Rand(1e12, 1e13 - 1) & "_" & filename
+        Dim format, ext, name
+        format = rsFormValues.Item( "fileNameFormat" )
+        ext = GetExt( filename )
+        name = GetNameWithoutExt( filename )
+        filename = Replace( format, "{filename}", name )
+        filename = Replace( filename, "{time}", TimeStamp() )
+        filename = Replace( filename, "{yyyy}", Year(Now) )
+        filename = Replace( filename, "{yy}", Year(Now) Mod 100 )
+        filename = Replace( filename, "{mm}", LeadZero( Month(Now) ) )
+        filename = Replace( filename, "{dd}", LeadZero( Day(Now) ) )
+        filename = Replace( filename, "{hh}", LeadZero( Hour(Now) ) )
+        filename = Replace( filename, "{ii}", LeadZero( Minute(Now) ) )
+        filename = Replace( filename, "{ss}", LeadZero( Second(Now) ) )
+        Set randPattern = new RegExp
+        randPattern.Pattern = "{rand(\:?)(\d+)}"
+        Set matches = randPattern.Execute(filename)
+        If matches.Count Then
+            Set match = matches(0)
+            digit = 6
+            If match.SubMatches.Count > 1 Then
+                digit = 0 + match.SubMatches(1)
+            End If
+            min = 1
+            Do While digit > 0
+                min = min * 10
+                digit = digit - 1
+            Loop
+            max = min * 10
+            filename = randPattern.Replace( filename, Rand( min, max ) )
+        End If
+        GetSaveName = filename + ext
     End Function
 
     Private Function TimeStamp()
-        Dim hh, mm, ss
-        hh = LeadZero(Hour(Now))
-        mm = LeadZero(Minute(Now))
-        ss = LeadZero(Second(Now))
-        TimeStamp = hh & mm & ss
+        TimeStamp = DateDiff("s", "1970-1-1 8:00:00", Now())
     End Function
 
     Private Function Rand( min, max )

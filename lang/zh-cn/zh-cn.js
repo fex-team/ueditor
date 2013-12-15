@@ -482,7 +482,8 @@ UE.I18N['zh-cn'] = {
     'insertvideo':{
         'static':{
             lang_tab_insertV:"插入视频",
-//            lang_tab_searchV:"搜索视频",
+            lang_tab_searchV:"搜索视频",
+            lang_tab_uploadV:"上传视频",
             lang_video_url:"视频网址",
             lang_video_size:"视频尺寸",
             lang_videoW:"宽度",
@@ -491,7 +492,16 @@ UE.I18N['zh-cn'] = {
             videoSearchTxt:{value:"请输入搜索关键字！"},
             videoType:{options:["全部", "热门", "娱乐", "搞笑", "体育", "科技", "综艺"]},
             videoSearchBtn:{value:"百度一下"},
-            videoSearchReset:{value:"清空结果"}
+            videoSearchReset:{value:"清空结果"},
+
+            'lang_input_fileStatus':' 当前未上传文件',
+            'startUpload':{style:"background:url(upload.png) no-repeat;"},
+
+            lang_upload_size:"视频尺寸",
+            lang_upload_width:"宽度",
+            lang_upload_height:"高度",
+            lang_upload_alignment:"对齐方式"
+
         },
         numError:"请输入正确的数值，如123,400",
         floatLeft:"左浮动",
@@ -502,7 +512,35 @@ UE.I18N['zh-cn'] = {
         loading:" &nbsp;视频加载中，请等待……",
         clickToSelect:"点击选中",
         goToSource:'访问源视频',
-        noVideo:" &nbsp; &nbsp;抱歉，找不到对应的视频，请重试！"
+        noVideo:" &nbsp; &nbsp;抱歉，找不到对应的视频，请重试！",
+
+
+        'browseFiles':'文件浏览…',
+        'uploadSuccess':'上传成功!',
+        'delSuccessFile':'从成功队列中移除',
+        'delFailSaveFile':'移除保存失败文件',
+        'statusPrompt':' 个文件已上传！ ',
+        'flashVersionError':'当前Flash版本过低，请更新FlashPlayer后重试！',
+        'flashLoadingError':'Flash加载失败!请检查路径或网络状态',
+        'fileUploadReady':'等待上传……',
+        'delUploadQueue':'从上传队列中移除',
+        'limitPrompt1':'单次不能选择超过',
+        'limitPrompt2':'个文件！请重新选择！',
+        'delFailFile':'移除失败文件',
+        'fileSizeLimit':'文件大小超出限制！',
+        'emptyFile':'空文件无法上传！',
+        'fileTypeError':'文件类型错误！',
+        'unknownError':'未知错误！',
+        'fileUploading':'上传中，请等待……',
+        'cancelUpload':'取消上传',
+        'netError':'网络错误',
+        'failUpload':'上传失败!',
+        'serverIOError':'服务器IO错误！',
+        'noAuthority':'无权限！',
+        'fileNumLimit':'上传个数限制',
+        'failCheck':'验证失败，本次上传被跳过！',
+        'fileCanceling':'取消中，请等待……',
+        'stopUploading':'上传已停止……'
     },
     'spechars':{
         'static':{},
