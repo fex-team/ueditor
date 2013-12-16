@@ -17,9 +17,11 @@
             这里可以书写，编辑器的初始内容
         </p>
         <p>
-            <video class="video-js vjs-default-skin" controls preload="none" width="420" height="280"
+            <video class="video-js vjs-default-skin" data-setup="{}" controls preload="none" width="640" height="264"
                    src="http://video-js.zencoder.com/oceans-clip.mp4"
-                   poster="http://video-js.zencoder.com/oceans-clip.png" data-setup="{}"></video>
+                   poster="http://video-js.zencoder.com/oceans-clip.png">
+                <source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
+            </video>
         </p>
         <pre class="brush:js;toolbar:false;">
                moveToBookmark:function (bookmark) {
