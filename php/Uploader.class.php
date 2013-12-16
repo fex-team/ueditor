@@ -168,6 +168,9 @@ class Uploader
             $oriName = substr($this->oriName, 0, strrpos($this->oriName, '.'));
             $randNum = rand(1, 10000000000);
 
+            //过滤非法字符
+            $format = preg_replace("/[\:\|\?\"\<\>\/\*\\\\]+/", '', $format);
+
             $d = split('-', date("Y-y-m-d-H-i-s"));
             $format = str_replace("{yyyy}", $d[0], $format);
             $format = str_replace("{yy}", $d[1], $format);
