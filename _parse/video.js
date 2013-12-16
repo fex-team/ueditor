@@ -22,10 +22,6 @@ UE.parse.register('vedio',function(utils){
             tag : "script",
             type : "text/javascript"
         },function(){
-//            setTimeout(function(){
-//                videojs.options.flash.swf = 'http://vjs.zencdn.net/4.2/video-js.swf';
-//                videojs(document.getElementsByTagName('video')[0], {});
-//            }, 2000);
         });
 
     }
