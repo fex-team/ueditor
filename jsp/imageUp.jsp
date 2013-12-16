@@ -6,15 +6,23 @@
         <%@ page import="java.util.Arrays" %>
         <%@ page import="java.io.FileInputStream" %>
         <%@ page import="ueditor.Uploader" %>
+        <%@ page import="java.io.File" %>
+        <%@ page import="java.util.Map" %>
 
             <%
 
 request.setCharacterEncoding("utf-8");
 response.setCharacterEncoding("utf-8");
 
+String currentPath = request.getRequestURI().replace( request.getContextPath(), "" );
+
+File currentFile = new File( currentPath );
+
+currentPath = currentFile.getParent() + File.separator;
+
 //加载配置文件
 Properties pro = new Properties();
-String propertiesPath = request.getRealPath("/jsp/config.properties");
+String propertiesPath = request.getSession().getServletContext().getRealPath( currentPath + "config.properties" );
 Properties properties = new Properties();
 
 try {
@@ -53,12 +61,16 @@ if ( request.getParameter( "fetch" ) != null ) {
 
 Uploader up = new Uploader(request);
 
-//获取前端提交的path路径
+// 获取前端提交的path路径
 String dir = request.getParameter( "dir" );
+// 文件名格式化默认参数
+String fileNameFormat = properties.getProperty( "fileNameFormat" );
+
 
 //普通请求中拿不到参数， 则从上传表单中拿
 if ( dir == null ) {
 	dir = up.getParameter("dir");
+	fileNameFormat = up.getParameter( "fileNameFormat" );
 }
 
 if ( dir == null || "".equals( dir ) ) {
@@ -78,6 +90,7 @@ up.setSavePath( dir );
 String[] fileType = {".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp"};
 up.setAllowFiles(fileType);
 up.setMaxSize(10000); //单位KB
+up.setFileNameFormat( fileNameFormat );
 up.upload();
 response.getWriter().print("{'original':'"+up.getOriginalName()+"','url':'"+up.getUrl()+"','title':'"+up.getTitle()+"','state':'"+up.getState()+"'}");
 %>
