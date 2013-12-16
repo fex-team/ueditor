@@ -366,7 +366,6 @@
 
     /* 插入上传视频 */
     function insertUpload(){
-        debugger;
         var videoObjs=[],
             uploadDir = editor.options.videoPath,
             width = $G('upload_width').value || 420,
