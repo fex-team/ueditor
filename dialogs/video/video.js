@@ -366,15 +366,19 @@
 
     /* 插入上传视频 */
     function insertUpload(){
+        debugger;
         var videoObjs=[],
-            uploadDir = editor.options.videoPath;
+            uploadDir = editor.options.videoPath,
+            width = $G('upload_width').value || 420,
+            height = $G('upload_height').value || 280,
+            align = findFocus("upload_alignment","name") || 'none';
         for(var key in uploadVideoList) {
             var file = uploadVideoList[key];
             videoObjs.push({
                 url: uploadDir + file.url,
-                width:420,
-                height:280,
-                align:"none"
+                width:width,
+                height:height,
+                align:align
             });
         }
         editor.execCommand('insertvideo', videoObjs, 'upload');
