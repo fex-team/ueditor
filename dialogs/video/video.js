@@ -9,8 +9,7 @@
 (function(){
 
     editor.setOpt({
-        videoFieldName:"upfile",
-        videoNameFormat: "{time}{rand:6}"
+        videoFieldName:"upfile"
     });
 
     var video = {},
@@ -367,14 +366,17 @@
     /* 插入上传视频 */
     function insertUpload(){
         var videoObjs=[],
-            uploadDir = editor.options.videoPath;
+            uploadDir = editor.options.videoPath,
+            width = $G('upload_width').value || 420,
+            height = $G('upload_height').value || 280,
+            align = findFocus("upload_alignment","name") || 'none';
         for(var key in uploadVideoList) {
             var file = uploadVideoList[key];
             videoObjs.push({
                 url: uploadDir + file.url,
-                width:420,
-                height:280,
-                align:"none"
+                width:width,
+                height:height,
+                align:align
             });
         }
         editor.execCommand('insertvideo', videoObjs, 'upload');
@@ -387,7 +389,7 @@
             file_post_name:editor.options.videoFieldName,      //向后台提交的表单名
             flash_url:"../../third-party/swfupload/swfupload.swf",
             flash9_url:"../../third-party/swfupload/swfupload_fp9.swf",
-            post_params:{"PHPSESSID":"<?php echo session_id(); ?>","fileNameFormat":editor.options.videoNameFormat}, //解决session丢失问题
+            post_params:{"PHPSESSID":"<?php echo session_id(); ?>","fileNameFormat":editor.options.fileNameFormat}, //解决session丢失问题
             file_size_limit:"100 MB",                                 //文件大小限制，此处仅是前端flash选择时候的限制，具体还需要和后端结合判断
             file_types:"*.*",                                         //允许的扩展名，多个扩展名之间用分号隔开，支持*通配符
             file_types_description:"Video Files",                      //扩展名描述

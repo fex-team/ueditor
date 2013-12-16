@@ -98,14 +98,13 @@
         editor.setOpt({
             imageFieldName:"upfile",
             compressSide:0,
-            maxImageSideLength:900,
-            imageNameFormat: "{time}{rand:6}"
+            maxImageSideLength:900
         });
         utils.domReady(function(){
             var flashOptions = {
                 container:"flashContainer",                                                    //flash容器id
                 url:editor.options.imageUrl,                                           // 上传处理页面的url地址
-                ext:'{"param1":"value1", "param2":"value2","fileNameFormat":"' + editor.options.imageNameFormat + '"}',                                 //可向服务器提交的自定义参数列表
+                ext:'{"param1":"value1", "param2":"value2","fileNameFormat":"' + editor.options.fileNameFormat + '"}',                                 //可向服务器提交的自定义参数列表
                 fileType:'{"description":"'+lang.fileType+'", "extension":"*.gif;*.jpeg;*.png;*.jpg"}',     //上传文件格式限制
                 flashUrl:'imageUploader.swf',                                                  //上传用的flash组件地址
                 width:608,          //flash的宽度
