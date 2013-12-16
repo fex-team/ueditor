@@ -202,45 +202,6 @@
     }
 
     /**
-     * tab切换
-     * @param tabParentId
-     * @param keepFocus   当此值为真时，切换按钮上会保留focus的样式
-     */
-    function switchTab( tabParentId,keepFocus ) {
-        var tabElements = $G( tabParentId ).children,
-                tabHeads = tabElements[0].children,
-                tabBodys = tabElements[1].children;
-        for ( var i = 0, length = tabHeads.length; i < length; i++ ) {
-            var head = tabHeads[i];
-            domUtils.on( head, "click", function () {
-                //head样式更改
-                for ( var k = 0, len = tabHeads.length; k < len; k++ ) {
-                    if(!keepFocus)tabHeads[k].className = "";
-                }
-                this.className = "focus";
-                //body显隐
-                var tabSrc = this.getAttribute( "tabSrc" );
-                for ( var j = 0, length = tabBodys.length; j < length; j++ ) {
-                    var body = tabBodys[j],
-                        id = body.getAttribute( "id" );
-
-                    if ( id == tabSrc ) {
-                        body.style.display = "";
-                        if(id=="videoSearch"){
-                            selectTxt($G("videoSearchTxt"));
-                        }
-                        if(id=="video"){
-                            selectTxt($G("videoUrl"));
-                        }
-
-                    } else {
-                        body.style.display = "none";
-                    }
-                }
-            } );
-        }
-    }
-    /**
       * 创建图片浮动选择按钮
       * @param ids
       */

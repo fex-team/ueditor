@@ -5,7 +5,7 @@ UE.parse.register('vedio',function(utils){
     document.createElement('video');document.createElement('audio');
     if(video.length || audio.length){
         var sourcePath = utils.removeLastbs(this.rootPath),
-            jsurl = sourcePath + '/third-party/video-js/video.dev.js',
+            jsurl = sourcePath + '/third-party/video-js/video.js',
             cssurl = sourcePath + '/third-party/video-js/video-js.min.css',
             swfUrl = sourcePath + '/third-party/video-js/video-js.swf';
 
@@ -22,10 +22,7 @@ UE.parse.register('vedio',function(utils){
             tag : "script",
             type : "text/javascript"
         },function(){
-//            setTimeout(function(){
-//                videojs.options.flash.swf = 'http://vjs.zencdn.net/4.2/video-js.swf';
-//                videojs(document.getElementsByTagName('video')[0], {});
-//            }, 2000);
+            videojs.options.flash.swf = swfUrl;
         });
 
     }
