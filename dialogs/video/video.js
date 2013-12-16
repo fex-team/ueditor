@@ -9,8 +9,7 @@
 (function(){
 
     editor.setOpt({
-        videoFieldName:"upfile",
-        videoNameFormat: "{time}{rand:6}"
+        videoFieldName:"upfile"
     });
 
     var video = {},
@@ -390,7 +389,7 @@
             file_post_name:editor.options.videoFieldName,      //向后台提交的表单名
             flash_url:"../../third-party/swfupload/swfupload.swf",
             flash9_url:"../../third-party/swfupload/swfupload_fp9.swf",
-            post_params:{"PHPSESSID":"<?php echo session_id(); ?>","fileNameFormat":editor.options.videoNameFormat}, //解决session丢失问题
+            post_params:{"PHPSESSID":"<?php echo session_id(); ?>","fileNameFormat":editor.options.fileNameFormat}, //解决session丢失问题
             file_size_limit:"100 MB",                                 //文件大小限制，此处仅是前端flash选择时候的限制，具体还需要和后端结合判断
             file_types:"*.*",                                         //允许的扩展名，多个扩展名之间用分号隔开，支持*通配符
             file_types_description:"Video Files",                      //扩展名描述
