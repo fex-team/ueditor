@@ -169,7 +169,7 @@ class Uploader
             $randNum = rand(1, 10000000000);
 
             //过滤非法字符
-            $format = preg_replace("/[\:\|\?\"\<\>\/\*\\\\]+/", '', $format);
+            $format = preg_replace("/[\|\?\"\<\>\/\*\\\\]+/", '', $format);
 
             $d = split('-', date("Y-y-m-d-H-i-s"));
             $format = str_replace("{yyyy}", $d[0], $format);
@@ -185,6 +185,9 @@ class Uploader
             if(preg_match("/\{rand\:([\d]*)\}/i", $format, $matches)) {
                 $format = preg_replace("/\{rand\:[\d]*\}/i", substr($randNum, 0, $matches[1]), $format);
             }
+
+            //过滤非法字符
+            $format = preg_replace("/[\|\?\"\<\>\/\*\\\\]+/", '', $format);
 
             $fileName = $format.$ext;
             while (file_exists($dir.'/'.$fileName)){
