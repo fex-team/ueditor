@@ -257,7 +257,8 @@
             allHtmlEnabled: false,
             scaleEnabled: false,
             tableNativeEditInFF: false,
-            autoSyncData : true
+            autoSyncData : true,
+            fileNameFormat: '{time}{rand:6}'
         });
 
         if(!utils.isEmptyObject(UE.I18N)){
