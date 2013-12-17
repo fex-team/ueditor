@@ -948,7 +948,6 @@ baidu.flash.fileUploader = baidu.flash.fileUploader || function(options){
      * @public
      * @param {Number|Array} [index] 要删除的index，不传则全部删除
      * @param {Function} callBack
-     * @param 
      * */
     me.deleteFile = function(index, callBack){
 
@@ -1236,28 +1235,9 @@ baidu.sio.log = function(url) {
   };
   img.src = url;
 };
-/*
- * Tangram
- * Copyright 2011 Baidu Inc. All rights reserved.
- *
- * path: baidu/fn/abstractMethod.js
- * author: leeight
- * version: 1.0.0
- * date: 2011/04/29
- */
 
 
 
-/**
- * 定义一个抽象方法
- * @type {!Function}
- * @throws {Error} when invoked to indicate the method should be
- *   overridden.
- * @see goog.abstractMethod
- */
-baidu.fn.abstractMethod = function() {
-    throw Error('unimplemented abstract method');
-};
 /*
  * Tangram
  * Copyright 2009 Baidu Inc. All rights reserved.
