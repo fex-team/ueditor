@@ -280,9 +280,10 @@ public class Uploader {
 			
 		}
 		
-		
+
+
 		// 对最终的结果删除不合法的字符
-		return ( filename + this.getFileExt(fileName) ).replaceAll( "[^a-z0-9A-Z\\-_.]", "" );
+		return ( filename + this.getFileExt(fileName) ).replaceAll( "[\\\\/:*?\"<>|]", "" );
 		
 	}
 
