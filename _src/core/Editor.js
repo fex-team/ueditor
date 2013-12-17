@@ -1004,7 +1004,13 @@
          * @see UE.EventBase:fireEvent(String)
          */
         _proxyDomEvent: function (evt) {
-            return this.fireEvent(evt.type.replace(/^on/, ''), evt);
+            if(this.fireEvent('before' + evt.type.replace(/^on/, '').toLowerCase()) === false){
+                return false;
+            }
+            if(this.fireEvent(evt.type.replace(/^on/, ''), evt) === false){
+                return false;
+            }
+            return this.fireEvent('after' + evt.type.replace(/^on/, '').toLowerCase())
         },
         /**
          * 变化选区
