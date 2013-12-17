@@ -239,6 +239,7 @@ UE.plugins['fiximgclick'] = (function () {
 
                         var _keyDownHandler = function (e) {
                             imageScale.hide();
+                            if(imageScale.target) me.selection.getRange().selectNode(imageScale.target).select();
                         }, _mouseDownHandler = function (e) {
                             var ele = e.target || e.srcElement;
                             if (ele && (ele.className===undefined || ele.className.indexOf('edui-editor-scale') == -1)) {
@@ -247,17 +248,17 @@ UE.plugins['fiximgclick'] = (function () {
                         }, timer;
 
                         me.addListener('afterscaleshow', function (e) {
+                            me.addListener('beforekeydown', _keyDownHandler);
+                            me.addListener('beforemousedown', _mouseDownHandler);
                             domUtils.on(document, 'keydown', _keyDownHandler);
-                            domUtils.on(me.document,'keydown', _keyDownHandler);
                             domUtils.on(document,'mousedown', _mouseDownHandler);
-                            domUtils.on(me.document,'mousedown', _mouseDownHandler);
                             me.selection.getNative().removeAllRanges();
                         });
                         me.addListener('afterscalehide', function (e) {
+                            me.removeListener('beforekeydown', _keyDownHandler);
+                            me.removeListener('beforemousedown', _mouseDownHandler);
                             domUtils.un(document, 'keydown', _keyDownHandler);
-                            domUtils.un(me.document,'keydown', _keyDownHandler);
                             domUtils.un(document,'mousedown', _mouseDownHandler);
-                            domUtils.un(me.document,'mousedown', _mouseDownHandler);
                             var target = imageScale.target;
                             if (target.parentNode) {
                                 me.selection.getRange().selectNode(target).select();
@@ -270,6 +271,7 @@ UE.plugins['fiximgclick'] = (function () {
                             if (ele && ele.className.indexOf('edui-editor-scale-hand') == -1) {
                                 timer = setTimeout(function () {
                                     imageScale.hide();
+                                    if(imageScale.target) me.selection.getRange().selectNode(ele).select();
                                 }, 200);
                             }
                         });

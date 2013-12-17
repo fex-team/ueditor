@@ -241,6 +241,8 @@ public static class NameFormater
         format = format.Replace("{hh}", DateTime.Now.Hour.ToString("D2"));
         format = format.Replace("{ii}", DateTime.Now.Minute.ToString("D2"));
         format = format.Replace("{ss}", DateTime.Now.Second.ToString("D2"));
+        var invalidPattern = new Regex(@"[\\\/\:\*\?\042\<\>\|]");
+        format = invalidPattern.Replace(format, "");
         return format + ext;
     }
 }
