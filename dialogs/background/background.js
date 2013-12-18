@@ -1,4 +1,4 @@
-//(function () {
+(function () {
 
     var backupStyle = editor.queryCommandValue('background');
 
@@ -36,8 +36,10 @@
                 image = obj['background-image'] || '',
                 position = obj['background-position'] || 'center center',
                 pos = position.split(' '),
-                x = parseInt(pos.x) || 0,
-                y = parseInt(pos.y) || 0;
+                x = parseInt(pos[0]) || 0,
+                y = parseInt(pos[1]) || 0;
+
+            if(repeat == 'no-repeat' && (x || y)) repeat = 'self';
 
             image = image.match(/url[\s]*\(([^\)]*)\)/);
             image = image ? image[1]:'';
@@ -246,4 +248,4 @@
     dialog.oncancel = function () {
         editor.execCommand('background', backupStyle);
     };
-//})()
+})()
