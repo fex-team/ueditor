@@ -15,6 +15,9 @@ var docList = [
             }, {
                 id:'format_upload_filename',
                 title:'格式化上传文件名'
+            }, {
+                id:'upload_video',
+                title:'上传视频'
             }
         ]
     },
