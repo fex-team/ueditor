@@ -508,7 +508,15 @@ UE.I18N['en'] = {
             videoSearchTxt:{value:"Enter the search keyword!"},
             videoType:{options:["All", "Hot", "Entertainment", "Funny", "Sports", "Science", "variety"]},
             videoSearchBtn:{value:"Search in Baidu"},
-            videoSearchReset:{value:"Clear result"}
+            videoSearchReset:{value:"Clear result"},
+
+            'lang_input_fileStatus':' No file uploaded!',
+            'startUpload':{style:"background:url(upload.png) no-repeat;"},
+
+            lang_upload_size:"Video Size",
+            lang_upload_width:"Width",
+            lang_upload_height:"Height",
+            lang_upload_alignment:"Alignment"
         },
         numError:"Please enter the correct Num. e.g 123,400",
         floatLeft:"Float left",
@@ -519,7 +527,34 @@ UE.I18N['en'] = {
         loading:" &nbsp;The video is loading, please wait…",
         clickToSelect:"Click to select",
         goToSource:'Visit source video ',
-        noVideo:" &nbsp; &nbsp;Sorry,can't find the video,please try again!"
+        noVideo:" &nbsp; &nbsp;Sorry,can't find the video,please try again!",
+
+        'browseFiles':'Open files',
+        'uploadSuccess':'Upload Successful!',
+        'delSuccessFile':'Remove from the success of the queue',
+        'delFailSaveFile':'Remove the save failed file',
+        'statusPrompt':' file(s) uploaded! ',
+        'flashVersionError':'The current Flash version is too low, please update FlashPlayer,then try again!',
+        'flashLoadingError':'The Flash failed loading! Please check the path or network state',
+        'fileUploadReady':'Wait for uploading...',
+        'delUploadQueue':'Remove from the uploading queue ',
+        'limitPrompt1':'Can not choose more than single',
+        'limitPrompt2':'file(s)！Please choose again！',
+        'delFailFile':'Remove failure file',
+        'fileSizeLimit':'File size exceeds the limit！',
+        'emptyFile':'Can not upload an empty file！',
+        'fileTypeError':'File type error！',
+        'unknownError':'Unknown error！',
+        'fileUploading':'Uploading,please wait...',
+        'cancelUpload':'Cancel upload',
+        'netError':'Network error',
+        'failUpload':'Upload failed',
+        'serverIOError':'Server IO error！',
+        'noAuthority':'No Permission！',
+        'fileNumLimit':'Upload limit to the number',
+        'failCheck':'Authentication fails, the upload is skipped!',
+        'fileCanceling':'Cancel, please wait...',
+        'stopUploading':'Upload has stopped...'
     },
     spechars:{
         'static':{},
