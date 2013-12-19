@@ -516,7 +516,8 @@ UE.I18N['en'] = {
             lang_upload_size:"Video Size",
             lang_upload_width:"Width",
             lang_upload_height:"Height",
-            lang_upload_alignment:"Alignment"
+            lang_upload_alignment:"Alignment",
+            lang_format_advice:"Recommends mp4 format."
         },
         numError:"Please enter the correct Num. e.g 123,400",
         floatLeft:"Float left",
