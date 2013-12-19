@@ -34,7 +34,11 @@
     <script type="text/javascript">
             //全局变量
         var imageUrls = [],          //用于保存从服务器返回的图片信息数组
-            selectedImageCount = 0;  //当前已选择的但未上传的图片数量
+            selectedImageCount = 0,  //当前已选择的但未上传的图片数量
+            params = baidu.json.stringify({
+                "fileNameFormat":editor.options.fileNameFormat
+            });
+
         editor.setOpt({
             wordImageFieldName:"upfile",
             compressSide:0,
@@ -45,7 +49,7 @@
             var flashOptions = {
                 container:"flashContainer",                                                    //flash容器id
                 url:editor.options.wordImageUrl,                                           // 上传处理页面的url地址
-                ext:'{"param1":"value1", "param2":"value2"}',                                 //可向服务器提交的自定义参数列表
+                ext:params,                                 //可向服务器提交的自定义参数列表
                 fileType:'{"description":"'+lang.fileType+'", "extension":"*.gif;*.jpeg;*.png;*.jpg"}',     //上传文件格式限制
                 flashUrl:'imageUploader.swf',                                                  //上传用的flash组件地址
                 width:600,          //flash的宽度

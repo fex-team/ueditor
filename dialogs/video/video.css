@@ -70,6 +70,7 @@ span.view{display: inline-block;width: 30px;float: right;cursor: pointer;color: 
 #uploadVideoInfo{margin-top:20px;float:right;padding-right:8px;}
 
 #divStatus {display:inline-block; width:336px;color: #aaa;font-size: 12px; }
+#video_format_advice{font-size: 12px; color:red;line-height: 24px;}
 #startUpload{cursor: pointer;display: inline-block; width: 100px;height: 30px;float: right;}
 div.fieldset {
     border:  1px solid #afe14c;
