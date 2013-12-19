@@ -265,7 +265,7 @@ UE.plugins['insertcode'] = function() {
                 var tmpNode = me.document.createElement('br'),pre;
                 rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true);
                 var next = tmpNode.nextSibling;
-                if(!next){
+                if(!next && (!browser.ie || browser.version > 10)){
                     rng.insertNode(tmpNode.cloneNode(false));
                 }else{
                     rng.setStartAfter(tmpNode);

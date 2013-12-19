@@ -3,6 +3,8 @@ package ueditor;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.fileupload.*;
@@ -10,8 +12,6 @@ import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.fileupload.FileUploadBase.InvalidContentTypeException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-
-
 
 
 
@@ -39,6 +39,8 @@ public class Uploader {
 	private String originalName = "";
 	// 文件大小
 	private String size = "";
+	// 文件名称格式化模板
+	private String format = "";
 
 	private HttpServletRequest request = null;
 	private String title = "";
@@ -126,6 +128,7 @@ public class Uploader {
 			
 			this.state=this.errorInfo.get("SUCCESS");
 		} catch ( Exception e ) {
+			e.printStackTrace();
 			this.state=this.errorInfo.get("IO");
 		}
 		
@@ -155,6 +158,7 @@ public class Uploader {
 			ro.close();
 			this.state=this.errorInfo.get("SUCCESS");
 		} catch (Exception e) {
+			e.printStackTrace();
 			this.state = this.errorInfo.get("IO");
 		}
 	}
@@ -237,9 +241,50 @@ public class Uploader {
 	 * @return
 	 */
 	private String getName(String fileName) {
-		Random random = new Random();
-		return this.fileName = "" + random.nextInt(10000)
-				+ System.currentTimeMillis() + this.getFileExt(fileName);
+
+		String filename = fileName.substring( 0, fileName.lastIndexOf( "." ) );
+		Calendar calendar = Calendar.getInstance();
+		
+		int intMonth = calendar.get( Calendar.MONTH ) + 1;
+		int intDay = calendar.get( Calendar.DAY_OF_MONTH );
+		int intHour = calendar.get( Calendar.HOUR_OF_DAY );
+		int intMinute = calendar.get( Calendar.MINUTE );
+		int intSecond = calendar.get( Calendar.SECOND );
+		
+		
+		String month = ( intMonth < 10 ? "0" : "" ) + intMonth;
+		String day = ( intDay < 10 ? "0" : "" ) + intDay;
+		String hour = ( intHour < 10 ? "0" : "" ) + intHour;
+		String minute = ( intMinute < 10 ? "0" : "" ) + intMinute;
+		String second = ( intSecond < 10 ? "0" : "" ) + intSecond;
+		
+		filename = this.format.replaceAll( "\\{filename\\}", filename )
+				   .replaceAll( "\\{time\\}", System.currentTimeMillis() + "" )
+				   .replaceAll( "\\{yyyy\\}", calendar.get( Calendar.YEAR ) + "" )
+				   .replaceAll( "\\{yy\\}", ( calendar.get( Calendar.YEAR ) + "" ).substring( 2 ) )
+				   .replaceAll( "\\{mm\\}", month )
+				   .replaceAll( "\\{dd\\}", day )
+				   .replaceAll( "\\{hh\\}", hour )
+				   .replaceAll( "\\{ii\\}", minute )
+				   .replaceAll( "\\{ss\\}", second );
+		
+		Matcher matcher = Pattern.compile( "\\{rand:([0-9]+)\\}" ).matcher( filename );
+		
+		while ( matcher.find() ) {
+			
+			int count = Integer.valueOf( matcher.group(1) );
+			String groupRex = matcher.group().replace( "{", "\\{" ).replace( "}", "\\}" );
+			
+			filename = filename.replaceFirst( groupRex, this.getRandom( count ) );
+			matcher.reset( filename );
+			
+		}
+		
+
+
+		// 对最终的结果删除不合法的字符
+		return ( filename + this.getFileExt(fileName) ).replaceAll( "[\\\\/:*?\"<>|]", "" );
+		
 	}
 
 	/**
@@ -260,6 +305,39 @@ public class Uploader {
 			}
 		}
 		return path;
+	}
+	
+	/**
+	 * 产生一个由参数count指定位数的随机数
+	 * @param count 随机数的位数
+	 * @return 随机数字符串
+	 */
+	private String getRandom ( int count ) {
+		
+		double random = Math.random();
+		int resultCount = 0;
+		int copyCount = count;
+		
+		while ( count > 0 ) {
+			
+			count--;
+			random *= 10;
+			
+		}
+		
+		String result = ( int )random + "";
+		
+		resultCount = copyCount - result.length();
+
+		while ( resultCount > 0 ) {
+			
+			result = "0" + result;
+			resultCount--;
+			
+		}
+		
+		return result;
+		
 	}
 
 	/**
@@ -321,6 +399,12 @@ public class Uploader {
 
 	public void setMaxSize( long size ) {
 		this.maxSize = size * 1024;
+	}
+	
+	public void setFileNameFormat ( String format ) {
+		
+		this.format = format;
+		
 	}
 
 	public String getSize() {

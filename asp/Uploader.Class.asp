@@ -231,6 +231,10 @@ Class Uploader
             max = min * 10
             filename = randPattern.Replace( filename, Rand( min, max ) )
         End If
+        Set invalidPattern = new RegExp
+        invalidPattern.Pattern = "[\\\/\:\*\?\<\>\|""]"
+        invalidPattern.Global = true
+        filename = invalidPattern.Replace( filename, "" )
         GetSaveName = filename + ext
     End Function
 

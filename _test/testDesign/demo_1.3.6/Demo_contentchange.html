@@ -30,8 +30,8 @@
         <button onclick="getPlainTxt()">获得带格式的纯文本</button>
         <button onclick="hasContent()">判断是否有内容</button>
         <button onclick="setFocus()">使编辑器获得焦点</button>
-        <button onmousedown="isFocus(event)">编辑器是否获得焦点</button>
-        <button onmousedown="setblur(event)" >编辑器失去焦点</button>
+        <button onmousedown="isFocus(event)" style="color:red">new 编辑器是否获得焦点</button>
+        <button onmousedown="setblur(event)" style="color:red">new 编辑器失去焦点</button>
 
     </div>
     <div>
@@ -45,8 +45,8 @@
     </div>
 
     <div>
-        <button onclick="getLocalData()" >获取草稿箱内容</button>
-        <button onclick="clearLocalData()" >清空草稿箱</button>
+        <button onclick="getLocalData()" style="color:red">new 获取草稿箱内容</button>
+        <button onclick="clearLocalData()" style="color:red">new 清空草稿箱</button>
     </div>
 
 </div>
@@ -62,8 +62,11 @@
 
     //实例化编辑器
     //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-    UE.getEditor('editor');
+   var editor= UE.getEditor('editor');
 
+    editor.addListener('contentchange',function(){
+        alert('contentchange');
+    });
 
     function isFocus(e){
         alert(UE.getEditor('editor').isFocus());
