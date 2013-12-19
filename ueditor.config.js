@@ -78,18 +78,6 @@
         ,videoPath:URL + "php/"                   //附件修正地址，同imagePath
         //,videoFieldName:"upfile"                    //附件提交的表单名，若此处修改，需要在后台对应文件修改对应参数
 
-        //,fileNameFormat: "{time}{rand:6}"            //格式化文件名,可配的参数模板如下
-                                                    // {filename}  //文件名
-                                                    // {rand:6}    //随机数,后面的数字是随机数的位数
-                                                    // {time}      //时间戳
-                                                    // {yyyy}      //四位年份
-                                                    // {yy}        //两位年份
-                                                    // {mm}        //两位月份
-                                                    // {dd}        //两位日期
-                                                    // {hh}        //两位小时
-                                                    // {ii}        //两位分钟
-                                                    // {ss}        //两位秒
-
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         , toolbars:[
             ['fullscreen', 'source', '|', 'undo', 'redo', '|',
