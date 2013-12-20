@@ -6,12 +6,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.servlet.*;
-import org.apache.commons.fileupload.FileUploadBase.InvalidContentTypeException;
-import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+
+
+
 
 
 
@@ -26,7 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 public class Uploader {
 	
 	//文件大小常量, 单位kb
-	private static final int MAX_SIZE = 10000;
+	// 32M, 如果报了内存溢出异常， 请根据具体需求修改该值
+	private static final int MAX_SIZE = 64 * 1024;
 	// 输出文件地址
 	private String url = "";
 	// 上传文件名
@@ -45,7 +47,6 @@ public class Uploader {
 	private HttpServletRequest request = null;
 	private String title = "";
 
-	// 保存路径
 	private String savePath = "upload";
 	// 文件允许格式
 	private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf",".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
@@ -54,21 +55,19 @@ public class Uploader {
 	
 	private HashMap<String, String> errorInfo = new HashMap<String, String>();
 	private Map<String, String> params = null;
-	//上传的文件数据
-	private byte[] fileBytes = null;
+	private FileItem fileItem = null;
 	
-	public static final String ENCODE = "utf-8";
+	public static final String ENCODEING = System.getProperties().getProperty( "file.encoding" );
 
 	public Uploader(HttpServletRequest request) {
+		
 		this.request = request;
 		this.params = new HashMap<String, String>();
 
 		this.setMaxSize( Uploader.MAX_SIZE );
 		
-		this.parseParams();
-		
 		HashMap<String, String> tmp = this.errorInfo;
-		tmp.put("SUCCESS", "SUCCESS"); //默认成功
+		tmp.put("SUCCESS", "SUCCESS");
 		// 未包含文件上传域
 		tmp.put("NOFILE", "\\u672a\\u5305\\u542b\\u6587\\u4ef6\\u4e0a\\u4f20\\u57df");
 		// 不允许的文件格式
@@ -87,17 +86,23 @@ public class Uploader {
 		tmp.put("DIR", "\\u76ee\\u5f55\\u521b\\u5efa\\u5931\\u8d25");
         // 未知错误
 		tmp.put("UNKNOWN", "\\u672a\\u77e5\\u9519\\u8bef");
-	
+		
+		//默认成功
+		this.state = tmp.get( "SUCCESS" );
+		
+		this.parseParams();
+		
 	}
 
 	public void upload() throws Exception {
+		
 		boolean isMultipart = ServletFileUpload.isMultipartContent(this.request);
 		if (!isMultipart) {
 			this.state = this.errorInfo.get("NOFILE");
 			return;
 		}
 		
-		if ( this.fileBytes == null ) {
+		if ( this.fileItem == null ) {
 			this.state = this.errorInfo.get("FILE");
 			return;
 		}
@@ -113,7 +118,7 @@ public class Uploader {
 				return;
 			} 
 			
-			if ( this.fileBytes.length > this.maxSize ) {
+			if ( this.fileItem.getSize() > this.maxSize ) {
 				this.state = this.errorInfo.get("SIZE");
 				return;
 			} 
@@ -123,7 +128,19 @@ public class Uploader {
 			this.url = savePath + "/" + this.fileName;
 			
 			FileOutputStream fos = new FileOutputStream( this.getPhysicalPath( this.url ) );
-			fos.write( this.fileBytes );
+			BufferedInputStream bis = new BufferedInputStream( this.fileItem.getInputStream() );
+			byte[] buff = new byte[128];
+			int count = -1;
+			
+			while ( ( count = bis.read( buff ) ) != -1 ) {
+				
+				fos.write( buff, 0, count );
+				
+			}
+			
+			
+			
+			bis.close();
 			fos.close();
 			
 			this.state=this.errorInfo.get("SUCCESS");
@@ -195,43 +212,37 @@ public class Uploader {
 		return fileName.substring(fileName.lastIndexOf("."));
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void parseParams () {
 		
 		DiskFileItemFactory dff = new DiskFileItemFactory();
+		ServletFileUpload sfu = new ServletFileUpload(dff);
+		
+		List<FileItem> items;
 		try {
-			ServletFileUpload sfu = new ServletFileUpload(dff);
-			sfu.setSizeMax(this.maxSize);
-			sfu.setHeaderEncoding("utf-8");
-			
-			FileItemIterator fii = sfu.getItemIterator(this.request);
-			
-			while (fii.hasNext()) {
-				FileItemStream item = fii.next();
-				//普通参数存储
-        		if ( item.isFormField() ) {
-        			
-        			this.params.put( item.getFieldName(), this.getParameterValue( item.openStream()) );
-        			
-        		} else {
-        			
-        			//只保留一个
-        			if ( this.fileBytes == null ) {
-    					this.fileBytes = this.getFileOutputStream( item.openStream() );
-    					this.originalName = item.getName();
-        			}
-        			
-        		}
+			items = sfu.parseRequest( this.request );
+		
+			for ( FileItem item : items ) {
+				
+				if ( item.isFormField() ) {
+					
+					this.params.put( item.getFieldName(), item.getString( "utf-8") );
+					
+				} else if ( this.fileItem == null ) {
+					
+					this.fileItem = item;
+					this.originalName = item.getName();
+					
+				}
 				
 			}
 			
-		} catch (SizeLimitExceededException e) {
-			this.state = this.errorInfo.get("SIZE");
-		} catch (InvalidContentTypeException e) {
-			this.state = this.errorInfo.get("ENTYPE");
 		} catch (FileUploadException e) {
-			this.state = this.errorInfo.get("REQUEST");
-		} catch (Exception e) {
-			this.state = this.errorInfo.get("UNKNOWN");
+			// TODO 读取数据错误
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO 读取数据错误
+			e.printStackTrace();
 		}
 		
 	}
@@ -284,7 +295,7 @@ public class Uploader {
 
 		// 对最终的结果删除不合法的字符
 		return ( filename + this.getFileExt(fileName) ).replaceAll( "[\\\\/:*?\"<>|]", "" );
-		
+
 	}
 
 	/**
@@ -353,42 +364,6 @@ public class Uploader {
 		return new File(realPath).getParent() +"/" +path;
 	}
 	
-	/**
-	 * 从输入流中获取字符串数据
-	 * @param in 给定的输入流， 结果字符串将从该流中读取
-	 * @return 从流中读取到的字符串
-	 */
-	private String getParameterValue ( InputStream in ) {
-		
-		BufferedReader reader = new BufferedReader( new InputStreamReader( in ) );
-		
-		String result = "";
-		String tmpString = null;
-		
-		try {
-			
-			while ( ( tmpString = reader.readLine() ) != null ) {
-				result += tmpString;
-			}
-			
-		} catch ( Exception e ) {
-			//do nothing
-		}
-
-		return result;
-		
-	}
-	
-	private byte[] getFileOutputStream ( InputStream in ) {
-
-		try {
-			return IOUtils.toByteArray(in);
-		} catch (IOException e) {
-			return null;
-		}
-		
-	}
-
 	public void setSavePath(String savePath) {
 		this.savePath = savePath;
 	}

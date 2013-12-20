@@ -11,8 +11,8 @@
 
             <%
 
-request.setCharacterEncoding("utf-8");
-response.setCharacterEncoding("utf-8");
+request.setCharacterEncoding( Uploader.ENCODEING );
+response.setCharacterEncoding( Uploader.ENCODEING );
 
 String currentPath = request.getRequestURI().replace( request.getContextPath(), "" );
 
@@ -21,7 +21,6 @@ File currentFile = new File( currentPath );
 currentPath = currentFile.getParent() + File.separator;
 
 //加载配置文件
-Properties pro = new Properties();
 String propertiesPath = request.getSession().getServletContext().getRealPath( currentPath + "config.properties" );
 Properties properties = new Properties();
 
