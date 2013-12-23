@@ -62,7 +62,7 @@ test('contentchange在命令调用时的触发机制',function(){
 test("initialStyle", function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
-    var editor = UE.getEditor('ue',{initialStyle:"body{font-family: arial black;}.testCss{        color: rgb(192, 0, 0);    }",initialContent:"<p><span class='testCss'>测试样式，红色，字体： arial black</span></p>"});
+    var editor = UE.getEditor('ue',{initialStyle:"body{font-family: arial black;}.testCss{        color: rgb(192, 0, 0);    }",initialContent:"<p><span class='testCss'>测试样式，红色，字体： arial black</span></p>",autoHeightEnabled:false});
     editor.ready(function () {
         equal(ua.formatColor(ua.getComputedStyle(editor.body.firstChild.firstChild).color), '#c00000', 'initialStyle中设置的class样式有效');
         ok(/arial black/.test(ua.getComputedStyle(editor.body.firstChild.firstChild).fontFamily), 'initialStyle中设置的body样式有效');
@@ -79,7 +79,7 @@ test("autoSyncData:true,textarea容器(由setcontent触发的)", function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.innerHTML = '<form id="form" method="post" target="_blank"><textarea id="myEditor" name="myEditor">这里的内容将会和html，body等标签一块提交</textarea></form>';
     equal(document.getElementById('form').childNodes.length, 1, 'form里只有一个子节点');
-    var editor_a = UE.getEditor('myEditor');
+    var editor_a = UE.getEditor('myEditor',{autoHeightEnabled:false});
     stop();
     editor_a.ready(function () {
         equal(document.getElementById('form').childNodes.length, 2, 'form里有2个子节点');
@@ -94,7 +94,7 @@ test("autoSyncData:true,textarea容器(由setcontent触发的)", function () {
                 document.getElementById('form').parentNode.removeChild(document.getElementById('form'));
                 document.getElementById('test1') && te.dom.push(document.getElementById('test1'));
                 start();
-            }, 100);
+            }, 200);
         }, 100);
     });
 });
@@ -103,7 +103,7 @@ test("autoSyncData:true（由blur触发的）", function () {
     if (ua.browser.ie > 8 || !ua.browser.ie) {
         var div = document.body.appendChild(document.createElement('div'));
         div.innerHTML = '<form id="form" method="post" ><script type="text/plain" id="myEditor" name="myEditor"></script></form>';
-        var editor_a = UE.getEditor('myEditor');
+        var editor_a = UE.getEditor('myEditor',{autoHeightEnabled:false});
         stop();
         editor_a.ready(function () {
             editor_a.body.innerHTML = '<p>设置内容autoSyncData 2<br/></p>';
@@ -118,14 +118,14 @@ test("autoSyncData:true（由blur触发的）", function () {
                 UE.delEditor('myEditor');
                 form.parentNode.removeChild(form);
                 start();
-            }, 100);
+            }, 200);
         });
     }
 });
 test("sync", function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.innerHTML = '<form id="form" method="post" target="_blank"><textarea id="myEditor" name="myEditor">这里的内容将会和html，body等标签一块提交</textarea></form>';
-    var editor_a = UE.getEditor('myEditor');
+    var editor_a = UE.getEditor('myEditor',{autoHeightEnabled:false});
     stop();
     editor_a.ready(function () {
         editor_a.body.innerHTML = '<p>hello</p>';
@@ -464,7 +464,7 @@ test("focus(false)", function () {
                 equal(range.endOffset, 0, "focus(false)焦点在最前面");
                 if (ua.browser.gecko || (ua.browser.ie && ua.browser.ie > 8)) {
                     equal(range.startContainer, editor.body.firstChild, "focus(false)焦点在最前面");
-                    equal(range.endContainer, editor.body.firstChild, "focus(false)焦点在最前面");
+                    equal(range.collapsed, true, "focus(false)焦点在最前面");
                 }
                 else {
                     equal(range.startContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
