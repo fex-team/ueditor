@@ -906,13 +906,13 @@ test('trace 3222：在合并后的单元格中按tab键', function () {
         trs[1].cells[2].innerHTML = 'asd';
         range.setStart(trs[1].cells[1], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode':9});
-        if (ua.browser.gecko||ua.browser.ie>8)
+        if (ua.browser.gecko)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第一次tab键');
         else
             equal(editor.selection.getRange().startContainer.data, 'asd', '第一次tab键');
         range.setStart(trs[1].cells[1], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode':9});
-        if (ua.browser.gecko||ua.browser.ie>8)
+        if (ua.browser.gecko)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第二次tab键');
         else
             equal(editor.selection.getRange().startContainer.data, 'asd', '第一次tab键');
@@ -1438,10 +1438,14 @@ test('contextMenu trace 3060：单元格对齐方式', function () {
             equal(tds[0].align, 'right', '水平居右');
             equal(tds[0].vAlign, 'middle', '垂直居中');
             equal(editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase(), 'td', '光标位于单元格中');
+            if(ua.browser.ie>8){
+                equal(editor.selection.getRange().startContainer.tagName.toLowerCase(), 'td', '光标位于单元格中');
+
+            }
             setTimeout(function () {
-                te.dom.push(editor.container);
-                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
-                start();
+//                te.dom.push(editor.container);
+//                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+//                start();
             }, 20);
         }, 200);
     }, 200);
