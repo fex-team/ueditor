@@ -23,6 +23,7 @@ UE.plugins['list'] = function () {
     };
 
     me.setOpt( {
+        'autoTransWordToList':false,
         'insertorderedlist':{
             'num':'',
             'num1':'',
@@ -230,89 +231,92 @@ UE.plugins['list'] = function () {
                 p.removeChild(lastChild)
             }
         });
-        var orderlisttype = {
-                'num1':/^\d+\)/,
-                'decimal':/^\d+\./,
-                'lower-alpha':/^[a-z]+\)/,
-                'upper-alpha':/^[A-Z]+\./,
-                'cn':/^[\u4E00\u4E8C\u4E09\u56DB\u516d\u4e94\u4e03\u516b\u4e5d]+[\u3001]/,
-                'cn2':/^\([\u4E00\u4E8C\u4E09\u56DB\u516d\u4e94\u4e03\u516b\u4e5d]+\)/
-            },
-            unorderlisttype = {
-                'square':'n'
-            };
-        function checkListType(content,container){
-            var span = container.firstChild();
-            if(span &&  span.type == 'element' && span.tagName == 'span' && /Wingdings|Symbol/.test(span.getStyle('font-family'))){
-                for(var p in unorderlisttype){
-                    if(unorderlisttype[p] == span.data){
-                        return p
+        if(me.options.autoTransWordToList){
+            var orderlisttype = {
+                    'num1':/^\d+\)/,
+                    'decimal':/^\d+\./,
+                    'lower-alpha':/^[a-z]+\)/,
+                    'upper-alpha':/^[A-Z]+\./,
+                    'cn':/^[\u4E00\u4E8C\u4E09\u56DB\u516d\u4e94\u4e03\u516b\u4e5d]+[\u3001]/,
+                    'cn2':/^\([\u4E00\u4E8C\u4E09\u56DB\u516d\u4e94\u4e03\u516b\u4e5d]+\)/
+                },
+                unorderlisttype = {
+                    'square':'n'
+                };
+            function checkListType(content,container){
+                var span = container.firstChild();
+                if(span &&  span.type == 'element' && span.tagName == 'span' && /Wingdings|Symbol/.test(span.getStyle('font-family'))){
+                    for(var p in unorderlisttype){
+                        if(unorderlisttype[p] == span.data){
+                            return p
+                        }
+                    }
+                    return 'disc'
+                }
+                for(var p in orderlisttype){
+                    if(orderlisttype[p].test(content)){
+                        return p;
                     }
                 }
-                return 'disc'
+
             }
-            for(var p in orderlisttype){
-                if(orderlisttype[p].test(content)){
-                    return p;
+            utils.each(root.getNodesByTagName('p'),function(node){
+                if(node.getAttr('class') != 'MsoListParagraph'){
+                    return
                 }
-            }
 
-        }
-        utils.each(root.getNodesByTagName('p'),function(node){
-            if(node.getAttr('class') != 'MsoListParagraph'){
-                return
-            }
+                //word粘贴过来的会带有margin要去掉,但这样也可能会误命中一些央视
+                node.setStyle('margin','');
+                node.setStyle('margin-left','');
+                node.setAttr('class','');
 
-            //word粘贴过来的会带有margin要去掉,但这样也可能会误命中一些央视
-            node.setStyle('margin','');
-            node.setStyle('margin-left','');
-            node.setAttr('class','');
-
-            function appendLi(list,p,type){
-                if(list.tagName == 'ol'){
-                    if(browser.ie){
-                        var first = p.firstChild();
-                        if(first.type =='element' && first.tagName == 'span' && orderlisttype[type].test(first.innerText())){
-                            p.removeChild(first);
+                function appendLi(list,p,type){
+                    if(list.tagName == 'ol'){
+                        if(browser.ie){
+                            var first = p.firstChild();
+                            if(first.type =='element' && first.tagName == 'span' && orderlisttype[type].test(first.innerText())){
+                                p.removeChild(first);
+                            }
+                        }else{
+                            p.innerHTML(p.innerHTML().replace(orderlisttype[type],''));
                         }
                     }else{
-                        p.innerHTML(p.innerHTML().replace(orderlisttype[type],''));
+                        p.removeChild(p.firstChild())
                     }
-                }else{
-                    p.removeChild(p.firstChild())
+
+                    var li = UE.uNode.createElement('li');
+                    li.appendChild(p);
+                    list.appendChild(li);
                 }
+                var tmp = node,type,cacheNode = node;
 
-                var li = UE.uNode.createElement('li');
-                li.appendChild(p);
-                list.appendChild(li);
-            }
-            var tmp = node,type,cacheNode = node;
+                if(node.parentNode.tagName != 'li' && (type = checkListType(node.innerText(),node))){
 
-            if(node.parentNode.tagName != 'li' && (type = checkListType(node.innerText(),node))){
-
-                var list = UE.uNode.createElement(me.options.insertorderedlist.hasOwnProperty(type) ? 'ol' : 'ul');
-                if(customStyle[type]){
-                    list.setAttr('class','custom_'+type)
-                }else{
-                    list.setStyle('list-style-type',type)
-                }
-                while(node && node.parentNode.tagName != 'li' && checkListType(node.innerText(),node)){
-                    tmp = node.nextSibling();
-                    if(!tmp){
+                    var list = UE.uNode.createElement(me.options.insertorderedlist.hasOwnProperty(type) ? 'ol' : 'ul');
+                    if(customStyle[type]){
+                        list.setAttr('class','custom_'+type)
+                    }else{
+                        list.setStyle('list-style-type',type)
+                    }
+                    while(node && node.parentNode.tagName != 'li' && checkListType(node.innerText(),node)){
+                        tmp = node.nextSibling();
+                        if(!tmp){
+                            node.parentNode.insertBefore(list,node)
+                        }
+                        appendLi(list,node,type);
+                        node = tmp;
+                    }
+                    if(!list.parentNode && node && node.parentNode){
                         node.parentNode.insertBefore(list,node)
                     }
-                    appendLi(list,node,type);
-                    node = tmp;
                 }
-                if(!list.parentNode && node && node.parentNode){
-                    node.parentNode.insertBefore(list,node)
+                var span = cacheNode.firstChild();
+                if(span && span.type == 'element' && span.tagName == 'span' && /^\s*(&nbsp;)+\s*$/.test(span.innerText())){
+                    span.parentNode.removeChild(span)
                 }
-            }
-            var span = cacheNode.firstChild();
-            if(span && span.type == 'element' && span.tagName == 'span' && /^\s*(&nbsp;)+\s*$/.test(span.innerText())){
-                span.parentNode.removeChild(span)
-            }
-        })
+            })
+        }
+
     });
 
     //调整索引标签
