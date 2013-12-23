@@ -425,20 +425,22 @@ test("focus(false)", function () {
     stop();
     editor.ready(function () {
         editor.setContent("<p>hello1</p><p>hello2</p>");
-        editor.focus(false);
         setTimeout(function () {
-            var range = editor.selection.getRange();
-            equal(range.startOffset, 0, "focus(false)焦点在最前面");
-            equal(range.endOffset, 0, "focus(false)焦点在最前面");
-            if (ua.browser.gecko || (ua.browser.ie && ua.browser.ie > 8)) {
-                equal(range.startContainer, editor.body.firstChild, "focus(false)焦点在最前面");
-                equal(range.endContainer, editor.body.firstChild, "focus(false)焦点在最前面");
-            }
-            else {
-                equal(range.startContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
-                equal(range.endContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
-            }
-            start();
+            editor.focus(false);
+            setTimeout(function () {
+                var range = editor.selection.getRange();
+                equal(range.startOffset, 0, "focus(false)焦点在最前面");
+                equal(range.endOffset, 0, "focus(false)焦点在最前面");
+                if (ua.browser.gecko || (ua.browser.ie && ua.browser.ie > 8)) {
+                    equal(range.startContainer, editor.body.firstChild, "focus(false)焦点在最前面");
+                    equal(range.endContainer, editor.body.firstChild, "focus(false)焦点在最前面");
+                }
+                else {
+                    equal(range.startContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
+                    equal(range.endContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
+                }
+                start();
+            }, 200);
         }, 100);
     });
 });
@@ -451,23 +453,27 @@ test("focus(true)", function () {
     stop();
     editor.ready(function () {
         editor.setContent("<p>hello1</p><p>hello2</p>");
-        editor.focus(true);
         setTimeout(function () {
 
-            if (ua.browser.gecko || (ua.browser.ie && ua.browser.ie > 8)) {
-                equal(editor.selection.getRange().startContainer, editor.body.lastChild, "focus( true)焦点在最后面");
-                equal(editor.selection.getRange().endContainer, editor.body.lastChild, "focus( true)焦点在最后面");
-                equal(editor.selection.getRange().startOffset, editor.body.lastChild.childNodes.length, "focus( true)焦点在最后面");
-                equal(editor.selection.getRange().endOffset, editor.body.lastChild.childNodes.length, "focus( true)焦点在最后面");
-            }
-            else {
-                equal(editor.selection.getRange().startContainer, editor.body.lastChild.lastChild, "focus( true)焦点在最后面");
-                equal(editor.selection.getRange().endContainer, editor.body.lastChild.lastChild, "focus( true)焦点在最后面");
-                equal(editor.selection.getRange().startOffset, editor.body.lastChild.lastChild.length, "focus( true)焦点在最后面");
-                equal(editor.selection.getRange().endOffset, editor.body.lastChild.lastChild.length, "focus( true)焦点在最后面");
-            }
-            start();
+            editor.focus(true);
+            setTimeout(function () {
+
+                if (ua.browser.gecko || (ua.browser.ie && ua.browser.ie > 8)) {
+                    equal(editor.selection.getRange().startContainer, editor.body.lastChild, "focus( true)焦点在最后面");
+                    equal(editor.selection.getRange().endContainer, editor.body.lastChild, "focus( true)焦点在最后面");
+                    equal(editor.selection.getRange().startOffset, editor.body.lastChild.childNodes.length, "focus( true)焦点在最后面");
+                    equal(editor.selection.getRange().endOffset, editor.body.lastChild.childNodes.length, "focus( true)焦点在最后面");
+                }
+                else {
+                    equal(editor.selection.getRange().startContainer, editor.body.lastChild.lastChild, "focus( true)焦点在最后面");
+                    equal(editor.selection.getRange().endContainer, editor.body.lastChild.lastChild, "focus( true)焦点在最后面");
+                    equal(editor.selection.getRange().startOffset, editor.body.lastChild.lastChild.length, "focus( true)焦点在最后面");
+                    equal(editor.selection.getRange().endOffset, editor.body.lastChild.lastChild.length, "focus( true)焦点在最后面");
+                }
+                start();
+            }, 200);
         }, 100);
+
     });
 });
 
@@ -482,7 +488,7 @@ test("isFocus()", function () {
         setTimeout(function () {
             ok(editor.isFocus());
             start();
-        }, 100);
+        },200);
     });
 });
 
