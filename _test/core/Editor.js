@@ -1,34 +1,62 @@
 module("core.Editor");
+//test('getContent--2个参数，第一个参数为参数为函数', function () {
+//    var editor = te.obj[1];
+//    var div = te.dom[0];
+//    editor.render(div);
+//    stop();
+//    setTimeout(function () {
+//        editor.focus();
+//        editor.setContent("<p><br/>dd</p>");
+//        equal(editor.getContent(), "<p><br/>dd</p>", 'hasContents判断不为空');
+//        equal(editor.getContent("", function () {
+//            return false
+//        }), "", '为空');
+//        setTimeout(function () {
+//            UE.delEditor('test1');
+//            setTimeout(function () {
+//                start();
+//            }, 50);
+//        }, 100);
+//    }, 50);
+//});
 //test('', function () {
 //    stop();
 //});
 test('contentchange在命令调用时的触发机制',function(){
     var editor = te.obj[1];
-    editor.commands['test1'] = {
-        execCommand:function(){
+    var container =  te.dom[0];
 
-        }
-    };
-    editor.commands['test'] = {
-        execCommand:function(){
-            editor.execCommand('test1')
-        }
-    };
-    var count = 0;
-    editor.on('contentchange',function(){
-        count++;
+    $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    editor.render(container);
+    editor.ready(function () {
+        editor.commands['test1'] = {
+            execCommand:function(){
+
+            }
+        };
+        editor.commands['test'] = {
+            execCommand:function(){
+                editor.execCommand('test1')
+            }
+        };
+        var count = 0;
+        editor.on('contentchange',function(){
+            count++;
+        });
+        editor.execCommand('test');
+        equals(count,1);
+        editor.commands['test'] = {
+            execCommand:function(){
+                editor.execCommand('test1')
+            },
+            ignoreContentChange:true
+        };
+        count = 0;
+        editor.execCommand('test');
+        equals(count,0);
+        start();
     });
-    editor.execCommand('test');
-    equals(count,1);
-    editor.commands['test'] = {
-        execCommand:function(){
-            editor.execCommand('test1')
-        },
-        ignoreContentChange:true
-    };
-    count = 0;
-    editor.execCommand('test');
-    equals(count,0);
+    stop();
 });
 
 test("initialStyle", function () {
@@ -247,10 +275,13 @@ test('destroy', function () {
     div.id = 'ed';
     editor.render(div);
     editor.ready(function () {
+        setTimeout(function () {
         editor.destroy();
         equal(document.getElementById('ed').tagName.toLowerCase(), 'textarea', '容器被删掉了');
         document.getElementById('ed') && te.dom.push(document.getElementById('ed'));
         start();
+        }, 200);
+
     });
     stop();
 });
@@ -296,7 +327,7 @@ test("getContent--转换空格，nbsp与空格相间显示", function () {
             editor.setContent(innerHTML);
             equal(editor.getContent(), '<p>x &nbsp;x &nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp; &nbsp;&nbsp;</p>', "转换空格，nbsp与空格相间显示，原nbsp不变");
             setTimeout(function () {
-                UE.delEditor('test1');
+//                UE.delEditor('test1');
                 start();
             }, 100);
         }, 100);
@@ -308,7 +339,7 @@ test('getContent--参数为函数', function () {
     var div = te.dom[0];
     editor.render(div);
     stop();
-    setTimeout(function () {
+    editor.ready(function () {
         editor.focus();
         editor.setContent("<p><br/>dd</p>");
         equal(editor.getContent(), "<p><br/>dd</p>", 'hasContents判断不为空');
@@ -316,12 +347,12 @@ test('getContent--参数为函数', function () {
             return false
         }), "", '为空');
         setTimeout(function () {
-            UE.delEditor('test1');
+//            UE.delEditor('test1');
             setTimeout(function () {
                 start();
             }, 50);
         }, 100);
-    }, 50);
+    });
 });
 
 test('getContent--2个参数，第一个参数为参数为函数', function () {
@@ -329,7 +360,7 @@ test('getContent--2个参数，第一个参数为参数为函数', function () {
     var div = te.dom[0];
     editor.render(div);
     stop();
-    setTimeout(function () {
+    editor.ready(function () {
         editor.focus();
         editor.setContent("<p><br/>dd</p>");
         equal(editor.getContent(), "<p><br/>dd</p>", 'hasContents判断不为空');
@@ -337,12 +368,12 @@ test('getContent--2个参数，第一个参数为参数为函数', function () {
             return false
         }), "", '为空');
         setTimeout(function () {
-            UE.delEditor('test1');
-            setTimeout(function () {
+//            UE.delEditor('test1');
+//            setTimeout(function () {
                 start();
-            }, 50);
+//            }, 50);
         }, 100);
-    }, 50);
+    });
 });
 
 /*ie自动把左边的空格去掉，所以就不测这个了*/
