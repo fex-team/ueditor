@@ -11,6 +11,7 @@ module("plugins.list");
  *
  * */
 
+//test('',function(){stop();})
 test('回车将p转成列表', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -42,19 +43,30 @@ test('li内添加p标签', function () {
 });
 //todo 1.2.6.1
 test('p转成列表', function () {
-    var editor = te.obj[0];
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue';
+    var editor = UE.getEditor('ue',{autoTransWordToList:true});
     var br = ua.browser.ie ? '&nbsp;' : '<br>';
-    editor.setContent('<p class="MsoListParagraph">1.a</p><ol><li>b</li></ol>');
-    ua.manualDeleteFillData(editor.body);
-    //todo 1.2.6.1
+    editor.ready(function () {
+        setTimeout(function(){
+            editor.setContent('<p class="MsoListParagraph">1.a</p><ol><li>b</li></ol>');
+            ua.manualDeleteFillData(editor.body);
+            //todo 1.2.6.1
 //    ua.checkSameHtml(editor.body.innerHTML,'<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p>a</p></li><li><p>b</p></li></ol>','p转成有序列表');
-    editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">abc</span></p>');
-    ua.manualDeleteFillData(editor.body);
-    ua.checkSameHtml(editor.body.innerHTML, '<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p>' + br + '</p></li></ul>', 'p转成无序列表');
+            editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">abc</span></p>');
+            ua.manualDeleteFillData(editor.body);
+            ua.checkSameHtml(editor.body.innerHTML, '<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p>' + br + '</p></li></ul>', 'p转成无序列表');
 //todo bug3417
 //    editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">n</span></p>');
 //    ua.manualDeleteFillData(editor.body);
 //    ua.checkSameHtml(editor.body.innerHTML,'<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p><br></p></li></ul>','p转成无序列表');
+            UE.delEditor('ue');
+            te.dom.push(document.getElementById('ue'));
+            start();
+        },200);
+    });
+    stop();
+
 });
 
 test('列表复制粘贴', function () {
