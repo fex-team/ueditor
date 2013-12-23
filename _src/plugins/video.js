@@ -146,7 +146,7 @@ UE.plugins['video'] = function (){
         },
         queryCommandState : function(){
             var img = me.selection.getRange().getClosedNode(),
-                flag = img && (img.className == "edui-faked-video");
+                flag = img && (img.className == "edui-faked-video" || img.className.indexOf("edui-upload-video")!=-1);
             return flag ? 1 : 0;
         }
     };
