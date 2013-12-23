@@ -88,8 +88,7 @@ if ( dir == null || "".equals( dir ) ) {
 up.setSavePath( dir );
 String[] fileType = {".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp"};
 up.setAllowFiles(fileType);
-up.setMaxSize(10000); //单位KB
-up.setFileNameFormat( fileNameFormat );
+up.setMaxSize(500 * 1024); //单位KB
 up.upload();
 response.getWriter().print("{'original':'"+up.getOriginalName()+"','url':'"+up.getUrl()+"','title':'"+up.getTitle()+"','state':'"+up.getState()+"'}");
 %>
