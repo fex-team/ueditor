@@ -52,7 +52,6 @@
     };
 
     var notTransTagName = {
-        pre:1,
         style:1,
         script:1
     };
@@ -116,7 +115,13 @@
     }
 
     function isText(node, arr) {
-        arr.push(notTransTagName[node.parentNode.tagName] ? utils.html(node.data) : node.data.replace(/[ ]{2}/g,' &nbsp;'))
+        if(node.parentNode.tagName == 'pre'){
+            //源码模式下输入html标签，不能做转换处理，直接输出
+            arr.push(node.data)
+        }else{
+            arr.push(notTransTagName[node.parentNode.tagName] ? utils.html(node.data) : node.data.replace(/[ ]{2}/g,' &nbsp;'))
+        }
+
     }
 
     function isElement(node, arr, formatter, current) {
