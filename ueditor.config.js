@@ -379,7 +379,9 @@
         //      indentValue : '2em'             //行首缩进的大小
         //  },
         //填写过滤规则
-        //filterRules : {}
+        //,filterRules : {}
+        //,autoTransWordToList:false  //禁止word中粘贴进来的列表自动变成列表标签
+        //,disabledTableInTable:true  //禁止表格嵌套
     };
 
     function getUEBasePath ( docUrl, confUrl ) {
