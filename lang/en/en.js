@@ -499,7 +499,8 @@ UE.I18N['en'] = {
     insertvideo:{
         'static':{
             lang_tab_insertV:"Video",
-//            lang_tab_searchV:"Search",
+            lang_tab_searchV:"Search",
+            lang_tab_uploadV:"Upload",
             lang_video_url:" URL ",
             lang_video_size:"Video Size",
             lang_videoW:"Width",
