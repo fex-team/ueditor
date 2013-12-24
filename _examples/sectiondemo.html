@@ -169,7 +169,7 @@
     function getSubStr(s,l){
         var i=0,len=0;
         for(i;i<s.length;i++){
-            if(s[i].match(/[^\x00-\xff]/g)!=null){
+            if(s.charAt(i).match(/[^\x00-\xff]/g)!=null){
                 len+=2;
             }else{
                 len++;
