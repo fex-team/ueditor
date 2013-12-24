@@ -139,7 +139,7 @@ test('body',function(){
     editor.setContent('<p>xx</p>');
     range.setStart(editor.body,0).collapse(1).select();
     editor.execCommand('directionality', 'rtl');
-    if(ua.browser.ie&&ua.browser.ie<9){
+    if(ua.browser.ie){
         equal( ua.getChildHTML( editor.body ), "<p dir=\"rtl\">xx</p>", "directionrtl" );
     }
     else{

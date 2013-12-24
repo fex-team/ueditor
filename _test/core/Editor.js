@@ -459,10 +459,12 @@ test("focus(false)", function () {
         setTimeout(function () {
             editor.focus(false);
             setTimeout(function () {
+                debugger
+
                 var range = editor.selection.getRange();
                 equal(range.startOffset, 0, "focus(false)焦点在最前面");
                 equal(range.endOffset, 0, "focus(false)焦点在最前面");
-                if (ua.browser.gecko || (ua.browser.ie && ua.browser.ie > 8)) {
+                if (ua.browser.gecko ) {
                     equal(range.startContainer, editor.body.firstChild, "focus(false)焦点在最前面");
                     equal(range.collapsed, true, "focus(false)焦点在最前面");
                 }
@@ -489,7 +491,7 @@ test("focus(true)", function () {
             editor.focus(true);
             setTimeout(function () {
 
-                if (ua.browser.gecko || (ua.browser.ie && ua.browser.ie > 8)) {
+                if (ua.browser.gecko ) {
                     equal(editor.selection.getRange().startContainer, editor.body.lastChild, "focus( true)焦点在最后面");
                     equal(editor.selection.getRange().endContainer, editor.body.lastChild, "focus( true)焦点在最后面");
                     equal(editor.selection.getRange().startOffset, editor.body.lastChild.childNodes.length, "focus( true)焦点在最后面");
