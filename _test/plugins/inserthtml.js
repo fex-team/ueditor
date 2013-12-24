@@ -51,7 +51,7 @@ test( '选中多个单元格插入列表', function() {
         var ut = editor.getUETable(editor.body.firstChild);
         var cellsRange = ut.getCellsRange(trs[0].cells[0],trs[0].cells[1]);
         ut.setSelected(cellsRange);
-        if(ua.browser.ie&&ua.browser.ie<9)
+        if(ua.browser.ie)
             range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
         var tds = body.firstChild.getElementsByTagName( 'td' );
         editor.execCommand( 'inserthtml', '<ol><li>hello</li></ol>' );
@@ -77,7 +77,7 @@ test( '表格中插入图片', function() {
         var ut = editor.getUETable(editor.body.firstChild);
         var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[0].cells[1]);
         ut.setSelected(cellsRange);
-        if (ua.browser.ie && ua.browser.ie<9)
+        if (ua.browser.ie)
             range.setStart( trs[0].cells[0], 0 ).collapse( true ).select();
         var tds = body.firstChild.getElementsByTagName( 'td' );
         editor.execCommand( 'inserthtml', '<img style="float:left"/>' );
@@ -166,7 +166,7 @@ test( '列表中插入img', function() {
     setTimeout(function(){
         equal(lis.length,1,'列表长度没有变化');
         ua.manualDeleteFillData(lis[0]);
-        if(ua.browser.ie&&ua.browser.ie<9){
+        if(ua.browser.ie){
             equal(lis[0].firstChild.firstChild.tagName.toLowerCase(),'img','列表中插入img');
             equal(lis[0].firstChild.firstChild.attributes['src'].nodeValue,'http://img.baidu.com/hi/jx2/j_0001.gif','列表中插入img');
         }

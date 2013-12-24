@@ -17,7 +17,7 @@ test( 'horizontal', function() {
     },50);
     stop();
 } );
-test( 'horizontal_br', function() {
+test( 'horizontal_br', function() {//trace 3854
     var div = document.body.appendChild(document.createElement('div'));
     $(div).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
     var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>', 'autoFloatEnabled':false,enterTag:'br'});
