@@ -221,12 +221,12 @@ test('autofloat:false 禁用IE中的自动加超链接功能--空格', function 
             var space = ua.browser.ie>8?'&nbsp;':' ';
             editor.body.innerHTML = '<p><a href="http://www.baidu.com">www.baidu.com</a>'+space+'<img></p>';
             setTimeout(function () {
-                if(ua.browser.ie>8){
-                    range.setStart(body.firstChild.childNodes[1], 1).collapse(true).select();
-                }
-                else{
+//                if(ua.browser.ie>8){
+//                    range.setStart(body.firstChild.childNodes[1], 1).collapse(true).select();
+//                }
+//                else{
                     range.selectNode(body.firstChild.childNodes[1]).select();
-                }
+//                }
                 setTimeout(function () {
                     ua.keyup(editor.body, {'keyCode': 32});
                     equal(body.firstChild.getElementsByTagName('a').length, 0, 'a 标签被去掉');

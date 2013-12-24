@@ -1,6 +1,4 @@
 module('plugins.table');
-
-
 //test('',function(){stop()})
 /*trace992，合并单元格后多了一个td*/
 test('向右合并--拆分成列', function () {
@@ -1437,15 +1435,17 @@ test('contextMenu trace 3060：单元格对齐方式', function () {
             var tds = editor.body.getElementsByTagName('td');
             equal(tds[0].align, 'right', '水平居右');
             equal(tds[0].vAlign, 'middle', '垂直居中');
-            equal(editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase(), 'td', '光标位于单元格中');
+
             if(ua.browser.ie>8){
                 equal(editor.selection.getRange().startContainer.tagName.toLowerCase(), 'td', '光标位于单元格中');
 
+            }else{
+                equal(editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase(), 'td', '光标位于单元格中');
             }
             setTimeout(function () {
 //                te.dom.push(editor.container);
 //                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
-//                start();
+                start();
             }, 20);
         }, 200);
     }, 200);
@@ -1456,7 +1456,6 @@ test('contextMenu trace 3060：单元格对齐方式', function () {
 test('contextMenu trace 3315：表格隔行变色', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    stop();
     var lang = editor.getLang("contextMenu");
     editor.execCommand('cleardoc');
     editor.execCommand('inserttable');
