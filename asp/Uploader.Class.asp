@@ -202,7 +202,11 @@ Class Uploader
 
     Private Function GetSaveName( ByVal filename )
         Dim format, ext, name
-        format = rsFormValues.Item( "fileNameFormat" )
+        If rsFormValues <> Null Then
+            format = rsFormValues.Item( "fileNameFormat" )
+        Else
+            format = "{yyyy}{mm}{dd}{hh}{ii}{ss}{rand:6}"
+        End If
         ext = GetExt( filename )
         name = GetNameWithoutExt( filename )
         filename = Replace( format, "{filename}", name )
