@@ -155,8 +155,8 @@ var filterWord = UE.filterWord = function () {
                                         n[i] = "display:none";
                                     }
                                     continue;
-                                case 'background':
-                                    break;
+//                                case 'background':
+//                                    break;
                                 case 'margin':
                                     if ( !/[1-9]/.test( value ) ) {
                                         continue;
