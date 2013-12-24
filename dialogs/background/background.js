@@ -207,7 +207,7 @@
                 item.selected = (align == item.getAttribute('value') ? 'selected':false);
             });
         }
-        if(x && y) {
+        if(x || y) {
             $G('x').value = parseInt(x) || 0;
             $G('y').value = parseInt(y) || 0;
         }
