@@ -23,8 +23,8 @@ Class Uploader
         cfgSavePath = "upload/"
 
         Set stateString = Server.CreateObject("Scripting.Dictionary")
-        stateString.Add "SIZE_LIMIT_EXCCEED", "文件大小超过服务器限制"
-        stateString.Add "TYPE_NOW_ALLOW", "文件类型不允许"
+        stateString.Add "SIZE_LIMIT_EXCCEED", "File size exceeded!"
+        stateString.Add "TYPE_NOW_ALLOW", "File type not allowed!"
     End Sub
 
     Public Property Let MaxSize(ByVal size)
@@ -202,7 +202,7 @@ Class Uploader
 
     Private Function GetSaveName( ByVal filename )
         Dim format, ext, name
-        If rsFormValues <> Null Then
+        If Not IsEmpty( rsFormValues ) Then
             format = rsFormValues.Item( "fileNameFormat" )
         Else
             format = "{yyyy}{mm}{dd}{hh}{ii}{ss}{rand:6}"

@@ -83,7 +83,15 @@ Class jsCore
 			haystack(i) = Mid(str, i + 1, 1)
 
 			charcode = AscW(haystack(i)) And 65535
-
+            If charcode < 127 Then
+				If Not IsEmpty(charmap(charcode)) Then
+					haystack(i) = charmap(charcode)
+				ElseIf charcode < 32 Then
+					haystack(i) = "\u" & Right("000" & Hex(charcode), 4)
+				End If
+			Else
+				haystack(i) = "\u" & Right("000" & Hex(charcode), 4)
+			End If
 		Next
 
 		jsEncode = Join(haystack, "")
