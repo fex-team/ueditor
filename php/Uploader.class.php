@@ -159,7 +159,46 @@ class Uploader
      */
     private function getName()
     {
-        return $this->fileName = time() . rand( 1 , 10000 ) . $this->getFileExt();
+        $count = 0;
+        $dir = $this->getFolder();
+        $timeStamp = time();
+        if ($format = $this->config[ "fileNameFormat" ]) {
+
+            $ext = $this->getFileExt();
+            $oriName = substr($this->oriName, 0, strrpos($this->oriName, '.'));
+            $randNum = rand(1, 10000000000);
+
+            //过滤非法字符
+            $format = preg_replace("/[\|\?\"\<\>\/\*\\\\]+/", '', $format);
+
+            $d = split('-', date("Y-y-m-d-H-i-s"));
+            $format = str_replace("{yyyy}", $d[0], $format);
+            $format = str_replace("{yy}", $d[1], $format);
+            $format = str_replace("{mm}", $d[2], $format);
+            $format = str_replace("{dd}", $d[3], $format);
+            $format = str_replace("{hh}", $d[4], $format);
+            $format = str_replace("{ii}", $d[5], $format);
+            $format = str_replace("{ss}", $d[6], $format);
+            $format = str_replace("{time}", $timeStamp, $format);
+            $format = str_replace("{filename}", $oriName, $format);
+
+            if(preg_match("/\{rand\:([\d]*)\}/i", $format, $matches)) {
+                $format = preg_replace("/\{rand\:[\d]*\}/i", substr($randNum, 0, $matches[1]), $format);
+            }
+
+            //过滤非法字符
+            $format = preg_replace("/[\|\?\"\<\>\/\*\\\\]+/", '', $format);
+
+            $fileName = $format.$ext;
+            while (file_exists($dir.'/'.$fileName)){
+                $fileName = $format.'_'.(++$count).$ext;
+            }
+        } else {
+            do{
+                $fileName = time().rand(1, 10000).$this->getFileExt();
+            } while (file_exists($dir.'/'.$fileName));
+        }
+        return $this->fileName = $fileName;
     }
 
     /**

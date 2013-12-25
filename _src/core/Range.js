@@ -1409,7 +1409,8 @@
          * @method select
          * @return { UE.dom.Range } 返回当前Range对象
          */
-        select:browser.ie9below ? function (noFillData, textRange) {
+            //这里不区分ie9以上，trace:3824
+        select:browser.ie ? function (noFillData, textRange) {
             var nativeRange;
             if (!this.collapsed)
                 this.shrinkBoundary();

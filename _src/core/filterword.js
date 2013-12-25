@@ -45,6 +45,10 @@ var filterWord = UE.filterWord = function () {
                         return '';
                     }
                     try{
+                        //有可能是bitmap占为图，无用，直接过滤掉，主要体现在粘贴excel表格中
+                        if(/Bitmap/i.test(str)){
+                            return '';
+                        }
                         var width = str.match(/width:([ \d.]*p[tx])/i)[1],
                             height = str.match(/height:([ \d.]*p[tx])/i)[1],
                             src =  str.match(/src=\s*"([^"]*)"/i)[1];
@@ -151,8 +155,8 @@ var filterWord = UE.filterWord = function () {
                                         n[i] = "display:none";
                                     }
                                     continue;
-                                case 'background':
-                                    break;
+//                                case 'background':
+//                                    break;
                                 case 'margin':
                                     if ( !/[1-9]/.test( value ) ) {
                                         continue;

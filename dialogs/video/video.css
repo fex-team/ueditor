@@ -57,3 +57,94 @@ label.url{font-weight: bold;margin-left: 5px;color: #06c;}
 #videoFloat div{cursor:pointer;opacity: 0.5;filter: alpha(opacity = 50);margin:9px;_margin:5px;width:38px;height:36px;float:left;}
 #videoFloat .focus{opacity: 1;filter: alpha(opacity = 100)}
 span.view{display: inline-block;width: 30px;float: right;cursor: pointer;color: blue}
+
+
+
+/* upload video */
+#fsUploadProgress{float:left;}
+#upload_alignment div{cursor:pointer;opacity: 0.5;filter: alpha(opacity = 50);margin:9px;_margin:5px;width:38px;height:36px;float:left;}
+#upload_alignment .focus{opacity: 1;filter: alpha(opacity = 100)}
+#fsUploadProgress{margin-top:15px;}
+#upload_left { width:412px; float:left; padding-left:10px; }
+#upload_left .controller { height: 30px; clear: both; }
+#uploadVideoInfo{margin-top:20px;float:right;padding-right:8px;}
+
+#divStatus {display:inline-block; width:336px;color: #aaa;font-size: 12px; }
+#video_format_advice{font-size: 12px; color:red;line-height: 24px;}
+#startUpload{cursor: pointer;display: inline-block; width: 100px;height: 30px;float: right;}
+div.fieldset {
+    border:  1px solid #afe14c;
+    padding: 10px 10px;
+    width: 390px;
+    height: 250px;
+    border-color: #CCCCCC;
+    overflow-y: auto;
+    margin-bottom: 8px;
+}
+div.fieldset span.legend{position: relative;top:-20px;}
+.progressWrapper { width: 380px; overflow: hidden; }
+.progressContainer {
+    margin: 0 0px 5px 0;
+    margin-bottom:10px;
+    border: solid 1px #E8E8E8;
+    background-color: #F7F7F7;
+    overflow: hidden;
+}
+.message {
+    margin: 1em 0;
+    padding: 10px 20px;
+    border: solid 1px #FFDD99;
+    background-color: #FFFFCC;
+    overflow: hidden;
+}
+.red {
+    border: solid 1px #B50000;
+    background-color: #FFEBEB;
+}
+.green {
+    border: solid 1px #DDF0DD;
+    background-color: #EBFFEB;
+}
+.blue {
+    border: solid 1px #CEE2F2;
+    background-color: #F0F5FF;
+}
+.progressName {
+    font-size: 10px;
+    color: #555;
+    width: 360px;
+    height: 14px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.progressBarInProgress,
+.progressBarComplete,
+.progressBarError {
+    font-size: 0;
+    width: 0%;
+    height: 2px;
+    background-color: blue;
+    margin-top: 2px;
+}
+.progressBarComplete {
+    width: 100%;
+    background-color: green;
+    visibility: hidden;
+}
+.progressBarError {
+    width: 100%;
+    background-color: red;
+    visibility: hidden;
+}
+a.progressCancel {
+    font-size: 0;
+    display: block;
+    height: 14px;
+    width: 14px;
+    background: url(../../themes/default/images/cancelbutton.gif) -14px 0 no-repeat ;
+    float: right;
+}
+a.progressCancel:hover { background-position: 0 0; }
+.progressBarStatus { margin-top: 2px; width: 337px; font-size: 7pt; text-align: left; white-space: nowrap; }
+.swfupload { vertical-align: top; }

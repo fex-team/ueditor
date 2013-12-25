@@ -26,9 +26,9 @@ test('框选', function () {
                 var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                 var tds = editor.body.getElementsByTagName('td');
                 equal(selectedTds.length, 4, '框选');
-//                if (ua.browser.ie && ua.browser.ie < 9)
-//                    ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
-//                else
+                if (ua.browser.ie && ua.browser.ie >8)
+                    ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 1, 1, true, '检查选中的range')
+                else
                     ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
                 range.setStart(tds[4], 0).collapse(true).select();
                 ua.mousedown(tds[4], {button: 2});
@@ -36,9 +36,9 @@ test('框选', function () {
                     var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                     var tds = editor.body.getElementsByTagName('td');
                     equal(selectedTds.length, 4, '右键框选不变');
-//                    if (ua.browser.ie && ua.browser.ie < 9)
-//                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range')
-//                    else
+                   if (ua.browser.ie && ua.browser.ie >8)
+                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 1, 1, true, '检查选中的range')
+                    else
                         ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
                         start();
                 }, 50);
@@ -131,9 +131,9 @@ test('tableDragable-双击', function () {//tableClicked
                     var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                     var tds = editor.body.getElementsByTagName('td');
                     equal(selectedTds.length, 9, '全选');
-//                    if (ua.browser.ie && ua.browser.ie < 9)
-//                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 0, true, '检查选中的range');
-//                    else
+                    if (ua.browser.ie && ua.browser.ie > 8)
+                        ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 1, 1, true, '检查选中的range');
+                    else
                     ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
                     setTimeout(function () {
                         UE.delEditor('ue');
@@ -554,17 +554,15 @@ test('trace 3022 表格名称中backspace、ctrl+z、enter', function () {
                 equal(te.obj[0].body.getElementsByTagName('tr').length, 3, '不会增加表格行数量');
                 equal(te.obj[0].body.getElementsByTagName('tr')[0].cells.length, 3, '不会增加表格列数量');
                 equal(te.obj[0].selection.getRange().collapsed, true, '检查光标');
-                if (ua.browser.ie && ua.browser.ie > 8) {
-                    equal(te.obj[0].selection.getRange().startContainer, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
-                }
-                else if (!ua.browser.gecko) {
+
+                if(!ua.browser.gecko)//todo 1.3.6 ff 回退后光标找不好
                     equal(te.obj[0].selection.getRange().startContainer.parentNode, te.obj[0].body.getElementsByTagName('td')[0], '检查光标');
-                }
                 start();
             }, 20);
         }, 20);
     }, 50);
 });
+
 
 
 /*trace 3067*/
@@ -918,10 +916,10 @@ test('点击一行的最左边,选中一行', function () {
     }, 50);
     stop();
 });
+
 test('点击一行的最左边,但是每行只有一列,这时选中单元格中的内容', function () {
     if (ua.browser.ie && ua.browser.ie < 9)return;//todo click事件模拟有问题
     var editor = te.obj[0];
-    var range = te.obj[1];
     editor.setContent('');
     editor.execCommand('inserttable', {numCols: 1, numRows: 1});
     /*插入表格*/
@@ -934,7 +932,7 @@ test('点击一行的最左边,但是每行只有一列,这时选中单元格中
         setTimeout(function () {
             var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
             equal(selectedTds.length, 0, '不选中行');
-            if (ua.browser.webkit) {
+            if (ua.browser.webkit||ua.browser.ie>8) {
                 ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 5, false, '检查选中的range');
             } else {
                 ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 1, false, '检查选中的range');
@@ -960,7 +958,7 @@ test('点击一列的最上边,但是每列只有一行,这时选中单元格中
         setTimeout(function () {
             var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
             equal(selectedTds.length, 0, '不选中列');
-            if (ua.browser.webkit) {
+            if (ua.browser.webkit ||ua.browser.ie>8) {
                 ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 0, 5, false, '检查选中的range');
             } else {
                 ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 1, false, '检查选中的range');

@@ -1,6 +1,27 @@
 #UEditor Change List
+##1.3.6
 
-##1.3.5
+###bug修复
+1.	script/style标签内容，在ie下的编辑状态显示内容问题
+2.	修复预览窗口没有滚动条问题 [出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=28231&extra=page%3D1)
+3.	修复在ie67下自动寻址的问题
+4.	修复ff下图片拖拽大小不触发contentchange问题
+5.	修复注释被删除的问题，包括在script中的[出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=12509&extra=page%3D1)
+6.	修复在源码模式下不能使用setContent的问题，[出自](http://www.ueditorbbs.com/forum.php?mod=viewthread&tid=26910&extra=page%3D1)
+7.	修复在给定宽度为100%时，ie11在拖动窗口大小时，编辑区域不随着变化的问题
+8.	修复在ie67下destroy方法调用报错
+9.	修复在插入代码模式下，ie9+以上的浏览器键盘操作(enter/tab等)错误或者失效的问题
+10.	修复不规则源码在ie下解析成文本的问题
+11.	修复p标签在ie下嵌套的问题
+12. 修复目录大纲更新事件导致失焦点的问题
+13. 针对word粘贴列表到编辑器中自动转换为list标签，由于有误命中情况，所以默认关闭该功能。提供**autoTransWordToList**配置项(默认为false)，开发者可酌情配置。
+14. 添加禁止表格嵌套的开关，解决excel中粘贴到编辑器中会有冗余的嵌套表格问题，配置项**disabledTableInTable**(默认是true)。
+15. 过滤掉excel的表格粘贴到ie中时，会有bitmap的冗余占位图片问题
+
+###功能更新
+1.	支持视频上传插入，多浏览器自适配播放器
+
+#1.3.5
 
 ###新增功能
 1.	asp后台的支持

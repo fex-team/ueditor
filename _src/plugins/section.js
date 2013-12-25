@@ -33,7 +33,7 @@ UE.plugin.register('section', function (){
 
     return {
         bindMultiEvents:{
-            type: 'aftersetcontent aftergetscene afterscencerestore',
+            type: 'aftersetcontent afterscencerestore',
             handler: function(){
                 me.fireEvent('updateSections');
             }
@@ -108,7 +108,7 @@ UE.plugin.register('section', function (){
                                 var address = me.selection.getRange().selectNode(child).createAddress(true).startAddress,
                                     current = getSection({
                                         'tag': child.tagName,
-                                        'title': child.innerHTML,
+                                        'title': child.innerText || child.textContent || '',
                                         'level': level,
                                         'dom': child,
                                         'startAddress': utils.clone(address, []),

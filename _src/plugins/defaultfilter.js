@@ -3,12 +3,24 @@
 
 UE.plugins['defaultfilter'] = function () {
     var me = this;
-    me.setOpt('allowDivTransToP',true);
+    me.setOpt({
+        'allowDivTransToP':true,
+        'disabledTableInTable':true
+    });
     //默认的过滤处理
     //进入编辑器的内容处理
     me.addInputRule(function (root) {
         var allowDivTransToP = this.options.allowDivTransToP;
         var val;
+        function tdParent(node){
+            while(node && node.type == 'element'){
+                if(node.tagName == 'td'){
+                    return true;
+                }
+                node = node.parentNode;
+            }
+            return false;
+        }
         //进行默认的处理
         root.traversal(function (node) {
             if (node.type == 'element') {
@@ -24,10 +36,11 @@ UE.plugins['defaultfilter'] = function () {
                     case 'script':
                         node.setAttr({
                             cdata_tag: node.tagName,
-                            style:'display:none'
+                            cdata_data: (node.innerHTML() || ''),
+                            '_ue_custom_node_':'true'
                         });
                         node.tagName = 'div';
-                        //node.removeChild(node.firstChild());
+                        node.innerHTML('');
                         break;
                     case 'a':
                         if (val = node.getAttr('href')) {
@@ -66,6 +79,21 @@ UE.plugins['defaultfilter'] = function () {
 //                            node.setAttr('style', cssStyle)
 //
 //                        }
+                        //p标签不允许嵌套
+                        utils.each(node.children,function(n){
+                            if(n.type == 'element' && n.tagName == 'p'){
+                                var next = n.nextSibling();
+                                node.parentNode.insertAfter(n,node);
+                                var last = n;
+                                while(next){
+                                    var tmp = next.nextSibling();
+                                    node.parentNode.insertAfter(next,last);
+                                    last = next;
+                                    next = tmp;
+                                }
+                                return false;
+                            }
+                        });
                         if (!node.firstChild()) {
                             node.innerHTML(browser.ie ? '&nbsp;' : '<br/>')
                         }
@@ -124,12 +152,18 @@ UE.plugins['defaultfilter'] = function () {
 
                             node.appendChild(browser.ie ? UE.uNode.createText(' ') : UE.uNode.createElement('br'))
                         }
+                        break;
+                    case 'table':
+                        if(me.options.disabledTableInTable && tdParent(node)){
+                            node.parentNode.insertBefore(UE.uNode.createText(node.innerText()),node);
+                            node.parentNode.removeChild(node)
+                        }
                 }
 
             }
-            if(node.type == 'comment'){
-                node.parentNode.removeChild(node);
-            }
+//            if(node.type == 'comment'){
+//                node.parentNode.removeChild(node);
+//            }
         })
 
     });
@@ -153,8 +187,8 @@ UE.plugins['defaultfilter'] = function () {
                     case 'div':
                         if (val = node.getAttr('cdata_tag')) {
                             node.tagName = val;
-                            node.setAttr({cdata_tag: '',style:''});
-                            node.innerText(utils.html(node.innerText()),true)
+                            node.appendChild(UE.uNode.createText(node.getAttr('cdata_data')));
+                            node.setAttr({cdata_tag: '', cdata_data: '','_ue_custom_node_':''});
                         }
                         break;
                     case 'a':

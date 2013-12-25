@@ -181,33 +181,33 @@ test("getContent--转换空格，nbsp与空格相间显示", function() {
 });
 test( '转换script标签', function () {
     var editor = te.obj[0];
-    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
+    var br = ua.browser.ie?'<p>&nbsp;</p>':('<p><br></p>');
     editor.setContent( '<script type="text/javascript">ueditor</script>' );
-    var html = br+'<div type="text/javascript" cdata_tag=\"script\"  style="display:none">ueditor</div>';
+    var html = br+'<div type="text/javascript" cdata_tag=\"script\"  cdata_data=\"ueditor\" _ue_custom_node_=\"true\"></div>';
     ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 test( 'trace 3698 1.3.0 版本修复: script(style)标签里面的内容不转码', function () {
     var editor = te.obj[0];
     editor.setContent('<script type="text/plain" id="myEditor" name="myEditor">var ue=UE.getEditor("editor");</script>');
-    equal(editor.document.getElementById('myEditor').innerHTML,'var ue=UE.getEditor("editor");','内容不转码')
+    equal(editor.document.getElementById('myEditor').innerHTML,'','内容不保留');//1.3.6 针对ie下标签不能隐藏问题的修复
     // todo 1.3.0 trace 3698
     editor.setContent('<style type="text/css" id="myEditor">        .clear {            clear: both;        }     </style>');
-    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
+    var br = ua.browser.ie?'<p>&nbsp;</p>':('<p><br></p>');
     ua.checkSameHtml(editor.getContent(),br+'<style type="text/css" id="myEditor">.clear {            clear: both;        }</style>','内容不转码');
 } );
 test( '转换style标签:style data不为空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css">sdf</style>' );
-    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
-    var html = br+'<div type="text/css" cdata_tag="style" style="display:none">sdf</div>';
+    var br = ua.browser.ie?'<p>&nbsp;</p>':('<p><br></p>');
+    var html = br+'<div type="text/css" cdata_tag="style" cdata_data=\"sdf\" _ue_custom_node_=\"true\"></div>';
     ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 test( '转换style标签:style data不空', function () {
     var editor = te.obj[0];
     editor.setContent( '<style type="text/css"></style>' );
-    var br = ua.browser.ie?'<p>&nbsp;</p>':(ua.browser.gecko?'<br/>':'<p><br></p>');
-    var html = br+'<div type="text/css" cdata_tag="style" style="display:none"></div>';
+    var br = ua.browser.ie?'<p>&nbsp;</p>':('<p><br></p>');
 
+    var html = br+'<div type="text/css" cdata_tag="style" _ue_custom_node_=\"true\"></div>';
     ua.checkSameHtml(editor.body.innerHTML,html,'转换script标签');
 } );
 test( 'div出编辑器转换', function () {

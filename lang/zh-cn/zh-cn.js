@@ -19,7 +19,7 @@ UE.I18N['zh-cn'] = {
         'insertvideo':'视频', 'help':'帮助', 'justifyleft':'居左对齐', 'justifyright':'居右对齐', 'justifycenter':'居中对齐',
         'justifyjustify':'两端对齐', 'forecolor':'字体颜色', 'backcolor':'背景色', 'insertorderedlist':'有序列表',
         'insertunorderedlist':'无序列表', 'fullscreen':'全屏', 'directionalityltr':'从左向右输入', 'directionalityrtl':'从右向左输入',
-        'rowspacingtop':'段前距', 'rowspacingbottom':'段后距', 'highlightcode':'插入代码', 'pagebreak':'分页', 'insertframe':'插入Iframe', 'imagenone':'默认',
+        'rowspacingtop':'段前距', 'rowspacingbottom':'段后距',  'pagebreak':'分页', 'insertframe':'插入Iframe', 'imagenone':'默认',
         'imageleft':'左浮动', 'imageright':'右浮动', 'attachment':'附件', 'imagecenter':'居中', 'wordimage':'图片转存',
         'lineheight':'行间距','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版', 'webapp':'百度应用',
         'touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦','music':'音乐',inserttable:'插入表格',
@@ -170,8 +170,7 @@ UE.I18N['zh-cn'] = {
         'copy':"复制(Ctrl + c)",
         'copymsg':"请使用 'Ctrl + c'执行复制操作",
         'paste':"粘贴(Ctrl + v)",
-         'pastemsg':"请使用 'Ctrl + v'执行复制操作",
-        'highlightcode':'插入代码'
+         'pastemsg':"请使用 'Ctrl + v'执行复制操作"
     },
 
     'anthorMsg':"链接",
@@ -214,7 +213,7 @@ UE.I18N['zh-cn'] = {
     'background':{
         'static':{
             'lang_background_normal':'背景设置',
-            'lang_background_local':'本地图片',
+            'lang_background_local':'在线图片',
             'lang_background_set':'选项',
             'lang_background_none':'无背景色',
             'lang_background_colored':'有背景色',
@@ -377,12 +376,6 @@ UE.I18N['zh-cn'] = {
         'fileCanceling':'取消中，请等待……',
         'stopUploading':'上传已停止……'
     },
-    'highlightcode':{
-        'static':{
-            'lang_input_selectLang':'选择语言'
-        },
-        importCode:'请输入代码'
-    },
     'emotion':{
         'static':{
             'lang_input_choice':'精选',
@@ -406,7 +399,7 @@ UE.I18N['zh-cn'] = {
         'static':{
             'lang_input_about':'关于UEditor',
             'lang_input_shortcuts':'快捷键',
-            'lang_input_version':'版本:1.3.5',
+            'lang_input_version':'版本:1.3.6',
             'lang_input_introduction':'UEditor是由百度web前端研发部开发的所见即所得富文本web编辑器，具有轻量，可定制，注重用户体验等特点。开源基于BSD协议，允许自由使用和修改代码。',
             'lang_Txt_shortcuts':'快捷键',
             'lang_Txt_func':'功能',
@@ -489,7 +482,8 @@ UE.I18N['zh-cn'] = {
     'insertvideo':{
         'static':{
             lang_tab_insertV:"插入视频",
-//            lang_tab_searchV:"搜索视频",
+            lang_tab_searchV:"搜索视频",
+            lang_tab_uploadV:"上传视频",
             lang_video_url:"视频网址",
             lang_video_size:"视频尺寸",
             lang_videoW:"宽度",
@@ -498,7 +492,17 @@ UE.I18N['zh-cn'] = {
             videoSearchTxt:{value:"请输入搜索关键字！"},
             videoType:{options:["全部", "热门", "娱乐", "搞笑", "体育", "科技", "综艺"]},
             videoSearchBtn:{value:"百度一下"},
-            videoSearchReset:{value:"清空结果"}
+            videoSearchReset:{value:"清空结果"},
+
+            'lang_input_fileStatus':' 当前未上传文件',
+            'startUpload':{style:"background:url(upload.png) no-repeat;"},
+
+            lang_upload_size:"视频尺寸",
+            lang_upload_width:"宽度",
+            lang_upload_height:"高度",
+            lang_upload_alignment:"对齐方式",
+            lang_format_advice:"建议使用mp4格式."
+
         },
         numError:"请输入正确的数值，如123,400",
         floatLeft:"左浮动",
@@ -509,7 +513,35 @@ UE.I18N['zh-cn'] = {
         loading:" &nbsp;视频加载中，请等待……",
         clickToSelect:"点击选中",
         goToSource:'访问源视频',
-        noVideo:" &nbsp; &nbsp;抱歉，找不到对应的视频，请重试！"
+        noVideo:" &nbsp; &nbsp;抱歉，找不到对应的视频，请重试！",
+
+
+        'browseFiles':'文件浏览…',
+        'uploadSuccess':'上传成功!',
+        'delSuccessFile':'从成功队列中移除',
+        'delFailSaveFile':'移除保存失败文件',
+        'statusPrompt':' 个文件已上传！ ',
+        'flashVersionError':'当前Flash版本过低，请更新FlashPlayer后重试！',
+        'flashLoadingError':'Flash加载失败!请检查路径或网络状态',
+        'fileUploadReady':'等待上传……',
+        'delUploadQueue':'从上传队列中移除',
+        'limitPrompt1':'单次不能选择超过',
+        'limitPrompt2':'个文件！请重新选择！',
+        'delFailFile':'移除失败文件',
+        'fileSizeLimit':'文件大小超出限制！',
+        'emptyFile':'空文件无法上传！',
+        'fileTypeError':'文件类型错误！',
+        'unknownError':'未知错误！',
+        'fileUploading':'上传中，请等待……',
+        'cancelUpload':'取消上传',
+        'netError':'网络错误',
+        'failUpload':'上传失败!',
+        'serverIOError':'服务器IO错误！',
+        'noAuthority':'无权限！',
+        'fileNumLimit':'上传个数限制',
+        'failCheck':'验证失败，本次上传被跳过！',
+        'fileCanceling':'取消中，请等待……',
+        'stopUploading':'上传已停止……'
     },
     'spechars':{
         'static':{},

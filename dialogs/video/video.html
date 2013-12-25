@@ -11,9 +11,10 @@
 <div class="wrapper">
     <div id="videoTab">
         <div id="tabHeads" class="tabhead">
-            <span tabSrc="video" class="focus"><var id="lang_tab_insertV"></var></span>
-            
+            <span tabSrc="video" class="focus" data-content-id="video"><var id="lang_tab_insertV"></var></span>
+            <span tabSrc="upload" data-content-id="upload"><var id="lang_tab_uploadV"></var></span>
         </div>
+        <!--<span tabSrc="video" data-content-id="videoSearch"><var id="lang_tab_searchV"></var></span>-->
         <div id="tabBodys" class="tabbody">
             <div id="video" class="panel">
                <table><tr><td><label for="videoUrl" class="url"><var id="lang_video_url"></var></label></td><td><input id="videoUrl" type="text"></td></tr></table>
@@ -32,36 +33,63 @@
                   </fieldset>
                </div>
             </div>
-            <!--<div id="videoSearch" class="panel" style="display: none">-->
-                <!--<table style="margin-top: 5px;">-->
-                    <!--<tr>-->
-                        <!--<td><input id="videoSearchTxt"  type="text" /></td>-->
-                        <!--<td>-->
-                            <!--<select id="videoType">-->
-                                <!--<option value="0"></option>-->
-                                <!--<option value="29"></option>-->
-                                <!--<option value="1"></option>-->
-                                <!--<option value="5"></option>-->
-                                <!--<option value="15"></option>-->
-                                <!--<option value="21"></option>-->
-                                <!--<option value="31"></option>-->
-                            <!--</select>-->
-                        <!--</td>-->
-                        <!--<td><input id="videoSearchBtn" type="button"/></td>-->
-                        <!--<td><input id="videoSearchReset" type="button" /></td>-->
-                    <!--</tr>-->
-                <!--</table>-->
-                <!--<div id="searchList"></div>-->
-            <!--</div>-->
+            <!--
+            <div id="videoSearch" class="panel" style="display: none">
+                <table style="margin-top: 5px;">
+                    <tr>
+                        <td><input id="videoSearchTxt"  type="text" /></td>
+                        <td>
+                            <select id="videoType">
+                                <option value="0"></option>
+                                <option value="29"></option>
+                                <option value="1"></option>
+                                <option value="5"></option>
+                                <option value="15"></option>
+                                <option value="21"></option>
+                                <option value="31"></option>
+                            </select>
+                        </td>
+                        <td><input id="videoSearchBtn" type="button"/></td>
+                        <td><input id="videoSearchReset" type="button" /></td>
+                    </tr>
+                </table>
+                <div id="searchList"></div>
+            </div>
+            -->
+            <div id="upload" class="panel" style="display: none">
+                <div id="upload_left">
+                    <div class="fieldset flash" id="fsUploadProgress"></div>
+                    <div class="controller">
+                        <span id="spanButtonPlaceHolder"></span>
+                        <!--<span id="video_format_advice"><var id="lang_format_advice"></var></span>-->
+                        <span id="startUpload" style="display: none;"></span>
+                    </div>
+                </div>
+                <div id="uploadVideoInfo">
+                    <fieldset>
+                        <legend><var id="lang_upload_size"></var></legend>
+                        <table>
+                            <tr><td><label><var id="lang_upload_width"></var></label></td><td><input class="txt" id="upload_width" type="text"/></td></tr>
+                            <tr><td><label><var id="lang_upload_height"></var></label></td><td><input class="txt" id="upload_height" type="text"/></td></tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend><var id="lang_upload_alignment"></var></legend>
+                        <div id="upload_alignment"></div>
+                    </fieldset>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <script type="text/javascript" src="video.js"></script>
+
+<script type="text/javascript" src="../../third-party/swfupload/swfupload.js"></script>
+<script type="text/javascript" src="../../third-party/swfupload/swfupload.queue.js"></script>
+<script type="text/javascript" src="../../third-party/swfupload/fileprogress.js"></script>
+<script type="text/javascript" src="callbacks.js"></script>
 <script type="text/javascript">
-    window.onload = function(){
-        video.init();
-        $focus($G("videoUrl"));
-    };
+
 </script>
 </body>
 </html>

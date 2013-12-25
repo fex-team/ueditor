@@ -32,10 +32,10 @@
         //图片上传配置区
         ,imageUrl:URL+"php/imageUp.php"             //图片上传提交地址
         ,imagePath:URL + "php/"                     //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
-        //,imageFieldName:"upfile"                   //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
-        //,compressSide:0                            //等比压缩的基准，确定maxImageSideLength参数的参照对象。0为按照最长边，1为按照宽度，2为按照高度
-        //,maxImageSideLength:900                    //上传图片最大允许的边长，超过会自动等比缩放,不缩放就设置一个比较大的值，更多设置在image.html中
-        //,savePath: [ 'upload1', 'upload2', 'upload3' ]      //图片保存在服务器端的目录， 默认为空， 此时在上传图片时会向服务器请求保存图片的目录列表，
+        //,imageFieldName:"upfile"                  //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
+        //,compressSide:0                           //等比压缩的基准，确定maxImageSideLength参数的参照对象。0为按照最长边，1为按照宽度，2为按照高度
+        //,maxImageSideLength:900                   //上传图片最大允许的边长，超过会自动等比缩放,不缩放就设置一个比较大的值，更多设置在image.html中
+        //,savePath: [ 'upload1', 'upload2', 'upload3' ]    //图片保存在服务器端的目录， 默认为空， 此时在上传图片时会向服务器请求保存图片的目录列表，
                                                             // 如果用户不希望发送请求， 则可以在这里设置与服务器端能够对应上的目录名称列表
                                                             //比如： savePath: [ 'upload1', 'upload2' ]
 
@@ -72,8 +72,11 @@
         ,wordImagePath:URL + "php/"                       //
         //,wordImageFieldName:"upfile"                     //word转存表单名若此处修改，需要在后台对应文件修改对应参数
 
-        //获取视频数据的地址
+        //视频上传配置区
         ,getMovieUrl:URL+"php/getMovie.php"                   //视频数据获取地址
+        ,videoUrl:URL+"php/fileUp.php"               //附件上传提交地址
+        ,videoPath:URL + "php/"                   //附件修正地址，同imagePath
+        //,videoFieldName:"upfile"                    //附件提交的表单名，若此处修改，需要在后台对应文件修改对应参数
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         , toolbars:[
@@ -294,11 +297,6 @@
         //超出字数限制提示  留空支持多语言自动切换，否则按此配置显示
         //,wordOverFlowMsg:''    //<span style="color:red;">你输入的字符个数已经超出最大允许值，服务器可能会拒绝保存！</span>
 
-        //highlightcode
-        // 代码高亮时需要加载的第三方插件的路径
-        // ,highlightJsUrl:URL + "third-party/SyntaxHighlighter/shCore.js"
-        // ,highlightCssUrl:URL + "third-party/SyntaxHighlighter/shCoreDefault.css"
-
         //tab
         //点击tab键时移动的距离,tabSize倍数，tabNode什么字符做为单位
         //,tabSize:4
@@ -381,7 +379,9 @@
         //      indentValue : '2em'             //行首缩进的大小
         //  },
         //填写过滤规则
-        //filterRules : {}
+        //,filterRules : {}
+        //,autoTransWordToList:false  //禁止word中粘贴进来的列表自动变成列表标签
+        //,disabledTableInTable:true  //禁止表格嵌套
     };
 
     function getUEBasePath ( docUrl, confUrl ) {
@@ -402,7 +402,12 @@
 
         var basePath = confUrl;
 
-        if ( !/^[a-z]+:/i.test( confUrl ) ) {
+
+        if(/^(\/|\\\\)/.test(confUrl)){
+
+            basePath = /^.+?\w(\/|\\\\)/.exec(docUrl)[0] + confUrl.replace(/^(\/|\\\\)/,'');
+
+        }else if ( !/^[a-z]+:/i.test( confUrl ) ) {
 
             docUrl = docUrl.split( "#" )[0].split( "?" )[0].replace( /[^\\\/]+$/, '' );
 

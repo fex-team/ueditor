@@ -220,12 +220,6 @@
     overflow: hidden;
 }
 
-/*code-dialog*/
-.edui-default .edui-for-highlightcode .edui-dialog-content {
-    width: 550px;
-    height: 360px;
-    overflow: hidden;
-}
 
 /*map-dialog*/
 .edui-default .edui-for-map .edui-dialog-content {
