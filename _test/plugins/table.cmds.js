@@ -1,4 +1,5 @@
 module('plugins.table');
+
 //test('',function(){stop()})
 /*trace992，合并单元格后多了一个td*/
 test('向右合并--拆分成列', function () {
@@ -1155,7 +1156,7 @@ test('contextMenu 选区背景隔行', function () {
         ua.click(menutableBody.childNodes[1]);
         ut.clearSelected();
         trs = editor.body.getElementsByTagName('tr');
-        if (ua.browser.ie == 8) {
+        if (ua.browser.ie &&ua.browser.ie<9) {
             equal(trs[0].cells[0].style.backgroundColor, '#bbb', '第一行');
             equal(trs[1].cells[1].style.backgroundColor, '#ccc', '第二行');
         } else {
@@ -1232,7 +1233,7 @@ test('contextMenu 三色渐变', function () {
     ua.click(menutable.childNodes[3]);
     ut.clearSelected();
     tds = editor.body.getElementsByTagName('td');
-    if (ua.browser.ie == 8) {
+    if (ua.browser.ie  &&ua.browser.ie<9) {
         equal(tds[0].style.backgroundColor, '#aaa', '第一行');
         equal(tds[6].style.backgroundColor, '#bbb', '第二行');
         equal(tds[11].style.backgroundColor, '#ccc', '第二行');
@@ -1443,8 +1444,8 @@ test('contextMenu trace 3060：单元格对齐方式', function () {
                 equal(editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase(), 'td', '光标位于单元格中');
             }
             setTimeout(function () {
-//                te.dom.push(editor.container);
-//                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
+                te.dom.push(editor.container);
+                document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                 start();
             }, 20);
         }, 200);

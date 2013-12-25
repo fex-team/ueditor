@@ -11,7 +11,6 @@ module("plugins.list");
  *
  * */
 
-//test('',function(){stop();})
 test('回车将p转成列表', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -19,15 +18,17 @@ test('回车将p转成列表', function () {
     editor.setContent('<p>1. 2</p>');
     stop();
     setTimeout(function () {
-        range.setStart(editor.body.firstChild, 0).collapse(true).select();
+        var textContent = editor.body.firstChild.childNodes;
+        range.setStart(textContent[textContent.length-1],textContent[textContent.length-1].length).collapse(true).select();
+//        range.setStart(editor.body.firstChild, 1).collapse(true).select();
         ua.keydown(editor.body, {keyCode:13});
         setTimeout(function () {
+            equal(ua.getChildHTML(editor.body), '<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p> 2</p></li><li><p>' + br + '</p></li></ol>', '回车将p转成列表');
             ua.checkSameHtml(ua.getChildHTML(editor.body), '<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p> 2</p></li><li><p>' + br + '</p></li></ol>', '回车将p转成列表');
             start()
         }, 50);
     }, 100);
 });
-
 //todo bug3418
 test('ol标签嵌套', function () {
     var editor = te.obj[0];
@@ -41,7 +42,6 @@ test('li内添加p标签', function () {
     ua.manualDeleteFillData(editor.body);
     ua.checkSameHtml(editor.body.innerHTML, '<ol class=\" list-paddingleft-2\"><li><p>asd</p><p>asd</p></li></ol>', '添加p标签');
 });
-//todo 1.2.6.1
 test('p转成列表', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
@@ -51,22 +51,25 @@ test('p转成列表', function () {
         setTimeout(function(){
             editor.setContent('<p class="MsoListParagraph">1.a</p><ol><li>b</li></ol>');
             ua.manualDeleteFillData(editor.body);
-            //todo 1.2.6.1
-//    ua.checkSameHtml(editor.body.innerHTML,'<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p>a</p></li><li><p>b</p></li></ol>','p转成有序列表');
+            //todo trace 3858
+            if(!ua.browser.ie)
+                ua.checkSameHtml(editor.body.innerHTML,'<ol style=\"list-style-type: decimal;\" class=\" list-paddingleft-2\"><li><p>a</p></li><li><p>b</p></li></ol>','p转成有序列表');
             editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">abc</span></p>');
             ua.manualDeleteFillData(editor.body);
             ua.checkSameHtml(editor.body.innerHTML, '<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p>' + br + '</p></li></ul>', 'p转成无序列表');
-//todo bug3417
-//    editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">n</span></p>');
-//    ua.manualDeleteFillData(editor.body);
-//    ua.checkSameHtml(editor.body.innerHTML,'<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p><br></p></li></ul>','p转成无序列表');
-            UE.delEditor('ue');
-            te.dom.push(document.getElementById('ue'));
-            start();
+            editor.setContent('<p class="MsoListParagraph"><span style="font-family: Symbol;">n</span></p>');
+            var br = ua.browser.ie ?'&nbsp;':'<br>';
+            ua.checkSameHtml(editor.body.innerHTML,'<ul style=\"list-style-type: disc;\" class=\" list-paddingleft-2\"><li><p>'+br+'</p></li></ul>','p转成无序列表');
+            setTimeout(function(){
+
+                UE.delEditor('ue');
+                te.dom.push(document.getElementById('ue'));
+                start();
+            },500);
+
         },200);
     });
     stop();
-
 });
 
 test('列表复制粘贴', function () {
@@ -360,7 +363,6 @@ test('修改列表中间某一段列表为另一种列表', function () {
     equal(body.childNodes[1].tagName.toLowerCase(), 'ul', '第二个孩子是无序列表');
     equal(ua.getChildHTML(body.childNodes[1]), '<li><p>hello2</p></li><li><p>hello3</p></li>', '检查第二个列表的内容');
 });
-
 test('两个列表，将下面的合并上去', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -372,10 +374,8 @@ test('两个列表，将下面的合并上去', function () {
     equal(body.firstChild.tagName.toLowerCase(), 'ol', '仍然是ol');
     equal(body.childNodes.length, 2, 'body有两个孩子ol');
     equal(body.lastChild.childNodes.length, 2, '下面和上面的列表合并到上面去了');
-//TODO 1.2.6不严重bug注释 空style未删除
-//    equal( ua.getChildHTML( editor.body ), '<ol class=" list-paddingleft-2" ><li><p>hello3</p></li></ol><ol class=" list-paddingleft-2" ><li><p>hello1</p></li><li><p>hello2</p></li></ol>', '3个li子节点' );
+    ua.checkSameHtml(  editor.body.innerHTML, '<ol class=" list-paddingleft-2" ><li><p>hello3</p></li></ol><ol class=" list-paddingleft-2" ><li><p>hello1</p></li><li><p>hello2</p></li></ol>', '3个li子节点' );
 });
-
 test('trace 3293：列表下的文本合并到列表中', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -469,57 +469,55 @@ test('列表内后退', function () {
             range.setStart(lis[1].firstChild.firstChild, 0).collapse(1).select();
             ua.manualDeleteFillData(editor.body);
             ua.keydown(editor.body, {keyCode:8});
-//TODO 1.2.6不严重bug注释 空style未删除
-//        equal(ua.getChildHTML(editor.body),'<p><br></p><ol class=\" list-paddingleft-2\"><li><p>hello2</p><p><br></p><sss>hello3</sss></li><li><p>hello4</p><p>hello5</p></li></ol>','自定义标签后退');
+        ua.checkSameHtml(editor.body.innerHTML,'<p><br></p><ol class=\" list-paddingleft-2\"><li><p>hello2</p><p><br></p><sss>hello3</sss></li><li><p>hello4</p><p>hello5</p></li></ol>','自定义标签后退');
         }
-
 });
 
 test('列表内回车', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
 
-        var lis;
-        var br = ua.browser.ie ? '' : '<br>';
-        editor.setContent('<ol><li><sss></sss><sss></sss></li></ol>');
-        lis = editor.body.getElementsByTagName('li');
-        range.setStart(lis[0], 0).collapse(1).select();
-        ua.keydown(editor.body, {keyCode:13});
-        var spa = ua.browser.opera ? '<br>' : '';
-        equal(ua.getChildHTML(editor.body), spa + '<p><sss></sss><sss></sss></p>', '空列表项回车--无列表');
+    var lis;
+    var br = ua.browser.ie ? '' : '<br>';
+    editor.setContent('<ol><li><sss></sss><sss></sss></li></ol>');
+    lis = editor.body.getElementsByTagName('li');
+    range.setStart(lis[0], 0).collapse(1).select();
+    ua.keydown(editor.body, {keyCode:13});
+    var spa = ua.browser.opera ? '<br>' : '';
+    equal(ua.getChildHTML(editor.body), spa + '<p><sss></sss><sss></sss></p>', '空列表项回车--无列表');
 
-        editor.setContent('<ol><li><sss>hello1</sss><p>hello2</p></li></ol>');
-        lis = editor.body.getElementsByTagName('li');
-        range.setStart(lis[0].lastChild, 0).collapse(1).select();
-        ua.keydown(editor.body, {keyCode:13});
-        equal(ua.getChildHTML(editor.body.firstChild), '<li><p><sss>hello1</sss><p></p></p></li><li><p><p>hello2</p></p></li>', '单个列表项内回车');
+    editor.setContent('<ol><li><sss>hello1</sss><p>hello2</p></li></ol>');
+    lis = editor.body.getElementsByTagName('li');
+    range.setStart(lis[0].lastChild, 0).collapse(1).select();
+    ua.keydown(editor.body, {keyCode:13});
+    equal(ua.getChildHTML(editor.body.firstChild), '<li><p><sss>hello1</sss><p></p></p></li><li><p><p>hello2</p></p></li>', '单个列表项内回车');
 //////标签空格的处理
 //    editor.setContent('<ol><li><br></li><li><p>hello5</p></li><li><p><br></p><p><br></p></li></ol>');
-        editor.setContent('<ol><li><br></li><li><p>hello5</p></li><li><p><br></p><p><br></p></li></ol>');
-        lis = editor.body.getElementsByTagName('li');
-        range.setStart(lis[2].firstChild.firstChild, 0).setEnd(lis[2].lastChild.firstChild, 0).select();
-        ua.keydown(editor.body, {keyCode:13});
-//TODO 1.2.6不严重bug注释 空style未删除
-//    equal(ua.getChildHTML(editor.body),'<ol class=\" list-paddingleft-2\"><li><p>'+br+'</p></li><li><p>hello5</p></li></ol><p>'+br+'</p>','最后一个列表项为空行回车');
+    editor.setContent('<ol><li><br></li><li><p>hello5</p></li><li><p><br></p><p><br></p></li></ol>');
+    lis = editor.body.getElementsByTagName('li');
+    range.setStart(lis[2].firstChild.firstChild, 0).setEnd(lis[2].lastChild.firstChild, 0).select();
+    ua.keydown(editor.body, {keyCode:13});
+    ua.manualDeleteFillData(editor.body);
+    ua.checkSameHtml(editor.body.innerHTML,'<ol class=\" list-paddingleft-2\"><li><p><br></p></li><li><p>hello5</p></li></ol><p>'+br+'</p>','最后一个列表项为空行回车');
 
-        /*trace 2652*/
-        range.setStart(editor.body.firstChild.firstChild.firstChild, 0).collapse(1).select();
-        ua.keydown(editor.body, {keyCode:13});
-//TODO 1.2.6不严重bug注释 空style未删除
-//    equal(ua.getChildHTML(editor.body),'<p>'+br+'</p><ol class=\" list-paddingleft-2\"><li><p>hello5</p></li></ol><p>'+br+'</p>','第一个列表项为空行下回车');
+    /*trace 2652*/
+    range.setStart(editor.body.firstChild.firstChild.firstChild, 0).collapse(1).select();
+    ua.keydown(editor.body, {keyCode:13});
+    ua.manualDeleteFillData(editor.body);
+    ua.checkSameHtml(editor.body.innerHTML,'<p><br></p><ol class=\" list-paddingleft-2\"><li><p>hello5</p></li></ol><p>'+br+'</p>','第一个列表项为空行下回车');
 
-        /*trace 2653*/
-        editor.setContent('<ol><li><p>hello2</p></li><li><p>hello3</p></li><li><p><br /></p><p>hello5</p></li></ol>');
-        lis = editor.body.getElementsByTagName('li');
-        range.setStart(lis[0].firstChild.firstChild, 2).setEnd(lis[1].firstChild.firstChild, 4).select();
-        ua.keydown(editor.body, {keyCode:13});
-        equal(ua.getChildHTML(editor.body.firstChild), '<li><p>he</p></li><li><p>o3</p></li><li><p><br></p><p>hello5</p></li>', '非闭合回车');
+    /*trace 2653*/
+    editor.setContent('<ol><li><p>hello2</p></li><li><p>hello3</p></li><li><p><br /></p><p>hello5</p></li></ol>');
+    lis = editor.body.getElementsByTagName('li');
+    range.setStart(lis[0].firstChild.firstChild, 2).setEnd(lis[1].firstChild.firstChild, 4).select();
+    ua.keydown(editor.body, {keyCode:13});
+    equal(ua.getChildHTML(editor.body.firstChild), '<li><p>he</p></li><li><p>o3</p></li><li><p><br></p><p>hello5</p></li>', '非闭合回车');
 
-        editor.setContent('<ol><li><sss>hello</sss><p>hello4</p></li><li><p>hello5</p></li></ol>');
-        lis = editor.body.getElementsByTagName('li');
-        range.setStart(lis[0].lastChild.firstChild, 1).setEnd(lis[0].lastChild.firstChild, 2).select();
-        ua.keydown(editor.body, {keyCode:13});
-        equal(ua.getChildHTML(editor.body.firstChild), '<li><p><sss>hello</sss><p>h</p></p></li><li><p><p>llo4</p></p></li><li><p>hello5</p></li>', '一个列表项内两行');
+    editor.setContent('<ol><li><sss>hello</sss><p>hello4</p></li><li><p>hello5</p></li></ol>');
+    lis = editor.body.getElementsByTagName('li');
+    range.setStart(lis[0].lastChild.firstChild, 1).setEnd(lis[0].lastChild.firstChild, 2).select();
+    ua.keydown(editor.body, {keyCode:13});
+    equal(ua.getChildHTML(editor.body.firstChild), '<li><p><sss>hello</sss><p>h</p></p></li><li><p><p>llo4</p></p></li><li><p>hello5</p></li>', '一个列表项内两行');
 
 });
 
@@ -678,15 +676,15 @@ test('trace 1621：选中多重列表，设置为相同类型的列表', functio
     editor.execCommand('insertorderedlist', 'upper-alpha');
     ua.checkSameHtml(html, editor.body.innerHTML.toLowerCase(), 'trace 1621');
 });
-//TODO 1.2.6不严重bug注释 空style未删除
-//test( 'trace 3049：列表内有引用', function () {
-//    var editor = te.obj[0];
-//    editor.setContent( '<blockquote><ol class="custom_cn1 list-paddingleft-1" ><li class="list-cn-2-1 list-cn1-paddingleft-1" ><p>a</p></li><li class="list-cn-2-2 list-cn1-paddingleft-1" ><p>b</p></li></ol></blockquote>' );
-//    editor.execCommand( 'selectall');
-//    editor.execCommand( 'blockquote' );
-//    var html = '<ol class="custom_cn1 list-paddingleft-1" ><li class="list-cn-2-1 list-cn1-paddingleft-1"><p>a</p></li><li class="list-cn-2-2 list-cn1-paddingleft-1"><p>b</p></li></ol>';
-//    equal(ua.getChildHTML(editor.body),html,'检查列表结果');
-//});
+test( 'trace 3049：列表内有引用', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<blockquote><ol class="custom_cn1 list-paddingleft-1" ><li class="list-cn-2-1 list-cn1-paddingleft-1" ><p>a</p></li><li class="list-cn-2-2 list-cn1-paddingleft-1" ><p>b</p></li></ol></blockquote>' );
+    editor.execCommand( 'selectall');
+    editor.execCommand( 'blockquote' );
+    var html = '<ol class="custom_cn1 list-paddingleft-1" ><li class="list-cn-2-1 list-cn1-paddingleft-1"><p>a</p></li><li class="list-cn-2-2 list-cn1-paddingleft-1"><p>b</p></li></ol>';
+    ua.checkSameHtml(editor.body.innerHTML,html,'检查列表结果');
+
+});
 
 /*trace 3056：模拟不完全，还需手动测试*/
 test('trace 3056：列表内表格后回车', function () {
@@ -768,24 +766,23 @@ test('trace 3117：列表内后退两次', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
 
-        var br = ua.browser.ie ? '<br>' : '<br>';
-        editor.setContent('<ol><li>hello</li><li><p><br></p></li></ol>');
+    var br = ua.browser.ie ? '<br>' : '<br>';
+    editor.setContent('<ol><li>hello</li><li><p><br></p></li></ol>');
 
-        range.setStart(editor.body.firstChild.lastChild.firstChild, 0).collapse(1).select();
-        ua.manualDeleteFillData(editor.body);
-        ua.keydown(editor.body, {keyCode:8});
-        var ol = editor.body.getElementsByTagName('ol');
-        var lis = editor.body.getElementsByTagName('li');
-        equal(lis.length, '1', '变成1个列表项');
-        equal(ua.getChildHTML(editor.body.firstChild), '<li><p>hello</p><p>' + br + '</p></li>', '检查列表内容');
-//TODO 1.2.6不严重bug注释 空style未删除
-//    range.setStart(lis[0].lastChild,0).collapse(1).select();
-//    ua.keydown(editor.body,{keyCode:8});
-//    equal(ua.getChildHTML(editor.body),'<ol class=\" list-paddingleft-2\"><li><p>hello</p></li></ol><p>'+br+'</p>','检查body内容');
-        /*模拟不到光标跳到上一行？*/
-//    range.setStart(editor.body.lastChild,0).collapse(1).select();
-//    ua.keydown(editor.body,{keyCode:8});
-//    equal(ua.getChildHTML(editor.body),'<ol class=\" list-paddingleft-2\"><li><p>hello</p></li></ol>','检查body内容');
+    range.setStart(editor.body.firstChild.lastChild.firstChild, 0).collapse(1).select();
+    ua.manualDeleteFillData(editor.body);
+    ua.keydown(editor.body, {keyCode:8});
+    var ol = editor.body.getElementsByTagName('ol');
+    var lis = editor.body.getElementsByTagName('li');
+    equal(lis.length, '1', '变成1个列表项');
+    equal(ua.getChildHTML(editor.body.firstChild), '<li><p>hello</p><p>' + br + '</p></li>', '检查列表内容');
+    range.setStart(lis[0].lastChild,0).collapse(1).select();
+    ua.keydown(editor.body,{keyCode:8});
+    equal(ua.getChildHTML(editor.body),'<ol class=\" list-paddingleft-2\"><li><p>hello</p></li></ol><p>'+br+'</p>','检查body内容');
+    /*模拟不到光标跳到上一行？*/
+    range.setStart(editor.body.lastChild,0).collapse(1).select();
+    ua.keydown(editor.body,{keyCode:8});
+    equal(ua.getChildHTML(editor.body),'<ol class=\" list-paddingleft-2\"><li><p>hello</p></li></ol><p>'+br+'</p>','检查body内容');
 
 });
 
@@ -827,11 +824,10 @@ test('trace 3132：单行列表backspace', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
 
-        editor.setContent('<ol><li><br></li></ol>');
-        range.selectNode(editor.body.firstChild.firstChild.firstChild.firstChild).select();
-        ua.keydown(editor.body, {keyCode:8});
-        var space =ua.browser.ie>8?'':'<br>';
-        equal(ua.getChildHTML(editor.body), '<p>'+space+'</p>', '');
+    editor.setContent('<ol><li><br></li></ol>');
+    range.selectNode(editor.body.firstChild.firstChild.firstChild.firstChild).select();
+    ua.keydown(editor.body, {keyCode: 8});
+    equal(ua.getChildHTML(editor.body), '<p><br></p>', '');
 
 });
 
@@ -882,29 +878,31 @@ test('trace 3164：添加列表，取消列表', function () {
 test('trace 3165：检查表格中列表tab键', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-        var body = editor.body;
-        setTimeout(function () {
-            editor.execCommand('inserttable');
-            var tds = body.getElementsByTagName('td');
-            range.setStart(tds[6], 0).collapse(1).select();
-            editor.execCommand('insertorderedlist');
-            equal(tds[6].firstChild.style['listStyleType'], 'decimal', '查询有序列表的类型');
-            tds = body.getElementsByTagName('td');
-            range.setStart(tds[5], 0).collapse(1).select();
-            range = editor.selection.getRange();
+    var body = editor.body;
+    setTimeout(function () {
+        editor.execCommand('inserttable');
+        var tds = body.getElementsByTagName('td');
+        range.setStart(tds[6], 0).collapse(1).select();
+        editor.execCommand('insertorderedlist');
+        equal(tds[6].firstChild.style['listStyleType'], 'decimal', '查询有序列表的类型');
+        tds = body.getElementsByTagName('td');
+        range.setStart(tds[5], 0).collapse(1).select();
+        range = editor.selection.getRange();
+        if(ua.browser.ie>8)
+            equal(range.startContainer.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
+        else
             equal(range.startContainer.parentNode.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
-            ua.keydown(editor.body, {keyCode:9});
-            setTimeout(function () {
-                range = editor.selection.getRange();
-                if (!ua.browser.gecko && !ua.browser.ie)//TODO 1.2.6
-                    equal(range.startContainer.parentNode.tagName.toLowerCase(), 'li', 'tab键后光标跳到有列表的单元格中');
-                equal(tds[6].firstChild.style['listStyleType'], 'decimal', '检查有序列表的类型不应该被改变');
-                start();
-            }, 100);
+        ua.keydown(editor.body, {keyCode:9});
+        setTimeout(function () {
+            range = editor.selection.getRange();
+            if (!ua.browser.gecko && !ua.browser.ie)//TODO 1.2.6
+                equal(range.startContainer.parentNode.tagName.toLowerCase(), 'li', 'tab键后光标跳到有列表的单元格中');
+            equal(tds[6].firstChild.style['listStyleType'], 'decimal', '检查有序列表的类型不应该被改变');
+            start();
         }, 100);
+    }, 100);
     stop();
 });
-
 test('trace 3168：表格中列表更改样式', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
