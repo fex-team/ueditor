@@ -441,7 +441,8 @@
                     width: "100%",
                     height: "100%",
                     frameborder: "0",
-                    scrolling : 'no',
+                    //先注释掉了，加的原因忘记了，但开启会直接导致全屏模式下内容多时不会出现滚动条
+//                    scrolling :'no',
                     src: 'javascript:void(function(){document.open();' + (options.customDomain && document.domain != location.hostname ?  'document.domain="' + document.domain + '";' : '') +
                         'document.write("' + html + '");document.close();}())'
                 }));
