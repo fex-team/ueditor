@@ -1,20 +1,49 @@
 module('plugins.source');
-//test('初始化进入源码模式',function(){
-//    if(ua.browser.ie>0 && ua.browser.ie<8)
-//        return 0;
-//    var div = document.createElement('div');
-//    document.body.appendChild(div);
-//    div.id = 'e';
-//    var editor = UE.getEditor('e');//,{sourceEditorFirst:true}
-//    stop();
-////    editor.ready(function(){
-////        setTimeout(function(){
-//////            equal(editor.queryCommandState('source'),1,'源码高亮');
-////            equal(editor.queryCommandState('bold'),-1,'加粗灰色');
-////////            start();
-////        },100);
-////    });
-//});
+test('trace 2200 p标签嵌套,正确解析 && 注释不会被过滤', function () {
+    var editor = te.obj[0];//
+    editor.setContent('<p>a<p>b</p></p><!--abc-->');
+    editor.execCommand('source');
+    setTimeout(function () {
+        editor.execCommand('source');
+        setTimeout(function () {
+        equal(editor.getContent(), '<p>a</p><p>b</p><!--abc-->', '源码模式 setConent && 注释不会被过滤');
+        start();
+        }, 200);
+    }, 100);
+
+    stop();
+});
+//test('',function(){stop();})
+test('源码模式 setConent', function () {
+    var editor = te.obj[0];//
+    editor.execCommand('source');
+    setTimeout(function () {
+        editor.setContent('<p>setContent in source</p>');
+        equal(editor.getContent(), '<p>setContent in source</p>', '源码模式 setConent');
+        start();
+    }, 100);
+        stop();
+
+});
+test('初始化进入源码模式', function () {
+    if (ua.browser.ie)return;//这个功能不支持ie
+    var div = document.createElement('div');
+    document.body.appendChild(div);
+    div.id = 'e';
+    var editor = UE.getEditor('e', {sourceEditorFirst: true});//
+    stop();
+    editor.ready(function () {
+        setTimeout(function () {
+            equal(editor.queryCommandState('source'), 1, '源码高亮');
+            setTimeout(function () {
+                UE.delEditor('e');
+                te.dom.push(document.getElementById('e'));
+                start();
+            }, 500);
+        }, 400);
+    });
+});
+
 test('chrome删除后切换源码再切换回来，光标没了', function () {
     //opera 取不到range值
     if (ua.browser.opera) return 0;
@@ -181,15 +210,13 @@ test('默认插入的占位符', function () {
 });
 
 test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
-    var div = document.body.appendChild(document.createElement('div'));
     var editor = te.obj[0];
-    editor.render(div);
-    setTimeout(function () {
         var range = new baidu.editor.dom.Range(editor.document);
         var body = editor.body;
         editor.setContent('<p><br></p>');
         setTimeout(function () {
             range.setStart(body.firstChild, 0).collapse(1).select();
+            setTimeout(function () {
             editor.execCommand('pagebreak');
             ua.manualDeleteFillData(editor.body);
             var pagebreak = body.getElementsByTagName('hr')[0];
@@ -204,10 +231,10 @@ test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
 //        var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
             ok(editor.getContent().indexOf('_ueditor_page_break_tag_') >= 0, 'pagebreak被解析');
 //        equal( editor.getContent(), '<p>' + br + '</p>_baidu_page_break_tag_<p>' + br + '</p>' );
-            document.body.removeChild(div);
+//            document.body.removeChild(div);
             start();
+            }, 50);
         }, 50);
-    }, 50);
     stop();
 });
 //TODO 1.2.6

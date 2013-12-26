@@ -258,7 +258,7 @@ test('trace 3088：检查表格属性', function () {
 /*trace 3410*/
 /*trace 3448*/
 test('检查表格属性', function () {
-    if (ua.browser.ie&&ua.browser.ie <9 )return;//todo 1.2.6.1  #3098
+    if (ua.browser.ie&&ua.browser.ie <9 )return;//todo 3410
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue');
@@ -277,7 +277,7 @@ test('检查表格属性', function () {
             var forTable = document.getElementsByClassName('edui-for-table');
             if (ua.browser.ie&&ua.browser.ie<9) {
                 ua.mouseenter(forTable[forTable.length - 1]);
-                ua.click(menutable.childNodes[6]);
+                ua.click(menutable.childNodes[7]);
             } else {
                 ua.mouseover(forTable[forTable.length - 1]);
                 ua.click(menutable.childNodes[5]);

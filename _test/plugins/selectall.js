@@ -25,7 +25,7 @@ test( 'trace1743 :content is null', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent( '<p><br></p>' );
-    //TODO 现在必须先focus再selectall，trace1743
+    // 现在必须先focus再selectall，trace1743
     editor.execCommand( 'selectAll' );
     equal( ua.getChildHTML( editor.body ), "<p><br></p>", "content is null" );
     //equal(UE.plugins['selectall'].notNeedUndo, 1, "notNeedUndo==1" );
@@ -45,9 +45,9 @@ test( 'ctrl+a', function() {
     ua.keydown(editor.body,{'keyCode':65,'ctrlKey':true});
     setTimeout( function() {
         var range = editor.selection.getRange();
-//        if ( ua.browser.gecko||ua.browser.ie>8 )
-//            ua.checkResult( range, body, body, 0, 2, false, '查看全选后的range' );
-//        else
+        if ( ua.browser.gecko )
+            ua.checkResult( range, body, body, 0, 2, false, '查看全选后的range' );
+        else
             ua.checkResult( range, body.firstChild.firstChild, body.lastChild.firstChild, 0, 6, false, '查看全选后的range' );
         start();
     }, 150 );
@@ -55,11 +55,9 @@ test( 'ctrl+a', function() {
 } );
 test('contextmenu 右键全选', function () {
     var editor = te.obj[0];
-    var range = te.obj[1];
     stop();
     editor.setContent('asdfg');
     ua.contextmenu(editor.body);
-    var lang = editor.getLang("contextMenu");
     var menuBody = document.getElementsByClassName("edui-menu-body")[0];
     equal(editor.selection.getRange().collapsed, true, '检查选区--闭合');
     ua.click(menuBody.childNodes[0]);

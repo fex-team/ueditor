@@ -347,7 +347,6 @@ test('getContent--参数为函数', function () {
             return false
         }), "", '为空');
         setTimeout(function () {
-//            UE.delEditor('test1');
             setTimeout(function () {
                 start();
             }, 50);
@@ -459,8 +458,6 @@ test("focus(false)", function () {
         setTimeout(function () {
             editor.focus(false);
             setTimeout(function () {
-                debugger
-
                 var range = editor.selection.getRange();
                 equal(range.startOffset, 0, "focus(false)焦点在最前面");
                 equal(range.endOffset, 0, "focus(false)焦点在最前面");

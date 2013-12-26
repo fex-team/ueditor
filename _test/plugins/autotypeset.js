@@ -1,5 +1,4 @@
 module('plugins.autotypeset');
-//todo
 test('文本居中',function(){
     var editor = te.obj[0];
     editor.setContent('<p>p文本<br></p>');
