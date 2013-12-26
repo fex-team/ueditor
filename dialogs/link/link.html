@@ -103,7 +103,7 @@
         }
     };
     $G('href').onblur = function(){
-        if(!hrefStartWith(this.value,["http","/","ftp://"])){
+        if(!hrefStartWith(this.value,["http","/","ftp://","#"])){
             $G("msg").innerHTML = "<span style='color: red'>"+lang.httpPrompt+"</span>";
         }else{
             $G("msg").innerHTML = "";
