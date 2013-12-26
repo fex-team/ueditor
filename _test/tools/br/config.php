@@ -19,11 +19,11 @@ class Config
     public static $BROWSERS_SET  = array(
         'plugins' => array(
             'ie8supp'
-            , 'ie9main'
-            ,'firefox'
+//            , 'ie9main'
+//            ,'firefox'
             ,'chrome'
             ,'ie8main'
-            , 'ie9supp'
+//            , 'ie9supp'
     ),
 
         'basic' => array(
