@@ -68,7 +68,7 @@ class Config
         $hostarr = array();
         $browsers = Config::$BROWSERS_SET[$BROWSERSSET];
         foreach ($browsers as $b ) {
-            $host = Config::$BROWSERS[$browsers[$b]][0];
+            $host = Config::$BROWSERS[$b][0];
             if (array_search($host, $hostarr))
                 continue;
             array_push($hostarr, $host);

@@ -80,6 +80,7 @@ if ( array_key_exists( 'clear' , $_GET ) ) {
         delDirAndFile( 'report' );
 }
 $reportfile = "report_{$_GET['filter']}";
+
 if ( file_exists( $reportfile ) ) {
     //	rmdir('report');
     $reports = scandir( $reportfile );
@@ -125,7 +126,8 @@ if ( $b != 'all' ) {
     }
     $browsers = array_key_exists( 'browserSet' , $_GET )?Config::getBrowserSet($_GET[ 'browserSet' ]):$THIS_BROWSERS;
 
-    foreach ( $browsers as $b => $i ) {
+
+    foreach ( $browsers as $b ) {
         run( $b );
         sleep(60);
     }

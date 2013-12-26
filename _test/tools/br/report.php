@@ -143,7 +143,7 @@ $dirName = str_replace('/','_',"report_{$config['filter']}");
     }
 foreach ($browsers as $key ) {
 
-    $file = $dirName."/$browsers[$key].xml";
+    $file = $dirName."/$key.xml";
     if (!file_exists($file)) {
         echo "wait for report : $file\r\n<br />";
         return;
