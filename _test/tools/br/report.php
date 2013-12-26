@@ -50,6 +50,7 @@ function match($fileName, $matcher )
     }
     return substr( $fileName , 0 , $len ) == $matcher;
 }
+$config = array();
 function report()
 {
     /**
@@ -59,7 +60,7 @@ function report()
     $dom = new DOMDocument('1.0', 'utf-8');
     $suite = $dom->appendChild($dom->createElement('testsuite'));
     $cfg = preg_split('/[&=]/', $_POST['config']);
-    $config = array();
+
     for ($i = 0; $i < sizeof($cfg); $i += 2) {
         //	echo "{$cfg[$i]} {$cfg[$i+1]}\r\n<br />";
         $config[$cfg[$i]] = $cfg[$i + 1];
@@ -136,8 +137,8 @@ report();
 $dom = new DOMDocument('1.0', 'utf-8');
 $testsuites = $dom->appendChild($dom->createElement('testsuites'));
 $dirName = str_replace('/','_',"report_{$config['filter']}");
-    if(array_key_exists('bConfig',$_POST)){
-        $browsers =Config::$BROWSERS_SET[$_POST['bConfig']] ;
+    if(array_key_exists('bConfig',$config)){
+        $browsers =Config::$BROWSERS_SET[$config['bConfig']] ;
     }else{
         $browsers =Config::$BROWSERS_SET['basic'] ;
     }
