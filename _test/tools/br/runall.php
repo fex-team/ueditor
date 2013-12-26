@@ -129,7 +129,7 @@ if ( $b != 'all' ) {
 
     foreach ( $browsers as $b ) {
         run( $b );
-        sleep(10);
+        sleep(60);
     }
 }
 ?>
