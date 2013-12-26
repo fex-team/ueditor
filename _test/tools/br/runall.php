@@ -33,7 +33,7 @@ function run( $b , $debug = false )
     //一次filter中的用例过多,会导致一些性能低的浏览器内存不够,所以分开跑,以filterRun标注
     if(array_key_exists($b,Config::$filterSet)){
 //        $filterR = Config::$filterSet[$b];
-        $url .= "^&filterRun={".Config::$filterSet[$b]."}";
+        $url .= "^&filterRun=".Config::$filterSet[$b];
     }else if(array_key_exists(  "filter" , $_GET  )){
 //        $filterR = $_GET['filter'];
         $url .= "^&filterRun={$_GET['filter']}";
