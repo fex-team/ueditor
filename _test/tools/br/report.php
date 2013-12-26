@@ -55,6 +55,7 @@ function report()
     /**
      * for junit report
      */
+
     $dom = new DOMDocument('1.0', 'utf-8');
     $suite = $dom->appendChild($dom->createElement('testsuite'));
     $cfg = preg_split('/[&=]/', $_POST['config']);
@@ -135,14 +136,19 @@ report();
 $dom = new DOMDocument('1.0', 'utf-8');
 $testsuites = $dom->appendChild($dom->createElement('testsuites'));
 $dirName = str_replace('/','_',"report_{$config['filter']}");
-foreach (Config::getBrowserSet($configBrowserSet) as $key => $value) {
+    if(array_key_exists('bConfig',$_POST)){
+        $browsers =Config::$BROWSERS_SET[$_POST['bConfig']] ;
+    }else{
+        $browsers =Config::$BROWSERS_SET['basic'] ;
+    }
+foreach ($browsers as $key ) {
 
-    $file = $dirName."/$key.xml";
+    $file = $dirName."/$browsers[$key].xml";
     if (!file_exists($file)) {
         echo "wait for report : $file\r\n<br />";
         return;
     }
-//    Config::StopOne($key);
+//    Config::StopOne(,$key);
     $xmlDoc = new DOMDocument('1.0', 'utf-8');
     $xmlDoc->load($file);
     $xmlDom = $xmlDoc->documentElement;
@@ -153,6 +159,6 @@ $dom->save("report.xml");
 $browserNum = count(Config::getBrowserSet($configBrowserSet));
 require_once 'record.php';
 record();
-
-Config::StopAll();
+//todo
+Config::StopAll('');
 ?>

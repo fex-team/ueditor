@@ -185,7 +185,7 @@ class Kiss
         return substr( $this->name , 0 , $len ) == $matcher;
     }
 
-    public static function listcase( $filter = "*" , $filterRun = '*',$projroot = '../../../' )
+    public static function listcase( $filter = "*" , $filterRun = '*',$bConfig,$projroot = '../../../' )
     {
         $srcpath = $projroot . '_src/';
         $testpath = $projroot . '_test/';
