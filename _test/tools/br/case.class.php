@@ -190,7 +190,10 @@ class Kiss
         $srcpath = $projroot . '_src/';
         $testpath = $projroot . '_test/';
         require_once 'filehelper.php';
-        $caselist = getSameFile( $srcpath , $testpath , '' );
+        $caselist = getSameFile( $srcpath , $testpath , '' );//默认取src和test下的同名文件
+        foreach(Config::$special_Case as $s_caseitem => $s_source){//设置在源码路径下没有同名文件对应的测试文件
+            array_push($caselist,$s_caseitem);
+        }
         sort($caselist,SORT_STRING);
         foreach ( $caselist as $caseitem ) {
             /*将文件名替换为域名方式，替换/为.，移除.js*/
@@ -206,14 +209,6 @@ class Kiss
                        /*过长的时候屏蔽超出20的部分，因为隐藏的处理，所有用例不能直接使用标签a中的innerHTML，而应该使用title*/
                        . $newName . "</a>\n" );
             }
-        }
-        /**
-         * 设置在源码路径下没有同名文件对应的测试文件
-         */
-        foreach(Config::$special_Case as $s_caseitem => $s_source){
-            //取形如 'plugins/config_test.js' 中 'plugins/config_test'部分
-            $s_newName = str_replace(".js","", $s_caseitem );
-            print( "<a href=\"run.php?case=$s_newName\" id=\"id_case_".str_replace('.','_',$s_newName)."\" class=\"jsframe_qunit\" target=\"_blank\" title=\"$s_newName\" onclick=\"run('$s_newName');\$('#id_rerun').html('$s_newName');return false;\">". $s_newName . "</a>\n" );
         }
     }
 
