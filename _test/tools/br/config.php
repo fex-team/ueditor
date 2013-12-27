@@ -5,6 +5,8 @@ class Config
     public static $BROWSERS= array(
         'ie8supp' => array('10.81.58.64@8500', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
     , 'ie9main' => array('10.81.96.46', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
+     ,   'ie8' => array('10.81.58.64@8500', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
+    , 'ie9' => array('10.81.96.46', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
     ,'firefox' => array('10.81.58.86@8500', "C:\\Program Files\\mozilla firefox\\firefox.exe")
     ,'chrome' => array('10.81.58.63@8500', "C:\\Documents and Settings\\geqa1\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe")
     ,'ie8main' => array('10.81.58.64@8500', "C:\\Program Files\\Internet Explorer\\iexplore.exe")
