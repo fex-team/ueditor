@@ -157,7 +157,9 @@ foreach ($browsers as $key ) {
     $testsuites->appendChild($dom->importNode($xmlDom, true));
 }
 $dom->save("report.xml");
-$browserNum = count(Config::getBrowserSet($configBrowserSet));
+//$browserNum = count(Config::getBrowserSet($configBrowserSet));
+$browserNum = count($browsers);
+
 require_once 'record.php';
 record();
 //todo

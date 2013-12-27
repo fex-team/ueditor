@@ -90,7 +90,8 @@ function getTrCase($caseList,$onlyFail,$onlyCoverd){
     $totalTrCase = '';
 	require_once 'config.php';
     $rowColor = '#B0E0E6';//标记行的颜色，单双数行显示的背景颜色不同
-	$numBro = count(Config::getBrowserSet($configBrowserSet));
+//	$numBro = count(Config::getBrowserSet($configBrowserSet));
+    $numBro = $browserNum;
     $averageCov = 0;//所有用例的全浏览器覆盖率的平均值（全浏览器覆盖率为0的不计）
     $numCov = 0;//全浏览器覆盖率不为0的用例数量
 	foreach ($caseList as $casename => $caseDetail) {
