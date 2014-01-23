@@ -12,7 +12,7 @@ var imageUploader = {},
     var g = $G,
         ajax = parent.baidu.editor.ajax,
         maskIframe = g("maskIframe"); //tab遮罩层,用来解决flash和其他dom元素的z-index层级不一致问题
-       // flashObj;                   //flash上传对象
+    // flashObj;                   //flash上传对象
 
     var flagImg = null, flashContainer;
     imageUploader.init = function (opt, callbacks) {
@@ -375,6 +375,7 @@ var imageUploader = {},
         }
         preview.innerHTML = lang.imageLoading;
         img.onload = function () {
+            debugger;
             flagImg = this;
             showImageInfo(this);
             showPreviewImage(this,true);
@@ -395,7 +396,8 @@ var imageUploader = {},
     function showImageInfo(img) {
         if (!img.getAttribute("src") || !img.src) return;
         var wordImgFlag = img.getAttribute("word_img");
-        g("url").value = wordImgFlag ? wordImgFlag.replace("&amp;", "&") : (img.getAttribute('_src') || img.getAttribute("src", 2).replace("&amp;", "&"));
+        var src = wordImgFlag ? wordImgFlag.replace("&amp;", "&") : (img.getAttribute('_src') || img.getAttribute("src", 2).replace("&amp;", "&"));
+        if(src !== g("url").value) g("url").value = src;
         g("width").value = img.width || 0;
         g("height").value = img.height || 0;
         g("border").value = img.getAttribute("border") || 0;
