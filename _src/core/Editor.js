@@ -257,7 +257,8 @@
             allHtmlEnabled: false,
             scaleEnabled: false,
             tableNativeEditInFF: false,
-            autoSyncData : true
+            autoSyncData : true,
+            fileNameFormat: '{time}{rand:6}'
         });
 
         if(!utils.isEmptyObject(UE.I18N)){
@@ -440,6 +441,7 @@
                     width: "100%",
                     height: "100%",
                     frameborder: "0",
+                    scrolling : 'no',
                     src: 'javascript:void(function(){document.open();' + (options.customDomain && document.domain != location.hostname ?  'document.domain="' + document.domain + '";' : '') +
                         'document.write("' + html + '");document.close();}())'
                 }));
@@ -448,7 +450,8 @@
                 setTimeout(function(){
                     if( /%$/.test(options.initialFrameWidth)){
                         options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
-                        container.style.width = options.initialFrameWidth + 'px';
+                        //如果这里给定宽度，会导致ie在拖动窗口大小时，编辑区域不随着变化
+//                        container.style.width = options.initialFrameWidth + 'px';
                     }
                     if(/%$/.test(options.initialFrameHeight)){
                         options.minFrameHeight = options.initialFrameHeight = container.offsetHeight;
@@ -480,7 +483,6 @@
             me.window = doc.defaultView || doc.parentWindow;
             me.iframe = me.window.frameElement;
             me.body = doc.body;
-
             me.selection = new dom.Selection(doc);
             //gecko初始化就能得到range,无法判断isFocus了
             var geckoSel;
@@ -632,7 +634,6 @@
                 this.iframe.parentNode.style.height = height + 'px';
             }
             !notSetHeight && (this.options.minFrameHeight = this.options.initialFrameHeight = height);
-
             this.body.style.height = height + 'px';
         },
 
@@ -848,7 +849,6 @@
             me.filterInputRule(root);
             html = root.toHtml();
 
-
             me.body.innerHTML = (isAppendTo ? me.body.innerHTML : '') + html;
 
 
@@ -1004,7 +1004,13 @@
          * @see UE.EventBase:fireEvent(String)
          */
         _proxyDomEvent: function (evt) {
-            return this.fireEvent(evt.type.replace(/^on/, ''), evt);
+            if(this.fireEvent('before' + evt.type.replace(/^on/, '').toLowerCase()) === false){
+                return false;
+            }
+            if(this.fireEvent(evt.type.replace(/^on/, ''), evt) === false){
+                return false;
+            }
+            return this.fireEvent('after' + evt.type.replace(/^on/, '').toLowerCase())
         },
         /**
          * 变化选区
@@ -1031,7 +1037,7 @@
             }
             clearTimeout(_selectionChangeTimer);
             _selectionChangeTimer = setTimeout(function () {
-                if (!me.selection.getNative()) {
+                if (!me.selection || !me.selection.getNative()) {
                     return;
                 }
                 //修复一个IE下的bug: 鼠标点击一段已选择的文本中间时，可能在mouseup后的一段时间内取到的range是在selection的type为None下的错误值.

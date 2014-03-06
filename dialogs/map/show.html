@@ -89,10 +89,11 @@
     }
 
     function setMapListener() {
-        var editor = parent.editor, containerIframe;
-        for (var key in parent.document.getElementsByTagName('iframe')) {
-            if (parent.document.getElementsByTagName('iframe')[key].contentWindow == window) {
-                containerIframe = parent.document.getElementsByTagName('iframe')[key];
+        var editor = parent.editor, containerIframe,
+            iframes = parent.document.getElementsByTagName('iframe');
+        for (var key in iframes) {
+            if (iframes[key].contentWindow == window) {
+                containerIframe = iframes[key];
                 break;
             }
         }

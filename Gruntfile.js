@@ -178,6 +178,15 @@ module.exports = function ( grunt ) {
                     from: 'editor_api.js',
                     to: '<%= pkg.name %>.all.min.js'
                 } ]
+            },
+            gbkasp:{
+
+                src: [ disDir+'asp/*.asp' ],
+                overwrite: true,
+                replacements: [ {
+                    from: /65001/gi,
+                    to: '936'
+                } ]
             }
 
         }
@@ -193,12 +202,13 @@ module.exports = function ( grunt ) {
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'gcc', 'copy:base', 'copy:demo', 'copy:'+server ];
+        var tasks = [ 'concat', 'cssmin', 'gcc', 'copy:base', 'copy:'+server, 'copy:demo', 'replace:demo' ];
 
         if ( encode === 'gbk' ) {
-            tasks.push( 'replace' );
-        } else {
-            tasks.push( 'replace:demo' );
+            tasks.push( 'replace:fileEncode' );
+            if(server === 'asp') {
+                tasks.push( 'replace:gbkasp' );
+            }
         }
 
         tasks.push( 'transcoding' );

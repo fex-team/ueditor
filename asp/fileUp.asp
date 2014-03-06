@@ -16,7 +16,7 @@
 
     Set up = new Uploader
     up.MaxSize = 10 * 1024 * 1024
-    up.AllowType = Array(".rar" , ".doc" , ".docx" , ".zip" , ".pdf" , ".txt" , ".swf" , ".wmv")
+    up.AllowType = Array(".rar" , ".doc" , ".docx" , ".zip" , ".pdf" , ".txt" , ".swf" , ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".mov", ".wmv", ".mp4", ".webm")
     up.SavePath = "upload/"
     up.FileField = "upfile"
     up.UploadForm()

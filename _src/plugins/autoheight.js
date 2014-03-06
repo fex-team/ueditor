@@ -26,12 +26,22 @@ UE.plugins['autoheight'] = function () {
         if(isFullscreen)return;
         if (!me.queryCommandState || me.queryCommandState && me.queryCommandState('source') != 1) {
             timer = setTimeout(function(){
+
                 var node = me.body.lastChild;
-                currentHeight = Math.max(domUtils.getXY(node).y + node.offsetHeight + 25 ,Math.max(options.minFrameHeight, options.initialFrameHeight)) ;
-                if (currentHeight != lastHeight) {
-                    me.setHeight(currentHeight,true);
-                    lastHeight = currentHeight;
+                while(node && node.nodeType != 1){
+                    node = node.previousSibling;
                 }
+                if(node && node.nodeType == 1){
+                    node.style.clear = 'both';
+                    currentHeight = Math.max(domUtils.getXY(node).y + node.offsetHeight + 25 ,Math.max(options.minFrameHeight, options.initialFrameHeight)) ;
+                    if (currentHeight != lastHeight) {
+                        me.setHeight(currentHeight,true);
+                        lastHeight = currentHeight;
+                    }
+                    domUtils.removeStyle(node,'clear');
+                }
+
+
             },50)
         }
     }

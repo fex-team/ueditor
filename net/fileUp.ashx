@@ -21,7 +21,7 @@ public class fileUp : IHttpHandler
 
         //上传配置
         String pathbase = "upload/";                                      //保存路径
-        string[] filetype = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv" };    //文件允许格式
+        string[] filetype = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".mov", ".wmv", ".mp4", ".webm" };    //文件允许格式
         int size = 100;   //文件大小限制,单位MB,同时在web.config里配置环境默认为100MB
 
 

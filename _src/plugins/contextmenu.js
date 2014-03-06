@@ -364,15 +364,6 @@ UE.plugins['contextmenu'] = function () {
                     query:function () {
                         return 0;
                     }
-                },{
-                    label:lang['highlightcode'],
-                    cmdName:'highlightcode',
-                    exec:function () {
-                        if ( UE.ui['highlightcode'] ) {
-                            new UE.ui['highlightcode']( this );
-                        }
-                        this.ui._dialogs['highlightcodeDialog'].open();
-                    }
                 }
             ];
     if ( !items.length ) {
@@ -453,15 +444,7 @@ UE.plugins['contextmenu'] = function () {
                     //有可能commmand没有加载右键不能出来，或者没有command也想能展示出来添加query方法
                     if ( (me.commands[item.cmdName] || UE.commands[item.cmdName] || item.query) &&
                             (item.query ? item.query.call(me) : me.queryCommandState( item.cmdName )) > -1 ) {
-                        //highlight todo
-                        if ( item.cmdName == 'highlightcode' ) {
-                            if(me.queryCommandState( item.cmdName ) == 1 && item.icon != 'deletehighlightcode'){
-                                return;
-                            }
-                            if(me.queryCommandState( item.cmdName ) != 1 && item.icon == 'deletehighlightcode'){
-                                return;
-                            }
-                        }
+
                         contextItems.push( {
                             'label':item.label || me.getLang( "contextMenu." + item.cmdName ),
                             className:'edui-for-' + (item.icon ? item.icon : item.cmdName + (item.value || '')),

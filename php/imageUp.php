@@ -30,7 +30,8 @@
     $config = array(
         "savePath" => $imgSavePathConfig,
         "maxSize" => 1000, //单位KB
-        "allowFiles" => array(".gif", ".png", ".jpg", ".jpeg", ".bmp")
+        "allowFiles" => array(".gif", ".png", ".jpg", ".jpeg", ".bmp"),
+        "fileNameFormat" => $_POST['fileNameFormat']
     );
 
     if ( empty( $path ) ) {

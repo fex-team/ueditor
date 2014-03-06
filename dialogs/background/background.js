@@ -1,4 +1,4 @@
-//(function () {
+(function () {
 
     var backupStyle = editor.queryCommandValue('background');
 
@@ -36,8 +36,10 @@
                 image = obj['background-image'] || '',
                 position = obj['background-position'] || 'center center',
                 pos = position.split(' '),
-                x = parseInt(pos.x) || 0,
-                y = parseInt(pos.y) || 0;
+                x = parseInt(pos[0]) || 0,
+                y = parseInt(pos[1]) || 0;
+
+            if(repeat == 'no-repeat' && (x || y)) repeat = 'self';
 
             image = image.match(/url[\s]*\(([^\)]*)\)/);
             image = image ? image[1]:'';
@@ -113,6 +115,8 @@
             action: 'get',
             onsuccess: function (r) {
                 var data = r.responseText.split('ue_separate_ue');
+                if(data.length && data[0]=='') data.shift();
+                if(data.length && data[data.length-1]=='') data.pop();
                 callback(data.length ? data:lang.noUploadImage);
             },
             onerror: function () {
@@ -203,7 +207,7 @@
                 item.selected = (align == item.getAttribute('value') ? 'selected':false);
             });
         }
-        if(x && y) {
+        if(x || y) {
             $G('x').value = parseInt(x) || 0;
             $G('y').value = parseInt(y) || 0;
         }
@@ -244,4 +248,4 @@
     dialog.oncancel = function () {
         editor.execCommand('background', backupStyle);
     };
-//})()
+})()

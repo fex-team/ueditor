@@ -21,7 +21,7 @@ UE.I18N['en'] = {
         'insertvideo':'Video', 'help':'Help', 'justifyleft':'JustifyLeft', 'justifyright':'JustifyRight', 'justifycenter':'JustifyCenter',
         'justifyjustify':'Justify', 'forecolor':'FontColor', 'backcolor':'BackColor', 'insertorderedlist':'OL',
         'insertunorderedlist':'UL', 'fullscreen':'FullScreen', 'directionalityltr':'EnterFromLeft', 'directionalityrtl':'EnterFromRight',
-        'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'highlightcode':'Code', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
+        'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
         'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
         'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
@@ -173,8 +173,7 @@ UE.I18N['en'] = {
         'copy':"Copy(Ctrl + c)",
         'copymsg':"Please use 'Ctrl + c' instead!",
         'paste':"Paste(Ctrl + v)",
-        'pastemsg':"Please use 'Ctrl + v' instead!",
-        'highlightcode':'Insert code'
+        'pastemsg':"Please use 'Ctrl + v' instead!"
     },
 
     'anthorMsg':"Link",
@@ -217,7 +216,7 @@ UE.I18N['en'] = {
     'background':{
         'static':{
             'lang_background_normal':'Normal',
-            'lang_background_local':'Local',
+            'lang_background_local':'Online',
             'lang_background_set':'Background Set',
             'lang_background_none':'No Background',
             'lang_background_colored':'Colored Background',
@@ -394,12 +393,6 @@ UE.I18N['en'] = {
         'fileCanceling':'Cancel, please wait...',
         'stopUploading':'Upload has stopped...'
     },
-    highlightcode:{
-        'static':{
-            'lang_input_selectLang':'Select Language'
-        },
-        importCode:'Please enter the code!'
-    },
     emotion:{
         'static':{
             'lang_input_choice':'Choice',
@@ -423,7 +416,7 @@ UE.I18N['en'] = {
         'static':{
             'lang_input_about':'About',
             'lang_input_shortcuts':'Shortcuts',
-            'lang_input_version':'Version:1.3.5',
+            'lang_input_version':'Version:1.3.6',
             'lang_input_introduction':"UEditor is developed by Baidu Co.ltd.  It is lightweight, customizable , focusing on user experience and etc. , UEditor is based on open source BSD license , allowing free use and redistribution.",
             'lang_Txt_shortcuts':'Shortcuts',
             'lang_Txt_func':'Function',
@@ -506,7 +499,8 @@ UE.I18N['en'] = {
     insertvideo:{
         'static':{
             lang_tab_insertV:"Video",
-//            lang_tab_searchV:"Search",
+            lang_tab_searchV:"Search",
+            lang_tab_uploadV:"Upload",
             lang_video_url:" URL ",
             lang_video_size:"Video Size",
             lang_videoW:"Width",
@@ -515,7 +509,16 @@ UE.I18N['en'] = {
             videoSearchTxt:{value:"Enter the search keyword!"},
             videoType:{options:["All", "Hot", "Entertainment", "Funny", "Sports", "Science", "variety"]},
             videoSearchBtn:{value:"Search in Baidu"},
-            videoSearchReset:{value:"Clear result"}
+            videoSearchReset:{value:"Clear result"},
+
+            'lang_input_fileStatus':' No file uploaded!',
+            'startUpload':{style:"background:url(upload.png) no-repeat;"},
+
+            lang_upload_size:"Video Size",
+            lang_upload_width:"Width",
+            lang_upload_height:"Height",
+            lang_upload_alignment:"Alignment",
+            lang_format_advice:"Recommends mp4 format."
         },
         numError:"Please enter the correct Num. e.g 123,400",
         floatLeft:"Float left",
@@ -526,7 +529,34 @@ UE.I18N['en'] = {
         loading:" &nbsp;The video is loading, please wait…",
         clickToSelect:"Click to select",
         goToSource:'Visit source video ',
-        noVideo:" &nbsp; &nbsp;Sorry,can't find the video,please try again!"
+        noVideo:" &nbsp; &nbsp;Sorry,can't find the video,please try again!",
+
+        'browseFiles':'Open files',
+        'uploadSuccess':'Upload Successful!',
+        'delSuccessFile':'Remove from the success of the queue',
+        'delFailSaveFile':'Remove the save failed file',
+        'statusPrompt':' file(s) uploaded! ',
+        'flashVersionError':'The current Flash version is too low, please update FlashPlayer,then try again!',
+        'flashLoadingError':'The Flash failed loading! Please check the path or network state',
+        'fileUploadReady':'Wait for uploading...',
+        'delUploadQueue':'Remove from the uploading queue ',
+        'limitPrompt1':'Can not choose more than single',
+        'limitPrompt2':'file(s)！Please choose again！',
+        'delFailFile':'Remove failure file',
+        'fileSizeLimit':'File size exceeds the limit！',
+        'emptyFile':'Can not upload an empty file！',
+        'fileTypeError':'File type error！',
+        'unknownError':'Unknown error！',
+        'fileUploading':'Uploading,please wait...',
+        'cancelUpload':'Cancel upload',
+        'netError':'Network error',
+        'failUpload':'Upload failed',
+        'serverIOError':'Server IO error！',
+        'noAuthority':'No Permission！',
+        'fileNumLimit':'Upload limit to the number',
+        'failCheck':'Authentication fails, the upload is skipped!',
+        'fileCanceling':'Cancel, please wait...',
+        'stopUploading':'Upload has stopped...'
     },
     spechars:{
         'static':{},

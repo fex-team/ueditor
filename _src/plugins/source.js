@@ -86,7 +86,7 @@
         var opt = this.options;
         var sourceMode = false;
         var sourceEditor;
-
+        var orgSetContent;
         opt.sourceEditor = browser.ie  ? 'textarea' : (opt.sourceEditor || 'codemirror');
 
         me.setOpt({
@@ -98,7 +98,7 @@
 
         var bakCssText;
         //解决在源码模式下getContent不能得到最新的内容问题
-        var oldGetContent = me.getContent,
+        var oldGetContent,
             bakAddress;
 
         /**
@@ -168,6 +168,17 @@
                     sourceEditor = createSourceEditor(me.iframe.parentNode);
 
                     sourceEditor.setContent(content);
+
+                    orgSetContent = me.setContent;
+
+                    me.setContent = function(html){
+                        //这里暂时不触发事件，防止报错
+                        var root = UE.htmlparser(html);
+                        me.filterInputRule(root);
+                        html = root.toHtml();
+                        sourceEditor.setContent(html);
+                    };
+
                     setTimeout(function (){
                         sourceEditor.select();
                         me.addListener('fullscreenchanged', function(){
@@ -176,7 +187,9 @@
                             }catch(e){}
                         });
                     });
+
                     //重置getContent，源码模式下取值也能是最新的数据
+                    oldGetContent = me.getContent;
                     me.getContent = function (){
                         return sourceEditor.getContent() || '<p>' + (browser.ie ? '' : '<br/>')+'</p>';
                     };
@@ -190,6 +203,9 @@
                         }
                         return a.replace(/(^[\n\r\t]*)|([\n\r\t]*$)/g,'')
                     });
+
+                    me.setContent = orgSetContent;
+
                     me.setContent(cont);
                     sourceEditor.dispose();
                     sourceEditor = null;
@@ -201,6 +217,8 @@
                         me.body.innerHTML = '<p>'+(browser.ie?'':'<br/>')+'</p>';
                         first = me.body.firstChild;
                     }
+
+
                     //要在ifm为显示时ff才能取到selection,否则报错
                     //这里不能比较位置了
                     me.undoManger && me.undoManger.save(true);

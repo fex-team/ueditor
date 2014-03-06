@@ -143,7 +143,8 @@
                 for(var i = 0; i< section.children.length; i++) {
                     child = section.children[i];
                     //设置目录节点内容标签
-                    $itemContent = $('<div class="sectionItem"></div>').html($('<span class="itemTitle">' + child['title'] + '</span>'));
+                    var title = getSubStr(child['title'], 18);
+                    $itemContent = $('<div class="sectionItem"></div>').html($('<span class="itemTitle">' + title + '</span>'));
                     $itemContent.attr('data-address', child['startAddress'].join(','));
                     $itemContent.append($('<span class="deleteIcon">删</span>' +
                             '<span class="selectIcon">选</span>' +
@@ -164,5 +165,17 @@
             return $list;
         }
     }
+
+    function getSubStr(s,l){
+        var i=0,len=0;
+        for(i;i<s.length;i++){
+            if(s.charAt(i).match(/[^\x00-\xff]/g)!=null){
+                len+=2;
+            }else{
+                len++;
+            }
+            if(len>l){ break; }
+        }return s.substr(0,i);
+    };
 </script>
 </html>
