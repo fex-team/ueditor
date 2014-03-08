@@ -382,7 +382,6 @@
         queryCommandState: function () {
             var tableItems = getTableItemsByRange(this);
             return tableItems.cell ? 0 : -1;
-            }
         },
         execCommand: function () {
             var cell = getTableItemsByRange(this).cell,
