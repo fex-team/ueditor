@@ -239,10 +239,22 @@ UE.plugins['autotypeset'] = function(){
             }
         }
         if(opt.tobdc){
-            cont.innerHTML = ToDBC(cont.innerHTML)
+            var root = UE.htmlparser(cont.innerHTML);
+            root.traversal(function(node){
+                if(node.type == 'text'){
+                    node.data = ToDBC(node.data)
+                }
+            });
+            cont.innerHTML = root.toHtml()
         }
         if(opt.bdc2sb){
-            cont.innerHTML = DBC2SB(cont.innerHTML)
+            var root = UE.htmlparser(cont.innerHTML);
+            root.traversal(function(node){
+                if(node.type == 'text'){
+                    node.data = DBC2SB(node.data)
+                }
+            });
+            cont.innerHTML = root.toHtml()
         }
         if(html){
             html.html = cont.innerHTML;
