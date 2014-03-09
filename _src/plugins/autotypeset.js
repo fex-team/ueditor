@@ -18,7 +18,7 @@
 UE.plugins['autotypeset'] = function(){
 
     this.setOpt({'autotypeset':{
-        mergeEmptyline : true,          //合并空行
+            mergeEmptyline : true,          //合并空行
             removeClass : true,            //去掉冗余的class
             removeEmptyline : false,        //去掉空行
             textAlign : "left",             //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
@@ -81,6 +81,7 @@ UE.plugins['autotypeset'] = function(){
         }
     }
     function autotype(type,html){
+
         var me = this,cont;
         if(html){
             if(!opt.pasteFilter){
@@ -237,6 +238,12 @@ UE.plugins['autotypeset'] = function(){
                 }
             }
         }
+        if(opt.tobdc){
+            cont.innerHTML = ToDBC(cont.innerHTML)
+        }
+        if(opt.bdc2sb){
+            cont.innerHTML = DBC2SB(cont.innerHTML)
+        }
         if(html){
             html.html = cont.innerHTML;
         }
@@ -245,6 +252,54 @@ UE.plugins['autotypeset'] = function(){
         me.addListener('beforepaste',autotype);
     }
 
+    function DBC2SB(str) {
+
+        var result = '';
+        for (var i = 0; i < str.length; i++) {
+            code = str.charCodeAt(i); //获取当前字符的unicode编码
+            if (code >= 65281 && code <= 65373)//在这个unicode编码范围中的是所有的英文字母已经各种字符
+            {
+                result += String.fromCharCode(str.charCodeAt(i) - 65248); //把全角字符的unicode编码转换为对应半角字符的unicode码
+            } else if (code == 12288)//空格
+            {
+                result += String.fromCharCode(str.charCodeAt(i) - 12288 + 32);
+            } else {
+                result += str.charAt(i);
+            }
+        }
+        return result;
+    }
+    function ToDBC(txtstring) {
+        txtstring = txtstring.replace("&nbsp;", "");
+        var tmp = "";
+        var mark = "";/*用于判断,如果是html尖括里的标记,则不进行全角的转换*/
+        for (var i = 0; i < txtstring.length; i++) {
+            if (txtstring[i] == '<') {
+                mark = "1";
+                tmp += txtstring[i];
+                continue;
+            }
+            if (mark == "1" && txtstring[i] != ">") {
+                tmp += txtstring[i];
+                continue;
+            }
+            if (mark == "1" && txtstring[i] == ">") {
+                mark = "0";
+                tmp += txtstring[i];
+                continue;
+            }
+            if (txtstring.charCodeAt(i) == 32) {
+                tmp = tmp + String.fromCharCode(12288);
+            }
+            else if (txtstring.charCodeAt(i) < 127) {
+                tmp = tmp + String.fromCharCode(txtstring.charCodeAt(i) + 65248);
+            }
+            else {
+                tmp += txtstring.charAt(i);
+            }
+        }
+        return tmp;
+    }
     me.commands['autotypeset'] = {
         execCommand:function () {
             me.removeListener('beforepaste',autotype);

@@ -13,6 +13,7 @@
             this.initAutoTypeSetButton();
         };
     function getPara(me){
+
         var opt = me.editor.options.autotypeset,
             cont = me.getDom(),
             editorId = me.editor.uid,
@@ -44,7 +45,13 @@
                         opt[attrName] = true;
                     }
                 }
+            }else{
+                if(ipt.getAttribute("name") == 'bdc'){
+                    opt[ipt.getAttribute("value")] = ipt.checked
+                }
+
             }
+
         }
         var selects = domUtils.getElementsByTagName(cont,"select");
         for(var i=0,si;si=selects[i++];){
