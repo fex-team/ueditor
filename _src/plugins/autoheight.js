@@ -35,7 +35,10 @@ UE.plugins['autoheight'] = function () {
                     node.style.clear = 'both';
                     currentHeight = Math.max(domUtils.getXY(node).y + node.offsetHeight + 25 ,Math.max(options.minFrameHeight, options.initialFrameHeight)) ;
                     if (currentHeight != lastHeight) {
-                        me.setHeight(currentHeight,true);
+                        if (currentHeight !== parseInt(me.iframe.parentNode.style.height)) {
+                            me.iframe.parentNode.style.height = currentHeight + 'px';
+                        }
+                        me.body.style.height = currentHeight + 'px';
                         lastHeight = currentHeight;
                     }
                     domUtils.removeStyle(node,'clear');
@@ -79,6 +82,10 @@ UE.plugins['autoheight'] = function () {
         me.autoHeightEnabled = false;
         me.fireEvent('autoheightchanged', me.autoHeightEnabled);
     };
+
+    me.on('setHeight',function(){
+        me.disableAutoHeight()
+    });
     me.addListener('ready', function () {
         me.enableAutoHeight();
         //trace:1764

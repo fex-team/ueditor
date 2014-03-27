@@ -597,7 +597,7 @@
                     editor.ui._actualFrameWidth = scalelayer.offsetWidth - 2;
                     editorHolder.style.width = editor.ui._actualFrameWidth + 'px';
 
-                    editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2);
+                    editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2,true);
                 }
                 if (scalelayer) {
                     scalelayer.style.display = "none";
