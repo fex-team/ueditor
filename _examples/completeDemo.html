@@ -41,7 +41,7 @@
         <button onclick="setDisabled()">不可编辑</button>
         <button onclick=" UE.getEditor('editor').setHide()">隐藏编辑器</button>
         <button onclick=" UE.getEditor('editor').setShow()">显示编辑器</button>
-        <button onclick=" UE.getEditor('editor').setHeight(300)">设置编辑器的高度为300</button>
+        <button onclick=" UE.getEditor('editor').setHeight(300)">设置高度为300默认关闭了自动长高</button>
     </div>
 
     <div>
@@ -62,7 +62,7 @@
 
     //实例化编辑器
     //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-    UE.getEditor('editor');
+    UE.getEditor('editor')
 
 
     function isFocus(e){
