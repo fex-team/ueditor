@@ -144,7 +144,7 @@ UE.plugins['undo'] = function () {
             var currentScene = this.getScene(notSetCursor),
                 lastScene = this.list[this.index];
 
-            if(!lastScene || lastScene.content != currentScene.content){
+            if(lastScene && lastScene.content != currentScene.content){
                 me.trigger('contentchange')
             }
             //内容相同位置相同不存

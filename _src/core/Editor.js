@@ -1119,7 +1119,8 @@
                     me.fireEvent('saveScene');
                     me.fireEvent('beforeexeccommand', cmdName);
                     result = this._callCmdFn('execCommand', arguments);
-                    (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
+                    //保存场景时，做了内容对比，再看是否进行contentchange触发，这里多触发了一次，去掉
+//                    (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
                     me.fireEvent('afterexeccommand', cmdName);
                     me.fireEvent('saveScene');
                 }
