@@ -339,7 +339,9 @@
             }
             utils.extend(this.options, obj, true);
         },
-
+        getOpt:function(key){
+            return this.options[key]
+        },
         /**
          * 销毁编辑器实例，使用textarea代替
          * @method destroy
