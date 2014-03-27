@@ -51,7 +51,7 @@ UE.plugins['keystrokes'] = function() {
         }
 
         //处理backspace
-        if (keyCode == 8) {
+        if (keyCode == keymap.Backspace) {
             rng = me.selection.getRange();
             collapsed = rng.collapsed;
             if(me.fireEvent('delkeydown',evt)){
@@ -94,7 +94,7 @@ UE.plugins['keystrokes'] = function() {
 
         }
         //处理tab键的逻辑
-        if (keyCode == 9) {
+        if (keyCode == keymap.Tab) {
             //不处理以下标签
             var excludeTagNameForTabKey = {
                 'ol' : 1,
@@ -162,7 +162,7 @@ UE.plugins['keystrokes'] = function() {
     me.addListener('keyup', function(type, evt) {
         var keyCode = evt.keyCode || evt.which,
             rng,me = this;
-        if(keyCode == 8){
+        if(keyCode == keymap.Backspace){
             if(me.fireEvent('delkeyup')){
                 return;
             }
@@ -210,6 +210,7 @@ UE.plugins['keystrokes'] = function() {
 
             }
         }
+
 
     })
 };
