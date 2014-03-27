@@ -1,4 +1,16 @@
 #UEditor Change List
+
+##1.4.0
+###bug修复&优化改进
+1. 修复内容过多时，回到顶部，顶部内容被工具栏遮挡问题
+2. 改进inline节点不能包含block节点
+3. 修复htmlparser解析标签的bug
+4. 修复锚点是#开头时还添加http://的bug
+5. 修复全屏后，退出全屏高度没有缩回来的问题
+6. 文字选中后按delete删除，无法触发contentchange事件
+
+###新功能添加
+
 ##1.3.6
 
 ###bug修复
