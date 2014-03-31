@@ -15,7 +15,7 @@
     $title = htmlspecialchars($_POST['pictitle'], ENT_QUOTES);
     $path = htmlspecialchars($_POST['dir'], ENT_QUOTES);
     $globalConfig = include( "config.php" );
-    $imgSavePathConfig = $globalConfig[ 'imageSavePath' ];
+    $imgSavePathConfig = $globalConfig[ 'savePath' ];
 
     //获取存储目录
     if ( isset( $_GET[ 'fetch' ] ) ) {
