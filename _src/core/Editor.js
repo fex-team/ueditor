@@ -1250,6 +1250,10 @@
                     me.queryCommandState = me.bkqueryCommandState;
                     delete me.bkqueryCommandState;
                 }
+                if (me.bkqueryCommandValue) {
+                    me.queryCommandValue = me.bkqueryCommandValue;
+                    delete me.bkqueryCommandValue;
+                }
                 me.fireEvent('selectionchange');
             }
         },
@@ -1289,11 +1293,18 @@
                 }
                 me.body.contentEditable = false;
                 me.bkqueryCommandState = me.queryCommandState;
+                me.bkqueryCommandValue = me.queryCommandValue;
                 me.queryCommandState = function (type) {
                     if (utils.indexOf(except, type) != -1) {
                         return me.bkqueryCommandState.apply(me, arguments);
                     }
                     return -1;
+                };
+                me.queryCommandValue = function (type) {
+                    if (utils.indexOf(except, type) != -1) {
+                        return me.bkqueryCommandValue.apply(me, arguments);
+                    }
+                    return null;
                 };
                 me.fireEvent('selectionchange');
             }
