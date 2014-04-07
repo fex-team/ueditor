@@ -1,4 +1,20 @@
 #UEditor Change List
+
+##1.4.0
+###bug修复&优化改进
+1. 修复内容过多时，回到顶部，顶部内容被工具栏遮挡问题
+2. 改进inline节点不能包含block节点
+3. 修复htmlparser解析标签的bug
+4. 修复锚点是#开头时还添加http://的bug
+5. 修复全屏后，退出全屏高度没有缩回来的问题
+6. 文字选中后按delete删除，无法触发contentchange事件
+7. 修复选择图片时点击8个控制点不拖动，contentchange会误触发的问题
+8. 修复执行命令会触发多次contentchange事件
+9. 修复输入文字，设置高度300，没有滚动条
+
+###新功能添加
+1. 添加了enableContextMenu配置开关，开关右键菜单，默认为true
+
 ##1.3.6
 
 ###bug修复

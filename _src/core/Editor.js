@@ -339,7 +339,9 @@
             }
             utils.extend(this.options, obj, true);
         },
-
+        getOpt:function(key){
+            return this.options[key]
+        },
         /**
          * 销毁编辑器实例，使用textarea代替
          * @method destroy
@@ -636,6 +638,7 @@
             }
             !notSetHeight && (this.options.minFrameHeight = this.options.initialFrameHeight = height);
             this.body.style.height = height + 'px';
+            !notSetHeight && this.trigger('setHeight')
         },
 
         /**
@@ -1119,7 +1122,8 @@
                     me.fireEvent('saveScene');
                     me.fireEvent('beforeexeccommand', cmdName);
                     result = this._callCmdFn('execCommand', arguments);
-                    (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
+                    //保存场景时，做了内容对比，再看是否进行contentchange触发，这里多触发了一次，去掉
+//                    (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
                     me.fireEvent('afterexeccommand', cmdName);
                     me.fireEvent('saveScene');
                 }
@@ -1246,6 +1250,10 @@
                     me.queryCommandState = me.bkqueryCommandState;
                     delete me.bkqueryCommandState;
                 }
+                if (me.bkqueryCommandValue) {
+                    me.queryCommandValue = me.bkqueryCommandValue;
+                    delete me.bkqueryCommandValue;
+                }
                 me.fireEvent('selectionchange');
             }
         },
@@ -1285,11 +1293,18 @@
                 }
                 me.body.contentEditable = false;
                 me.bkqueryCommandState = me.queryCommandState;
+                me.bkqueryCommandValue = me.queryCommandValue;
                 me.queryCommandState = function (type) {
                     if (utils.indexOf(except, type) != -1) {
                         return me.bkqueryCommandState.apply(me, arguments);
                     }
                     return -1;
+                };
+                me.queryCommandValue = function (type) {
+                    if (utils.indexOf(except, type) != -1) {
+                        return me.bkqueryCommandValue.apply(me, arguments);
+                    }
+                    return null;
                 };
                 me.fireEvent('selectionchange');
             }

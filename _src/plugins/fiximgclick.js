@@ -6,6 +6,7 @@
 
 UE.plugins['fiximgclick'] = (function () {
 
+    var elementUpdated = false;
     function Scale() {
         this.editor = null;
         this.resizer = null;
@@ -94,6 +95,7 @@ UE.plugins['fiximgclick'] = (function () {
                             me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
                             me.prePos.x = e.clientX;
                             me.prePos.y = e.clientY;
+                            elementUpdated = true;
                             me.updateTargetElement();
 
                         }
@@ -106,7 +108,12 @@ UE.plugins['fiximgclick'] = (function () {
                             me.dragId = -1;
                         }
                         domUtils.un(me.doc,'mousemove', me.proxy(me._eventHandler, me));
-                        me.editor.fireEvent('contentchange');
+                        //修复只是点击挪动点，但没有改变大小，不应该触发contentchange
+                        if(elementUpdated){
+                            elementUpdated = false;
+                            me.editor.fireEvent('contentchange');
+                        }
+
                         break;
                     default:
                         break;

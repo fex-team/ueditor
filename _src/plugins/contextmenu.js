@@ -10,8 +10,12 @@
  */
 
 UE.plugins['contextmenu'] = function () {
-    var me = this,
-            lang = me.getLang( "contextMenu" ),
+    var me = this;
+    me.setOpt('enableContextMenu',true);
+    if(me.getOpt('enableContextMenu') === false){
+        return;
+    }
+    var lang = me.getLang( "contextMenu" ),
             menu,
             items = me.options.contextMenu || [
                 {label:lang['selectall'], cmdName:'selectall'},

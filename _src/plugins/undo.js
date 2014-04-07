@@ -143,6 +143,10 @@ UE.plugins['undo'] = function () {
             clearTimeout(saveSceneTimer);
             var currentScene = this.getScene(notSetCursor),
                 lastScene = this.list[this.index];
+
+            if(lastScene && lastScene.content != currentScene.content){
+                me.trigger('contentchange')
+            }
             //内容相同位置相同不存
             if (lastScene && lastScene.content == currentScene.content &&
                 ( notCompareRange ? 1 : compareRangeAddress(lastScene.address, currentScene.address) )
@@ -250,9 +254,6 @@ UE.plugins['undo'] = function () {
             }
             clearTimeout(saveSceneTimer);
             function save(cont){
-
-                if (cont.selection.getRange().collapsed)
-                    cont.fireEvent('contentchange');
                 cont.undoManger.save(false,true);
                 cont.fireEvent('selectionchange');
             }
