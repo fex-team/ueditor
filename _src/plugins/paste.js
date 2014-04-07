@@ -54,8 +54,40 @@ UE.plugins['paste'] = function () {
 
     var me = this;
 
+    me.setOpt({
+        retainOnlyLabelPasted : false
+    });
+
     var txtContent, htmlContent, address;
 
+    function getPureHtml(html){
+        return html.replace(/<(\/?)([\w\-]+)([^>]*)>/gi, function (a, b, tagName, attrs) {
+            tagName = tagName.toLowerCase();
+            if ({img: 1}[tagName]) {
+                return a;
+            }
+            attrs = attrs.replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi, function (str, atr, val) {
+                if ({
+                    'src': 1,
+                    'href': 1,
+                    'name': 1
+                }[atr.toLowerCase()]) {
+                    return atr + '=' + val + ' '
+                }
+                return ''
+            });
+            if ({
+                'span': 1,
+                'div': 1
+            }[tagName]) {
+                return ''
+            } else {
+
+                return '<' + b + tagName + ' ' + utils.trim(attrs) + '>'
+            }
+
+        });
+    }
     function filter(div) {
         var html;
         if (div.firstChild) {
@@ -155,7 +187,7 @@ UE.plugins['paste'] = function () {
                 htmlContent = html.html;
 
                 address = me.selection.getRange().createAddress(true);
-                me.execCommand('insertHtml', htmlContent, true);
+                me.execCommand('insertHtml', me.getOpt('retainOnlyLabelPasted') === true ?  getPureHtml(htmlContent) : htmlContent, true);
             }
             me.fireEvent("afterpaste", html);
         }
@@ -219,33 +251,8 @@ UE.plugins['paste'] = function () {
             range.select(true);
             me.__hasEnterExecCommand = true;
             var html = htmlContent;
-            if (plainType === 2) {
-                html = html.replace(/<(\/?)([\w\-]+)([^>]*)>/gi, function (a, b, tagName, attrs) {
-                    tagName = tagName.toLowerCase();
-                    if ({img: 1}[tagName]) {
-                        return a;
-                    }
-                    attrs = attrs.replace(/([\w\-]*?)\s*=\s*(("([^"]*)")|('([^']*)')|([^\s>]+))/gi, function (str, atr, val) {
-                        if ({
-                            'src': 1,
-                            'href': 1,
-                            'name': 1
-                        }[atr.toLowerCase()]) {
-                            return atr + '=' + val + ' '
-                        }
-                        return ''
-                    });
-                    if ({
-                        'span': 1,
-                        'div': 1
-                    }[tagName]) {
-                        return ''
-                    } else {
-
-                        return '<' + b + tagName + ' ' + utils.trim(attrs) + '>'
-                    }
-
-                });
+            if (plainType === 2 ) {
+                html = getPureHtml(html);
             } else if (plainType) {
                 html = txtContent;
             }

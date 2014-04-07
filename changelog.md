@@ -16,6 +16,7 @@
 ###新功能添加
 1. 添加了enableContextMenu配置开关，开关右键菜单，默认为true
 2. 添加disablePInList配置，指定产出的列表中是否嵌套P标签，默认是false
+3. 添加retainOnlyLabelPasted配置，指定粘贴时是否是只保留标签模式，默认是false
 
 ##1.3.6
 
