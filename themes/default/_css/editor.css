@@ -8,7 +8,10 @@
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
-
+.edui-editor div{
+    width:auto;
+    height:auto;
+}
 .edui-default .edui-editor-toolbarbox {
     position: relative;
     zoom: 1;
