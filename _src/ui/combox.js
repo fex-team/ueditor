@@ -14,6 +14,9 @@
         };
     Combox.prototype = {
         uiName: 'combox',
+        onbuttonclick:function () {
+            this.showPopup();
+        },
         initCombox: function (){
             var me = this;
             this.items = this.items || [];

@@ -6,6 +6,14 @@
         UIBase = baidu.editor.ui.UIBase,
         Stateful = baidu.editor.ui.Stateful,
         Button = baidu.editor.ui.Button = function (options){
+            if(options.name){
+                var btnName = options.name;
+                var cssRules = options.cssRules;
+                if(!options.className){
+                    options.className =  'edui-for-' + btnName;
+                }
+                options.cssRules = '.edui-default  .edui-for-'+ btnName +' .edui-icon {'+ cssRules +'}'
+            }
             this.initOptions(options);
             this.initButton();
         };
@@ -15,9 +23,13 @@
         title: '',
         showIcon: true,
         showText: true,
+        cssRules:'',
         initButton: function (){
             this.initUIBase();
             this.Stateful_init();
+            if(this.cssRules){
+                utils.cssRule('edui-customize-'+this.name+'-style',this.cssRules);
+            }
         },
         getHtmlTpl: function (){
             return '<div id="##" class="edui-box %%">' +

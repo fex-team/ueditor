@@ -12,8 +12,13 @@
             this.items = this.items || [];
             this.initUIBase();
         },
-        add: function (item){
-            this.items.push(item);
+        add: function (item,index){
+            if(index === undefined){
+                this.items.push(item);
+            }else{
+                this.items.splice(index,0,item)
+            }
+
         },
         getHtmlTpl: function (){
             var buff = [];

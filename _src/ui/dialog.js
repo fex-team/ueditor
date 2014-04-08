@@ -10,6 +10,16 @@
         UIBase = baidu.editor.ui.UIBase,
         Button = baidu.editor.ui.Button,
         Dialog = baidu.editor.ui.Dialog = function (options){
+            if(options.name){
+                var name = options.name;
+                var cssRules = options.cssRules;
+                if(!options.className){
+                    options.className =  'edui-for-' + name;
+                }
+                if(cssRules){
+                    options.cssRules = '.edui-default .edui-for-'+ name +' .edui-dialog-content  {'+ cssRules +'}'
+                }
+            }
             this.initOptions(utils.extend({
                 autoReset: true,
                 draggable: true,
@@ -31,6 +41,9 @@
         initDialog: function (){
             var me = this,
                 theme=this.editor.options.theme;
+            if(this.cssRules){
+                utils.cssRule('edui-customize-'+this.name+'-style',this.cssRules);
+            }
             this.initUIBase();
             this.modalMask = (modalMask || (modalMask = new Mask({
                 className: 'edui-dialog-modalmask',
@@ -54,7 +67,9 @@
             if (this.buttons) {
                 for (var i=0; i<this.buttons.length; i++) {
                     if (!(this.buttons[i] instanceof Button)) {
-                        this.buttons[i] = new Button(this.buttons[i]);
+                        this.buttons[i] = new Button(utils.extend(this.buttons[i],{
+                            editor : this.editor
+                        },true));
                     }
                 }
             }

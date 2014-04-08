@@ -366,6 +366,24 @@
                 }
                 toolbarUis[i] = toolbarUi;
             }
+
+            //接受外部定制的UI
+
+            utils.each(UE._customizeUI,function(obj,key){
+                var itemUI,index;
+                if(obj.id && obj.id != editor.key){
+                   return false;
+                }
+                itemUI = obj.execFn.call(editor,editor,key);
+                if(itemUI){
+                    index = obj.index;
+                    if(index === undefined){
+                        index = toolbarUi.items.length;
+                    }
+                    toolbarUi.add(itemUI,index)
+                }
+            });
+
             this.toolbars = toolbarUis;
         },
         getHtmlTpl:function () {
@@ -810,5 +828,14 @@
             editor.key && editor.destroy();
             delete instances[id]
         }
+    };
+
+    UE.registerUI = function(uiName,fn,index,editorId){
+        UE._customizeUI[uiName] = {
+            id : editorId,
+            execFn:fn,
+            index:index
+        };
     }
+
 })();
