@@ -413,3 +413,38 @@
 .edui-default  .edui-for-deletetitlecol  .edui-icon {
     background-position: -698px -76px;
 }
+
+/* uploader */
+.edui-default  .edui-for-simpleupload  .edui-icon {
+    background-position: -380px 0px;
+}
+.edui-default  .edui-for-simpleupload  .edui-icon div {
+    top: 0;
+    left: 0;
+}
+.edui-default  .edui-for-simpleupload  .edui-icon{
+    /*width: 20px;*/
+    /*height: 20px;*/
+    overflow: hidden;
+}
+.edui-default  .edui-for-simpleupload  .edui-icon .webuploader-pick {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+    overflow: hidden;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: -140px 0;
+    background-size: auto 100%;
+}
+.edui-default  .edui-for-simpleupload  .edui-icon div input {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+}

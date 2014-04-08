@@ -2,6 +2,11 @@
 .edui-default .edui-dialog {
     z-index: 2000;
     position: absolute;
+
+}
+
+.edui-dialog div{
+    width:auto;
 }
 
 .edui-default .edui-dialog-wrap {

@@ -7,15 +7,16 @@
  */
 var imageUploader = {},
     flashObj = null,
-    postConfig=[];
-(function () {
+    postConfig = [];
+(function() {
     var g = $G,
         ajax = parent.baidu.editor.ajax,
         maskIframe = g("maskIframe"); //tab遮罩层,用来解决flash和其他dom元素的z-index层级不一致问题
     // flashObj;                   //flash上传对象
 
-    var flagImg = null, flashContainer;
-    imageUploader.init = function (opt, callbacks) {
+    var flagImg = null,
+        flashContainer;
+    imageUploader.init = function(opt, callbacks) {
         switchTab("imageTab");
         createAlignButton(["remoteFloat", "localFloat"]);
         createFlash(opt, callbacks);
@@ -39,12 +40,12 @@ var imageUploader = {},
         addSearchListener();
         $focus(g("url"));
     };
-    imageUploader.setPostParams = function(obj,index){
-        if(index===undefined){
-            utils.each(postConfig,function(config){
+    imageUploader.setPostParams = function(obj, index) {
+        if (index === undefined) {
+            utils.each(postConfig, function(config) {
                 config.data = obj;
             })
-        }else{
+        } else {
             postConfig[index].data = obj;
         }
     };
@@ -63,9 +64,9 @@ var imageUploader = {},
         g("searchList").innerHTML = "<p class='msg'>" + lang.imageLoading + "</p>";
         var key = imgSearchInput.value,
             type = $G("imgType").value,
-            keepOriginName = editor.options.keepOriginName ? "1":"0",
+            keepOriginName = editor.options.keepOriginName ? "1" : "0",
             url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + encodeToGb2312(key) + type + "&keeporiginname=" + keepOriginName + "&" + +new Date;
-        var reqCallBack = function (data) {
+        var reqCallBack = function(data) {
             try {
                 var imgObjs = data.data;
             } catch (e) {
@@ -77,18 +78,22 @@ var imageUploader = {},
                 return;
             }
             for (var i = 0, len = imgObjs.length; i < len - 1; i++) {
-                var img = document.createElement("img"), obj = imgObjs[i], div = document.createElement("div");
+                var img = document.createElement("img"),
+                    obj = imgObjs[i],
+                    div = document.createElement("div");
                 img.src = obj.objURL; //obj.thumbURL 为缩略图，只能针对百度内部使用
                 img.setAttribute("sourceUrl", obj.objURL);
                 var title = obj.fromPageTitleEnc.replace(/^\.\.\./i, "");
                 img.setAttribute("title", lang.toggleSelect + obj.width + "X" + obj.height);
-                img.onclick = function () {
+                div.onclick = function() {
                     changeSelected(this);
                 };
-                scale(img, 100, obj.width, obj.height);
+                img.onload = function(){
+                    scale(this, 116, obj.width, obj.height, 'justify');
+                };
                 div.appendChild(img);
                 var p = document.createElement("p");
-                p.innerHTML = "<a target='_blank' href='" + obj.fromURL + "'>" + title + "</a>";
+                p.innerHTML = '<a target="_blank" href="' + obj.fromURL + '" title="' + title + '">' + title + '</a>';
                 div.appendChild(p);
                 //setTimeout(function(){
                 frg.appendChild(div);
@@ -98,7 +103,9 @@ var imageUploader = {},
             g("searchList").innerHTML = "";
             g("searchList").appendChild(frg);
         };
-        baidu.sio.callByServer(url, reqCallBack, {charset:"GB18030"});
+        baidu.sio.callByServer(url, reqCallBack, {
+            charset: "GB18030"
+        });
     }
 
     function selectTxt(node) {
@@ -111,32 +118,32 @@ var imageUploader = {},
     }
 
     function addSearchListener() {
-        g("imgSearchTxt").onclick = function () {
+        g("imgSearchTxt").onclick = function() {
             selectTxt(this);
             this.setAttribute("hasClick", true);
             if (this.value == lang.searchInitInfo) {
                 this.value = "";
             }
         };
-        g("imgSearchTxt").onkeyup = function () {
+        g("imgSearchTxt").onkeyup = function() {
             this.setAttribute("hasClick", true);
             //只触发一次
             this.onkeyup = null;
         };
 
-        g("imgSearchBtn").onclick = function () {
+        g("imgSearchBtn").onclick = function() {
             searchImage();
         };
-        g("imgSearchReset").onclick = function () {
+        g("imgSearchReset").onclick = function() {
             var txt = g("imgSearchTxt");
             txt.value = "";
             txt.focus();
             g("searchList").innerHTML = "";
         };
-        g("imgType").onchange = function () {
+        g("imgType").onchange = function() {
             searchImage();
         };
-        domUtils.on(g("imgSearchTxt"), "keyup", function (evt) {
+        domUtils.on(g("imgSearchTxt"), "keyup", function(evt) {
             if (evt.keyCode == 13) {
                 searchImage();
             }
@@ -149,7 +156,7 @@ var imageUploader = {},
      */
     function addScrollListener() {
 
-        g("imageList").onscroll = function () {
+        g("imageList").onscroll = function() {
             var imgs = this.getElementsByTagName("img"),
                 top = Math.ceil(this.scrollTop / 100) - 1;
             top = top < 0 ? 0 : top;
@@ -167,7 +174,7 @@ var imageUploader = {},
      * 绑定确认按钮
      */
     function addOKListener() {
-        dialog.onok = function () {
+        dialog.onok = function() {
             var currentTab = findFocus("tabHeads", "tabSrc");
             switch (currentTab) {
                 case "remote":
@@ -184,7 +191,7 @@ var imageUploader = {},
                     break;
             }
         };
-        dialog.oncancel = function () {
+        dialog.oncancel = function() {
             hideFlash();
         }
     }
@@ -200,10 +207,12 @@ var imageUploader = {},
      * @param catchRemote  是否需要替换远程图片
      */
     function insertSearch(id, catchRemote) {
-        var imgs = $G(id).getElementsByTagName("img"), imgObjs = [];
+        var imgs = $G(id).getElementsByTagName("img"),
+            imgObjs = [];
         for (var i = 0, ci; ci = imgs[i++];) {
-            if (ci.getAttribute("selected")) {
-                var url = ci.getAttribute("src", 2).replace(/(\s*$)/g, ""), img = {};
+            if (ci.parentNode.getAttribute("selected")) {
+                var url = ci.getAttribute("src", 2).replace(/(\s*$)/g, ""),
+                    img = {};
                 img.src = url;
                 img._src = url;
                 imgObjs.push(img);
@@ -227,7 +236,7 @@ var imageUploader = {},
             align = findFocus("remoteFloat", "name"),
             imgObj = {};
         if (!url.value) return;
-        if (!flagImg) return;   //粘贴地址后如果没有生成对应的预览图，可以认为本次粘贴地址失败
+        if (!flagImg) return; //粘贴地址后如果没有生成对应的预览图，可以认为本次粘贴地址失败
         if (!checkNum([width, height, border, vhSpace])) return false;
         imgObj.src = url.value;
         imgObj._src = url.value;
@@ -310,7 +319,7 @@ var imageUploader = {},
     function addUrlChangeListener() {
         var value = g("url").value;
         if (browser.ie) {
-            g("url").onpropertychange = function () {
+            g("url").onpropertychange = function() {
                 var v = this.value;
                 if (v != value) {
                     createPreviewImage(v);
@@ -318,7 +327,7 @@ var imageUploader = {},
                 }
             };
         } else {
-            g("url").addEventListener("input", function () {
+            g("url").addEventListener("input", function() {
                 var v = this.value;
                 if (v != value) {
                     createPreviewImage(v);
@@ -336,12 +345,12 @@ var imageUploader = {},
         var width = g("width"),
             height = g("height"),
             lock = g('lock');
-        width.onkeyup = function () {
+        width.onkeyup = function() {
             if (!isNaN(this.value) && lock.checked) {
                 height.value = Math.round(this.value / percent) || this.value;
             }
         };
-        height.onkeyup = function () {
+        height.onkeyup = function() {
             if (!isNaN(this.value) && lock.checked) {
                 width.value = Math.round(this.value * percent) || this.value;
             }
@@ -367,21 +376,20 @@ var imageUploader = {},
             preview = g("preview");
 
         var imgTypeReg = /\.(png|gif|jpg|jpeg)$/gi, //格式过滤
-            urlFilter = "";                                     //地址过滤
+            urlFilter = ""; //地址过滤
         if (!imgTypeReg.test(url) || url.indexOf(urlFilter) == -1) {
             preview.innerHTML = "<span style='color: red'>" + lang.imageUrlError + "</span>";
             flagImg = null;
             return;
         }
         preview.innerHTML = lang.imageLoading;
-        img.onload = function () {
-            debugger;
+        img.onload = function() {
             flagImg = this;
             showImageInfo(this);
-            showPreviewImage(this,true);
+            showPreviewImage(this, true);
             this.onload = null;
         };
-        img.onerror = function () {
+        img.onerror = function() {
             preview.innerHTML = "<span style='color: red'>" + lang.imageLoadError + "</span>";
             flagImg = null;
             this.onerror = null;
@@ -397,7 +405,7 @@ var imageUploader = {},
         if (!img.getAttribute("src") || !img.src) return;
         var wordImgFlag = img.getAttribute("word_img");
         var src = wordImgFlag ? wordImgFlag.replace("&amp;", "&") : (img.getAttribute('_src') || img.getAttribute("src", 2).replace("&amp;", "&"));
-        if(src !== g("url").value) g("url").value = src;
+        if (src !== g("url").value) g("url").value = src;
         g("width").value = img.width || 0;
         g("height").value = img.height || 0;
         g("border").value = img.getAttribute("border") || 0;
@@ -417,10 +425,12 @@ var imageUploader = {},
      * @param needClone  是否需要克隆后显示
      */
     function showPreviewImage(img, needClone) {
-        var tmpWidth = img.width, tmpHeight = img.height;
-        var maxWidth = 262,maxHeight = 262,
-            target = scaling(tmpWidth,tmpHeight,maxWidth,maxHeight);
-        target.border = img.border||0;
+        var tmpWidth = img.width,
+            tmpHeight = img.height;
+        var maxWidth = 262,
+            maxHeight = 262,
+            target = scaling(tmpWidth, tmpHeight, maxWidth, maxHeight);
+        target.border = img.border || 0;
         target.src = img.src;
         flagImg = true;
         if ((target.width + 2 * target.border) > maxWidth) {
@@ -438,38 +448,52 @@ var imageUploader = {},
      * @param img
      * @param max
      */
-    function scale(img, max, oWidth, oHeight) {
-        var width = 0, height = 0, percent, ow = img.width || oWidth, oh = img.height || oHeight;
-        if (ow > max || oh > max) {
+    function scale(img, max, oWidth, oHeight, type) {
+        var ow = img.width || oWidth,
+            oh = img.height || oHeight;
+
+        if (type == 'justify') {
             if (ow >= oh) {
-                if (width = ow - max) {
-                    percent = (width / ow).toFixed(2);
-                    img.height = oh - oh * percent;
-                    img.width = max;
-                }
+                img.width = max;
+                img.height = max*oh/ow;
+                img.style.marginLeft = '-' + parseInt((img.width-max)/2) + 'px';
             } else {
-                if (height = oh - max) {
-                    percent = (height / oh).toFixed(2);
-                    img.width = ow - ow * percent;
-                    img.height = max;
-                }
+                img.width = max*ow/oh;
+                img.height = max;
+                img.style.marginTop = '-' + parseInt((img.height-max)/2) + 'px';
+            }
+        } else {
+            if (ow >= oh) {
+                img.width = max*ow/oh;
+                img.height = max;
+                img.style.marginLeft = '-' + parseInt((img.width-max)/2) + 'px';
+            } else {
+                img.width = max;
+                img.height = max*oh/ow;
+                img.style.marginTop = '-' + parseInt((img.height-max)/2) + 'px';
             }
         }
     }
 
-    function scaling(width,height,maxWidth,maxHeight){
-        if(width<maxWidth && height<maxHeight) return {width:width,height:height};
-        var srcRatio = (width/height).toFixed(2),
-            tarRatio = (maxWidth/maxHeight).toFixed(2),
-            w,h;
-        if(srcRatio<tarRatio){
+    function scaling(width, height, maxWidth, maxHeight) {
+        if (width < maxWidth && height < maxHeight) return {
+            width: width,
+            height: height
+        };
+        var srcRatio = (width / height).toFixed(2),
+            tarRatio = (maxWidth / maxHeight).toFixed(2),
+            w, h;
+        if (srcRatio < tarRatio) {
             h = maxHeight;
-            w = h*srcRatio;
-        }else{
+            w = h * srcRatio;
+        } else {
             w = maxWidth;
-            h = w/srcRatio;
+            h = w / srcRatio;
         }
-        return {width:w.toFixed(0),height:h.toFixed(0)}
+        return {
+            width: w.toFixed(0),
+            height: h.toFixed(0)
+        }
     }
     /**
      * 创建flash实例
@@ -480,22 +504,27 @@ var imageUploader = {},
         var i18n = utils.extend({}, lang.flashI18n);
         //处理图片资源地址的编码，补全等问题
         for (var i in i18n) {
-            if (!(i in {"lang":1, "uploadingTF":1, "imageTF":1, "textEncoding":1}) && i18n[i]) {
+            if (!(i in {
+                "lang": 1,
+                "uploadingTF": 1,
+                "imageTF": 1,
+                "textEncoding": 1
+            }) && i18n[i]) {
                 i18n[i] = encodeURIComponent(editor.options.langPath + editor.options.lang + "/images/" + i18n[i]);
             }
         }
         opt = utils.extend(opt, i18n, false);
         var option = {
-            createOptions:{
-                id:'flash',
-                url:opt.flashUrl,
-                width:opt.width,
-                height:opt.height,
-                errorMessage:lang.flashError,
-                wmode:browser.safari ? 'transparent' : 'window',
-                ver:'10.0.0',
-                vars:opt,
-                container:opt.container
+            createOptions: {
+                id: 'flash',
+                url: opt.flashUrl,
+                width: opt.width,
+                height: opt.height,
+                errorMessage: lang.flashError,
+                wmode: browser.safari ? 'transparent' : 'window',
+                ver: '10.0.0',
+                vars: opt,
+                container: opt.container
             }
         };
         flashContainer = $G(opt.container);
@@ -529,7 +558,12 @@ var imageUploader = {},
     function createAlignButton(ids) {
         for (var i = 0, ci; ci = ids[i++];) {
             var floatContainer = g(ci),
-                nameMaps = {"none":lang.floatDefault, "left":lang.floatLeft, "right":lang.floatRight, "center":lang.floatCenter};
+                nameMaps = {
+                    "none": lang.floatDefault,
+                    "left": lang.floatLeft,
+                    "right": lang.floatRight,
+                    "center": lang.floatCenter
+                };
             for (var j in nameMaps) {
                 var div = document.createElement("div");
                 div.setAttribute("name", j);
@@ -566,7 +600,7 @@ var imageUploader = {},
         for (var j = 0, length = tabBodys.length; j < length; j++) {
             var body = tabBodys[j],
                 id = body.getAttribute("id");
-            body.onclick = function () {
+            body.onclick = function() {
                 this.style.zoom = 1;
             };
             if (id != tabSrc) {
@@ -594,9 +628,9 @@ var imageUploader = {},
                     //已经初始化过时不再重复提交请求
                     if (!list.children.length) {
                         ajax.request(editor.options.imageManagerUrl, {
-                            timeout:100000,
-                            action:"get",
-                            onsuccess:function (xhr) {
+                            timeout: 100000,
+                            action: "get",
+                            onsuccess: function(xhr) {
                                 //去除空格
                                 var tmp = utils.trim(xhr.responseText),
                                     imageUrls = !tmp ? [] : tmp.split("ue_separate_ue"),
@@ -609,12 +643,13 @@ var imageUploader = {},
                                     div.appendChild(img);
                                     div.style.display = "none";
                                     g("imageList").appendChild(div);
-                                    img.onclick = function () {
+                                    div.onclick = function() {
                                         changeSelected(this);
                                     };
-                                    img.onload = function () {
+                                    img.onload = function() {
                                         this.parentNode.style.display = "";
-                                        var w = this.width, h = this.height;
+                                        var w = this.width,
+                                            h = this.height;
                                         scale(this, 100, 120, 80);
                                         this.title = lang.toggleSelect + w + "X" + h;
                                         this.onload = null;
@@ -624,7 +659,7 @@ var imageUploader = {},
 
                                 }
                             },
-                            onerror:function () {
+                            onerror: function() {
                                 g("imageList").innerHTML = lang.imageLoadError;
                             }
                         });
@@ -652,8 +687,8 @@ var imageUploader = {},
 
         for (var i = 0, length = tabHeads.length; i < length; i++) {
             var head = tabHeads[i];
-            if (head.className === "focus")clickHandler(tabHeads, tabBodys, head);
-            head.onclick = function () {
+            if (head.className === "focus") clickHandler(tabHeads, tabBodys, head);
+            head.onclick = function() {
                 clickHandler(tabHeads, tabBodys, this);
             }
         }
@@ -666,10 +701,10 @@ var imageUploader = {},
     function changeSelected(o) {
         if (o.getAttribute("selected")) {
             o.removeAttribute("selected");
-            o.style.cssText = "filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;border: 2px solid #fff";
+            domUtils.removeClasses(o, 'selected');
         } else {
             o.setAttribute("selected", "true");
-            o.style.cssText = "filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;border:2px solid blue;";
+            domUtils.addClass(o, 'selected');
         }
     }
 
@@ -680,7 +715,7 @@ var imageUploader = {},
     function switchSelect(selectParentId) {
         var select = g(selectParentId),
             children = select.children;
-        domUtils.on(select, "click", function (evt) {
+        domUtils.on(select, "click", function(evt) {
             var tar = evt.srcElement || evt.target;
             for (var j = 0, cj; cj = children[j++];) {
                 cj.className = "";

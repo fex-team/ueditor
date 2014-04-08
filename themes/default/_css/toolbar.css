@@ -6,6 +6,8 @@
     padding: 1px;
     overflow: hidden; /*全屏下单独一行不占位*/
     zoom: 1;
+    width:auto;
+    height:auto;
 }
 
 .edui-default .edui-toolbar .edui-button,

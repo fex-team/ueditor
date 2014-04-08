@@ -64,22 +64,17 @@
                     <div id="imageList"><var id="lang_imgLoading"></var></div>
                 </div>
                 <div id="imgSearch" class="panel">
-                    <table style="margin-top: 5px;">
-                        <tr>
-                            <td width="200"><input id="imgSearchTxt" type="text" /></td>
-                            <td width="65">
-                                <select id="imgType">
-                                    <!--具体内容值将由国际化组件动态填充-->
-                                    <option value="&s=4&z=0"></option>
-                                    <option value="&s=1&z=19"></option>
-                                    <option value="&s=2&z=0"></option>
-                                    <option value="&s=3&z=0"></option>
-                                </select>
-                            </td>
-                            <td width="80"><input id="imgSearchBtn" type="button"  /></td>
-                            <td width="80"><input id="imgSearchReset" type="button" /></td>
-                        </tr>
-                    </table>
+                    <div style="margin-top:5px;" class="control-line">
+                        <input id="imgSearchTxt" type="text" />
+                        <select id="imgType">
+                            <option value="&s=4&z=0"></option>
+                            <option value="&s=1&z=19"></option>
+                            <option value="&s=2&z=0"></option>
+                            <option value="&s=3&z=0"></option>
+                        </select>
+                        <input id="imgSearchReset" type="button"  />
+                        <input id="imgSearchBtn" type="button"  />
+                    </div>
                     <div id="searchList"></div>
                 </div>
                 <iframe id="maskIframe" src="about:blank" scrolling="no" frameborder="no"></iframe>
