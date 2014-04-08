@@ -26,7 +26,7 @@ UE.plugin.register('simpleupload', function (){
             resize: false,
 
             threads: 3,
-            fileVal: me.options.uploaderFileName,
+            fileVal: me.options.imageFieldName,
             formdata: {},
             duplicate: true
 
@@ -39,7 +39,7 @@ UE.plugin.register('simpleupload', function (){
         uploader.on('uploadSuccess', function (file, ret) {
             try{
                 var json = (new Function("return " + ret._raw))();
-                var picLink = me.options.uploaderPath + json.url;
+                var picLink = me.options.imagePath + json.url;
                 if(json.url) {
                     me.execCommand('insertimage', {
                         src: picLink,
@@ -52,10 +52,10 @@ UE.plugin.register('simpleupload', function (){
                 showError('parseError: ' + ret._raw);
             }
         });
-        uploader.on('uploadError', function (a, b) {
+        uploader.on('uploadError', function (file) {
             showError('uploadError!');
         });
-        uploader.on('uploadComplete', function (a, b) {
+        uploader.on('uploadComplete', function (file) {
         });
 
         me.fireEvent('initWebUploader');
@@ -68,7 +68,8 @@ UE.plugin.register('simpleupload', function (){
 
     me.setOpt({
         'uploaderSwfUrl': me.options.UEDITOR_HOME_URL + 'third-party/webuploader/Uploader.swf',
-        'uploaderJsUrl': me.options.UEDITOR_HOME_URL + 'third-party/webuploader/webuploader.min.js'
+        'uploaderJsUrl': me.options.UEDITOR_HOME_URL + 'third-party/webuploader/webuploader.min.js',
+        'uploaderJsCss': me.options.UEDITOR_HOME_URL + 'third-party/webuploader/webuploader.css'
     });
 
     return {
