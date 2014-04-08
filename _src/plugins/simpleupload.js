@@ -75,29 +75,28 @@ UE.plugin.register('simpleupload', function (){
         bindEvents:{
             /* 初始化简单上传按钮 */
             'ready': function () {
-                var doc = me.document,
-                    loadWebUploaderJs = function(){
-                        /* 加载webuploader */
-                        utils.loadFile(doc, {
-                            src: me.options.uploaderJsUrl,
-                            tag: "script",
-                            type: "text/javascript",
-                            defer: "defer"
-                        }, initWebUploader);
-                    };
-
-                /* 加载jquery */
-                if(!window.jQuery) {
-                    utils.loadFile(doc, {
-                        src: me.options.UEDITOR_HOME_URL + 'third-party/jquery-1.10.2.min.js',
-                        tag: "script",
-                        type: "text/javascript",
-                        defer: "defer"
-                    }, loadWebUploaderJs);
-                } else {
-                    loadWebUploaderJs();
-                }
-                initWebUploader();
+//                var doc = me.document,
+//                    loadWebUploaderJs = function(){
+//                        /* 加载webuploader */
+//                        utils.loadFile(doc, {
+//                            src: me.options.uploaderJsUrl,
+//                            tag: "script",
+//                            type: "text/javascript",
+//                            defer: "defer"
+//                        }, initWebUploader);
+//                    };
+//
+//                /* 加载jquery */
+//                if(!window.jQuery) {
+//                    utils.loadFile(doc, {
+//                        src: me.options.UEDITOR_HOME_URL + 'third-party/jquery-1.10.2.min.js',
+//                        tag: "script",
+//                        type: "text/javascript",
+//                        defer: "defer"
+//                    }, loadWebUploaderJs);
+//                } else {
+//                    loadWebUploaderJs();
+//                }
             }
         }
     }

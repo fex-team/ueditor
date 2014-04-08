@@ -82,7 +82,7 @@
             'plugins/autosave.js',
             'plugins/charts.js',
             'plugins/section.js',
-            'plugins/qmailsnap.js',
+            'plugins/simpleupload.js',
             'ui/ui.js',
             'ui/uiutils.js',
             'ui/uibase.js',

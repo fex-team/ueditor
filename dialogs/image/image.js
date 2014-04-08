@@ -382,7 +382,6 @@ var imageUploader = {},
         }
         preview.innerHTML = lang.imageLoading;
         img.onload = function() {
-            debugger;
             flagImg = this;
             showImageInfo(this);
             showPreviewImage(this, true);
