@@ -35,6 +35,7 @@
             'plugins/convertcase.js',
             'plugins/indent.js',
             'plugins/print.js',
+            'plugins/preview.js',
             'plugins/selectall.js',
             'plugins/paragraph.js',
             'plugins/directionality.js',
