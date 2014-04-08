@@ -85,7 +85,7 @@ var imageUploader = {},
                 img.setAttribute("sourceUrl", obj.objURL);
                 var title = obj.fromPageTitleEnc.replace(/^\.\.\./i, "");
                 img.setAttribute("title", lang.toggleSelect + obj.width + "X" + obj.height);
-                img.onclick = function() {
+                div.onclick = function() {
                     changeSelected(this);
                 };
                 scale(img, 100, obj.width, obj.height);
@@ -457,12 +457,14 @@ var imageUploader = {},
                     percent = (width / ow).toFixed(2);
                     img.height = oh - oh * percent;
                     img.width = max;
+                    img.style.marginTop = parseInt((max-img.height)/2) + 'px';
                 }
             } else {
                 if (height = oh - max) {
                     percent = (height / oh).toFixed(2);
                     img.width = ow - ow * percent;
                     img.height = max;
+                    img.style.marginLeft = parseInt((max-img.width)/2) + 'px';
                 }
             }
         }
@@ -636,7 +638,7 @@ var imageUploader = {},
                                     div.appendChild(img);
                                     div.style.display = "none";
                                     g("imageList").appendChild(div);
-                                    img.onclick = function() {
+                                    div.onclick = function() {
                                         changeSelected(this);
                                     };
                                     img.onload = function() {
@@ -694,10 +696,10 @@ var imageUploader = {},
     function changeSelected(o) {
         if (o.getAttribute("selected")) {
             o.removeAttribute("selected");
-            o.style.cssText = "filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;border: 2px solid #fff";
+            domUtils.removeClasses(o, 'selected');
         } else {
             o.setAttribute("selected", "true");
-            o.style.cssText = "filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;border:2px solid #00a0e9;";
+            domUtils.addClass(o, 'selected');
         }
     }
 
