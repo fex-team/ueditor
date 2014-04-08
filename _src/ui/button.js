@@ -35,7 +35,7 @@
             return '<div id="##" class="edui-box %%">' +
                 '<div id="##_state" stateful>' +
                  '<div class="%%-wrap"><div id="##_body" unselectable="on" ' + (this.title ? 'title="' + this.title + '"' : '') +
-                 ' class="%%-body" onmousedown="return false;" onclick="return $$._onClick();">' +
+                 ' class="%%-body" onclick="return $$._onClick();">' +
                   (this.showIcon ? '<div class="edui-box edui-icon"></div>' : '') +
                   (this.showText ? '<div class="edui-box edui-label">' + this.label + '</div>' : '') +
                  '</div>' +

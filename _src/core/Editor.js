@@ -261,6 +261,19 @@
             fileNameFormat: '{time}{rand:6}'
         });
 
+        /* 尝试异步加载后台配置 */
+        try{
+            UE.ajax.request(me.options.serverUrl,{
+                method: 'GET',
+                data: {
+                    'action': 'config'
+                }, onsuccess:function(xhr){
+                    var config = eval("("+xhr.responseText+")");
+                    me.setOpt(config);
+                }
+            });
+        } catch(e){}
+
         if(!utils.isEmptyObject(UE.I18N)){
             //修改默认的语言类型
             me.options.lang = checkCurLang(UE.I18N);

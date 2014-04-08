@@ -884,7 +884,7 @@ UE.plugins['list'] = function () {
      * @param { String } style 插入的有序列表类型，值为：decimal,lower-alpha,lower-roman,upper-alpha,upper-roman,cn,cn1,cn2,num,num1,num2
      * @example
      * ```javascript
-     * editor.execCommand( 'insertunorderedlist','decimal');
+     * editor.execCommand( 'insertorderedlist','decimal');
      * ```
      */
     /**
