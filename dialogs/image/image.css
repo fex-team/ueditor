@@ -65,10 +65,10 @@ td input:focus,.control-line input:focus{
 #flashContainer { margin: 6px;position: relative;}
 #upload{width: 100px;height: 30px;float: right; margin:3px 6px 0 0;cursor: pointer;}
 #imageList{width: 620px;height: 315px; margin-top: 10px;overflow:hidden;overflow-y: auto;}
+#imgManager #imageList div{float: left;width: 100px;height: 100px;margin: 8px 0 8px 16px;}
 #imageList div{background-color:#eee;overflow:hidden;cursor: pointer;filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;border: 2px solid #fff;}
-#imageList div.selected{filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;border:2px solid #00a0e9;}
+#imageList div.selected{filter:alpha(Opacity=40);-moz-opacity:0.4;opacity: 0.4;border:2px solid #00a0e9;}
 #imageList img{cursor: pointer ;border: 0;}
-#imgManager #imageList div{float: left;width: 100px;height: 100px;margin: 5px 10px;}
 #imgSearchTxt{padding-left:5px;background: #FFF;width:200px;height:21px;line-height:21px;}
 #searchList{width: 620px;overflow: auto;zoom:1;height: 270px;background: rgb(240,240,240)}
 #searchList div{
@@ -87,8 +87,8 @@ td input:focus,.control-line input:focus{
     padding-top: 10px;
 }
 
-#searchList div{cursor: pointer;filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;border: 2px solid #fff;}
-#searchList div.selected{filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;border:2px solid #00a0e9;}
+#searchList div{background-color:#eee;overflow:hidden;cursor: pointer;filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;border: 2px solid #fff;}
+#searchList div.selected{filter:alpha(Opacity=40);-moz-opacity:0.4;opacity: 0.4;border:2px solid #00a0e9;}
 #searchList img{cursor: pointer;border: 0;} /*不用缩略图*/
 #searchList p{
     margin-top: 5px;

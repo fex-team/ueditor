@@ -88,10 +88,12 @@ var imageUploader = {},
                 div.onclick = function() {
                     changeSelected(this);
                 };
-                scale(img, 100, obj.width, obj.height);
+                img.onload = function(){
+                    scale(this, 116, obj.width, obj.height, 'justify');
+                };
                 div.appendChild(img);
                 var p = document.createElement("p");
-                p.innerHTML = "<a target='_blank' href='" + obj.fromURL + "'>" + title + "</a>";
+                p.innerHTML = '<a target="_blank" href="' + obj.fromURL + '" title="' + title + '">' + title + '</a>';
                 div.appendChild(p);
                 //setTimeout(function(){
                 frg.appendChild(div);
@@ -208,7 +210,7 @@ var imageUploader = {},
         var imgs = $G(id).getElementsByTagName("img"),
             imgObjs = [];
         for (var i = 0, ci; ci = imgs[i++];) {
-            if (ci.getAttribute("selected")) {
+            if (ci.parentNode.getAttribute("selected")) {
                 var url = ci.getAttribute("src", 2).replace(/(\s*$)/g, ""),
                     img = {};
                 img.src = url;
@@ -446,26 +448,29 @@ var imageUploader = {},
      * @param img
      * @param max
      */
-    function scale(img, max, oWidth, oHeight) {
-        var width = 0,
-            height = 0,
-            percent, ow = img.width || oWidth,
+    function scale(img, max, oWidth, oHeight, type) {
+        var ow = img.width || oWidth,
             oh = img.height || oHeight;
-        if (ow > max || oh > max) {
+
+        if (type == 'justify') {
             if (ow >= oh) {
-                if (width = ow - max) {
-                    percent = (width / ow).toFixed(2);
-                    img.height = oh - oh * percent;
-                    img.width = max;
-                    img.style.marginTop = parseInt((max-img.height)/2) + 'px';
-                }
+                img.width = max;
+                img.height = max*oh/ow;
+                img.style.marginLeft = '-' + parseInt((img.width-max)/2) + 'px';
             } else {
-                if (height = oh - max) {
-                    percent = (height / oh).toFixed(2);
-                    img.width = ow - ow * percent;
-                    img.height = max;
-                    img.style.marginLeft = parseInt((max-img.width)/2) + 'px';
-                }
+                img.width = max*ow/oh;
+                img.height = max;
+                img.style.marginTop = '-' + parseInt((img.height-max)/2) + 'px';
+            }
+        } else {
+            if (ow >= oh) {
+                img.width = max*ow/oh;
+                img.height = max;
+                img.style.marginLeft = '-' + parseInt((img.width-max)/2) + 'px';
+            } else {
+                img.width = max;
+                img.height = max*oh/ow;
+                img.style.marginTop = '-' + parseInt((img.height-max)/2) + 'px';
             }
         }
     }
