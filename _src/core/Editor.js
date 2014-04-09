@@ -295,7 +295,9 @@
         UE.instants['ueditorInstant' + me.uid] = me;
     };
     Editor.prototype = {
-
+         registerCommand : function(name,obj){
+            this.commands[name] = obj;
+         },
         /**
          * 编辑器对外提供的监听ready事件的接口， 通过调用该方法，达到的效果与监听ready事件是一致的
          * @method ready
@@ -1524,7 +1526,6 @@
                 ci.call(this, root)
             }
         }
-
     };
     utils.inherits(Editor, EventBase);
 })();
