@@ -3,7 +3,7 @@
 $phpSelf = $_SERVER['PHP_SELF'];
 $serverDir = substr($phpSelf, 0, strrpos($phpSelf, '/') + 1); // 例子: "/ueditor/php/"
 $serverUrl = $serverDir . 'server.php'; // 例子: "/ueditor/php/server.php"
-$uploadPathPrefix = '/ueditor/php/'; // 例子: "/ueditor/php/"
+$uploadPathPrefix = $serverDir; // 例子: "/ueditor/php/"
 
 return array(
 
@@ -56,6 +56,7 @@ return array(
     /* 图片在线管理配置区 */
     , imageManagerUrl => $serverUrl . "?action=list&type=image" //图片在线管理的处理地址
     , imageManagerPath => $uploadPathPrefix //图片修正地址，同imagePath
+    , imageManagerListSize => 30 //一次获取列表大小
 
 
 );
