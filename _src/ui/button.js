@@ -51,12 +51,6 @@
                 this.fireEvent('click');
             }
         },
-        show: function(){
-            this.getDom().style.display = 'block';
-        },
-        hide: function(){
-            this.getDom().style.display = 'none';
-        },
         setTitle: function(text){
             var label = this.getDom('label');
             label.innerHTML = text;
