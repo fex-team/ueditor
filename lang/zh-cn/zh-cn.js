@@ -223,7 +223,7 @@ UE.I18N['zh-cn'] = {
             'lang_background_netimg':'网络图片',
             'lang_background_align':'对齐方式',
             'lang_background_position':'精确定位',
-            'repeatType':{options:["居中", "横向重复", "纵向重复", "平铺","自定义"]}
+            'repeatType':{'options':["居中", "横向重复", "纵向重复", "平铺","自定义"]}
 
         },
         'noUploadImage':"当前未上传过任何图片！",
@@ -232,25 +232,25 @@ UE.I18N['zh-cn'] = {
     //===============dialog i18N=======================
     'insertimage':{
         'static':{
-            lang_tab_remote:"远程图片", //节点
-            lang_tab_local:"本地上传",
-            lang_tab_imgManager:"在线管理",
-            lang_tab_imgSearch:"图片搜索",
-            lang_input_url:"地 址：",
-            lang_input_width:"宽 度：",
-            lang_input_height:"高 度：",
-            lang_input_border:"边 框：",
-            lang_input_vhspace:"边 距：",
-            lang_input_title:"描 述：",
-            lang_input_remoteAlign:'对 齐：',
-            lang_imgLoading:"　图片加载中……",
-            'lock':{title:"锁定宽高比例"}, //属性
-            'imgType':{title:"图片类型", options:["新闻", "壁纸", "表情", "头像"]}, //select的option
-            'imgSearchTxt':{value:"请输入搜索关键词"},
-            'imgSearchBtn':{value:"百度一下"},
-            'imgSearchReset':{value:"清空搜索"},
-            'upload':{style:'background: url(upload.png);'},
-            'duiqi':{style:'background: url(imglabel.png) -12px 2px no-repeat;'},
+            'lang_tab_remote':"插入图片", //节点
+            'lang_tab_local':"本地上传",
+            'lang_tab_imgManager':"在线管理",
+            'lang_tab_imgSearch':"图片搜索",
+            'lang_input_url':"地 址：",
+            'lang_input_size':"大 小：",
+            'lang_input_width':"宽度",
+            'lang_input_height':"高度",
+            'lang_input_border':"边 框：",
+            'lang_input_vhspace':"边 距：",
+            'lang_input_title':"描 述：",
+            'lang_input_align':'对 齐：',
+            'lang_imgLoading':"　图片加载中……",
+            'lock':{'title':"锁定宽高比例"}, //属性
+            'imgType':{'title':"图片类型", 'options':["新闻", "壁纸", "表情", "头像"]}, //select的option
+            'imgSearchTxt':{'value':"请输入搜索关键词"},
+            'imgSearchBtn':{'value':"百度一下"},
+            'imgSearchReset':{'value':"清空搜索"},
+            'duiqi':{'style':'background: url(imglabel.png) -12px 2px no-repeat;'},
             'lang_savePath':'选择保存目录：',
             'lang_load_savePath': '正在读取目录...'
         },

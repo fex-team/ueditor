@@ -37,7 +37,7 @@
                  '<div class="%%-wrap"><div id="##_body" unselectable="on" ' + (this.title ? 'title="' + this.title + '"' : '') +
                  ' class="%%-body" onclick="return $$._onClick();">' +
                   (this.showIcon ? '<div class="edui-box edui-icon"></div>' : '') +
-                  (this.showText ? '<div class="edui-box edui-label">' + this.label + '</div>' : '') +
+                  (this.showText ? '<div id="##_label" class="edui-box edui-label">' + this.label + '</div>' : '') +
                  '</div>' +
                 '</div>' +
                 '</div></div>';
@@ -50,6 +50,10 @@
             if (!this.isDisabled()) {
                 this.fireEvent('click');
             }
+        },
+        setTitle: function(text){
+            var label = this.getDom('label');
+            label.innerHTML = text;
         }
     };
     utils.inherits(Button, UIBase);

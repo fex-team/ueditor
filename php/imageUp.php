@@ -1,6 +1,4 @@
 <?php
-	
-
     /**
      * Created by JetBrains PhpStorm.
      * User: taoqili
@@ -74,5 +72,6 @@
      *   'state'    :'SUCCESS'  //上传状态，成功时返回SUCCESS,其他任何值将原样返回至图片上传框中
      * }
      */
-    echo "{'url':'" . $info["url"] . "','title':'" . $title . "','original':'" . $info["originalName"] . "','state':'" . $info["state"] . "'}";
+echo json_encode($info);
+    //echo "{'url':'" . $info["url"] . "','title':'" . $title . "','original':'" . $info["originalName"] . "','state':'" . $info["state"] . "'}";
 
