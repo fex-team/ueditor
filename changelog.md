@@ -20,6 +20,7 @@
 2. 添加disablePInList配置，指定产出的列表中是否嵌套P标签，默认是false
 3. 添加retainOnlyLabelPasted配置，指定粘贴时是否是只保留标签模式，默认是false
 4. 优化了添加toolbar上各类ui的方式，方便二次开发
+5. 添加简洁图片上传功能
 
 ##1.3.6
 
