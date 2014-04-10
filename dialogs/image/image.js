@@ -116,25 +116,24 @@
         },
         initEvents: function () {
             var _this = this;
+
             /* 改变url */
-            domUtils.on($G("url"), 'change', function(e){
-
-            });
-            /* 改变width */
-            domUtils.on($G("width"), 'change', function(e){
-
-            });
-            /* 改变height */
-            domUtils.on($G("height"), 'change', function(e){
-
-            });
+            domUtils.on($G("url"), 'keyup', updatePreview);
+            domUtils.on($G("width"), 'keyup', updatePreview);
+            domUtils.on($G("height"), 'keyup', updatePreview);
+            domUtils.on($G("border"), 'keyup', updatePreview);
+            domUtils.on($G("title"), 'keyup', updatePreview);
             /* 点击align图标 */
-            domUtils.on($G("url"), 'click', function(e){
+            domUtils.on($G("alignIcon"), 'click', function(e){
                 var target = e.target || e.srcElement;
                 if(target.className && target.className.indexOf('-align') != -1) {
-                    setAlign(target.getAttribute('data-align'));
+                    _this.setAlign(target.getAttribute('data-align'));
                 }
             });
+
+            function updatePreview(){
+                _this.setPreview();
+            }
         },
         setImage: function(img){
             /* 不是正常的图片 */
@@ -155,45 +154,46 @@
             this.setAlign(align);
 
             this.setPreview(img, true);
-            var tabElements = g("imageTab").children,
-                tabHeads = tabElements[0].children,
-                tabBodys = tabElements[1].children;
-            for (var i = 0, ci; ci = tabHeads[i++];) {
-                if (ci.getAttribute("tabSrc") == "remote") {
-                    clickHandler(tabHeads, tabBodys, ci);
-                }
-            }
+//            var tabElements = g("imageTab").children,
+//                tabHeads = tabElements[0].children,
+//                tabBodys = tabElements[1].children;
+//            for (var i = 0, ci; ci = tabHeads[i++];) {
+//                if (ci.getAttribute("tabSrc") == "remote") {
+//                    clickHandler(tabHeads, tabBodys, ci);
+//                }
+//            }
         },
         setAlign: function(align){
             var aligns = $G("alignIcon").children;
             for(i = 0; i < aligns.length; i++){
-                if(aligns[i].getAttribute('data-align') == 'align') {
-                    domUtils.removeClasses(aligns[i], 'focus');
-                } else {
+                if(aligns[i].getAttribute('data-align') == align) {
                     domUtils.addClass(aligns[i], 'focus');
+                    $G("align").value = aligns[i].getAttribute('data-align');
+                } else {
+                    domUtils.removeClasses(aligns[i], 'focus');
                 }
             }
-            $G("align").value = target.getAttribute('data-align');
         },
         getData: function(){
             return $G("align").value;
         },
-        setPreview: function(img){
-            var tmpWidth = img.width,
-                tmpHeight = img.height;
-            var maxWidth = 262,
-                maxHeight = 262,
-                target = scaling(tmpWidth, tmpHeight, maxWidth, maxHeight);
-            target.border = img.border || 0;
-            target.src = img.src;
-            if ((target.width + 2 * target.border) > maxWidth) {
-                target.width = maxWidth - 2 * target.border;
+        setPreview: function(){
+            var url = $G('url').value,
+                ow = $G('width').value,
+                oh = $G('height').value,
+                border = $G('border').value,
+                title = $G('title').value,
+                preview = $G('preview'),
+                width,
+                height;
+
+            width = ((!ow || !oh) ? preview.offsetWidth:Math.min(ow, preview.offsetWidth));
+            width = width+(border*2) > preview.offsetWidth ? width:(preview.offsetWidth - (border*2));
+            height = (!ow || !oh) ? '':width*oh/ow;
+
+            if(url) {
+                preview.innerHTML = '<img src="' + url + '" width="' + width + '" height="' + height + '" border="' + border + 'px solid #000" title="' + title + '" />';
             }
-            if ((target.height + 2 * target.border) > maxWidth) {
-                target.height = maxWidth - 2 * target.border;
-            }
-            var preview = g("preview");
-            preview.innerHTML = '<img src="' + target.src + '" width="' + target.width + '" height="' + target.height + '" border="' + target.border + 'px solid #000" />';
         },
         getInsertList: function () {
             return list;
