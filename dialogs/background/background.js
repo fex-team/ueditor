@@ -248,4 +248,4 @@
     dialog.oncancel = function () {
         editor.execCommand('background', backupStyle);
     };
-})()
+})();

@@ -224,33 +224,33 @@ UE.I18N['en'] = {
             'lang_background_netimg':'Net-Image',
             'lang_background_align':'Align Type',
             'lang_background_position':'Position',
-            'repeatType':{options:["Center", "Repeat-x", "Repeat-y", "Tile","Custom"]}
+            'repeatType':{'options':["Center", "Repeat-x", "Repeat-y", "Tile","Custom"]}
         },
         'noUploadImage':"No pictures has been uploaded！",
         'toggleSelect':'Change the active state by click!\n Image Size: '
     },
     //===============dialog i18N=======================
-    insertimage:{
+    'insertimage':{
         'static':{
-            'lang_tab_remote':"Remote", //节点
+            'lang_tab_remote':"Insert",
             'lang_tab_local':"Local",
             'lang_tab_imgManager':"Manager",
             'lang_tab_imgSearch':"Search",
             'lang_input_url':"Address",
+            'lang_input_size':"size",
             'lang_input_width':"Width",
             'lang_input_height':"Height",
             'lang_input_border':"Border",
             'lang_input_vhspace':"Margins",
             'lang_input_title':"Title",
-            'lang_input_remoteAlign':'Align',
+            'lang_input_align':'Align',
             'lang_imgLoading':"Loading...",
-            'lock':{title:"Lock rate"}, //属性
-            'imgType':{title:"ImageType", options:["News", "Wallpaper", "emotions", "photo"]}, //select的option
-            'imgSearchTxt':{value:"Enter the search keyword!"},
-            'imgSearchBtn':{value:"Search"},
-            'imgSearchReset':{value:"Clear"},
-            'upload':{style:'background: url(upload.png);'},
-            'duiqi':{style:'background: url(imglabel.png) -12px 2px no-repeat;'},
+            'lock':{'title':"Lock rate"}, //属性
+            'imgType':{'title':"ImageType", 'options':["News", "Wallpaper", "emotions", "photo"]}, //select的option
+            'imgSearchTxt':{'value':"Enter the search keyword!"},
+            'imgSearchBtn':{'value':"Search"},
+            'imgSearchReset':{'value':"Clear"},
+            'duiqi':{'style':'background: url(imglabel.png) -12px 2px no-repeat;'},
             'lang_savePath':'Select savePath:',
             'lang_load_savePath': 'Loading...'
         },
