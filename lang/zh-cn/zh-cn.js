@@ -243,16 +243,13 @@ UE.I18N['zh-cn'] = {
             'lang_input_border':"边 框：",
             'lang_input_vhspace':"边 距：",
             'lang_input_title':"描 述：",
-            'lang_input_align':'对 齐：',
+            'lang_input_align':'对齐方式：',
             'lang_imgLoading':"　图片加载中……",
             'lock':{'title':"锁定宽高比例"}, //属性
-            'imgType':{'title':"图片类型", 'options':["新闻", "壁纸", "表情", "头像"]}, //select的option
-            'imgSearchTxt':{'value':"请输入搜索关键词"},
-            'imgSearchBtn':{'value':"百度一下"},
-            'imgSearchReset':{'value':"清空搜索"},
-            'duiqi':{'style':'background: url(imglabel.png) -12px 2px no-repeat;'},
-            'lang_savePath':'选择保存目录：',
-            'lang_load_savePath': '正在读取目录...'
+            'searchType':{'title':"图片类型", 'options':["新闻", "壁纸", "表情", "头像"]}, //select的option
+            'searchTxt':{'value':"请输入搜索关键词"},
+            'searchBtn':{'value':"百度一下"},
+            'searchReset':{'value':"清空搜索"}
         },
         'netError':"网络链接错误，请检查配置后重试！",
         'noUploadImage':"当前未上传过任何图片！",

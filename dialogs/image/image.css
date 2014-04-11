@@ -10,10 +10,14 @@
 }
 
 /*tab样式框大小*/
+.tabhead {
+    float:left;
+}
 .tabbody {
     width: 100%;
     height: 346px;
     position: relative;
+    clear: both;
 }
 
 .tabbody .panel {
@@ -21,8 +25,8 @@
     width: 100%;
     height: 100%;
     background: #fff;
-    display: none;
     overflow: hidden;
+    display: none;
 }
 
 .tabbody .panel.focus {
@@ -30,7 +34,150 @@
 }
 
 
+/* 图片对齐方式 */
+.alignBar{
+    float:right;
+    margin-top: 5px;
+    position: relative;
+}
 
+.alignBar .algnLabel{
+    float:left;
+    height: 20px;
+    line-height: 20px;
+}
+
+.alignBar #alignIcon{
+    zoom:1;
+    _display: inline;
+    display: inline-block;
+    position: relative;
+}
+.alignBar #alignIcon span{
+    float: left;
+    display: block;
+    width: 20px;
+    height: 19px;
+    margin-right: 5px;
+    filter:alpha(Opacity=40);-moz-opacity:0.4;opacity: 0.4;
+    background-size:  100% 100%;
+}
+.alignBar #alignIcon span.focus{
+    filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;
+}
+.alignBar #alignIcon span.none-align{
+    background-image: url(./images/none_focus.jpg);
+}
+.alignBar #alignIcon span.left-align{
+    background-image: url(./images/left_focus.jpg);
+}
+.alignBar #alignIcon span.right-align{
+    background-image: url(./images/right_focus.jpg);
+}
+.alignBar #alignIcon span.center-align{
+    background-image: url(./images/center_focus.jpg);
+}
+
+
+
+
+/* 远程图片样式 */
+#remote {
+    z-index: 200;
+}
+
+#remote .top{
+    width: 100%;
+    margin-top: 25px;
+}
+#remote .left{
+    display: block;
+    float: left;
+    width: 300px;
+    height:10px;
+}
+#remote .right{
+    display: block;
+    float: right;
+    width: 300px;
+    height:10px;
+}
+#remote .row{
+    margin-left: 20px;
+    clear: both;
+    height: 40px;
+}
+
+#remote .row label{
+    text-align: center;
+    width: 50px;
+    zoom:1;
+    _display: inline;
+    display:inline-block;
+    vertical-align: middle;
+}
+#remote .row label.algnLabel{
+    float: left;
+
+}
+
+#remote input.text{
+    width: 150px;
+    padding: 3px 6px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+#remote input.text:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+}
+#remote #url{
+    width: 500px;
+    margin-bottom: 2px;
+}
+#remote #width,
+#remote #height{
+    width: 30px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+#remote #border,
+#remote #vhSpace,
+#remote #title{
+    width: 180px;
+    margin-right: 5px;
+}
+#remote #lock{
+}
+#remote #lockicon{
+    zoom: 1;
+    _display:inline;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url("../../themes/default/images/lock.gif") -13px -13px no-repeat;
+    vertical-align: middle;
+}
+#remote #preview{
+    clear: both;
+    width: 260px;
+    height: 240px;
+    z-index: 9999;
+    margin-top: 10px;
+    background-color: #eee;
+    overflow: hidden;
+}
 
 /* 上传图片 */
 #container {
@@ -492,47 +639,16 @@
     background-position: 72px 72px;
 }
 
-/* 远程图片样式 */
-#remote {
-    z-index: 200;
-}
 
-#remote .top{
+/* 图片搜索样式 */
+#search .searchBar {
     width: 100%;
-    margin-top: 40px;
-}
-#remote .left{
-    display: block;
-    float: left;
-    width: 300px;
-    height:10px;
-}
-#remote .right{
-    display: block;
-    float: right;
-    width: 300px;
-    height:10px;
-}
-#remote .row{
-    margin-left: 20px;
-    clear: both;
-    height: 40px;
+    height: 30px;
+    margin: 10px 0 5px 0;
+    padding: 0;
 }
 
-#remote .row label{
-    text-align: center;
-    width: 50px;
-    zoom:1;
-    _display: inline;
-    display:inline-block;
-    vertical-align: middle;
-}
-#remote .row label.algnLabel{
-    float: left;
-
-}
-
-#remote input.text{
+#search input.text{
     width: 150px;
     padding: 3px 6px;
     font-size: 14px;
@@ -547,191 +663,37 @@
     -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
-#remote input.text:focus {
+#search input.text:focus {
     border-color: #66afe9;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
 }
-#remote #url{
-    width: 500px;
-    margin-bottom: 2px;
-}
-#remote #width,
-#remote #height{
-    width: 30px;
-    margin-left: 3px;
-    margin-right: 3px;
-}
-#remote #border,
-#remote #vhSpace,
-#remote #title{
-    width: 180px;
-    margin-right: 5px;
-}
-#remote #alignIcon{
-    zoom:1;
-    _display: inline;
-    display: inline-block;
-}
-#remote #alignIcon span{
-    float: left;
-    display: block;
-    width: 38px;
-    height: 36px;
-    margin-right: 5px;
-    filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;
-}
-#remote #alignIcon span.focus{
-    filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;
-}
-#remote #alignIcon span.none-align{
-    background-image: url(./images/none_focus.jpg);
-}
-#remote #alignIcon span.left-align{
-    background-image: url(./images/left_focus.jpg);
-}
-#remote #alignIcon span.right-align{
-    background-image: url(./images/right_focus.jpg);
-}
-#remote #alignIcon span.center-align{
-    background-image: url(./images/center_focus.jpg);
-}
-#remote #lock{
-}
-#remote #lockicon{
-    zoom: 1;
-    _display:inline;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background: url("../../themes/default/images/lock.gif") -13px -13px no-repeat;
-    vertical-align: middle;
-}
-#remote #preview{
-    clear: both;
-    width: 260px;
-    height: 230px;
-    z-index: 9999;
-    margin-top: 10px;
-    background-color: #eee;
-    overflow: hidden;
-}
-
-
-
-
-
-#remote table {
-    border-collapse: collapse;
-    width: 620px;
-    height: 300px;
-    margin-top: 5px;
-}
-
-#remote td.label {
-    text-align: center;
-    width: 80px;
-}
-
-#remote td {
-    height: 40px;
-}
-
-.control-line {
-    padding: 5px 15px;
-    -webkit-box-shadow: 0 1px 4px rgba(204, 204, 204, 0.6);
-    -moz-box-shadow: 0 1px 4px rgba(204, 204, 204, 0.6);
-    box-shadow: 0 1px 4px rgba(204, 204, 204, 0.6);
-}
-
-
-
-/* 图片搜索样式 */
-#imgSearchTxt {
+#search input.searchTxt {
+    margin-left:5px;
     padding-left: 5px;
     background: #FFF;
-    width: 200px;
+    width: 300px;
     height: 21px;
     line-height: 21px;
 }
-#searchList {
-    width: 620px;
-    overflow: auto;
-    zoom: 1;
-    height: 270px;
-    background: rgb(240, 240, 240)
-}
 
-#searchList div {
-    display: inline-block;
-    width: 116px;
-    margin: 5px 15px;
-    _margin: 5px 10px;
-    font-size: 12px;
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
-    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
-    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
-    position: relative;
-    vertical-align: top;
-    text-align: center;
-    padding-top: 10px;
-}
-
-#searchList div {
-    background-color: #eee;
-    overflow: hidden;
-    cursor: pointer;
-    filter: alpha(Opacity=100);
-    -moz-opacity: 1;
-    opacity: 1;
-    border: 2px solid #fff;
-}
-
-#searchList div.selected {
-    filter: alpha(Opacity=40);
-    -moz-opacity: 0.4;
-    opacity: 0.4;
-    border: 2px solid #00a0e9;
-}
-
-#searchList img {
-    cursor: pointer;
-    border: 0;
-}
-
-/*不用缩略图*/
-#searchList p {
-    margin-top: 5px;
-    padding: 5px 10px;
-    color: #999;
-    border-top: 1px solid #F2F2F2;
-    background: #FAFAFA;
-    text-align: left;
-}
-
-#searchList p > a {
-    color: #999;
-    text-decoration: none;
-    word-break: break-all;
-}
-
-#searchList p > a:hover {
-    color: #333;
-}
-
-#imgType {
+#search .searchType {
     width: 65px;
-    height: 30px;
+    height: 28px;
+    padding:0;
     line-height: 22px;
     border: 1px solid #d7d7d7;
+    border-radius: 0;
     vertical-align: top;
 }
 
-#imgSearchBtn, #imgSearchReset {
+#search #searchBtn,
+#search #searchReset {
     display: inline-block;
     margin-bottom: 0;
+    margin-right: 5px;
+    padding: 4px 10px;
     font-weight: 400;
     text-align: center;
     vertical-align: middle;
@@ -749,19 +711,102 @@
     float: right;
 }
 
-#imgSearchBtn {
-    background-color: #3276b1;
-    border-color: #285e8e;
+#search #searchBtn {
     color: white;
-    margin-right: 5px;
+    border-color: #285e8e;
+    background-color: #398ac8;
 }
-
-#imgSearchReset {
+#search #searchReset {
     color: #333;
-    background-color: #fff;
     border-color: #ccc;
+    background-color: #fff;
+}
+#search #imgSearchBtn:hover {
+    background-color: #3276b1;
+}
+#search #searchReset:hover {
+    background-color: #eee;
 }
 
-.msg {
+#search .msg {
     margin-left: 5px;
+}
+
+#search .searchList{
+    height: 300px;
+    overflow-y: auto;
+}
+#search .searchList ul{
+    margin:0;
+    padding:0;
+    list-style:none;
+    clear: both;
+    width: 100%;
+    overflow: auto;
+    zoom: 1;
+}
+
+#search .searchList li {
+    position: relative;
+    list-style:none;
+    display: inline-block;
+    width: 115px;
+    margin: 5px 15px;
+    padding:0;
+    font-size: 12px;
+    /*box-shadow: 0 1px 3px rgba(0, 0, 0, .3);*/
+    /*-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);*/
+    /*-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);*/
+    position: relative;
+    vertical-align: top;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    filter: alpha(Opacity=100);
+    -moz-opacity: 1;
+    opacity: 1;
+    border: 2px solid #ccc;
+}
+
+#search .searchList li.selected {
+    filter: alpha(Opacity=40);
+    -moz-opacity: 0.4;
+    opacity: 0.4;
+    border: 2px solid #00a0e9;
+}
+
+#search .searchList li p {
+    background-color: #eee;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width:100%;
+    height:115px;
+    overflow: hidden;
+}
+
+#search .searchList li p img {
+    cursor: pointer;
+    border: 0;
+}
+
+#search .searchList li a {
+    color: #999;
+    border-top: 1px solid #F2F2F2;
+    background: #FAFAFA;
+    text-align: center;
+    display: block;
+    padding: 0 5px;
+    width: 105px;
+    height:32px;
+    line-height:32px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    text-decoration: none;
+    overflow: hidden;
+    word-break: break-all;
+}
+
+#search .searchList a:hover {
+    color: #333;
 }
