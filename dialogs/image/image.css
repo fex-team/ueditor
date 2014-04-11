@@ -256,6 +256,7 @@
     padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    height: 300px;
 }
 
 #upload .filelist:after {
@@ -268,8 +269,8 @@
 }
 
 #upload .filelist li {
-    width: 115px;
-    height: 115px;
+    width: 113px;
+    height: 113px;
     background: url(./images/bg.png) no-repeat;
     text-align: center;
     margin: 9px 0 0 9px;
