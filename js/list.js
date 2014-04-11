@@ -18,6 +18,9 @@ var docList = [
             }, {
                 id:'upload_video',
                 title:'上传视频'
+            },{
+                id:'use_patch_file',
+                title:'如何使用补丁文件'
             }
         ]
     },
