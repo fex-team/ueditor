@@ -702,7 +702,7 @@
             var _this = this;
 
             /* 滚动拉取图片 */
-            domUtils.on($G('online'), 'scroll', function(e){
+            domUtils.on($G('imageList'), 'scroll', function(e){
                 var panel = this;
                 if (panel.scrollHeight - (panel.offsetHeight + panel.scrollTop) < 10) {
                     _this.getImageData();
