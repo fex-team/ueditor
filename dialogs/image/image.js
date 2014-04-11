@@ -284,8 +284,8 @@
             // 优化retina, 在retina下这个值是2
                 ratio = window.devicePixelRatio || 1,
             // 缩略图大小
-                thumbnailWidth = 115 * ratio,
-                thumbnailHeight = 115 * ratio,
+                thumbnailWidth = 113 * ratio,
+                thumbnailHeight = 113 * ratio,
             // 可能有pedding, ready, uploading, confirm, done.
                 state = 'pedding',
             // 所有文件的进度信息，key为file id
@@ -702,15 +702,14 @@
             var _this = this;
 
             /* 滚动拉取图片 */
-            this.container.onscroll = function () {
-                //TODO 判断是否已滚动到底部
-                if (true) {
+            domUtils.on($G('online'), 'scroll', function(e){
+                var panel = this;
+                if (panel.scrollHeight - (panel.offsetHeight + panel.scrollTop) < 10) {
                     _this.getImageData();
                 }
-            };
-
+            });
             /* 选中图片 */
-            this.list.onclick = function (e) {
+            domUtils.on(this.list, 'click', function (e) {
                 var target = e.target || e.srcElement,
                     li = target.parentNode;
 
@@ -721,7 +720,7 @@
                         domUtils.addClass(li, 'selected');
                     }
                 }
-            };
+            });
         },
         /* 初始化第一次的数据 */
         initData: function () {
@@ -737,46 +736,58 @@
         /* 向后台拉取图片列表数据 */
         getImageData: function () {
             var _this = this;
-            ajax.request(editor.options.imageManagerUrl, {
-                timeout: 100000,
-                data: {
-                    size: this.listSize,
-                    page: (this.listIndex - 1) / this.listSize + 1
-                },
-                method: 'get',
-                onsuccess: function (r) {
-                    try {
-                        var json = eval('(' + r.responseText + ')');
-                        if (json.state == 'SUCCESS') {
-                            _this.pushData(json.list);
+
+            if(!_this.listEnd && !this.isLoadingData) {
+                this.isLoadingData = true;
+                ajax.request(editor.options.imageManagerUrl, {
+                    timeout: 100000,
+                    data: {
+                        size: this.listSize,
+                        page: this.listIndex / this.listSize
+                    },
+                    method: 'get',
+                    onsuccess: function (r) {
+                        try {
+                            var json = eval('(' + r.responseText + ')');
+                            if (json.state == 'SUCCESS') {
+                                _this.pushData(json.list);
+                                _this.listIndex += json.list.length;
+                                if(_this.listIndex >= json.total) {
+                                    _this.listEnd = true;
+                                }
+                                _this.isLoadingData = false;
+                            }
+                        } catch (e) {
                         }
-                    } catch (e) {
+                    },
+                    onerror: function () {
+                        _this.isLoadingData = false;
                     }
-                },
-                onerror: function () {
-                }
-            });
+                });
+            }
         },
         /* 添加图片到列表界面上 */
         pushData: function (list) {
             var i, item, img, icon, _this = this;
             for (i = 0; i < list.length; i++) {
-                item = document.createElement('li');
-                img = document.createElement('img');
-                icon = document.createElement('span');
+                if(list[i]) {
+                    item = document.createElement('li');
+                    img = document.createElement('img');
+                    icon = document.createElement('span');
 
-                img.onload = function () {
-                    var image = this;
-                    _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
-                };
-                img.width = 100;
-                img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i]);
-                img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i]);
-                domUtils.addClass(icon, 'icon');
+                    img.onload = function () {
+                        var image = this;
+                        _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
+                    };
+                    img.width = 100;
+                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i]);
+                    img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i]);
+                    domUtils.addClass(icon, 'icon');
 
-                item.appendChild(img);
-                item.appendChild(icon);
-                this.list.insertBefore(item, this.clearFloat);
+                    item.appendChild(img);
+                    item.appendChild(icon);
+                    this.list.insertBefore(item, this.clearFloat);
+                }
             }
         },
         /* 改变图片大小 */
@@ -947,9 +958,9 @@
                     link = document.createElement('a');
 
                     img.onload = function () {
-                        _this.scale(this, 115, 115);
+                        _this.scale(this, 113, 113);
                     };
-                    img.width = 120;
+                    img.width = 113;
                     img.setAttribute('src', list[i].src);
 
                     link.href = list[i].url;

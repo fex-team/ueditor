@@ -254,7 +254,9 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 300px;
 }
 
 #upload .filelist:after {
@@ -267,8 +269,8 @@
 }
 
 #upload .filelist li {
-    width: 115px;
-    height: 115px;
+    width: 113px;
+    height: 113px;
     background: url(./images/bg.png) no-repeat;
     text-align: center;
     margin: 9px 0 0 9px;
@@ -594,8 +596,8 @@
     display: block;
     list-style: none;
     padding: 0;
-    width: 115px;
-    height: 115px;
+    width: 113px;
+    height: 113px;
     margin: 9px 0 0 9px;
     background-color: #eee;
     overflow: hidden;
@@ -606,6 +608,8 @@
     float: none;
     clear: both;
     display: block;
+    width:0;
+    height:0;
     margin: 0;
     padding: 0;
 }
@@ -614,8 +618,8 @@
 }
 #online li .icon {
     cursor: pointer;
-    width: 115px;
-    height: 115px;
+    width: 113px;
+    height: 113px;
     position: absolute;
     top: 0;
     left: 0;
@@ -624,8 +628,8 @@
     background-repeat: no-repeat;
 }
 #online li .icon:hover {
-    width: 109px;
-    height: 109px;
+    width: 107px;
+    height: 107px;
     border: 3px solid #1094fa;
 }
 #online li.selected .icon {
@@ -633,8 +637,8 @@
     background-position: 75px 75px;
 }
 #online li.selected .icon:hover {
-    width: 109px;
-    height: 109px;
+    width: 107px;
+    height: 107px;
     border: 3px solid #1094fa;
     background-position: 72px 72px;
 }
@@ -714,14 +718,14 @@
 #search #searchBtn {
     color: white;
     border-color: #285e8e;
-    background-color: #398ac8;
+    background-color: #3b97d7;
 }
 #search #searchReset {
     color: #333;
     border-color: #ccc;
     background-color: #fff;
 }
-#search #imgSearchBtn:hover {
+#search #searchBtn:hover {
     background-color: #3276b1;
 }
 #search #searchReset:hover {
@@ -734,6 +738,7 @@
 
 #search .searchList{
     height: 300px;
+    overflow-x: hidden;
     overflow-y: auto;
 }
 #search .searchList ul{
@@ -742,7 +747,6 @@
     list-style:none;
     clear: both;
     width: 100%;
-    overflow: auto;
     zoom: 1;
 }
 
@@ -754,9 +758,9 @@
     margin: 5px 15px;
     padding:0;
     font-size: 12px;
-    /*box-shadow: 0 1px 3px rgba(0, 0, 0, .3);*/
-    /*-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);*/
-    /*-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);*/
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
     position: relative;
     vertical-align: top;
     text-align: center;
@@ -765,7 +769,7 @@
     filter: alpha(Opacity=100);
     -moz-opacity: 1;
     opacity: 1;
-    border: 2px solid #ccc;
+    border: 2px solid #eee;
 }
 
 #search .searchList li.selected {

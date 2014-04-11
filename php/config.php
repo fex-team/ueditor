@@ -56,7 +56,7 @@ return array(
     /* 图片在线管理配置区 */
     , imageManagerUrl => $serverUrl . "?action=list&type=image" //图片在线管理的处理地址
     , imageManagerPath => $uploadPathPrefix //图片修正地址，同imagePath
-    , imageManagerListSize => 30 //一次获取列表大小
+    , imageManagerListSize => 15 //一次获取列表大小
 
 
 );
