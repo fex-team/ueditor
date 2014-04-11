@@ -15,6 +15,7 @@
 11.修复全局css对于ueditor有时展现会出现按钮独占一行的问题
 12.修复在ie11下上传图片失败的问题
 
+
 ###新功能添加
 1. 添加了enableContextMenu配置开关，开关右键菜单，默认为true
 2. 添加disablePInList配置，指定产出的列表中是否嵌套P标签，默认是false
