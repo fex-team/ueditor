@@ -284,8 +284,8 @@
             // 优化retina, 在retina下这个值是2
                 ratio = window.devicePixelRatio || 1,
             // 缩略图大小
-                thumbnailWidth = 115 * ratio,
-                thumbnailHeight = 115 * ratio,
+                thumbnailWidth = 113 * ratio,
+                thumbnailHeight = 113 * ratio,
             // 可能有pedding, ready, uploading, confirm, done.
                 state = 'pedding',
             // 所有文件的进度信息，key为file id
@@ -958,9 +958,9 @@
                     link = document.createElement('a');
 
                     img.onload = function () {
-                        _this.scale(this, 115, 115);
+                        _this.scale(this, 113, 113);
                     };
-                    img.width = 120;
+                    img.width = 113;
                     img.setAttribute('src', list[i].src);
 
                     link.href = list[i].url;
