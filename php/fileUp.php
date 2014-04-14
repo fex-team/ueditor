@@ -14,7 +14,27 @@ error_reporting(E_ERROR | E_WARNING);
 $CONFIG = include("config.php");
 
 /* 上传配置 */
+$isBase64 = false;
 switch ($_GET['action']) {
+    case 'uploadimage':
+        $config = array(
+            "savePath" => $CONFIG['savePath'],
+            "fileNameFormat" => $CONFIG['nameFormat'],
+            "maxSize" => $CONFIG['imageMaxSize'], //单位KB
+            "allowFiles" => $CONFIG['imageAllowFiles']
+        );
+        $fieldName = $CONFIG['imageFieldName'];
+        break;
+    case 'uploadscrawl':
+        $config = array(
+            "savePath" => $CONFIG['savePath'],
+            "fileNameFormat" => $CONFIG['nameFormat'],
+            "maxSize" => 1024, //默认1MB
+            "allowFiles" => array(".png", ".jpg")
+        );
+        $fieldName = $CONFIG['scrawlFieldName'];
+        $isBase64 = true;
+        break;
     case 'uploadfile':
         $config = array(
             "savePath" => $CONFIG['savePath'],
@@ -36,7 +56,7 @@ switch ($_GET['action']) {
 }
 
 /* 生成上传实例对象并完成上传 */
-$up = new Uploader($fieldName, $config);
+$up = new Uploader($fieldName, $config, $isBase64);
 
 /**
  * 得到上传文件所对应的各个参数,数组结构

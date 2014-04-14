@@ -25,19 +25,10 @@ switch ($action) {
 
     /* 上传图片 */
     case 'uploadimage':
-        include("imageUp.php");
-        break;
-
     /* 上传涂鸦 */
     case 'uploadscrawl':
-        include("scrawlUp.php");
-        break;
-
     /* 上传视频 */
     case 'uploadvideo':
-        include("fileUp.php");
-        break;
-
     /* 上传文件 */
     case 'uploadfile':
         include("fileUp.php");
