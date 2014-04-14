@@ -1,8 +1,8 @@
 <?php
 include "Uploader.class.php";
+date_default_timezone_set("Asia/chongqing");
 header("Content-Type: text/html; charset=utf-8");
 error_reporting(E_ERROR | E_WARNING);
-date_default_timezone_set("Asia/chongqing");
 
 /* 全局配置项 */
 $CONFIG = include("config.php");
@@ -11,58 +11,26 @@ $CONFIG = include("config.php");
 $config = array(
     "savePath" => $CONFIG['savePath'],
     "fileNameFormat" => $CONFIG['nameFormat'],
-    "maxSize" => $CONFIG['scrawlMaxSize'], //单位KB
-    "allowFiles" => $CONFIG['scrawlAllowFiles']
+    "maxSize" => 2 * 1024, //默认3MB
+    "allowFiles" => array(".png", ".jpg")
 );
-$fieldName = $CONFIG['imageFieldName'];
+$fieldName = $CONFIG['scrawlFieldName'];
 
-//临时文件目录
-$tmpPath = "tmp/";
+/* 生成上传实例对象并完成上传 */
+$up = new Uploader($fieldName, $config, true);
 
-//获取当前上传的类型
-$action = htmlspecialchars($_GET["action"]);
-if ($action == "tmpImg") { // 背景上传
-    //背景保存在临时目录中
-    $config["savePath"] = $tmpPath;
-    $up = new Uploader("upfile", $config);
-    $info = $up->getFileInfo();
-    /**
-     * 返回数据，调用父页面的ue_callback回调
-     */
-    echo "<script>parent.ue_callback('" . $info["url"] . "','" . $info["state"] . "')</script>";
-} else {
-    //涂鸦上传，上传方式采用了base64编码模式，所以第三个参数设置为true
-    $up = new Uploader("content", $config, true);
-    //上传成功后删除临时目录
-    if (file_exists($tmpPath)) {
-        delDir($tmpPath);
-    }
-    $info = $up->getFileInfo();
-    echo "{'url':'" . $info["url"] . "',state:'" . $info["state"] . "'}";
-}
 /**
- * 删除整个目录
- * @param $dir
- * @return bool
+ * 得到上传文件所对应的各个参数,数组结构
+ * array(
+ *     "originalName" => "",   //原始文件名
+ *     "name" => "",           //新文件名
+ *     "url" => "",            //返回的地址
+ *     "size" => "",           //文件大小
+ *     "type" => "" ,          //文件类型
+ *     "state" => ""           //上传状态，上传成功时必须返回"SUCCESS"
+ * )
  */
-function delDir($dir)
-{
-    //先删除目录下的所有文件：
-    $dh = opendir($dir);
-    while ($file = readdir($dh)) {
-        if ($file != "." && $file != "..") {
-            $fullpath = $dir . "/" . $file;
-            if (!is_dir($fullpath)) {
-                unlink($fullpath);
-            } else {
-                delDir($fullpath);
-            }
-        }
-    }
-    closedir($dh);
-    //删除当前文件夹：
-    return rmdir($dir);
-}
+$info = $up->getFileInfo();
 
-
-
+/* 返回数据 */
+echo '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';

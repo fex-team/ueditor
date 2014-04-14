@@ -1,16 +1,15 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
+ * 获取已上传的文件列表
  * User: Jinqn
  * Date: 14-04-09
  * Time: 上午10:17
- * 获取已上传的文件列表
  */
 header("Content-Type: text/html; charset=utf-8");
 error_reporting(E_ERROR | E_WARNING);
 
 //需要遍历的目录列表，最好使用缩略图地址，否则当网速慢时可能会造成严重的延时
-$paths = array('upload', 'upload1');
+$paths = array('upload');
 
 $files = array();
 foreach ($paths as $path) {

@@ -17,7 +17,7 @@ $config = array(
 $fieldName = $CONFIG['imageFieldName'];
 
 /* 生成上传实例对象并完成上传 */
-$up = new Uploader($fieldName, $config);
+$up = new Uploader($fieldName, $config, true);
 
 /**
  * 得到上传文件所对应的各个参数,数组结构
@@ -33,9 +33,4 @@ $up = new Uploader($fieldName, $config);
 $info = $up->getFileInfo();
 
 /* 返回数据 */
-$result = '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';
-if ($callback = $_GET["callback"]) {
-    echo $callback . '(' . $result . ')';
-} else {
-    echo $result;
-}
+echo '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';

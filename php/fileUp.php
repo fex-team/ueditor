@@ -1,4 +1,10 @@
 <?php
+/**
+ * 上传附件和上传视频
+ * User: Jinqn
+ * Date: 14-04-09
+ * Time: 上午10:17
+ */
 include "Uploader.class.php";
 date_default_timezone_set("Asia/chongqing");
 header("Content-Type: text/html; charset=utf-8");
@@ -8,17 +14,8 @@ error_reporting(E_ERROR | E_WARNING);
 $CONFIG = include("config.php");
 
 /* 上传配置 */
-switch($_GET['type']){
-    case 'image':
-        $config = array(
-            "savePath" => $CONFIG['savePath'],
-            "fileNameFormat" => $CONFIG['nameFormat'],
-            "maxSize" => $CONFIG['imageMaxSize'], //单位KB
-            "allowFiles" => $CONFIG['imageAllowFiles']
-        );
-        $fieldName = $CONFIG['imageFieldName'];
-        break;
-    case 'file':
+switch ($_GET['action']) {
+    case 'uploadfile':
         $config = array(
             "savePath" => $CONFIG['savePath'],
             "fileNameFormat" => $CONFIG['nameFormat'],
@@ -27,7 +24,7 @@ switch($_GET['type']){
         );
         $fieldName = $CONFIG['fileFieldName'];
         break;
-    case 'video':
+    case 'uploadvideo':
         $config = array(
             "savePath" => $CONFIG['savePath'],
             "fileNameFormat" => $CONFIG['nameFormat'],
@@ -54,8 +51,5 @@ $up = new Uploader($fieldName, $config);
  */
 $info = $up->getFileInfo();
 
-if ($callback = $_GET["callback"]) {
-    echo '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';
-} else {
-    echo $callback . '({"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"})';
-}
+/* 返回数据 */
+echo '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';
