@@ -14,7 +14,7 @@ return array(
     /* 图片上传配置区 */
     , imageUrl => $serverUrl . '?action=upload&type=image' //图片上传地址
     , imagePath => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
-    , imageFieldName => $fieldName //提交的图片数据表单名
+    , imageFieldName => $fieldName //提交的图片表单名
     , imageMaxSize => 1024 //上传图片大小限制，单位KB
     , imageAllowFiles => array(".png", ".jpg", ".jpeg", ".gif", ".bmp") //上传图片允许的文件格式
     , imageCompressEnable => true //是否压缩图片,默认是true
@@ -23,7 +23,7 @@ return array(
     /* 图片在线管理配置区 */
     , imageManagerUrl => $serverUrl . "?action=list&type=image" //图片在线管理的处理地址
     , imageManagerPath => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
-    , imageManagerListSize => 20 //一次获取列表大小
+    , imageManagerListSize => 20 //一次获取列表数量
 
     /* 远程抓取配置区 */
     , catchRemoteImageEnable => true //是否开启远程图片抓取,默认开启
@@ -41,12 +41,12 @@ return array(
     /* word图片转存配置区 */
     , wordImageUrl => $serverUrl . "?action=list&type=image" //word转存提交地址
     , wordImagePath => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
-    , wordImageFieldName => $fieldName //提交的图片数据表单名
+    , wordImageFieldName => $fieldName //提交的图片表单名
 
     /* 涂鸦图片配置区 */
     , scrawlUrl => $serverUrl . "?action=upload&type=scrawl" //涂鸦上传地址
     , scrawlPath => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
-    , scrawlFieldName => $fieldName //提交的图片数据表单名
+    , scrawlFieldName => $fieldName //提交的图片表单名
     , scrawlMaxSize => 1024 //涂鸦图片大小限制，单位KB
     , scrawlAllowFiles => array(".png", ".jpg", ".jpeg", ".gif", ".bmp") //涂鸦图片允许的文件格式
 
@@ -61,7 +61,7 @@ return array(
     /* 视频上传配置区 */
     , videoUrl => $serverDir + "upload/video/" //视频上传提交地址
     , videoPath => $uploadPathPrefix //视频修正地址，是最终插入的视频地址前缀
-    , videoFieldName => $fieldName //视频提交的表单名
+    , videoFieldName => $fieldName //提交的图片表单名
     , videoAllowFiles => array(".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".mov", ".wmv", ".mp4", ".webm") //上传图片允许的文件格式
 
 );
