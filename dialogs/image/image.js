@@ -634,6 +634,8 @@
                         setState('confirm', files);
                         break;
                     case 'startUpload':
+                        /* 添加额外的参数 */
+                        uploader.option('formdata', editor.queryCommandValue('serverparam'));
                         setState('uploading', files);
                         break;
                     case 'stopUpload':
@@ -749,10 +751,10 @@
                 this.isLoadingData = true;
                 ajax.request(editor.options.imageManagerUrl, {
                     timeout: 100000,
-                    data: {
-                        size: this.listSize,
-                        page: this.listIndex / this.listSize
-                    },
+                    data: utils.extend({
+                            size: this.listSize,
+                            page: this.listIndex / this.listSize
+                        }, editor.queryCommandValue('serverparam')),
                     method: 'get',
                     onsuccess: function (r) {
                         try {
