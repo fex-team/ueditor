@@ -59,7 +59,7 @@ return array(
         ".txt", ".md", ".xml") //上传图片允许的文件格式
 
     /* 视频上传配置区 */
-    , videoUrl => $serverDir + "upload/video/" //视频上传提交地址
+    , videoUrl => $serverDir //视频上传提交地址
     , videoPath => $uploadPathPrefix //视频修正地址，是最终插入的视频地址前缀
     , videoFieldName => $fieldName //提交的图片表单名
     , videoAllowFiles => array(".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".mov", ".wmv", ".mp4", ".webm") //上传图片允许的文件格式
