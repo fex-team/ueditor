@@ -312,7 +312,7 @@
             uploader = _this.uploader = WebUploader.create({
                 pick: {
                     id: '#filePickerReady',
-                    label: '点击选择图片'
+                    label: lang.uploadSelectFile
                 },
                 dnd: '#queueList',
                 paste: document.body,
@@ -348,7 +348,7 @@
             });
             uploader.addButton({
                 id: '#filePickerBtn',
-                label: '继续添加'
+                label: lang.uploadAddFile
             });
 
             // 当有文件添加进来时执行，负责view的创建
@@ -360,9 +360,9 @@
                         '</li>'),
 
                     $btns = $('<div class="file-panel">' +
-                        '<span class="cancel">删除</span>' +
-                        '<span class="rotateRight">向右旋转</span>' +
-                        '<span class="rotateLeft">向左旋转</span></div>' +
+                        '<span class="cancel">' + lang.uploadDelete + '</span>' +
+                        '<span class="rotateRight">' + lang.uploadTurnRight + '</span>' +
+                        '<span class="rotateLeft">' + lang.uploadTurnLeft + '</span></div>' +
                         '<p class="error"></p>').appendTo($li),
                     $prgress = $li.find('p.progress span'),
                     $wrap = $li.find('p.imgWrap'),
@@ -371,13 +371,13 @@
                     showError = function (code) {
                         switch (code) {
                             case 'exceed_size':
-                                text = '文件大小超出';
+                                text = lang.errorExceedSize;
                                 break;
                             case 'interrupt':
-                                text = '上传暂停';
+                                text = lang.errorInterrupt;
                                 break;
                             default:
-                                text = '上传失败，请重试';
+                                text = lang.errorUploadRetry;
                                 break;
                         }
                         $info.text(text).show();
@@ -496,22 +496,20 @@
                 var text = '', stats;
 
                 if (state === 'ready') {
-                    text = '选中' + fileCount + '张图片，共' +
-                        WebUploader.formatSize(fileSize) + '。';
+                    text = lang.updateStatusReady.replace('_', fileCount).replace('_KB', WebUploader.formatSize(fileSize));
                 } else if (state === 'confirm') {
                     stats = uploader.getStats();
                     if (stats.uploadFailNum) {
-                        text = '已成功上传' + stats.successNum + '张照片，' +
-                            stats.uploadFailNum + '张照片上传失败，<a class="retry" href="#">重新上传</a>失败图片或<a class="ignore" href="#">忽略</a>'
+                        text = lang.updateStatusConfirm.replace('_', stats.successNum).replace('_', stats.successNum);
                     }
                 } else {
                     stats = uploader.getStats();
-                    text = '共' + fileCount + '张（' +
-                        WebUploader.formatSize(fileSize) +
-                        '），已上传' + stats.successNum + '张';
+                    text = lang.updateStatusFinish.replace('_', fileCount).
+                        replace('_KB', WebUploader.formatSize(fileSize)).
+                        replace('_', stats.successNum);
 
                     if (stats.uploadFailNum) {
-                        text += '，失败' + stats.uploadFailNum + '张';
+                        text += lang.updateStatusError.replace('_', stats.uploadFailNum);
                     }
                 }
 
@@ -542,25 +540,25 @@
                     case 'ready':
                         $placeHolder.hide(); $queue.show(); $statusBar.show();
                         $progress.hide(); $info.show();
-                        $upload.text('开始上传').removeClass('disabled');
+                        $upload.text(lang.uploadStart).removeClass('disabled');
                         uploader.refresh();
                         break;
 
                     /* 上传中 */
                     case 'uploading':
                         $progress.show(); $info.hide();
-                        $upload.text('暂停上传');
+                        $upload.text(lang.uploadPause);
                         break;
 
                     /* 暂停上传 */
                     case 'paused':
                         $progress.show(); $info.hide();
-                        $upload.text('继续上传');
+                        $upload.text(lang.uploadContinue);
                         break;
 
                     case 'confirm':
                         $progress.show(); $info.hide();
-                        $upload.text('开始上传').addClass('disabled');
+                        $upload.text(lang.uploadStart).addClass('disabled');
 
                         stats = uploader.getStats();
                         if (stats.successNum && !stats.uploadFailNum) {
@@ -572,9 +570,9 @@
                     case 'finish':
                         $progress.hide(); $info.show();
                         if (stats.uploadFailNum) {
-                            $upload.text('重试上传').removeClass('disabled');
+                            $upload.text(lang.uploadRetry).removeClass('disabled');
                         } else {
-                            $upload.text('开始上传').addClass('disabled');
+                            $upload.text(lang.uploadStart).addClass('disabled');
                         }
                         break;
                 }
@@ -660,14 +658,6 @@
                 } else if (state === 'uploading') {
                     uploader.stop();
                 }
-            });
-
-            $info.on('click', '.retry', function () {
-                uploader.retry();
-            });
-
-            $info.on('click', '.ignore', function () {
-                //alert('todo');
             });
 
             $upload.addClass('state-' + state);
@@ -867,7 +857,7 @@
             /* 点击搜索按钮 */
             domUtils.on($G('searchBtn'), 'click', function(){
                 var key = $G('searchTxt').value;
-                if(key && key != lang.searchInitInfo) {
+                if(key && key != lang.searchRemind) {
                     _this.getImageData();
                 }
             });
@@ -939,7 +929,7 @@
                 keepOriginName = editor.options.keepOriginName ? "1" : "0",
                 url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + _this.encodeToGb2312(key) + type + "&keeporiginname=" + keepOriginName + "&" + +new Date;
 
-                $G('searchListUl').innerHTML = lang.imageLoading;
+                $G('searchListUl').innerHTML = lang.searchLoading;
                 $.ajax({
                     url: url,
                     dataType: 'jsonp',
@@ -992,7 +982,7 @@
                     listUl.appendChild(item);
                 }
             } else {
-                listUl.innerHTML = lang.tryAgain;
+                listUl.innerHTML = lang.searchRetry;
             }
         },
         getInsertList: function () {
