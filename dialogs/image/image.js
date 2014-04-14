@@ -99,7 +99,8 @@
     }
     /* 获取对齐方式 */
     function getAlign(){
-        return $G("align").value || 'none';
+        var align = $G("align").value == 'none';
+        return align == 'none' ? '':align;
     }
 
     /* 初始化tabbody */
@@ -164,7 +165,9 @@
 
             /* 改变url */
             domUtils.on($G("url"), 'keyup', updatePreview);
-            domUtils.on($G("width"), 'keyup', updatePreview);
+            domUtils.on($G("width"), 'keyup', function(){
+                updatePreview();
+            });
             domUtils.on($G("height"), 'keyup', updatePreview);
             domUtils.on($G("border"), 'keyup', updatePreview);
             domUtils.on($G("title"), 'keyup', updatePreview);
@@ -189,7 +192,7 @@
                 $G("height").value = img.height || '';
                 $G("border").value = img.getAttribute("border") || '0';
                 $G("vhSpace").value = img.getAttribute("vspace") || '0';
-                $G("title").value = img.title || img.alt ||'';
+                $G("title").value = img.title || img.alt || '';
                 setAlign(align);
                 this.setPreview();
             }
@@ -225,13 +228,13 @@
                 return [{
                     src: data['url'],
                     _src: data['url'],
-                    width: data['width'],
-                    height: data['height'],
-                    border: data['border'],
-                    floatStyle: data['align'],
-                    vspace: data['vhSpace'],
-                    title: data['title'],
-                    alt: data['alt'],
+                    width: data['width'] || '',
+                    height: data['height'] || '',
+                    border: data['border'] || '',
+                    floatStyle: data['align'] || '',
+                    vspace: data['vhSpace'] || '',
+                    title: data['title'] || '',
+                    alt: data['alt'] || '',
                     style: "width:" + data['width'] + "px;height:" + data['height'] + "px;"
                 }];
             } else {
@@ -301,7 +304,10 @@
                     return r;
                 })(),
             // WebUploader实例
-                uploader;
+                uploader,
+                acceptExtensions = editor.getOpt('imageAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
+                imageMaxSize = editor.getOpt('imageMaxSize'),
+                imageCompressBorder = editor.getOpt('imageCompressBorder');
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {
@@ -312,7 +318,7 @@
                 paste: document.body,
                 accept: {
                     title: 'Images',
-                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    extensions: acceptExtensions,
                     mimeTypes: 'image/*'
                 },
                 swf: '../../third-party/webuploader/webuploader.swf',
@@ -322,8 +328,20 @@
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
                 fileNumLimit: 300,
-                fileSizeLimit: 200 * 1024 * 1024,    // 200 M
-                fileSingleSizeLimit: 50 * 1024 * 1024    // 50 M
+                fileSizeLimit: 1024 * imageMaxSize * 300,    // 默认 600 M
+                fileSingleSizeLimit: 1024 * imageMaxSize,    // 默认 2 M
+                compress: editor.getOpt('imageCompressEnable') ? {
+                    width: imageCompressBorder,
+                    height: imageCompressBorder,
+                    // 图片质量，只有type为`image/jpeg`的时候才有效。
+                    quality: 90,
+                    // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
+                    allowMagnify: false,
+                    // 是否允许裁剪。
+                    crop: false,
+                    // 是否保留头部meta信息。
+                    preserveHeaders: true
+                }:false
             });
             uploader.addButton({
                 id: '#filePickerBlock'
@@ -657,7 +675,7 @@
         },
         getInsertList: function () {
             var i, data, list = [],
-                align = getAlign();
+                align = getAlign(),
                 prefix = editor.getOpt('imagePath');
             for (i = 0; i < this.imageList.length; i++) {
                 data = this.imageList[i];
