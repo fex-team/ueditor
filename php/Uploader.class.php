@@ -29,7 +29,7 @@ class Uploader
         "\u6ca1\u6709\u6587\u4ef6\u88ab\u4e0a\u4f20",
         // "上传文件为空" ,
         "\u4e0a\u4f20\u6587\u4ef6\u4e3a\u7a7a",
-        // "POST" => "文件大小超出 post_max_size 限制" ,
+        // "POST" => "找不到文件或大小超出post_max_size限制" ,
         "POST" => "\u6587\u4ef6\u5927\u5c0f\u8d85\u51fa\u9650\u5236",
         // "SIZE" => "文件大小超出网站限制" ,
         "SIZE" => "\u6587\u4ef6\u5927\u5c0f\u8d85\u51fa\u7f51\u7ad9\u9650\u5236",

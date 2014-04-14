@@ -1,20 +1,45 @@
 <?php
 include "Uploader.class.php";
+date_default_timezone_set("Asia/chongqing");
 header("Content-Type: text/html; charset=utf-8");
 error_reporting(E_ERROR | E_WARNING);
 
 /* 全局配置项 */
 $CONFIG = include("config.php");
 
-//上传配置
-$config = array(
-    "savePath" => $CONFIG['savePath'],
-    "allowFiles" => array(), //文件允许格式
-    "maxSize" => 100000, //文件大小限制，单位KB
-    "fileNameFormat" => $_POST['fileNameFormat']
-);
-//生成上传实例对象并完成上传
-$up = new Uploader("upfile", $config);
+/* 上传配置 */
+switch($_GET['type']){
+    case 'image':
+        $config = array(
+            "savePath" => $CONFIG['savePath'],
+            "fileNameFormat" => $CONFIG['nameFormat'],
+            "maxSize" => $CONFIG['imageMaxSize'], //单位KB
+            "allowFiles" => $CONFIG['imageAllowFiles']
+        );
+        $fieldName = $CONFIG['imageFieldName'];
+        break;
+    case 'file':
+        $config = array(
+            "savePath" => $CONFIG['savePath'],
+            "fileNameFormat" => $CONFIG['nameFormat'],
+            "maxSize" => $CONFIG['fileMaxSize'], //单位KB
+            "allowFiles" => $CONFIG['fileAllowFiles']
+        );
+        $fieldName = $CONFIG['fileFieldName'];
+        break;
+    case 'video':
+        $config = array(
+            "savePath" => $CONFIG['savePath'],
+            "fileNameFormat" => $CONFIG['nameFormat'],
+            "maxSize" => $CONFIG['videoMaxSize'], //单位KB
+            "allowFiles" => $CONFIG['videoAllowFiles']
+        );
+        $fieldName = $CONFIG['videoFieldName'];
+        break;
+}
+
+/* 生成上传实例对象并完成上传 */
+$up = new Uploader($fieldName, $config);
 
 /**
  * 得到上传文件所对应的各个参数,数组结构
@@ -29,14 +54,8 @@ $up = new Uploader("upfile", $config);
  */
 $info = $up->getFileInfo();
 
-/**
- * 向浏览器返回数据json数据
- * {
- *   'url'      :'a.rar',        //保存后的文件路径
- *   'fileType' :'.rar',         //文件描述，对图片来说在前端会添加到title属性上
- *   'original' :'编辑器.jpg',   //原始文件名
- *   'state'    :'SUCCESS'       //上传状态，成功时返回SUCCESS,其他任何值将原样返回至图片上传框中
- * }
- */
-echo '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';
-
+if ($callback = $_GET["callback"]) {
+    echo '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';
+} else {
+    echo $callback . '({"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"})';
+}

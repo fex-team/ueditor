@@ -23,7 +23,13 @@ switch($action){
         }
         break;
     case 'upload':
-        include("upload.php");
+        if($type == 'image') {
+            include("imageUp.php");
+        } else if($type == 'scrawl') {
+            include("scrawlUp.php");
+        } else {
+            include("fileUp.php");
+        }
         break;
     case 'list':
         if($type == 'image') {

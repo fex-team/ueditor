@@ -10,9 +10,9 @@ $CONFIG = include("config.php");
 /* 上传配置 */
 $config = array(
     "savePath" => $CONFIG['savePath'],
+    "fileNameFormat" => $CONFIG['nameFormat'],
     "maxSize" => $CONFIG['imageMaxSize'], //单位KB
-    "allowFiles" => $CONFIG['imageAllowFiles'],
-    "nameFormat" => $_POST['imageFieldName']
+    "allowFiles" => $CONFIG['imageAllowFiles']
 );
 $fieldName = $CONFIG['imageFieldName'];
 
@@ -32,8 +32,10 @@ $up = new Uploader($fieldName, $config);
  */
 $info = $up->getFileInfo();
 
+/* 返回数据 */
+$result = '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';
 if ($callback = $_GET["callback"]) {
-    echo json_encode($info);
+    echo $callback . '(' . $result . ')';
 } else {
-    echo $callback . '(' . json_encode($info) . ')';
+    echo $result;
 }
