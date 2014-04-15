@@ -30,6 +30,12 @@ UE.parse.register('insertcode',function(utils){
                     }
                 });
             });
+        }else{
+            utils.each(pres,function(pi){
+                if(pi && /brush/i.test(pi.className)){
+                    SyntaxHighlighter.highlight(pi);
+                }
+            });
         }
     }
 
