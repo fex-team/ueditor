@@ -24,23 +24,26 @@ return array(
     , imageAllowFiles => array(".png", ".jpg", ".jpeg", ".gif", ".bmp") //上传图片允许的文件格式
     , imageCompressEnable => true //是否压缩图片,默认是true
     , imageCompressBorder => 1600 //是否压缩图片,图片压缩最长边限制
+    , imageInsertAlign => 'none' //插入的图片浮动方式
 
     /* 涂鸦图片配置区 */
     , scrawlUrl => $serverUrl . "?action=uploadscrawl" //涂鸦上传地址
     , scrawlPath => $uploadPathPrefix //涂鸦修正地址，是最终插入的图片地址前缀
     , scrawlFieldName => $fieldName //提交的涂鸦表单名称
+    , scrawlInsertAlign => 'none' //插入的涂鸦图片浮动方式
 
     /* 屏幕截图配置区 */
     , snapscreenHost => $_SERVER['HTTP_HOST'] //屏幕截图的server端文件所在的网站地址或者ip，请不要加http=>//
     , snapscreenServerUrl => $serverUrl . "?action=uploadimage" //屏幕截图的server端保存程序，UEditor的范例代码为“URL +"server/upload/php/snapImgUp.php"”
     , snapscreenPath => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
     , snapscreenServerPort => $_SERVER['SERVER_PORT'] //屏幕截图的server端端口
-    , snapscreenImgAlign => '' //截图的图片默认的排版方式
+    , snapscreenImgAlign => 'none' //截图的图片默认的排版方式
 
     /* 图片在线管理配置区 */
     , imageManagerUrl => $serverUrl . "?action=listimage" //图片在线管理的处理地址
     , imageManagerPath => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
     , imageManagerListSize => 20 //一次获取列表数量
+    , imageManagerInsertAlign => 'none' //截图的图片默认的排版方式
 
     /* 远程抓取配置区 */
     , localDomain => ["127.0.0.1","localhost","img.baidu.com"] //不抓取的域名列表

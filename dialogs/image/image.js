@@ -865,14 +865,14 @@
             });
             /* 点击清除妞 */
             domUtils.on($G('searchReset'), 'click', function(){
-                $G('searchTxt').value = lang.searchInitInfo;
+                $G('searchTxt').value = lang.searchRemind;
                 $G('searchListUl').innerHTML = '';
                 $G('searchType').selectedIndex = 0;
             });
             /* 搜索框聚焦 */
             domUtils.on($G('searchTxt'), 'focus', function(){
                 var key = $G('searchTxt').value;
-                if(key && key == lang.searchInitInfo) {
+                if(key && key == lang.searchRemind) {
                     $G('searchTxt').value = '';
                 }
             });
