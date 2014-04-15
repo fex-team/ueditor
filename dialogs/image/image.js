@@ -99,7 +99,8 @@
     }
     /* 获取对齐方式 */
     function getAlign(){
-        return $G("align").value || 'none';
+        var align = $G("align").value == 'none';
+        return align == 'none' ? '':align;
     }
 
     /* 初始化tabbody */
@@ -164,7 +165,9 @@
 
             /* 改变url */
             domUtils.on($G("url"), 'keyup', updatePreview);
-            domUtils.on($G("width"), 'keyup', updatePreview);
+            domUtils.on($G("width"), 'keyup', function(){
+                updatePreview();
+            });
             domUtils.on($G("height"), 'keyup', updatePreview);
             domUtils.on($G("border"), 'keyup', updatePreview);
             domUtils.on($G("title"), 'keyup', updatePreview);
@@ -189,7 +192,7 @@
                 $G("height").value = img.height || '';
                 $G("border").value = img.getAttribute("border") || '0';
                 $G("vhSpace").value = img.getAttribute("vspace") || '0';
-                $G("title").value = img.title || img.alt ||'';
+                $G("title").value = img.title || img.alt || '';
                 setAlign(align);
                 this.setPreview();
             }
@@ -225,13 +228,13 @@
                 return [{
                     src: data['url'],
                     _src: data['url'],
-                    width: data['width'],
-                    height: data['height'],
-                    border: data['border'],
-                    floatStyle: data['align'],
-                    vspace: data['vhSpace'],
-                    title: data['title'],
-                    alt: data['alt'],
+                    width: data['width'] || '',
+                    height: data['height'] || '',
+                    border: data['border'] || '',
+                    floatStyle: data['align'] || '',
+                    vspace: data['vhSpace'] || '',
+                    title: data['title'] || '',
+                    alt: data['alt'] || '',
                     style: "width:" + data['width'] + "px;height:" + data['height'] + "px;"
                 }];
             } else {
@@ -301,18 +304,21 @@
                     return r;
                 })(),
             // WebUploader实例
-                uploader;
+                uploader,
+                acceptExtensions = editor.getOpt('imageAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
+                imageMaxSize = editor.getOpt('imageMaxSize'),
+                imageCompressBorder = editor.getOpt('imageCompressBorder');
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {
                     id: '#filePickerReady',
-                    label: '点击选择图片'
+                    label: lang.uploadSelectFile
                 },
                 dnd: '#queueList',
                 paste: document.body,
                 accept: {
                     title: 'Images',
-                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    extensions: acceptExtensions,
                     mimeTypes: 'image/*'
                 },
                 swf: '../../third-party/webuploader/webuploader.swf',
@@ -322,15 +328,27 @@
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
                 fileNumLimit: 300,
-                fileSizeLimit: 200 * 1024 * 1024,    // 200 M
-                fileSingleSizeLimit: 50 * 1024 * 1024    // 50 M
+                fileSizeLimit: 1024 * imageMaxSize * 300,    // 默认 600 M
+                fileSingleSizeLimit: 1024 * imageMaxSize,    // 默认 2 M
+                compress: editor.getOpt('imageCompressEnable') ? {
+                    width: imageCompressBorder,
+                    height: imageCompressBorder,
+                    // 图片质量，只有type为`image/jpeg`的时候才有效。
+                    quality: 90,
+                    // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
+                    allowMagnify: false,
+                    // 是否允许裁剪。
+                    crop: false,
+                    // 是否保留头部meta信息。
+                    preserveHeaders: true
+                }:false
             });
             uploader.addButton({
                 id: '#filePickerBlock'
             });
             uploader.addButton({
                 id: '#filePickerBtn',
-                label: '继续添加'
+                label: lang.uploadAddFile
             });
 
             // 当有文件添加进来时执行，负责view的创建
@@ -342,9 +360,9 @@
                         '</li>'),
 
                     $btns = $('<div class="file-panel">' +
-                        '<span class="cancel">删除</span>' +
-                        '<span class="rotateRight">向右旋转</span>' +
-                        '<span class="rotateLeft">向左旋转</span></div>' +
+                        '<span class="cancel">' + lang.uploadDelete + '</span>' +
+                        '<span class="rotateRight">' + lang.uploadTurnRight + '</span>' +
+                        '<span class="rotateLeft">' + lang.uploadTurnLeft + '</span></div>' +
                         '<p class="error"></p>').appendTo($li),
                     $prgress = $li.find('p.progress span'),
                     $wrap = $li.find('p.imgWrap'),
@@ -353,13 +371,13 @@
                     showError = function (code) {
                         switch (code) {
                             case 'exceed_size':
-                                text = '文件大小超出';
+                                text = lang.errorExceedSize;
                                 break;
                             case 'interrupt':
-                                text = '上传暂停';
+                                text = lang.errorInterrupt;
                                 break;
                             default:
-                                text = '上传失败，请重试';
+                                text = lang.errorUploadRetry;
                                 break;
                         }
                         $info.text(text).show();
@@ -478,22 +496,20 @@
                 var text = '', stats;
 
                 if (state === 'ready') {
-                    text = '选中' + fileCount + '张图片，共' +
-                        WebUploader.formatSize(fileSize) + '。';
+                    text = lang.updateStatusReady.replace('_', fileCount).replace('_KB', WebUploader.formatSize(fileSize));
                 } else if (state === 'confirm') {
                     stats = uploader.getStats();
                     if (stats.uploadFailNum) {
-                        text = '已成功上传' + stats.successNum + '张照片，' +
-                            stats.uploadFailNum + '张照片上传失败，<a class="retry" href="#">重新上传</a>失败图片或<a class="ignore" href="#">忽略</a>'
+                        text = lang.updateStatusConfirm.replace('_', stats.successNum).replace('_', stats.successNum);
                     }
                 } else {
                     stats = uploader.getStats();
-                    text = '共' + fileCount + '张（' +
-                        WebUploader.formatSize(fileSize) +
-                        '），已上传' + stats.successNum + '张';
+                    text = lang.updateStatusFinish.replace('_', fileCount).
+                        replace('_KB', WebUploader.formatSize(fileSize)).
+                        replace('_', stats.successNum);
 
                     if (stats.uploadFailNum) {
-                        text += '，失败' + stats.uploadFailNum + '张';
+                        text += lang.updateStatusError.replace('_', stats.uploadFailNum);
                     }
                 }
 
@@ -524,25 +540,25 @@
                     case 'ready':
                         $placeHolder.hide(); $queue.show(); $statusBar.show();
                         $progress.hide(); $info.show();
-                        $upload.text('开始上传').removeClass('disabled');
+                        $upload.text(lang.uploadStart).removeClass('disabled');
                         uploader.refresh();
                         break;
 
                     /* 上传中 */
                     case 'uploading':
                         $progress.show(); $info.hide();
-                        $upload.text('暂停上传');
+                        $upload.text(lang.uploadPause);
                         break;
 
                     /* 暂停上传 */
                     case 'paused':
                         $progress.show(); $info.hide();
-                        $upload.text('继续上传');
+                        $upload.text(lang.uploadContinue);
                         break;
 
                     case 'confirm':
                         $progress.show(); $info.hide();
-                        $upload.text('开始上传').addClass('disabled');
+                        $upload.text(lang.uploadStart).addClass('disabled');
 
                         stats = uploader.getStats();
                         if (stats.successNum && !stats.uploadFailNum) {
@@ -554,9 +570,9 @@
                     case 'finish':
                         $progress.hide(); $info.show();
                         if (stats.uploadFailNum) {
-                            $upload.text('重试上传').removeClass('disabled');
+                            $upload.text(lang.uploadRetry).removeClass('disabled');
                         } else {
-                            $upload.text('开始上传').addClass('disabled');
+                            $upload.text(lang.uploadStart).addClass('disabled');
                         }
                         break;
                 }
@@ -618,6 +634,8 @@
                         setState('confirm', files);
                         break;
                     case 'startUpload':
+                        /* 添加额外的参数 */
+                        uploader.option('formdata', editor.queryCommandValue('serverparam'));
                         setState('uploading', files);
                         break;
                     case 'stopUpload':
@@ -644,20 +662,12 @@
                 }
             });
 
-            $info.on('click', '.retry', function () {
-                uploader.retry();
-            });
-
-            $info.on('click', '.ignore', function () {
-                //alert('todo');
-            });
-
             $upload.addClass('state-' + state);
             updateTotalProgress();
         },
         getInsertList: function () {
             var i, data, list = [],
-                align = getAlign();
+                align = getAlign(),
                 prefix = editor.getOpt('imagePath');
             for (i = 0; i < this.imageList.length; i++) {
                 data = this.imageList[i];
@@ -741,10 +751,10 @@
                 this.isLoadingData = true;
                 ajax.request(editor.options.imageManagerUrl, {
                     timeout: 100000,
-                    data: {
-                        size: this.listSize,
-                        page: this.listIndex / this.listSize
-                    },
+                    data: utils.extend({
+                            size: this.listSize,
+                            page: this.listIndex / this.listSize
+                        }, editor.queryCommandValue('serverparam')),
                     method: 'get',
                     onsuccess: function (r) {
                         try {
@@ -849,20 +859,20 @@
             /* 点击搜索按钮 */
             domUtils.on($G('searchBtn'), 'click', function(){
                 var key = $G('searchTxt').value;
-                if(key && key != lang.searchInitInfo) {
+                if(key && key != lang.searchRemind) {
                     _this.getImageData();
                 }
             });
             /* 点击清除妞 */
             domUtils.on($G('searchReset'), 'click', function(){
-                $G('searchTxt').value = lang.searchInitInfo;
+                $G('searchTxt').value = lang.searchRemind;
                 $G('searchListUl').innerHTML = '';
                 $G('searchType').selectedIndex = 0;
             });
             /* 搜索框聚焦 */
             domUtils.on($G('searchTxt'), 'focus', function(){
                 var key = $G('searchTxt').value;
-                if(key && key == lang.searchInitInfo) {
+                if(key && key == lang.searchRemind) {
                     $G('searchTxt').value = '';
                 }
             });
@@ -921,7 +931,7 @@
                 keepOriginName = editor.options.keepOriginName ? "1" : "0",
                 url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + _this.encodeToGb2312(key) + type + "&keeporiginname=" + keepOriginName + "&" + +new Date;
 
-                $G('searchListUl').innerHTML = lang.imageLoading;
+                $G('searchListUl').innerHTML = lang.searchLoading;
                 $.ajax({
                     url: url,
                     dataType: 'jsonp',
@@ -974,7 +984,7 @@
                     listUl.appendChild(item);
                 }
             } else {
-                listUl.innerHTML = lang.tryAgain;
+                listUl.innerHTML = lang.searchRetry;
             }
         },
         getInsertList: function () {

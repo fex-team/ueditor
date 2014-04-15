@@ -1404,7 +1404,7 @@ var domUtils = dom.domUtils = {
                 case 'style':
                     node.style.cssText = '';
                     var val = node.getAttributeNode('style');
-                    !browser.ie && val && node.removeAttributeNode(val)
+                    !browser.ie && val && node.removeAttributeNode(val);
             }
             node.removeAttribute(ci);
         }

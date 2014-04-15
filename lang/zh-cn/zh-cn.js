@@ -233,9 +233,9 @@ UE.I18N['zh-cn'] = {
     'insertimage':{
         'static':{
             'lang_tab_remote':"插入图片", //节点
-            'lang_tab_local':"本地上传",
-            'lang_tab_imgManager':"在线管理",
-            'lang_tab_imgSearch':"图片搜索",
+            'lang_tab_upload':"本地上传",
+            'lang_tab_online':"在线管理",
+            'lang_tab_search':"图片搜索",
             'lang_input_url':"地 址：",
             'lang_input_size':"大 小：",
             'lang_input_width':"宽度",
@@ -245,6 +245,8 @@ UE.I18N['zh-cn'] = {
             'lang_input_title':"描 述：",
             'lang_input_align':'图片浮动方式：',
             'lang_imgLoading':"　图片加载中……",
+            'lang_start_upload':"开始上传",
+            'lang_drop_remind':"可以将照片拖到这里，单次最多可选300张",
             'lock':{'title':"锁定宽高比例"}, //属性
             'searchType':{'title':"图片类型", 'options':["新闻", "壁纸", "表情", "头像"]}, //select的option
             'searchTxt':{'value':"请输入搜索关键词"},
@@ -255,22 +257,28 @@ UE.I18N['zh-cn'] = {
             'rightAlign':{'title':'右浮动'},
             'centerAlign':{'title':'居中独占一行'}
         },
-        'netError':"网络链接错误，请检查配置后重试！",
-        'noUploadImage':"当前未上传过任何图片！",
-        'imageLoading':"图片加载中，请稍后……",
-        'tryAgain':" :( ，抱歉，没有找到图片！请重试一次！",
-        'toggleSelect':"单击可切换选中状态\n原图尺寸: ",
-        'searchInitInfo':"请输入搜索关键词",
+        'uploadSelectFile':'点击选择图片',
+        'uploadAddFile':'继续添加',
+        'uploadStart':'开始上传',
+        'uploadPause':'暂停上传',
+        'uploadContinue':'继续上传',
+        'uploadRetry':'重试上传',
+        'uploadDelete':'删除',
+        'uploadTurnLeft':'向左旋转',
+        'uploadTurnRight':'向右旋转',
+        'updateStatusReady': '选中_张图片，共_KB。',
+        'updateStatusConfirm': '已成功上传_张照片，_张照片上传失败',
+        'updateStatusFinish': '共_张（_KB），_张上传成功',
+        'updateStatusError': '，_张上传失败。',
+        'errorExceedSize':'文件大小超出',
+        'errorInterrupt':'文件大小超出',
+        'errorUploadRetry':'上传失败，请重试',
         'numError':"请输入正确的长度或者宽度值！例如：123，400",
-        'fileType':"图片",
         'imageUrlError':"不允许的图片格式或者图片域！",
         'imageLoadError':"图片加载失败！请检查链接地址或网络状态！",
-        'flashError':'Flash插件初始化失败，请更新您的FlashPlayer版本之后重试！',
-        'floatDefault':"默认",
-        'floatLeft':"左浮动",
-        'floatRight':"右浮动",
-        'floatCenter':"居中",
-        'flashI18n':{} //留空默认中文
+        'searchRemind':"请输入搜索关键词",
+        'searchLoading':"图片加载中，请稍后……",
+        'searchRetry':" :( ，抱歉，没有找到图片！请重试一次！"
     },
     'webapp':{
         tip1:"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",

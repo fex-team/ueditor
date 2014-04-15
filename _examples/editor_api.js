@@ -84,6 +84,7 @@
             'plugins/charts.js',
             'plugins/section.js',
             'plugins/simpleupload.js',
+            'plugins/serverparam.js',
             'ui/ui.js',
             'ui/uiutils.js',
             'ui/uibase.js',

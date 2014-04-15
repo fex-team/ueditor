@@ -10,7 +10,7 @@ UE.plugin.register('autoupload', function (){
     var sendAndInsertImage = function (file, editor) {
         //模拟数据
         var fd = new FormData();
-        fd.append(editor.options.imageFieldName || 'upfile', file, file.name || ('blob.' + file.type.substr('image/'.length)));
+        fd.append(editor.options.imageFieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
         fd.append('type', 'ajax');
         var xhr = new XMLHttpRequest();
         xhr.open("post", me.options.imageUrl, true);

@@ -7,39 +7,30 @@
  *
  */
 UE.plugins['catchremoteimage'] = function () {
-    if (this.options.catchRemoteImageEnable===false){
-        return;
-    }
-    var me = this;
-    this.setOpt({
-        localDomain:["127.0.0.1","localhost","img.baidu.com"],
-        separater:'ue_separate_ue',
-        catchFieldName:"upfile",
+    var me = this,
+        ajax = UE.ajax;
+
+    /* 设置默认值 */
+    if (me.options.catchRemoteImageEnable===false) return;
+    me.setOpt({
         catchRemoteImageEnable:true
     });
-    var ajax = UE.ajax,
-        localDomain = me.options.localDomain ,
-        catcherUrl = me.options.catcherUrl,
-        separater = me.options.separater;
-    function catchremoteimage(imgs, callbacks) {
-        var submitStr = imgs.join(separater);
-        var tmpOption = {
-            timeout:60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
-            onsuccess:callbacks["success"],
-            onerror:callbacks["error"]
-        };
-        tmpOption[me.options.catchFieldName] = submitStr;
-        ajax.request(catcherUrl, tmpOption);
-    }
 
     me.addListener("afterpaste", function () {
         me.fireEvent("catchRemoteImage");
     });
 
     me.addListener("catchRemoteImage", function () {
-        var remoteImages = [];
-        var imgs = domUtils.getElementsByTagName(me.document, "img");
-        var test = function (src,urls) {
+
+        var catcherLocalDomain = me.getOpt('localDomain'),
+            catcherUrl = me.getOpt('catcherUrl'),
+            catcherPath = me.getOpt('catcherPath'),
+            catcherFieldName = me.getOpt('catchFieldName'),
+            catcherSeparater = me.getOpt('separater');
+
+        var remoteImages = [],
+            imgs = domUtils.getElementsByTagName(me.document, "img"),
+            test = function (src,urls) {
             for (var j = 0, url; url = urls[j++];) {
                 if (src.indexOf(url) !== -1) {
                     return true;
@@ -47,15 +38,17 @@ UE.plugins['catchremoteimage'] = function () {
             }
             return false;
         };
+
         for (var i = 0, ci; ci = imgs[i++];) {
             if (ci.getAttribute("word_img")){
                 continue;
             }
             var src = ci.getAttribute("_src") || ci.src || "";
-            if (/^(https?|ftp):/i.test(src) && !test(src,localDomain)) {
+            if (/^(https?|ftp):/i.test(src) && !test(src,catcherLocalDomain)) {
                 remoteImages.push(src);
             }
         }
+
         if (remoteImages.length) {
             catchremoteimage(remoteImages, {
                 //成功抓取
@@ -65,15 +58,15 @@ UE.plugins['catchremoteimage'] = function () {
                     } catch (e) {
                         return;
                     }
-                    var srcUrls = info.srcUrl.split(separater),
-                        urls = info.url.split(separater);
+                    var srcUrls = info.srcUrl.split(catcherSeparater),
+                        urls = info.url.split(catcherSeparater);
                     for (var i = 0, ci; ci = imgs[i++];) {
                         var src = ci.getAttribute("_src") || ci.src || "";
                         for (var j = 0, cj; cj = srcUrls[j++];) {
                             var url = urls[j - 1];
                             if (src == cj && url != "error") {  //抓取失败时不做替换处理
                                 //地址修正
-                                var newSrc = me.options.catcherPath + url;
+                                var newSrc = catcherPath + url;
                                 domUtils.setAttributes(ci, {
                                     "src":newSrc,
                                     "_src":newSrc
@@ -89,6 +82,17 @@ UE.plugins['catchremoteimage'] = function () {
                     me.fireEvent("catchremoteerror");
                 }
             });
+        }
+
+        function catchremoteimage(imgs, callbacks) {
+            var submitStr = imgs.join(catcherSeparater);
+            var opt = {
+                timeout:60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
+                onsuccess:callbacks["success"],
+                onerror:callbacks["error"]
+            };
+            opt[catcherFieldName] = submitStr;
+            ajax.request(catcherUrl, opt);
         }
 
     });
