@@ -1,5 +1,6 @@
 <?php
 global $C;
+global $action;
 
 $C = include("config.php");
 $action = $_GET['action'];

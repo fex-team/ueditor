@@ -14,8 +14,12 @@ error_reporting(E_ERROR | E_WARNING);
 $CONFIG = include("config.php");
 
 /* 上传配置 */
+if(!$action) {
+    global $action;
+    $action = 'uploadfile';
+}
 $isBase64 = false;
-switch ($_GET['action']) {
+switch ($action) {
     case 'uploadimage':
         $config = array(
             "savePath" => $CONFIG['savePath'],
@@ -35,15 +39,6 @@ switch ($_GET['action']) {
         $fieldName = $CONFIG['scrawlFieldName'];
         $isBase64 = true;
         break;
-    case 'uploadfile':
-        $config = array(
-            "savePath" => $CONFIG['savePath'],
-            "fileNameFormat" => $CONFIG['nameFormat'],
-            "maxSize" => $CONFIG['fileMaxSize'], //单位KB
-            "allowFiles" => $CONFIG['fileAllowFiles']
-        );
-        $fieldName = $CONFIG['fileFieldName'];
-        break;
     case 'uploadvideo':
         $config = array(
             "savePath" => $CONFIG['savePath'],
@@ -52,6 +47,16 @@ switch ($_GET['action']) {
             "allowFiles" => $CONFIG['videoAllowFiles']
         );
         $fieldName = $CONFIG['videoFieldName'];
+        break;
+    case 'uploadfile':
+    default:
+        $config = array(
+            "savePath" => $CONFIG['savePath'],
+            "fileNameFormat" => $CONFIG['nameFormat'],
+            "maxSize" => $CONFIG['fileMaxSize'], //单位KB
+            "allowFiles" => $CONFIG['fileAllowFiles']
+        );
+        $fieldName = $CONFIG['fileFieldName'];
         break;
 }
 
