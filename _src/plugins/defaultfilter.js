@@ -66,6 +66,10 @@ UE.plugins['defaultfilter'] = function () {
                                 }
                             }
                         }
+                        val = node.getAttr('id');
+                        if(val && /^_baidu_bookmark_/i.test(val)){
+                            node.parentNode.removeChild(node)
+                        }
                         break;
                     case 'p':
                         if (val = node.getAttr('align')) {
@@ -197,6 +201,13 @@ UE.plugins['defaultfilter'] = function () {
                                 'href': utils.html(val),
                                 '_href': ''
                             })
+                        }
+                        break;
+                        break;
+                    case 'span':
+                        val = node.getAttr('id');
+                        if(val && /^_baidu_bookmark_/i.test(val)){
+                            node.parentNode.removeChild(node)
                         }
                         break;
                     case 'img':
