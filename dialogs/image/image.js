@@ -41,7 +41,7 @@
         var btn = dialog.buttons[0];
 
         dialog.onok = function () {
-            var list = [], id, tabs = $G('tabhead').children;
+            var remote = false, list = [], id, tabs = $G('tabhead').children;
             for (var i = 0; i < tabs.length; i++) {
                 if (domUtils.hasClass(tabs[i], 'focus')) {
                     id = tabs[i].getAttribute('data-content-id');
@@ -61,11 +61,13 @@
                     break;
                 case 'search':
                     list = searchImage.getInsertList();
+                    remote = true;
                     break;
             }
 
             if(list) {
                 editor.execCommand('insertimage', list);
+                remote && editor.fireEvent("catchRemoteImage");
             } else {
                 return false;
             }
@@ -739,6 +741,7 @@
             this.state = 0;
             this.listSize = editor.getOpt('imageManagerListSize');
             this.listIndex = 0;
+            this.listEnd = false;
 
             /* 第一次拉取数据 */
             this.getImageData();
@@ -752,8 +755,8 @@
                 ajax.request(editor.options.imageManagerUrl, {
                     timeout: 100000,
                     data: utils.extend({
-                            size: this.listSize,
-                            page: this.listIndex / this.listSize
+                            start: this.listIndex,
+                            size: this.listSize
                         }, editor.queryCommandValue('serverparam')),
                     method: 'get',
                     onsuccess: function (r) {
@@ -761,13 +764,20 @@
                             var json = eval('(' + r.responseText + ')');
                             if (json.state == 'SUCCESS') {
                                 _this.pushData(json.list);
-                                _this.listIndex += json.list.length;
+                                _this.listIndex = parseInt(json.start) + parseInt(json.list.length);
                                 if(_this.listIndex >= json.total) {
                                     _this.listEnd = true;
                                 }
                                 _this.isLoadingData = false;
                             }
                         } catch (e) {
+                            if(r.responseText.indexOf('ue_separate_ue') != -1) {
+                                var list = r.responseText.split(r.responseText);
+                                _this.pushData(list);
+                                _this.listIndex = parseInt(list.length);
+                                _this.listEnd = true;
+                                _this.isLoadingData = false;
+                            }
                         }
                     },
                     onerror: function () {

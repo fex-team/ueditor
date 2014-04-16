@@ -87,10 +87,10 @@
 
                 while( _top + _height > winHeight ) {
                     _height -= 30;
-                    content.style.height = _height + 'px';
-                    //同步更改iframe高度
-                    ifr && ( ifr.style.height = _height + 'px' );
                 }
+                content.style.height = _height + 'px';
+                //同步更改iframe高度
+                ifr && ( ifr.style.height = _height + 'px' );
 
                 //阻止在combox上的鼠标滚轮事件, 防止用户的正常操作被误解
                 if( window.XMLHttpRequest ) {

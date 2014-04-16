@@ -22,11 +22,10 @@ UE.plugins['catchremoteimage'] = function () {
 
     me.addListener("catchRemoteImage", function () {
 
-        var catcherLocalDomain = me.getOpt('localDomain'),
+        var catcherLocalDomain = me.getOpt('catcherLocalDomain'),
             catcherUrl = me.getOpt('catcherUrl'),
             catcherPath = me.getOpt('catcherPath'),
-            catcherFieldName = me.getOpt('catchFieldName'),
-            catcherSeparater = me.getOpt('separater');
+            catcherFieldName = me.getOpt('catcherFieldName');
 
         var remoteImages = [],
             imgs = domUtils.getElementsByTagName(me.document, "img"),
@@ -58,8 +57,17 @@ UE.plugins['catchremoteimage'] = function () {
                     } catch (e) {
                         return;
                     }
-                    var srcUrls = info.srcUrl.split(catcherSeparater),
-                        urls = info.url.split(catcherSeparater);
+
+                    /* 获取源路径和新路径, 兼容老版本数据 */
+                    var srcUrls, urls;
+                    if(info.source != undefined) {
+                        srcUrls = info.source;
+                        urls = info.url;
+                    } else {
+                        srcUrls = info.srcUrl.split('ue_separate_ue');
+                        urls = info.url.split('ue_separate_ue');
+                    }
+
                     for (var i = 0, ci; ci = imgs[i++];) {
                         var src = ci.getAttribute("_src") || ci.src || "";
                         for (var j = 0, cj; cj = srcUrls[j++];) {
@@ -85,13 +93,12 @@ UE.plugins['catchremoteimage'] = function () {
         }
 
         function catchremoteimage(imgs, callbacks) {
-            var submitStr = imgs.join(catcherSeparater);
             var opt = {
                 timeout:60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
                 onsuccess:callbacks["success"],
                 onerror:callbacks["error"]
             };
-            opt[catcherFieldName] = submitStr;
+            opt[catcherFieldName] = imgs;
             ajax.request(catcherUrl, opt);
         }
 

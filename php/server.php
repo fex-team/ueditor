@@ -1,10 +1,6 @@
 <?php
-global $C;
-global $action;
-
 $C = include("config.php");
 $action = $_GET['action'];
-$type = $_GET['type'];
 
 switch ($action) {
     case 'config':
@@ -17,11 +13,7 @@ switch ($action) {
                 $config[$k] = $v;
             }
         }
-        if ($callback = $_GET['callback']) {
-            echo $callback . '(' . json_encode($config) . ')';
-        } else {
-            echo json_encode($config);
-        }
+        $result =  json_encode($config);
         break;
 
     /* 上传图片 */
@@ -32,20 +24,29 @@ switch ($action) {
     case 'uploadvideo':
     /* 上传文件 */
     case 'uploadfile':
-        include("fileUp.php");
+        $result = include("upload.php");
         break;
 
     /* 列出图片 */
     case 'listimage':
-        include("imageManager.php");
+        $result = include("list.php");
         break;
 
     /* 抓取远程文件 */
     case 'getremoteimage':
-        include("getRemoteImage.php");
+        $result = include("remote.php");
         break;
 
     default:
-        echo 'UNKNOW ERROR';
+        $result = json_encode(array(
+            'state'=> 'UNKNOW ERROR'
+        ));
         break;
+}
+
+/* 输出结果 */
+if ($callback = $_GET['callback']) {
+    echo $callback . '(' . $result . ')';
+} else {
+    echo $result;
 }
