@@ -169,6 +169,7 @@
         showAnchorRect: function ( rect, hoz, adj ){
             this._doAutoRender();
             var vpRect = uiUtils.getViewportRect();
+            this.getDom().style.visibility = 'hidden';
             this._show();
             var popSize = this.fitSize();
 
@@ -196,6 +197,7 @@
                 popEl.style.zIndex = this.editor.container.style.zIndex * 1 + 10;
                 baidu.editor.ui.uiUtils.getFixedLayer().style.zIndex = popEl.style.zIndex - 1;
             }
+            this.getDom().style.visibility = 'visible';
 
         },
         showAt: function (offset) {
