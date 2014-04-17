@@ -13,7 +13,7 @@ UE.plugins['catchremoteimage'] = function () {
     /* 设置默认值 */
     if (me.options.catchRemoteImageEnable===false) return;
     me.setOpt({
-        catchRemoteImageEnable:true
+        catchRemoteImageEnable:false
     });
 
     me.addListener("afterpaste", function () {

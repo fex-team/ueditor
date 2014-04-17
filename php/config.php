@@ -6,9 +6,11 @@
  * Time: 下午19:18
  */
 $phpSelf = $_SERVER['PHP_SELF'];
+$serverOrigin = "http://" . $_SERVER['HTTP_HOST'] . ($_SERVER['SERVER_PORT'] != '80' ? (':'.$_SERVER['SERVER_PORT']):'');
 $serverDir = substr($phpSelf, 0, strrpos($phpSelf, '/') + 1); // 例子: "/ueditor/php/"
-$serverUrl = $serverDir . 'server.php'; // 例子: "/ueditor/php/server.php"
-$uploadPathPrefix = $serverDir; // 例子: "/ueditor/php/"
+$serverUrl = $serverOrigin . $serverDir . 'server.php'; // 例子: "http://localhost/ueditor/php/server.php"
+//$uploadPathPrefix = $serverOrigin . $serverDir; // 带http的绝对路径,格式: "http://localhost/ueditor/php/"
+$uploadPathPrefix = $serverDir; // 跟路径,格式: "/ueditor/php/"
 $fieldName = 'upfile';
 $insertAlign = 'none'; // none left right center
 
