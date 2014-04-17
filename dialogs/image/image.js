@@ -68,8 +68,6 @@
             if(list) {
                 editor.execCommand('insertimage', list);
                 remote && editor.fireEvent("catchRemoteImage");
-            } else {
-                return false;
             }
         };
     }
@@ -101,7 +99,7 @@
     }
     /* 获取对齐方式 */
     function getAlign(){
-        var align = $G("align").value == 'none';
+        var align = $G("align").value || 'none';
         return align == 'none' ? '':align;
     }
 
@@ -316,7 +314,7 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
-                dnd: '#queueList',
+                dnd: '#dndArea',
                 paste: document.body,
                 accept: {
                     title: 'Images',
@@ -795,12 +793,13 @@
                     img = document.createElement('img');
                     icon = document.createElement('span');
 
-                    img.onload = function () {
-                        var image = this;
-                        _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
-                    };
-                    img.width = 100;
-                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i]);
+                    domUtils.on(img, 'load', (function(image){
+                        return function(){
+                            _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
+                        }
+                    })(img));
+                    img.width = '100';
+                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i] + '?' + (+new Date()));
                     img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i]);
                     domUtils.addClass(icon, 'icon');
 

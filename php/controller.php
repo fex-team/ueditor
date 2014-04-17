@@ -34,12 +34,12 @@ switch ($action) {
 
     /* 列出图片 */
     case 'listimage':
-        $result = include("list.php");
+        $result = include("filemanager.php");
         break;
 
     /* 抓取远程文件 */
-    case 'getremoteimage':
-        $result = include("remote.php");
+    case 'crawlimage':
+        $result = include("crawler.php");
         break;
 
     default:

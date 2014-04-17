@@ -22,7 +22,7 @@ return array(
     , 'imageUrl' => $serverUrl . '?action=uploadimage' //图片上传地址
     , 'imagePath' => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
     , 'imageFieldName' => $fieldName //提交的图片表单名称
-    , 'imageMaxSize' => 1024 //上传图片大小限制，单位KB
+    , 'imageMaxSize' => 2 * 1024 //上传图片大小限制，单位KB
     , 'imageAllowFiles' => array(".png", ".jpg", ".jpeg", ".gif", ".bmp") //上传图片允许的文件格式
     , 'imageCompressEnable' => true //是否压缩图片,默认是true
     , 'imageCompressBorder' => 1600 //是否压缩图片,图片压缩最长边限制
@@ -51,7 +51,7 @@ return array(
 
     /* 远程抓取配置区 */
     , 'catcherLocalDomain' => ["127.0.0.1","localhost","img.baidu.com"] //不抓取的域名列表
-    , 'catcherUrl' => $serverUrl . "?action=getremoteimage" //处理远程图片抓取的地址
+    , 'catcherUrl' => $serverUrl . "?action=crawlimage" //处理远程图片抓取的地址
     , 'catcherPath' => $uploadPathPrefix //图片修正地址，同imagePath
     , 'catcherFieldName' => 'source' //提交到后台远程图片uri合集，若此处修改，需要在后台对应文件修改对应参数
     , 'catcherMaxSize' => 2 * 1024 //上传图片大小限制，单位KB
