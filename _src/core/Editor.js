@@ -269,7 +269,7 @@
                     'action': 'config'
                 }, onsuccess:function(xhr){
                     var config = eval("("+xhr.responseText+")");
-                    utils.extend(this.options, config);
+                    utils.extend(me.options, config);
                 }
             });
         } catch(e){}
