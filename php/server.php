@@ -45,8 +45,8 @@ switch ($action) {
 }
 
 /* 输出结果 */
-if ($callback = $_GET['callback']) {
-    echo $callback . '(' . $result . ')';
+if (isset($_GET["callback"])) {
+    echo $_GET["callback"] . '(' . $result . ')';
 } else {
     echo $result;
 }
