@@ -51,7 +51,7 @@ return array(
 
     /* 远程抓取配置区 */
     , 'catcherLocalDomain' => ["127.0.0.1","localhost","img.baidu.com"] //不抓取的域名列表
-    , 'catcherUrl' => $serverUrl . "?action=crawlimage" //处理远程图片抓取的地址
+    , 'catcherUrl' => $serverUrl . "?action=catchimage" //处理远程图片抓取的地址
     , 'catcherPath' => $uploadPathPrefix //图片修正地址，同imagePath
     , 'catcherFieldName' => 'source' //提交到后台远程图片uri合集，若此处修改，需要在后台对应文件修改对应参数
     , 'catcherMaxSize' => 2 * 1024 //上传图片大小限制，单位KB

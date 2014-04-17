@@ -38,7 +38,7 @@ switch ($action) {
         break;
 
     /* 抓取远程文件 */
-    case 'crawlimage':
+    case 'catchimage':
         $result = include("crawler.php");
         break;
 
