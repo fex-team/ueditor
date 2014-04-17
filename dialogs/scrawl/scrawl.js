@@ -224,10 +224,16 @@ var scrawl = function (options) {
         _addAddImgListener:function () {
             var doc = document,
                 file = $G("J_imgTxt");
-            domUtils.on(file, "change", function () {
+            domUtils.on(file, "change", function (e) {
                 var frm = file.parentNode;
                 addMaskLayer(lang.backgroundUploading);
-                frm.submit();
+
+                var target = e.target || e.srcElement,
+                    reader = new FileReader();
+                reader.onload = function(evt){
+                    ue_callback(this.result, 'SUCCESS');
+                };
+                reader.readAsDataURL(target.files[0]);
                 frm.reset();
             });
         },
@@ -597,7 +603,7 @@ function ue_callback(url, state) {
             //trace 2457
             obj.btn2Highlight("J_sacleBoard");
         };
-        img.src = editor.options.scrawlPath + url;
+        img.src = url;
     } else {
         alert(state);
     }
@@ -622,9 +628,8 @@ function exec(scrawlObj) {
         addMaskLayer(lang.scrawlUpLoading);
         var base64 = scrawlObj.getCanvasData();
         if (!!base64) {
-            ajax.request(editor.options.scrawlUrl, {
+            options = {
                 timeout:100000,
-                content:base64,
                 onsuccess:function (xhr) {
                     if (!scrawlObj.isCancelScrawl) {
                         var responseObj;
@@ -646,7 +651,9 @@ function exec(scrawlObj) {
                     alert(lang.imageError);
                     dialog.close();
                 }
-            });
+            };
+            options[editor.getOpt('scrawlFieldName')] = base64;
+            ajax.request(editor.getOpt('scrawlUrl'), options);
         }
     } else {
         addMaskLayer(lang.noScarwl + "&nbsp;&nbsp;&nbsp;<input type='button' value='" + lang.continueBtn + "'  onclick='removeMaskLayer()'/>");
