@@ -67,7 +67,7 @@ return array(
         ".txt", ".md", ".xml") //上传图片允许的文件格式
 
     /* 视频上传配置区 */
-    , 'videoUrl' => $serverDir . "?action=uploadvideo" //视频上传提交地址
+    , 'videoUrl' => $serverUrl . "?action=uploadvideo" //视频上传提交地址
     , 'videoPath' => $uploadPathPrefix //视频修正地址，是最终插入的视频地址前缀
     , 'videoFieldName' => $fieldName //提交的图片表单名称
     , 'videoMaxSize' => 100 * 1024 //上传图片大小限制，单位KB
