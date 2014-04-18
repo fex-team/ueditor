@@ -9,21 +9,26 @@ UE.parse.register('vedio',function(utils){
             cssurl = sourcePath + '/third-party/video-js/video-js.min.css',
             swfUrl = sourcePath + '/third-party/video-js/video-js.swf';
 
-        utils.loadFile(document,{
-            id : "video_css",
-            tag : "link",
-            rel : "stylesheet",
-            type : "text/css",
-            href : cssurl
-        });
-        utils.loadFile(document,{
-            id : "video_js",
-            src : jsurl,
-            tag : "script",
-            type : "text/javascript"
-        },function(){
-            videojs.options.flash.swf = swfUrl;
-        });
+        if(vjs) {
+            utils.loadFile(document,{
+                id : "video_css",
+                tag : "link",
+                rel : "stylesheet",
+                type : "text/css",
+                href : cssurl
+            });
+            utils.loadFile(document,{
+                id : "video_js",
+                src : jsurl,
+                tag : "script",
+                type : "text/javascript"
+            },function(){
+                videojs.options.flash.swf = swfUrl;
+                vjs.autoSetup();
+            });
+        } else {
+            vjs.autoSetup();
+        }
 
     }
 });
