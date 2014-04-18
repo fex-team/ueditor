@@ -8,7 +8,7 @@
 $phpSelf = $_SERVER['PHP_SELF'];
 $serverOrigin = "http://" . $_SERVER['HTTP_HOST'] . ($_SERVER['SERVER_PORT'] != '80' ? (':'.$_SERVER['SERVER_PORT']):'');
 $serverDir = substr($phpSelf, 0, strrpos($phpSelf, '/') + 1); // 例子: "/ueditor/php/"
-$serverUrl = $serverOrigin . $serverDir . 'server.php'; // 例子: "http://localhost/ueditor/php/server.php"
+$serverUrl = $serverOrigin . $phpSelf; // 例子: "http://localhost/ueditor/php/server.php"
 //$uploadPathPrefix = $serverOrigin . $serverDir; // 带http的绝对路径,格式: "http://localhost/ueditor/php/"
 $uploadPathPrefix = $serverDir; // 跟路径,格式: "/ueditor/php/"
 $fieldName = 'upfile';
@@ -71,6 +71,6 @@ return array(
     , 'videoPath' => $uploadPathPrefix //视频修正地址，是最终插入的视频地址前缀
     , 'videoFieldName' => $fieldName //提交的图片表单名称
     , 'videoMaxSize' => 100 * 1024 //上传图片大小限制，单位KB
-    , 'videoAllowFiles' => array(".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".mov", ".wmv", ".mp4", ".webm") //上传图片允许的文件格式
+    , 'videoAllowFiles' => array(".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid") //上传图片允许的文件格式
 
 );
