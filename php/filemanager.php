@@ -64,7 +64,9 @@ function getfiles($path, &$files = array())
                 getfiles($path2, $files);
             } else {
                 if (preg_match("/\.(gif|jpeg|jpg|png|bmp)$/i", $file)) {
-                    $files[] = $path2;
+                    $files[] = array(
+                        'url'=> $path2
+                    );
                 }
             }
         }

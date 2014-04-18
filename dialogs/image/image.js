@@ -788,7 +788,7 @@
         pushData: function (list) {
             var i, item, img, icon, _this = this;
             for (i = 0; i < list.length; i++) {
-                if(list[i]) {
+                if(list[i] && list[i].url) {
                     item = document.createElement('li');
                     img = document.createElement('img');
                     icon = document.createElement('span');
@@ -799,8 +799,8 @@
                         }
                     })(img));
                     img.width = '100';
-                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i] + '?' + (+new Date()));
-                    img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i]);
+                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i].url + '?' + (+new Date()));
+                    img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i].url);
                     domUtils.addClass(icon, 'icon');
 
                     item.appendChild(img);

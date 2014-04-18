@@ -36,8 +36,12 @@ function getRemoteImage($source, $config)
 {
     //忽略抓取时间限制
     set_time_limit(0);
-    $urls = array();
+
+    $list = array();
     foreach ($source as $imgUrl) {
+
+        //列表项
+        $item = array();
 
         //字符转换
         $imgUrl = htmlspecialchars($imgUrl);
@@ -45,21 +49,22 @@ function getRemoteImage($source, $config)
 
         //http开头验证
         if (strpos($imgUrl, "http") !== 0) {
-            array_push($urls, "error");
+            $item['state'] = 'Not Http Link';
             continue;
         }
+
         //获取请求头
         $heads = get_headers($imgUrl);
         //死链检测
         if (!(stristr($heads[0], "200") && stristr($heads[0], "OK"))) {
-            array_push($urls, "error");
+            $item['state'] = 'Dead Link';
             continue;
         }
 
         //格式验证(扩展名验证和Content-Type验证)
         $fileType = strtolower(strrchr($imgUrl, '.'));
         if (!in_array($fileType, $config['allowFiles']) || stristr($heads['Content-Type'], "image")) {
-            array_push($urls, "error");
+            $item['state'] = 'Get File ContentType Error';
             continue;
         }
 
@@ -72,16 +77,17 @@ function getRemoteImage($source, $config)
                 )
             )
         );
+
         //请确保php.ini中的fopen wrappers已经激活
         readfile($imgUrl, false, $context);
         $img = ob_get_contents();
         ob_end_clean();
 
-        //大小验证
+        //验证大小
         $uriSize = strlen($img); //得到图片大小
         $allowSize = 1024 * $config['maxSize'];
         if ($uriSize > $allowSize) {
-            array_push($urls, "error");
+            $item['state'] = 'File Size Exceed';
             continue;
         }
 
@@ -100,16 +106,18 @@ function getRemoteImage($source, $config)
             $fp2 = @fopen($tmpName, "a");
             fwrite($fp2, $img);
             fclose($fp2);
-            array_push($urls, $tmpName);
+            $item['url'] = $tmpName;
         } catch (Exception $e) {
-            array_push($urls, "error");
+            $item['state'] = 'File Save Error';
         }
+
+        $item['state'] = isset($item['state']) ? $item['state']:'SUCCESS';
+        $item['source'] = $imgUrl;
+        array_push($list, $item);
     }
 
     return json_encode(array(
-        'state'=> 'SUCCESS',
-        'url'=> $urls,
-        'tip'=> '远程图片抓取成功！',
-        'source'=> $source
+        'state'=> $list.length ? 'SUCCESS':'ERROR',
+        'list'=> $list
     ));
 }
