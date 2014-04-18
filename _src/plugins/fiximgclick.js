@@ -120,12 +120,13 @@ UE.plugins['fiximgclick'] = (function () {
                 }
             },
             updateTargetElement: function () {
-                var me = this,
-                    targetPos;
+                var me = this;
                 domUtils.setStyles(me.target, {
                     'width': me.resizer.style.width,
                     'height': me.resizer.style.height
                 });
+                me.target.width = parseInt(me.resizer.style.width);
+                me.target.height = parseInt(me.resizer.style.height);
                 me.attachTo(me.target);
             },
             updateContainerStyle: function (dir, offset) {

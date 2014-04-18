@@ -34,7 +34,18 @@
 
 
 
-#preview{width: 420px; margin-left: 10px; _margin-left:5px; height: 280px;background-color: #ddd;float: left}
+#preview{position: relative;width: 420px;padding:0;overflow: hidden; margin-left: 10px; _margin-left:5px; height: 280px;background-color: #ddd;float: left}
+#preview .previewMsg {position:absolute;top:0;margin:0;padding:0;height:280px;width:100%;background-color: #666;}
+#preview .previewMsg span{display:block;margin: 125px auto 0 auto;text-align:center;font-size:18px;color:#fff;}
+#preview .previewVideo {position:absolute;top:0;margin:0;padding:0;height:280px;width:100%;}
+.edui-video-wrapper fieldset{
+    border: 1px solid #ddd;
+    padding-left: 5px;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    width: 115px;
+}
+
 #videoInfo {width: 120px;float: left;margin-left: 10px;_margin-left:7px;}
 fieldset{
     border: 1px solid #ddd;

@@ -174,13 +174,23 @@
         }
         return property;
     }
-    function convert_url(s){
-        return s.replace(/http:\/\/www\.tudou\.com\/programs\/view\/([\w\-]+)\/?/i,"http://www.tudou.com/v/$1")
-            .replace(/http:\/\/www\.youtube\.com\/watch\?v=([\w\-]+)/i,"http://www.youtube.com/v/$1")
-            .replace(/http:\/\/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i,"http://player.youku.com/player.php/sid/$1")
-            .replace(/http:\/\/www\.56\.com\/u\d+\/v_([\w\-]+)\.html/i, "http://player.56.com/v_$1.swf")
-            .replace(/http:\/\/www.56.com\/w\d+\/play_album\-aid\-\d+_vid\-([^.]+)\.html/i, "http://player.56.com/v_$1.swf")
-            .replace(/http:\/\/v\.ku6\.com\/.+\/([^.]+)\.html/i, "http://player.ku6.com/refer/$1/v.swf");
+    function convert_url(url){
+        if ( !url ) return '';
+        url = utils.trim(url)
+            .replace(/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i, 'player.youku.com/player.php/sid/$1/v.swf')
+            .replace(/(www\.)?youtube\.com\/watch\?v=([\w\-]+)/i, "www.youtube.com/v/$2")
+            .replace(/youtu.be\/(\w+)$/i, "www.youtube.com/v/$1")
+            .replace(/v\.ku6\.com\/.+\/([\w\.]+)\.html.*$/i, "player.ku6.com/refer/$1/v.swf")
+            .replace(/www\.56\.com\/u\d+\/v_([\w\-]+)\.html/i, "player.56.com/v_$1.swf")
+            .replace(/www.56.com\/w\d+\/play_album\-aid\-\d+_vid\-([^.]+)\.html/i, "player.56.com/v_$1.swf")
+            .replace(/v\.pps\.tv\/play_([\w]+)\.html.*$/i, "player.pps.tv/player/sid/$1/v.swf")
+            .replace(/www\.letv\.com\/ptv\/vplay\/([\d]+)\.html.*$/i, "i7.imgs.letv.com/player/swfPlayer.swf?id=$1&autoplay=0")
+            .replace(/www\.tudou\.com\/programs\/view\/([\w\-]+)\/?/i, "www.tudou.com/v/$1")
+            .replace(/v\.qq\.com\/cover\/[\w]+\/[\w]+\/([\w]+)\.html/i, "static.video.qq.com/TPout.swf?vid=$1")
+            .replace(/v\.qq\.com\/.+[\?\&]vid=([^&]+).*$/i, "static.video.qq.com/TPout.swf?vid=$1")
+            .replace(/my\.tv\.sohu\.com\/[\w]+\/[\d]+\/([\d]+)\.shtml.*$/i, "share.vrs.sohu.com/my/v.swf&id=$1");
+
+        return url;
     }
 
     /**
@@ -266,108 +276,17 @@
      * @param url
      */
     function createPreviewVideo(url){
-
         if ( !url )return;
-		var matches = url.match(/youtu.be\/(\w+)$/) || url.match(/youtube\.com\/watch\?v=(\w+)/) || url.match(/youtube.com\/v\/(\w+)/),
-            youku = url.match(/youku\.com\/v_show\/id_(\w+)/),
-            youkuPlay = /player\.youku\.com/ig.test(url);
-        if(!youkuPlay){
-            if (matches){
-                url = "https://www.youtube.com/v/" + matches[1] + "?version=3&feature=player_embedded";
-            }else if(youku){
-                url = "http://player.youku.com/player.php/sid/"+youku[1]+"/v.swf"
-            }else if(!endWith(url,[".swf",".flv",".wmv"])){
-                $G("preview").innerHTML = lang.urlError;
-                return;
-            }
-        }else{
-            url = url.replace(/\?f=.*/,"");
-        }
-        $G("preview").innerHTML = '<embed type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
-        ' src="' + url + '"' +
-        ' width="' + 420  + '"' +
-        ' height="' + 280  + '"' +
-        ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" ></embed>';
-    }
 
-    /**
-     * 末尾字符检测
-     * @param str
-     * @param endStrArr
-     */
-    function endWith(str,endStrArr){
-        for(var i=0,len = endStrArr.length;i<len;i++){
-            var tmp = endStrArr[i];
-            if(str.length - tmp.length<0) return false;
+        var conUrl = convert_url(url);
 
-            if(str.substring(str.length-tmp.length)==tmp){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * ajax获取视频信息
-     */
-    function getMovie(){
-        var keywordInput =  $G("videoSearchTxt");
-        if(!keywordInput.getAttribute("hasClick") ||!keywordInput.value){
-            selectTxt(keywordInput);
-            return;
-        }
-        $G( "searchList" ).innerHTML = lang.loading;
-        var keyword = keywordInput.value,
-                type = $G("videoType").value,
-            str="";
-        ajax.request(editor.options.getMovieUrl,{
-            searchKey:keyword,
-            videoType:type,
-            onsuccess:function(xhr){
-                try{
-                    var info = eval("("+xhr.responseText+")");
-                }catch(e){
-                    return;
-                }
-
-                var videos = info.multiPageResult.results;
-                var html=["<table width='530'>"];
-                for(var i=0,ci;ci = videos[i++];){
-                    html.push(
-                        "<tr>" +
-                            "<td><img title='"+lang.clickToSelect+"' ue_video_url='"+ci.outerPlayerUrl+"' alt='"+ci.tags+"' width='106' height='80' src='"+ci.picUrl+"' /> </td>" +
-                            "<td>" +
-                                "<p><a target='_blank' title='"+lang.goToSource+"' href='"+ci.itemUrl+"'>"+ci.title.substr(0,30)+"</a></p>" +
-                                "<p style='height: 62px;line-height: 20px' title='"+ci.description+"'> "+ ci.description.substr(0,95) +" </p>" +
-                            "</td>" +
-                       "</tr>"
-                    );
-                }
-                html.push("</table>");
-                $G("searchList").innerHTML = str = html.length ==2 ?lang.noVideo : html.join("");
-                var imgs = domUtils.getElementsByTagName($G("searchList"),"img");
-                if(!imgs)return;
-                for(var i=0,img;img = imgs[i++];){
-                    domUtils.on(img,"click",function(){
-                        changeSelected(this);
-                    })
-                }
-            }
-        });
-    }
-
-    /**
-     * 改变对象o的选中状态
-     * @param o
-     */
-    function changeSelected(o){
-        if ( o.getAttribute( "selected" ) ) {
-            o.removeAttribute( "selected" );
-            o.style.cssText = "filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;border: 2px solid #fff";
-        } else {
-            o.setAttribute( "selected", "true" );
-            o.style.cssText = "filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;border:2px solid blue;";
-        }
+        $G("preview").innerHTML = '<div class="previewMsg"><span>'+lang.urlError+'</span></div>'+
+        '<embed class="previewVideo" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
+            ' src="' + conUrl + '"' +
+            ' width="' + 420  + '"' +
+            ' height="' + 280  + '"' +
+            ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" >' +
+        '</embed>';
     }
 
 
