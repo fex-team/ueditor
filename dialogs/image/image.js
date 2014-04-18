@@ -117,18 +117,20 @@
                 domUtils.removeClasses($G(bodyId), 'focus');
             }
         }
-        setAlign('none');
         switch (id) {
             case 'remote':
                 remoteImage = remoteImage || new RemoteImage();
                 break;
             case 'upload':
+                setAlign(editor.getOpt('imageInsertAlign'));
                 uploadImage = uploadImage || new UploadImage('queueList');
                 break;
             case 'online':
+                setAlign(editor.getOpt('imageManagerInsertAlign'));
                 onlineImage = onlineImage || new OnlineImage('imageList');
                 break;
             case 'search':
+                setAlign(editor.getOpt('imageManagerInsertAlign'));
                 searchImage = searchImage || new SearchImage();
                 break;
         }

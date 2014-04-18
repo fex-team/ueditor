@@ -31,7 +31,7 @@ return array(
     /* 涂鸦图片配置区 */
     , 'scrawlUrl' => $serverUrl . "?action=uploadscrawl" //涂鸦上传地址
     , 'scrawlPath' => $uploadPathPrefix //涂鸦修正地址，是最终插入的图片地址前缀
-    , 'scrawlFieldName' => 'content' //提交的涂鸦表单名称
+    , 'scrawlFieldName' => $fieldName //提交的涂鸦表单名称
     , 'scrawlInsertAlign' => $insertAlign //插入的涂鸦图片浮动方式
     , 'scrawlMaxSize' => 2 * 1024 //提交的涂鸦大小限制，单位KB
     , 'scrawlAllowFiles' => array(".png", ".jpg") //提交的涂鸦的文件格式
@@ -67,7 +67,7 @@ return array(
         ".txt", ".md", ".xml") //上传图片允许的文件格式
 
     /* 视频上传配置区 */
-    , 'videoUrl' => $serverUrl . "?action=uploadvideo" //视频上传提交地址
+    , 'videoUrl' => $serverDir . "?action=uploadvideo" //视频上传提交地址
     , 'videoPath' => $uploadPathPrefix //视频修正地址，是最终插入的视频地址前缀
     , 'videoFieldName' => $fieldName //提交的图片表单名称
     , 'videoMaxSize' => 100 * 1024 //上传图片大小限制，单位KB
