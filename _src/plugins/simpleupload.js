@@ -84,7 +84,15 @@ UE.plugin.register('simpleupload', function (){
                             tag: "script",
                             type: "text/javascript",
                             defer: "defer"
-                        }, initWebUploader);
+                        }, function(){
+                            if(me._serverConfigLoaded) {
+                                initWebUploader();
+                            } else {
+                                me.addListener('serverConfigLoaded', function(){
+                                    initWebUploader();
+                                });
+                            }
+                        });
                     };
 
                 /* 加载jquery */
