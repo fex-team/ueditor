@@ -273,6 +273,7 @@ UE.I18N['zh-cn'] = {
         'errorExceedSize':'文件大小超出',
         'errorInterrupt':'文件大小超出',
         'errorUploadRetry':'上传失败，请重试',
+        'remoteLockError':"宽高不正确,不能所定比例",
         'numError':"请输入正确的长度或者宽度值！例如：123，400",
         'imageUrlError':"不允许的图片格式或者图片域！",
         'imageLoadError':"图片加载失败！请检查链接地址或网络状态！",

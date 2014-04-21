@@ -163,19 +163,52 @@
             }
         },
         initEvents: function () {
-            var _this = this;
+            var _this = this,
+                locker = $G('lock');
 
             /* 改变url */
             domUtils.on($G("url"), 'keyup', updatePreview);
-            domUtils.on($G("width"), 'keyup', function(){
-                updatePreview();
-            });
-            domUtils.on($G("height"), 'keyup', updatePreview);
             domUtils.on($G("border"), 'keyup', updatePreview);
             domUtils.on($G("title"), 'keyup', updatePreview);
 
+            domUtils.on($G("width"), 'keyup', function(){
+                updatePreview();
+                if(locker.checked) {
+                    var proportion =locker.getAttribute('data-proportion');
+                    $G('height').value = Math.round(this.value / proportion);
+                } else {
+                    _this.updateLocker();
+                }
+            });
+            domUtils.on($G("height"), 'keyup', function(){
+                updatePreview();
+                if(locker.checked) {
+                    var proportion =locker.getAttribute('data-proportion');
+                    $G('width').value = Math.round(this.value * proportion);
+                } else {
+                    _this.updateLocker();
+                }
+            });
+            domUtils.on($G("lock"), 'change', function(){
+                var proportion = parseInt($G("width").value) /parseInt($G("height").value);
+                locker.setAttribute('data-proportion', proportion);
+            });
+
             function updatePreview(){
                 _this.setPreview();
+            }
+        },
+        updateLocker: function(){
+            var width = $G('width').value,
+                height = $G('height').value,
+                locker = $G('lock');
+            if(width && height && width == parseInt(width) && height == parseInt(height)) {
+                locker.disabled = false;
+                locker.title = '';
+            } else {
+                locker.checked = false;
+                locker.disabled = 'disabled';
+                locker.title = lang.remoteLockError;
             }
         },
         setImage: function(img){
@@ -197,6 +230,7 @@
                 $G("title").value = img.title || img.alt || '';
                 setAlign(align);
                 this.setPreview();
+                this.updateLocker();
             }
         },
         getData: function(){
@@ -222,6 +256,14 @@
 
             if(url) {
                 preview.innerHTML = '<img src="' + url + '" width="' + width + '" height="' + height + '" border="' + border + 'px solid #000" title="' + title + '" />';
+                /*
+                if(!ow && !oh) {
+                    preview.firstChild.onload = function(){
+                        $G('width').value = this.offsetWidth;
+                        $G('height').value = this.offsetHeight;
+                    }
+                }
+                */
             }
         },
         getInsertList: function () {
@@ -317,7 +359,7 @@
                     label: lang.uploadSelectFile
                 },
                 dnd: '#dndArea',
-                paste: document.body,
+                paste: $queue,
                 accept: {
                     title: 'Images',
                     extensions: acceptExtensions,
@@ -801,7 +843,7 @@
                         }
                     })(img));
                     img.width = '100';
-                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i].url + '?' + (+new Date()));
+                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i].url);
                     img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i].url);
                     domUtils.addClass(icon, 'icon');
 

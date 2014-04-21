@@ -273,6 +273,7 @@ UE.I18N['en'] = {
         'errorExceedSize':'File Size Exceed',
         'errorInterrupt':'Upload was Interrupted',
         'errorUploadRetry':'Upload Error, Please Retry.',
+        'remoteLockError':"Cannot Lock the Proportion between width and height",
         'numError':"Please enter the correct Num. e.g 123,400",
         'imageUrlError':"The image format may be wrong!",
         'imageLoadError':"Error,please check the network or URL！",
