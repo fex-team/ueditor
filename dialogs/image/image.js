@@ -38,10 +38,9 @@
 
     /* 初始化onok事件 */
     function initButtons() {
-        var btn = dialog.buttons[0];
 
         dialog.onok = function () {
-            var list = [], id, tabs = $G('tabhead').children;
+            var remote = false, list = [], id, tabs = $G('tabhead').children;
             for (var i = 0; i < tabs.length; i++) {
                 if (domUtils.hasClass(tabs[i], 'focus')) {
                     id = tabs[i].getAttribute('data-content-id');
@@ -61,13 +60,13 @@
                     break;
                 case 'search':
                     list = searchImage.getInsertList();
+                    remote = true;
                     break;
             }
 
             if(list) {
                 editor.execCommand('insertimage', list);
-            } else {
-                return false;
+                remote && editor.fireEvent("catchRemoteImage");
             }
         };
     }
@@ -99,7 +98,7 @@
     }
     /* 获取对齐方式 */
     function getAlign(){
-        var align = $G("align").value == 'none';
+        var align = $G("align").value || 'none';
         return align == 'none' ? '':align;
     }
 
@@ -117,18 +116,20 @@
                 domUtils.removeClasses($G(bodyId), 'focus');
             }
         }
-        setAlign('none');
         switch (id) {
             case 'remote':
                 remoteImage = remoteImage || new RemoteImage();
                 break;
             case 'upload':
+                setAlign(editor.getOpt('imageInsertAlign'));
                 uploadImage = uploadImage || new UploadImage('queueList');
                 break;
             case 'online':
+                setAlign(editor.getOpt('imageManagerInsertAlign'));
                 onlineImage = onlineImage || new OnlineImage('imageList');
                 break;
             case 'search':
+                setAlign(editor.getOpt('imageManagerInsertAlign'));
                 searchImage = searchImage || new SearchImage();
                 break;
         }
@@ -161,19 +162,52 @@
             }
         },
         initEvents: function () {
-            var _this = this;
+            var _this = this,
+                locker = $G('lock');
 
             /* 改变url */
             domUtils.on($G("url"), 'keyup', updatePreview);
-            domUtils.on($G("width"), 'keyup', function(){
-                updatePreview();
-            });
-            domUtils.on($G("height"), 'keyup', updatePreview);
             domUtils.on($G("border"), 'keyup', updatePreview);
             domUtils.on($G("title"), 'keyup', updatePreview);
 
+            domUtils.on($G("width"), 'keyup', function(){
+                updatePreview();
+                if(locker.checked) {
+                    var proportion =locker.getAttribute('data-proportion');
+                    $G('height').value = Math.round(this.value / proportion);
+                } else {
+                    _this.updateLocker();
+                }
+            });
+            domUtils.on($G("height"), 'keyup', function(){
+                updatePreview();
+                if(locker.checked) {
+                    var proportion =locker.getAttribute('data-proportion');
+                    $G('width').value = Math.round(this.value * proportion);
+                } else {
+                    _this.updateLocker();
+                }
+            });
+            domUtils.on($G("lock"), 'change', function(){
+                var proportion = parseInt($G("width").value) /parseInt($G("height").value);
+                locker.setAttribute('data-proportion', proportion);
+            });
+
             function updatePreview(){
                 _this.setPreview();
+            }
+        },
+        updateLocker: function(){
+            var width = $G('width').value,
+                height = $G('height').value,
+                locker = $G('lock');
+            if(width && height && width == parseInt(width) && height == parseInt(height)) {
+                locker.disabled = false;
+                locker.title = '';
+            } else {
+                locker.checked = false;
+                locker.disabled = 'disabled';
+                locker.title = lang.remoteLockError;
             }
         },
         setImage: function(img){
@@ -195,6 +229,7 @@
                 $G("title").value = img.title || img.alt || '';
                 setAlign(align);
                 this.setPreview();
+                this.updateLocker();
             }
         },
         getData: function(){
@@ -257,7 +292,7 @@
             this.initUploader();
         },
         initContainer: function () {
-            this.$queue = this.$wrap.find('.filelist').hide();
+            this.$queue = this.$wrap.find('.filelist');
         },
         /* 初始化容器 */
         initUploader: function () {
@@ -273,7 +308,7 @@
             // 上传按钮
                 $upload = $wrap.find('.uploadBtn'),
             // 上传按钮
-                $filePickerBtn = $wrap.find('.filePickerBtn').hide(),
+                $filePickerBtn = $wrap.find('.filePickerBtn'),
             // 上传按钮
                 $filePickerBlock = $wrap.find('.filePickerBlock'),
             // 没选择文件之前的内容。
@@ -290,7 +325,7 @@
                 thumbnailWidth = 113 * ratio,
                 thumbnailHeight = 113 * ratio,
             // 可能有pedding, ready, uploading, confirm, done.
-                state = 'pedding',
+                state,
             // 所有文件的进度信息，key为file id
                 percentages = {},
                 supportTransition = (function () {
@@ -314,14 +349,14 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
-                dnd: '#queueList',
-                paste: document.body,
+                dnd: '#dndArea',
+                paste: $queue,
                 accept: {
                     title: 'Images',
                     extensions: acceptExtensions,
                     mimeTypes: 'image/*'
                 },
-                swf: '../../third-party/webuploader/webuploader.swf',
+                swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
                 server: editor.getOpt('imageUrl'),
@@ -350,6 +385,8 @@
                 id: '#filePickerBtn',
                 label: lang.uploadAddFile
             });
+
+            setState('pedding');
 
             // 当有文件添加进来时执行，负责view的创建
             function addFile(file) {
@@ -531,14 +568,18 @@
 
                     /* 未选择文件 */
                     case 'pedding':
-                        $queue.hide(); $statusBar.hide(); $placeHolder.show();
+                        $queue.addClass('element-invisible');
+                        $statusBar.addClass('element-invisible');
+                        $placeHolder.removeClass('element-invisible');
                         $progress.hide(); $info.hide();
                         uploader.refresh();
                         break;
 
                     /* 可以开始上传 */
                     case 'ready':
-                        $placeHolder.hide(); $queue.show(); $statusBar.show();
+                        $placeHolder.addClass('element-invisible');
+                        $queue.removeClass('element-invisible');
+                        $statusBar.removeClass('element-invisible');
                         $progress.hide(); $info.show();
                         $upload.text(lang.uploadStart).removeClass('disabled');
                         uploader.refresh();
@@ -618,10 +659,6 @@
             uploader.onFileDequeued = function (file) {
                 fileCount--;
                 fileSize -= file.size;
-
-                if (!fileCount) {
-                    setState('pedding');
-                }
 
                 removeFile(file);
                 updateTotalProgress();
@@ -739,6 +776,7 @@
             this.state = 0;
             this.listSize = editor.getOpt('imageManagerListSize');
             this.listIndex = 0;
+            this.listEnd = false;
 
             /* 第一次拉取数据 */
             this.getImageData();
@@ -752,8 +790,8 @@
                 ajax.request(editor.options.imageManagerUrl, {
                     timeout: 100000,
                     data: utils.extend({
-                            size: this.listSize,
-                            page: this.listIndex / this.listSize
+                            start: this.listIndex,
+                            size: this.listSize
                         }, editor.queryCommandValue('serverparam')),
                     method: 'get',
                     onsuccess: function (r) {
@@ -761,13 +799,20 @@
                             var json = eval('(' + r.responseText + ')');
                             if (json.state == 'SUCCESS') {
                                 _this.pushData(json.list);
-                                _this.listIndex += json.list.length;
+                                _this.listIndex = parseInt(json.start) + parseInt(json.list.length);
                                 if(_this.listIndex >= json.total) {
                                     _this.listEnd = true;
                                 }
                                 _this.isLoadingData = false;
                             }
                         } catch (e) {
+                            if(r.responseText.indexOf('ue_separate_ue') != -1) {
+                                var list = r.responseText.split(r.responseText);
+                                _this.pushData(list);
+                                _this.listIndex = parseInt(list.length);
+                                _this.listEnd = true;
+                                _this.isLoadingData = false;
+                            }
                         }
                     },
                     onerror: function () {
@@ -780,18 +825,19 @@
         pushData: function (list) {
             var i, item, img, icon, _this = this;
             for (i = 0; i < list.length; i++) {
-                if(list[i]) {
+                if(list[i] && list[i].url) {
                     item = document.createElement('li');
                     img = document.createElement('img');
                     icon = document.createElement('span');
 
-                    img.onload = function () {
-                        var image = this;
-                        _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
-                    };
-                    img.width = 100;
-                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i]);
-                    img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i]);
+                    domUtils.on(img, 'load', (function(image){
+                        return function(){
+                            _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
+                        }
+                    })(img));
+                    img.width = '100';
+                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                    img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i].url);
                     domUtils.addClass(icon, 'icon');
 
                     item.appendChild(img);

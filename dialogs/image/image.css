@@ -7,6 +7,7 @@
     margin: 0 auto;
     padding: 10px;
     position: relative;
+    font-family: sans-serif;
 }
 
 /*tab样式框大小*/
@@ -55,27 +56,30 @@
 }
 .alignBar #alignIcon span{
     float: left;
+    cursor: pointer;
     display: block;
-    width: 20px;
-    height: 19px;
-    margin-right: 5px;
+    width: 19px;
+    height: 17px;
+    margin-right: 3px;
+    margin-left: 3px;
     filter:alpha(Opacity=40);-moz-opacity:0.4;opacity: 0.4;
-    background-size:  100% 100%;
+    background-image: url(./images/alignicon.png);
+    background-image: url(./images/alignicon.gif) \9;
 }
 .alignBar #alignIcon span.focus{
     filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;
 }
 .alignBar #alignIcon span.none-align{
-    background-image: url(./images/none_focus.jpg);
+    background-position: 0 0;
 }
 .alignBar #alignIcon span.left-align{
-    background-image: url(./images/left_focus.jpg);
+    background-position: -20px 0;
 }
 .alignBar #alignIcon span.right-align{
-    background-image: url(./images/right_focus.jpg);
+    background-position: -40px 0;
 }
 .alignBar #alignIcon span.center-align{
-    background-image: url(./images/center_focus.jpg);
+    background-position: -60px 0;
 }
 
 
@@ -148,9 +152,9 @@
 }
 #remote #width,
 #remote #height{
-    width: 30px;
-    margin-left: 3px;
-    margin-right: 3px;
+    width: 20px;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 #remote #border,
 #remote #vhSpace,
@@ -228,6 +232,11 @@
     background: #00a2d4;
 }
 
+
+#filePickerContainer {
+    text-align: center;
+}
+
 #upload .placeholder .flashTip {
     color: #666666;
     font-size: 12px;
@@ -271,7 +280,7 @@
 #upload .filelist li {
     width: 113px;
     height: 113px;
-    background: url(./images/bg.png) no-repeat;
+    background: url(./images/bg.png);
     text-align: center;
     margin: 9px 0 0 9px;
     position: relative;
@@ -425,6 +434,8 @@
     margin: 0;
     padding: 0;
     opacity: 0;
+    background: none;
+    font-size: 0;
 }
 
 #upload .filelist div.file-panel {
@@ -533,7 +544,6 @@
     display: inline-block;
     float: left;
 }
-
 #upload .statusBar .btns .webuploader-pick,
 #upload .statusBar .btns .uploadBtn,
 #upload .statusBar .btns .uploadBtn.state-uploading,

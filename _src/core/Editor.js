@@ -263,16 +263,26 @@
 
         /* 尝试异步加载后台配置 */
         try{
-            UE.ajax.request(me.options.serverUrl,{
-                method: 'GET',
-                data: {
+            var serverUrl = me.options.serverUrl || me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2') || '';
+
+            /* 发出ajax请求 */
+            me._serverConfigLoaded = false;
+            serverUrl && UE.ajax.request(serverUrl,{
+                'method': 'GET',
+                'data': {
                     'action': 'config'
-                }, onsuccess:function(xhr){
+                },
+                'onsuccess':function(xhr){
                     var config = eval("("+xhr.responseText+")");
-                    me.setOpt(config);
-                }
+                    utils.extend(me.options, config);
+                    me.fireEvent('serverConfigLoaded');
+                    me._serverConfigLoaded = true;
+                },
+                'onerror':function(){}
             });
-        } catch(e){}
+        } catch(e){
+            console.log('Get Server Config Error!');
+        }
 
         if(!utils.isEmptyObject(UE.I18N)){
             //修改默认的语言类型

@@ -37,10 +37,14 @@ UE.ajax = function() {
             //传递过来的对象和函数不在提交之列
             if (!((typeof json[i]).toLowerCase() == "function" || (typeof json[i]).toLowerCase() == "object")) {
                 strArr.push( encodeURIComponent(i) + "="+encodeURIComponent(json[i]) );
+            } else if (json[i].constructor === Array) {
+            //支持传数组内容
+                for(var j = 0; j < json[i].length; j++) {
+                    strArr.push( encodeURIComponent(i) + "[]="+encodeURIComponent(json[i][j]) );
+                }
             }
         }
         return strArr.join("&");
-
     }
 
 

@@ -1,10 +1,11 @@
 <?php
-global $C;
-global $action;
+//header('Access-Control-Allow-Origin: http://*.baidu.com'); //设置http://*.baidu.com允许跨域访问
+date_default_timezone_set("Asia/chongqing");
+header("Content-Type: text/html; charset=utf-8");
+error_reporting(E_ERROR | E_WARNING);
 
 $C = include("config.php");
 $action = $_GET['action'];
-$type = $_GET['type'];
 
 switch ($action) {
     case 'config':
@@ -17,11 +18,7 @@ switch ($action) {
                 $config[$k] = $v;
             }
         }
-        if ($callback = $_GET['callback']) {
-            echo $callback . '(' . json_encode($config) . ')';
-        } else {
-            echo json_encode($config);
-        }
+        $result =  json_encode($config);
         break;
 
     /* 上传图片 */
@@ -32,20 +29,33 @@ switch ($action) {
     case 'uploadvideo':
     /* 上传文件 */
     case 'uploadfile':
-        include("fileUp.php");
+        $result = include("upload.php");
         break;
 
     /* 列出图片 */
     case 'listimage':
-        include("imageManager.php");
+        $result = include("filemanager.php");
+        break;
+    /* 列出文件 */
+    case 'listfile':
+        $result = include("filemanager.php");
         break;
 
     /* 抓取远程文件 */
-    case 'getremoteimage':
-        include("getRemoteImage.php");
+    case 'catchimage':
+        $result = include("crawler.php");
         break;
 
     default:
-        echo 'UNKNOW ERROR';
+        $result = json_encode(array(
+            'state'=> 'UNKNOW ERROR'
+        ));
         break;
+}
+
+/* 输出结果 */
+if (isset($_GET["callback"])) {
+    echo $_GET["callback"] . '(' . $result . ')';
+} else {
+    echo $result;
 }
