@@ -13,21 +13,20 @@ error_reporting(E_ERROR | E_WARNING);
 /* 全局配置项 */
 $CONFIG = include("config.php");
 
-//需要遍历的目录列表，最好使用缩略图地址，否则当网速慢时可能会造成严重的延时
-$paths = $CONFIG['savePath'];
-
 /* 判断类型 */
 switch ($_GET['action']) {
     /* 列出文件 */
     case 'listfile':
         $allowFiles = $CONFIG['fileAllowFiles'];
         $listSize = $CONFIG['fileManagerListSize'];
+        $paths = $CONFIG['fileManagerListPath'];
         break;
     /* 列出图片 */
     case 'listimage':
     default:
         $allowFiles = $CONFIG['imageAllowFiles'];
         $listSize = $CONFIG['imageManagerListSize'];
+        $paths = $CONFIG['imageManagerListPath'];
 }
 $allowFiles = substr(str_replace(".", "|", join("", $allowFiles)), 1);
 
