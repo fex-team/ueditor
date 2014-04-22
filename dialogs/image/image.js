@@ -38,7 +38,6 @@
 
     /* 初始化onok事件 */
     function initButtons() {
-        var btn = dialog.buttons[0];
 
         dialog.onok = function () {
             var remote = false, list = [], id, tabs = $G('tabhead').children;
@@ -256,14 +255,6 @@
 
             if(url) {
                 preview.innerHTML = '<img src="' + url + '" width="' + width + '" height="' + height + '" border="' + border + 'px solid #000" title="' + title + '" />';
-                /*
-                if(!ow && !oh) {
-                    preview.firstChild.onload = function(){
-                        $G('width').value = this.offsetWidth;
-                        $G('height').value = this.offsetHeight;
-                    }
-                }
-                */
             }
         },
         getInsertList: function () {
@@ -301,7 +292,7 @@
             this.initUploader();
         },
         initContainer: function () {
-            this.$queue = this.$wrap.find('.filelist').hide();
+            this.$queue = this.$wrap.find('.filelist');
         },
         /* 初始化容器 */
         initUploader: function () {
@@ -317,7 +308,7 @@
             // 上传按钮
                 $upload = $wrap.find('.uploadBtn'),
             // 上传按钮
-                $filePickerBtn = $wrap.find('.filePickerBtn').hide(),
+                $filePickerBtn = $wrap.find('.filePickerBtn'),
             // 上传按钮
                 $filePickerBlock = $wrap.find('.filePickerBlock'),
             // 没选择文件之前的内容。
@@ -334,7 +325,7 @@
                 thumbnailWidth = 113 * ratio,
                 thumbnailHeight = 113 * ratio,
             // 可能有pedding, ready, uploading, confirm, done.
-                state = 'pedding',
+                state,
             // 所有文件的进度信息，key为file id
                 percentages = {},
                 supportTransition = (function () {
@@ -365,7 +356,7 @@
                     extensions: acceptExtensions,
                     mimeTypes: 'image/*'
                 },
-                swf: '../../third-party/webuploader/webuploader.swf',
+                swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
                 server: editor.getOpt('imageUrl'),
@@ -394,6 +385,8 @@
                 id: '#filePickerBtn',
                 label: lang.uploadAddFile
             });
+
+            setState('pedding');
 
             // 当有文件添加进来时执行，负责view的创建
             function addFile(file) {
@@ -575,14 +568,18 @@
 
                     /* 未选择文件 */
                     case 'pedding':
-                        $queue.hide(); $statusBar.hide(); $placeHolder.show();
+                        $queue.addClass('element-invisible');
+                        $statusBar.addClass('element-invisible');
+                        $placeHolder.removeClass('element-invisible');
                         $progress.hide(); $info.hide();
                         uploader.refresh();
                         break;
 
                     /* 可以开始上传 */
                     case 'ready':
-                        $placeHolder.hide(); $queue.show(); $statusBar.show();
+                        $placeHolder.addClass('element-invisible');
+                        $queue.removeClass('element-invisible');
+                        $statusBar.removeClass('element-invisible');
                         $progress.hide(); $info.show();
                         $upload.text(lang.uploadStart).removeClass('disabled');
                         uploader.refresh();
@@ -662,10 +659,6 @@
             uploader.onFileDequeued = function (file) {
                 fileCount--;
                 fileSize -= file.size;
-
-                if (!fileCount) {
-                    setState('pedding');
-                }
 
                 removeFile(file);
                 updateTotalProgress();
@@ -843,7 +836,7 @@
                         }
                     })(img));
                     img.width = '100';
-                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i].url);
+                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
                     img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i].url);
                     domUtils.addClass(icon, 'icon');
 

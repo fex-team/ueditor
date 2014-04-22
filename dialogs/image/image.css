@@ -7,6 +7,7 @@
     margin: 0 auto;
     padding: 10px;
     position: relative;
+    font-family: sans-serif;
 }
 
 /*tab样式框大小*/
@@ -151,9 +152,9 @@
 }
 #remote #width,
 #remote #height{
-    width: 26px;
-    margin-left: 3px;
-    margin-right: 3px;
+    width: 20px;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 #remote #border,
 #remote #vhSpace,
@@ -231,6 +232,11 @@
     background: #00a2d4;
 }
 
+
+#filePickerContainer {
+    text-align: center;
+}
+
 #upload .placeholder .flashTip {
     color: #666666;
     font-size: 12px;
@@ -274,7 +280,7 @@
 #upload .filelist li {
     width: 113px;
     height: 113px;
-    background: url(./images/bg.png) no-repeat;
+    background: url(./images/bg.png);
     text-align: center;
     margin: 9px 0 0 9px;
     position: relative;
@@ -428,6 +434,8 @@
     margin: 0;
     padding: 0;
     opacity: 0;
+    background: none;
+    font-size: 0;
 }
 
 #upload .filelist div.file-panel {
@@ -536,7 +544,6 @@
     display: inline-block;
     float: left;
 }
-
 #upload .statusBar .btns .webuploader-pick,
 #upload .statusBar .btns .uploadBtn,
 #upload .statusBar .btns .uploadBtn.state-uploading,
