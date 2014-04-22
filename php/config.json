@@ -26,7 +26,7 @@
     "imageManagerActionName": "listimage", //执行图片管理的action名称
     "imageManagerListPath": "image", //指定要列出图片的目录
     "imageManagerListSize": 20, //每次列出文件数量
-    "imageUrlPrefix": "", //图片访问路径前缀
+    "imageManagerUrlPrefix": "", //图片访问路径前缀
     "imageManagerInsertAlign": "none",
 
     // 涂鸦图片上传配置项
@@ -77,12 +77,11 @@
         ".rar", ".zip", ".tar", ".gz", ".7z", ".bz2", ".cab", ".iso",
         ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml"
     ], //上传文件格式显示
-    "fileUrlPrefix": "", //文件访问路径前缀
 
     // 列出指定目录下的文件
     "fileManagerActionName": "listfile", //执行文件管理的action名称
     "fileManagerListPath": "file", //指定要列出文件的目录
-    "fileManagerListSize": 20 //每次列出文件数量
-    "fileManagerUrlPrefix": "", //文件访问路径前缀
+    "fileManagerListSize": 20, //每次列出文件数量
+    "fileManagerUrlPrefix": "" //文件访问路径前缀
 
 }
