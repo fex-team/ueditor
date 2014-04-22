@@ -16,7 +16,18 @@ $insertAlign = 'none'; // none left right center
 
 return array(
     'savePath' => ['upload'] //上传文件保存在服务器端的目录
-    , 'nameFormat' => '{time}/{rand:6}'
+    , 'imagePathFormat' => '{filename}_{time}{rand:6}' //格式化上传文件名称
+                        // {filename}  //会替换成文件名
+                        // {rand:6}    //会替换成随机数,后面的数字是随机数的位数
+                        // {time}      //会替换成时间戳
+                        // {yyyy}      //会替换成四位年份
+                        // {yy}        //会替换成两位年份
+                        // {mm}        //会替换成两位月份
+                        // {dd}        //会替换成两位日期
+                        // {hh}        //会替换成两位小时
+                        // {ii}        //会替换成两位分钟
+                        // {ss}        //会替换成两位秒
+                        // 非法字符 \ / : * ? " < > |
 
     /* 图片上传配置区 */
     , 'imageUrl' => $serverUrl . '?action=uploadimage' //图片上传地址
@@ -43,12 +54,6 @@ return array(
     , 'snapscreenServerPort' => $_SERVER['SERVER_PORT'] //屏幕截图的server端端口
     , 'snapscreenInsertAlign' => $insertAlign //截图的图片默认的排版方式
 
-    /* 图片在线管理配置区 */
-    , 'imageManagerUrl' => $serverUrl . "?action=listimage" //图片在线管理的处理地址
-    , 'imageManagerPath' => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
-    , 'imageManagerListSize' => 20 //一次获取列表数量
-    , 'imageManagerInsertAlign' => $insertAlign //截图的图片默认的排版方式
-
     /* 远程抓取配置区 */
     , 'catcherLocalDomain' => ["127.0.0.1","localhost","img.baidu.com"] //不抓取的域名列表
     , 'catcherUrl' => $serverUrl . "?action=catchimage" //处理远程图片抓取的地址
@@ -62,7 +67,9 @@ return array(
     , 'filePath' => $uploadPathPrefix //附件修正地址，是最终插入的附件地址前缀
     , 'fileFieldName' => $fieldName //附件提交的表单名，若此处修改，需要在后台对应文件修改对应参数
     , 'fileMaxSize' => 20 * 1024 //上传图片大小限制，单位KB
-    , 'fileAllowFiles' => array(".rar", ".zip", ".tar", ".gz", ".7z", "bz2", ".cab", ".iso",
+    , 'fileAllowFiles' => array(".png", ".jpg", ".jpeg", ".gif", ".bmp",
+        ".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid",
+        ".rar", ".zip", ".tar", ".gz", ".7z", ".bz2", ".cab", ".iso",
         ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf",
         ".txt", ".md", ".xml") //上传图片允许的文件格式
 
@@ -72,5 +79,16 @@ return array(
     , 'videoFieldName' => $fieldName //提交的图片表单名称
     , 'videoMaxSize' => 100 * 1024 //上传图片大小限制，单位KB
     , 'videoAllowFiles' => array(".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg", ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid") //上传图片允许的文件格式
+
+    /* 图片在线管理配置区 */
+    , 'imageManagerUrl' => $serverUrl . "?action=listimage" //图片在线管理的处理地址
+    , 'imageManagerPath' => $uploadPathPrefix //图片修正地址，是最终插入的图片地址前缀
+    , 'imageManagerListSize' => 20 //一次获取列表数量
+    , 'imageManagerInsertAlign' => $insertAlign //截图的图片默认的排版方式
+
+    /* 文件在线管理配置区 */
+    , 'fileManagerUrl' => $serverUrl . "?action=listfile" //文件在线管理的处理地址
+    , 'fileManagerPath' => $uploadPathPrefix //文件修正地址，是最终插入的文件地址前缀
+    , 'fileManagerListSize' => 20 //一次获取列表数量
 
 );

@@ -36,6 +36,10 @@ switch ($action) {
     case 'listimage':
         $result = include("filemanager.php");
         break;
+    /* 列出文件 */
+    case 'listfile':
+        $result = include("filemanager.php");
+        break;
 
     /* 抓取远程文件 */
     case 'catchimage':
