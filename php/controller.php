@@ -5,7 +5,7 @@ header("Content-Type: text/html; charset=utf-8");
 error_reporting(E_ERROR | E_WARNING);
 
 global $CONFIG;
-$CONFIG = json_decode(preg_replace("/\/\/.*[\r\n]/", "\n", file_get_contents("config")));
+$CONFIG = json_decode(preg_replace("/\/\/.*[\r\n]/", "\n", file_get_contents("config.json")));
 $action = $_GET['action'];
 
 switch ($action) {
