@@ -61,6 +61,10 @@ UE.I18N['en'] = {
         'impact':'Impact',
         'timesNewRoman':'Times new roman'
     },
+    'simpleupload':{
+        'exceedSizeError': 'File Size Exceed',
+        'jsonEncodeError': 'Server Return Format Error'
+    },
     'customstyle':{
         'tc':'Title center',
         'tl':'Title left',

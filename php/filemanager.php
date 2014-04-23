@@ -10,23 +10,20 @@ date_default_timezone_set("Asia/chongqing");
 header("Content-Type: text/html; charset=utf-8");
 error_reporting(E_ERROR | E_WARNING);
 
-/* 全局配置项 */
-$CONFIG = include("config.php");
-
 /* 判断类型 */
 switch ($_GET['action']) {
     /* 列出文件 */
     case 'listfile':
-        $allowFiles = $CONFIG['fileAllowFiles'];
+        $allowFiles = $CONFIG['fileManagerAllowFiles'];
         $listSize = $CONFIG['fileManagerListSize'];
-        $paths = $CONFIG['fileManagerListPath'];
+        $path = $CONFIG['fileManagerListPath'];
         break;
     /* 列出图片 */
     case 'listimage':
     default:
-        $allowFiles = $CONFIG['imageAllowFiles'];
+        $allowFiles = $CONFIG['imageManagerAllowFiles'];
         $listSize = $CONFIG['imageManagerListSize'];
-        $paths = $CONFIG['imageManagerListPath'];
+        $path = $CONFIG['imageManagerListPath'];
 }
 $allowFiles = substr(str_replace(".", "|", join("", $allowFiles)), 1);
 
@@ -36,13 +33,8 @@ $start = isset($_GET['start']) ? $_GET['start'] : 0;
 $end = $start + $size;
 
 /* 获取文件列表 */
-$files = array();
-foreach ($paths as $path) {
-    $tmp = getfiles($path, $allowFiles);
-    if ($tmp) {
-        $files = array_merge($files, $tmp);
-    }
-}
+$path = $_SERVER['DOCUMENT_ROOT'] . (substr($path, 0, 1) == "/" ? "":"/") . $path;
+$files = getfiles($path, $allowFiles);
 if (!count($files)) {
     return json_encode(array(
         "state" => "no match file",
@@ -90,7 +82,7 @@ function getfiles($path, $allowFiles, &$files = array())
             } else {
                 if (preg_match("/\.(".$allowFiles.")$/i", $file)) {
                     $files[] = array(
-                        'url'=> $path2
+                        'url'=> substr($path2, strlen($_SERVER['DOCUMENT_ROOT']))
                     );
                 }
             }

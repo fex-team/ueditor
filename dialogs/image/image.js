@@ -359,12 +359,10 @@
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
-                server: editor.getOpt('imageUrl'),
+                server: editor.getActionUrl(editor.getOpt('imageActionName')),
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
-                fileNumLimit: 300,
-                fileSizeLimit: 1024 * imageMaxSize * 300,    // 默认 600 M
-                fileSingleSizeLimit: 1024 * imageMaxSize,    // 默认 2 M
+                fileSingleSizeLimit: imageMaxSize,    // 默认 2 M
                 compress: editor.getOpt('imageCompressEnable') ? {
                     width: imageCompressBorder,
                     height: imageCompressBorder,
@@ -446,7 +444,6 @@
                     }
                     // 成功
                     if (cur === 'error' || cur === 'invalid') {
-                        console.log(file.statusText);
                         showError(file.statusText);
                         percentages[ file.id ][ 1 ] = 1;
                     } else if (cur === 'interrupt') {
@@ -787,7 +784,8 @@
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                ajax.request(editor.options.imageManagerUrl, {
+                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName');
+                ajax.request(url, {
                     timeout: 100000,
                     data: utils.extend({
                             start: this.listIndex,
@@ -835,9 +833,9 @@
                             _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
                         }
                     })(img));
-                    img.width = '100';
-                    img.setAttribute('src', editor.getOpt('imageManagerPath') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
-                    img.setAttribute('_src', editor.getOpt('imageManagerPath') + list[i].url);
+                    img.width = '113';
+                    img.setAttribute('src', editor.getOpt('imageManagerUrlPrefix') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                    img.setAttribute('_src', editor.getOpt('imageManagerUrlPrefix') + list[i].url);
                     domUtils.addClass(icon, 'icon');
 
                     item.appendChild(img);

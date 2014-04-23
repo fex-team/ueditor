@@ -6,37 +6,31 @@
  * Time: 上午10:17
  */
 include "Uploader.class.php";
-date_default_timezone_set("Asia/chongqing");
-header("Content-Type: text/html; charset=utf-8");
-error_reporting(E_ERROR | E_WARNING);
 
 /* 上传配置 */
-$isBase64 = false;
+$base64 = "upload";
 switch ($_GET['action']) {
     case 'uploadimage':
         $config = array(
-            "savePath" => $CONFIG['savePath'][0],
-            "fileNameFormat" => $CONFIG['nameFormat'],
-            "maxSize" => $CONFIG['imageMaxSize'], //单位KB
+            "pathFormat" => $CONFIG['imagePathFormat'],
+            "maxSize" => $CONFIG['imageMaxSize'],
             "allowFiles" => $CONFIG['imageAllowFiles']
         );
         $fieldName = $CONFIG['imageFieldName'];
         break;
     case 'uploadscrawl':
         $config = array(
-            "savePath" => $CONFIG['savePath'][0],
-            "fileNameFormat" => $CONFIG['nameFormat'],
-            "maxSize" => $CONFIG['scrawlMaxSize'], //默认1MB
+            "pathFormat" => $CONFIG['scrawlPathFormat'],
+            "maxSize" => $CONFIG['scrawlMaxSize'],
             "allowFiles" => $CONFIG['scrawlAllowFiles']
         );
         $fieldName = $CONFIG['scrawlFieldName'];
-        $isBase64 = true;
+        $base64 = "base64";
         break;
     case 'uploadvideo':
         $config = array(
-            "savePath" => $CONFIG['savePath'][0],
-            "fileNameFormat" => $CONFIG['nameFormat'],
-            "maxSize" => $CONFIG['videoMaxSize'], //单位KB
+            "pathFormat" => $CONFIG['videoPathFormat'],
+            "maxSize" => $CONFIG['videoMaxSize'],
             "allowFiles" => $CONFIG['videoAllowFiles']
         );
         $fieldName = $CONFIG['videoFieldName'];
@@ -44,9 +38,8 @@ switch ($_GET['action']) {
     case 'uploadfile':
     default:
         $config = array(
-            "savePath" => $CONFIG['savePath'][0],
-            "fileNameFormat" => $CONFIG['nameFormat'],
-            "maxSize" => $CONFIG['fileMaxSize'], //单位KB
+            "pathFormat" => $CONFIG['filePathFormat'],
+            "maxSize" => $CONFIG['fileMaxSize'],
             "allowFiles" => $CONFIG['fileAllowFiles']
         );
         $fieldName = $CONFIG['fileFieldName'];
@@ -54,7 +47,7 @@ switch ($_GET['action']) {
 }
 
 /* 生成上传实例对象并完成上传 */
-$up = new Uploader($fieldName, $config, $isBase64);
+$up = new Uploader($fieldName, $config, $base64);
 
 /**
  * 得到上传文件所对应的各个参数,数组结构
@@ -67,7 +60,6 @@ $up = new Uploader($fieldName, $config, $isBase64);
  *     "state" => ""           //上传状态，上传成功时必须返回"SUCCESS"
  * )
  */
-$info = $up->getFileInfo();
 
 /* 返回数据 */
-return '{"url":"' . $info["url"] . '","fileType":"' . $info["type"] . '","original":"' . $info["originalName"] . '","state":"' . $info["state"] . '"}';
+return json_encode($up->getFileInfo());
