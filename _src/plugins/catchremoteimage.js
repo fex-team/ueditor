@@ -23,8 +23,8 @@ UE.plugins['catchremoteimage'] = function () {
     me.addListener("catchRemoteImage", function () {
 
         var catcherLocalDomain = me.getOpt('catcherLocalDomain'),
-            catcherUrl = me.getOpt('catcherUrl'),
-            catcherPath = me.getOpt('catcherPath'),
+            catcherActionUrl = me.getActionUrl(me.getOpt('imageActionName')),
+            catcherUrlPrefix = me.getOpt('catcherUrlPrefix'),
             catcherFieldName = me.getOpt('catcherFieldName');
 
         var remoteImages = [],
@@ -68,7 +68,7 @@ UE.plugins['catchremoteimage'] = function () {
                             console.log(cj.source);
                             console.log(cj.state);
                             if (oldSrc == cj.source && cj.state == "SUCCESS") {  //抓取失败时不做替换处理
-                                newSrc = catcherPath + cj.url;
+                                newSrc = catcherUrlPrefix + cj.url;
                                 domUtils.setAttributes(ci, {
                                     "src": newSrc,
                                     "_src": newSrc
@@ -93,7 +93,7 @@ UE.plugins['catchremoteimage'] = function () {
                 onerror: callbacks["error"]
             };
             opt[catcherFieldName] = imgs;
-            ajax.request(catcherUrl, opt);
+            ajax.request(catcherActionUrl, opt);
         }
 
     });

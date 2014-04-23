@@ -32,7 +32,7 @@
     function initButtons() {
 
         dialog.onok = function () {
-            var remote = false, list = [], id, tabs = $G('tabhead').children;
+            var list = [], id, tabs = $G('tabhead').children;
             for (var i = 0; i < tabs.length; i++) {
                 if (domUtils.hasClass(tabs[i], 'focus')) {
                     id = tabs[i].getAttribute('data-content-id');
@@ -49,10 +49,15 @@
                     break;
             }
 
-            if(list) {
-                editor.execCommand('insertimage', list);
-                remote && editor.fireEvent("catchRemoteImage");
-            }
+            utils.each(utils.isArray(list) ? list:[list], function(item, i){
+                if(item && item.url) {
+                    editor.execCommand('inserthtml',
+                        '<p style="line-height: 16px;">' +
+                        '<img src="'+ item.icon + '" _src="' + item.icon + '" />' +
+                        '<a href="' + item.url +'">"' + item.url + '"</a>' +
+                        '</p>');
+                }
+            });
         };
     }
 
@@ -154,7 +159,7 @@
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
-                server: editor.getOpt('fileUrl'),
+                server: editor.getActionUrl(editor.getOpt('imageActionName')),
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
                 fileNumLimit: 300,
@@ -619,7 +624,6 @@
                         })(preview));
                         preview.width = '100';
                         preview.setAttribute('src', editor.getOpt('fileManagerPath') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
-                        preview.setAttribute('_src', editor.getOpt('fileManagerPath') + list[i].url);
                     } else {
                         var ic = document.createElement('i'),
                             textSpan = document.createElement('span');
@@ -632,6 +636,7 @@
                         domUtils.addClass(ic, 'file-preview');
                     }
                     domUtils.addClass(icon, 'icon');
+                    item.setAttribute('data-url', list[i].url);
 
                     item.appendChild(preview);
                     item.appendChild(icon);
@@ -666,18 +671,42 @@
                 }
             }
         },
+        getFileIcon: function(url){
+            var ext = url.substr(url.lastIndexOf('.') + 1),
+                maps = {
+                    "rar":"icon_rar.gif",
+                    "zip":"icon_rar.gif",
+                    "doc":"icon_doc.gif",
+                    "docx":"icon_doc.gif",
+                    "pdf":"icon_pdf.gif",
+                    "mp3":"icon_mp3.gif",
+                    "xls":"icon_xls.gif",
+                    "chm":"icon_chm.gif",
+                    "ppt":"icon_ppt.gif",
+                    "pptx":"icon_ppt.gif",
+                    "avi":"icon_mv.gif",
+                    "rmvb":"icon_mv.gif",
+                    "wmv":"icon_mv.gif",
+                    "flv":"icon_mv.gif",
+                    "swf":"icon_mv.gif",
+                    "rm":"icon_mv.gif",
+                    "exe":"icon_exe.gif",
+                    "psd":"icon_psd.gif",
+                    "txt":"icon_txt.gif"
+                };
+            return maps[ext] ? maps[ext]:maps['txt'];
+        },
         getInsertList: function () {
             var i, lis = this.list.children, list = [];
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
-                    var img = lis[i].firstChild,
-                        src = img.getAttribute('_src');
+                    var url = lis[i].getAttribute('data-url');
                     list.push({
-                        src: src,
-                        _src: src
+                        icon: this.getFileIcon(url),
+                        title: url.substr(url.lastIndexOf('/') + 1),
+                        url: editor.options.fileUrlPrefix + url
                     });
                 }
-
             }
             return list;
         }

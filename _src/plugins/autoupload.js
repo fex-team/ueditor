@@ -12,13 +12,14 @@ UE.plugin.register('autoupload', function (){
         var fd = new FormData();
         fd.append(editor.options.imageFieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
         fd.append('type', 'ajax');
-        var xhr = new XMLHttpRequest();
-        xhr.open("post", me.options.imageUrl, true);
+        var xhr = new XMLHttpRequest(),
+            url = editor.getActionUrl(editor.getOpt('imageActionName'));
+        xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.addEventListener('load', function (e) {
             try{
                 var json = (new Function("return " + e.target.response))(),
-                    picLink = me.options.imagePath + json.url;
+                    picLink = me.getOpt('imageUrlPrefix') + json.url;
                 editor.execCommand('insertimage', {
                     src: picLink,
                     _src: picLink

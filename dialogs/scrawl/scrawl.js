@@ -40,13 +40,11 @@ var scrawl = function (options) {
         },
 
         originalState:function (options) {
-            var me = this,
-                url = editor.options.scrawlUrl;
+            var me = this;
 
             me.brushWidth = options.drawBrushSize;//同步画笔粗细
             me.brushColor = options.drawBrushColor;//同步画笔颜色
 
-            $G("fileForm").action = url + (url.indexOf("?") == -1 ? "?" : "&") + "action=tmpImg";//初始form提交地址
             context.lineWidth = me.brushWidth;//初始画笔大小
             context.strokeStyle = me.brushColor;//初始画笔颜色
             context.fillStyle = "transparent";//初始画布背景颜色
@@ -636,7 +634,7 @@ function exec(scrawlObj) {
                         responseObj = eval("(" + xhr.responseText + ")");
                         if (responseObj.state == "SUCCESS") {
                             var imgObj = {},
-                                url = editor.options.scrawlPath + responseObj.url;
+                                url = editor.options.scrawlUrlPrefix + responseObj.url;
                             imgObj.src = url;
                             imgObj._src = url;
                             editor.execCommand("insertImage", imgObj);
@@ -653,7 +651,7 @@ function exec(scrawlObj) {
                 }
             };
             options[editor.getOpt('scrawlFieldName')] = base64;
-            ajax.request(editor.getOpt('scrawlUrl'), options);
+            ajax.request(editor.getActionUrl(editor.getOpt('scrawlActionName')), options);
         }
     } else {
         addMaskLayer(lang.noScarwl + "&nbsp;&nbsp;&nbsp;<input type='button' value='" + lang.continueBtn + "'  onclick='removeMaskLayer()'/>");

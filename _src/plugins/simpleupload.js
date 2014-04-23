@@ -11,49 +11,70 @@ UE.plugin.register('simpleupload', function (){
 
         // 创建webupoaler实例
         var uploader = me.webuploader = WebUploader.create({
-
-            // swf文件路径
             swf: me.options.uploaderSwfUrl,
-
-            // 文件接收服务端。
-            server: me.options.imageUrl,
-
-            // 选择文件的按钮。可选。
-            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-            // pick: '#' + id,
-
-            // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+            accept: {
+                title: 'Images',
+                extensions: me.getOpt('imageAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
+                mimeTypes: 'image/*'
+            },
+            chunked: true,
+            server: me.getActionUrl(me.getOpt('imageActionName')),
             resize: false,
-
-            threads: 3,
-            fileVal: me.options.imageFieldName,
+            fileVal: me.getOpt('imageFieldName'),
+            duplicate: true,
             formdata: {},
-            duplicate: true
+            threads: 3,
+            fileSingleSizeLimit: me.getOpt('imageMaxSize'),    // 默认 2 M
+            compress: me.getOpt('imageCompressEnable') ? {
+                width: me.getOpt('imageCompressBorder'),
+                height: me.getOpt('imageCompressBorder'),
+                // 图片质量，只有type为`image/jpeg`的时候才有效。
+                quality: 90,
+                // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
+                allowMagnify: false,
+                // 是否允许裁剪。
+                crop: false,
+                // 是否保留头部meta信息。
+                preserveHeaders: true
+            }:false
 
         });
 
         // 当有文件被添加进队列的时候
-        uploader.on('filesQueued', function (a, b) {
+        uploader.on('fileQueued', function (file) {
+            file.on('statuschange', function (cur, prev) {
+                if (cur === 'error' || cur === 'invalid' || cur === 'cancelled') {
+                    var msg = file.statusText;
+                    if(msg == 'exceed_size') {
+                        showError(me.getLang('simpleupload.exceedSizeError'));
+                    } else if(cur == 'error') {
+                        showError(msg + ' Error!');
+                    } else {
+                        showError(msg);
+                    }
+                }
+            });
+        });
+        uploader.on('filesQueued', function (files) {
             uploader.upload();
         });
         uploader.on('uploadSuccess', function (file, ret) {
             try{
                 var json = (new Function("return " + ret._raw))();
-                var picLink = me.options.imagePath + json.url;
-                if(json.url) {
+                var picLink = me.getOpt('imageUrlPrefix') + json.url;
+                if(json.state == 'SUCCESS' && json.url) {
                     me.execCommand('insertimage', {
                         src: picLink,
                         _src: picLink
                     });
                 } else {
-                    showError('server error: ' + json.state);
+                    showError(json.state);
                 }
             }catch(er){
-                showError('parseError: ' + ret._raw);
+                showError(me.getLang('simpleupload.jsonEncodeError'));
             }
         });
-        uploader.on('uploadError', function (file) {
-            showError('uploadError!');
+        uploader.on('uploadError', function (file, msg) {
         });
         uploader.on('uploadComplete', function (file) {
         });
@@ -61,7 +82,7 @@ UE.plugin.register('simpleupload', function (){
         me.fireEvent('initWebUploader');
 
         function showError(msg){
-            alert(msg || '上传错误!');
+            alert(msg);
         }
 
     }
