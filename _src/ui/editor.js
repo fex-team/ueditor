@@ -831,11 +831,14 @@
     };
 
     UE.registerUI = function(uiName,fn,index,editorId){
-        UE._customizeUI[uiName] = {
-            id : editorId,
-            execFn:fn,
-            index:index
-        };
+        utils.each(uiName.split(/\s+/), function (name) {
+            UE._customizeUI[name] = {
+                id : editorId,
+                execFn:fn,
+                index:index
+            };
+        })
+
     }
 
 })();

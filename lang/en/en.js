@@ -271,8 +271,9 @@ UE.I18N['en'] = {
         'updateStatusFinish': 'Total _ pictures (_KB), _  uploaded successfully',
         'updateStatusError': ' and _ upload failed',
         'errorExceedSize':'File Size Exceed',
-        'errorInterrupt':'Upload was Interrupted',
+        'errorInterrupt':'File Upload Interrupted',
         'errorUploadRetry':'Upload Error, Please Retry.',
+        'remoteLockError':"Cannot Lock the Proportion between width and height",
         'numError':"Please enter the correct Num. e.g 123,400",
         'imageUrlError':"The image format may be wrong!",
         'imageLoadError':"Error,please check the network or URL！",
@@ -280,13 +281,37 @@ UE.I18N['en'] = {
         'searchLoading':"Image is loading,please wait...",
         'searchRetry':" Sorry,can't find the image,please try again!"
     },
-    webapp:{
-        tip1:"This function provided by Baidu APP,please apply for baidu APPKey webmaster first!",
-        tip2:"And then open the file ueditor.config.js to set it! ",
-        applyFor:"APPLY FOR",
-        anthorApi:"Baidu API"
+    'attachment':{
+        'static':{
+            'lang_tab_upload': 'Upload',
+            'lang_tab_online': 'Online',
+            'lang_start_upload':"Start upload",
+            'lang_drop_remind':"You can drop files here, a single maximum of 300 files"
+        },
+        'uploadSelectFile':'Select File',
+        'uploadAddFile':'Add File',
+        'uploadStart':'Start Upload',
+        'uploadPause':'Pause Upload',
+        'uploadContinue':'Continue Upload',
+        'uploadRetry':'Retry Upload',
+        'uploadDelete':'Delete',
+        'uploadTurnLeft':'Turn Left',
+        'uploadTurnRight':'Turn Right',
+        'updateStatusReady': 'Selected _ pictures, total _KB.',
+        'updateStatusConfirm': '_ uploaded successfully and _ upload failed',
+        'updateStatusFinish': 'Total _ pictures (_KB), _  uploaded successfully',
+        'updateStatusError': ' and _ upload failed',
+        'errorExceedSize':'File Size Exceed',
+        'errorInterrupt':'File Upload Interrupted',
+        'errorUploadRetry':'Upload Error, Please Retry.'
     },
-    template:{
+    'webapp':{
+        'tip1':"This function provided by Baidu APP,please apply for baidu APPKey webmaster first!",
+        'tip2':"And then open the file ueditor.config.js to set it! ",
+        'applyFor':"APPLY FOR",
+        'anthorApi':"Baidu API"
+    },
+    'template':{
         'static':{
             'lang_template_bkcolor':'Background Color',
             'lang_template_clear' : 'Keep Content',
@@ -352,38 +377,6 @@ UE.I18N['en'] = {
             'lang_prev_btn': 'Previous',
             'lang_next_btn': 'Next'
         }
-    },
-    attachment:{
-        'static':{
-            'lang_input_fileStatus':' No file uploaded!',
-            'startUpload':{style:"background:url(upload.png) no-repeat;"}
-        },
-        'browseFiles':'Open files',
-        'uploadSuccess':'Upload Successful!',
-        'delSuccessFile':'Remove from the success of the queue',
-        'delFailSaveFile':'Remove the save failed file',
-        'statusPrompt':' file(s) uploaded! ',
-        'flashVersionError':'The current Flash version is too low, please update FlashPlayer,then try again!',
-        'flashLoadingError':'The Flash failed loading! Please check the path or network state',
-        'fileUploadReady':'Wait for uploading...',
-        'delUploadQueue':'Remove from the uploading queue ',
-        'limitPrompt1':'Can not choose more than single',
-        'limitPrompt2':'file(s)！Please choose again！',
-        'delFailFile':'Remove failure file',
-        'fileSizeLimit':'File size exceeds the limit！',
-        'emptyFile':'Can not upload an empty file！',
-        'fileTypeError':'File type error！',
-        'unknownError':'Unknown error！',
-        'fileUploading':'Uploading,please wait...',
-        'cancelUpload':'Cancel upload',
-        'netError':'Network error',
-        'failUpload':'Upload failed',
-        'serverIOError':'Server IO error！',
-        'noAuthority':'No Permission！',
-        'fileNumLimit':'Upload limit to the number',
-        'failCheck':'Authentication fails, the upload is skipped!',
-        'fileCanceling':'Cancel, please wait...',
-        'stopUploading':'Upload has stopped...'
     },
     emotion:{
         'static':{

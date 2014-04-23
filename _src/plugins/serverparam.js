@@ -6,7 +6,7 @@
 UE.plugin.register('serverparam', function (){
 
     var me = this,
-        serverParam = {a: 'aa', b:'bb', c:'cc'};
+        serverParam = {};
 
     return {
         commands:{

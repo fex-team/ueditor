@@ -263,33 +263,22 @@
 
         /* 尝试异步加载后台配置 */
         try{
-            var serverUrl = me.options.serverUrl || me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1server$2') || '',
-                onsuccess = function(xhr){
-                    var config = eval("("+xhr.responseText+")");
-                    utils.extend(me.options, config);
-                };
+            var serverUrl = me.options.serverUrl || me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2') || '';
 
             /* 发出ajax请求 */
+            me._serverConfigLoaded = false;
             serverUrl && UE.ajax.request(serverUrl,{
                 'method': 'GET',
                 'data': {
                     'action': 'config'
                 },
-                'onsuccess':onsuccess,
-                'onerror':function(){
-                    /* 尝试试用jsonp请求 */
-                    UE.ajax.request(serverUrl,{
-                        'method': 'GET',
-                        'dataType': 'jsonp',
-                        'data': {
-                            'action': 'config'
-                        },
-                        'onsuccess':onsuccess,
-                        'onerror':function(){
-                            //throw 'Get Server Config Error!';
-                        }
-                    });
-                }
+                'onsuccess':function(xhr){
+                    var config = eval("("+xhr.responseText+")");
+                    utils.extend(me.options, config);
+                    me.fireEvent('serverConfigLoaded');
+                    me._serverConfigLoaded = true;
+                },
+                'onerror':function(){}
             });
         } catch(e){
             console.log('Get Server Config Error!');
