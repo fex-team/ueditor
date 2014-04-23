@@ -35,7 +35,10 @@ class Uploader
         "ERROR_FILE_MOVE" => "文件保存时出错",
         "ERROR_FILE_NOT_FOUND" => "找不到上传文件",
         "ERROR_WRITE_CONTENT" => "写入文件内容错误",
-        "ERROR_UNKNOWN" => "未知错误"
+        "ERROR_UNKNOWN" => "未知错误",
+        "ERROR_DEAD_LINK" => "链接不可用",
+        "ERROR_HTTP_LINK" => "链接不是http链接",
+        "ERROR_HTTP_CONTENTTYPE" => "链接contentType不正确"
     );
 
     /**
@@ -44,13 +47,15 @@ class Uploader
      * @param array $config 配置项
      * @param bool $base64 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
      */
-    public function __construct($fileField, $config, $base64 = false)
+    public function __construct($fileField, $config, $type = "upload")
     {
         $this->fileField = $fileField;
         $this->config = $config;
-        $this->base64 = $base64;
-        if($base64) {
-            $this->upBase64($base64);
+        $this->type = $type;
+        if ($type == "remote") {
+            $this->saveRemote();
+        } else if($type == "base64") {
+            $this->upBase64();
         } else {
             $this->upFile();
         }
@@ -129,7 +134,78 @@ class Uploader
 
         $this->oriName = "scrawl.png";
         $this->fileSize = strlen($img);
-        $this->fileType = ".png";
+        $this->fileType = $this->getFileExt();
+        $this->fullName = $this->getFullName();
+        $this->fileName = $this->getFileName();
+
+        $filepath = $this->getFilePath();
+        $dirname = dirname($filepath);
+
+        //检查文件大小是否超出限制
+        if (!$this->checkSize()) {
+            $this->stateInfo = $this->getStateInfo("ERROR_SIZE_EXCEED");
+            return;
+        }
+
+        //创建目录失败
+        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
+            $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
+            return;
+        } else if (!is_writeable($dirname)) {
+            $this->stateInfo = $this->getStateInfo("ERROR_DIR_NOT_WRITEABLE");
+            return;
+        }
+
+        //移动文件
+        if (!(file_put_contents($filepath, $img) && file_exists($filepath))) { //移动失败
+            $this->stateInfo = $this->getStateInfo("ERROR_WRITE_CONTENT");
+        } else { //移动成功
+            $this->stateInfo = $this->stateMap[0];
+        }
+
+    }
+
+    /**
+     * 拉取远程图片
+     * @param $base64Data
+     * @return mixed
+     */
+    private function saveRemote()
+    {
+        $imgUrl = htmlspecialchars($this->fileField);
+        $imgUrl = str_replace("&amp;", "&", $imgUrl);
+
+        //http开头验证
+        if (strpos($imgUrl, "http") !== 0) {
+            $this->stateInfo = $this->getStateInfo("ERROR_HTTP_LINK");
+            return;
+        }
+        //获取请求头并检测死链
+        $heads = get_headers($imgUrl);
+        if (!(stristr($heads[0], "200") && stristr($heads[0], "OK"))) {
+            $this->stateInfo = $this->getStateInfo("ERROR_DEAD_LINK");
+            return;
+        }
+        //格式验证(扩展名验证和Content-Type验证)
+        $fileType = strtolower(strrchr($imgUrl, '.'));
+        if (!in_array($fileType, $this->config['allowFiles']) || stristr($heads['Content-Type'], "image")) {
+            $this->stateInfo = $this->getStateInfo("ERROR_HTTP_CONTENTTYPE");
+            return;
+        }
+
+        //打开输出缓冲区并获取远程图片
+        ob_start();
+        $context = stream_context_create(
+            array('http' => array(
+                'follow_location' => false // don't follow redirects
+            ))
+        );
+        readfile($imgUrl, false, $context);
+        $img = ob_get_contents();
+        ob_end_clean();
+
+        $this->oriName = "remote.png";
+        $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
         $this->fileName = $this->getFileName();

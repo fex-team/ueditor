@@ -23,13 +23,6 @@
                         // 非法字符 \ : * ? " < > |
                         // 具请体看线上文档: http://fex.baidu.com/ueditor/#use-format_upload_filename
 
-    // 列出指定目录下的图片
-    "imageManagerActionName": "listimage", //执行图片管理的action名称
-    "imageManagerListPath": "image", //指定要列出图片的目录
-    "imageManagerListSize": 20, //每次列出文件数量
-    "imageManagerUrlPrefix": "", //图片访问路径前缀
-    "imageManagerInsertAlign": "none",
-
     // 涂鸦图片上传配置项
     "scrawlActionName": "uploadscrawl", //执行上传涂鸦的action名称
     "scrawlFieldName": "upfile",
@@ -40,7 +33,7 @@
 
     // 截图工具上传
     "snapscreenActionName": "uploadimage", //执行上传截图的action名称
-    "snapscreenPathFormat": "/ueditor/php/upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
+    "snapscreenPathFormat": "/ueditor/php/upload/image/{yyyy}{mm}{dd}/snap_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
     "snapscreenUrlPrefix": "", //图片访问路径前缀
     "snapscreenHost": "localhost",
     "snapscreenServerPort": 80,
@@ -50,7 +43,7 @@
     "catcherLocalDomain": ["127.0.0.1", "localhost", "img.baidu.com"],
     "catcherActionName": "catchimage", //执行抓取远程图片的action名称
     "catcherFieldName": "source",
-    "catcherPathFormat": "/ueditor/php/upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
+    "catcherPathFormat": "/ueditor/php/upload/image/{yyyy}{mm}{dd}/remote_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
     "catcherUrlPrefix": "", //图片访问路径前缀
     "catcherMaxSize": 2048000, //上传大小限制，单位B
     "catcherAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"], //抓取图片格式显示
@@ -79,10 +72,25 @@
         ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml"
     ], //上传文件格式显示
 
+    // 列出指定目录下的图片
+    "imageManagerActionName": "listimage", //执行图片管理的action名称
+    "imageManagerListPath": "/ueditor/php/upload/image/", //指定要列出图片的目录
+    "imageManagerListSize": 20, //每次列出文件数量
+    "imageManagerUrlPrefix": "", //图片访问路径前缀
+    "imageManagerInsertAlign": "none",
+    "imageManagerAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"], //上传文件格式显示
+
     // 列出指定目录下的文件
     "fileManagerActionName": "listfile", //执行文件管理的action名称
-    "fileManagerListPath": "file", //指定要列出文件的目录
+    "fileManagerListPath": "/ueditor/php/upload/file/", //指定要列出文件的目录
     "fileManagerListSize": 20, //每次列出文件数量
-    "fileManagerUrlPrefix": "" //文件访问路径前缀
+    "fileManagerUrlPrefix": "", //文件访问路径前缀
+    "fileManagerAllowFiles": [
+        ".png", ".jpg", ".jpeg", ".gif", ".bmp",
+        ".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg",
+        ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid",
+        ".rar", ".zip", ".tar", ".gz", ".7z", ".bz2", ".cab", ".iso",
+        ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml"
+    ] //上传文件格式显示
 
 }
