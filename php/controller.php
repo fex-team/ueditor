@@ -4,21 +4,13 @@ date_default_timezone_set("Asia/chongqing");
 header("Content-Type: text/html; charset=utf-8");
 error_reporting(E_ERROR | E_WARNING);
 
-$C = include("config.php");
+global $CONFIG;
+$CONFIG = json_decode(preg_replace("/\/\/.*[\r\n]/", "\n", file_get_contents("config.json")));
 $action = $_GET['action'];
 
 switch ($action) {
     case 'config':
-        /* 过滤一些不想暴露给前端的配置项 */
-        $filter = ['savePath', 'nameFormat'];
-        /* 返回给前端的配置项 */
-        $config = [];
-        foreach ($C as $k => $v) {
-            if (!in_array($k, $filter)) {
-                $config[$k] = $v;
-            }
-        }
-        $result =  json_encode($config);
+        $result =  json_encode($CONFIG);
         break;
 
     /* 上传图片 */
@@ -34,6 +26,10 @@ switch ($action) {
 
     /* 列出图片 */
     case 'listimage':
+        $result = include("filemanager.php");
+        break;
+    /* 列出文件 */
+    case 'listfile':
         $result = include("filemanager.php");
         break;
 

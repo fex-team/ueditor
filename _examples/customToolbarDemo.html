@@ -58,7 +58,7 @@
         <div id="editor_iframe_holder" ></div>
     </div>
     <script type="text/javascript" charset="utf-8">
-        function $(id){
+        function $G(id){
             return document.getElementById(id);
         }
         //实例化一个不带ui的编辑器,注意此处的实例化对象是baidu.editor下的Editor，而非baidu.editor.ui下的Editor
@@ -76,13 +76,13 @@
             var i =-1;
             while(i++ < cmdName.length-1){
                 var state = myeditor.queryCommandState(cmdName[i]);
-                $(cmdName[i]).style.color = state == 1?"red":"";
+                $G(cmdName[i]).style.color = state == 1?"red":"";
             }
             //依据当前光标所在的字体改变下拉列表的选中值
             i = -1;
             while(i++<fontName.length-1){
                 var fstate = myeditor.queryCommandValue(fontName[i]).toLowerCase();
-                var fselect = $(fontName[i]);
+                var fselect = $G(fontName[i]);
                 for(var j= 0;j<fselect.options.length;j++){
                     if(fselect.options[j].value.toLowerCase().indexOf(fstate.split(",")[0])!=-1){
                         fselect.options[j].selected = "true";

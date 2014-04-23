@@ -273,6 +273,7 @@ UE.I18N['zh-cn'] = {
         'errorExceedSize':'文件大小超出',
         'errorInterrupt':'文件大小超出',
         'errorUploadRetry':'上传失败，请重试',
+        'remoteLockError':"宽高不正确,不能所定比例",
         'numError':"请输入正确的长度或者宽度值！例如：123，400",
         'imageUrlError':"不允许的图片格式或者图片域！",
         'imageLoadError':"图片加载失败！请检查链接地址或网络状态！",
@@ -280,13 +281,37 @@ UE.I18N['zh-cn'] = {
         'searchLoading':"图片加载中，请稍后……",
         'searchRetry':" :( ，抱歉，没有找到图片！请重试一次！"
     },
-    'webapp':{
-        tip1:"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",
-        tip2:"申请完成之后请至ueditor.config.js中配置获得的appkey! ",
-        applyFor:"点此申请",
-        anthorApi:"百度API"
+    'attachment':{
+        'static':{
+            'lang_tab_upload': '上传附件',
+            'lang_tab_online': '在线附件',
+            'lang_start_upload':"开始上传",
+            'lang_drop_remind':"可以将文件拖到这里，单次最多可选100个文件"
+        },
+        'uploadSelectFile':'点击选择图片',
+        'uploadAddFile':'继续添加',
+        'uploadStart':'开始上传',
+        'uploadPause':'暂停上传',
+        'uploadContinue':'继续上传',
+        'uploadRetry':'重试上传',
+        'uploadDelete':'删除',
+        'uploadTurnLeft':'向左旋转',
+        'uploadTurnRight':'向右旋转',
+        'updateStatusReady': '选中_个文件，共_KB。',
+        'updateStatusConfirm': '已成功上传_个文件，_个文件上传失败',
+        'updateStatusFinish': '共_个（_KB），_个上传成功',
+        'updateStatusError': '，_张上传失败。',
+        'errorExceedSize':'文件大小超出',
+        'errorInterrupt':'文件传输中断',
+        'errorUploadRetry':'上传失败，请重试'
     },
-    template:{
+    'webapp':{
+        'tip1':"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",
+        'tip2':"申请完成之后请至ueditor.config.js中配置获得的appkey! ",
+        'applyFor':"点此申请",
+        'anthorApi':"百度API"
+    },
+    'template':{
         'static':{
             'lang_template_bkcolor':'背景颜色',
             'lang_template_clear' : '保留原有内容',
@@ -354,38 +379,6 @@ UE.I18N['zh-cn'] = {
             'lang_prev_btn': '上一个',
             'lang_next_btn': '下一个'
         }
-    },
-    'attachment':{
-        'static':{
-            'lang_input_fileStatus':' 当前未上传文件',
-            'startUpload':{style:"background:url(upload.png) no-repeat;"}
-        },
-        'browseFiles':'文件浏览…',
-        'uploadSuccess':'上传成功!',
-        'delSuccessFile':'从成功队列中移除',
-        'delFailSaveFile':'移除保存失败文件',
-        'statusPrompt':' 个文件已上传！ ',
-        'flashVersionError':'当前Flash版本过低，请更新FlashPlayer后重试！',
-        'flashLoadingError':'Flash加载失败!请检查路径或网络状态',
-        'fileUploadReady':'等待上传……',
-        'delUploadQueue':'从上传队列中移除',
-        'limitPrompt1':'单次不能选择超过',
-        'limitPrompt2':'个文件！请重新选择！',
-        'delFailFile':'移除失败文件',
-        'fileSizeLimit':'文件大小超出限制！',
-        'emptyFile':'空文件无法上传！',
-        'fileTypeError':'文件类型错误！',
-        'unknownError':'未知错误！',
-        'fileUploading':'上传中，请等待……',
-        'cancelUpload':'取消上传',
-        'netError':'网络错误',
-        'failUpload':'上传失败!',
-        'serverIOError':'服务器IO错误！',
-        'noAuthority':'无权限！',
-        'fileNumLimit':'上传个数限制',
-        'failCheck':'验证失败，本次上传被跳过！',
-        'fileCanceling':'取消中，请等待……',
-        'stopUploading':'上传已停止……'
     },
     'emotion':{
         'static':{
