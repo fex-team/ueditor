@@ -22,17 +22,23 @@ public class ListFileManager : Handler
     private int Size;
     private int Total;
     private ResultState State;
-    private String[] PathToList = Config.GetStringList("savePath");
+    private String PathToList;
     private String[] FileList;
+    private String[] SearchExtensions;
 
-    public ListFileManager(HttpContext context) : base(context) { }
+    public ListFileManager(HttpContext context, string pathToList, string[] searchExtensions)
+        : base(context)
+    {
+        this.SearchExtensions = searchExtensions.Select(x => x.ToLower()).ToArray();
+        this.PathToList = pathToList;
+    }
 
     public override void Process()
     {
         try
         {
             Start = String.IsNullOrEmpty(Request["start"]) ? 0 : Convert.ToInt32(Request["start"]);
-            Size = String.IsNullOrEmpty(Request["size"]) ? Config.GetInt("imageManagerListSize") : Convert.ToInt32("size");
+            Size = String.IsNullOrEmpty(Request["size"]) ? Config.GetInt("imageManagerListSize") : Convert.ToInt32(Request["size"]);
         }
         catch (FormatException)
         {
@@ -43,10 +49,10 @@ public class ListFileManager : Handler
         var buildingList = new List<String>();
         try
         {
-            foreach (var path in PathToList)
-            {
-                buildingList.AddRange(Directory.GetFiles(Server.MapPath(path)));
-            }
+            var localPath = Server.MapPath(PathToList);
+            buildingList.AddRange(Directory.GetFiles(localPath, "*", SearchOption.AllDirectories)
+                .Where(x => SearchExtensions.Contains(Path.GetExtension(x).ToLower()))
+                .Select(x => PathToList + x.Substring(localPath.Length).Replace("\\", "/")));
             Total = buildingList.Count;
             FileList = buildingList.OrderBy(x => x).Skip(Start).Take(Size).ToArray();
         }

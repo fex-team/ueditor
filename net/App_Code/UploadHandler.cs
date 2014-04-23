@@ -11,13 +11,13 @@ using System.Web;
 public class UploadHandler : Handler
 {
 
-    public UploadConfig Config { get; private set; }
+    public UploadConfig UploadConfig { get; private set; }
     public UploadResult Result { get; private set; }
 
     public UploadHandler(HttpContext context, UploadConfig config)
         : base(context)
     {
-        this.Config = config;
+        this.UploadConfig = config;
         this.Result = new UploadResult() { State = UploadState.Unknown };
     }
 
@@ -26,14 +26,14 @@ public class UploadHandler : Handler
         byte[] uploadFileBytes = null;
         string uploadFileName = null;
 
-        if (Config.Base64)
+        if (UploadConfig.Base64)
         {
-            uploadFileName = Config.Base64Filename;
-            uploadFileBytes = Convert.FromBase64String(Request[Config.UploadFieldName]);
+            uploadFileName = UploadConfig.Base64Filename;
+            uploadFileBytes = Convert.FromBase64String(Request[UploadConfig.UploadFieldName]);
         }
         else
         {
-            var file = Request.Files[Config.UploadFieldName];
+            var file = Request.Files[UploadConfig.UploadFieldName];
             uploadFileName = file.FileName;
 
             if (!CheckFileType(uploadFileName))
@@ -62,8 +62,8 @@ public class UploadHandler : Handler
         }
 
         Result.OriginFileName = uploadFileName;
-        
-        var savePath = Config.SavePath + NameFormater.Format(Config.FileNamingFormat, uploadFileName);
+
+        var savePath = PathFormatter.Format(uploadFileName, UploadConfig.PathFormat);
         var localPath = Server.MapPath(savePath);
         try
         {
@@ -123,26 +123,21 @@ public class UploadHandler : Handler
     private bool CheckFileType(string filename)
     {
         var fileExtension = Path.GetExtension(filename).ToLower();
-        return Config.AllowExtensions.Select(x => x.ToLower()).Contains(fileExtension);
+        return UploadConfig.AllowExtensions.Select(x => x.ToLower()).Contains(fileExtension);
     }
 
     private bool CheckFileSize(int size)
     {
-        return size < Config.SizeLimit;
+        return size < UploadConfig.SizeLimit;
     }
 }
 
 public class UploadConfig
 {
     /// <summary>
-    /// 上存文件保存路径
-    /// </summary>
-    public string SavePath { get; set; }
-
-    /// <summary>
     /// 文件命名规则
     /// </summary>
-    public string FileNamingFormat { get; set; }
+    public string PathFormat { get; set; }
 
     /// <summary>
     /// 上传表单域名称
@@ -189,37 +184,3 @@ public enum UploadState
     Unknown = 1,
 }
 
-public static class NameFormater
-{
-    public static string Format(string format, string filename)
-    {
-        if (String.IsNullOrWhiteSpace(format))
-        {
-            format = "{filename}{rand:6}";
-        }
-        string ext = Path.GetExtension(filename);
-        filename = Path.GetFileNameWithoutExtension(filename);
-        format = format.Replace("{filename}", filename);
-        format = new Regex(@"\{rand(\:?)(\d+)\}", RegexOptions.Compiled).Replace(format, new MatchEvaluator(delegate(Match match)
-        {
-            var digit = 6;
-            if (match.Groups.Count > 2)
-            {
-                digit = Convert.ToInt32(match.Groups[2].Value);
-            }
-            var rand = new Random();
-            return rand.Next((int)Math.Pow(10, digit), (int)Math.Pow(10, digit + 1)).ToString();
-        }));
-        format = format.Replace("{time}", DateTime.Now.Ticks.ToString());
-        format = format.Replace("{yyyy}", DateTime.Now.Year.ToString());
-        format = format.Replace("{yy}", (DateTime.Now.Year % 100).ToString("D2"));
-        format = format.Replace("{mm}", DateTime.Now.Month.ToString("D2"));
-        format = format.Replace("{dd}", DateTime.Now.Day.ToString("D2"));
-        format = format.Replace("{hh}", DateTime.Now.Hour.ToString("D2"));
-        format = format.Replace("{ii}", DateTime.Now.Minute.ToString("D2"));
-        format = format.Replace("{ss}", DateTime.Now.Second.ToString("D2"));
-        var invalidPattern = new Regex(@"[\\\/\:\*\?\042\<\>\|]");
-        format = invalidPattern.Replace(format, "");
-        return format + ext;
-    }
-}

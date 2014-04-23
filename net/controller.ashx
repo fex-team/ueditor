@@ -20,8 +20,7 @@ public class UEditorHandler : IHttpHandler
                 action = new UploadHandler(context, new UploadConfig()
                 {
                     AllowExtensions = Config.GetStringList("imageAllowFiles"),
-                    FileNamingFormat = Config.GetString("nameFormat"),
-                    SavePath = Config.GetStringList("savePath")[0],
+                    PathFormat = Config.GetString("imagePathFormat"),
                     SizeLimit = Config.GetInt("imageMaxSize") * 1024,
                     UploadFieldName = Config.GetString("imageFieldName")
                 });
@@ -30,8 +29,7 @@ public class UEditorHandler : IHttpHandler
                 action = new UploadHandler(context, new UploadConfig()
                 {
                     AllowExtensions = Config.GetStringList("scrawlAllowFiles"),
-                    FileNamingFormat = Config.GetString("nameFormat"),
-                    SavePath = Config.GetStringList("savePath")[0],
+                    PathFormat = Config.GetString("scrawlPathFormat"),
                     SizeLimit = Config.GetInt("scrawlMaxSize") * 1024,
                     UploadFieldName = Config.GetString("scrawlFieldName"),
                     Base64 = true,
@@ -42,8 +40,7 @@ public class UEditorHandler : IHttpHandler
                 action = new UploadHandler(context, new UploadConfig()
                 {
                     AllowExtensions = Config.GetStringList("videoAllowFiles"),
-                    FileNamingFormat = Config.GetString("nameFormat"),
-                    SavePath = Config.GetStringList("savePath")[0],
+                    PathFormat = Config.GetString("videoPathFormat"),
                     SizeLimit = Config.GetInt("videoMaxSize") * 1024,
                     UploadFieldName = Config.GetString("videoFieldName")
                 });
@@ -52,14 +49,16 @@ public class UEditorHandler : IHttpHandler
                 action = new UploadHandler(context, new UploadConfig()
                 {
                     AllowExtensions = Config.GetStringList("fileAllowFiles"),
-                    FileNamingFormat = Config.GetString("nameFormat"),
-                    SavePath = Config.GetStringList("savePath")[0],
+                    PathFormat = Config.GetString("filePathFormat"),
                     SizeLimit = Config.GetInt("fileMaxSize") * 1024,
-                    UploadFieldName = Config.GetString("file FieldName")
+                    UploadFieldName = Config.GetString("fileFieldName")
                 });
                 break;
             case "listimage":
-                action = new ListFileManager(context);
+                action = new ListFileManager(context, Config.GetString("imageManagerListPath"), Config.GetStringList("imageManagerAllowFiles"));
+                break;
+            case "listfile":
+                action = new ListFileManager(context, Config.GetString("fileManagerListPath"), Config.GetStringList("fileManagerAllowFiles"));
                 break;
             case "catchimage":
                 action = new CrawlerHandler(context);
@@ -78,5 +77,4 @@ public class UEditorHandler : IHttpHandler
             return false;
         }
     }
-
 }
