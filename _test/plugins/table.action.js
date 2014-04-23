@@ -440,12 +440,8 @@ test('拖拽', function () {
     ua.manualDeleteFillData(editor.body);
     var tds = te.obj[0].body.getElementsByTagName('td');
     var width1 = tds[1].width;
-    console.log(width1);
-//    var tds = te.obj[0].body.getElementsByTagName('table');
-    console.log();
     ua.mousemove(tds[1], {clientX: 199, clientY: 100});
     equal(editor.body.style.cursor, 'col-resize', '检查鼠标显示');
-
     ua.mousedown(tds[1], {clientX: 199, clientY: 100});
     ua.mousemove(tds[1], {clientX: 299, clientY: 100});
     ua.mouseup(tds[1], {clientX: 299, clientY: 100});
@@ -453,13 +449,6 @@ test('拖拽', function () {
     setTimeout(function () {
         var width2 = tds[1].width;
         ok(width2 - width1 > 50, '拖拽后单元格宽度改变');
-        console.log(width2);
-        console.log(width1);
-        console.log(p);
-       /* if(window.event.button==1){
-            console.log(1);
-        }*/
-//        start();
     }, 200);
     stop();
 });
