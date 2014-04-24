@@ -17,6 +17,8 @@
 ///import core/htmlparser;
 ///import core/filternode;
 ///import core/plugin;
+///import core/keymap;
+
 ///import plugins/emotion;
 ///import plugins/map;
 ///import plugins/scrawl;
@@ -76,6 +78,7 @@
 ///import plugins/table.action;
 ///import plugins/table.sort;
 ///import plugins/contextmenu;
+///import plugins/serverparam;
 ///import plugins/shortcutmenu;
 ///import plugins/pagebreak;
 ///import plugins/catchremoteimage;
