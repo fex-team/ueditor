@@ -23,9 +23,9 @@ UE.plugins['catchremoteimage'] = function () {
     me.addListener("catchRemoteImage", function () {
 
         var catcherLocalDomain = me.getOpt('catcherLocalDomain'),
-            catcherActionUrl = me.getActionUrl(me.getOpt('imageActionName')),
+            catcherActionUrl = me.getActionUrl(me.getOpt('catcherActionName')),
             catcherUrlPrefix = me.getOpt('catcherUrlPrefix'),
-            catcherFieldName = me.getOpt('catcherFieldName');
+            catcherFieldName = me.getOpt('catcherFieldName');s
 
         var remoteImages = [],
             imgs = domUtils.getElementsByTagName(me.document, "img"),
@@ -64,9 +64,6 @@ UE.plugins['catchremoteimage'] = function () {
                     for (i = 0; ci = imgs[i++];) {
                         oldSrc = ci.getAttribute("_src") || ci.src || "";
                         for (j = 0; cj = list[j++];) {
-                            console.log(oldSrc);
-                            console.log(cj.source);
-                            console.log(cj.state);
                             if (oldSrc == cj.source && cj.state == "SUCCESS") {  //抓取失败时不做替换处理
                                 newSrc = catcherUrlPrefix + cj.url;
                                 domUtils.setAttributes(ci, {
