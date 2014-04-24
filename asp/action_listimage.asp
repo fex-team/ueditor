@@ -1,4 +1,3 @@
-<%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %> 
 <%
     Session.CodePage = 65001
     Response.AddHeader "Content-Type", "text/html;charset=utf-8"

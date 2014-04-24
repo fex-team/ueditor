@@ -1,6 +1,3 @@
-<%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %> 
-<!--#include file="Uploader.Class.asp"-->
-<!--#include file="json.asp"-->
 <%
     'Author: techird
     'Date: 2013/09/29
@@ -12,7 +9,6 @@
     'IIS 7
         '打开IIS控制台，选择 ASP，在限制属性里有一个“最大请求实体主题限制”，设置需要的值
 
-    Dim up, json
 
     Set up = new Uploader
     up.MaxSize = 10 * 1024 * 1024

@@ -1,9 +1,5 @@
-<%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %> 
-<!--#include file="Uploader.Class.asp"-->
-<!--#include file="json.asp"-->
 <%
 
-Dim tmpPath
 
 tmpPath = "tmp/"
 

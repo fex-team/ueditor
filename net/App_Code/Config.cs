@@ -12,6 +12,7 @@ using System.Web;
 /// </summary>
 public static class Config
 {
+    private static bool noCache = true;
     private static JObject BuildItems()
     {
         var json = File.ReadAllText(HttpContext.Current.Server.MapPath("config.json"));
@@ -22,7 +23,7 @@ public static class Config
     {
         get
         {
-            if (_Items == null)
+            if (noCache || _Items == null)
             {
                 _Items = BuildItems();
             }
