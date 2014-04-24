@@ -449,6 +449,10 @@ test('拖拽', function () {
     setTimeout(function () {
         var width2 = tds[1].width;
         ok(width2 - width1 > 50, '拖拽后单元格宽度改变');
+<<<<<<< HEAD
+=======
+        start();
+>>>>>>> 886ae2c4d507b3fc1867e246899ad55bb4bb63ab
     }, 200);
     stop();
 });
