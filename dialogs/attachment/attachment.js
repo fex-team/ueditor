@@ -86,6 +86,33 @@
     }
 
 
+    function getFileIcon(url){
+        var ext = url.substr(url.lastIndexOf('.') + 1),
+            maps = {
+                "rar":"icon_rar.gif",
+                "zip":"icon_rar.gif",
+                "doc":"icon_doc.gif",
+                "docx":"icon_doc.gif",
+                "pdf":"icon_pdf.gif",
+                "mp3":"icon_mp3.gif",
+                "xls":"icon_xls.gif",
+                "chm":"icon_chm.gif",
+                "ppt":"icon_ppt.gif",
+                "pptx":"icon_ppt.gif",
+                "avi":"icon_mv.gif",
+                "rmvb":"icon_mv.gif",
+                "wmv":"icon_mv.gif",
+                "flv":"icon_mv.gif",
+                "swf":"icon_mv.gif",
+                "rm":"icon_mv.gif",
+                "exe":"icon_exe.gif",
+                "psd":"icon_psd.gif",
+                "txt":"icon_txt.gif"
+            };
+        return maps[ext] ? maps[ext]:maps['txt'];
+    }
+
+
     /* 上传图片 */
     function UploadFile(target) {
         this.$wrap = target.constructor == String ? $('#' + target) : $(target);
@@ -499,14 +526,17 @@
             updateTotalProgress();
         },
         getInsertList: function () {
-            var i, data, list = [],
-                prefix = editor.getOpt('fileUrlPrefix');
+            var i, link, data, list = [],
+                prefix = editor.getOpt('fileUrlPrefix'),
+                URL = editor.getOpt('UEDITOR_HOME_URL'),
+                iconDir = URL + (URL.substr(URL.length - 1) == '/' ? '':'/') + 'dialogs/attachment/fileTypeImages/';
             for (i = 0; i < this.fileList.length; i++) {
                 data = this.fileList[i];
+                link = data.url;
                 list.push({
-                    src: prefix + data.url,
-                    _src: prefix + data.url,
-                    title: data.original
+                    icon: iconDir + getFileIcon(link),
+                    title: link.substr(link.lastIndexOf('/') + 1),
+                    url: prefix + link
                 });
             }
             return list;
@@ -679,42 +709,18 @@
                 }
             }
         },
-        getFileIcon: function(url){
-            var ext = url.substr(url.lastIndexOf('.') + 1),
-                maps = {
-                    "rar":"icon_rar.gif",
-                    "zip":"icon_rar.gif",
-                    "doc":"icon_doc.gif",
-                    "docx":"icon_doc.gif",
-                    "pdf":"icon_pdf.gif",
-                    "mp3":"icon_mp3.gif",
-                    "xls":"icon_xls.gif",
-                    "chm":"icon_chm.gif",
-                    "ppt":"icon_ppt.gif",
-                    "pptx":"icon_ppt.gif",
-                    "avi":"icon_mv.gif",
-                    "rmvb":"icon_mv.gif",
-                    "wmv":"icon_mv.gif",
-                    "flv":"icon_mv.gif",
-                    "swf":"icon_mv.gif",
-                    "rm":"icon_mv.gif",
-                    "exe":"icon_exe.gif",
-                    "psd":"icon_psd.gif",
-                    "txt":"icon_txt.gif"
-                };
-            return maps[ext] ? maps[ext]:maps['txt'];
-        },
         getInsertList: function () {
             var i, lis = this.list.children, list = [],
                 URL = editor.getOpt('UEDITOR_HOME_URL'),
+                prefix = editor.getOpt('fileManagerUrlPrefix'),
                 iconDir = URL + (URL.substr(URL.length - 1) == '/' ? '':'/') + 'dialogs/attachment/fileTypeImages/';
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
                     var url = lis[i].getAttribute('data-url');
                     list.push({
-                        icon: iconDir + this.getFileIcon(url),
+                        icon: iconDir + getFileIcon(url),
                         title: url.substr(url.lastIndexOf('/') + 1),
-                        url: editor.getOpt('fileManagerUrlPrefix') + url
+                        url: prefix + url
                     });
                 }
             }
