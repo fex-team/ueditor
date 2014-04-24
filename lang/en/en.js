@@ -61,6 +61,10 @@ UE.I18N['en'] = {
         'impact':'Impact',
         'timesNewRoman':'Times new roman'
     },
+    'simpleupload':{
+        'exceedSizeError': 'File Size Exceed',
+        'jsonEncodeError': 'Server Return Format Error'
+    },
     'customstyle':{
         'tc':'Title center',
         'tl':'Title left',
@@ -297,9 +301,9 @@ UE.I18N['en'] = {
         'uploadDelete':'Delete',
         'uploadTurnLeft':'Turn Left',
         'uploadTurnRight':'Turn Right',
-        'updateStatusReady': 'Selected _ pictures, total _KB.',
+        'updateStatusReady': 'Selected _ files, total _KB.',
         'updateStatusConfirm': '_ uploaded successfully and _ upload failed',
-        'updateStatusFinish': 'Total _ pictures (_KB), _  uploaded successfully',
+        'updateStatusFinish': 'Total _ files (_KB), _  uploaded successfully',
         'updateStatusError': ' and _ upload failed',
         'errorExceedSize':'File Size Exceed',
         'errorInterrupt':'File Upload Interrupted',

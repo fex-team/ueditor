@@ -7,8 +7,8 @@
 
 (function () {
 
-    var uploadImage,
-        onlineImage;
+    var uploadFile,
+        onlineFile;
 
     window.onload = function () {
         initTabs();
@@ -32,7 +32,7 @@
     function initButtons() {
 
         dialog.onok = function () {
-            var remote = false, list = [], id, tabs = $G('tabhead').children;
+            var list = [], id, tabs = $G('tabhead').children;
             for (var i = 0; i < tabs.length; i++) {
                 if (domUtils.hasClass(tabs[i], 'focus')) {
                     id = tabs[i].getAttribute('data-content-id');
@@ -42,17 +42,22 @@
 
             switch (id) {
                 case 'upload':
-                    list = uploadImage.getInsertList();
+                    list = uploadFile.getInsertList();
                     break;
                 case 'online':
-                    list = onlineImage.getInsertList();
+                    list = onlineFile.getInsertList();
                     break;
             }
 
-            if(list) {
-                editor.execCommand('insertimage', list);
-                remote && editor.fireEvent("catchRemoteImage");
-            }
+            utils.each(utils.isArray(list) ? list:[list], function(item, i){
+                if(item && item.url) {
+                    editor.execCommand('inserthtml',
+                        '<p style="line-height: 16px;">' +
+                        '<img style="vertical-align: middle;" src="'+ item.icon + '" _src="' + item.icon + '" />' +
+                        '<a href="' + item.url +'">' + item.url + '</a>' +
+                        '</p>');
+                }
+            });
         };
     }
 
@@ -72,23 +77,50 @@
         }
         switch (id) {
             case 'upload':
-                uploadImage = uploadImage || new UploadImage('queueList');
+                uploadFile = uploadFile || new UploadFile('queueList');
                 break;
             case 'online':
-                onlineImage = onlineImage || new OnlineImage('imageList');
+                onlineFile = onlineFile || new OnlineFile('fileList');
                 break;
         }
     }
 
 
+    function getFileIcon(url){
+        var ext = url.substr(url.lastIndexOf('.') + 1),
+            maps = {
+                "rar":"icon_rar.gif",
+                "zip":"icon_rar.gif",
+                "doc":"icon_doc.gif",
+                "docx":"icon_doc.gif",
+                "pdf":"icon_pdf.gif",
+                "mp3":"icon_mp3.gif",
+                "xls":"icon_xls.gif",
+                "chm":"icon_chm.gif",
+                "ppt":"icon_ppt.gif",
+                "pptx":"icon_ppt.gif",
+                "avi":"icon_mv.gif",
+                "rmvb":"icon_mv.gif",
+                "wmv":"icon_mv.gif",
+                "flv":"icon_mv.gif",
+                "swf":"icon_mv.gif",
+                "rm":"icon_mv.gif",
+                "exe":"icon_exe.gif",
+                "psd":"icon_psd.gif",
+                "txt":"icon_txt.gif"
+            };
+        return maps[ext] ? maps[ext]:maps['txt'];
+    }
+
+
     /* 上传图片 */
-    function UploadImage(target) {
+    function UploadFile(target) {
         this.$wrap = target.constructor == String ? $('#' + target) : $(target);
         this.init();
     }
-    UploadImage.prototype = {
+    UploadFile.prototype = {
         init: function () {
-            this.imageList = [];
+            this.fileList = [];
             this.initContainer();
             this.initUploader();
         },
@@ -141,8 +173,7 @@
                 })(),
             // WebUploader实例
                 uploader,
-                acceptExtensions = editor.getOpt('fileAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
-                imageMaxSize = editor.getOpt('fileMaxSize');
+                fileMaxSize = editor.getOpt('fileMaxSize');
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {
@@ -154,12 +185,10 @@
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
-                server: editor.getOpt('fileUrl'),
+                server: editor.getActionUrl(editor.getOpt('fileActionName')),
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
-                fileNumLimit: 300,
-                fileSizeLimit: 1024 * imageMaxSize * 300,    // 默认 600 M
-                fileSingleSizeLimit: 1024 * imageMaxSize    // 默认 2 M
+                fileSingleSizeLimit: fileMaxSize
             });
             uploader.addButton({
                 id: '#filePickerBlock'
@@ -209,12 +238,23 @@
                     $wrap.text('预览中');
                     uploader.makeThumb(file, function (error, src) {
                         if (error) {
-                            $wrap.text('不能预览');
-                            return;
+//                            var img = $('<div>' +
+//                                '<i class="file-type-' + filetype + '"></i></div>');
+//                            $wrap.empty().append(img);
+//
+//                            var ic = document.createElement('i'),
+//                                textSpan = document.createElement('span');
+//                            textSpan.innerHTML = list[i].url.substr(list[i].url.lastIndexOf('/') + 1);
+//                            preview = document.createElement('div');
+//                            preview.appendChild(ic);
+//                            preview.appendChild(textSpan);
+//                            domUtils.addClass(textSpan, 'file-title');
+//                            domUtils.addClass(ic, 'file-type-' + filetype);
+//                            domUtils.addClass(ic, 'file-preview');
+                        } else {
+                            var img = $('<img src="' + src + '">');
+                            $wrap.empty().append(img);
                         }
-
-                        var img = $('<img src="' + src + '">');
-                        $wrap.empty().append(img);
                     }, thumbnailWidth, thumbnailHeight);
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
@@ -409,7 +449,7 @@
                 try {
                     var json = eval('(' + ret._raw + ')');
                     if (json.state == 'SUCCESS') {
-                        _this.imageList.push(json);
+                        _this.fileList.push(json);
                     }
                 } catch (e) {
                 }
@@ -486,14 +526,17 @@
             updateTotalProgress();
         },
         getInsertList: function () {
-            var i, data, list = [],
-                prefix = editor.getOpt('imagePath');
-            for (i = 0; i < this.imageList.length; i++) {
-                data = this.imageList[i];
+            var i, link, data, list = [],
+                prefix = editor.getOpt('fileUrlPrefix'),
+                URL = editor.getOpt('UEDITOR_HOME_URL'),
+                iconDir = URL + (URL.substr(URL.length - 1) == '/' ? '':'/') + 'dialogs/attachment/fileTypeImages/';
+            for (i = 0; i < this.fileList.length; i++) {
+                data = this.fileList[i];
+                link = data.url;
                 list.push({
-                    src: prefix + data.url,
-                    _src: prefix + data.url,
-                    title: data.original
+                    icon: iconDir + getFileIcon(link),
+                    title: link.substr(link.lastIndexOf('/') + 1),
+                    url: prefix + link
                 });
             }
             return list;
@@ -502,11 +545,11 @@
 
 
     /* 在线图片 */
-    function OnlineImage(target) {
+    function OnlineFile(target) {
         this.container = utils.isString(target) ? document.getElementById(target) : target;
         this.init();
     }
-    OnlineImage.prototype = {
+    OnlineFile.prototype = {
         init: function () {
             this.initContainer();
             this.initEvents();
@@ -529,10 +572,10 @@
             var _this = this;
 
             /* 滚动拉取图片 */
-            domUtils.on($G('imageList'), 'scroll', function(e){
+            domUtils.on($G('fileList'), 'scroll', function(e){
                 var panel = this;
                 if (panel.scrollHeight - (panel.offsetHeight + panel.scrollTop) < 10) {
-                    _this.getImageData();
+                    _this.getFileData();
                 }
             });
             /* 选中图片 */
@@ -559,15 +602,15 @@
             this.listEnd = false;
 
             /* 第一次拉取数据 */
-            this.getImageData();
+            this.getFileData();
         },
         /* 向后台拉取图片列表数据 */
-        getImageData: function () {
+        getFileData: function () {
             var _this = this;
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                ajax.request(editor.options.fileManagerUrl, {
+                ajax.request(editor.getActionUrl(editor.getOpt('fileManagerActionName')), {
                     timeout: 100000,
                     data: utils.extend({
                             start: this.listIndex,
@@ -617,9 +660,8 @@
                                 _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
                             }
                         })(preview));
-                        preview.width = '100';
-                        preview.setAttribute('src', editor.getOpt('fileManagerPath') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
-                        preview.setAttribute('_src', editor.getOpt('fileManagerPath') + list[i].url);
+                        preview.width = 113;
+                        preview.setAttribute('src', editor.getOpt('fileManagerUrlPrefix') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
                     } else {
                         var ic = document.createElement('i'),
                             textSpan = document.createElement('span');
@@ -632,6 +674,7 @@
                         domUtils.addClass(ic, 'file-preview');
                     }
                     domUtils.addClass(icon, 'icon');
+                    item.setAttribute('data-url', list[i].url);
 
                     item.appendChild(preview);
                     item.appendChild(icon);
@@ -667,17 +710,19 @@
             }
         },
         getInsertList: function () {
-            var i, lis = this.list.children, list = [];
+            var i, lis = this.list.children, list = [],
+                URL = editor.getOpt('UEDITOR_HOME_URL'),
+                prefix = editor.getOpt('fileManagerUrlPrefix'),
+                iconDir = URL + (URL.substr(URL.length - 1) == '/' ? '':'/') + 'dialogs/attachment/fileTypeImages/';
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
-                    var img = lis[i].firstChild,
-                        src = img.getAttribute('_src');
+                    var url = lis[i].getAttribute('data-url');
                     list.push({
-                        src: src,
-                        _src: src
+                        icon: iconDir + getFileIcon(url),
+                        title: url.substr(url.lastIndexOf('/') + 1),
+                        url: prefix + url
                     });
                 }
-
             }
             return list;
         }
