@@ -63,7 +63,6 @@ class Uploader
 
     /**
      * 上传文件的主处理方法
-     * @param $base64
      * @return mixed
      */
     private function upFile()
@@ -124,7 +123,6 @@ class Uploader
 
     /**
      * 处理base64编码的图片上传
-     * @param $base64Data
      * @return mixed
      */
     private function upBase64()
@@ -167,7 +165,6 @@ class Uploader
 
     /**
      * 拉取远程图片
-     * @param $base64Data
      * @return mixed
      */
     private function saveRemote()

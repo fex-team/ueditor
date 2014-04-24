@@ -5,10 +5,6 @@
  * Date: 14-04-14
  * Time: 下午19:18
  */
-include "Uploader.class.php";
-date_default_timezone_set("Asia/chongqing");
-header("Content-Type: text/html; charset=utf-8");
-error_reporting(E_ERROR | E_WARNING);
 set_time_limit(0);
 include("Uploader.class.php");
 
@@ -25,7 +21,12 @@ $list = array();
 $source = $_POST[$fieldName];
 foreach ($source as $imgUrl) {
     $item = new Uploader($imgUrl, $config, "remote");
-    array_push($list, $item);
+    $info = $item->getFileInfo();
+    array_push($list, array(
+        "state" => $info["state"],
+        "url" => $info["url"],
+        "source" => $imgUrl
+    ));
 }
 
 /* 返回抓取数据 */
