@@ -1029,99 +1029,253 @@ UserAction = {
     },
 
     browser:(function () {
+        var win = window;
+        var numberify = function (s) {
+                var c = 0;
+                return parseFloat(s.replace(/\./g, function () {
+                    return (c++ == 1) ? '' : '.';
+                }));
+            },
 
-        var agent = navigator.userAgent.toLowerCase(),
-            opera = window.opera,
+            nav = win && win.navigator,
+
             o = {
 
-                ie		: !!window.ActiveXObject,
+                /**
+                 * Internet Explorer version number or 0. Example: 6
+                 *
+                 * @property ie
+                 * @type float
+                 * @static
+                 */
+                ie:0,
 
-                opera	: ( !!opera && opera.version ),
+                /**
+                 * Opera version number or 0. Example: 9.2
+                 *
+                 * @property opera
+                 * @type float
+                 * @static
+                 */
+                opera:0,
 
-                webkit	: ( agent.indexOf( ' applewebkit/' ) > -1 ),
+                /**
+                 * Gecko engine revision number. Will evaluate to 1 if Gecko is
+                 * detected but the revision could not be found. Other browsers will
+                 * be 0. Example: 1.8
+                 *
+                 * <pre>
+                 * Firefox 1.0.0.4: 1.7.8   &lt;-- Reports 1.7
+                 * Firefox 1.5.0.9: 1.8.0.9 &lt;-- 1.8
+                 * Firefox 2.0.0.3: 1.8.1.3 &lt;-- 1.81
+                 * Firefox 3.0   &lt;-- 1.9
+                 * Firefox 3.5   &lt;-- 1.91
+                 * </pre>
+                 *
+                 * @property gecko
+                 * @type float
+                 * @static
+                 */
+                gecko:0,
 
+                /**
+                 * AppleWebKit version. KHTML browsers that are not WebKit browsers
+                 * will evaluate to 1, other browsers 0. Example: 418.9
+                 *
+                 * <pre>
+                 * Safari 1.3.2 (312.6): 312.8.1 &lt;-- Reports 312.8 -- currently the
+                 *                                   latest available for Mac OSX 10.3.
+                 * Safari 2.0.2:         416     &lt;-- hasOwnProperty introduced
+                 * Safari 2.0.4:         418     &lt;-- preventDefault fixed
+                 * Safari 2.0.4 (419.3): 418.9.1 &lt;-- One version of Safari may run
+                 *                                   different versions of webkit
+                 * Safari 2.0.4 (419.3): 419     &lt;-- Tiger installations that have been
+                 *                                   updated, but not updated
+                 *                                   to the latest patch.
+                 * Webkit 212 nightly:   522+    &lt;-- Safari 3.0 precursor (with native SVG
+                 *                                   and many major issues fixed).
+                 * Safari 3.0.4 (523.12) 523.12  &lt;-- First Tiger release - automatic update
+                 *                                   from 2.x via the 10.4.11 OS patch
+                 * Webkit nightly 1/2008:525+    &lt;-- Supports DOMContentLoaded event.
+                 *                                   yahoo.com user agent hack removed.
+                 * </pre>
+                 *
+                 * http://en.wikipedia.org/wiki/Safari_version_history
+                 *
+                 * @property webkit
+                 * @type float
+                 * @static
+                 */
+                webkit:0,
 
-                mac	: ( agent.indexOf( 'macintosh' ) > -1 ),
+                /**
+                 * Chrome will be detected as webkit, but this property will also be
+                 * populated with the Chrome version number
+                 *
+                 * @property chrome
+                 * @type float
+                 * @static
+                 */
+                chrome:0,
 
+                safari:0,
 
-                quirks : ( document.compatMode == 'BackCompat' )
-            };
+                firefox:0,
 
+                maxthon:0,
+                maxthonIE:0,
 
-        o.gecko =( navigator.product == 'Gecko' && !o.webkit && !o.opera );
+                /**
+                 * The mobile property will be set to a string containing any
+                 * relevant user agent information when a modern mobile browser is
+                 * detected. Currently limited to Safari on the iPhone/iPod Touch,
+                 * Nokia N-series devices with the WebKit-based browser, and Opera
+                 * Mini.
+                 *
+                 * @property mobile
+                 * @type string
+                 * @static
+                 */
+                mobile:null,
 
-        var version = 0;
+                /**
+                 * Adobe AIR version number or 0. Only populated if webkit is
+                 * detected. Example: 1.0
+                 *
+                 * @property air
+                 * @type float
+                 */
+                air:0,
 
-        // Internet Explorer 6.0+
-        if ( o.ie ){
-            version = parseFloat( agent.match( /msie (\d+)/ )[1] );
+                /**
+                 * Google Caja version number or 0.
+                 *
+                 * @property caja
+                 * @type float
+                 */
+                caja:nav && nav.cajaVersion,
 
-            o.ie = version;
+                /**
+                 * Set to true if the pagebreak appears to be in SSL
+                 *
+                 * @property secure
+                 * @type boolean
+                 * @static
+                 */
+                secure:false,
 
-            o.ie9Compat = document.documentMode == 9;
+                /**
+                 * The operating system. Currently only detecting windows or
+                 * macintosh
+                 *
+                 * @property os
+                 * @type string
+                 * @static
+                 */
+                os:null
 
+            },
 
+            ua = nav && nav.userAgent,
 
-            o.ie8Compat = document.documentMode == 8;
+            loc = win && win.location,
 
+            href = loc && loc.href,
 
-            o.ie7Compat = ( ( version == 7 && !document.documentMode )
-                || document.documentMode == 7 );
+            m;
 
+        o.secure = href && (href.toLowerCase().indexOf("https") === 0);
 
-            o.ie6Compat = ( version < 7 || o.quirks );
+        if (ua) {
 
-            o.ie9above = version > 8;
+            if ((/windows|win32/i).test(ua)) {
+                o.os = 'windows';
+            } else if ((/macintosh/i).test(ua)) {
+                o.os = 'macintosh';
+            } else if ((/rhino/i).test(ua)) {
+                o.os = 'rhino';
+            }
 
-            o.ie9below = version < 9;
+            // Modern KHTML browsers should qualify as Safari X-Grade
+            if ((/KHTML/).test(ua)) {
+                o.webkit = 1;
+            }
+            if (window.external && /(\d+\.\d)/.test(external.max_version)) {
 
-        }
+                o.maxthon = parseFloat(RegExp['\x241']);
+                if (/MSIE/.test(ua)) {
+                    o.maxthonIE = 1;
+                    o.maxthon = 0;
+                }
 
-        // Gecko.
-        if ( o.gecko ){
-            var geckoRelease = agent.match( /rv:([\d\.]+)/ );
-            if ( geckoRelease )
-            {
-                geckoRelease = geckoRelease[1].split( '.' );
-                version = geckoRelease[0] * 10000 + ( geckoRelease[1] || 0 ) * 100 + ( geckoRelease[2] || 0 ) * 1;
+            }
+            // Modern WebKit browsers are at least X-Grade
+            m = ua.match(/AppleWebKit\/([^\s]*)/);
+            if (m && m[1]) {
+                o.webkit = numberify(m[1]);
+
+                // Mobile browser check
+                if (/ Mobile\//.test(ua)) {
+                    o.mobile = "Apple"; // iPhone or iPod Touch
+                } else {
+                    m = ua.match(/NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/);
+                    if (m) {
+                        o.mobile = m[0]; // Nokia N-series, Android, webOS,
+                        // ex:
+                        // NokiaN95
+                    }
+                }
+
+                var m1 = ua.match(/Safari\/([^\s]*)/);
+                if (m1 && m1[1]) // Safari
+                    o.safari = numberify(m1[1]);
+                m = ua.match(/Chrome\/([^\s]*)/);
+                if (o.safari && m && m[1]) {
+                    o.chrome = numberify(m[1]); // Chrome
+                } else {
+                    m = ua.match(/AdobeAIR\/([^\s]*)/);
+                    if (m) {
+                        o.air = m[0]; // Adobe AIR 1.0 or better
+                    }
+                }
+            }
+
+            if (!o.webkit) { // not webkit
+                // @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316;
+                // fi; U;
+                // try get firefox and it's ver
+                // ssr)
+                m = ua.match(/Opera[\s\/]([^\s]*)/);
+                if (m && m[1]) {
+                    m = ua.match(/Version[\s\/]([^\s]*)/);
+                    o.opera = numberify(m[1]);
+                    m = ua.match(/Opera Mini[^;]*/);
+                    if (m) {
+                        o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
+                    }
+                } else { // not opera or webkit
+                    m = ua.match(/MSIE\s([^;]*)/);
+                    if (m && m[1]) {
+                        o.ie = numberify(m[1]);
+                    }else if (ua.match(/Gecko([^\s]*)/)&&ua.match(/rv:11/)){//todo
+                        o.ie = 11;
+                    } else { // not opera, webkit, or ie
+                        m = ua.match(/Gecko\/([^\s]*)/);
+                        if (m) {
+                            o.gecko = 1; // Gecko detected, look for revision
+                            m = ua.match(/rv:([^\s\)]*)/);
+                            if (m && m[1]) {
+                                o.gecko = numberify(m[1]);
+                            }
+                        }
+                    }
+                }
             }
         }
 
-
-        if (/chrome\/(\d+\.\d)/i.test(agent)) {
-            o.chrome = + RegExp['\x241'];
-        }
-
-
-        if(/(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(agent) && !/chrome/i.test(agent)){
-            o.safari = + (RegExp['\x241'] || RegExp['\x242']);
-        }
-
-
-        // Opera 9.50+
-        if ( o.opera )
-            version = parseFloat( opera.version() );
-
-        // WebKit 522+ (Safari 3+)
-        if ( o.webkit )
-            version = parseFloat( agent.match( / applewebkit\/(\d+)/ )[1] );
-
-
-        o.version = version;
-
-
-        o.isCompatible =
-            !o.mobile && (
-                ( o.ie && version >= 6 ) ||
-                    ( o.gecko && version >= 10801 ) ||
-                    ( o.opera && version >= 9.5 ) ||
-                    ( o.air && version >= 1 ) ||
-                    ( o.webkit && version >= 522 ) ||
-                    false );
-
         return o;
-})
-(),
+    })
+        (),
 
     /**
      * 提供队列方式执行用例的方案，接口包括start、add、next，方法全部执行完毕时会启动用例继续执行

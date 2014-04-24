@@ -44,7 +44,7 @@
             params = baidu.json.stringify({
                 "fileNameFormat":editor.options.fileNameFormat
             }),
-            optImageUrl = editor.getOpt('imageUrl'),
+            optImageUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
             optImageFieldName = editor.getOpt('imageFieldName'),
             optImageCompressBorder = editor.getOpt('imageCompressEnable') ? editor.getOpt('imageCompressBorder'):null,
             maxSize = editor.getOpt('imageMaxSize') / 1024,

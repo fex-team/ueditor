@@ -127,7 +127,7 @@
 
     /* 初始化在线图片列表 */
     function initImagePanel(data) {
-        var imagePanel = $G("imageList");
+        var imagePanel = $G("fileList");
         if(utils.isArray(data) && data) {
             utils.each(data, function(value, key){
                 var img = document.createElement("img"),

@@ -59,6 +59,30 @@ UE.I18N['zh-cn'] = {
         'impact':'impact',
         'timesNewRoman':'times new roman'
     },
+    'simpleupload':{
+        'exceedSizeError': '文件大小超出限制',
+        'jsonEncodeError': '服务器返回格式错误'
+    },
+    'customstyle':{
+        'tc':'标题居中',
+        'tl':'标题居左',
+        'im':'强调',
+        'hi':'明显强调'
+    },
+    'elementPathTip':"元素路径",
+    'wordCountTip':"字数统计",
+    'wordCountMsg':'当前已输入{#count}个字符, 您还可以输入{#leave}个字符。 ',
+    'wordOverFlowMsg':'<span style="color:red;">字数超出最大允许值，服务器可能拒绝保存！</span>',
+    'ok':"确认",
+    'cancel':"取消",
+    'closeDialog':"关闭对话框",
+    'tableDrag':"表格拖动必须引入uiUtils.js文件！",
+    'autofloatMsg':"工具栏浮动依赖编辑器UI，您首先需要引入UI文件!",
+    'snapScreen_plugin':{
+        'browserMsg':"仅支持IE浏览器！",
+        'callBackErrorMsg':"服务器返回数据有误，请检查配置项之后重试。",
+        'uploadErrorMsg':"截图上传失败，请检查服务器端环境! "
+    },
     'insertcode':{
         'as3':'ActionScript3',
         'bash':'Bash/Shell',
@@ -84,26 +108,6 @@ UE.I18N['zh-cn'] = {
         'sql':'Sql',
         'vb':'Vb',
         'xml':'Xml'
-    },
-    'customstyle':{
-        'tc':'标题居中',
-        'tl':'标题居左',
-        'im':'强调',
-        'hi':'明显强调'
-    },
-    elementPathTip:"元素路径",
-    'wordCountTip':"字数统计",
-    'wordCountMsg':'当前已输入{#count}个字符, 您还可以输入{#leave}个字符。 ',
-    'wordOverFlowMsg':'<span style="color:red;">字数超出最大允许值，服务器可能拒绝保存！</span>',
-    'ok':"确认",
-    'cancel':"取消",
-    'closeDialog':"关闭对话框",
-    'tableDrag':"表格拖动必须引入uiUtils.js文件！",
-    'autofloatMsg':"工具栏浮动依赖编辑器UI，您首先需要引入UI文件!",
-    'snapScreen_plugin':{
-        'browserMsg':"仅支持IE浏览器！",
-        'callBackErrorMsg':"服务器返回数据有误，请检查配置项之后重试。",
-        'uploadErrorMsg':"截图上传失败，请检查服务器端环境! "
     },
     'confirmClear':"确定清空当前文档么？",
     'contextMenu':{
@@ -288,7 +292,7 @@ UE.I18N['zh-cn'] = {
             'lang_start_upload':"开始上传",
             'lang_drop_remind':"可以将文件拖到这里，单次最多可选100个文件"
         },
-        'uploadSelectFile':'点击选择图片',
+        'uploadSelectFile':'点击选择文件',
         'uploadAddFile':'继续添加',
         'uploadStart':'开始上传',
         'uploadPause':'暂停上传',
