@@ -263,9 +263,9 @@
 
         /* 尝试异步加载后台配置 */
         try{
-            me.options.imageUrl && me.setOpt(me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2'));
+            me.options.imageUrl && me.setOpt('serverUrl', me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2'));
 
-            var configUrl = me.getActionUrl('config');
+            var configUrl = me.getOpt('serverUrl');
 
             /* 发出ajax请求 */
             me._serverConfigLoaded = false;
@@ -1553,7 +1553,8 @@
          * ```
          */
         getActionUrl: function(action){
-            var imageUrl = this.getOpt('imageUrl'),
+            var actionName = me.getOpt(action) || action,
+                imageUrl = this.getOpt('imageUrl'),
                 serverUrl = this.getOpt('serverUrl');
 
             if(!serverUrl && imageUrl) {
@@ -1561,7 +1562,7 @@
             }
 
             if(serverUrl) {
-                return serverUrl + (serverUrl.indexOf('?') ? '?':'&') + 'action=' + action;
+                return serverUrl + (serverUrl.indexOf('?') ? '?':'&') + 'action=' + actionName;
             } else {
                 return '';
             }
