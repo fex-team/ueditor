@@ -49,9 +49,9 @@ UE.plugins['snapscreen'] = function(){
                     return;
                 }
                 me.execCommand('insertimage', {
-                    src: editorOptions.snapscreenPath + rs.url,
+                    src: editorOptions.snapscreenUrlPrefix + rs.url,
                     floatStyle: editorOptions.snapscreenImgAlign,
-                    _src:editorOptions.snapscreenPath + rs.url
+                    _src:editorOptions.snapscreenUrlPrefix + rs.url
                 });
             };
             var onStartUpload = function(){
@@ -71,10 +71,11 @@ UE.plugins['snapscreen'] = function(){
 
             try{
                 var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, snapscreenServerUrl, port);
-                onSuccess(ret);
             }catch(e){
                 me.ui._dialogs['snapscreenDialog'].open();
+                return;
             }
+            onSuccess(ret);
         }
     };
 }
