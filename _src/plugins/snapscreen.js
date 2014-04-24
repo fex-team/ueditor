@@ -60,14 +60,17 @@ UE.plugins['snapscreen'] = function(){
             var onError = function(){
                 alert(lang.uploadErrorMsg);
             };
+
+            var port = editorOptions.snapscreenServerPort + '',
+                snapscreenServerUrl = me.getActionUrl(me.getOpt('snapscreenActionName'));
+            snapscreenServerUrl = snapscreenServerUrl.split( editorOptions.snapscreenHost );
+            snapscreenServerUrl = snapscreenServerUrl[1] || snapscreenServerUrl[0];
+            if( snapscreenServerUrl.indexOf(":"+port) === 0 ) {
+                snapscreenServerUrl = snapscreenServerUrl.substring( port.length+1 );
+            }
+
             try{
-                var port = editorOptions.snapscreenServerPort + '';
-                editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.split( editorOptions.snapscreenHost );
-                editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl[1] || editorOptions.snapscreenServerUrl[0];
-                if( editorOptions.snapscreenServerUrl.indexOf(":"+port) === 0 ) {
-                    editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.substring( port.length+1 );
-                }
-                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, port);
+                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, snapscreenServerUrl, port);
                 onSuccess(ret);
             }catch(e){
                 me.ui._dialogs['snapscreenDialog'].open();
