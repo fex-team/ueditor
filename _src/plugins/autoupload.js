@@ -9,21 +9,28 @@ UE.plugin.register('autoupload', function (){
     var me = this;
     var sendAndInsertImage = function (file, editor) {
         //模拟数据
-        var fd = new FormData();
+        var filetype = /image\/\w+/i.test(file.type) ? 'image':'file',
+            fd = new FormData();
         fd.append(editor.options.imageFieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
         fd.append('type', 'ajax');
+
         var xhr = new XMLHttpRequest(),
-            url = editor.getActionUrl(editor.getOpt('imageActionName'));
+            url = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
+
         xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.addEventListener('load', function (e) {
             try{
-                var json = (new Function("return " + e.target.response))(),
-                    picLink = me.getOpt('imageUrlPrefix') + json.url;
-                editor.execCommand('insertimage', {
-                    src: picLink,
-                    _src: picLink
-                });
+                var json = (new Function("return " + e.target.response))();
+                if (json.state == 'SUCCESS' && json.url) {
+                    var link = me.getOpt(filetype + 'UrlPrefix') + json.url;
+                    filetype == 'image' ? editor.execCommand('insertimage', {
+                        src: link,
+                        _src: link
+                    }) : editor.execCommand('insertfile', {
+                        url: link
+                    });
+                }
             }catch(er){ }
         });
         xhr.send(fd);
@@ -52,7 +59,7 @@ UE.plugin.register('autoupload', function (){
                             while (len--){
                                 file = items[len];
                                 if(file.getAsFile) file = file.getAsFile();
-                                if(file && file.size > 0 && /image\/\w+/i.test(file.type) ) {
+                                if(file && file.size > 0) {
                                     sendAndInsertImage(file, me);
                                     hasImg = true;
                                 }
