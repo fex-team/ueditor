@@ -292,7 +292,7 @@ UE.I18N['zh-cn'] = {
             'lang_start_upload':"开始上传",
             'lang_drop_remind':"可以将文件拖到这里，单次最多可选100个文件"
         },
-        'uploadSelectFile':'点击选择图片',
+        'uploadSelectFile':'点击选择文件',
         'uploadAddFile':'继续添加',
         'uploadStart':'开始上传',
         'uploadPause':'暂停上传',
