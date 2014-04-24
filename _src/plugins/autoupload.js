@@ -14,8 +14,12 @@ UE.plugin.register('autoupload', function (){
         fd.append(editor.options.imageFieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
         fd.append('type', 'ajax');
 
-        var xhr = new XMLHttpRequest(),
+        var loadingId = 'loading_' + (+new Date()).toString(36),
+            xhr = new XMLHttpRequest(),
             url = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
+
+        //插入loading的占位图片
+        filetype == 'image' && editor.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '">');
 
         xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -23,11 +27,19 @@ UE.plugin.register('autoupload', function (){
             try{
                 var json = (new Function("return " + e.target.response))();
                 if (json.state == 'SUCCESS' && json.url) {
-                    var link = me.getOpt(filetype + 'UrlPrefix') + json.url;
-                    filetype == 'image' ? editor.execCommand('insertimage', {
-                        src: link,
-                        _src: link
-                    }) : editor.execCommand('insertfile', {
+                    var link = editor.getOpt(filetype + 'UrlPrefix') + json.url;
+//                    filetype == 'image' ? editor.execCommand('insertimage', {
+//                        src: link,
+//                        _src: link
+//                    }) : editor.execCommand('insertfile', {
+//                        url: link
+//                    });
+                    filetype == 'image' ? (function(){
+                        var img = editor.document.getElementById(loadingId);
+                        img.setAttribute('src', link);
+                        img.setAttribute('_src', link);
+                        domUtils.removeClasses(img, 'loadingclass');
+                    })() : editor.execCommand('insertfile', {
                         url: link
                     });
                 }
@@ -74,6 +86,13 @@ UE.plugin.register('autoupload', function (){
                             e.preventDefault();
                         }
                     });
+
+                    //设置loading的样式
+                    utils.cssRule('loading',
+                        '.loadingclass{background: url(\''
+                            + this.options.themePath
+                            + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;margin-right:1px;cursor: auto;display: inline-block;height: 22px;width: 22px;}',
+                        this.document);
                 }
             }
         }
