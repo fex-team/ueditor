@@ -9,21 +9,40 @@ UE.plugin.register('autoupload', function (){
     var me = this;
     var sendAndInsertImage = function (file, editor) {
         //模拟数据
-        var fd = new FormData();
+        var filetype = /image\/\w+/i.test(file.type) ? 'image':'file',
+            fd = new FormData();
         fd.append(editor.options.imageFieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
         fd.append('type', 'ajax');
-        var xhr = new XMLHttpRequest(),
-            url = editor.getActionUrl(editor.getOpt('imageActionName'));
+
+        var loadingId = 'loading_' + (+new Date()).toString(36),
+            xhr = new XMLHttpRequest(),
+            url = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
+
+        //插入loading的占位图片
+        filetype == 'image' && editor.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '">');
+
         xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.addEventListener('load', function (e) {
             try{
-                var json = (new Function("return " + e.target.response))(),
-                    picLink = me.getOpt('imageUrlPrefix') + json.url;
-                editor.execCommand('insertimage', {
-                    src: picLink,
-                    _src: picLink
-                });
+                var json = (new Function("return " + e.target.response))();
+                if (json.state == 'SUCCESS' && json.url) {
+                    var link = editor.getOpt(filetype + 'UrlPrefix') + json.url;
+//                    filetype == 'image' ? editor.execCommand('insertimage', {
+//                        src: link,
+//                        _src: link
+//                    }) : editor.execCommand('insertfile', {
+//                        url: link
+//                    });
+                    filetype == 'image' ? (function(){
+                        var img = editor.document.getElementById(loadingId);
+                        img.setAttribute('src', link);
+                        img.setAttribute('_src', link);
+                        domUtils.removeClasses(img, 'loadingclass');
+                    })() : editor.execCommand('insertfile', {
+                        url: link
+                    });
+                }
             }catch(er){ }
         });
         xhr.send(fd);
@@ -52,7 +71,7 @@ UE.plugin.register('autoupload', function (){
                             while (len--){
                                 file = items[len];
                                 if(file.getAsFile) file = file.getAsFile();
-                                if(file && file.size > 0 && /image\/\w+/i.test(file.type) ) {
+                                if(file && file.size > 0) {
                                     sendAndInsertImage(file, me);
                                     hasImg = true;
                                 }
@@ -67,6 +86,13 @@ UE.plugin.register('autoupload', function (){
                             e.preventDefault();
                         }
                     });
+
+                    //设置loading的样式
+                    utils.cssRule('loading',
+                        '.loadingclass{background: url(\''
+                            + this.options.themePath
+                            + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;margin-right:1px;cursor: auto;display: inline-block;height: 22px;width: 22px;}',
+                        this.document);
                 }
             }
         }

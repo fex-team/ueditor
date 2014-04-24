@@ -49,15 +49,7 @@
                     break;
             }
 
-            utils.each(utils.isArray(list) ? list:[list], function(item, i){
-                if(item && item.url) {
-                    editor.execCommand('inserthtml',
-                        '<p style="line-height: 16px;">' +
-                        '<img style="vertical-align: middle;" src="'+ item.icon + '" _src="' + item.icon + '" />' +
-                        '<a href="' + item.url +'">' + item.url + '</a>' +
-                        '</p>');
-                }
-            });
+            editor.execCommand('insertfile', list);
         };
     }
 
@@ -83,33 +75,6 @@
                 onlineFile = onlineFile || new OnlineFile('fileList');
                 break;
         }
-    }
-
-
-    function getFileIcon(url){
-        var ext = url.substr(url.lastIndexOf('.') + 1),
-            maps = {
-                "rar":"icon_rar.gif",
-                "zip":"icon_rar.gif",
-                "doc":"icon_doc.gif",
-                "docx":"icon_doc.gif",
-                "pdf":"icon_pdf.gif",
-                "mp3":"icon_mp3.gif",
-                "xls":"icon_xls.gif",
-                "chm":"icon_chm.gif",
-                "ppt":"icon_ppt.gif",
-                "pptx":"icon_ppt.gif",
-                "avi":"icon_mv.gif",
-                "rmvb":"icon_mv.gif",
-                "wmv":"icon_mv.gif",
-                "flv":"icon_mv.gif",
-                "swf":"icon_mv.gif",
-                "rm":"icon_mv.gif",
-                "exe":"icon_exe.gif",
-                "psd":"icon_psd.gif",
-                "txt":"icon_txt.gif"
-            };
-        return maps[ext] ? maps[ext]:maps['txt'];
     }
 
 
@@ -158,7 +123,7 @@
                 thumbnailWidth = 113 * ratio,
                 thumbnailHeight = 113 * ratio,
             // 可能有pedding, ready, uploading, confirm, done.
-                state,
+                state = 'ready',
             // 所有文件的进度信息，key为file id
                 percentages = {},
                 supportTransition = (function () {
@@ -238,19 +203,8 @@
                     $wrap.text('预览中');
                     uploader.makeThumb(file, function (error, src) {
                         if (error) {
-//                            var img = $('<div>' +
-//                                '<i class="file-type-' + filetype + '"></i></div>');
-//                            $wrap.empty().append(img);
-//
-//                            var ic = document.createElement('i'),
-//                                textSpan = document.createElement('span');
-//                            textSpan.innerHTML = list[i].url.substr(list[i].url.lastIndexOf('/') + 1);
-//                            preview = document.createElement('div');
-//                            preview.appendChild(ic);
-//                            preview.appendChild(textSpan);
-//                            domUtils.addClass(textSpan, 'file-title');
-//                            domUtils.addClass(ic, 'file-type-' + filetype);
-//                            domUtils.addClass(ic, 'file-preview');
+                            $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
+                                '<span class="file-title">' + file.name + '</span>');
                         } else {
                             var img = $('<img src="' + src + '">');
                             $wrap.empty().append(img);
@@ -527,14 +481,11 @@
         },
         getInsertList: function () {
             var i, link, data, list = [],
-                prefix = editor.getOpt('fileUrlPrefix'),
-                URL = editor.getOpt('UEDITOR_HOME_URL'),
-                iconDir = URL + (URL.substr(URL.length - 1) == '/' ? '':'/') + 'dialogs/attachment/fileTypeImages/';
+                prefix = editor.getOpt('fileUrlPrefix');
             for (i = 0; i < this.fileList.length; i++) {
                 data = this.fileList[i];
                 link = data.url;
                 list.push({
-                    icon: iconDir + getFileIcon(link),
                     title: link.substr(link.lastIndexOf('/') + 1),
                     url: prefix + link
                 });
@@ -669,6 +620,7 @@
                         preview = document.createElement('div');
                         preview.appendChild(ic);
                         preview.appendChild(textSpan);
+                        domUtils.addClass(preview, 'file-wrapper');
                         domUtils.addClass(textSpan, 'file-title');
                         domUtils.addClass(ic, 'file-type-' + filetype);
                         domUtils.addClass(ic, 'file-preview');
@@ -711,14 +663,11 @@
         },
         getInsertList: function () {
             var i, lis = this.list.children, list = [],
-                URL = editor.getOpt('UEDITOR_HOME_URL'),
-                prefix = editor.getOpt('fileManagerUrlPrefix'),
-                iconDir = URL + (URL.substr(URL.length - 1) == '/' ? '':'/') + 'dialogs/attachment/fileTypeImages/';
+                prefix = editor.getOpt('fileManagerUrlPrefix');
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
                     var url = lis[i].getAttribute('data-url');
                     list.push({
-                        icon: iconDir + getFileIcon(url),
                         title: url.substr(url.lastIndexOf('/') + 1),
                         url: prefix + url
                     });

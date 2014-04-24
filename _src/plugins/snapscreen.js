@@ -49,9 +49,9 @@ UE.plugins['snapscreen'] = function(){
                     return;
                 }
                 me.execCommand('insertimage', {
-                    src: editorOptions.snapscreenPath + rs.url,
+                    src: editorOptions.snapscreenUrlPrefix + rs.url,
                     floatStyle: editorOptions.snapscreenImgAlign,
-                    _src:editorOptions.snapscreenPath + rs.url
+                    _src:editorOptions.snapscreenUrlPrefix + rs.url
                 });
             };
             var onStartUpload = function(){
@@ -60,18 +60,22 @@ UE.plugins['snapscreen'] = function(){
             var onError = function(){
                 alert(lang.uploadErrorMsg);
             };
+
+            var port = editorOptions.snapscreenServerPort + '',
+                snapscreenServerUrl = me.getActionUrl(me.getOpt('snapscreenActionName'));
+            snapscreenServerUrl = snapscreenServerUrl.split( editorOptions.snapscreenHost );
+            snapscreenServerUrl = snapscreenServerUrl[1] || snapscreenServerUrl[0];
+            if( snapscreenServerUrl.indexOf(":"+port) === 0 ) {
+                snapscreenServerUrl = snapscreenServerUrl.substring( port.length+1 );
+            }
+
             try{
-                var port = editorOptions.snapscreenServerPort + '';
-                editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.split( editorOptions.snapscreenHost );
-                editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl[1] || editorOptions.snapscreenServerUrl[0];
-                if( editorOptions.snapscreenServerUrl.indexOf(":"+port) === 0 ) {
-                    editorOptions.snapscreenServerUrl = editorOptions.snapscreenServerUrl.substring( port.length+1 );
-                }
-                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerUrl, port);
-                onSuccess(ret);
+                var ret =snapplugin.saveSnapshot(editorOptions.snapscreenHost, snapscreenServerUrl, port);
             }catch(e){
                 me.ui._dialogs['snapscreenDialog'].open();
+                return;
             }
+            onSuccess(ret);
         }
     };
 }
