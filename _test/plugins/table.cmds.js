@@ -35,7 +35,6 @@ test('向右合并--拆分成列', function () {
     equal(tds[0].rowSpan, 1, '拆分--[0][0]单元格rowspan');
 });
 test('向右合并--拆分成列:th', function () {
-    debugger
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<p></p>');
