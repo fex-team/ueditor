@@ -188,7 +188,7 @@
                 server: editor.getActionUrl(editor.getOpt('fileActionName')),
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
-                fileSingleSizeLimit: fileMaxSize    // 默认 2 M
+                fileSingleSizeLimit: fileMaxSize
             });
             uploader.addButton({
                 id: '#filePickerBlock'
@@ -238,19 +238,19 @@
                     $wrap.text('预览中');
                     uploader.makeThumb(file, function (error, src) {
                         if (error) {
-                            var img = $('<div>' +
-                                '<i class="file-type-' + filetype + '"></i></div>');
-                            $wrap.empty().append(img);
-
-                            var ic = document.createElement('i'),
-                                textSpan = document.createElement('span');
-                            textSpan.innerHTML = list[i].url.substr(list[i].url.lastIndexOf('/') + 1);
-                            preview = document.createElement('div');
-                            preview.appendChild(ic);
-                            preview.appendChild(textSpan);
-                            domUtils.addClass(textSpan, 'file-title');
-                            domUtils.addClass(ic, 'file-type-' + filetype);
-                            domUtils.addClass(ic, 'file-preview');
+//                            var img = $('<div>' +
+//                                '<i class="file-type-' + filetype + '"></i></div>');
+//                            $wrap.empty().append(img);
+//
+//                            var ic = document.createElement('i'),
+//                                textSpan = document.createElement('span');
+//                            textSpan.innerHTML = list[i].url.substr(list[i].url.lastIndexOf('/') + 1);
+//                            preview = document.createElement('div');
+//                            preview.appendChild(ic);
+//                            preview.appendChild(textSpan);
+//                            domUtils.addClass(textSpan, 'file-title');
+//                            domUtils.addClass(ic, 'file-type-' + filetype);
+//                            domUtils.addClass(ic, 'file-preview');
                         } else {
                             var img = $('<img src="' + src + '">');
                             $wrap.empty().append(img);
