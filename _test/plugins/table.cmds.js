@@ -35,6 +35,7 @@ test('向右合并--拆分成列', function () {
     equal(tds[0].rowSpan, 1, '拆分--[0][0]单元格rowspan');
 });
 test('向右合并--拆分成列:th', function () {
+    debugger
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<p></p>');
@@ -51,6 +52,7 @@ test('向右合并--拆分成列:th', function () {
     range.setStart(ths[0], 0).collapse(true).select();
     editor.execCommand('splittocols');
     equal(editor.body.getElementsByTagName('th').length, 2, '拆分单元格th');
+    stop();
 });
 test('向下合并-拆分成行', function () {
     var editor = te.obj[0];
@@ -191,7 +193,7 @@ test('表格中设置对齐方式', function () {
         editor.execCommand('cellalignment', {align:'right', vAlign:'top'});
         equal(tds[0].align, 'right', 'td对齐方式为右上对齐');
         equal(tds[0].vAlign, 'top', 'td对齐方式为右上对齐');
-        /*不闭合设置对齐方式*/
+        //*不闭合设置对齐方式*//*
         range.selectNode(tds[1].firstChild, 0).select();
         editor.execCommand('cellalignment', {align:'center', vAlign:'middle'});
         equal(tds[1].align, 'center', 'p对齐方式为居中对齐');
@@ -534,7 +536,7 @@ test('interlacetable', function () {
     }, 20);
 });
 //
-/*trace 750，1308*/
+//*trace 750，1308*//*
 //test( 'trace1308：前插入行的样式和原先不同', function() {
 //    var editor = te.obj[0];
 //    var range = te.obj[1];
@@ -549,9 +551,9 @@ test('interlacetable', function () {
 //    range.setStart( table2.getElementsByTagName( 'td' )[0], 0 ).collapse( true ).select();
 //    editor.execCommand( 'insertrow' );
 //    var tds = table2.getElementsByTagName( 'td' );
-///*firefox下用jquery的方式去不到border-width*/
+//*//*firefox下用jquery的方式去不到border-width*//*
 //    for(var index = 0;index<tds.length;index++)
-///*边框宽度加到table上了*/
+//*//*边框宽度加到table上了*//*
 //equal(table2.getAttribute('border'),'2','表格边框为2px');
 ////    equal( $( tds[index] ).css( 'border-width' ) || tds[index].style.borderWidth, '2px', '表格边框为2px' );
 ////    for ( var index = 0; index < tds.length; index++ ) {
@@ -559,7 +561,7 @@ test('interlacetable', function () {
 ////    }
 //} );
 
-/*trace 749*/
+//*trace 749*//*
 test('trace 749：拆分为列后2列都有文本', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -581,7 +583,7 @@ test('trace 749：拆分为列后2列都有文本', function () {
     ok(tds[1].innerHTML == '' || tds[1].innerHTML == '<br>', '第二个单元格中有内容');
 });
 
-/*trace 743*/
+//*trace 743*//*
 test('trace 743：合并单元格后删除列再撤销', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -610,7 +612,7 @@ test('trace 743：合并单元格后删除列再撤销', function () {
     stop();
 });
 
-/*trace 726*/
+//*trace 726*//*
 test('trace 726：选中合并过的单元格和普通单元格，查看完全拆分单元格菜单是否高亮', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -641,7 +643,7 @@ test('trace 726：选中合并过的单元格和普通单元格，查看完全�
     stop();
 });
 
-/*trace 718*/
+//*trace 718*//*
 test('trace 718：2次撤销删除列', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -678,7 +680,7 @@ test('trace 718：2次撤销删除列', function () {
     stop();
 });
 
-/*trace 1098 */
+//*trace 1098 *//*
 test('trace 1098:多次合并单元格偶切换到源码再切回来', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -728,7 +730,7 @@ test('trace 1098:多次合并单元格偶切换到源码再切回来', function 
     stop();
 });
 
-/*trace 1307*/
+//*trace 1307*//*
 test('trace 1307:adjustTable--多次合并单元格切换到源码再切回来--选中单元格浏览器会假死', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -776,7 +778,7 @@ test('trace 1307:adjustTable--多次合并单元格切换到源码再切回来--
     }, 50);
     stop();
 });
-///*trace 2378*/
+//*//*trace 2378*//*
 //test('不覆盖原来的class',function(){
 //    var editor = te.obj[0];
 //    editor.setContent('<table class="asdf" border="0" cellspacing="1" cellpadding="3" width="332"><tbody><tr><td></td></tr></tbody></table>');
@@ -786,8 +788,8 @@ test('trace 1307:adjustTable--多次合并单元格切换到源码再切回来--
 //    equal($(table).attr('class'),'asdf noBorderTable','table的class');
 //});
 
-/*trace 3121*/
-/*trace 3195*/
+//*trace 3121*//*
+//*trace 3195*//*
 test('单元格对齐方式-align', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -913,7 +915,7 @@ test('trace 3222：在合并后的单元格中按tab键', function () {
         if (ua.browser.gecko)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第二次tab键');
         else
-            equal(editor.selection.getRange().startContainer.data, 'asd', '第一次tab键');
+            equal(editor.selection.getRange().startContainer.data, 'asd', '第二次tab键');
         start();
     }, 50);
     stop();
@@ -1113,7 +1115,7 @@ test('contextMenu trace 3216：前插入行', function () {
     }
     setTimeout(function () {
         lang = editor.getLang("contextMenu");
-        ua.click(menutable.childNodes[4]);
+        ua.click(menutable.childNodes[6]);
         equal(editor.body.getElementsByTagName('tr').length, 6, '前插入行后有6行');
         equal(ua.getChildHTML(editor.body.getElementsByTagName('td')[5]), 'asd', '原单元格中文本未改变');
         setTimeout(function () {
@@ -1395,15 +1397,15 @@ test('contextMenu 标题行中右插入列', function () {
     }
     setTimeout(function () {
         lang = editor.getLang("contextMenu");
-        equal(menutable.childNodes.length, 13, '13个子项目');//当光标在th[0]时,由于标题变更13->12 (少了前插入列)
+        equal(menutable.childNodes.length, 15, '15个子项目');//当光标在th[0]时,有15个项目
         /*trace 3197：没有后插行选项*/
-        var innerText = lang.deletetable +  lang.insertcolnext + lang.insertcaption + lang.deletetitle +lang.inserttitlecol+ lang.mergeright + lang.edittd + lang.edittable+lang.setbordervisible;
+        var innerText = lang.deletetable + lang.deleterow+ lang.deletecol + lang.insertcolnext + lang.insertcaption + lang.deletetitle +lang.inserttitlecol+ lang.mergeright + lang.edittd + lang.edittable+lang.setbordervisible;
         if (browser.gecko) {
             equal(menutable.textContent, innerText, '检查menu显示的字符');
         } else {
             equal(menutable.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), innerText, '检查menu显示的字符');
         }
-        ua.click(menutable.childNodes[2]);
+        ua.click(menutable.childNodes[4]);
         equal(editor.body.getElementsByTagName('tr')[0].cells.length, 6, '左插入列后有6列');
         setTimeout(function () {
             document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
@@ -1461,7 +1463,7 @@ test('contextMenu trace 3315：表格隔行变色', function () {
     editor.execCommand('inserttable');
     range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
     ua.contextmenu(editor.body.firstChild);
-    var menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+    var menutableBody = document.getElementsByClassName("edui-menu-body")[8];
     var forTable = document.getElementsByClassName('edui-for-table');
     if (ua.browser.ie) {
         ua.mouseenter(forTable[forTable.length - 1]);
@@ -1478,7 +1480,6 @@ test('contextMenu trace 3315：表格隔行变色', function () {
             equal(menutableBody.innerText.replace(/[\r\n\t\u200b\ufeff]/g, ''), '表格隔行变色', '检查menu显示的字符');
         }
         ua.click(menutableBody.childNodes[0]);
-        //        equal(editor.body.getElementsByTagName('table')[0].interlaced,'enabled','表格隔行变色');
         var trs = editor.body.getElementsByTagName('tr');
         for (var i = 0; i < trs.length; i++) {
             if (i % 2 == 0) {
@@ -1489,7 +1490,7 @@ test('contextMenu trace 3315：表格隔行变色', function () {
         }
         range.setStart(editor.body.getElementsByTagName('td')[0], 0).collapse(true).select();
         ua.contextmenu(editor.body.firstChild);
-        menutableBody = document.getElementsByClassName("edui-menu-body")[3];
+        menutableBody = document.getElementsByClassName("edui-menu-body")[8];
         forTable = document.getElementsByClassName('edui-for-table');
         if (ua.browser.ie) {
             ua.mouseenter(forTable[forTable.length - 1]);
