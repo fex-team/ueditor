@@ -85,6 +85,7 @@
             'plugins/section.js',
             'plugins/simpleupload.js',
             'plugins/serverparam.js',
+            'plugins/insertfile.js',
             'ui/ui.js',
             'ui/uiutils.js',
             'ui/uibase.js',
