@@ -277,6 +277,8 @@ UE.I18N['zh-cn'] = {
         'errorExceedSize':'文件大小超出',
         'errorInterrupt':'文件大小超出',
         'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错',
         'remoteLockError':"宽高不正确,不能所定比例",
         'numError':"请输入正确的长度或者宽度值！例如：123，400",
         'imageUrlError':"不允许的图片格式或者图片域！",
@@ -307,7 +309,9 @@ UE.I18N['zh-cn'] = {
         'updateStatusError': '，_张上传失败。',
         'errorExceedSize':'文件大小超出',
         'errorInterrupt':'文件传输中断',
-        'errorUploadRetry':'上传失败，请重试'
+        'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错'
     },
     'webapp':{
         'tip1':"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",

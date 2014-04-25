@@ -277,6 +277,8 @@ UE.I18N['en'] = {
         'errorExceedSize':'File Size Exceed',
         'errorInterrupt':'File Upload Interrupted',
         'errorUploadRetry':'Upload Error, Please Retry.',
+        'errorHttp':'Http Error',
+        'errorServerUpload':'Server Result Error.',
         'remoteLockError':"Cannot Lock the Proportion between width and height",
         'numError':"Please enter the correct Num. e.g 123,400",
         'imageUrlError':"The image format may be wrong!",
@@ -307,7 +309,9 @@ UE.I18N['en'] = {
         'updateStatusError': ' and _ upload failed',
         'errorExceedSize':'File Size Exceed',
         'errorInterrupt':'File Upload Interrupted',
-        'errorUploadRetry':'Upload Error, Please Retry.'
+        'errorUploadRetry':'Upload Error, Please Retry.',
+        'errorHttp':'Http Error',
+        'errorServerUpload':'Server Result Error.',
     },
     'webapp':{
         'tip1':"This function provided by Baidu APP,please apply for baidu APPKey webmaster first!",
