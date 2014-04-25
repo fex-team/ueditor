@@ -3,8 +3,9 @@ module( 'core.domUtils' );
 test( 'isBoundaryNode--node是firstChild',function(){
 
     if(ua.browser.ie){
-        var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
-        var div = body.appendChild(document.createElement('div'));
+//        var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
+//        var div = body.appendChild(document.createElement('div'));
+        var div = te.dom[2];
     }else{
         var div = te.dom[1].contentWindow.document.firstChild.lastChild.appendChild(document.createElement('div'));
     }
@@ -13,9 +14,13 @@ test( 'isBoundaryNode--node是firstChild',function(){
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
     equal( domUtils.isBoundaryNode(node, "lastChild"), 0 );
     node = div.firstChild.firstChild;
-    equal( domUtils.isBoundaryNode(node, "firstChild"), 1 );
+    if(ua.browser.ie){
+        equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
+    }else{
+        equal( domUtils.isBoundaryNode(node, "firstChild"), 1 );
+    }
     equal( domUtils.isBoundaryNode(node, "lastChild"), 0 );
-    node = div.lastChild.lastChild;
+    node = div.firstChild.nextSibling.nextSibling;
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
     equal( domUtils.isBoundaryNode(node, "lastChild"), 1 );
 } );
