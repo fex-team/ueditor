@@ -328,6 +328,7 @@
 }
 
 #upload .filelist div.file-panel span.rotateLeft {
+    display:none;
     background-position: 0 -24px;
 }
 
@@ -336,6 +337,7 @@
 }
 
 #upload .filelist div.file-panel span.rotateRight {
+    display:none;
     background-position: -24px -24px;
 }
 
