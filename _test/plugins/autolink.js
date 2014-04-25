@@ -6,7 +6,6 @@ module('plugins.autolink');
 //});
 //自动添加的功能是针对非ie的，单测用例同样只针对非ie,仍需手动测试检验ie与非ie下效果是否一致
 test('输入超链接后回车', function () {
-//    debugger
     if (!ua.browser.ie) {
         var editor = te.obj[0];
         var range = te.obj[1];
@@ -146,10 +145,10 @@ test('你好htp://ww.baidu.com  后面回车', function () {
             range.setStart(body.firstChild, 1).collapse(1).select();
             ua.keydown(editor.body, {'keyCode': 32});
             setTimeout(function () {
-                equal(body.firstChild.firstChild.nodeValue, '你好http://www.baidu.com', '你好htp://www.baidu.com 部分没有转换');
+                equal(body.firstChild.firstChild.nodeValue, '你好', '你好http://www.baidu.com 转换成文字+超链接');
                 var a = body.firstChild.getElementsByTagName('a')[0];
                 if(a){
-                equal(ua.getChildHTML(a), 'www.baidu.com', '检查a的内容');
+                equal(ua.getChildHTML(a), 'http://www.baidu.com', '检查a的内容');
                 ok(a && $(a).attr('href').indexOf('http://www.baidu.com') != -1, '检查a的href');
                 }else{
                     var p =body.firstChild.innerHTML;
