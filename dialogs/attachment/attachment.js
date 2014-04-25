@@ -203,7 +203,7 @@
                 if (file.getStatus() === 'invalid') {
                     showError(file.statusText);
                 } else {
-                    $wrap.text('预览中');
+                    $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {
                         if (error) {
                             $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
