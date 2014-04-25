@@ -14,12 +14,30 @@ UE.plugin.register('autoupload', function (){
         fd.append(editor.options.imageFieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
         fd.append('type', 'ajax');
 
-        var loadingId = 'loading_' + (+new Date()).toString(36),
-            xhr = new XMLHttpRequest(),
+        var xhr = new XMLHttpRequest(),
             url = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
 
         //插入loading的占位图片
-        filetype == 'image' && editor.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '">');
+        var loadingId = 'loading_' + (+new Date()).toString(36);
+        if (filetype == 'image') {
+            editor.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + editor.options.themePath + editor.options.theme +'/images/spacer.gif" title="' + (editor.getLang('loading') || '') + '" >');
+
+            setTimeout(function(){
+                var loader = editor.document.getElementById(loadingId);
+                loader && (loader.style.display = 'inline-block');
+                var rng = editor.selection.getRange();
+                loader && rng.setStartAfter(loader).collapse(true).select();
+            }, 100);
+
+            function showErrorLoader(title){
+                if(loadingId) {
+                    var loader = editor.document.getElementById(loadingId);
+                    domUtils.removeClasses(loader, 'loadingclass');
+                    domUtils.addClass(loader, 'loaderrorclass');
+                    loader.setAttribute('title', title || '');
+                }
+            }
+        }
 
         xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -27,17 +45,23 @@ UE.plugin.register('autoupload', function (){
             try{
                 var json = (new Function("return " + utils.trim(e.target.response)))();
                 if (json.state == 'SUCCESS' && json.url) {
-                    var link = editor.getOpt(filetype + 'UrlPrefix') + json.url;
-                    filetype == 'image' ? (function(){
-                        var img = editor.document.getElementById(loadingId);
-                        img.setAttribute('src', link);
-                        img.setAttribute('_src', link);
-                        domUtils.removeClasses(img, 'loadingclass');
-                    })() : editor.execCommand('insertfile', {
-                        url: link
-                    });
+                    var link = editor.getOpt(filetype + 'UrlPrefix') + json.url,
+                        loader = editor.document.getElementById(loadingId);
+                    if (filetype == 'image') {
+                        loader.setAttribute('src', link);
+                        loader.setAttribute('_src', link);
+                        domUtils.removeClasses(loader, 'loadingclass');
+                    } else {
+                        editor.execCommand('insertfile', {
+                            url: link
+                        })
+                    }
+                } else {
+                    showErrorLoader && showErrorLoader(json.state);
                 }
-            }catch(er){ }
+            }catch(er){
+                showErrorLoader && showErrorLoader(editor.getLang('loadError'));
+            }
         });
         xhr.send(fd);
     };
@@ -50,6 +74,13 @@ UE.plugin.register('autoupload', function (){
     }
 
     return {
+        outputRule: function(root){
+            utils.each(root.getNodesByTagName('img'),function(n){
+                if (/\b(loaderrorclass)|(bloaderrorclass)\b/.test(n.getAttr('class'))) {
+                    n.parentNode.removeChild(n);
+                }
+            })
+        },
         bindEvents:{
             //插入粘贴板的图片，拖放插入图片
             'ready':function(e){
@@ -83,9 +114,13 @@ UE.plugin.register('autoupload', function (){
 
                     //设置loading的样式
                     utils.cssRule('loading',
-                        '.loadingclass{background: url(\''
+                        '.loadingclass{display:inline-block;cursor:default;background: url(\''
                             + this.options.themePath
-                            + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;margin-right:1px;cursor: auto;display: inline-block;height: 22px;width: 22px;}',
+                            + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;border:1px solid #cccccc;margin-left:1px;height: 22px;width: 22px;}\n' +
+                            '.loaderrorclass{display:inline-block;cursor:default;background: url(\''
+                            + this.options.themePath
+                            + this.options.theme +'/images/loaderror.png\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;' +
+                            '}',
                         this.document);
                 }
             }
