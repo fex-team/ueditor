@@ -768,10 +768,10 @@
                         opt.minFrameWidth = opt.initialFrameWidth;
                     } else {
                         opt.minFrameWidth = opt.initialFrameWidth = holder.offsetWidth;
-//                        var styleWidth = holder.style.width;
-//                        if(/%$/.test(styleWidth)) {
-//                            opt.initialFrameWidth = styleWidth;
-//                        }
+                        var styleWidth = holder.style.width;
+                        if(/%$/.test(styleWidth)) {
+                            opt.initialFrameWidth = styleWidth;
+                        }
                     }
                     if (opt.initialFrameHeight) {
                         opt.minFrameHeight = opt.initialFrameHeight;
