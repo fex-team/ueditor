@@ -60,7 +60,7 @@ UE.plugin.register('simpleupload', function (){
         });
         uploader.on('uploadSuccess', function (file, ret) {
             try{
-                var json = (new Function("return " + ret._raw))();
+                var json = (new Function("return " + utils.trim(ret._raw)))();
                 var picLink = me.getOpt('imageUrlPrefix') + json.url;
                 if(json.state == 'SUCCESS' && json.url) {
                     me.execCommand('insertimage', {

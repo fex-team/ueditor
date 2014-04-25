@@ -25,15 +25,9 @@ UE.plugin.register('autoupload', function (){
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.addEventListener('load', function (e) {
             try{
-                var json = (new Function("return " + e.target.response))();
+                var json = (new Function("return " + utils.trim(e.target.response)))();
                 if (json.state == 'SUCCESS' && json.url) {
                     var link = editor.getOpt(filetype + 'UrlPrefix') + json.url;
-//                    filetype == 'image' ? editor.execCommand('insertimage', {
-//                        src: link,
-//                        _src: link
-//                    }) : editor.execCommand('insertfile', {
-//                        url: link
-//                    });
                     filetype == 'image' ? (function(){
                         var img = editor.document.getElementById(loadingId);
                         img.setAttribute('src', link);

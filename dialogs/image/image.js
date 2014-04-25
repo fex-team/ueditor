@@ -674,7 +674,8 @@
             uploader.on('uploadSuccess', function (file, ret) {
                 var $file = $('#' + file.id);
                 try {
-                    var json = eval('(' + (ret._raw || ret) + ')');
+                    var responseText = (ret._raw || ret),
+                        json = eval('(' + utils.trim(responseText) + ')');
                     if (json.state == 'SUCCESS') {
                         _this.imageList.push(json);
                         $file.append('<span class="success"></span>');
