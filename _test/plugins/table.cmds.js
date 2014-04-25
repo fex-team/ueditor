@@ -51,7 +51,6 @@ test('向右合并--拆分成列:th', function () {
     range.setStart(ths[0], 0).collapse(true).select();
     editor.execCommand('splittocols');
     equal(editor.body.getElementsByTagName('th').length, 2, '拆分单元格th');
-    stop();
 });
 test('向下合并-拆分成行', function () {
     var editor = te.obj[0];
