@@ -374,11 +374,11 @@
 #upload .filelist li p.imgWrap {
     position: relative;
     z-index: 2;
-    line-height: 115px;
+    line-height: 113px;
     vertical-align: middle;
     overflow: hidden;
-    width: 115px;
-    height: 115px;
+    width: 113px;
+    height: 113px;
 
     -webkit-transform-origin: 50% 50%;
     -moz-transform-origin: 50% 50%;
