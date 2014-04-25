@@ -153,7 +153,7 @@
                 server: editor.getActionUrl(editor.getOpt('fileActionName')),
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
-                fileSingleSizeLimit: imageMaxSize,    // 默认 2 M
+                fileSingleSizeLimit: fileMaxSize,    // 默认 2 M
                 compress: false
             });
             uploader.addButton({
@@ -456,7 +456,7 @@
                 try {
                     var json = eval('(' + (ret._raw || ret) + ')');
                     if (json.state == 'SUCCESS') {
-                        _this.imageList.push(json);
+                        _this.fileList.push(json);
                         $file.append('<span class="success"></span>');
                     } else {
                         $file.find('.error').text(json.state).show();
