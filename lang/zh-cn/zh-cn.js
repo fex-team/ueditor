@@ -69,6 +69,8 @@ UE.I18N['zh-cn'] = {
         'im':'强调',
         'hi':'明显强调'
     },
+    'loading':"正在上传...",
+    'loadError':"上传错误",
     'elementPathTip':"元素路径",
     'wordCountTip':"字数统计",
     'wordCountMsg':'当前已输入{#count}个字符, 您还可以输入{#leave}个字符。 ',

@@ -414,6 +414,10 @@
     background-position: -698px -76px;
 }
 
+.edui-default  .edui-for-iframeupload  .edui-icon {
+    background-position: -380px 0px;
+}
+
 /* uploader */
 .edui-default  .edui-for-simpleupload  .edui-icon {
     background-position: -380px 0px;

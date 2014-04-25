@@ -71,6 +71,8 @@ UE.I18N['en'] = {
         'im':'Important',
         'hi':'Highlight'
     },
+    'loading':"loading...",
+    'loadError':"load error",
     'elementPathTip':"Path",
     'wordCountTip':"Word Count",
     'wordCountMsg':'{#count} characters entered,{#leave} left. ',
