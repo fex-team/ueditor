@@ -59,18 +59,24 @@ UE.I18N['zh-cn'] = {
         'impact':'impact',
         'timesNewRoman':'times new roman'
     },
-    'simpleupload':{
-        'exceedSizeError': '文件大小超出限制',
-        'jsonEncodeError': '服务器返回格式错误'
-    },
     'customstyle':{
         'tc':'标题居中',
         'tl':'标题居左',
         'im':'强调',
         'hi':'明显强调'
     },
-    'loading':"正在上传...",
-    'loadError':"上传错误",
+    'autoupload': {
+        'exceedSizeError': '文件大小超出限制',
+        'jsonEncodeError': '服务器返回格式错误',
+        'loading':"正在上传...",
+        'loadError':"上传错误"
+    },
+    'simpleupload':{
+        'exceedSizeError': '文件大小超出限制',
+        'jsonEncodeError': '服务器返回格式错误',
+        'loading':"正在上传...",
+        'loadError':"上传错误"
+    },
     'elementPathTip':"元素路径",
     'wordCountTip':"字数统计",
     'wordCountMsg':'当前已输入{#count}个字符, 您还可以输入{#leave}个字符。 ',

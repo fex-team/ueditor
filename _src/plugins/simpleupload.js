@@ -40,7 +40,7 @@ UE.plugin.register('simpleupload', function (){
 
         domUtils.on(input, 'change', function(){
             var loadingId = 'loading_' + (+new Date()).toString(36);
-            me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('loading') || '') + '" >');
+            me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
 
             function callback(){
                 var link, json, loader, result = (iframe.contentDocument || iframe.contentWindow.contentDocument).body.innerHTML;
@@ -56,7 +56,7 @@ UE.plugin.register('simpleupload', function (){
                         showErrorLoader && showErrorLoader(json.state);
                     }
                 }catch(er){
-                    showErrorLoader && showErrorLoader(me.getLang('loadError'));
+                    showErrorLoader && showErrorLoader(me.getLang('simpleupload.loadError'));
                 }
                 input.value = '';
                 domUtils.un(iframe, 'load', callback);

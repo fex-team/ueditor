@@ -61,18 +61,24 @@ UE.I18N['en'] = {
         'impact':'Impact',
         'timesNewRoman':'Times new roman'
     },
-    'simpleupload':{
-        'exceedSizeError': 'File Size Exceed',
-        'jsonEncodeError': 'Server Return Format Error'
-    },
     'customstyle':{
         'tc':'Title center',
         'tl':'Title left',
         'im':'Important',
         'hi':'Highlight'
     },
-    'loading':"loading...",
-    'loadError':"load error",
+    'autoupload': {
+        'exceedSizeError': 'File Size Exceed',
+        'jsonEncodeError': 'Server Return Format Error',
+        'loading':"loading...",
+        'loadError':"load error"
+    },
+    'simpleupload':{
+        'exceedSizeError': 'File Size Exceed',
+        'jsonEncodeError': 'Server Return Format Error',
+        'loading':"loading...",
+        'loadError':"load error"
+    },
     'elementPathTip':"Path",
     'wordCountTip':"Word Count",
     'wordCountMsg':'{#count} characters entered,{#leave} left. ',

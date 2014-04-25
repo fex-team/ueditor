@@ -7,64 +7,92 @@
  */
 UE.plugin.register('autoupload', function (){
     var me = this;
-    var sendAndInsertImage = function (file, editor) {
+
+    function sendAndInsertFile(file, editor) {
         //模拟数据
-        var filetype = /image\/\w+/i.test(file.type) ? 'image':'file',
-            fd = new FormData();
-        fd.append(editor.options.imageFieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
-        fd.append('type', 'ajax');
+        var fieldName, urlPrefix, maxSize, allowFiles, actionUrl,
+            loadingHtml, errorHandler, successHandler,
+            filetype = /image\/\w+/i.test(file.type) ? 'image':'file',
+            loadingId = 'loading_' + (+new Date()).toString(36);
 
-        var xhr = new XMLHttpRequest(),
-            url = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
-
-        //插入loading的占位图片
-        var loadingId = 'loading_' + (+new Date()).toString(36);
-        if (filetype == 'image') {
-            editor.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + editor.options.themePath + editor.options.theme +'/images/spacer.gif" title="' + (editor.getLang('loading') || '') + '" >');
-
-            setTimeout(function(){
-                var loader = editor.document.getElementById(loadingId);
-                loader && (loader.style.display = 'inline-block');
-                var rng = editor.selection.getRange();
-                loader && rng.setStartAfter(loader).collapse(true).select();
-            }, 100);
-
-            function showErrorLoader(title){
-                if(loadingId) {
-                    var loader = editor.document.getElementById(loadingId);
-                    domUtils.removeClasses(loader, 'loadingclass');
-                    domUtils.addClass(loader, 'loaderrorclass');
-                    loader.setAttribute('title', title || '');
-                }
+        fieldName = editor.getOpt(filetype + 'FieldName');
+        urlPrefix = editor.getOpt(filetype + 'UrlPrefix');
+        maxSize = editor.getOpt(filetype + 'MaxSize');
+        allowFiles = editor.getOpt(filetype + 'MaxSize');
+        actionUrl = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
+        errorHandler = function(title) {
+            var loader = editor.document.getElementById(loadingId);
+            if (loader) {
+                domUtils.removeClasses(loader, 'loadingclass');
+                domUtils.addClass(loader, 'loaderrorclass');
+                loader.setAttribute('title', title || '');
             }
+        };
+
+        if (filetype == 'image') {
+            loadingHtml = '<img class="loadingclass" id="' + loadingId + '" src="' +
+                editor.options.themePath + editor.options.theme +
+                '/images/spacer.gif" title="' + (editor.getLang('autoupload.loading') || '') + '" >';
+            successHandler = function(data) {
+                var link = urlPrefix + data.url,
+                    loader = editor.document.getElementById(loadingId);
+                if (loader) {
+                    loader.setAttribute('src', link);
+                    loader.setAttribute('_src', link);
+                    domUtils.removeClasses(loader, 'loadingclass');
+                }
+            };
+        } else {
+            loadingHtml = '<p>' +
+                '<img class="loadingclass" id="' + loadingId + '" src="' +
+                editor.options.themePath + editor.options.theme +
+                '/images/spacer.gif" title="' + (editor.getLang('autoupload.loading') || '') + '" >' +
+                '</p>';
+            successHandler = function(data) {
+                var link = urlPrefix + data.url,
+                    loader = editor.document.getElementById(loadingId);
+
+                var rng = editor.selection.getRange(),
+                    bk = rng.createBookmark();
+                rng.selectNode(loader).select();
+                editor.execCommand('insertfile', {'url': link});
+                rng.moveToBookmark(bk).select();
+            };
         }
 
-        xhr.open("post", url, true);
+        /* 插入loading的占位符 */
+        editor.execCommand('inserthtml', loadingHtml);
+
+        /* 判断文件大小是否超出限制 */
+        if(file.size > maxSize) {
+            errorHandler(editor.getLang('autoupload.exceedSizeError'));
+            return;
+        }
+        /* 判断文件格式是否超出允许 */
+        /*TODO*/
+        debugger;
+
+        /* 创建Ajax并提交 */
+        var xhr = new XMLHttpRequest(),
+            fd = new FormData();
+        fd.append(fieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
+        fd.append('type', 'ajax');
+        xhr.open("post", actionUrl, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.addEventListener('load', function (e) {
             try{
                 var json = (new Function("return " + utils.trim(e.target.response)))();
                 if (json.state == 'SUCCESS' && json.url) {
-                    var link = editor.getOpt(filetype + 'UrlPrefix') + json.url,
-                        loader = editor.document.getElementById(loadingId);
-                    if (filetype == 'image') {
-                        loader.setAttribute('src', link);
-                        loader.setAttribute('_src', link);
-                        domUtils.removeClasses(loader, 'loadingclass');
-                    } else {
-                        editor.execCommand('insertfile', {
-                            url: link
-                        })
-                    }
+                    successHandler(json);
                 } else {
-                    showErrorLoader && showErrorLoader(json.state);
+                    errorHandler(json.state);
                 }
             }catch(er){
-                showErrorLoader && showErrorLoader(editor.getLang('loadError'));
+                errorHandler(editor.getLang('autoupload.loadError'));
             }
         });
         xhr.send(fd);
-    };
+    }
 
     function getPasteImage(e){
         return e.clipboardData && e.clipboardData.items && e.clipboardData.items.length == 1 && /^image\//.test(e.clipboardData.items[0].type) ? e.clipboardData.items:null;
@@ -79,7 +107,12 @@ UE.plugin.register('autoupload', function (){
                 if (/\b(loaderrorclass)|(bloaderrorclass)\b/.test(n.getAttr('class'))) {
                     n.parentNode.removeChild(n);
                 }
-            })
+            });
+            utils.each(root.getNodesByTagName('p'),function(n){
+                if (/\bloadpara\b/.test(n.getAttr('class'))) {
+                    n.parentNode.removeChild(n);
+                }
+            });
         },
         bindEvents:{
             //插入粘贴板的图片，拖放插入图片
@@ -97,7 +130,7 @@ UE.plugin.register('autoupload', function (){
                                 file = items[len];
                                 if(file.getAsFile) file = file.getAsFile();
                                 if(file && file.size > 0) {
-                                    sendAndInsertImage(file, me);
+                                    sendAndInsertFile(file, me);
                                     hasImg = true;
                                 }
                             }
