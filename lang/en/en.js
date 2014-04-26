@@ -61,15 +61,23 @@ UE.I18N['en'] = {
         'impact':'Impact',
         'timesNewRoman':'Times new roman'
     },
-    'simpleupload':{
-        'exceedSizeError': 'File Size Exceed',
-        'jsonEncodeError': 'Server Return Format Error'
-    },
     'customstyle':{
         'tc':'Title center',
         'tl':'Title left',
         'im':'Important',
         'hi':'Highlight'
+    },
+    'autoupload': {
+        'exceedSizeError': 'File Size Exceed',
+        'jsonEncodeError': 'Server Return Format Error',
+        'loading':"loading...",
+        'loadError':"load error"
+    },
+    'simpleupload':{
+        'exceedSizeError': 'File Size Exceed',
+        'jsonEncodeError': 'Server Return Format Error',
+        'loading':"loading...",
+        'loadError':"load error"
     },
     'elementPathTip':"Path",
     'wordCountTip':"Word Count",
@@ -270,6 +278,8 @@ UE.I18N['en'] = {
         'uploadDelete':'Delete',
         'uploadTurnLeft':'Turn Left',
         'uploadTurnRight':'Turn Right',
+        'uploadPreview':'Doing Preview',
+        'uploadNoPreview':'Can Not Preview',
         'updateStatusReady': 'Selected _ pictures, total _KB.',
         'updateStatusConfirm': '_ uploaded successfully and _ upload failed',
         'updateStatusFinish': 'Total _ pictures (_KB), _  uploaded successfully',
@@ -277,6 +287,8 @@ UE.I18N['en'] = {
         'errorExceedSize':'File Size Exceed',
         'errorInterrupt':'File Upload Interrupted',
         'errorUploadRetry':'Upload Error, Please Retry.',
+        'errorHttp':'Http Error',
+        'errorServerUpload':'Server Result Error.',
         'remoteLockError':"Cannot Lock the Proportion between width and height",
         'numError':"Please enter the correct Num. e.g 123,400",
         'imageUrlError':"The image format may be wrong!",
@@ -301,13 +313,16 @@ UE.I18N['en'] = {
         'uploadDelete':'Delete',
         'uploadTurnLeft':'Turn Left',
         'uploadTurnRight':'Turn Right',
+        'uploadPreview':'Doing Preview',
         'updateStatusReady': 'Selected _ files, total _KB.',
         'updateStatusConfirm': '_ uploaded successfully and _ upload failed',
         'updateStatusFinish': 'Total _ files (_KB), _  uploaded successfully',
         'updateStatusError': ' and _ upload failed',
         'errorExceedSize':'File Size Exceed',
         'errorInterrupt':'File Upload Interrupted',
-        'errorUploadRetry':'Upload Error, Please Retry.'
+        'errorUploadRetry':'Upload Error, Please Retry.',
+        'errorHttp':'Http Error',
+        'errorServerUpload':'Server Result Error.',
     },
     'webapp':{
         'tip1':"This function provided by Baidu APP,please apply for baidu APPKey webmaster first!",

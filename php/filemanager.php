@@ -43,13 +43,19 @@ if (!count($files)) {
         "total" => count($files)
     ));
 }
-rsort($files, SORT_STRING);
+
+/* 按照修改时间倒序排序 */
+$files = array_sort($files, "mtime", "desc");
 
 /* 获取指定范围的列表 */
-for ($list = [], $len = count($files), $i = $start; $i < $end && $i < $len; $i++) {
-    if($files[$i]) {
-        $list[] = $files[$i];
+$list = array();
+$i = 0;
+foreach ($files as $k=>$v){
+    if($i >= $start) {
+        unset($v["mtime"]);
+        $list[] = $v;
     }
+    if($i++ >= $end) break;
 }
 
 /* 返回数据 */
@@ -82,11 +88,35 @@ function getfiles($path, $allowFiles, &$files = array())
             } else {
                 if (preg_match("/\.(".$allowFiles.")$/i", $file)) {
                     $files[] = array(
-                        'url'=> substr($path2, strlen($_SERVER['DOCUMENT_ROOT']))
+                        'url'=> substr($path2, strlen($_SERVER['DOCUMENT_ROOT'])),
+                        'mtime'=> filemtime($path2)
                     );
                 }
             }
         }
     }
     return $files;
+}
+
+/**
+ * 二维数组在哪找指定键值排序
+ * @param $arr
+ * @param $keys
+ * @param string $type
+ * @return array
+ */
+function array_sort($arr,$keys,$type='asc'){
+    $keysvalue = $new_array = array();
+    foreach ($arr as $k=>$v){
+        $keysvalue[$k] = $v[$keys];
+    }
+    if($type == 'asc'){
+        asort($keysvalue);
+    }else{
+        arsort($keysvalue);
+    }
+    foreach ($keysvalue as $k=>$v){
+        $new_array[$k] = $arr[$k];
+    }
+    return $new_array;
 }

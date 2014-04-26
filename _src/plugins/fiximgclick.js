@@ -240,6 +240,12 @@ UE.plugins['fiximgclick'] = (function () {
                     img = range.getClosedNode();
 
                 if (img && img.tagName == 'IMG' && me.body.contentEditable!="false") {
+
+                    if (img.className.indexOf("edui-faked-music") != -1 ||
+                        img.getAttribute("anchorname") ||
+                        domUtils.hasClass(img, 'loadingclass') ||
+                        domUtils.hasClass(img, 'loaderrorclass')) { return }
+
                     if (!imageScale) {
                         imageScale = new Scale();
                         imageScale.init(me);

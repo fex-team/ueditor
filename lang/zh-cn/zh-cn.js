@@ -59,15 +59,23 @@ UE.I18N['zh-cn'] = {
         'impact':'impact',
         'timesNewRoman':'times new roman'
     },
-    'simpleupload':{
-        'exceedSizeError': '文件大小超出限制',
-        'jsonEncodeError': '服务器返回格式错误'
-    },
     'customstyle':{
         'tc':'标题居中',
         'tl':'标题居左',
         'im':'强调',
         'hi':'明显强调'
+    },
+    'autoupload': {
+        'exceedSizeError': '文件大小超出限制',
+        'jsonEncodeError': '服务器返回格式错误',
+        'loading':"正在上传...",
+        'loadError':"上传错误"
+    },
+    'simpleupload':{
+        'exceedSizeError': '文件大小超出限制',
+        'jsonEncodeError': '服务器返回格式错误',
+        'loading':"正在上传...",
+        'loadError':"上传错误"
     },
     'elementPathTip':"元素路径",
     'wordCountTip':"字数统计",
@@ -270,6 +278,8 @@ UE.I18N['zh-cn'] = {
         'uploadDelete':'删除',
         'uploadTurnLeft':'向左旋转',
         'uploadTurnRight':'向右旋转',
+        'uploadPreview':'预览中',
+        'uploadNoPreview':'不能预览',
         'updateStatusReady': '选中_张图片，共_KB。',
         'updateStatusConfirm': '已成功上传_张照片，_张照片上传失败',
         'updateStatusFinish': '共_张（_KB），_张上传成功',
@@ -277,6 +287,8 @@ UE.I18N['zh-cn'] = {
         'errorExceedSize':'文件大小超出',
         'errorInterrupt':'文件大小超出',
         'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错',
         'remoteLockError':"宽高不正确,不能所定比例",
         'numError':"请输入正确的长度或者宽度值！例如：123，400",
         'imageUrlError':"不允许的图片格式或者图片域！",
@@ -301,13 +313,16 @@ UE.I18N['zh-cn'] = {
         'uploadDelete':'删除',
         'uploadTurnLeft':'向左旋转',
         'uploadTurnRight':'向右旋转',
+        'uploadPreview':'预览中',
         'updateStatusReady': '选中_个文件，共_KB。',
         'updateStatusConfirm': '已成功上传_个文件，_个文件上传失败',
         'updateStatusFinish': '共_个（_KB），_个上传成功',
         'updateStatusError': '，_张上传失败。',
         'errorExceedSize':'文件大小超出',
         'errorInterrupt':'文件传输中断',
-        'errorUploadRetry':'上传失败，请重试'
+        'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错'
     },
     'webapp':{
         'tip1':"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",

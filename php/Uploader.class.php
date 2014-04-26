@@ -130,7 +130,7 @@ class Uploader
         $base64Data = $_POST[$this->fileField];
         $img = base64_decode($base64Data);
 
-        $this->oriName = "scrawl.png";
+        $this->oriName = $this->config['oriName'];
         $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
@@ -200,8 +200,9 @@ class Uploader
         readfile($imgUrl, false, $context);
         $img = ob_get_contents();
         ob_end_clean();
+        preg_match("/[\/]([^\/]*)[\.]?[^\.\/]*$/", $imgUrl, $m);
 
-        $this->oriName = "remote.png";
+        $this->oriName = $m ? $m[1]:"";
         $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
@@ -336,7 +337,7 @@ class Uploader
     public function getFileInfo()
     {
         return array(
-            "originalName" => $this->oriName,
+            "original" => $this->oriName,
             "name" => $this->fileName,
             "url" => $this->fullName,
             "size" => $this->fileSize,

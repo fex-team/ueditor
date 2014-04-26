@@ -1,7 +1,5 @@
 
 ///import editor;
-
-
 ///import core/browser;
 ///import core/utils;
 ///import core/EventBase;
@@ -22,13 +20,9 @@
 ///import plugins/emotion;
 ///import plugins/map;
 ///import plugins/scrawl;
-
 ///import plugins/blockquote;
 ///import plugins/wordimage;
-
-
 ///import plugins/autotypeset;
-
 ///import plugins/removeformat;
 ///import plugins/font;
 ///import plugins/justify;
@@ -97,6 +91,7 @@
 ///import plugins/autoupload;
 ///import plugins/section;
 ///import plugins/charts;
+
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;
@@ -125,4 +120,6 @@
 ///import ui/autotypesetbutton;
 ///import ui/shortcutmenu;
 
+///import adapter/editor;
+///import adapter/editorui;
 
