@@ -1,26 +1,41 @@
 <%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %>
-<!--#include file="ASPJson.class.asp"-->
-<!--#include file="config_loader.asp"-->
 <%
     action = Request.Item("action")
 
+    Session.Contents.RemoveAll()
+
     Select Case action
+
         Case "config"
-            %><!--#include file="action_config.asp"--><%
+            Server.Execute("action_config.asp")
+
         Case "uploadimage"
-            %><!--#include file="action_uploadimage.asp"--><%
+            Session.Value("uploadTemplateName") = "image"
+            Server.Execute("action_upload.asp")
+
         Case "uploadscrawl"
-            %><!--#include file="action_uploadscrawl.asp"--><%
+            Session.Value("uploadTemplateName") = "scrawl"
+            Session.Value("base64Upload") = "scrawl.png"
+            Server.Execute("action_upload.asp")
+
         Case "uploadvideo"
-            %><!--#include file="action_uploadvideo.asp"--><%
+            Session.Value("uploadTemplateName") = "video"
+            Server.Execute("action_upload.asp")
+
         Case "uploadfile"
-            %><!--#include file="action_uploadfile.asp"--><%
+            Session.Value("uploadTemplateName") = "file"
+            Server.Execute("action_upload.asp")
+
         Case "listimage"
-            %><!--#include file="action_listimage.asp"--><%
+            Session.Value("listTemplateName") = "image"
+            Server.Execute("action_list.asp")
+
         Case "listfile"
-            %><!--#include file="action_listfile.asp"--><%
+            Session.Value("listTemplateName") = "file"
+            Server.Execute("action_list.asp")
+
         Case "catchimage"
-            %><!--#include file="action_crawler.asp"--><%
+            Server.Execute("action_crawler.asp")
     End Select
 
 %>

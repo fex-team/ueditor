@@ -169,6 +169,11 @@ Class AspJSON
 		JSONoutput = Left(wrap_dicttype, 1) & Chr(13) & Chr(10) & GetDict(data) & Right(wrap_dicttype, 1)
 	End Function
 
+    Public Function PrintJson
+        Response.AddHeader "Content-Type", "application/json"
+        Response.Write JSONoutput()
+    End Function
+
 	Private Function GetDict(objDict)
 		dim aj_item, aj_keyvals, aj_label, aj_dicttype
 		For Each aj_item In objDict
