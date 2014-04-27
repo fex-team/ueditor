@@ -21,16 +21,16 @@ public class UEditorHandler : IHttpHandler
                 {
                     AllowExtensions = Config.GetStringList("imageAllowFiles"),
                     PathFormat = Config.GetString("imagePathFormat"),
-                    SizeLimit = Config.GetInt("imageMaxSize") * 1024,
+                    SizeLimit = Config.GetInt("imageMaxSize"),
                     UploadFieldName = Config.GetString("imageFieldName")
                 });
                 break;
             case "uploadscrawl":
                 action = new UploadHandler(context, new UploadConfig()
                 {
-                    AllowExtensions = Config.GetStringList("scrawlAllowFiles"),
+                    AllowExtensions = new string[] { ".png" },
                     PathFormat = Config.GetString("scrawlPathFormat"),
-                    SizeLimit = Config.GetInt("scrawlMaxSize") * 1024,
+                    SizeLimit = Config.GetInt("scrawlMaxSize"),
                     UploadFieldName = Config.GetString("scrawlFieldName"),
                     Base64 = true,
                     Base64Filename = "scrawl.png"
@@ -41,7 +41,7 @@ public class UEditorHandler : IHttpHandler
                 {
                     AllowExtensions = Config.GetStringList("videoAllowFiles"),
                     PathFormat = Config.GetString("videoPathFormat"),
-                    SizeLimit = Config.GetInt("videoMaxSize") * 1024,
+                    SizeLimit = Config.GetInt("videoMaxSize"),
                     UploadFieldName = Config.GetString("videoFieldName")
                 });
                 break;
@@ -50,7 +50,7 @@ public class UEditorHandler : IHttpHandler
                 {
                     AllowExtensions = Config.GetStringList("fileAllowFiles"),
                     PathFormat = Config.GetString("filePathFormat"),
-                    SizeLimit = Config.GetInt("fileMaxSize") * 1024,
+                    SizeLimit = Config.GetInt("fileMaxSize"),
                     UploadFieldName = Config.GetString("fileFieldName")
                 });
                 break;

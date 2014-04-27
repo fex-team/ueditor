@@ -3,13 +3,13 @@
     // 上传图片配置项
     "imageActionName": "uploadimage", //执行上传图片的action名称
     "imageFieldName": "upfile", //提交的图片表单名称
-    "imageUrlPrefix": "/ueditor/net/", //图片访问路径前缀
+    "imageUrlPrefix": "/ueditor/asp/", //图片访问路径前缀
     "imageMaxSize": 2048000, //上传大小限制，单位B
     "imageAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"], //上传图片格式显示
     "imageCompressEnable": true, //是否压缩图片,默认是true
     "imageCompressBorder": 1600, //图片压缩最长边限制
     "imageInsertAlign": "none", //插入的图片浮动方式
-    "imagePathFormat": "upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:6}", //上传保存路径,可以自定义保存路径和文件名格式
+    "imagePathFormat": "upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
                         // {filename}  //会替换成源文件名
                         // {rand:6}    //会替换成随机数,后面的数字是随机数的位数
                         // {time}      //会替换成时间戳
@@ -28,21 +28,22 @@
 	"imageManagerAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"],
     "imageManagerListPath": "upload/image", //指定要列出图片的目录
     "imageManagerListSize": 20, //每次列出文件数量
-    "imageManagerUrlPrefix": "/ueditor/net/", //图片访问路径前缀
+    "imageManagerUrlPrefix": "/ueditor/asp/", //图片访问路径前缀
     "imageManagerInsertAlign": "none",
 
     // 涂鸦图片上传配置项
     "scrawlActionName": "uploadscrawl", //执行上传涂鸦的action名称
     "scrawlFieldName": "upfile",
-    "scrawlPathFormat": "upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:6}", //上传保存路径,可以自定义保存路径和文件名格式
+	"scrawlAllowFiles": [".png"],
+    "scrawlPathFormat": "upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
     "scrawlMaxSize": 2048000, //上传大小限制，单位B
-    "scrawlUrlPrefix": "/ueditor/net/", //图片访问路径前缀
+    "scrawlUrlPrefix": "/ueditor/asp/", //图片访问路径前缀
     "scrawlInsertAlign": "none",
 
     // 截图工具上传
     "snapscreenActionName": "uploadimage", //执行上传截图的action名称
-    "snapscreenPathFormat": "upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:6}", //上传保存路径,可以自定义保存路径和文件名格式
-    "snapscreenUrlPrefix": "/ueditor/net/", //图片访问路径前缀
+    "snapscreenPathFormat": "upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
+    "snapscreenUrlPrefix": "/ueditor/asp/", //图片访问路径前缀
     "snapscreenHost": "localhost",
     "snapscreenServerPort": 80,
     "snapscreenInsertAlign": "none",
@@ -51,17 +52,17 @@
     "catcherLocalDomain": ["127.0.0.1", "localhost", "img.baidu.com"],
     "catcherActionName": "catchimage", //执行抓取远程图片的action名称
     "catcherFieldName": "source",
-    "catcherPathFormat": "upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:6}", //上传保存路径,可以自定义保存路径和文件名格式
-    "catcherUrlPrefix": "/ueditor/net/", //图片访问路径前缀
+    "catcherPathFormat": "upload/image/{yyyy}{mm}{dd}/{filename}_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
+    "catcherUrlPrefix": "/ueditor/asp/", //图片访问路径前缀
     "catcherMaxSize": 2048000, //上传大小限制，单位B
     "catcherAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"], //抓取图片格式显示
 
     // 上传视频配置
     "videoActionName": "uploadvideo", //执行上传视频的action名称
     "videoFieldName": "upfile",
-    "videoPathFormat": "upload/video/{yyyy}{mm}{dd}/{filename}_{time}{rand:6}", //上传保存路径,可以自定义保存路径和文件名格式
-    "videoUrlPrefix": "/ueditor/net/", //视频访问路径前缀
-    "videoMaxSize": 51200000, //上传大小限制，单位B，默认 50 M
+    "videoPathFormat": "upload/video/{yyyy}{mm}{dd}/{filename}_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
+    "videoUrlPrefix": "/ueditor/asp/", //视频访问路径前缀
+    "videoMaxSize": 500000000, //上传大小限制，单位B
     "videoAllowFiles": [
         ".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg",
         ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid"], //上传视频格式显示
@@ -69,8 +70,8 @@
     // 上传文件配置
     "fileActionName": "uploadfile", //controller里,执行上传视频的action名称
     "fileFieldName": "upfile",
-    "filePathFormat": "upload/file/{yyyy}{mm}{dd}/{filename}_{time}{rand:6}", //上传保存路径,可以自定义保存路径和文件名格式
-    "fileUrlPrefix": "/ueditor/net/", //文件访问路径前缀
+    "filePathFormat": "upload/file/{yyyy}{mm}{dd}/{filename}_{time}{rand:3}", //上传保存路径,可以自定义保存路径和文件名格式
+    "fileUrlPrefix": "/ueditor/asp/", //文件访问路径前缀
     "fileMaxSize": 20480000, //上传大小限制，单位B
     "fileAllowFiles": [
         ".png", ".jpg", ".jpeg", ".gif", ".bmp",
@@ -91,6 +92,6 @@
         ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".md", ".xml"
     ], //列出的文件类型
     "fileManagerListSize": 20, //每次列出文件数量
-    "fileManagerUrlPrefix": "/ueditor/net/" //文件访问路径前缀
+    "fileManagerUrlPrefix": "/ueditor/asp/" //文件访问路径前缀
 
 }

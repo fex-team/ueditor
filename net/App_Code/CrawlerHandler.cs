@@ -16,7 +16,7 @@ public class CrawlerHandler : Handler
 
     public override void Process()
     {
-        Sources = Request.QueryString.GetValues("source");
+        Sources = Request.Form.GetValues("source[]");
         if (Sources == null || Sources.Length == 0)
         {
             WriteJson(new

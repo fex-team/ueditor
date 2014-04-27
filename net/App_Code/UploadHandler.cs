@@ -97,7 +97,7 @@ public class UploadHandler : Handler
             state = GetStateMessage(Result.State),
             url = Result.Url,
             title = Result.OriginFileName,
-            origin = Result.OriginFileName,
+            original = Result.OriginFileName,
             error = Result.ErrorMessage
         });
     }
