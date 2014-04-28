@@ -18,7 +18,7 @@ UE.plugin.register('autoupload', function (){
         fieldName = editor.getOpt(filetype + 'FieldName');
         urlPrefix = editor.getOpt(filetype + 'UrlPrefix');
         maxSize = editor.getOpt(filetype + 'MaxSize');
-        allowFiles = editor.getOpt(filetype + 'MaxSize');
+        allowFiles = editor.getOpt(filetype + 'AllowFiles');
         actionUrl = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
         errorHandler = function(title) {
             var loader = editor.document.getElementById(loadingId);
@@ -69,8 +69,11 @@ UE.plugin.register('autoupload', function (){
             return;
         }
         /* 判断文件格式是否超出允许 */
-        /*TODO*/
-        debugger;
+        var fileext = file.name.substr(file.name.lastIndexOf('.'));
+        if ((allowFiles.join('') + '.').indexOf(fileext + '.') == -1) {
+            errorHandler(editor.getLang('autoupload.exceedTypeError'));
+            return;
+        }
 
         /* 创建Ajax并提交 */
         var xhr = new XMLHttpRequest(),

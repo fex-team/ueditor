@@ -138,7 +138,8 @@
                 })(),
             // WebUploader实例
                 uploader,
-                fileMaxSize = editor.getOpt('fileMaxSize');
+                fileMaxSize = editor.getOpt('fileMaxSize'),
+                acceptExtensions = editor.getOpt('fileAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');;
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {
@@ -193,6 +194,9 @@
                             case 'http':
                                 text = lang.errorHttp;
                                 break;
+                            case 'not_allow_type':
+                                text = lang.errorFileType;
+                                break;
                             default:
                                 text = lang.errorUploadRetry;
                                 break;
@@ -202,6 +206,9 @@
 
                 if (file.getStatus() === 'invalid') {
                     showError(file.statusText);
+                } else if (acceptExtensions.indexOf(file.ext) == -1) {
+                    showError('not_allow_type');
+                    uploader.removeFile(file);
                 } else {
                     $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {

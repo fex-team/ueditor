@@ -67,7 +67,8 @@
             }
             createPreviewVideo(url);
         })();
-    };
+    }
+
     /**
      * 监听确认和取消两个按钮事件，用户执行插入或者清空正在播放的视频实例操作
      */
@@ -90,15 +91,6 @@
         dialog.oncancel = function(){
             $G("preview").innerHTML = "";
         };
-    }
-
-    function selectTxt(node){
-        if(node.select){
-            node.select();
-        }else{
-            var r = node.createTextRange && node.createTextRange();
-            r.select();
-        }
     }
 
     /**
@@ -293,7 +285,7 @@
     /* 插入上传视频 */
     function insertUpload(){
         var videoObjs=[],
-            uploadDir = editor.options.videoPath,
+            uploadDir = editor.options.videoUrlPrefix,
             width = $G('upload_width').value || 420,
             height = $G('upload_height').value || 280,
             align = findFocus("upload_alignment","name") || 'none';
@@ -311,80 +303,132 @@
 
     /*初始化上传标签*/
     function initUpload(){
-        var settings = {
-            upload_url:editor.options.videoUrl,           //附件上传服务器地址
-            file_post_name:editor.options.videoFieldName,      //向后台提交的表单名
-            flash_url:"../../third-party/swfupload/swfupload.swf",
-            flash9_url:"../../third-party/swfupload/swfupload_fp9.swf",
-            post_params:{"PHPSESSID":"<?php echo session_id(); ?>","fileNameFormat":editor.options.fileNameFormat}, //解决session丢失问题
-            file_size_limit:"100 MB",                                 //文件大小限制，此处仅是前端flash选择时候的限制，具体还需要和后端结合判断
-            file_types:"*.*",                                         //允许的扩展名，多个扩展名之间用分号隔开，支持*通配符
-            file_types_description:"Video Files",                      //扩展名描述
-            file_upload_limit:100,                                   //单次可同时上传的文件数目
-            file_queue_limit:10,                                      //队列中可同时上传的文件数目
-            custom_settings:{                                         //自定义设置，用户可在此向服务器传递自定义变量
-                progressTarget:"fsUploadProgress",
-                startUploadId:"startUpload"
+        var unFinishFileCount = 0;
+        var acceptExtensions = editor.getOpt('videoAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');
+        var uploader = WebUploader.create({
+            pick: {
+                id: '#spanButtonPlaceHolder',
+                label: lang.browseFiles
             },
-            debug:false,
+            swf: '../../third-party/webuploader/Uploader.swf',
+            disableGlobalDnd: true,
+            chunked: true,
+            server: editor.getActionUrl(editor.getOpt('videoActionName')),
+            fileVal: editor.getOpt('videoFieldName'),
+            duplicate: true,
+            fileSingleSizeLimit: editor.getOpt('videoMaxSize'),
+            compress: false
+        });
 
-            // 按钮设置
-            button_image_url:"../../themes/default/images/filescan.png",
-            button_width:"100",
-            button_height:"25",
-            button_placeholder_id:"spanButtonPlaceHolder",
-            button_text:'<span class="theFont">'+lang.browseFiles+'</span>',
-            button_text_style:".theFont { font-size:14px;}",
-            button_text_left_padding:10,
-            button_text_top_padding:4,
-            // 所有回调函数
-            swfupload_preload_handler:preLoad,
-            swfupload_load_failed_handler:loadFailed,
-            file_queued_handler:fileQueued,
-            file_queue_error_handler:fileQueueError,
-            //选择文件完成回调
-            file_dialog_complete_handler:function(numFilesSelected, numFilesQueued) {
-                var me = this;        //此处的this是swfupload对象
-                if (numFilesQueued > 0) {
-                    dialog.buttons[0].setDisabled(true);
-                    var start = $G(this.customSettings.startUploadId);
-                    start.style.display = "";
-                    start.onclick = function(){
-                        me.startUpload();
-                        start.style.display = "none";
-                    }
-                }
-            },
-            upload_start_handler:uploadStart,
-            upload_progress_handler:uploadProgress,
-            upload_error_handler:uploadError,
-            upload_success_handler:function (file, serverData) {
-                try{
-                    var info = eval("("+serverData+")");
-                }catch(e){}
-                var progress = new FileProgress(file, this.customSettings.progressTarget);
-                if(info.state=="SUCCESS"){
-                    progress.setComplete();
-                    progress.setStatus("<span style='color: #0b0;font-weight: bold'>"+lang.uploadSuccess+"</span>");
-                    uploadVideoList.push({url:info.url,type:info.fileType,original:info.original});
-                    progress.toggleCancel(true,this,lang.delSuccessFile);
-                }else{
-                    progress.setError();
-                    progress.setStatus(info.state);
-                    progress.toggleCancel(true,this,lang.delFailSaveFile);
-                }
-            },
-            //上传完成回调
-            upload_complete_handler:uploadComplete,
-            //队列完成回调
-            queue_complete_handler:function(numFilesUploaded){
-                dialog.buttons[0].setDisabled(false);
-//                var status = $G("divStatus");
-//                var num = status.innerHTML.match(/\d+/g);
-//                status.innerHTML = ((num && num[0] ?parseInt(num[0]):0) + numFilesUploaded) +lang.statusPrompt;
+        $('#startUpload').on('click', function(){
+            uploader.upload();
+        });
+
+        uploader.on('fileQueued', function (file) {
+            unFinishFileCount++;
+            $file = $('<div class="progressWrapper" id="' + file.id + '">' +
+                '<div class="progressContainer">' +
+                '<a class="progressCancel" href="#" title="' + lang.delUploadQueue + '" style="visibility: visible;"></a>' +
+                '<div class="progressName">' + file.name + '</div>' +
+                '<div class="progressBarStatus">' + lang.fileUploadReady + '</div>' +
+                '<div class="progressBarInProgress"></div>' +
+                '</div>' +
+                '</div>').appendTo('#fsUploadProgress')
+                .find('.progressCancel').on('click', function(e){
+                    setFileState(file.id, 'red', lang.cancelUpload);
+                    uploader.removeFile(file);
+                    e.preventDefault();
+                });
+            if (file.getStatus() === 'invalid') {
+                setFileState(file.id, 'red', file.statusText);
+                uploader.removeFile(file);
+            } else if (acceptExtensions.indexOf(file.ext) == -1) {
+                setFileState(file.id, 'red', lang.fileTypeError);
+                uploader.removeFile(file);
             }
-        };
-        var swfupload = new SWFUpload( settings );
-    };
+            file.on('statuschange', function (cur, prev) {
+                if (cur === 'error' || cur === 'invalid') {
+                    setFileState(file.id, 'red', file.statusText);
+                } else if (cur === 'interrupt') {
+                    setFileState(file.id, 'red', 'interrupt');
+                } else if (cur === 'cancelled'){
+                }
+            });
+        });
+        uploader.on('filesQueued', function (file) {
+            if (unFinishFileCount) {
+                $('#startUpload').show();
+                dialog.buttons[0].setDisabled(true);
+            } else {
+                $('#startUpload').hide();
+                dialog.buttons[0].setDisabled(false);
+            }
+        });
+        uploader.on('fileDequeued', function (file) {
+            unFinishFileCount = Math.max(unFinishFileCount - 1, 0);
+            if (!unFinishFileCount) {
+                $('#startUpload').hide();
+                dialog.buttons[0].setDisabled(false);
+            }
+        });
+        uploader.on('uploadProgress', function (file, p) {
+            var id = file.id;
+            setFileState(id, 'green', lang.fileUploading);
+            $('#' + id).find('.progressBarInProgress').css('width', p * 100 + '%');
+        });
+        uploader.on('uploadSuccess', function (file, r) {
+            var id = file.id;
+            try {
+                var info = eval('(' + (r._raw || r)+ ')');
+                if (info.state == 'SUCCESS' && info.url) {
+                    uploadVideoList.push({
+                        'url': info.url,
+                        'type': info.fileType,
+                        'original':info.original
+                    });
+                    setFileState(id, 'blue', lang.uploadSuccess);
+                } else {
+                    setFileState(id, 'red', info.state);
+                }
+            } catch (e) {
+                setFileState(id, 'red', lang.failUpload);
+            }
+        });
+        uploader.on('uploadError', function (file, code) {
+            setFileState(file.id, 'red', lang.netError + code);
+        });
+        uploader.on('error', function (file, code) {
+            setFileState(file.id, 'red', code);
+        });
+        uploader.on('uploadComplete', function (file, code) {
+            unFinishFileCount--;
+        });
+        uploader.on('uploadFinished', function (file, code) {
+            $('#startUpload').hide();
+            dialog.buttons[0].setDisabled(false);
+        });
+
+        function setFileState(id, color, msg){
+            var $file = $('#' + id);
+            var map = {
+                'exceed_size': lang.errorExceedSize,
+                'interrupt': lang.errorInterrupt,
+                'http': lang.errorHttp
+            };
+            msg = map[msg] || msg;
+
+            $file.find('.progressContainer').removeClass('green red blue').addClass(color)
+                .find('.progressBarStatus').text(msg);
+            if (color == 'red') {
+                $file.find('.progressBarInProgress').css('width', 0);
+                $file.find('.progressCancel').attr('title', lang.delFailSaveFile);
+                $file.find('.progressCancel').hide();
+            } else if (color == 'blue') {
+                $file.find('.progressBarStatus').css({color: '#0b0', 'font-weight': 'bold'});
+                $file.find('.progressCancel').attr('title', lang.delSuccessFile).hide();
+                $file.find('.progressCancel').hide();
+            }
+        }
+    }
 
 })();
