@@ -73,6 +73,7 @@ UE.I18N['zh-cn'] = {
     },
     'simpleupload':{
         'exceedSizeError': '文件大小超出限制',
+        'exceedTypeError': '文件格式不允许',
         'jsonEncodeError': '服务器返回格式错误',
         'loading':"正在上传...",
         'loadError':"上传错误"

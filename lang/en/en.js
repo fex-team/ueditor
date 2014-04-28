@@ -69,6 +69,7 @@ UE.I18N['en'] = {
     },
     'autoupload': {
         'exceedSizeError': 'File Size Exceed',
+        'exceedTypeError': 'File Type Not Allow',
         'jsonEncodeError': 'Server Return Format Error',
         'loading':"loading...",
         'loadError':"load error"
