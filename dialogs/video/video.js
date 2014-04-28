@@ -67,7 +67,8 @@
             }
             createPreviewVideo(url);
         })();
-    };
+    }
+
     /**
      * 监听确认和取消两个按钮事件，用户执行插入或者清空正在播放的视频实例操作
      */
@@ -90,15 +91,6 @@
         dialog.oncancel = function(){
             $G("preview").innerHTML = "";
         };
-    }
-
-    function selectTxt(node){
-        if(node.select){
-            node.select();
-        }else{
-            var r = node.createTextRange && node.createTextRange();
-            r.select();
-        }
     }
 
     /**
@@ -318,11 +310,6 @@
                 id: '#spanButtonPlaceHolder',
                 label: lang.browseFiles
             },
-//            accept: {
-//                title: 'Videos',
-//                extensions: acceptExtensions,
-//                mimeTypes: 'video/*'
-//            },
             swf: '../../third-party/webuploader/Uploader.swf',
             disableGlobalDnd: true,
             chunked: true,
@@ -348,7 +335,6 @@
                 '</div>' +
                 '</div>').appendTo('#fsUploadProgress')
                 .find('.progressCancel').on('click', function(e){
-                    $file.find('.progressCancel').hide();
                     setFileState(file.id, 'red', lang.cancelUpload);
                     uploader.removeFile(file);
                     e.preventDefault();
@@ -415,6 +401,7 @@
             setFileState(file.id, 'red', code);
         });
         uploader.on('uploadComplete', function (file, code) {
+            unFinishFileCount--;
         });
         uploader.on('uploadFinished', function (file, code) {
             $('#startUpload').hide();
@@ -435,9 +422,11 @@
             if (color == 'red') {
                 $file.find('.progressBarInProgress').css('width', 0);
                 $file.find('.progressCancel').attr('title', lang.delFailSaveFile);
+                $file.find('.progressCancel').hide();
             } else if (color == 'blue') {
                 $file.find('.progressBarStatus').css({color: '#0b0', 'font-weight': 'bold'});
                 $file.find('.progressCancel').attr('title', lang.delSuccessFile).hide();
+                $file.find('.progressCancel').hide();
             }
         }
     }
