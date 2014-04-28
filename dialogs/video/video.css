@@ -158,4 +158,3 @@ a.progressCancel {
 }
 a.progressCancel:hover { background-position: 0 0; }
 .progressBarStatus { margin-top: 2px; width: 337px; font-size: 7pt; text-align: left; white-space: nowrap; }
-.swfupload { vertical-align: top; }
