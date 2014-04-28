@@ -14,21 +14,21 @@ UE.plugin.register('simpleupload', function (){
             form = document.createElement('form'),
             input = uploadInput = document.createElement('input'),
             iframe = document.createElement('iframe'),
-            iframeId = 'edui_iframe_' + (+new Date()).toString(36),
-            loadingId;
+            iframeId = 'edui_iframe_' + (+new Date()).toString(36);
 
         input.type = 'file';
+        input.accept = 'image/*';
         input.name = me.options.imageFieldName;
         input.style.cssText = 'display:none;width:0px;height:0px;border:0;margin:0;padding:0;position:absolute;';
 
         iframe.name = iframe.id = iframeId;
-        iframe.style.cssText = 'display:none;width:0px;height:0px;border:0;margin:0;padding:0;position:absolute;';
+        iframe.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
 
         form.target = iframeId;
         form.method = 'POST';
         form.enctype = 'multipart/form-data';
         form.action = me.getActionUrl(me.getOpt('imageActionName'));
-        form.style.cssText = 'width:20px;height:20px;margin:0;padding:0;position:relative;';
+        form.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
 
         wrapper.className = 'edui-' + me.options.theme;
         wrapper.id = me.ui.id + '_iframeupload';
