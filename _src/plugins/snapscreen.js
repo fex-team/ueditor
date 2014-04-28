@@ -8,13 +8,6 @@ UE.plugin.register('snapscreen', function (){
     var me = this;
     var snapplugin;
 
-    // 设置截屏配置项默认值
-    me.setOpt({
-        snapscreenServerPort: location.port, // 屏幕截图的server端端口
-        snapscreenImgAlign: '', // 截图的图片默认的排版方式
-        snapscreenHost: location.hostname // 屏幕截图的server端文件所在的网站地址或者ip，请不要加http://
-    });
-
     function getLocation(url){
         var a = document.createElement('a');
 
@@ -41,8 +34,7 @@ UE.plugin.register('snapscreen', function (){
             'snapscreen':{
                 execCommand:function (cmd) {
                     var url, local, res;
-                    var me = this,
-                        lang = me.getLang("snapScreen_plugin");
+                    var lang = me.getLang("snapScreen_plugin");
 
                     if(!snapplugin){
                         var container = me.container;
@@ -79,7 +71,7 @@ UE.plugin.register('snapscreen', function (){
                     local = getLocation(url);
                     setTimeout(function () {
                         try{
-                            res =snapplugin.saveSnapshot(local.hostname, '/ueditor/' + local.path, local.port);
+                            res =snapplugin.saveSnapshot(local.hostname, local.path, local.port);
                         }catch(e){
                             me.ui._dialogs['snapscreenDialog'].open();
                             return;
