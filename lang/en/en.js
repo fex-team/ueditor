@@ -319,6 +319,7 @@ UE.I18N['en'] = {
         'updateStatusFinish': 'Total _ files (_KB), _  uploaded successfully',
         'updateStatusError': ' and _ upload failed',
         'errorExceedSize':'File Size Exceed',
+        'errorFileType':'File Type Not Allow',
         'errorInterrupt':'File Upload Interrupted',
         'errorUploadRetry':'Upload Error, Please Retry.',
         'errorHttp':'Http Error',

@@ -319,6 +319,7 @@ UE.I18N['zh-cn'] = {
         'updateStatusFinish': '共_个（_KB），_个上传成功',
         'updateStatusError': '，_张上传失败。',
         'errorExceedSize':'文件大小超出',
+        'errorFileType':'文件格式不允许',
         'errorInterrupt':'文件传输中断',
         'errorUploadRetry':'上传失败，请重试',
         'errorHttp':'http请求错误',
