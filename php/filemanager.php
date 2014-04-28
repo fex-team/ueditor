@@ -44,19 +44,15 @@ if (!count($files)) {
     ));
 }
 
-/* 按照修改时间倒序排序 */
-$files = array_sort($files, "mtime", "desc");
-
 /* 获取指定范围的列表 */
-$list = array();
-$i = 0;
-foreach ($files as $k=>$v){
-    if($i >= $start) {
-        unset($v["mtime"]);
-        $list[] = $v;
-    }
-    if($i++ >= $end) break;
+$len = count($files);
+for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $start; $i--){
+    $list[] = $files[$i];
 }
+//倒序
+//for ($i = $end, $list = array(); $i < $len && $i < $end; $i++){
+//    $list[] = $files[$i];
+//}
 
 /* 返回数据 */
 $result = json_encode(array(
@@ -96,27 +92,4 @@ function getfiles($path, $allowFiles, &$files = array())
         }
     }
     return $files;
-}
-
-/**
- * 二维数组在哪找指定键值排序
- * @param $arr
- * @param $keys
- * @param string $type
- * @return array
- */
-function array_sort($arr,$keys,$type='asc'){
-    $keysvalue = $new_array = array();
-    foreach ($arr as $k=>$v){
-        $keysvalue[$k] = $v[$keys];
-    }
-    if($type == 'asc'){
-        asort($keysvalue);
-    }else{
-        arsort($keysvalue);
-    }
-    foreach ($keysvalue as $k=>$v){
-        $new_array[$k] = $arr[$k];
-    }
-    return $new_array;
 }
