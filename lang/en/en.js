@@ -322,10 +322,10 @@ UE.I18N['en'] = {
         'errorInterrupt':'File Upload Interrupted',
         'errorUploadRetry':'Upload Error, Please Retry.',
         'errorHttp':'Http Error',
-        'errorServerUpload':'Server Result Error.',
+        'errorServerUpload':'Server Result Error.'
     },
 
-    insertvideo:{
+    'insertvideo':{
         'static':{
             'lang_tab_insertV':"Video",
             'lang_tab_searchV':"Search",
@@ -385,7 +385,11 @@ UE.I18N['en'] = {
         'fileNumLimit':'Upload limit to the number',
         'failCheck':'Authentication fails, the upload is skipped!',
         'fileCanceling':'Cancel, please wait...',
-        'stopUploading':'Upload has stopped...'
+        'stopUploading':'Upload has stopped...',
+        'errorExceedSize':'File Size Exceed',
+        'errorInterrupt':'File Upload Interrupted',
+        'errorHttp':'Http Error',
+        'errorServerUpload':'Server Result Error.'
     },
     'webapp':{
         'tip1':"This function provided by Baidu APP,please apply for baidu APPKey webmaster first!",

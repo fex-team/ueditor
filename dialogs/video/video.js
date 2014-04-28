@@ -318,11 +318,11 @@
                 id: '#spanButtonPlaceHolder',
                 label: lang.browseFiles
             },
-            accept: {
-                title: 'Videos',
-                extensions: acceptExtensions,
-                mimeTypes: 'video/*'
-            },
+//            accept: {
+//                title: 'Videos',
+//                extensions: acceptExtensions,
+//                mimeTypes: 'video/*'
+//            },
             swf: '../../third-party/webuploader/Uploader.swf',
             disableGlobalDnd: true,
             chunked: true,
@@ -339,7 +339,7 @@
 
         uploader.on('fileQueued', function (file) {
             unFinishFileCount++;
-            $('<div class="progressWrapper" id="' + file.id + '">' +
+            $file = $('<div class="progressWrapper" id="' + file.id + '">' +
                 '<div class="progressContainer">' +
                 '<a class="progressCancel" href="#" title="' + lang.delUploadQueue + '" style="visibility: visible;"></a>' +
                 '<div class="progressName">' + file.name + '</div>' +
@@ -348,18 +348,42 @@
                 '</div>' +
                 '</div>').appendTo('#fsUploadProgress')
                 .find('.progressCancel').on('click', function(e){
+                    $file.find('.progressCancel').hide();
+                    setFileState(file.id, 'red', lang.cancelUpload);
                     uploader.removeFile(file);
                     e.preventDefault();
                 });
+            if (file.getStatus() === 'invalid') {
+                setFileState(file.id, 'red', file.statusText);
+                uploader.removeFile(file);
+            } else if (acceptExtensions.indexOf(file.ext) == -1) {
+                setFileState(file.id, 'red', lang.fileTypeError);
+                uploader.removeFile(file);
+            }
+            file.on('statuschange', function (cur, prev) {
+                if (cur === 'error' || cur === 'invalid') {
+                    setFileState(file.id, 'red', file.statusText);
+                } else if (cur === 'interrupt') {
+                    setFileState(file.id, 'red', 'interrupt');
+                } else if (cur === 'cancelled'){
+                }
+            });
         });
         uploader.on('filesQueued', function (file) {
-            $('#startUpload').show();
-            dialog.buttons[0].setDisabled(true);
+            if (unFinishFileCount) {
+                $('#startUpload').show();
+                dialog.buttons[0].setDisabled(true);
+            } else {
+                $('#startUpload').hide();
+                dialog.buttons[0].setDisabled(false);
+            }
         });
         uploader.on('fileDequeued', function (file) {
-            unFinishFileCount--;
-            if (!unFinishFileCount) dialog.buttons[0].setDisabled(false);
-            $('#' + file.id).remove();
+            unFinishFileCount = Math.max(unFinishFileCount - 1, 0);
+            if (!unFinishFileCount) {
+                $('#startUpload').hide();
+                dialog.buttons[0].setDisabled(false);
+            }
         });
         uploader.on('uploadProgress', function (file, p) {
             var id = file.id;
@@ -399,6 +423,13 @@
 
         function setFileState(id, color, msg){
             var $file = $('#' + id);
+            var map = {
+                'exceed_size': lang.errorExceedSize,
+                'interrupt': lang.errorInterrupt,
+                'http': lang.errorHttp
+            };
+            msg = map[msg] || msg;
+
             $file.find('.progressContainer').removeClass('green red blue').addClass(color)
                 .find('.progressBarStatus').text(msg);
             if (color == 'red') {

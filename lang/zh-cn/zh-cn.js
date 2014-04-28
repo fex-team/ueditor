@@ -360,7 +360,6 @@ UE.I18N['zh-cn'] = {
         'goToSource':'访问源视频',
         'noVideo':" &nbsp; &nbsp;抱歉，找不到对应的视频，请重试！",
 
-
         'browseFiles':'浏览文件',
         'uploadSuccess':'上传成功!',
         'delSuccessFile':'从成功队列中移除',
@@ -375,7 +374,7 @@ UE.I18N['zh-cn'] = {
         'delFailFile':'移除失败文件',
         'fileSizeLimit':'文件大小超出限制！',
         'emptyFile':'空文件无法上传！',
-        'fileTypeError':'文件类型错误！',
+        'fileTypeError':'文件类型不允许！',
         'unknownError':'未知错误！',
         'fileUploading':'上传中，请等待……',
         'cancelUpload':'取消上传',
@@ -386,7 +385,10 @@ UE.I18N['zh-cn'] = {
         'fileNumLimit':'上传个数限制',
         'failCheck':'验证失败，本次上传被跳过！',
         'fileCanceling':'取消中，请等待……',
-        'stopUploading':'上传已停止……'
+        'stopUploading':'上传已停止……',
+        'errorExceedSize':'文件大小超出',
+        'errorInterrupt':'文件传输中断',
+        'errorHttp':'http请求错误'
     },
     'webapp':{
         'tip1':"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",
