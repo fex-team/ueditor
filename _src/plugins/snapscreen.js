@@ -9,13 +9,20 @@ UE.plugin.register('snapscreen', function (){
     var snapplugin;
 
     function getLocation(url){
-        var a = document.createElement('a');
+        var a = document.createElement('a'),
+            params = utils.serializeParam(me.queryCommandValue('serverparam')) || '',
+            search = a.search;
+
+        if (params) {
+            search = search ? search + params:'?' + params;
+            search = search.replace(/[&]+/ig, '&');
+        }
 
         a.href = url;
         return {
             'port': a.port,
             'hostname': a.hostname,
-            'path': a.pathname + a.search + a.hash
+            'path': a.pathname + search + a.hash
         }
     }
 
@@ -66,7 +73,6 @@ UE.plugin.register('snapscreen', function (){
                             alert(lang.callBackErrorMsg);
                         }
                     }
-
                     url = me.getActionUrl(me.getOpt('snapscreenActionName'));
                     local = getLocation(url);
                     setTimeout(function () {
