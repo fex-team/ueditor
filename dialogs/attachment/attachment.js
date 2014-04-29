@@ -639,7 +639,7 @@
                         domUtils.on(preview, 'load', (function(image){
                             return function(){
                                 _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
-                            }
+                            };
                         })(preview));
                         preview.width = 113;
                         preview.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
