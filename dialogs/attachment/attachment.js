@@ -452,6 +452,10 @@
                 }
             });
 
+            uploader.on('uploadBeforeSend', function (file, data) {
+                data = $.extend(data, editor.queryCommandValue('serverparam'));
+            });
+
             uploader.on('uploadProgress', function (file, percentage) {
                 var $li = $('#' + file.id),
                     $percent = $li.find('.progress span');
