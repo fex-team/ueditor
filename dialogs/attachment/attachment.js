@@ -78,7 +78,7 @@
     }
 
 
-    /* 上传图片 */
+    /* 上传附件 */
     function UploadFile(target) {
         this.$wrap = target.constructor == String ? $('#' + target) : $(target);
         this.init();
@@ -206,13 +206,10 @@
 
                 if (file.getStatus() === 'invalid') {
                     showError(file.statusText);
-                } else if (acceptExtensions.indexOf(file.ext) == -1) {
-                    showError('not_allow_type');
-                    uploader.removeFile(file);
                 } else {
                     $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {
-                        if (error) {
+                        if (error || !src) {
                             $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
                                 '<span class="file-title">' + file.name + '</span>');
                         } else {
@@ -222,6 +219,12 @@
                     }, thumbnailWidth, thumbnailHeight);
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
+
+                    /* 检查文件格式 */
+                    if (acceptExtensions.indexOf(file.ext) == -1) {
+                        showError('not_allow_type');
+                        uploader.removeFile(file);
+                    }
                 }
 
                 file.on('statuschange', function (cur, prev) {
@@ -514,7 +517,7 @@
     };
 
 
-    /* 在线图片 */
+    /* 在线附件 */
     function OnlineFile(target) {
         this.container = utils.isString(target) ? document.getElementById(target) : target;
         this.init();
