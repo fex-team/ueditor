@@ -54,8 +54,8 @@
             //创建Flash相关的参数集合
             var flashOptions = {
                 container:"flashContainer",                                                    //flash容器id
-                url:imageUrl,                                           // 上传处理页面的url地址
-                ext:params,                                 //可向服务器提交的自定义参数列表
+                url:optImageUrl,                                           // 上传处理页面的url地址
+                ext:editor.queryCommandValue('serverParam') || {},                                 //可向服务器提交的自定义参数列表
                 fileType:'{"description":"'+lang.fileType+'", "extension":"' + extension + '"}',     //上传文件格式限制
                 flashUrl:'imageUploader.swf',                                                  //上传用的flash组件地址
                 width:600,          //flash的宽度
