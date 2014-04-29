@@ -16,7 +16,7 @@ UE.I18N['en'] = {
         'deleterow':'DeleteRow', 'deletecol':'DeleteCol', 'splittorows':'SplitToRows','insertcode':'insert code',
         'splittocols':'SplitToCols', 'splittocells':'SplitToCells','deletecaption':'DeleteCaption','inserttitle':'InsertTitle',
         'mergecells':'MergeCells', 'deletetable':'DeleteTable', 'cleardoc':'Clear', 'insertparagraphbeforetable':"InsertParagraphBeforeTable",
-        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph','simpleupload':'Single Image','insertimage':'Multi Image','edittable':'Edit Table', edittd:'Edit Td','link':'Link',
+        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph','simpleupload':'Single Image','insertimage':'Multi Image','edittable':'Edit Table', 'edittd':'Edit Td','link':'Link',
         'emotion':'Emotion', 'spechars':'Spechars', 'searchreplace':'SearchReplace', 'map':'BaiduMap', 'gmap':'GoogleMap',
         'insertvideo':'Video', 'help':'Help', 'justifyleft':'JustifyLeft', 'justifyright':'JustifyRight', 'justifycenter':'JustifyCenter',
         'justifyjustify':'Justify', 'forecolor':'FontColor', 'backcolor':'BackColor', 'insertorderedlist':'OL',
@@ -24,7 +24,7 @@ UE.I18N['en'] = {
         'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
         'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
-        'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
+        'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background','inserttable':'InsertTable',
         'music':'Music', 'charts': 'charts','drafts': 'Load from Drafts'
     },
     'insertorderedlist':{
