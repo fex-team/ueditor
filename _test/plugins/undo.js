@@ -27,8 +27,9 @@ test('trace 583,1726 插入表格、表情,撤销', function () {
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols: 2, numRows: 2});
     editor.execCommand('insertimage', {src: 'http://img.baidu.com/hi/jx2/j_0001.gif', width: 50, height: 50});
-    editor.execCommand('Undo');
-    editor.execCommand('Undo');
+    editor.execCommand('undo');
+    editor.execCommand('undo');
+    editor.execCommand('undo');//需要3次undo，已经和RD确认过，暂时不改
     ua.manualDeleteFillData(editor.body);
     equal(editor.getContent().toLowerCase(), '', '插入表格、表情,撤销');
 });

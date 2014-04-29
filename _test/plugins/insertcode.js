@@ -117,8 +117,11 @@ test('trace 3396：多次切换源码，不会产生空行', function () {
         editor.setContent('<p>&lt;body&gt;</p><p>&lt;/body&gt;</p>');
         ua.keydown(editor.body, {'keyCode':65, 'ctrlKey':true});
         editor.execCommand('insertcode', 'html');
-        var br = ua.browser.ie ? (ua.browser.ie<9?'':'\n') : '<br>';
-    equal(editor.body.firstChild.outerHTML, '<pre class="brush:html;toolbar:false">&lt;body&gt;'+br+'&lt;/body&gt;</pre>', '检查插入了html')
+        var br = ua.browser.ie>8 ? (ua.browser.ie>8?'\n':'') : '<br>';
+    var p = editor.body.firstChild.outerHTML.toLowerCase();
+    var x ='\"';
+    if(ua.browser.ie<9&&ua.browser.ie)x='';
+    equal(p, '<pre class='+x+'brush:html;toolbar:false'+x+'>&lt;body&gt;'+br+'&lt;/body&gt;</pre>', '检查插入了html')
             ua.checkSameHtml(editor.body.firstChild.outerHTML, '<pre class="brush:html;toolbar:false">&lt;body&gt;'+br+'&lt;/body&gt;</pre>', '检查插入了html');
 
     //todo 1.3.6 3853
@@ -208,23 +211,35 @@ test('test-beforeInsertHTML', function(){
         ua.manualDeleteFillData(editor.body);
 
         //插入br element
-        range.setStart(editor.body.firstChild,1).collapse(true).select();
+        range.setStart(editor.body.firstChild.firstChild,1).collapse(true).select();
         insert='<br>br';
         editor.execCommand('inserthtml', insert);
-        if(ua.browser.ie && ua.browser.ie > 8)
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">I\nbrtext</pre>', '插入IE');
-        else
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">I​<br>brtext<br></pre>', '插入chrome/ff');
+        if(ua.browser.ie && ua.browser.ie > 8){
+            if(ua.browser.ie<11){
+                ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">\nbrItext</pre>', '插入IE');
+            }else{
+                ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">I\nbrtext</pre>', '插入IE');
+            }
+
+        }
+        else{
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">I​<br>brtext<br></pre>', '插入chrome/ff');}
         ua.manualDeleteFillData(editor.body);
 
         //混合标签
         range.setStart(editor.body.firstChild,0).collapse(true).select();
         insert='<p>PPP<p>222</p><span>SSS</span><br>BBB</p>';
         editor.execCommand('inserthtml', insert);
-        if(ua.browser.ie && ua.browser.ie > 8)
+        if(ua.browser.ie && ua.browser.ie > 8){
+            if(ua.browser.ie<11){
+                ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS\nBBB\nbrItext</pre>', '插入IE');
+            }else{
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS\nBBBI\nbrtext</pre>', '插入IE');
-        else
+            }
+        }
+        else{
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS<br>BBBI<br>brtext<br></pre>', '插入chrome/ff');
+        }
         ua.manualDeleteFillData(editor.body);
 
         //非闭合

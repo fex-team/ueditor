@@ -155,7 +155,7 @@ test('从外面粘贴表格', function () {
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     var html = {html: '<table style="width:992px"><tbody><tr><td style="border-color: rgb(247, 150, 70);width:198px" >hello1</td><td  style="background-color: rgb(255, 0, 0); border-color: rgb(247, 150, 70);width:198px" ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table><p>hello2</p>'};
     editor.fireEvent('beforepaste', html);
-    *//**//*粘贴*//**//*
+    //**//*粘贴*//**//*
     stop();
     setTimeout(function () {
         var space = ua.browser.ie ? '' : '<br/>';
@@ -170,12 +170,12 @@ test('从外面粘贴表格到表格-表格中不能粘完整的表格', functio
     var range = te.obj[1];
     editor.setContent('');
     editor.execCommand('inserttable', {numCols: 3, numRows: 3});
-    *//**//*插入表格*//**//*
+    //**//*插入表格*//**//*
     var tds = editor.body.getElementsByTagName('td');
     range.setStart(tds[0], 0).collapse(true).select();
     var html = {html: '<table><tbody><tr><td>hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table><p>hello2</p>'};
     editor.fireEvent('beforepaste', html);
-    *//**//*粘贴*//**//*
+    //**//*粘贴*//**//*
     stop();
     setTimeout(function () {
         equal(html.html, '<p>hello2</p>', '表格中不能粘完整的表格');
@@ -187,14 +187,14 @@ test('  trace 3729 从外面粘贴表格到表格-在caption中粘贴,只粘贴�
     var range = te.obj[1];
     editor.setContent('');
     editor.execCommand('inserttable', {numCols: 3, numRows: 3});
-    *//**//*插入表格*//**//*
+    //**//*插入表格*//**//*
     var tds = editor.body.getElementsByTagName('td');
     range.setStart(tds[0], 0).collapse(true).select();
     editor.execCommand('insertcaption');
     range.setStart(editor.body.getElementsByTagName('caption')[0], 0).collapse(true).select();
     var html = {html: '<table><tbody><tr><td>hello1</td><td ></td></tr></tbody></table>'};
     editor.fireEvent('beforepaste', html);
-    *//**//*粘贴*//**//*
+    //**//*粘贴*//**//*
     stop();
     setTimeout(function () {
         //todo ie9 使用 div[browser.ie ? 'innerText' : 'textContent'] 会多一个换行,用textContent没有 trace 3729
@@ -270,7 +270,7 @@ test('delete 事件', function () {
         start();
     }, 20);
 });
-*//**//*trace 3047,3545*//**//*
+//**//*trace 3047,3545*//**//*
 test('trace 3047 ,3545 全屏插入表格', function () {
     if (ua.browser.gecko)return;//TODO 1.2.6
     if (ua.browser.ie && ua.browser.ie < 9)return;//TODO 1.2.6
@@ -442,7 +442,6 @@ test('拖拽', function () {
     var width1 = tds[1].width;
     ua.mousemove(tds[1], {clientX: 199, clientY: 100});
     equal(editor.body.style.cursor, 'col-resize', '检查鼠标显示');
-
     ua.mousedown(tds[1], {clientX: 199, clientY: 100});
     ua.mousemove(tds[1], {clientX: 299, clientY: 100});
     ua.mouseup(tds[1], {clientX: 299, clientY: 100});
