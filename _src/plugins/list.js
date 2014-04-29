@@ -200,7 +200,7 @@ UE.plugins['list'] = function () {
         html.html = root.toHtml();
     });
     //导出时，去掉p标签
-    me.getOpt('disablePInList') === false && me.addOutputRule(function(root){
+    me.getOpt('disablePInList') === true && me.addOutputRule(function(root){
         utils.each(root.getNodesByTagName('li'),function(li){
             var newChildrens = [],index=0;
             utils.each(li.children,function(n){
