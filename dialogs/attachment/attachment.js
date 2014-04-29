@@ -138,6 +138,7 @@
                 })(),
             // WebUploader实例
                 uploader,
+                actionUrl = editor.getActionUrl(editor.getOpt('fileActionName')),
                 fileMaxSize = editor.getOpt('fileMaxSize'),
                 acceptExtensions = editor.getOpt('fileAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');;
 
@@ -151,7 +152,7 @@
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
-                server: editor.getActionUrl(editor.getOpt('fileActionName')),
+                server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
                 fileSingleSizeLimit: fileMaxSize,    // 默认 2 M
@@ -442,8 +443,10 @@
                         setState('confirm', files);
                         break;
                     case 'startUpload':
-                        /* 添加额外的参数 */
-                        uploader.option('formdata', editor.queryCommandValue('serverparam'));
+                        /* 添加额外的GET参数 */
+                        var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+                            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                        uploader.option('server', url);
                         setState('uploading', files);
                         break;
                     case 'stopUpload':
@@ -453,7 +456,7 @@
             });
 
             uploader.on('uploadBeforeSend', function (file, data) {
-                data = $.extend(data, editor.queryCommandValue('serverparam'));
+                //这里可以通过data对象添加POST参数
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
