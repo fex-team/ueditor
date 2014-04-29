@@ -123,10 +123,12 @@
             case 'upload':
                 setAlign(editor.getOpt('imageInsertAlign'));
                 uploadImage = uploadImage || new UploadImage('queueList');
+                uploadImage.refresh();
                 break;
             case 'online':
                 setAlign(editor.getOpt('imageManagerInsertAlign'));
                 onlineImage = onlineImage || new OnlineImage('imageList');
+                onlineImage.reset();
                 break;
             case 'search':
                 setAlign(editor.getOpt('imageManagerInsertAlign'));
@@ -294,6 +296,13 @@
         initContainer: function () {
             this.$queue = this.$wrap.find('.filelist');
         },
+        refresh: function(){
+            var _this = this;
+            setTimeout(function(){
+                _this.uploader.refresh();
+            }, 100);
+            console.log('refresh');
+        },
         /* 初始化容器 */
         initUploader: function () {
             var _this = this,
@@ -340,6 +349,7 @@
                 })(),
             // WebUploader实例
                 uploader,
+                actionUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
                 acceptExtensions = editor.getOpt('imageAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
                 imageMaxSize = editor.getOpt('imageMaxSize'),
                 imageCompressBorder = editor.getOpt('imageCompressBorder');
@@ -359,7 +369,7 @@
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
-                server: editor.getActionUrl(editor.getOpt('imageActionName')),
+                server: actionUrl,
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
                 fileSingleSizeLimit: imageMaxSize,    // 默认 2 M
@@ -425,7 +435,7 @@
                 } else {
                     $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {
-                        if (error) {
+                        if (error || !src) {
                             $wrap.text(lang.uploadNoPreview);
                             return;
                         }
@@ -643,7 +653,6 @@
 
                 removeFile(file);
                 updateTotalProgress();
-
             });
 
             uploader.on('all', function (type, files) {
@@ -652,14 +661,20 @@
                         setState('confirm', files);
                         break;
                     case 'startUpload':
-                        /* 添加额外的参数 */
-                        uploader.option('formdata', editor.queryCommandValue('serverparam'));
+                        /* 添加额外的GET参数 */
+                        var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+                            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                        uploader.option('server', url);
                         setState('uploading', files);
                         break;
                     case 'stopUpload':
                         setState('paused', files);
                         break;
                 }
+            });
+
+            uploader.on('uploadBeforeSend', function (file, data) {
+                //这里可以通过data对象添加POST参数
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
@@ -737,9 +752,8 @@
     }
     OnlineImage.prototype = {
         init: function () {
-            this.initContainer();
+            this.reset();
             this.initEvents();
-            this.initData();
         },
         /* 初始化容器 */
         initContainer: function () {
@@ -765,7 +779,7 @@
                 }
             });
             /* 选中图片 */
-            domUtils.on(this.list, 'click', function (e) {
+            domUtils.on(this.container, 'click', function (e) {
                 var target = e.target || e.srcElement,
                     li = target.parentNode;
 
@@ -789,6 +803,11 @@
 
             /* 第一次拉取数据 */
             this.getImageData();
+        },
+        /* 重置界面 */
+        reset: function() {
+            this.initContainer();
+            this.initData();
         },
         /* 向后台拉取图片列表数据 */
         getImageData: function () {

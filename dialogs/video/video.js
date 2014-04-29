@@ -10,7 +10,8 @@
 
     var video = {},
         uploadVideoList = [],
-        isModifyUploadVideo = false;
+        isModifyUploadVideo = false,
+        uploader;
 
     window.onload = function(){
         $focus($G("videoUrl"));
@@ -27,11 +28,17 @@
                 var target = e.target || e.srcElement;
                 for (var j = 0; j < tabs.length; j++) {
                     if(tabs[j] == target){
+                        var contentId = tabs[j].getAttribute('data-content-id');
                         tabs[j].className = "focus";
-                        $G(tabs[j].getAttribute('data-content-id')).style.display = "block";
+                        domUtils.removeClasses($G(tabs[j].getAttribute('data-content-id')), 'element-invisible');
+                        $G(contentId).style.display = "block";
+                        if(contentId == 'upload') {
+                            uploader.refresh();
+                        }
                     }else {
                         tabs[j].className = "";
-                        $G(tabs[j].getAttribute('data-content-id')).style.display = "none";
+                        domUtils.addClass($G(tabs[j].getAttribute('data-content-id')), 'element-invisible');
+//                        $G(tabs[j].getAttribute('data-content-id')).style.display = "none";
                     }
                 }
             });
@@ -426,7 +433,7 @@
 //            }
 //        }
 
-        var uploadFile = new UploadFile('queueList');
+        uploader = new UploadFile('queueList');
     }
 
 
@@ -490,6 +497,7 @@
                 })(),
             // WebUploader实例
                 uploader,
+                actionUrl = editor.getActionUrl(editor.getOpt('videoActionName')),
                 fileMaxSize = editor.getOpt('videoMaxSize'),
                 acceptExtensions = editor.getOpt('videoAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');;
 
@@ -503,7 +511,7 @@
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
-                server: editor.getActionUrl(editor.getOpt('videoActionName')),
+                server: actionUrl,
                 fileVal: editor.getOpt('videoFieldName'),
                 duplicate: true,
                 fileSingleSizeLimit: fileMaxSize,    // 默认 2 M
@@ -798,8 +806,10 @@
                         setState('confirm', files);
                         break;
                     case 'startUpload':
-                        /* 添加额外的参数 */
-                        uploader.option('formdata', editor.queryCommandValue('serverparam'));
+                        /* 添加额外的GET参数 */
+                        var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+                            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                        uploader.option('server', url);
                         setState('uploading', files);
                         break;
                     case 'stopUpload':
@@ -809,7 +819,7 @@
             });
 
             uploader.on('uploadBeforeSend', function (file, data) {
-                data = $.extend(data, editor.queryCommandValue('serverparam'));
+                //这里可以通过data对象添加POST参数
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
@@ -864,6 +874,10 @@
 
             $upload.addClass('state-' + state);
             updateTotalProgress();
+        },
+        refresh: function(){
+            this.uploader.refresh();
+            console.log('refresh');
         }
     };
 
