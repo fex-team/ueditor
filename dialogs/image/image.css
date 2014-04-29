@@ -33,6 +33,7 @@
 
 .tabbody .panel.focus {
     display: block;
+    clip: auto;
 }
 
 

@@ -107,7 +107,7 @@
         if(!id) return;
         var i, bodyId, tabs = $G('tabhead').children;
         for (i = 0; i < tabs.length; i++) {
-            bodyId = tabs[i].getAttribute('data-content-id')
+            bodyId = tabs[i].getAttribute('data-content-id');
             if (bodyId == id) {
                 domUtils.addClass(tabs[i], 'focus');
                 domUtils.addClass($G(bodyId), 'focus');
