@@ -626,7 +626,8 @@
         },
         /* 添加图片到列表界面上 */
         pushData: function (list) {
-            var i, item, img, filetype, preview, icon, _this = this;
+            var i, item, img, filetype, preview, icon, _this = this,
+                urlPrefix = editor.getOpt('fileManagerUrlPrefix');
             for (i = 0; i < list.length; i++) {
                 if(list[i] && list[i].url) {
                     item = document.createElement('li');
@@ -638,10 +639,10 @@
                         domUtils.on(preview, 'load', (function(image){
                             return function(){
                                 _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
-                            }
+                            };
                         })(preview));
                         preview.width = 113;
-                        preview.setAttribute('src', editor.getOpt('fileManagerUrlPrefix') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                        preview.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
                     } else {
                         var ic = document.createElement('i'),
                             textSpan = document.createElement('span');
@@ -655,7 +656,7 @@
                         domUtils.addClass(ic, 'file-preview');
                     }
                     domUtils.addClass(icon, 'icon');
-                    item.setAttribute('data-url', list[i].url);
+                    item.setAttribute('data-url', urlPrefix + list[i].url);
 
                     item.appendChild(preview);
                     item.appendChild(icon);
