@@ -388,9 +388,27 @@ UE.I18N['zh-cn'] = {
         'failCheck':'验证失败，本次上传被跳过！',
         'fileCanceling':'取消中，请等待……',
         'stopUploading':'上传已停止……',
+
+        'uploadSelectFile':'点击选择文件',
+        'uploadAddFile':'继续添加',
+        'uploadStart':'开始上传',
+        'uploadPause':'暂停上传',
+        'uploadContinue':'继续上传',
+        'uploadRetry':'重试上传',
+        'uploadDelete':'删除',
+        'uploadTurnLeft':'向左旋转',
+        'uploadTurnRight':'向右旋转',
+        'uploadPreview':'预览中',
+        'updateStatusReady': '选中_个文件，共_KB。',
+        'updateStatusConfirm': '成功上传_个，_个失败',
+        'updateStatusFinish': '共_个(_KB)，_个成功上传',
+        'updateStatusError': '，_张上传失败。',
         'errorExceedSize':'文件大小超出',
+        'errorFileType':'文件格式不允许',
         'errorInterrupt':'文件传输中断',
-        'errorHttp':'http请求错误'
+        'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错'
     },
     'webapp':{
         'tip1':"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",
