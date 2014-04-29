@@ -31,6 +31,7 @@ test('contentchange在命令调用时的触发机制',function(){
     editor.ready(function () {
         editor.commands['test1'] = {
             execCommand:function(){
+
             editor.body.innerHTML='1123';
             }
         };
@@ -454,7 +455,6 @@ test("focus(false)", function () {
         setTimeout(function () {
             editor.focus(false);
             setTimeout(function () {
-//                debugger
 
                 var range = editor.selection.getRange();
                 equal(range.startOffset, 0, "focus(false)焦点在最前面");

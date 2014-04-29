@@ -84,13 +84,15 @@ UE.plugins['catchremoteimage'] = function () {
         }
 
         function catchremoteimage(imgs, callbacks) {
-            var opt = {
-                timeout: 60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
-                onsuccess: callbacks["success"],
-                onerror: callbacks["error"]
-            };
+            var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '',
+                url = catcherActionUrl + (catcherActionUrl.indexOf('?') == -1 ? '?':'&') + params,
+                opt = {
+                    timeout: 60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
+                    onsuccess: callbacks["success"],
+                    onerror: callbacks["error"]
+                };
             opt[catcherFieldName] = imgs;
-            ajax.request(catcherActionUrl, opt);
+            ajax.request(url, opt);
         }
 
     });

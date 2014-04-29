@@ -110,9 +110,8 @@
                                 range = editor.selection.getRange();
                             range.insertNode(span);
                             var tmp= getDomNode(span, 'firstChild', 'previousSibling');
-                            pastePop.showAnchor(tmp.nodeType == 3 ? tmp.parentNode : tmp);
+                            tmp && pastePop.showAnchor(tmp.nodeType == 3 ? tmp.parentNode : tmp);
                             domUtils.remove(span);
-
                         }else{
                             pastePop.show();
                         }
@@ -278,6 +277,9 @@
                             //todo 放到dialog去做查询
                             editor.word_img = [img.getAttribute("word_img")];
                             dialogName = "wordimageDialog"
+                        }
+                        if(domUtils.hasClass(img, 'loadingclass') || domUtils.hasClass(img, 'loaderrorclass')) {
+                            dialogName = "";
                         }
                         if (!dialogs[dialogName]) {
                             return;
@@ -766,6 +768,10 @@
                         opt.minFrameWidth = opt.initialFrameWidth;
                     } else {
                         opt.minFrameWidth = opt.initialFrameWidth = holder.offsetWidth;
+                        var styleWidth = holder.style.width;
+                        if(/%$/.test(styleWidth)) {
+                            opt.initialFrameWidth = styleWidth;
+                        }
                     }
                     if (opt.initialFrameHeight) {
                         opt.minFrameHeight = opt.initialFrameHeight;

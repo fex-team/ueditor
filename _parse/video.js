@@ -9,7 +9,9 @@ UE.parse.register('vedio',function(utils){
             cssurl = sourcePath + '/third-party/video-js/video-js.min.css',
             swfUrl = sourcePath + '/third-party/video-js/video-js.swf';
 
-        if(vjs) {
+        if(window.videojs) {
+            videojs.autoSetup();
+        } else {
             utils.loadFile(document,{
                 id : "video_css",
                 tag : "link",
@@ -24,10 +26,8 @@ UE.parse.register('vedio',function(utils){
                 type : "text/javascript"
             },function(){
                 videojs.options.flash.swf = swfUrl;
-                vjs.autoSetup();
+                videojs.autoSetup();
             });
-        } else {
-            vjs.autoSetup();
         }
 
     }

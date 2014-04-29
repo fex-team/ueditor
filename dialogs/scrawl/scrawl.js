@@ -626,7 +626,7 @@ function exec(scrawlObj) {
         addMaskLayer(lang.scrawlUpLoading);
         var base64 = scrawlObj.getCanvasData();
         if (!!base64) {
-            options = {
+            var options = {
                 timeout:100000,
                 onsuccess:function (xhr) {
                     if (!scrawlObj.isCancelScrawl) {
@@ -651,7 +651,11 @@ function exec(scrawlObj) {
                 }
             };
             options[editor.getOpt('scrawlFieldName')] = base64;
-            ajax.request(editor.getActionUrl(editor.getOpt('scrawlActionName')), options);
+
+            var actionUrl = editor.getActionUrl(editor.getOpt('scrawlActionName')),
+                params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+                url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+            ajax.request(url, options);
         }
     } else {
         addMaskLayer(lang.noScarwl + "&nbsp;&nbsp;&nbsp;<input type='button' value='" + lang.continueBtn + "'  onclick='removeMaskLayer()'/>");

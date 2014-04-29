@@ -78,7 +78,7 @@
     }
 
 
-    /* 上传图片 */
+    /* 上传附件 */
     function UploadFile(target) {
         this.$wrap = target.constructor == String ? $('#' + target) : $(target);
         this.init();
@@ -123,7 +123,7 @@
                 thumbnailWidth = 113 * ratio,
                 thumbnailHeight = 113 * ratio,
             // 可能有pedding, ready, uploading, confirm, done.
-                state = 'ready',
+                state = '',
             // 所有文件的进度信息，key为file id
                 percentages = {},
                 supportTransition = (function () {
@@ -138,7 +138,9 @@
                 })(),
             // WebUploader实例
                 uploader,
-                fileMaxSize = editor.getOpt('fileMaxSize');
+                actionUrl = editor.getActionUrl(editor.getOpt('fileActionName')),
+                fileMaxSize = editor.getOpt('fileMaxSize'),
+                acceptExtensions = editor.getOpt('fileAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');;
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {
@@ -150,10 +152,11 @@
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
                 chunked: true,
-                server: editor.getActionUrl(editor.getOpt('fileActionName')),
+                server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
-                fileSingleSizeLimit: fileMaxSize
+                fileSingleSizeLimit: fileMaxSize,    // 默认 2 M
+                compress: false
             });
             uploader.addButton({
                 id: '#filePickerBlock'
@@ -176,11 +179,10 @@
                     $btns = $('<div class="file-panel">' +
                         '<span class="cancel">' + lang.uploadDelete + '</span>' +
                         '<span class="rotateRight">' + lang.uploadTurnRight + '</span>' +
-                        '<span class="rotateLeft">' + lang.uploadTurnLeft + '</span></div>' +
-                        '<p class="error"></p>').appendTo($li),
+                        '<span class="rotateLeft">' + lang.uploadTurnLeft + '</span></div>').appendTo($li),
                     $prgress = $li.find('p.progress span'),
                     $wrap = $li.find('p.imgWrap'),
-                    $info = $li.find('.error').hide(),
+                    $info = $('<p class="error"></p>').hide().appendTo($li),
 
                     showError = function (code) {
                         switch (code) {
@@ -189,6 +191,12 @@
                                 break;
                             case 'interrupt':
                                 text = lang.errorInterrupt;
+                                break;
+                            case 'http':
+                                text = lang.errorHttp;
+                                break;
+                            case 'not_allow_type':
+                                text = lang.errorFileType;
                                 break;
                             default:
                                 text = lang.errorUploadRetry;
@@ -200,9 +208,9 @@
                 if (file.getStatus() === 'invalid') {
                     showError(file.statusText);
                 } else {
-                    $wrap.text('预览中');
+                    $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {
-                        if (error) {
+                        if (error || !src) {
                             $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
                                 '<span class="file-title">' + file.name + '</span>');
                         } else {
@@ -212,6 +220,12 @@
                     }, thumbnailWidth, thumbnailHeight);
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
+
+                    /* 检查文件格式 */
+                    if (acceptExtensions.indexOf(file.ext) == -1) {
+                        showError('not_allow_type');
+                        uploader.removeFile(file);
+                    }
                 }
 
                 file.on('statuschange', function (cur, prev) {
@@ -223,7 +237,6 @@
                     }
                     // 成功
                     if (cur === 'error' || cur === 'invalid') {
-                        console.log(file.statusText);
                         showError(file.statusText);
                         percentages[ file.id ][ 1 ] = 1;
                     } else if (cur === 'interrupt') {
@@ -231,10 +244,9 @@
                     } else if (cur === 'queued') {
                         percentages[ file.id ][ 1 ] = 0;
                     } else if (cur === 'progress') {
-                        $info.remove();
+                        $info.hide();
                         $prgress.css('display', 'block');
                     } else if (cur === 'complete') {
-                        $li.append('<span class="success"></span>');
                     }
 
                     $li.removeClass('state-' + prev).addClass('state-' + cur);
@@ -306,30 +318,6 @@
                 updateStatus();
             }
 
-            function updateStatus() {
-                var text = '', stats;
-
-                if (state === 'ready') {
-                    text = lang.updateStatusReady.replace('_', fileCount).replace('_KB', WebUploader.formatSize(fileSize));
-                } else if (state === 'confirm') {
-                    stats = uploader.getStats();
-                    if (stats.uploadFailNum) {
-                        text = lang.updateStatusConfirm.replace('_', stats.successNum).replace('_', stats.successNum);
-                    }
-                } else {
-                    stats = uploader.getStats();
-                    text = lang.updateStatusFinish.replace('_', fileCount).
-                        replace('_KB', WebUploader.formatSize(fileSize)).
-                        replace('_', stats.successNum);
-
-                    if (stats.uploadFailNum) {
-                        text += lang.updateStatusError.replace('_', stats.uploadFailNum);
-                    }
-                }
-
-                $info.html(text);
-            }
-
             function setState(val, files) {
                 if (val === state) {
                     return;
@@ -399,25 +387,32 @@
                 updateStatus();
             }
 
-            uploader.onUploadSuccess = function (file, ret) {
-                try {
-                    var json = eval('(' + ret._raw + ')');
-                    if (json.state == 'SUCCESS') {
-                        _this.fileList.push(json);
+            function updateStatus() {
+                var text = '', stats;
+
+                if (state === 'ready') {
+                    text = lang.updateStatusReady.replace('_', fileCount).replace('_KB', WebUploader.formatSize(fileSize));
+                } else if (state === 'confirm') {
+                    stats = uploader.getStats();
+                    if (stats.uploadFailNum) {
+                        text = lang.updateStatusConfirm.replace('_', stats.successNum).replace('_', stats.successNum);
                     }
-                } catch (e) {
+                } else {
+                    stats = uploader.getStats();
+                    text = lang.updateStatusFinish.replace('_', fileCount).
+                        replace('_KB', WebUploader.formatSize(fileSize)).
+                        replace('_', stats.successNum);
+
+                    if (stats.uploadFailNum) {
+                        text += lang.updateStatusError.replace('_', stats.uploadFailNum);
+                    }
                 }
-            };
-            uploader.onUploadProgress = function (file, percentage) {
-                var $li = $('#' + file.id),
-                    $percent = $li.find('.progress span');
 
-                $percent.css('width', percentage * 100 + '%');
-                percentages[ file.id ][ 1 ] = percentage;
-                updateTotalProgress();
-            };
+                $info.html(text);
+            }
 
-            uploader.onFileQueued = function (file) {
+
+            uploader.on('fileQueued', function (file) {
                 fileCount++;
                 fileSize += file.size;
 
@@ -431,16 +426,16 @@
                     setState('ready');
                 }
                 updateTotalProgress();
-            };
+            });
 
-            uploader.onFileDequeued = function (file) {
+            uploader.on('fileDequeued', function (file) {
                 fileCount--;
                 fileSize -= file.size;
 
                 removeFile(file);
                 updateTotalProgress();
 
-            };
+            });
 
             uploader.on('all', function (type, files) {
                 switch (type) {
@@ -448,8 +443,10 @@
                         setState('confirm', files);
                         break;
                     case 'startUpload':
-                        /* 添加额外的参数 */
-                        uploader.option('formdata', editor.queryCommandValue('serverparam'));
+                        /* 添加额外的GET参数 */
+                        var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+                            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                        uploader.option('server', url);
                         setState('uploading', files);
                         break;
                     case 'stopUpload':
@@ -458,9 +455,41 @@
                 }
             });
 
-            uploader.onError = function (code) {
-                //alert('Eroor: ' + code);
-            };
+            uploader.on('uploadBeforeSend', function (file, data) {
+                //这里可以通过data对象添加POST参数
+            });
+
+            uploader.on('uploadProgress', function (file, percentage) {
+                var $li = $('#' + file.id),
+                    $percent = $li.find('.progress span');
+
+                $percent.css('width', percentage * 100 + '%');
+                percentages[ file.id ][ 1 ] = percentage;
+                updateTotalProgress();
+            });
+
+            uploader.on('uploadSuccess', function (file, ret) {
+                var $file = $('#' + file.id);
+                try {
+                    var responseText = (ret._raw || ret),
+                        json = eval('(' + utils.trim(responseText) + ')');
+                    if (json.state == 'SUCCESS') {
+                        _this.fileList.push(json);
+                        $file.append('<span class="success"></span>');
+                    } else {
+                        $file.find('.error').text(json.state).show();
+                    }
+                } catch (e) {
+                    $file.find('.error').text(lang.errorServerUpload).show();
+                }
+            });
+
+            uploader.on('uploadError', function (file, code) {
+            });
+            uploader.on('Error', function (file, code) {
+            });
+            uploader.on('UploadComplete', function (file, ret) {
+            });
 
             $upload.on('click', function () {
                 if ($(this).hasClass('disabled')) {
@@ -495,7 +524,7 @@
     };
 
 
-    /* 在线图片 */
+    /* 在线附件 */
     function OnlineFile(target) {
         this.container = utils.isString(target) ? document.getElementById(target) : target;
         this.init();
