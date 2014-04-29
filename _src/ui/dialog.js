@@ -396,7 +396,8 @@
                 this._hide();
 
                 //销毁content
-                domUtils.remove(this.getDom('content'));
+                var content = this.getDom('content');
+                content && domUtils.remove(content);
             }
         }
     };
