@@ -11,6 +11,7 @@ module('plugins.contextmenu');
 test('基本右键菜单', function () {
     var editor = te.obj[0];
     stop();
+
         ua.contextmenu(editor.body);
         var lang = editor.getLang("contextMenu");
         equal(document.getElementsByClassName("edui-menu-body").length, 3, '默认3个menu,一个主的，一个段落格式，一个表格');
@@ -96,8 +97,8 @@ test('表格右键菜单', function () {
             setTimeout(function () {
                 lang = editor.getLang("contextMenu");
                 equal(menutableBody.parentNode.parentNode.parentNode.style.display, 'none', '显示submenu,检查submenu的display值:""');
-                equal(menutableBody.childNodes.length, 17, '13个items4个分隔线');
-                var innerText = lang.deletetable + lang.insertcol + lang.insertcolnext + lang.insertrow + lang.insertrownext + lang.insertcaption + lang.inserttitle + lang.inserttitlecol + lang.mergeright + lang.mergedown + lang.edittd + lang.edittable+lang.setbordervisible;
+                equal(menutableBody.childNodes.length, 19, '14个items5个分隔线');
+                var innerText = lang.deletetable + lang.deleterow + lang.deletecol+ lang.insertcol + lang.insertcolnext + lang.insertrow + lang.insertrownext + lang.insertcaption + lang.inserttitle + lang.inserttitlecol + lang.mergeright + lang.mergedown + lang.edittd + lang.edittable+lang.setbordervisible;
                 if (browser.gecko) {
                     equal(menutableBody.textContent, innerText, '检查menu显示的字符');
                 }
@@ -134,7 +135,7 @@ test('trace 3044：表格名称中右键', function () {
         }
         setTimeout(function () {
             lang = editor.getLang("contextMenu");
-            ua.click(menutableBody.childNodes[7]);
+            ua.click(menutableBody.childNodes[9]);
             var caption = editor.body.getElementsByTagName('caption');
             equal(caption.length, 1, '插入表格名称');
             range.setStart(caption[0], 0).collapse(true).select();
