@@ -156,7 +156,6 @@
                 paste: $queue,
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
-                chunked: true,
                 server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
@@ -520,6 +519,7 @@
             updateTotalProgress();
         },
         getQueueCount: function () {
+            debugger;
             var file, i, readyFile = 0, files = this.uploader.getFiles();
             for (i = 0; file = files[i++]; ) {
                 if (file.getStatus() == 'queued') readyFile++;
