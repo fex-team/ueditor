@@ -72,7 +72,7 @@
     function handleDialogOk(){
         var href =$G('href').value.replace(/^\s+|\s+$/g, '');
         if(href){
-            if(!hrefStartWith(href,["http","/","ftp://"])) {
+            if(!hrefStartWith(href,["http","/","ftp://",'#'])) {
                 href  = "http://" + href;
             }
             var obj = {
