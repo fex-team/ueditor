@@ -28,11 +28,10 @@ div.alignment,#custom{margin-left: 23px;margin-left: 28px\9;}
 /* 图片管理样式 */
 #imgManager {
     width: 100%;
-    height: 326px;
+    height: 225px;
 }
 #imgManager #imageList{
     width: 100%;
-    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
 }

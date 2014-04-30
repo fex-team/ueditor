@@ -36,6 +36,41 @@
         }
     }
 
+    /* 初始化tabbody */
+    function setTabFocus(id) {
+        if(!id) return;
+        var i, bodyId, tabs = $G('tabhead').children;
+        for (i = 0; i < tabs.length; i++) {
+            bodyId = tabs[i].getAttribute('data-content-id');
+            if (bodyId == id) {
+                domUtils.addClass(tabs[i], 'focus');
+                domUtils.addClass($G(bodyId), 'focus');
+            } else {
+                domUtils.removeClasses(tabs[i], 'focus');
+                domUtils.removeClasses($G(bodyId), 'focus');
+            }
+        }
+        switch (id) {
+            case 'remote':
+                remoteImage = remoteImage || new RemoteImage();
+                break;
+            case 'upload':
+                setAlign(editor.getOpt('imageInsertAlign'));
+                uploadImage = uploadImage || new UploadImage('queueList');
+                uploadImage.refresh();
+                break;
+            case 'online':
+                setAlign(editor.getOpt('imageManagerInsertAlign'));
+                onlineImage = onlineImage || new OnlineImage('imageList');
+                onlineImage.reset();
+                break;
+            case 'search':
+                setAlign(editor.getOpt('imageManagerInsertAlign'));
+                searchImage = searchImage || new SearchImage();
+                break;
+        }
+    }
+
     /* 初始化onok事件 */
     function initButtons() {
 
@@ -54,6 +89,11 @@
                     break;
                 case 'upload':
                     list = uploadImage.getInsertList();
+                    var count = uploadImage.getQueueCount();
+                    if (count) {
+                        $('.info', '#queueList').html('<span style="color:red;">' + '还有2个未上传文件'.replace(/[\d]/, count) + '</span>');
+                        return false;
+                    }
                     break;
                 case 'online':
                     list = onlineImage.getInsertList();
@@ -100,41 +140,6 @@
     function getAlign(){
         var align = $G("align").value || 'none';
         return align == 'none' ? '':align;
-    }
-
-    /* 初始化tabbody */
-    function setTabFocus(id) {
-        if(!id) return;
-        var i, bodyId, tabs = $G('tabhead').children;
-        for (i = 0; i < tabs.length; i++) {
-            bodyId = tabs[i].getAttribute('data-content-id');
-            if (bodyId == id) {
-                domUtils.addClass(tabs[i], 'focus');
-                domUtils.addClass($G(bodyId), 'focus');
-            } else {
-                domUtils.removeClasses(tabs[i], 'focus');
-                domUtils.removeClasses($G(bodyId), 'focus');
-            }
-        }
-        switch (id) {
-            case 'remote':
-                remoteImage = remoteImage || new RemoteImage();
-                break;
-            case 'upload':
-                setAlign(editor.getOpt('imageInsertAlign'));
-                uploadImage = uploadImage || new UploadImage('queueList');
-                uploadImage.refresh();
-                break;
-            case 'online':
-                setAlign(editor.getOpt('imageManagerInsertAlign'));
-                onlineImage = onlineImage || new OnlineImage('imageList');
-                onlineImage.reset();
-                break;
-            case 'search':
-                setAlign(editor.getOpt('imageManagerInsertAlign'));
-                searchImage = searchImage || new SearchImage();
-                break;
-        }
     }
 
 
@@ -602,6 +607,9 @@
                         break;
                 }
 
+                if (!_this.getQueueCount()) {
+                    $upload.addClass('disabled')
+                }
                 state = val;
                 updateStatus();
             }
@@ -630,7 +638,6 @@
                 $info.html(text);
             }
 
-
             uploader.on('fileQueued', function (file) {
                 fileCount++;
                 fileSize += file.size;
@@ -641,10 +648,6 @@
                 }
 
                 addFile(file);
-                if (state == 'pedding' || state == 'finish') {
-                    setState('ready');
-                }
-                updateTotalProgress();
             });
 
             uploader.on('fileDequeued', function (file) {
@@ -652,6 +655,15 @@
                 fileSize -= file.size;
 
                 removeFile(file);
+                updateTotalProgress();
+            });
+
+            uploader.on('filesQueued', function (file) {
+                if (!uploader.isInProgress() && (state == 'pedding' || state == 'finish' || state == 'confirm')) {
+                    setState('ready');
+                } else if (!_this.getQueueCount()) {
+                    setState('finish');
+                }
                 updateTotalProgress();
             });
 
@@ -725,6 +737,13 @@
 
             $upload.addClass('state-' + state);
             updateTotalProgress();
+        },
+        getQueueCount: function () {
+            var file, i, readyFile = 0, files = this.uploader.getFiles();
+            for (i = 0; file = files[i++]; ) {
+                if (file.getStatus() == 'queued') readyFile++;
+            }
+            return readyFile;
         },
         getInsertList: function () {
             var i, data, list = [],

@@ -25,7 +25,7 @@
             for (var i=0; i<this.items.length; i++) {
                 buff[i] = this.items[i].renderHtml();
             }
-            return '<div id="##" class="edui-toolbar %%" onselectstart="return false;">' +
+            return '<div id="##" class="edui-toolbar %%" onselectstart="return false;" onmousedown="return $$._onMouseDown(event, this);">' +
                 buff.join('') +
                 '</div>'
         },
@@ -35,6 +35,9 @@
                 this.items[i].postRender();
             }
             uiUtils.makeUnselectable(box);
+        },
+        _onMouseDown: function (){
+            return false;
         }
     };
     utils.inherits(Toolbar, UIBase);

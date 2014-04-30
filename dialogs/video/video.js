@@ -11,7 +11,7 @@
     var video = {},
         uploadVideoList = [],
         isModifyUploadVideo = false,
-        uploader;
+        uploadFile;
 
     window.onload = function(){
         $focus($G("videoUrl"));
@@ -33,12 +33,11 @@
                         domUtils.removeClasses($G(tabs[j].getAttribute('data-content-id')), 'element-invisible');
                         $G(contentId).style.display = "block";
                         if(contentId == 'upload') {
-                            uploader.refresh();
+                            uploadFile.refresh();
                         }
                     }else {
                         tabs[j].className = "";
                         domUtils.addClass($G(tabs[j].getAttribute('data-content-id')), 'element-invisible');
-//                        $G(tabs[j].getAttribute('data-content-id')).style.display = "none";
                     }
                 }
             });
@@ -301,139 +300,19 @@
                 align:align
             });
         }
-        editor.execCommand('insertvideo', videoObjs, 'upload');
+
+        var count = uploadFile.getQueueCount();
+        if (count) {
+            $('.info', '#queueList').html('<span style="color:red;">' + '还有2个未上传文件'.replace(/[\d]/, count) + '</span>');
+            return false;
+        } else {
+            editor.execCommand('insertvideo', videoObjs, 'upload');
+        }
     }
 
     /*初始化上传标签*/
     function initUpload(){
-//        var unFinishFileCount = 0;
-//        var acceptExtensions = editor.getOpt('videoAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');
-//        var uploader = WebUploader.create({
-//            pick: {
-//                id: '#spanButtonPlaceHolder',
-//                label: lang.browseFiles
-//            },
-//            swf: '../../third-party/webuploader/Uploader.swf',
-//            disableGlobalDnd: true,
-//            chunked: true,
-//            server: editor.getActionUrl(editor.getOpt('videoActionName')),
-//            fileVal: editor.getOpt('videoFieldName'),
-//            duplicate: true,
-//            fileSingleSizeLimit: editor.getOpt('videoMaxSize'),
-//            compress: false
-//        });
-//
-//        $('#startUpload').on('click', function(){
-//            uploader.upload();
-//        });
-//
-//        uploader.on('fileQueued', function (file) {
-//            unFinishFileCount++;
-//            $file = $('<div class="progressWrapper" id="' + file.id + '">' +
-//                '<div class="progressContainer">' +
-//                '<a class="progressCancel" href="#" title="' + lang.delUploadQueue + '" style="visibility: visible;"></a>' +
-//                '<div class="progressName">' + file.name + '</div>' +
-//                '<div class="progressBarStatus">' + lang.fileUploadReady + '</div>' +
-//                '<div class="progressBarInProgress"></div>' +
-//                '</div>' +
-//                '</div>').appendTo('#fsUploadProgress')
-//                .find('.progressCancel').on('click', function(e){
-//                    setFileState(file.id, 'red', lang.cancelUpload);
-//                    uploader.removeFile(file);
-//                    e.preventDefault();
-//                });
-//            if (file.getStatus() === 'invalid') {
-//                setFileState(file.id, 'red', file.statusText);
-//                uploader.removeFile(file);
-//            } else if (acceptExtensions.indexOf(file.ext) == -1) {
-//                setFileState(file.id, 'red', lang.fileTypeError);
-//                uploader.removeFile(file);
-//            }
-//            file.on('statuschange', function (cur, prev) {
-//                if (cur === 'error' || cur === 'invalid') {
-//                    setFileState(file.id, 'red', file.statusText);
-//                } else if (cur === 'interrupt') {
-//                    setFileState(file.id, 'red', 'interrupt');
-//                } else if (cur === 'cancelled'){
-//                }
-//            });
-//        });
-//        uploader.on('filesQueued', function (file) {
-//            if (unFinishFileCount) {
-//                $('#startUpload').show();
-//                dialog.buttons[0].setDisabled(true);
-//            } else {
-//                $('#startUpload').hide();
-//                dialog.buttons[0].setDisabled(false);
-//            }
-//        });
-//        uploader.on('fileDequeued', function (file) {
-//            unFinishFileCount = Math.max(unFinishFileCount - 1, 0);
-//            if (!unFinishFileCount) {
-//                $('#startUpload').hide();
-//                dialog.buttons[0].setDisabled(false);
-//            }
-//        });
-//        uploader.on('uploadProgress', function (file, p) {
-//            var id = file.id;
-//            setFileState(id, 'green', lang.fileUploading);
-//            $('#' + id).find('.progressBarInProgress').css('width', p * 100 + '%');
-//        });
-//        uploader.on('uploadSuccess', function (file, r) {
-//            var id = file.id;
-//            try {
-//                var info = eval('(' + (r._raw || r)+ ')');
-//                if (info.state == 'SUCCESS' && info.url) {
-//                    uploadVideoList.push({
-//                        'url': info.url,
-//                        'type': info.fileType,
-//                        'original':info.original
-//                    });
-//                    setFileState(id, 'blue', lang.uploadSuccess);
-//                } else {
-//                    setFileState(id, 'red', info.state);
-//                }
-//            } catch (e) {
-//                setFileState(id, 'red', lang.failUpload);
-//            }
-//        });
-//        uploader.on('uploadError', function (file, code) {
-//            setFileState(file.id, 'red', lang.netError + code);
-//        });
-//        uploader.on('error', function (file, code) {
-//            setFileState(file.id, 'red', code);
-//        });
-//        uploader.on('uploadComplete', function (file, code) {
-//            unFinishFileCount--;
-//        });
-//        uploader.on('uploadFinished', function (file, code) {
-//            $('#startUpload').hide();
-//            dialog.buttons[0].setDisabled(false);
-//        });
-//
-//        function setFileState(id, color, msg){
-//            var $file = $('#' + id);
-//            var map = {
-//                'exceed_size': lang.errorExceedSize,
-//                'interrupt': lang.errorInterrupt,
-//                'http': lang.errorHttp
-//            };
-//            msg = map[msg] || msg;
-//
-//            $file.find('.progressContainer').removeClass('green red blue').addClass(color)
-//                .find('.progressBarStatus').text(msg);
-//            if (color == 'red') {
-//                $file.find('.progressBarInProgress').css('width', 0);
-//                $file.find('.progressCancel').attr('title', lang.delFailSaveFile);
-//                $file.find('.progressCancel').hide();
-//            } else if (color == 'blue') {
-//                $file.find('.progressBarStatus').css({color: '#0b0', 'font-weight': 'bold'});
-//                $file.find('.progressCancel').attr('title', lang.delSuccessFile).hide();
-//                $file.find('.progressCancel').hide();
-//            }
-//        }
-
-        uploader = new UploadFile('queueList');
+        uploadFile = new UploadFile('queueList');
     }
 
 
@@ -747,6 +626,9 @@
                         break;
                 }
 
+                if (!_this.getQueueCount()) {
+                    $upload.addClass('disabled')
+                }
                 state = val;
                 updateStatus();
             }
@@ -785,10 +667,6 @@
                 }
 
                 addFile(file);
-                if (state == 'pedding' || state == 'finish') {
-                    setState('ready');
-                }
-                updateTotalProgress();
             });
 
             uploader.on('fileDequeued', function (file) {
@@ -797,7 +675,15 @@
 
                 removeFile(file);
                 updateTotalProgress();
+            });
 
+            uploader.on('filesQueued', function (file) {
+                if (!uploader.isInProgress() && (state == 'pedding' || state == 'finish' || state == 'confirm')) {
+                    setState('ready');
+                } else if (!_this.getQueueCount()) {
+                    setState('finish');
+                }
+                updateTotalProgress();
             });
 
             uploader.on('all', function (type, files) {
@@ -875,9 +761,15 @@
             $upload.addClass('state-' + state);
             updateTotalProgress();
         },
+        getQueueCount: function () {
+            var file, i, readyFile = 0, files = this.uploader.getFiles();
+            for (i = 0; file = files[i++]; ) {
+                if (file.getStatus() == 'queued') readyFile++;
+            }
+            return readyFile;
+        },
         refresh: function(){
             this.uploader.refresh();
-            console.log('refresh');
         }
     };
 
