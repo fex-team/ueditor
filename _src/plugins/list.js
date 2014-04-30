@@ -209,10 +209,15 @@ UE.plugins['list'] = function () {
                     while(tmpNode = n.children.pop()) {
                         newChildrens.splice(index,0,tmpNode);
                         tmpNode.parentNode = li;
+                        lastNode = tmpNode;
                     }
-                    var br = UE.uNode.createElement('br');
-                    br.parentNode = li;
-                    newChildrens.push(br);
+                    tmpNode = newChildrens[newChildrens.length-1];
+                    if(!tmpNode || tmpNode.type != 'element' || tmpNode.tagName != 'br'){
+                        var br = UE.uNode.createElement('br');
+                        br.parentNode = li;
+                        newChildrens.push(br);
+                    }
+
                     index = newChildrens.length;
                 }
             });
