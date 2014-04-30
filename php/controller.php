@@ -21,21 +21,21 @@ switch ($action) {
     case 'uploadvideo':
     /* 上传文件 */
     case 'uploadfile':
-        $result = include("upload.php");
+        $result = include("action_upload.php");
         break;
 
     /* 列出图片 */
     case 'listimage':
-        $result = include("filemanager.php");
+        $result = include("action_list.php");
         break;
     /* 列出文件 */
     case 'listfile':
-        $result = include("filemanager.php");
+        $result = include("action_list.php");
         break;
 
     /* 抓取远程文件 */
     case 'catchimage':
-        $result = include("crawler.php");
+        $result = include("action_crawler.php");
         break;
 
     default:
