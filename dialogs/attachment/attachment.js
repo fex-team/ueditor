@@ -324,76 +324,78 @@
 
             function setState(val, files) {
 
+                if (val != state) {
+
+                    var stats = uploader.getStats();
+
+                    $upload.removeClass('state-' + state);
+                    $upload.addClass('state-' + val);
+
+                    switch (val) {
+
+                        /* 未选择文件 */
+                        case 'pedding':
+                            $queue.addClass('element-invisible');
+                            $statusBar.addClass('element-invisible');
+                            $placeHolder.removeClass('element-invisible');
+                            $progress.hide(); $info.hide();
+                            uploader.refresh();
+                            break;
+
+                        /* 可以开始上传 */
+                        case 'ready':
+                            $placeHolder.addClass('element-invisible');
+                            $queue.removeClass('element-invisible');
+                            $statusBar.removeClass('element-invisible');
+                            $progress.hide(); $info.show();
+                            $upload.text(lang.uploadStart);
+                            uploader.refresh();
+                            break;
+
+                        /* 上传中 */
+                        case 'uploading':
+                            $progress.show(); $info.hide();
+                            $upload.text(lang.uploadPause);
+                            break;
+
+                        /* 暂停上传 */
+                        case 'paused':
+                            $progress.show(); $info.hide();
+                            $upload.text(lang.uploadContinue);
+                            break;
+
+                        case 'confirm':
+                            $progress.show(); $info.hide();
+                            $upload.text(lang.uploadStart);
+
+                            stats = uploader.getStats();
+                            if (stats.successNum && !stats.uploadFailNum) {
+                                setState('finish');
+                                return;
+                            }
+                            break;
+
+                        case 'finish':
+                            $progress.hide(); $info.show();
+                            if (stats.uploadFailNum) {
+                                $upload.text(lang.uploadRetry);
+                            } else {
+                                $upload.text(lang.uploadStart);
+                            }
+                            break;
+                    }
+
+                    state = val;
+                    updateStatus();
+
+                }
+
                 if (!_this.getQueueCount()) {
                     $upload.addClass('disabled')
+                } else {
+                    $upload.removeClass('disabled')
                 }
 
-                if (val === state) {
-                    return;
-                }
-
-                var stats = uploader.getStats();
-
-                $upload.removeClass('state-' + state);
-                $upload.addClass('state-' + val);
-
-
-                switch (val) {
-
-                    /* 未选择文件 */
-                    case 'pedding':
-                        $queue.addClass('element-invisible');
-                        $statusBar.addClass('element-invisible');
-                        $placeHolder.removeClass('element-invisible');
-                        $progress.hide(); $info.hide();
-                        uploader.refresh();
-                        break;
-
-                    /* 可以开始上传 */
-                    case 'ready':
-                        $placeHolder.addClass('element-invisible');
-                        $queue.removeClass('element-invisible');
-                        $statusBar.removeClass('element-invisible');
-                        $progress.hide(); $info.show();
-                        $upload.text(lang.uploadStart).removeClass('disabled');
-                        uploader.refresh();
-                        break;
-
-                    /* 上传中 */
-                    case 'uploading':
-                        $progress.show(); $info.hide();
-                        $upload.text(lang.uploadPause);
-                        break;
-
-                    /* 暂停上传 */
-                    case 'paused':
-                        $progress.show(); $info.hide();
-                        $upload.text(lang.uploadContinue);
-                        break;
-
-                    case 'confirm':
-                        $progress.show(); $info.hide();
-                        $upload.text(lang.uploadStart).addClass('disabled');
-
-                        stats = uploader.getStats();
-                        if (stats.successNum && !stats.uploadFailNum) {
-                            setState('finish');
-                            return;
-                        }
-                        break;
-
-                    case 'finish':
-                        $progress.hide(); $info.show();
-                        if (stats.uploadFailNum) {
-                            $upload.text(lang.uploadRetry).removeClass('disabled');
-                        } else {
-                            $upload.text(lang.uploadStart).addClass('disabled');
-                        }
-                        break;
-                }
-
-                state = val;
-                updateStatus();
             }
 
             function updateStatus() {
