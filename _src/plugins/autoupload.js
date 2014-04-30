@@ -70,7 +70,7 @@ UE.plugin.register('autoupload', function (){
         }
         /* 判断文件格式是否超出允许 */
         var fileext = file.name ? file.name.substr(file.name.lastIndexOf('.')):'';
-        if ((allowFiles.join('') + '.').indexOf(fileext + '.') == -1) {
+        if (allowFiles && (allowFiles.join('') + '.').indexOf(fileext + '.') == -1) {
             errorHandler(editor.getLang('autoupload.exceedTypeError'));
             return;
         }

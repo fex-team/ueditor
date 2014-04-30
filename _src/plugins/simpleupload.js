@@ -45,7 +45,7 @@ UE.plugin.register('simpleupload', function (){
             me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
 
             function callback(){
-                var link, json, loader, result = (iframe.contentDocument || iframe.contentWindow.contentDocument).body.innerHTML;
+                var link, json, loader, body = (iframe.contentDocument || iframe.contentWindow.contentDocument).body, result = body.innerText || body.textContent || '';
                 try{
                     json = (new Function("return " + result))();
                     link = me.options.imageUrlPrefix + json.url;
