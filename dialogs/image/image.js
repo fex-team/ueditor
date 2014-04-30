@@ -542,6 +542,11 @@
             }
 
             function setState(val, files) {
+
+                if (!_this.getQueueCount()) {
+                    $upload.addClass('disabled')
+                }
+
                 if (val === state) {
                     return;
                 }
@@ -606,9 +611,6 @@
                         break;
                 }
 
-                if (!_this.getQueueCount()) {
-                    $upload.addClass('disabled')
-                }
                 state = val;
                 updateStatus();
             }
@@ -658,7 +660,7 @@
             });
 
             uploader.on('filesQueued', function (file) {
-                if (!uploader.isInProgress() && (state == 'pedding' || state == 'finish' || state == 'confirm')) {
+                if (!uploader.isInProgress() && (state == 'pedding' || state == 'ready' || state == 'finish' || state == 'confirm')) {
                     setState('ready');
                 } else if (!_this.getQueueCount()) {
                     setState('finish');
@@ -740,7 +742,7 @@
         getQueueCount: function () {
             var file, i, readyFile = 0, files = this.uploader.getFiles();
             for (i = 0; file = files[i++]; ) {
-                if (file.getStatus() == 'queued') readyFile++;
+                if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
             }
             return readyFile;
         },
