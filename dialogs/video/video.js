@@ -389,7 +389,6 @@
                 paste: $queue,
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
-                chunked: true,
                 server: actionUrl,
                 fileVal: editor.getOpt('videoFieldName'),
                 duplicate: true,
