@@ -27,11 +27,13 @@
     height: 100%;
     background: #fff;
     overflow: hidden;
-    display: none;
+    display: block;
+    clip: rect(1px, 1px, 1px, 1px);
 }
 
 .tabbody .panel.focus {
     display: block;
+    clip: auto;
 }
 
 

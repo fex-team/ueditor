@@ -13,17 +13,19 @@ UE.I18N['zh-cn'] = {
         'pasteplain':'纯文本粘贴模式', 'selectall':'全选', 'print':'打印', 'preview':'预览',
         'horizontal':'分隔线', 'removeformat':'清除格式', 'time':'时间', 'date':'日期',
         'unlink':'取消链接', 'insertrow':'前插入行', 'insertcol':'前插入列', 'mergeright':'右合并单元格', 'mergedown':'下合并单元格',
-        'deleterow':'删除行', 'deletecol':'删除列', 'splittorows':'拆分成行', 'splittocols':'拆分成列', 'splittocells':'完全拆分单元格',
-        'mergecells':'合并多个单元格', 'deletetable':'删除表格', 'cleardoc':'清空文档','insertparagraphbeforetable':"表格前插入行",'insertcode':'代码语言','fontfamily':'字体', 'fontsize':'字号', 'paragraph':'段落格式', 'insertimage':'图片',
-        'edittable':'表格属性','edittd':'单元格属性', 'link':'超链接','emotion':'表情', 'spechars':'特殊字符', 'searchreplace':'查询替换', 'map':'Baidu地图', 'gmap':'Google地图',
+        'deleterow':'删除行', 'deletecol':'删除列', 'splittorows':'拆分成行',
+        'splittocols':'拆分成列', 'splittocells':'完全拆分单元格','deletecaption':'删除表格标题','inserttitle':'插入标题',
+        'mergecells':'合并多个单元格', 'deletetable':'删除表格', 'cleardoc':'清空文档','insertparagraphbeforetable':"表格前插入行",'insertcode':'代码语言',
+        'fontfamily':'字体', 'fontsize':'字号', 'paragraph':'段落格式', 'simpleupload':'单图上传', 'insertimage':'多图上传','edittable':'表格属性','edittd':'单元格属性', 'link':'超链接',
+        'emotion':'表情', 'spechars':'特殊字符', 'searchreplace':'查询替换', 'map':'Baidu地图', 'gmap':'Google地图',
         'insertvideo':'视频', 'help':'帮助', 'justifyleft':'居左对齐', 'justifyright':'居右对齐', 'justifycenter':'居中对齐',
         'justifyjustify':'两端对齐', 'forecolor':'字体颜色', 'backcolor':'背景色', 'insertorderedlist':'有序列表',
         'insertunorderedlist':'无序列表', 'fullscreen':'全屏', 'directionalityltr':'从左向右输入', 'directionalityrtl':'从右向左输入',
         'rowspacingtop':'段前距', 'rowspacingbottom':'段后距',  'pagebreak':'分页', 'insertframe':'插入Iframe', 'imagenone':'默认',
         'imageleft':'左浮动', 'imageright':'右浮动', 'attachment':'附件', 'imagecenter':'居中', 'wordimage':'图片转存',
-        'lineheight':'行间距','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版', 'webapp':'百度应用',
-        'touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦','music':'音乐',inserttable:'插入表格',
-        'drafts': '从草稿箱加载', 'charts': '图表'
+        'lineheight':'行间距','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版',
+        'webapp':'百度应用','touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦',
+        'music':'音乐','inserttable':'插入表格','drafts': '从草稿箱加载', 'charts': '图表'
     },
     'insertorderedlist':{
         'num':'1,2,3...',
@@ -73,6 +75,7 @@ UE.I18N['zh-cn'] = {
     },
     'simpleupload':{
         'exceedSizeError': '文件大小超出限制',
+        'exceedTypeError': '文件格式不允许',
         'jsonEncodeError': '服务器返回格式错误',
         'loading':"正在上传...",
         'loadError':"上传错误"
@@ -387,9 +390,27 @@ UE.I18N['zh-cn'] = {
         'failCheck':'验证失败，本次上传被跳过！',
         'fileCanceling':'取消中，请等待……',
         'stopUploading':'上传已停止……',
+
+        'uploadSelectFile':'点击选择文件',
+        'uploadAddFile':'继续添加',
+        'uploadStart':'开始上传',
+        'uploadPause':'暂停上传',
+        'uploadContinue':'继续上传',
+        'uploadRetry':'重试上传',
+        'uploadDelete':'删除',
+        'uploadTurnLeft':'向左旋转',
+        'uploadTurnRight':'向右旋转',
+        'uploadPreview':'预览中',
+        'updateStatusReady': '选中_个文件，共_KB。',
+        'updateStatusConfirm': '成功上传_个，_个失败',
+        'updateStatusFinish': '共_个(_KB)，_个成功上传',
+        'updateStatusError': '，_张上传失败。',
         'errorExceedSize':'文件大小超出',
+        'errorFileType':'文件格式不允许',
         'errorInterrupt':'文件传输中断',
-        'errorHttp':'http请求错误'
+        'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错'
     },
     'webapp':{
         'tip1':"本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",
@@ -489,7 +510,6 @@ UE.I18N['zh-cn'] = {
         'static':{
             'lang_input_about':'关于UEditor',
             'lang_input_shortcuts':'快捷键',
-            'lang_input_version':'版本:1.3.6',
             'lang_input_introduction':'UEditor是由百度web前端研发部开发的所见即所得富文本web编辑器，具有轻量，可定制，注重用户体验等特点。开源基于BSD协议，允许自由使用和修改代码。',
             'lang_Txt_shortcuts':'快捷键',
             'lang_Txt_func':'功能',

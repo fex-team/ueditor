@@ -23,3 +23,72 @@ div.color{float: left;margin: 0;}
 div.alignment,#custom{margin-left: 23px;margin-left: 28px\9;}
 #custom input{height: 15px;min-height: 15px;width:20px;}
 #repeatType{width:100px;}
+
+
+/* 图片管理样式 */
+#imgManager {
+    width: 100%;
+    height: 225px;
+}
+#imgManager #imageList{
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#imgManager ul {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#imgManager li {
+    float: left;
+    display: block;
+    list-style: none;
+    padding: 0;
+    width: 113px;
+    height: 113px;
+    margin: 9px 0 0 19px;
+    background-color: #eee;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+#imgManager li.clearFloat {
+    float: none;
+    clear: both;
+    display: block;
+    width:0;
+    height:0;
+    margin: 0;
+    padding: 0;
+}
+#imgManager li img {
+    cursor: pointer;
+}
+#imgManager li .icon {
+    cursor: pointer;
+    width: 113px;
+    height: 113px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    border: 0;
+    background-repeat: no-repeat;
+}
+#imgManager li .icon:hover {
+    width: 107px;
+    height: 107px;
+    border: 3px solid #1094fa;
+}
+#imgManager li.selected .icon {
+    background-image: url(images/success.png);
+    background-position: 75px 75px;
+}
+#imgManager li.selected .icon:hover {
+    width: 107px;
+    height: 107px;
+    border: 3px solid #1094fa;
+    background-position: 72px 72px;
+}

@@ -145,7 +145,7 @@ Class Uploader
     End Function
 
     Private Function GetDirectoryName(path)
-        GetDirectoryName = Left( path, Len(path) - InStrRev(path, "\\") - 1 )
+        GetDirectoryName = Left( path, InStrRev(path, "\") )
     End Function
 
     Private Function Base64Decode( content )

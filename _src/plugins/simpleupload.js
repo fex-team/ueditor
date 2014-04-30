@@ -15,20 +15,21 @@ UE.plugin.register('simpleupload', function (){
             input = uploadInput = document.createElement('input'),
             iframe = document.createElement('iframe'),
             iframeId = 'edui_iframe_' + (+new Date()).toString(36),
-            loadingId;
+            imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
 
         input.type = 'file';
+        input.accept = 'image/*';
         input.name = me.options.imageFieldName;
         input.style.cssText = 'display:none;width:0px;height:0px;border:0;margin:0;padding:0;position:absolute;';
 
         iframe.name = iframe.id = iframeId;
-        iframe.style.cssText = 'display:none;width:0px;height:0px;border:0;margin:0;padding:0;position:absolute;';
+        iframe.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
 
         form.target = iframeId;
         form.method = 'POST';
         form.enctype = 'multipart/form-data';
-        form.action = me.getActionUrl(me.getOpt('imageActionName'));
-        form.style.cssText = 'width:20px;height:20px;margin:0;padding:0;position:relative;';
+        form.action = imageActionUrl;
+        form.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
 
         wrapper.className = 'edui-' + me.options.theme;
         wrapper.id = me.ui.id + '_iframeupload';
@@ -40,10 +41,11 @@ UE.plugin.register('simpleupload', function (){
 
         domUtils.on(input, 'change', function(){
             var loadingId = 'loading_' + (+new Date()).toString(36);
+            var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
             me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
 
             function callback(){
-                var link, json, loader, result = (iframe.contentDocument || iframe.contentWindow.contentDocument).body.innerHTML;
+                var link, json, loader, body = (iframe.contentDocument || iframe.contentWindow.contentDocument).body, result = body.innerText || body.textContent || '';
                 try{
                     json = (new Function("return " + result))();
                     link = me.options.imageUrlPrefix + json.url;
@@ -70,6 +72,7 @@ UE.plugin.register('simpleupload', function (){
                 }
             }
             domUtils.on(iframe, 'load', callback);
+            form.action = imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params;
             form.submit();
         });
     }
@@ -97,7 +100,7 @@ UE.plugin.register('simpleupload', function (){
                 if (/\b(loaderrorclass)|(bloaderrorclass)\b/.test(n.getAttr('class'))) {
                     n.parentNode.removeChild(n);
                 }
-            })
+            });
         },
         commands: {
             "simpleupload":{

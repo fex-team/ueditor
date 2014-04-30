@@ -18,7 +18,7 @@ UE.plugin.register('autoupload', function (){
         fieldName = editor.getOpt(filetype + 'FieldName');
         urlPrefix = editor.getOpt(filetype + 'UrlPrefix');
         maxSize = editor.getOpt(filetype + 'MaxSize');
-        allowFiles = editor.getOpt(filetype + 'MaxSize');
+        allowFiles = editor.getOpt(filetype + 'AllowFiles');
         actionUrl = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
         errorHandler = function(title) {
             var loader = editor.document.getElementById(loadingId);
@@ -69,15 +69,21 @@ UE.plugin.register('autoupload', function (){
             return;
         }
         /* 判断文件格式是否超出允许 */
-        /*TODO*/
-        debugger;
+        var fileext = file.name ? file.name.substr(file.name.lastIndexOf('.')):'';
+        if (allowFiles && (allowFiles.join('') + '.').indexOf(fileext + '.') == -1) {
+            errorHandler(editor.getLang('autoupload.exceedTypeError'));
+            return;
+        }
 
         /* 创建Ajax并提交 */
         var xhr = new XMLHttpRequest(),
-            fd = new FormData();
+            fd = new FormData(),
+            params = utils.serializeParam(me.queryCommandValue('serverparam')) || '',
+            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+
         fd.append(fieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
         fd.append('type', 'ajax');
-        xhr.open("post", actionUrl, true);
+        xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.addEventListener('load', function (e) {
             try{

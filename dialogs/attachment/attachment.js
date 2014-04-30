@@ -28,31 +28,6 @@
         setTabFocus('upload');
     }
 
-    /* 初始化onok事件 */
-    function initButtons() {
-
-        dialog.onok = function () {
-            var list = [], id, tabs = $G('tabhead').children;
-            for (var i = 0; i < tabs.length; i++) {
-                if (domUtils.hasClass(tabs[i], 'focus')) {
-                    id = tabs[i].getAttribute('data-content-id');
-                    break;
-                }
-            }
-
-            switch (id) {
-                case 'upload':
-                    list = uploadFile.getInsertList();
-                    break;
-                case 'online':
-                    list = onlineFile.getInsertList();
-                    break;
-            }
-
-            editor.execCommand('insertfile', list);
-        };
-    }
-
     /* 初始化tabbody */
     function setTabFocus(id) {
         if(!id) return;
@@ -77,8 +52,38 @@
         }
     }
 
+    /* 初始化onok事件 */
+    function initButtons() {
 
-    /* 上传图片 */
+        dialog.onok = function () {
+            var list = [], id, tabs = $G('tabhead').children;
+            for (var i = 0; i < tabs.length; i++) {
+                if (domUtils.hasClass(tabs[i], 'focus')) {
+                    id = tabs[i].getAttribute('data-content-id');
+                    break;
+                }
+            }
+
+            switch (id) {
+                case 'upload':
+                    list = uploadFile.getInsertList();
+                    var count = uploadFile.getQueueCount();
+                    if (count) {
+                        $('.info', '#queueList').html('<span style="color:red;">' + '还有2个未上传文件'.replace(/[\d]/, count) + '</span>');
+                        return false;
+                    }
+                    break;
+                case 'online':
+                    list = onlineFile.getInsertList();
+                    break;
+            }
+
+            editor.execCommand('insertfile', list);
+        };
+    }
+
+
+    /* 上传附件 */
     function UploadFile(target) {
         this.$wrap = target.constructor == String ? $('#' + target) : $(target);
         this.init();
@@ -138,6 +143,7 @@
                 })(),
             // WebUploader实例
                 uploader,
+                actionUrl = editor.getActionUrl(editor.getOpt('fileActionName')),
                 fileMaxSize = editor.getOpt('fileMaxSize'),
                 acceptExtensions = editor.getOpt('fileAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');;
 
@@ -150,8 +156,7 @@
                 paste: $queue,
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
-                chunked: true,
-                server: editor.getActionUrl(editor.getOpt('fileActionName')),
+                server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
                 fileSingleSizeLimit: fileMaxSize,    // 默认 2 M
@@ -206,13 +211,10 @@
 
                 if (file.getStatus() === 'invalid') {
                     showError(file.statusText);
-                } else if (acceptExtensions.indexOf(file.ext) == -1) {
-                    showError('not_allow_type');
-                    uploader.removeFile(file);
                 } else {
                     $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {
-                        if (error) {
+                        if (error || !src) {
                             $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
                                 '<span class="file-title">' + file.name + '</span>');
                         } else {
@@ -222,6 +224,12 @@
                     }, thumbnailWidth, thumbnailHeight);
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
+
+                    /* 检查文件格式 */
+                    if (acceptExtensions.indexOf(file.ext) == -1) {
+                        showError('not_allow_type');
+                        uploader.removeFile(file);
+                    }
                 }
 
                 file.on('statuschange', function (cur, prev) {
@@ -315,6 +323,11 @@
             }
 
             function setState(val, files) {
+
+                if (!_this.getQueueCount()) {
+                    $upload.addClass('disabled')
+                }
+
                 if (val === state) {
                     return;
                 }
@@ -407,7 +420,6 @@
                 $info.html(text);
             }
 
-
             uploader.on('fileQueued', function (file) {
                 fileCount++;
                 fileSize += file.size;
@@ -418,10 +430,6 @@
                 }
 
                 addFile(file);
-                if (state == 'pedding' || state == 'finish') {
-                    setState('ready');
-                }
-                updateTotalProgress();
             });
 
             uploader.on('fileDequeued', function (file) {
@@ -430,7 +438,15 @@
 
                 removeFile(file);
                 updateTotalProgress();
+            });
 
+            uploader.on('filesQueued', function (file) {
+                if (!uploader.isInProgress() && (state == 'pedding' || state == 'finish' || state == 'confirm')) {
+                    setState('ready');
+                } else if (!_this.getQueueCount()) {
+                    setState('finish');
+                }
+                updateTotalProgress();
             });
 
             uploader.on('all', function (type, files) {
@@ -439,14 +455,20 @@
                         setState('confirm', files);
                         break;
                     case 'startUpload':
-                        /* 添加额外的参数 */
-                        uploader.option('formdata', editor.queryCommandValue('serverparam'));
+                        /* 添加额外的GET参数 */
+                        var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+                            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                        uploader.option('server', url);
                         setState('uploading', files);
                         break;
                     case 'stopUpload':
                         setState('paused', files);
                         break;
                 }
+            });
+
+            uploader.on('uploadBeforeSend', function (file, data) {
+                //这里可以通过data对象添加POST参数
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
@@ -498,6 +520,13 @@
             $upload.addClass('state-' + state);
             updateTotalProgress();
         },
+        getQueueCount: function () {
+            var file, i, readyFile = 0, files = this.uploader.getFiles();
+            for (i = 0; file = files[i++]; ) {
+                if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
+            }
+            return readyFile;
+        },
         getInsertList: function () {
             var i, link, data, list = [],
                 prefix = editor.getOpt('fileUrlPrefix');
@@ -514,7 +543,7 @@
     };
 
 
-    /* 在线图片 */
+    /* 在线附件 */
     function OnlineFile(target) {
         this.container = utils.isString(target) ? document.getElementById(target) : target;
         this.init();
@@ -616,7 +645,8 @@
         },
         /* 添加图片到列表界面上 */
         pushData: function (list) {
-            var i, item, img, filetype, preview, icon, _this = this;
+            var i, item, img, filetype, preview, icon, _this = this,
+                urlPrefix = editor.getOpt('fileManagerUrlPrefix');
             for (i = 0; i < list.length; i++) {
                 if(list[i] && list[i].url) {
                     item = document.createElement('li');
@@ -628,10 +658,10 @@
                         domUtils.on(preview, 'load', (function(image){
                             return function(){
                                 _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
-                            }
+                            };
                         })(preview));
                         preview.width = 113;
-                        preview.setAttribute('src', editor.getOpt('fileManagerUrlPrefix') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                        preview.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
                     } else {
                         var ic = document.createElement('i'),
                             textSpan = document.createElement('span');
@@ -645,7 +675,7 @@
                         domUtils.addClass(ic, 'file-preview');
                     }
                     domUtils.addClass(icon, 'icon');
-                    item.setAttribute('data-url', list[i].url);
+                    item.setAttribute('data-url', urlPrefix + list[i].url);
 
                     item.appendChild(preview);
                     item.appendChild(icon);

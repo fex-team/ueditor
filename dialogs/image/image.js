@@ -36,6 +36,41 @@
         }
     }
 
+    /* 初始化tabbody */
+    function setTabFocus(id) {
+        if(!id) return;
+        var i, bodyId, tabs = $G('tabhead').children;
+        for (i = 0; i < tabs.length; i++) {
+            bodyId = tabs[i].getAttribute('data-content-id');
+            if (bodyId == id) {
+                domUtils.addClass(tabs[i], 'focus');
+                domUtils.addClass($G(bodyId), 'focus');
+            } else {
+                domUtils.removeClasses(tabs[i], 'focus');
+                domUtils.removeClasses($G(bodyId), 'focus');
+            }
+        }
+        switch (id) {
+            case 'remote':
+                remoteImage = remoteImage || new RemoteImage();
+                break;
+            case 'upload':
+                setAlign(editor.getOpt('imageInsertAlign'));
+                uploadImage = uploadImage || new UploadImage('queueList');
+                uploadImage.refresh();
+                break;
+            case 'online':
+                setAlign(editor.getOpt('imageManagerInsertAlign'));
+                onlineImage = onlineImage || new OnlineImage('imageList');
+                onlineImage.reset();
+                break;
+            case 'search':
+                setAlign(editor.getOpt('imageManagerInsertAlign'));
+                searchImage = searchImage || new SearchImage();
+                break;
+        }
+    }
+
     /* 初始化onok事件 */
     function initButtons() {
 
@@ -54,6 +89,11 @@
                     break;
                 case 'upload':
                     list = uploadImage.getInsertList();
+                    var count = uploadImage.getQueueCount();
+                    if (count) {
+                        $('.info', '#queueList').html('<span style="color:red;">' + '还有2个未上传文件'.replace(/[\d]/, count) + '</span>');
+                        return false;
+                    }
                     break;
                 case 'online':
                     list = onlineImage.getInsertList();
@@ -100,39 +140,6 @@
     function getAlign(){
         var align = $G("align").value || 'none';
         return align == 'none' ? '':align;
-    }
-
-    /* 初始化tabbody */
-    function setTabFocus(id) {
-        if(!id) return;
-        var i, bodyId, tabs = $G('tabhead').children;
-        for (i = 0; i < tabs.length; i++) {
-            bodyId = tabs[i].getAttribute('data-content-id')
-            if (bodyId == id) {
-                domUtils.addClass(tabs[i], 'focus');
-                domUtils.addClass($G(bodyId), 'focus');
-            } else {
-                domUtils.removeClasses(tabs[i], 'focus');
-                domUtils.removeClasses($G(bodyId), 'focus');
-            }
-        }
-        switch (id) {
-            case 'remote':
-                remoteImage = remoteImage || new RemoteImage();
-                break;
-            case 'upload':
-                setAlign(editor.getOpt('imageInsertAlign'));
-                uploadImage = uploadImage || new UploadImage('queueList');
-                break;
-            case 'online':
-                setAlign(editor.getOpt('imageManagerInsertAlign'));
-                onlineImage = onlineImage || new OnlineImage('imageList');
-                break;
-            case 'search':
-                setAlign(editor.getOpt('imageManagerInsertAlign'));
-                searchImage = searchImage || new SearchImage();
-                break;
-        }
     }
 
 
@@ -294,6 +301,13 @@
         initContainer: function () {
             this.$queue = this.$wrap.find('.filelist');
         },
+        refresh: function(){
+            var _this = this;
+            setTimeout(function(){
+                _this.uploader.refresh();
+            }, 100);
+            console.log('refresh');
+        },
         /* 初始化容器 */
         initUploader: function () {
             var _this = this,
@@ -340,6 +354,7 @@
                 })(),
             // WebUploader实例
                 uploader,
+                actionUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
                 acceptExtensions = editor.getOpt('imageAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
                 imageMaxSize = editor.getOpt('imageMaxSize'),
                 imageCompressBorder = editor.getOpt('imageCompressBorder');
@@ -358,8 +373,7 @@
                 },
                 swf: '../../third-party/webuploader/Uploader.swf',
                 disableGlobalDnd: true,
-                chunked: true,
-                server: editor.getActionUrl(editor.getOpt('imageActionName')),
+                server: actionUrl,
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
                 fileSingleSizeLimit: imageMaxSize,    // 默认 2 M
@@ -425,7 +439,7 @@
                 } else {
                     $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {
-                        if (error) {
+                        if (error || !src) {
                             $wrap.text(lang.uploadNoPreview);
                             return;
                         }
@@ -528,6 +542,11 @@
             }
 
             function setState(val, files) {
+
+                if (!_this.getQueueCount()) {
+                    $upload.addClass('disabled')
+                }
+
                 if (val === state) {
                     return;
                 }
@@ -620,7 +639,6 @@
                 $info.html(text);
             }
 
-
             uploader.on('fileQueued', function (file) {
                 fileCount++;
                 fileSize += file.size;
@@ -631,10 +649,6 @@
                 }
 
                 addFile(file);
-                if (state == 'pedding' || state == 'finish') {
-                    setState('ready');
-                }
-                updateTotalProgress();
             });
 
             uploader.on('fileDequeued', function (file) {
@@ -643,7 +657,15 @@
 
                 removeFile(file);
                 updateTotalProgress();
+            });
 
+            uploader.on('filesQueued', function (file) {
+                if (!uploader.isInProgress() && (state == 'pedding' || state == 'ready' || state == 'finish' || state == 'confirm')) {
+                    setState('ready');
+                } else if (!_this.getQueueCount()) {
+                    setState('finish');
+                }
+                updateTotalProgress();
             });
 
             uploader.on('all', function (type, files) {
@@ -652,14 +674,20 @@
                         setState('confirm', files);
                         break;
                     case 'startUpload':
-                        /* 添加额外的参数 */
-                        uploader.option('formdata', editor.queryCommandValue('serverparam'));
+                        /* 添加额外的GET参数 */
+                        var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+                            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                        uploader.option('server', url);
                         setState('uploading', files);
                         break;
                     case 'stopUpload':
                         setState('paused', files);
                         break;
                 }
+            });
+
+            uploader.on('uploadBeforeSend', function (file, data) {
+                //这里可以通过data对象添加POST参数
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
@@ -711,6 +739,13 @@
             $upload.addClass('state-' + state);
             updateTotalProgress();
         },
+        getQueueCount: function () {
+            var file, i, readyFile = 0, files = this.uploader.getFiles();
+            for (i = 0; file = files[i++]; ) {
+                if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
+            }
+            return readyFile;
+        },
         getInsertList: function () {
             var i, data, list = [],
                 align = getAlign(),
@@ -737,9 +772,8 @@
     }
     OnlineImage.prototype = {
         init: function () {
-            this.initContainer();
+            this.reset();
             this.initEvents();
-            this.initData();
         },
         /* 初始化容器 */
         initContainer: function () {
@@ -765,7 +799,7 @@
                 }
             });
             /* 选中图片 */
-            domUtils.on(this.list, 'click', function (e) {
+            domUtils.on(this.container, 'click', function (e) {
                 var target = e.target || e.srcElement,
                     li = target.parentNode;
 
@@ -789,6 +823,11 @@
 
             /* 第一次拉取数据 */
             this.getImageData();
+        },
+        /* 重置界面 */
+        reset: function() {
+            this.initContainer();
+            this.initData();
         },
         /* 向后台拉取图片列表数据 */
         getImageData: function () {
@@ -833,7 +872,8 @@
         },
         /* 添加图片到列表界面上 */
         pushData: function (list) {
-            var i, item, img, icon, _this = this;
+            var i, item, img, icon, _this = this,
+                urlPrefix = editor.getOpt('imageManagerUrlPrefix');
             for (i = 0; i < list.length; i++) {
                 if(list[i] && list[i].url) {
                     item = document.createElement('li');
@@ -846,8 +886,8 @@
                         }
                     })(img));
                     img.width = 113;
-                    img.setAttribute('src', editor.getOpt('imageManagerUrlPrefix') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
-                    img.setAttribute('_src', editor.getOpt('imageManagerUrlPrefix') + list[i].url);
+                    img.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                    img.setAttribute('_src', urlPrefix + list[i].url);
                     domUtils.addClass(icon, 'icon');
 
                     item.appendChild(img);

@@ -394,6 +394,10 @@
 
                 }
                 this._hide();
+
+                //销毁content
+                var content = this.getDom('content');
+                content && domUtils.remove(content);
             }
         }
     };

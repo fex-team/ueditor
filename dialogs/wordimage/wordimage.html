@@ -29,7 +29,7 @@
             </div>
           </div>
     </div>
-    <script type="text/javascript" src="../tangram.js"></script>
+    <script type="text/javascript" src="tangram.js"></script>
     <script type="text/javascript" src="wordimage.js"></script>
     <script type="text/javascript">
         editor.setOpt({
@@ -41,21 +41,22 @@
             //全局变量
         var imageUrls = [],          //用于保存从服务器返回的图片信息数组
             selectedImageCount = 0,  //当前已选择的但未上传的图片数量
-            params = baidu.json.stringify({
-                "fileNameFormat":editor.options.fileNameFormat
-            }),
             optImageUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
             optImageFieldName = editor.getOpt('imageFieldName'),
             optImageCompressBorder = editor.getOpt('imageCompressEnable') ? editor.getOpt('imageCompressBorder'):null,
             maxSize = editor.getOpt('imageMaxSize') / 1024,
             extension = editor.getOpt('imageAllowFiles').join(';').replace(/\./g, '*.');
 
+        /* 添加额外的GET参数 */
+        var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+            urlWidthParams = optImageUrl + (optImageUrl.indexOf('?') == -1 ? '?':'&') + params;
+
         utils.domReady(function(){
             //创建Flash相关的参数集合
             var flashOptions = {
                 container:"flashContainer",                                                    //flash容器id
-                url:imageUrl,                                           // 上传处理页面的url地址
-                ext:params,                                 //可向服务器提交的自定义参数列表
+                url:urlWidthParams,                                           // 上传处理页面的url地址
+                ext:editor.queryCommandValue('serverParam') || {},                                 //可向服务器提交的自定义参数列表
                 fileType:'{"description":"'+lang.fileType+'", "extension":"' + extension + '"}',     //上传文件格式限制
                 flashUrl:'imageUploader.swf',                                                  //上传用的flash组件地址
                 width:600,          //flash的宽度

@@ -27,11 +27,13 @@
     height: 100%;
     background: #fff;
     overflow: hidden;
-    display: none;
+    display: block;
+    clip: rect(1px, 1px, 1px, 1px);
 }
 
 .tabbody .panel.focus {
     display: block;
+    clip: auto;
 }
 
 /* 上传图片 */
@@ -612,12 +614,20 @@ i.file-preview.file-type-ipa{
     background-position: -910px center;
 }
 i.file-preview.file-type-mp4,
+i.file-preview.file-type-swf,
+i.file-preview.file-type-mkv,
+i.file-preview.file-type-avi,
+i.file-preview.file-type-flv,
 i.file-preview.file-type-mov,
+i.file-preview.file-type-mpg,
 i.file-preview.file-type-mpeg,
+i.file-preview.file-type-ogv,
+i.file-preview.file-type-webm,
 i.file-preview.file-type-rm,
 i.file-preview.file-type-rmvb{
     background-position: -980px center;
 }
+i.file-preview.file-type-ogg,
 i.file-preview.file-type-wav,
 i.file-preview.file-type-wmv,
 i.file-preview.file-type-mid,

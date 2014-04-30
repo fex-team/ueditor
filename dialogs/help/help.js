@@ -53,4 +53,4 @@ function switchTab( tabParentId ) {
 }
 switchTab("helptab");
 
-document.getElementById('version').innerHTML = parent.UE.version
+document.getElementById('version').innerHTML = parent.UE.version;

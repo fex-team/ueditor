@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../../third-party/jquery-1.10.2.min.js"></script>
 
     <!-- webuploader -->
-    <script src="../../third-party/webuploader/webuploader.min.js"></script>
+    <script src="../../third-party/webuploader/webuploader.flashonly.js"></script>
     <link rel="stylesheet" type="text/css" href="../../third-party/webuploader/webuploader.css">
 
     <!-- attachment dialog -->
@@ -26,7 +26,7 @@
             <!-- 上传图片 -->
             <div id="upload" class="panel focus">
                 <div id="queueList" class="queueList">
-                    <div class="statusBar">
+                    <div class="statusBar element-invisible">
                         <div class="progress">
                             <span class="text">0%</span>
                             <span class="percentage"></span>
@@ -42,7 +42,7 @@
                         </div>
                         <p><var id="lang_drop_remind"></var></p>
                     </div>
-                    <ul class="filelist">
+                    <ul class="filelist element-invisible">
                         <li id="filePickerBlock" class="filePickerBlock"></li>
                     </ul>
                 </div>

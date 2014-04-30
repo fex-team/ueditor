@@ -16,7 +16,7 @@ UE.I18N['en'] = {
         'deleterow':'DeleteRow', 'deletecol':'DeleteCol', 'splittorows':'SplitToRows','insertcode':'insert code',
         'splittocols':'SplitToCols', 'splittocells':'SplitToCells','deletecaption':'DeleteCaption','inserttitle':'InsertTitle',
         'mergecells':'MergeCells', 'deletetable':'DeleteTable', 'cleardoc':'Clear', 'insertparagraphbeforetable':"InsertParagraphBeforeTable",
-        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph', 'insertimage':'Image','edittable':'Edit Table', edittd:'Edit Td','link':'Link',
+        'fontfamily':'FontFamily', 'fontsize':'FontSize', 'paragraph':'Paragraph','simpleupload':'Single Image','insertimage':'Multi Image','edittable':'Edit Table', 'edittd':'Edit Td','link':'Link',
         'emotion':'Emotion', 'spechars':'Spechars', 'searchreplace':'SearchReplace', 'map':'BaiduMap', 'gmap':'GoogleMap',
         'insertvideo':'Video', 'help':'Help', 'justifyleft':'JustifyLeft', 'justifyright':'JustifyRight', 'justifycenter':'JustifyCenter',
         'justifyjustify':'Justify', 'forecolor':'FontColor', 'backcolor':'BackColor', 'insertorderedlist':'OL',
@@ -24,7 +24,7 @@ UE.I18N['en'] = {
         'rowspacingtop':'RowSpacingTop', 'rowspacingbottom':'RowSpacingBottom', 'pagebreak':'PageBreak', 'insertframe':'Iframe', 'imagenone':'Default',
         'imageleft':'ImageLeft', 'imageright':'ImageRight', 'attachment':'Attachment', 'imagecenter':'ImageCenter', 'wordimage':'WordImage',
         'lineheight':'LineHeight','edittip':'EditTip','customstyle':'CustomStyle', 'scrawl':'Scrawl', 'autotypeset':'AutoTypeset',
-        'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background',inserttable:'InsertTable',
+        'webapp':'WebAPP', 'touppercase':'UpperCase', 'tolowercase':'LowerCase','template':'Template','background':'Background','inserttable':'InsertTable',
         'music':'Music', 'charts': 'charts','drafts': 'Load from Drafts'
     },
     'insertorderedlist':{
@@ -69,6 +69,7 @@ UE.I18N['en'] = {
     },
     'autoupload': {
         'exceedSizeError': 'File Size Exceed',
+        'exceedTypeError': 'File Type Not Allow',
         'jsonEncodeError': 'Server Return Format Error',
         'loading':"loading...",
         'loadError':"load error"
@@ -387,8 +388,25 @@ UE.I18N['en'] = {
         'failCheck':'Authentication fails, the upload is skipped!',
         'fileCanceling':'Cancel, please wait...',
         'stopUploading':'Upload has stopped...',
+
+        'uploadSelectFile':'Select File',
+        'uploadAddFile':'Add File',
+        'uploadStart':'Start Upload',
+        'uploadPause':'Pause Upload',
+        'uploadContinue':'Continue Upload',
+        'uploadRetry':'Retry Upload',
+        'uploadDelete':'Delete',
+        'uploadTurnLeft':'Turn Left',
+        'uploadTurnRight':'Turn Right',
+        'uploadPreview':'Doing Preview',
+        'updateStatusReady': 'Selected _ files, total _KB.',
+        'updateStatusConfirm': '_ uploaded successfully and _ upload failed',
+        'updateStatusFinish': 'Total _ files (_KB), _  uploaded successfully',
+        'updateStatusError': ' and _ upload failed',
         'errorExceedSize':'File Size Exceed',
+        'errorFileType':'File Type Not Allow',
         'errorInterrupt':'File Upload Interrupted',
+        'errorUploadRetry':'Upload Error, Please Retry.',
         'errorHttp':'Http Error',
         'errorServerUpload':'Server Result Error.'
     },
@@ -488,7 +506,6 @@ UE.I18N['en'] = {
         'static':{
             'lang_input_about':'About',
             'lang_input_shortcuts':'Shortcuts',
-            'lang_input_version':'Version:1.3.6',
             'lang_input_introduction':"UEditor is developed by Baidu Co.ltd.  It is lightweight, customizable , focusing on user experience and etc. , UEditor is based on open source BSD license , allowing free use and redistribution.",
             'lang_Txt_shortcuts':'Shortcuts',
             'lang_Txt_func':'Function',
