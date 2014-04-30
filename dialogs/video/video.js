@@ -697,7 +697,7 @@
                     case 'startUpload':
                         /* 添加额外的GET参数 */
                         var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
-                            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
                         uploader.option('server', url);
                         setState('uploading', files);
                         break;

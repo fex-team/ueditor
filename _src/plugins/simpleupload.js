@@ -72,7 +72,7 @@ UE.plugin.register('simpleupload', function (){
                 }
             }
             domUtils.on(iframe, 'load', callback);
-            form.action = imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params;
+            form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
             form.submit();
         });
     }
