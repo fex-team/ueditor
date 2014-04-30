@@ -188,6 +188,7 @@ a.progressCancel:hover { background-position: 0 0; }
     color: #cccccc;
     font-size: 18px;
     position: relative;
+    top:0;
 }
 
 #upload_left .placeholder .webuploader-pick {
