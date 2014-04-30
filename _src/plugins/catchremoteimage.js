@@ -30,6 +30,9 @@ UE.plugins['catchremoteimage'] = function () {
         var remoteImages = [],
             imgs = domUtils.getElementsByTagName(me.document, "img"),
             test = function (src, urls) {
+                if (src.indexOf(location.host) == -1 || /(^\.)|(^\/)/.test(src)) {
+                    return true;
+                }
                 if (urls) {
                     for (var j = 0, url; url = urls[j++];) {
                         if (src.indexOf(url) !== -1) {
