@@ -275,12 +275,18 @@
                     'action': 'config'
                 },
                 'onsuccess':function(xhr){
-                    var config = eval("("+xhr.responseText+")");
-                    utils.extend(me.options, config);
-                    me.fireEvent('serverConfigLoaded');
-                    me._serverConfigLoaded = true;
+                    try {
+                        var config = eval("("+xhr.responseText+")");
+                        utils.extend(me.options, config);
+                        me.fireEvent('serverConfigLoaded');
+                        me._serverConfigLoaded = true;
+                    } catch (e) {
+                        console.error('后台配置项返回出错!');
+                    }
                 },
-                'onerror':function(){}
+                'onerror':function(){
+                    console.error('获取后台配置项出错!');
+                }
             });
         } catch(e){
             console.log('Get Server Config Error!');
