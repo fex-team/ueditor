@@ -1568,7 +1568,8 @@
             }
 
             if(serverUrl) {
-                return serverUrl + (serverUrl.indexOf('?') ? '?':'&') + 'action=' + actionName;
+                serverUrl = serverUrl + (serverUrl.indexOf('?') ? '?':'&') + 'action=' + actionName;
+                return utils.formatUrl(serverUrl);
             } else {
                 return '';
             }

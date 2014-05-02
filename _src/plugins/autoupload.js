@@ -79,7 +79,7 @@ UE.plugin.register('autoupload', function (){
         var xhr = new XMLHttpRequest(),
             fd = new FormData(),
             params = utils.serializeParam(me.queryCommandValue('serverparam')) || '',
-            url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
 
         fd.append(fieldName, file, file.name || ('blob.' + file.type.substr('image/'.length)));
         fd.append('type', 'ajax');

@@ -981,6 +981,12 @@ var utils = UE.utils = {
         }
         return strArr.join("&");
     },
+    formatUrl:function (url) {
+        var u = url.replace(/&&/g, '&');
+        u = u.replace(/\?&/g, '?');
+        u = u.replace(/&$/g, '');
+        return u;
+    },
     clearEmptyAttrs : function(obj){
         for(var p in obj){
             if(obj[p] === ''){
