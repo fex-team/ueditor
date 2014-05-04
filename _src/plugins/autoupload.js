@@ -39,6 +39,7 @@ UE.plugin.register('autoupload', function (){
                 if (loader) {
                     loader.setAttribute('src', link);
                     loader.setAttribute('_src', link);
+                    loader.removeAttribute('title');
                     domUtils.removeClasses(loader, 'loadingclass');
                 }
             };
