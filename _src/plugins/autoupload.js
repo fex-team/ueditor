@@ -40,6 +40,7 @@ UE.plugin.register('autoupload', function (){
                     loader.setAttribute('src', link);
                     loader.setAttribute('_src', link);
                     loader.removeAttribute('title');
+                    loader.removeAttribute('id');
                     domUtils.removeClasses(loader, 'loadingclass');
                 }
             };
