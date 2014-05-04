@@ -261,7 +261,6 @@ UE.I18N['zh-cn'] = {
             'lang_input_align':'图片浮动方式：',
             'lang_imgLoading':"　图片加载中……",
             'lang_start_upload':"开始上传",
-            'lang_drop_remind':"可以将照片拖到这里，单次最多可选300张",
             'lock':{'title':"锁定宽高比例"}, //属性
             'searchType':{'title':"图片类型", 'options':["新闻", "壁纸", "表情", "头像"]}, //select的option
             'searchTxt':{'value':"请输入搜索关键词"},

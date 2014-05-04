@@ -364,8 +364,6 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
-                dnd: '#dndArea',
-                paste: $queue,
                 accept: {
                     title: 'Images',
                     extensions: acceptExtensions,
