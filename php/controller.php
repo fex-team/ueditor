@@ -4,7 +4,7 @@ date_default_timezone_set("Asia/chongqing");
 header("Content-Type: text/html; charset=utf-8");
 error_reporting(E_ERROR | E_WARNING);
 
-$CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//g", "\n", file_get_contents("config.json")), true);
+$CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("config.json")), true);
 $action = $_GET['action'];
 
 switch ($action) {
