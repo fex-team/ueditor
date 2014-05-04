@@ -7,7 +7,7 @@
  */
 include "Uploader.class.php";
 date_default_timezone_set("Asia/chongqing");
-header("Content-Type: text/html; charset=utf-8");
+header("Content-Type: text/plain; charset=utf-8");
 error_reporting(E_ERROR | E_WARNING);
 
 /* 判断类型 */
@@ -38,7 +38,7 @@ $files = getfiles($path, $allowFiles);
 if (!count($files)) {
     return json_encode(array(
         "state" => "no match file",
-        "list" => [],
+        "list" => array(),
         "start" => $start,
         "total" => count($files)
     ));
