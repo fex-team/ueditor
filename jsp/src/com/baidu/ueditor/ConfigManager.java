@@ -37,8 +37,8 @@ public final class ConfigManager {
 	 */
 	private ConfigManager ( String rootPath, String contextPath, String uri ) throws FileNotFoundException, IOException {
 		
-		this.rootPath = rootPath;
-		this.originalPath = rootPath + uri.substring( contextPath.length() );
+		this.rootPath = rootPath.substring( 0, rootPath.length() - contextPath.length() );
+		this.originalPath = rootPath + uri;
 		
 		this.initEnv();
 		
@@ -190,7 +190,7 @@ public final class ConfigManager {
 			String tmpContent = null;
 			
 			while ( ( tmpContent = bfReader.readLine() ) != null ) {
-				builder.append( tmpContent.replaceFirst( "//[\\S\\s]*$", "" ) );
+				builder.append( tmpContent );
 			}
 			
 			bfReader.close();
@@ -206,7 +206,7 @@ public final class ConfigManager {
 	// 过滤输入字符串, 剔除多行注释以及替换掉反斜杠
 	private String filter ( String input ) {
 		
-		return input.replaceAll( "/\\*[\\s\\S]*?\\*/", "" ).replaceAll( "\\/", "/" );
+		return input.replaceAll( "/\\*[\\s\\S]*?\\*/", "" );
 		
 	}
 	
