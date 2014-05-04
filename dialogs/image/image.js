@@ -364,8 +364,6 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
-                dnd: '#dndArea',
-                paste: $queue,
                 accept: {
                     title: 'Images',
                     extensions: acceptExtensions,
@@ -662,16 +660,8 @@
             });
 
             uploader.on('filesQueued', function (file) {
-                if (!uploader.isInProgress() && (state == 'pedding' || state == 'finish' || state == 'confirm')) {
+                if (!uploader.isInProgress() && (state == 'pedding' || state == 'finish' || state == 'confirm' || state == 'ready')) {
                     setState('ready');
-                } else if (!_this.getQueueCount()) {
-                    setState('finish');
-                } else if (state == 'ready') {
-                    if (!_this.getQueueCount()) {
-                        $upload.addClass('disabled');
-                    } else {
-                        $upload.removeClass('disabled');
-                    }
                 }
                 updateTotalProgress();
             });
