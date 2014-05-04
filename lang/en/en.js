@@ -259,7 +259,6 @@ UE.I18N['en'] = {
             'lang_input_align':'Image Float Style:',
             'lang_imgLoading':"Loading...",
             'lang_start_upload':"Start Upload",
-            'lang_drop_remind':"You can drop photos here, a single maximum of 300 pieces",
             'lock':{'title':"Lock rate"},
             'searchType':{'title':"ImageType", 'options':["News", "Wallpaper", "emotions", "photo"]},
             'searchTxt':{'value':"Enter the search keyword!"},
