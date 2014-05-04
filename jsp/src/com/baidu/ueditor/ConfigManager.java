@@ -24,6 +24,7 @@ public final class ConfigManager {
 
 	private final String rootPath;
 	private final String originalPath;
+	private final String contextPath;
 	private static final String configFileName = "config.json";
 	private String parentPath = null;
 	private JSONObject jsonConfig = null;
@@ -38,7 +39,8 @@ public final class ConfigManager {
 	private ConfigManager ( String rootPath, String contextPath, String uri ) throws FileNotFoundException, IOException {
 		
 		this.rootPath = rootPath.substring( 0, rootPath.length() - contextPath.length() );
-		this.originalPath = rootPath + uri;
+		this.contextPath = contextPath;
+		this.originalPath = this.rootPath + uri;
 		
 		this.initEnv();
 		
