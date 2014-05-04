@@ -54,6 +54,7 @@ UE.plugin.register('simpleupload', function (){
                         loader.setAttribute('src', link);
                         loader.setAttribute('_src', link);
                         loader.removeAttribute('title');
+                        loader.removeAttribute('id');
                         domUtils.removeClasses(loader, 'loadingclass');
                     } else {
                         showErrorLoader && showErrorLoader(json.state);
