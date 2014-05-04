@@ -397,7 +397,12 @@
 
                 //销毁content
                 var content = this.getDom('content');
-                content && domUtils.remove(content);
+                var iframe = this.getDom('iframe');
+                if (content && iframe) {
+                    var doc = iframe.contentDocument || iframe.contentWindow.document;
+                    doc && (doc.body.innerHTML = '');
+                    domUtils.remove(content);
+                }
             }
         }
     };
