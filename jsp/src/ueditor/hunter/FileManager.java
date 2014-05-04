@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
+import com.baidu.ueditor.PathFormat;
 import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.MultiState;
@@ -22,7 +23,7 @@ public class FileManager {
 		
 		this.dir = (String)conf.get("rootPath") + conf.get( "dir" );
 		this.allowFiles = this.getAllowFiles( conf.get("allowFiles") );
-		this.count = (int)conf.get( "count" );
+		this.count = (Integer)conf.get( "count" );
 		
 	}
 	
@@ -68,7 +69,7 @@ public class FileManager {
 			}
 			file = (File)obj;
 			fileState = new BaseState( true );
-			fileState.putInfo( "url", this.getPath( file ) );
+			fileState.putInfo( "url", PathFormat.format( this.getPath( file ) ) );
 			state.addState( fileState );
 		}
 		

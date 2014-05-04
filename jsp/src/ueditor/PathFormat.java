@@ -38,6 +38,17 @@ public class PathFormat {
 		
 		return sb.toString();
 	}
+	
+	/**
+	 * 格式化路径, 把windows路径替换成标准路径
+	 * @param input 待格式化的路径
+	 * @return 格式化后的路径
+	 */
+	public static String format ( String input ) {
+		
+		return input.replace( "\\", "/" );
+		
+	}
 
 	public static String parse ( String input, String filename ) {
 	
@@ -53,7 +64,7 @@ public class PathFormat {
 			
 			matchStr = matcher.group( 1 );
 			if ( matchStr.indexOf( "filename" ) != -1 ) {
-				filename = filename.replace( "$", "\\$" );
+				filename = filename.replace( "$", "\\$" ).replaceAll( "[\\/:*?\"<>|]", "" );
 				matcher.appendReplacement(sb, filename );
 			} else {
 				matcher.appendReplacement(sb, PathFormat.getString( matchStr ) );
