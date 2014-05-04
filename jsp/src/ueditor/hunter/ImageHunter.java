@@ -34,7 +34,7 @@ public class ImageHunter {
 		this.filename = (String)conf.get( "filename" );
 		this.savePath = (String)conf.get( "savePath" );
 		this.rootPath = (String)conf.get( "rootPath" );
-		this.maxSize = (long)conf.get( "maxSize" );
+		this.maxSize = (Long)conf.get( "maxSize" );
 		this.allowTypes = Arrays.asList( (String[])conf.get( "allowFiles" ) );
 		this.filters = Arrays.asList( (String[])conf.get( "filter" ) );
 		
@@ -90,7 +90,7 @@ public class ImageHunter {
 			State state = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath );
 			
 			if ( state.isSuccess() ) {
-				state.putInfo( "url", savePath );
+				state.putInfo( "url", PathFormat.format( savePath ) );
 				state.putInfo( "source", urlStr );
 			}
 			
