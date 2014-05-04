@@ -16,12 +16,14 @@ import com.baidu.ueditor.define.State;
 public class FileManager {
 
 	private String dir = null;
+	private String rootPath = null;
 	private String[] allowFiles = null;
 	private int count = 0;
 	
 	public FileManager ( Map<String, Object> conf ) {
-		
-		this.dir = (String)conf.get("rootPath") + conf.get( "dir" );
+
+		this.rootPath = (String)conf.get( "rootPath" );
+		this.dir = this.rootPath + (String)conf.get( "dir" );
 		this.allowFiles = this.getAllowFiles( conf.get("allowFiles") );
 		this.count = (Integer)conf.get( "count" );
 		
@@ -80,9 +82,8 @@ public class FileManager {
 	private String getPath ( File file ) {
 		
 		String path = file.getAbsolutePath();
-		String dirPathStr = new File( this.dir ).getAbsolutePath();
 		
-		return path.replace( dirPathStr, "" );
+		return path.replace( this.rootPath, "" );
 		
 	}
 	
