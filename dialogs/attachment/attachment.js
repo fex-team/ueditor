@@ -718,7 +718,7 @@
                     var url = lis[i].getAttribute('data-url');
                     list.push({
                         title: url.substr(url.lastIndexOf('/') + 1),
-                        url: prefix + url
+                        url: url
                     });
                 }
             }

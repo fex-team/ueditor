@@ -171,7 +171,11 @@ Class AspJSON
 
     Public Function PrintJson
         Response.AddHeader "Content-Type", "application/json"
-        Response.Write JSONoutput()
+        If IsEmpty(Request.Item("callback")) Then
+            Response.Write JSONoutput()
+        Else
+            Response.Write Request.Item("callback") & "(" & JSONoutput() & ")"
+        End If
     End Function
 
 	Private Function GetDict(objDict)

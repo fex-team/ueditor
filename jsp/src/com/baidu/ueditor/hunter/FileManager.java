@@ -83,7 +83,7 @@ public class FileManager {
 		
 		String path = file.getAbsolutePath();
 		
-		return path.replace( this.rootPath, "" );
+		return path.replace( this.rootPath, "/" );
 		
 	}
 	

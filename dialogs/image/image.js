@@ -57,7 +57,6 @@
             case 'upload':
                 setAlign(editor.getOpt('imageInsertAlign'));
                 uploadImage = uploadImage || new UploadImage('queueList');
-                uploadImage.refresh();
                 break;
             case 'online':
                 setAlign(editor.getOpt('imageManagerInsertAlign'));
@@ -300,13 +299,6 @@
         },
         initContainer: function () {
             this.$queue = this.$wrap.find('.filelist');
-        },
-        refresh: function(){
-            var _this = this;
-            setTimeout(function(){
-                _this.uploader.refresh();
-            }, 100);
-            console.log('refresh');
         },
         /* 初始化容器 */
         initUploader: function () {
@@ -743,6 +735,9 @@
                 if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
             }
             return readyFile;
+        },
+        destroy: function () {
+            this.$wrap.remove();
         },
         getInsertList: function () {
             var i, data, list = [],
