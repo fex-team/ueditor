@@ -12,7 +12,7 @@
 
     Set commentPattern = new RegExp
     commentPattern.Multiline = true
-    commentPattern.Pattern = "//[\s\S]+?$"
+    commentPattern.Pattern = "/\*[\s\S]+?\*/"
     commentPattern.Global = true
     content = commentPattern.Replace(content, "")
     json.loadJSON( content )
