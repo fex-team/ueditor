@@ -220,8 +220,11 @@ var scrawl = function (options) {
             });
         },
         _addAddImgListener:function () {
-            var doc = document,
-                file = $G("J_imgTxt");
+            var file = $G("J_imgTxt");
+            if (!window.FileReader) {
+                $G("J_addImg").style.display = 'none';
+                $G("J_removeImg").style.display = 'none';
+            }
             domUtils.on(file, "change", function (e) {
                 var frm = file.parentNode;
                 addMaskLayer(lang.backgroundUploading);
@@ -229,7 +232,8 @@ var scrawl = function (options) {
                 var target = e.target || e.srcElement,
                     reader = new FileReader();
                 reader.onload = function(evt){
-                    ue_callback(this.result, 'SUCCESS');
+                    var target = evt.target || evt.srcElement;
+                    ue_callback(target.result, 'SUCCESS');
                 };
                 reader.readAsDataURL(target.files[0]);
                 frm.reset();
