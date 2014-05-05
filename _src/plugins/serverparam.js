@@ -87,7 +87,7 @@ UE.plugin.register('serverparam', function (){
                     if (key === undefined || key === null) { //不传参数,清空列表
                         serverParam = {};
                     } else if (utils.isString(key)) { //传入键值
-                        if(key === undefined || key === null) {
+                        if(value === undefined || value === null) {
                             delete serverParam[key];
                         } else {
                             serverParam[key] = value;

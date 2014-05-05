@@ -8,9 +8,8 @@ UE.plugin.register('simpleupload', function (){
     var me = this,
         uploadInput;
 
-    function initUploadBtn(){
-        var container = me.container,
-            wrapper = document.createElement('form'),
+    function initUploadBtn(container){
+        var wrapper = document.createElement('form'),
             form = document.createElement('form'),
             input = uploadInput = document.createElement('input'),
             iframe = document.createElement('iframe'),
@@ -20,7 +19,8 @@ UE.plugin.register('simpleupload', function (){
         input.type = 'file';
         input.accept = 'image/*';
         input.name = me.options.imageFieldName;
-        input.style.cssText = 'display:none;width:0px;height:0px;border:0;margin:0;padding:0;position:absolute;';
+        input.style.cssText = 'background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;' +
+            'position:absolute;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;';
 
         iframe.name = iframe.id = iframeId;
         iframe.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
@@ -29,7 +29,7 @@ UE.plugin.register('simpleupload', function (){
         form.method = 'POST';
         form.enctype = 'multipart/form-data';
         form.action = imageActionUrl;
-        form.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
+        form.style.cssText = 'display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;';
 
         wrapper.className = 'edui-' + me.options.theme;
         wrapper.id = me.ui.id + '_iframeupload';
@@ -53,6 +53,8 @@ UE.plugin.register('simpleupload', function (){
                         loader = me.document.getElementById(loadingId);
                         loader.setAttribute('src', link);
                         loader.setAttribute('_src', link);
+                        loader.removeAttribute('title');
+                        loader.removeAttribute('id');
                         domUtils.removeClasses(loader, 'loadingclass');
                     } else {
                         showErrorLoader && showErrorLoader(json.state);
@@ -74,25 +76,27 @@ UE.plugin.register('simpleupload', function (){
             domUtils.on(iframe, 'load', callback);
             form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
             form.submit();
+            me.focus();
         });
     }
 
     return {
         bindEvents:{
-            /* 初始化简单上传按钮 */
-            'ready': function(){
+            'ready': function() {
                 //设置loading的样式
                 utils.cssRule('loading',
                     '.loadingclass{display:inline-block;cursor:default;background: url(\''
-                        + this.options.themePath
-                        + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;}\n' +
-                        '.loaderrorclass{display:inline-block;cursor:default;background: url(\''
-                        + this.options.themePath
-                        + this.options.theme +'/images/loaderror.png\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;' +
-                        '}',
+                    + this.options.themePath
+                    + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;}\n' +
+                    '.loaderrorclass{display:inline-block;cursor:default;background: url(\''
+                    + this.options.themePath
+                    + this.options.theme +'/images/loaderror.png\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;' +
+                    '}',
                     this.document);
-
-                initUploadBtn();
+            },
+            /* 初始化简单上传按钮 */
+            'simpleuploadbtnready': function(type, container) {
+                initUploadBtn(container);
             }
         },
         outputRule: function(root){

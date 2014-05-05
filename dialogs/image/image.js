@@ -57,7 +57,6 @@
             case 'upload':
                 setAlign(editor.getOpt('imageInsertAlign'));
                 uploadImage = uploadImage || new UploadImage('queueList');
-                uploadImage.refresh();
                 break;
             case 'online':
                 setAlign(editor.getOpt('imageManagerInsertAlign'));
@@ -301,13 +300,6 @@
         initContainer: function () {
             this.$queue = this.$wrap.find('.filelist');
         },
-        refresh: function(){
-            var _this = this;
-            setTimeout(function(){
-                _this.uploader.refresh();
-            }, 100);
-            console.log('refresh');
-        },
         /* 初始化容器 */
         initUploader: function () {
             var _this = this,
@@ -364,8 +356,6 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
-                dnd: '#dndArea',
-                paste: $queue,
                 accept: {
                     title: 'Images',
                     extensions: acceptExtensions,
@@ -662,16 +652,8 @@
             });
 
             uploader.on('filesQueued', function (file) {
-                if (!uploader.isInProgress() && (state == 'pedding' || state == 'finish' || state == 'confirm')) {
+                if (!uploader.isInProgress() && (state == 'pedding' || state == 'finish' || state == 'confirm' || state == 'ready')) {
                     setState('ready');
-                } else if (!_this.getQueueCount()) {
-                    setState('finish');
-                } else if (state == 'ready') {
-                    if (!_this.getQueueCount()) {
-                        $upload.addClass('disabled');
-                    } else {
-                        $upload.removeClass('disabled');
-                    }
                 }
                 updateTotalProgress();
             });
@@ -753,6 +735,9 @@
                 if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
             }
             return readyFile;
+        },
+        destroy: function () {
+            this.$wrap.remove();
         },
         getInsertList: function () {
             var i, data, list = [],

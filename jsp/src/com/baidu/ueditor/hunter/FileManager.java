@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
+import com.baidu.ueditor.PathFormat;
 import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.MultiState;
@@ -15,14 +16,16 @@ import com.baidu.ueditor.define.State;
 public class FileManager {
 
 	private String dir = null;
+	private String rootPath = null;
 	private String[] allowFiles = null;
 	private int count = 0;
 	
 	public FileManager ( Map<String, Object> conf ) {
-		
-		this.dir = (String)conf.get("rootPath") + conf.get( "dir" );
+
+		this.rootPath = (String)conf.get( "rootPath" );
+		this.dir = this.rootPath + (String)conf.get( "dir" );
 		this.allowFiles = this.getAllowFiles( conf.get("allowFiles") );
-		this.count = (int)conf.get( "count" );
+		this.count = (Integer)conf.get( "count" );
 		
 	}
 	
@@ -68,7 +71,7 @@ public class FileManager {
 			}
 			file = (File)obj;
 			fileState = new BaseState( true );
-			fileState.putInfo( "url", this.getPath( file ) );
+			fileState.putInfo( "url", PathFormat.format( this.getPath( file ) ) );
 			state.addState( fileState );
 		}
 		
@@ -79,9 +82,8 @@ public class FileManager {
 	private String getPath ( File file ) {
 		
 		String path = file.getAbsolutePath();
-		String dirPathStr = new File( this.dir ).getAbsolutePath();
 		
-		return path.replace( dirPathStr, "" );
+		return path.replace( this.rootPath, "/" );
 		
 	}
 	
