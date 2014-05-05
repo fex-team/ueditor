@@ -175,6 +175,7 @@ Class AspJSON
             Response.Write JSONoutput()
         Else
             Response.Write Request.Item("callback") & "(" & JSONoutput() & ")"
+        End If
     End Function
 
 	Private Function GetDict(objDict)
