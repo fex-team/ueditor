@@ -1366,24 +1366,27 @@ UE.plugins['table'] = function () {
             singleClickState = 0;
             dragLine = me.document.getElementById('ue_tableDragLine');
 
-            var dragTdPos = domUtils.getXY(dragTd),
-                dragLinePos = domUtils.getXY(dragLine);
+            // trace 3973
+            if (dragLine) {
+                var dragTdPos = domUtils.getXY(dragTd),
+                    dragLinePos = domUtils.getXY(dragLine);
 
-            switch (onDrag) {
-                case "h":
-                    changeColWidth(dragTd, dragLinePos.x - dragTdPos.x);
-                    break;
-                case "v":
-                    changeRowHeight(dragTd, dragLinePos.y - dragTdPos.y - dragTd.offsetHeight);
-                    break;
-                default:
+                switch (onDrag) {
+                    case "h":
+                        changeColWidth(dragTd, dragLinePos.x - dragTdPos.x);
+                        break;
+                    case "v":
+                        changeRowHeight(dragTd, dragLinePos.y - dragTdPos.y - dragTd.offsetHeight);
+                        break;
+                    default:
+                }
+                onDrag = "";
+                dragTd = null;
+
+                hideDragLine(me);
+                me.fireEvent('saveScene');
+                return;
             }
-            onDrag = "";
-            dragTd = null;
-
-            hideDragLine(me);
-            me.fireEvent('saveScene');
-            return;
         }
         //正常状态下的mouseup
         if (!startTd) {
