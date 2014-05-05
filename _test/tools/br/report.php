@@ -105,7 +105,7 @@ function report()
             //FROM php.net, You cannot simply overwrite $textContent, to replace the text content of a DOMNode, as the missing readonly flag suggests.
             $kiss = join(".", split("/", $key));
             //                $failinfo->appendChild( new DOMText( $value ) );
-            $failinfo->appendChild(new DOMText("<a href=\"http://10.48.31.90:8089/ueditor_git/_test/tools/br/run.php?case=$kiss\">run</a>"));
+            $failinfo->appendChild(new DOMText("<a href=\"http://10.48.31.90:8089/ueditor/_test/tools/br/run.php?case=$kiss\">run</a>"));
         }
         //TODO add more case info in xml
     }
