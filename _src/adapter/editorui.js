@@ -823,8 +823,7 @@
 
     /* 简单上传插件 */
     editorui["simpleupload"] = function (editor) {
-        var uploadInput,
-            name = 'simpleupload',
+        var name = 'simpleupload',
             ui = new editorui.Button({
                 className:'edui-for-' + name,
                 title:editor.options.labelMap[name] || editor.getLang("labelMap." + name) || '',
@@ -837,6 +836,18 @@
             var b = ui.getDom('body'),
                 iconSpan = b.children[0];
             editor.fireEvent('simpleuploadbtnready', iconSpan);
+        });
+        editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
+            var state = editor.queryCommandState(name);
+            if (state == -1) {
+                ui.setDisabled(true);
+                ui.setChecked(false);
+            } else {
+                if (!uiReady) {
+                    ui.setDisabled(false);
+                    ui.setChecked(state);
+                }
+            }
         });
         return ui;
     };
