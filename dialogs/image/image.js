@@ -730,9 +730,10 @@
             updateTotalProgress();
         },
         getQueueCount: function () {
-            var file, i, readyFile = 0, files = this.uploader.getFiles();
+            var file, i, status, readyFile = 0, files = this.uploader.getFiles();
             for (i = 0; file = files[i++]; ) {
-                if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
+                status = file.getStatus();
+                if (status == 'queued' || status == 'uploading' || status == 'progress') readyFile++;
             }
             return readyFile;
         },
