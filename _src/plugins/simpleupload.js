@@ -5,47 +5,55 @@
  * @date 2014-03-31
  */
 UE.plugin.register('simpleupload', function (){
-    var me = this,
-        uploadInput;
+    var me = this;
 
     function initUploadBtn(container){
-        var wrapper = document.createElement('form'),
-            form = document.createElement('form'),
-            input = uploadInput = document.createElement('input'),
-            iframe = document.createElement('iframe'),
-            iframeId = 'edui_iframe_' + (+new Date()).toString(36),
+        var timestrap = (+new Date()).toString(36),
+            doc = container.ownerDocument,
+            wrapper = document.createElement('div'),
             imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
 
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.name = me.options.imageFieldName;
-        input.style.cssText = 'background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;' +
-            'position:absolute;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;';
-
-        iframe.name = iframe.id = iframeId;
-        iframe.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
-
-        form.target = iframeId;
-        form.method = 'POST';
-        form.enctype = 'multipart/form-data';
-        form.action = imageActionUrl;
-        form.style.cssText = 'display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;';
+        wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + imageActionUrl + '" ' +
+            'style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;">' +
+        '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
+            'style="background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;">' +
+        '</form>' +
+        '<iframe id="edui_iframe_' + timestrap + '" name="edui_iframe_' + timestrap + '" ' +
+            'style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>';
 
         wrapper.className = 'edui-' + me.options.theme;
         wrapper.id = me.ui.id + '_iframeupload';
+        container.appendChild(wrapper);
 
-        form.appendChild(input);
-        form.appendChild(iframe);
-        wrapper.appendChild(form);
-        container.appendChild(form);
+        var form = doc.getElementById('edui_form_' + timestrap);
+        var input = doc.getElementById('edui_input_' + timestrap);
+        var iframe = doc.getElementById('edui_iframe_' + timestrap);
+
+        var stateTimer;
+        me.addListener('selectionchange', function () {
+            clearTimeout(stateTimer);
+            stateTimer = setTimeout(function() {
+                var state = me.queryCommandState('simpleupload');
+                if (state == -1) {
+                    input.disabled = 'disabled';
+                } else {
+                    input.disabled = false;
+                }
+            }, 400);
+        });
 
         domUtils.on(input, 'change', function(){
+            if(!input.value) return;
             var loadingId = 'loading_' + (+new Date()).toString(36);
             var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
+
+            me.focus();
             me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
 
             function callback(){
-                var link, json, loader, body = (iframe.contentDocument || iframe.contentWindow.contentDocument).body, result = body.innerText || body.textContent || '';
+                var link, json, loader,
+                    body = (iframe.contentDocument || iframe.contentWindow.document).body,
+                    result = body.innerText || body.textContent || '';
                 try{
                     json = (new Function("return " + result))();
                     link = me.options.imageUrlPrefix + json.url;
@@ -62,7 +70,7 @@ UE.plugin.register('simpleupload', function (){
                 }catch(er){
                     showErrorLoader && showErrorLoader(me.getLang('simpleupload.loadError'));
                 }
-                input.value = '';
+                input.setAttribute('value', null);
                 domUtils.un(iframe, 'load', callback);
             }
             function showErrorLoader(title){
@@ -74,9 +82,9 @@ UE.plugin.register('simpleupload', function (){
                 }
             }
             domUtils.on(iframe, 'load', callback);
+
             form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
             form.submit();
-            me.focus();
         });
     }
 
@@ -105,13 +113,6 @@ UE.plugin.register('simpleupload', function (){
                     n.parentNode.removeChild(n);
                 }
             });
-        },
-        commands: {
-            "simpleupload":{
-                execCommand: function(){
-                    uploadInput && uploadInput.click();
-                }
-            }
         }
     }
 });

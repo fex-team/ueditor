@@ -30,9 +30,7 @@ test( 'horizontal_br', function() {//trace 3854
         editor.execCommand( 'horizontal' );
         range = editor.selection.getRange();
         var containger = (ua.browser.ie&&ua.browser.ie<9)?editor.body.getElementsByTagName('li')[0]:editor.body.getElementsByTagName('hr')[0].nextSibling;
-        var offset = ua.browser.webkit?1:((ua.browser.ie&&ua.browser.ie<9)?3:0);
-        if(ua.browser.ie&&ua.browser.ie==11)
-        { offset=1}
+        var offset = (ua.browser.webkit||ua.browser.ie==11)?1:((ua.browser.ie&&ua.browser.ie<9)?3:0);
         if(!ua.browser.opera){
             ua.checkResult( range,containger,containger, offset, offset, true, 'check range' );
         }
