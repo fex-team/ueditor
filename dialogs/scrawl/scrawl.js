@@ -224,6 +224,7 @@ var scrawl = function (options) {
             if (!window.FileReader) {
                 $G("J_addImg").style.display = 'none';
                 $G("J_removeImg").style.display = 'none';
+                $G("J_sacleBoard").style.display = 'none';
             }
             domUtils.on(file, "change", function (e) {
                 var frm = file.parentNode;
