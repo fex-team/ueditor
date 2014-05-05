@@ -158,9 +158,10 @@ test(' trace 3739 trace 1734 range的更新/特殊符号的转换', function () 
 //            range.setStart(editor.body.firstChild,0).collapse(1).select();
             setTimeout(function () {
 //                var label = ua.browser.gecko ? 'html' : 'body';
-                var label = 'html';
+//                var label = 'html';
                 ua.manualDeleteFillData(editor.body);
-                equal(editor.selection.getRange().startContainer.parentNode.parentNode.tagName.toLowerCase(), label, 'range的更新');
+                var sc = (ua.browser.ie==11)?editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase():editor.selection.getRange().startContainer.parentNode.parentNode.tagName.toLowerCase();
+                equal(sc, 'html', 'range的更新');
                 editor.execCommand('source');
                 setTimeout(function () {
                     editor.execCommand('source');
@@ -181,10 +182,11 @@ test('默认插入的占位符', function () {
 });
 
 test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
+    if(ua.browser.ie==11)return;//todo 1.4.0
     var div = document.body.appendChild(document.createElement('div'));
     var editor = te.obj[0];
     editor.render(div);
-    setTimeout(function () {
+    editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
         var body = editor.body;
         editor.setContent('<p><br></p>');
@@ -207,7 +209,7 @@ test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
             document.body.removeChild(div);
             start();
         }, 50);
-    }, 50);
+    });
     stop();
 });
 //TODO 1.2.6

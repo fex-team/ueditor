@@ -50,7 +50,7 @@
             <a href="javascript:void(0)" class="size4">7</a>
         </div>
         <div class="sectionBar">
-            <div class="addImgH">
+            <div id="J_addImg" class="addImgH">
                 <em class="icon"></em>
                 <em class="text"><var id="lang_input_addPic"></var></em>
                 <form method="post" id="fileForm" enctype="multipart/form-data" class="addImgH_form" target="up">

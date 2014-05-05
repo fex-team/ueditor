@@ -36,8 +36,11 @@
             }
             uiUtils.makeUnselectable(box);
         },
-        _onMouseDown: function (){
-            return false;
+        _onMouseDown: function (e){
+            var target = e.target || e.srcElement;
+            if (!(target && target.tagName && (target.tagName.toLowerCase() == 'input' || target.tagName.toLowerCase() == 'object'))) {
+                return false;
+            }
         }
     };
     utils.inherits(Toolbar, UIBase);
