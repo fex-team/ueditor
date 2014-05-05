@@ -39,6 +39,19 @@ UE.plugin.register('simpleupload', function (){
         wrapper.appendChild(form);
         container.appendChild(form);
 
+        var stateTimer;
+        me.addListener('selectionchange', function (type, causeByUi, uiReady) {
+            clearTimeout(stateTimer);
+            stateTimer = setTimeout(function() {
+                var state = me.queryCommandState('simpleupload');
+                if (state == -1) {
+                    input.disabled = 'disabled';
+                } else {
+                    input.disabled = false;
+                }
+            }, 400);
+        });
+
         domUtils.on(input, 'change', function(){
             var loadingId = 'loading_' + (+new Date()).toString(36);
             var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
