@@ -292,11 +292,3 @@
     width: 515px;
     height: 360px;
 }
-
-/*preview-dialog*/
-.edui-default .edui-for-preview .edui-dialog-content {
-    width: 620px;
-    height: 500px;
-    *width: 630px;
-    *height: 570px;
-}
