@@ -892,13 +892,7 @@ test('trace 3165：检查表格中列表tab键', function () {
             tds = body.getElementsByTagName('td');
             range.setStart(tds[5], 0).collapse(1).select();
             range = editor.selection.getRange();
-            if(ua.browser.ie&&ua.browser.ie==11){
-
-                equal(range.startContainer.parentNode.tagName.toLowerCase(), 'tr', 'tab键前光标位于td中');
-            }else{
-                //在非ie11 浏览器中range.startContainer 中多了一个br 所以此时的parentNode为td，而在ie11中range.startContainer.nodeName即为td本身
             equal(range.startContainer.parentNode.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
-            }
             ua.keydown(editor.body, {keyCode:9});
             setTimeout(function () {
                 range = editor.selection.getRange();
