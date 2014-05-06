@@ -26,7 +26,7 @@ test('框选', function () {
                 var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                 var tds = editor.body.getElementsByTagName('td');
                 equal(selectedTds.length, 4, '框选');
-                if (ua.browser.ie && ua.browser.ie >8)
+                if ( ua.browser.ie >8 && ua.browser.ie<11)
                     ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 1, 1, true, '检查选中的range')
                 else
                     ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
@@ -36,7 +36,7 @@ test('框选', function () {
                     var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                     var tds = editor.body.getElementsByTagName('td');
                     equal(selectedTds.length, 4, '右键框选不变');
-                   if (ua.browser.ie && ua.browser.ie >8)
+                    if ( ua.browser.ie >8 && ua.browser.ie<11)
                         ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 1, 1, true, '检查选中的range')
                     else
                         ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
@@ -61,8 +61,8 @@ test('tableDragable-显示和消失', function () {
             var tds = editor.body.getElementsByTagName('td');
             ua.mousemove(editor.body.firstChild);
             var pos = domUtils.getXY(editor.body.firstChild);
-            var select = ua.browser.webkit ? '-webkit-user-select: none;' : ua.browser.gecko ? '-moz-user-select: none;' : '';
-            var html = '<div contenteditable=\"false\" style=\"width:15px;height:15px;background-image:url(' + editor.options.UEDITOR_HOME_URL + 'dialogs/table/dragicon.png);position: absolute;cursor:move;top:' + (pos.y - 15) + 'px;left:' + pos.x + 'px; ' + select + '\"' + (ua.browser.ie ? 'unselectable=\"on\"' : '') + '></div>';
+            var select = ua.browser.webkit ? '-webkit-user-select: none;' : ua.browser.gecko ? '-moz-user-select: none;' : ua.browser.ie ==11?'-ms-user-select: none':'';//-ms-user-select: none
+            var html = '<div contenteditable=\"false\" style=\"width:15px;height:15px;background-image:url(' + editor.options.UEDITOR_HOME_URL + 'dialogs/table/dragicon.png);position: absolute;cursor:move;top:' + (pos.y - 15) + 'px;left:' + pos.x + 'px; ' + select + '\"' + (ua.browser.ie && ua.browser.ie<11 ? 'unselectable=\"on\"' : '') + '></div>';
             setTimeout(function () {
                 var button = editor.body.lastChild;
                 ua.checkSameHtml(button.outerHTML.replace('&quot;', ''), html, 'DragButton显示');
@@ -131,7 +131,7 @@ test('tableDragable-双击', function () {//tableClicked
                     var selectedTds = editor.getUETable(editor.body.firstChild).selectedTds;
                     var tds = editor.body.getElementsByTagName('td');
                     equal(selectedTds.length, 9, '全选');
-                    if (ua.browser.ie && ua.browser.ie > 8)
+                    if (ua.browser.ie > 8 && ua.browser.ie<11)
                         ua.checkResult(editor.selection.getRange(), tds[0].firstChild, tds[0].firstChild, 1, 1, true, '检查选中的range');
                     else
                     ua.checkResult(editor.selection.getRange(), tds[0], tds[0], 0, 0, true, '检查选中的range');
