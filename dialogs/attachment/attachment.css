@@ -3,6 +3,7 @@
 .wrapper {
     zoom: 1;
     width: 630px;
+    *width: 626px;
     height: 380px;
     margin: 0 auto;
     padding: 10px;
@@ -23,27 +24,43 @@
 
 .tabbody .panel {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 0;
+    height: 0;
     background: #fff;
     overflow: hidden;
-    display: block;
-    clip: rect(1px, 1px, 1px, 1px);
+    display: none;
 }
 
 .tabbody .panel.focus {
+    width: 100%;
+    height: 346px;
+    display: block;
+}
+
+/* 上传附件 */
+.tabbody #upload.panel {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    background: #fff;
+    display: block;
+}
+
+.tabbody #upload.panel.focus {
+    width: 100%;
+    height: 346px;
     display: block;
     clip: auto;
 }
 
-/* 上传图片 */
-#container {
-    color: #838383;
-    font-size: 12px;
-}
-
 #upload .queueList {
     margin: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
 }
 
 #upload p {
@@ -51,6 +68,12 @@
 }
 
 .element-invisible {
+    width: 0 !important;
+    height: 0 !important;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
     position: absolute !important;
     clip: rect(1px, 1px, 1px, 1px);
 }
@@ -58,6 +81,7 @@
 #upload .placeholder {
     margin: 10px;
     border: 2px dashed #e6e6e6;
+    _border: 0px dashed #e6e6e6;
     height: 172px;
     padding-top: 150px;
     text-align: center;
@@ -65,6 +89,8 @@
     color: #cccccc;
     font-size: 18px;
     position: relative;
+    top:0;
+    *top: 10px;
 }
 
 #upload .placeholder .webuploader-pick {
@@ -136,8 +162,9 @@
     background: url(./images/bg.png);
     text-align: center;
     margin: 9px 0 0 9px;
+    *margin: 6px 0 0 6px;
     position: relative;
-    display: inline;
+    display: block;
     float: left;
     overflow: hidden;
     font-size: 12px;
@@ -281,6 +308,7 @@
     width: 100%;
     z-index: 200;
     background: url(./images/success.png) no-repeat right bottom;
+    background-image: url(./images/success.gif) \9;
 }
 
 #upload .filelist li.filePickerBlock {
@@ -320,6 +348,7 @@
     text-indent: -9999px;
     overflow: hidden;
     background: url(./images/icons.png) no-repeat;
+    background: url(./images/icons.gif) no-repeat \9;
     margin: 5px 1px 1px;
     cursor: pointer;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -458,8 +487,8 @@
 /* 图片管理样式 */
 #online {
     width: 100%;
-    height: 326px;
-    padding:10px 0;
+    height: 336px;
+    padding: 10px 0 0 0;
 }
 #online #fileList{
     width: 100%;
@@ -480,7 +509,9 @@
     padding: 0;
     width: 113px;
     height: 113px;
-    margin: 9px 0 0 9px;
+    margin: 0 0 9px 9px;
+    *margin: 0 0 6px 6px;
+    background-color: #eee;
     overflow: hidden;
     cursor: pointer;
     position: relative;
@@ -538,6 +569,7 @@
 }
 #online li.selected .icon {
     background-image: url(images/success.png);
+    background-image: url(images/success.gif) \9;
     background-position: 75px 75px;
 }
 #online li.selected .icon:hover {

@@ -214,12 +214,14 @@
                 } else {
                     $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {
-                        if (error || !src) {
-                            $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
-                                '<span class="file-title">' + file.name + '</span>');
+                        if (error || !src || (/^data:/.test(src) && browser.ie && browser.version <= 7)) {
+                            $wrap.text(lang.uploadNoPreview);
                         } else {
-                            var img = $('<img src="' + src + '">');
-                            $wrap.empty().append(img);
+                            var $img = $('<img src="' + src + '">');
+                            $wrap.empty().append($img);
+                            $img.on('error', function () {
+                                $wrap.text(lang.uploadNoPreview);
+                            });
                         }
                     }, thumbnailWidth, thumbnailHeight);
                     percentages[ file.id ] = [ file.size, 0 ];

@@ -25,19 +25,15 @@
         var tabs = $G('tabHeads').children;
         for (var i = 0; i < tabs.length; i++) {
             domUtils.on(tabs[i], "click", function (e) {
-                var target = e.target || e.srcElement;
-                for (var j = 0; j < tabs.length; j++) {
+                var j, bodyId, target = e.target || e.srcElement;
+                for (j = 0; j < tabs.length; j++) {
+                    bodyId = tabs[j].getAttribute('data-content-id');
                     if(tabs[j] == target){
-                        var contentId = tabs[j].getAttribute('data-content-id');
-                        tabs[j].className = "focus";
-                        domUtils.removeClasses($G(tabs[j].getAttribute('data-content-id')), 'element-invisible');
-                        $G(contentId).style.display = "block";
-                        if(contentId == 'upload') {
-                            uploadFile.refresh();
-                        }
+                        domUtils.addClass(tabs[j], 'focus');
+                        domUtils.addClass($G(bodyId), 'focus');
                     }else {
-                        tabs[j].className = "";
-                        domUtils.addClass($G(tabs[j].getAttribute('data-content-id')), 'element-invisible');
+                        domUtils.removeClasses(tabs[j], 'focus');
+                        domUtils.removeClasses($G(bodyId), 'focus');
                     }
                 }
             });
@@ -451,12 +447,14 @@
                             '<span class="file-title">' + file.name + '</span>');
                     } else {
                         uploader.makeThumb(file, function (error, src) {
-                            if (error || !src) {
-                                $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
-                                    '<span class="file-title">' + file.name + '</span>');
+                            if (error || !src || (/^data:/.test(src) && browser.ie && browser.version <= 7)) {
+                                $wrap.text(lang.uploadNoPreview);
                             } else {
-                                var img = $('<img src="' + src + '">');
-                                $wrap.empty().append(img);
+                                var $img = $('<img src="' + src + '">');
+                                $wrap.empty().append($img);
+                                $img.on('error', function () {
+                                    $wrap.text(lang.uploadNoPreview);
+                                });
                             }
                         }, thumbnailWidth, thumbnailHeight);
                     }

@@ -3,6 +3,7 @@
 .wrapper {
     zoom: 1;
     width: 630px;
+    *width: 626px;
     height: 380px;
     margin: 0 auto;
     padding: 10px;
@@ -23,19 +24,18 @@
 
 .tabbody .panel {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 0;
+    height: 0;
     background: #fff;
     overflow: hidden;
-    display: block;
-    clip: rect(1px, 1px, 1px, 1px);
+    display: none;
 }
 
 .tabbody .panel.focus {
+    width: 100%;
+    height: 346px;
     display: block;
-    clip: auto;
 }
-
 
 /* 图片对齐方式 */
 .alignBar{
@@ -64,23 +64,30 @@
     height: 17px;
     margin-right: 3px;
     margin-left: 3px;
-    filter:alpha(Opacity=40);-moz-opacity:0.4;opacity: 0.4;
-    background-image: url(./images/alignicon.png);
-    background-image: url(./images/alignicon.gif) \9;
+    background-image: url(./images/alignicon.jpg);
 }
-.alignBar #alignIcon span.focus{
-    filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;
+.alignBar #alignIcon .none-align{
+    background-position: 0 -18px;
 }
-.alignBar #alignIcon span.none-align{
+.alignBar #alignIcon .left-align{
+    background-position: -20px -18px;
+}
+.alignBar #alignIcon .right-align{
+    background-position: -40px -18px;
+}
+.alignBar #alignIcon .center-align{
+    background-position: -60px -18px;
+}
+.alignBar #alignIcon .none-align.focus{
     background-position: 0 0;
 }
-.alignBar #alignIcon span.left-align{
+.alignBar #alignIcon .left-align.focus{
     background-position: -20px 0;
 }
-.alignBar #alignIcon span.right-align{
+.alignBar #alignIcon .right-align.focus{
     background-position: -40px 0;
 }
-.alignBar #alignIcon span.center-align{
+.alignBar #alignIcon .center-align.focus{
     background-position: -60px 0;
 }
 
@@ -186,13 +193,29 @@
 }
 
 /* 上传图片 */
-#container {
-    color: #838383;
-    font-size: 12px;
+.tabbody #upload.panel {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    background: #fff;
+    display: block;
+}
+
+.tabbody #upload.panel.focus {
+    width: 100%;
+    height: 346px;
+    display: block;
+    clip: auto;
 }
 
 #upload .queueList {
     margin: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
 }
 
 #upload p {
@@ -200,6 +223,12 @@
 }
 
 .element-invisible {
+    width: 0 !important;
+    height: 0 !important;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
     position: absolute !important;
     clip: rect(1px, 1px, 1px, 1px);
 }
@@ -207,6 +236,7 @@
 #upload .placeholder {
     margin: 10px;
     border: 2px dashed #e6e6e6;
+    _border: 0px dashed #e6e6e6;
     height: 172px;
     padding-top: 150px;
     text-align: center;
@@ -214,6 +244,8 @@
     color: #cccccc;
     font-size: 18px;
     position: relative;
+    top:0;
+    *top: 10px;
 }
 
 #upload .placeholder .webuploader-pick {
@@ -285,8 +317,9 @@
     background: url(./images/bg.png);
     text-align: center;
     margin: 9px 0 0 9px;
+    *margin: 6px 0 0 6px;
     position: relative;
-    display: inline;
+    display: block;
     float: left;
     overflow: hidden;
     font-size: 12px;
@@ -421,6 +454,7 @@
     width: 100%;
     z-index: 200;
     background: url(./images/success.png) no-repeat right bottom;
+    background: url(./images/success.gif) no-repeat right bottom \9;
 }
 
 #upload .filelist li.filePickerBlock {
@@ -460,6 +494,7 @@
     text-indent: -9999px;
     overflow: hidden;
     background: url(./images/icons.png) no-repeat;
+    background: url(./images/icons.gif) no-repeat \9;
     margin: 5px 1px 1px;
     cursor: pointer;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -598,8 +633,8 @@
 /* 图片管理样式 */
 #online {
     width: 100%;
-    height: 326px;
-    padding:10px 0;
+    height: 336px;
+    padding: 10px 0 0 0;
 }
 #online #imageList{
     width: 100%;
@@ -620,7 +655,8 @@
     padding: 0;
     width: 113px;
     height: 113px;
-    margin: 9px 0 0 9px;
+    margin: 0 0 9px 9px;
+    *margin: 0 0 6px 6px;
     background-color: #eee;
     overflow: hidden;
     cursor: pointer;
@@ -656,6 +692,7 @@
 }
 #online li.selected .icon {
     background-image: url(images/success.png);
+    background-image: url(images/success.gif)\9;
     background-position: 75px 75px;
 }
 #online li.selected .icon:hover {
@@ -700,18 +737,24 @@
     padding-left: 5px;
     background: #FFF;
     width: 300px;
+    *width: 260px;
     height: 21px;
     line-height: 21px;
+    float: left;
+    dislay: block;
 }
 
 #search .searchType {
     width: 65px;
     height: 28px;
     padding:0;
-    line-height: 22px;
+    line-height: 28px;
     border: 1px solid #d7d7d7;
     border-radius: 0;
     vertical-align: top;
+    margin-left: 5px;
+    float: left;
+    dislay: block;
 }
 
 #search #searchBtn,
@@ -759,9 +802,10 @@
 }
 
 #search .searchList{
+    width: 100%;
     height: 300px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
+    clear: both;
 }
 #search .searchList ul{
     margin:0;
@@ -769,13 +813,17 @@
     list-style:none;
     clear: both;
     width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
     zoom: 1;
 }
 
 #search .searchList li {
     position: relative;
     list-style:none;
-    display: inline-block;
+    float: left;
+    display: block;
     width: 115px;
     margin: 5px 10px 5px 20px;
     padding:0;
@@ -835,4 +883,7 @@
 
 #search .searchList a:hover {
     color: #333;
+}
+#search .searchList .clearFloat{
+    clear: both;
 }
