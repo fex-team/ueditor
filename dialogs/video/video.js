@@ -446,17 +446,21 @@
                         $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
                             '<span class="file-title">' + file.name + '</span>');
                     } else {
-                        uploader.makeThumb(file, function (error, src) {
-                            if (error || !src || (/^data:/.test(src) && browser.ie && browser.version <= 7)) {
-                                $wrap.text(lang.uploadNoPreview);
-                            } else {
-                                var $img = $('<img src="' + src + '">');
-                                $wrap.empty().append($img);
-                                $img.on('error', function () {
+                        if (browser.ie && browser.version <= 7) {
+                            $wrap.text(lang.uploadNoPreview);
+                        } else {
+                            uploader.makeThumb(file, function (error, src) {
+                                if (error || !src || (/^data:/.test(src) && browser.ie && browser.version <= 7)) {
                                     $wrap.text(lang.uploadNoPreview);
-                                });
-                            }
-                        }, thumbnailWidth, thumbnailHeight);
+                                } else {
+                                    var $img = $('<img src="' + src + '">');
+                                    $wrap.empty().append($img);
+                                    $img.on('error', function () {
+                                        $wrap.text(lang.uploadNoPreview);
+                                    });
+                                }
+                            }, thumbnailWidth, thumbnailHeight);
+                        }
                     }
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
