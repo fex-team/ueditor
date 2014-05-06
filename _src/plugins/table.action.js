@@ -557,9 +557,16 @@ UE.plugins['table'] = function () {
 
         me.addListener("mousedown", mouseDownEvent);
         me.addListener("mouseup", mouseUpEvent);
-        //拖动的时候不出发mouseup
+        //拖动的时候触发mouseup
         domUtils.on( me.body, 'dragstart', function( evt ){
             mouseUpEvent.call( me, 'dragstart', evt );
+        });
+        me.addOutputRule(function(root){
+            utils.each(root.getNodesByTagName('div'),function(n){
+                if (n.getAttr('id') == 'ue_tableDragLine') {
+                    n.parentNode.removeChild(n);
+                }
+            });
         });
 
         var currentRowIndex = 0;
