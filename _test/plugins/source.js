@@ -188,13 +188,12 @@ test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
     editor.render(div);
     editor.ready(function () {
         var range = new baidu.editor.dom.Range(editor.document);
-        var body = editor.body;
         editor.setContent('<p><br></p>');
         setTimeout(function () {
-            range.setStart(body.firstChild, 0).collapse(1).select();
+            range.setStart(editor.body.firstChild, 0).collapse(1).select();
             editor.execCommand('pagebreak');
             ua.manualDeleteFillData(editor.body);
-            var pagebreak = body.getElementsByTagName('hr')[0];
+            var pagebreak = editor.body.getElementsByTagName('hr')[0];
 
             if (typeof pagebreak.attributes['class'] == "undefined") {
                 equal(pagebreak.getAttribute('class'), 'pagebreak', 'pagebreak');
