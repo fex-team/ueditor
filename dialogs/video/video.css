@@ -196,6 +196,7 @@ span.view{display: inline-block;width: 30px;float: right;cursor: pointer;color: 
     padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    position: relative;
     height: 285px;
 }
 
