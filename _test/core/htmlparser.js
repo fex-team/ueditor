@@ -194,7 +194,7 @@ test( 'br', function () {
 /*考察标签之间嵌套关系*/
 test( '复杂标签嵌套', function() {
     var root = UE.htmlparser('<span>hello1<p><img>hello2<div>hello3<p>hello4');
-    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<span>hello1</span><p><img/>hello2<div>hello3<p>hello4</p></div></p>');
+    equals(root.toHtml().replace(/[ ]+>/g,'>'),'<span>hello1<p><img/>hello2<div>hello3<p>hello4</p></div></p></span>');
 } );
 
 test( 'trace 1727:过滤超链接后面的空格', function () {

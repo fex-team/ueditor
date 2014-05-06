@@ -38,8 +38,8 @@ test("插入一个webapp",function(){
                 ok(newImg.className ==backImg.className,"源码切换之后占位图片样式类不变");
                 ok(newImg._url ==backImg._url,"源码切换之后占位图片_url数据不变");
                 start();
-        }, 100 );
-    }, 100 );
+        }, 200 );
+    }, 200 );
 
 
 
