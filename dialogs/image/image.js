@@ -429,13 +429,15 @@
                 } else {
                     $wrap.text(lang.uploadPreview);
                     uploader.makeThumb(file, function (error, src) {
-                        if (error || !src) {
+                        if (error || !src || (/^data:/.test(src) && browser.ie && browser.version <= 7)) {
                             $wrap.text(lang.uploadNoPreview);
-                            return;
+                        } else {
+                            var $img = $('<img src="' + src + '">');
+                            $wrap.empty().append($img);
+                            $img.on('error', function () {
+                                $wrap.text(lang.uploadNoPreview);
+                            });
                         }
-
-                        var img = $('<img src="' + src + '">');
-                        $wrap.empty().append(img);
                     }, thumbnailWidth, thumbnailHeight);
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
