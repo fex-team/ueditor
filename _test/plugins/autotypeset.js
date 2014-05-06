@@ -2,15 +2,15 @@ module('plugins.autotypeset');
 
 test('全角半角转换',function(){
     var editor = te.obj[0];
-    editor.setContent('<p>Mayday123,.Ｍａｙｄａｙ１２３，．</p>');
+    editor.setContent('<p><select><option>123</option></select>Mayday123,.Ｍａｙｄａｙ１２３，．</p>');
     var text = editor.getContent();
-    equal(text,'<p>Mayday123,.Ｍａｙｄａｙ１２３，．</p>','半角全角内容输入正确');
+    equal(text,'<p><select><option>123</option></select>Mayday123,.Ｍａｙｄａｙ１２３，．</p>','半角全角内容输入正确');
     editor.execCommand('autotypeset');
     var text2 = editor.body.firstChild.innerHTML;
-    equal(text2,'Mayday123,.Ｍａｙｄａｙ１２３，．','半角全角内容输入正确2');
+    equal(text2,'<select><option>123</option></select>Mayday123,.Ｍａｙｄａｙ１２３，．','半角全角内容输入正确2');
     editor.options.autotypeset.tobdc=true;
     editor.execCommand('autotypeset');
-    equal(editor.body.firstChild.innerHTML,'Ｍａｙｄａｙ１２３，．Ｍａｙｄａｙ１２３，．','内容转为全角：正确');
+    equal(editor.body.firstChild.innerHTML,'<select><option>１２３</option></select>Ｍａｙｄａｙ１２３，．Ｍａｙｄａｙ１２３，．','内容转为全角：正确');
     editor.options.autotypeset.tobdc=false;
     editor.setContent('<p>Mayday123,.Ｍａｙｄａｙ１２３，．</p>');
     editor.options.autotypeset.bdc2sb=true;
