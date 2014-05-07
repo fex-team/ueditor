@@ -47,6 +47,138 @@ UE.ajax = function() {
         return strArr.join("&");
     }
 
+    function doAjax(url, ajaxOptions) {
+        var ajaxRequest = creatAjaxRequest(),
+        //是否超时
+            timeIsOut = false,
+        //默认参数
+            defaultAjaxOptions = {
+                method:"POST",
+                timeout:5000,
+                async:true,
+                data:{},//需要传递对象的话只能覆盖
+                onsuccess:function() {
+                },
+                onerror:function() {
+                }
+            };
+
+        if (typeof url === "object") {
+            ajaxOptions = url;
+            url = ajaxOptions.url;
+        }
+        if (!ajaxRequest || !url) return;
+        var ajaxOpts = ajaxOptions ? utils.extend(defaultAjaxOptions,ajaxOptions) : defaultAjaxOptions;
+
+        var submitStr = json2str(ajaxOpts);  // { name:"Jim",city:"Beijing" } --> "name=Jim&city=Beijing"
+        //如果用户直接通过data参数传递json对象过来，则也要将此json对象转化为字符串
+        if (!utils.isEmptyObject(ajaxOpts.data)){
+            submitStr += (submitStr? "&":"") + json2str(ajaxOpts.data);
+        }
+        //超时检测
+        var timerID = setTimeout(function() {
+            if (ajaxRequest.readyState != 4) {
+                timeIsOut = true;
+                ajaxRequest.abort();
+                clearTimeout(timerID);
+            }
+        }, ajaxOpts.timeout);
+
+        var method = ajaxOpts.method.toUpperCase();
+        var str = url + (url.indexOf("?")==-1?"?":"&") + (method=="POST"?"":submitStr+ "&noCache=" + +new Date);
+        ajaxRequest.open(method, str, ajaxOpts.async);
+        ajaxRequest.onreadystatechange = function() {
+            if (ajaxRequest.readyState == 4) {
+                if (!timeIsOut && ajaxRequest.status == 200) {
+                    ajaxOpts.onsuccess(ajaxRequest);
+                } else {
+                    ajaxOpts.onerror(ajaxRequest);
+                }
+            }
+        };
+        if (method == "POST") {
+            ajaxRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            ajaxRequest.send(submitStr);
+        } else {
+            ajaxRequest.send(null);
+        }
+    }
+
+    function doJsonp(url, opts) {
+
+        var successhandler = opts.onsuccess || function(){},
+            scr = document.createElement('SCRIPT'),
+            options = opts || {},
+            charset = options['charset'],
+            callbackField = options['jsonp'] || 'callback',
+            callbackFnName,
+            timeOut = options['timeOut'] || 0,
+            timer,
+            reg = new RegExp('(\\?|&)' + callbackField + '=([^&]*)'),
+            matches;
+
+        if (utils.isFunction(successhandler)) {
+            callbackFnName = 'bd__editor__' + Math.floor(Math.random() * 2147483648).toString(36);
+            window[callbackFnName] = getCallBack(0);
+        } else if(utils.isString(successhandler)){
+            callbackFnName = successhandler;
+        } else {
+            if (matches = reg.exec(url)) {
+                callbackFnName = matches[2];
+            }
+        }
+
+        url = url.replace(reg, '\x241' + callbackField + '=' + callbackFnName);
+
+        if (url.search(reg) < 0) {
+            url += (url.indexOf('?') < 0 ? '?' : '&') + callbackField + '=' + callbackFnName;
+        }
+
+        if (options.data) {
+            delete options.data['callback'];
+            var queryStr = json2str(options.data);
+            url = url.replace(/\?/, '?' + queryStr + '&');
+        }
+
+        scr.onerror = getCallBack(1);
+        if( timeOut ){
+            timer = setTimeout(getCallBack(1), timeOut);
+        }
+        createScriptTag(scr, url, charset);
+
+        function createScriptTag(scr, url, charset) {
+            scr.setAttribute('type', 'text/javascript');
+            scr.setAttribute('defer', 'defer');
+            charset && scr.setAttribute('charset', charset);
+            scr.setAttribute('src', url);
+            document.getElementsByTagName('head')[0].appendChild(scr);
+        }
+
+        function getCallBack(onTimeOut){
+            return function(){
+                try {
+                    if(onTimeOut){
+                        options.onerror && options.onerror();
+                    }else{
+                        try{
+                            clearTimeout(timer);
+                            successhandler.apply(window, arguments);
+                        } catch (e){}
+                    }
+                } catch (exception) {
+                    options.onerror && options.onerror.call(window, exception);
+                } finally {
+                    options.oncomplete && options.oncomplete.apply(window, arguments);
+                    scr.parentNode && scr.parentNode.removeChild(scr);
+                    window[callbackFnName] = null;
+                    try {
+                        delete window[callbackFnName];
+                    }catch(e){}
+                }
+            }
+        }
+    }
+
     return {
         /**
          * 根据给定的参数项，向指定的url发起一个ajax请求。 ajax请求完成后，会根据请求结果调用相应回调： 如果请求
@@ -105,135 +237,15 @@ UE.ajax = function() {
          * } );
          * ```
          */
-		request:function(url, ajaxOptions) {
-
-            var ajaxRequest = creatAjaxRequest(),
-            //是否超时
-                timeIsOut = false,
-            //默认参数
-                defaultAjaxOptions = {
-                    method:"POST",
-                    timeout:5000,
-                    async:true,
-                    data:{},//需要传递对象的话只能覆盖
-                    onsuccess:function() {
-                    },
-                    onerror:function() {
-                    }
-                };
-
-            if (typeof url === "object") {
-                ajaxOptions = url;
-                url = ajaxOptions.url;
-            }
-            if (!ajaxRequest || !url) return;
-            var ajaxOpts = ajaxOptions ? utils.extend(defaultAjaxOptions,ajaxOptions) : defaultAjaxOptions;
-
-            var submitStr = json2str(ajaxOpts);  // { name:"Jim",city:"Beijing" } --> "name=Jim&city=Beijing"
-            //如果用户直接通过data参数传递json对象过来，则也要将此json对象转化为字符串
-            if (!utils.isEmptyObject(ajaxOpts.data)){
-                submitStr += (submitStr? "&":"") + json2str(ajaxOpts.data);
-            }
-            //超时检测
-            var timerID = setTimeout(function() {
-                if (ajaxRequest.readyState != 4) {
-                    timeIsOut = true;
-                    ajaxRequest.abort();
-                    clearTimeout(timerID);
-                }
-            }, ajaxOpts.timeout);
-
-            var method = ajaxOpts.method.toUpperCase();
-            var str = url + (url.indexOf("?")==-1?"?":"&") + (method=="POST"?"":submitStr+ "&noCache=" + +new Date);
-            ajaxRequest.open(method, str, ajaxOpts.async);
-            ajaxRequest.onreadystatechange = function() {
-                if (ajaxRequest.readyState == 4) {
-                    if (!timeIsOut && ajaxRequest.status == 200) {
-                        ajaxOpts.onsuccess(ajaxRequest);
-                    } else {
-                        ajaxOpts.onerror(ajaxRequest);
-                    }
-                }
-            };
-            if (method == "POST") {
-                ajaxRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                ajaxRequest.send(submitStr);
+		request:function(url, opts) {
+            if (opts && opts.dataType == 'jsonp') {
+                doJsonp(url, opts);
             } else {
-                ajaxRequest.send(null);
+                doAjax(url, opts);
             }
 		},
         getJsonp:function(url, opts) {
-            var successhandler = opts.onsuccess || function(){},
-                scr = document.createElement('SCRIPT'),
-                options = opts || {},
-                charset = options['charset'],
-                callbackField = options['jsonp'] || 'callback',
-                callbackFnName,
-                timeOut = options['timeOut'] || 0,
-                timer,
-                reg = new RegExp('(\\?|&)' + callbackField + '=([^&]*)'),
-                matches;
-
-            if (utils.isFunction(successhandler)) {
-                callbackFnName = 'bd__editor__' + Math.floor(Math.random() * 2147483648).toString(36);
-                window[callbackFnName] = getCallBack(0);
-            } else if(utils.isString(successhandler)){
-                callbackFnName = successhandler;
-            } else {
-                if (matches = reg.exec(url)) {
-                    callbackFnName = matches[2];
-                }
-            }
-
-            url = url.replace(reg, '\x241' + callbackField + '=' + callbackFnName);
-
-            if (url.search(reg) < 0) {
-                url += (url.indexOf('?') < 0 ? '?' : '&') + callbackField + '=' + callbackFnName;
-            }
-
-            if (options.data) {
-                delete options.data['callback'];
-                var queryStr = json2str(options.data);
-                url = url.replace(/\?/, '?' + queryStr + '&');
-            }
-
-            scr.onerror = getCallBack(1);
-            if( timeOut ){
-                timer = setTimeout(getCallBack(1), timeOut);
-            }
-            createScriptTag(scr, url, charset);
-
-            function createScriptTag(scr, url, charset) {
-                scr.setAttribute('type', 'text/javascript');
-                scr.setAttribute('defer', 'defer');
-                charset && scr.setAttribute('charset', charset);
-                scr.setAttribute('src', url);
-                document.getElementsByTagName('head')[0].appendChild(scr);
-            }
-
-            function getCallBack(onTimeOut){
-                return function(){
-                    try {
-                        if(onTimeOut){
-                            options.onerror && options.onerror();
-                        }else{
-                            try{
-                                clearTimeout(timer);
-                                successhandler.apply(window, arguments);
-                            } catch (e){}
-                        }
-                    } catch (exception) {
-                        options.onerror && options.onerror.call(window, exception);
-                    } finally {
-                        options.oncomplete && options.oncomplete.apply(window, arguments);
-                        scr.parentNode && scr.parentNode.removeChild(scr);
-                        window[callbackFnName] = null;
-                        try {
-                            delete window[callbackFnName];
-                        }catch(e){}
-                    }
-                }
-            }
+            doJsonp(url, opts);
 		}
 	};
 

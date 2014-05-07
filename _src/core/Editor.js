@@ -265,18 +265,18 @@
         try{
             me.options.imageUrl && me.setOpt('serverUrl', me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2'));
 
-            var configUrl = me.getOpt('serverUrl');
+            var configUrl = me.getActionUrl('config'),
+                isJsonp = utils.isCrossDomainUrl(configUrl);
 
             /* 发出ajax请求 */
             me._serverConfigLoaded = false;
+
             configUrl && UE.ajax.request(configUrl,{
                 'method': 'GET',
-                'data': {
-                    'action': 'config'
-                },
-                'onsuccess':function(xhr){
+                'dataType': isJsonp ? 'jsonp':null,
+                'onsuccess':function(r){
                     try {
-                        var config = eval("("+xhr.responseText+")");
+                        var config = isJsonp ? r:eval("("+r.responseText+")");
                         utils.extend(me.options, config);
                         me.fireEvent('serverConfigLoaded');
                         me._serverConfigLoaded = true;
