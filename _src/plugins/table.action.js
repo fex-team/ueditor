@@ -1296,9 +1296,9 @@ UE.plugins['table'] = function () {
 
         isInResizeBuffer = false;
 
+        startTd = evt.target || evt.srcElement;
         if( !startTd ) return;
-        var state = Math.abs( userActionStatus.x - evt.clientX ) >= Math.abs( userActionStatus.y - evt.clientY ) ? 'h' : 'v';
-//        var state = getRelation(startTd, mouseCoords(evt));
+        var state = getRelation(startTd, mouseCoords(evt));
         if (/\d/.test(state)) {
             state = state.replace(/\d/, '');
             startTd = getUETable(startTd).getPreviewCell(startTd, state == 'v');
