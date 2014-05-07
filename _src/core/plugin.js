@@ -71,7 +71,7 @@ UE.plugin = function(){
                 plugin.call(editor);
             });
         },
-        run : function(plugnName,editor){
+        run : function(pluginName,editor){
             var plugin = _plugins[pluginName];
             if(plugin){
                 plugin.exeFn.call(editor)
