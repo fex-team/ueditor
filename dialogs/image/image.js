@@ -835,17 +835,19 @@
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName');
+                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName'),
+                    isJsonp = utils.isCrossDomainUrl(url);
                 ajax.request(url, {
-                    timeout: 100000,
-                    data: utils.extend({
+                    'timeout': 100000,
+                    'dataType': isJsonp ? 'jsonp':null,
+                    'data': utils.extend({
                             start: this.listIndex,
                             size: this.listSize
                         }, editor.queryCommandValue('serverparam')),
-                    method: 'get',
-                    onsuccess: function (r) {
+                    'method': 'get',
+                    'onsuccess': function (r) {
                         try {
-                            var json = eval('(' + r.responseText + ')');
+                            var json = isJsonp ? r:eval('(' + r.responseText + ')');
                             if (json.state == 'SUCCESS') {
                                 _this.pushData(json.list);
                                 _this.listIndex = parseInt(json.start) + parseInt(json.list.length);
@@ -864,7 +866,7 @@
                             }
                         }
                     },
-                    onerror: function () {
+                    'onerror': function () {
                         _this.isLoadingData = false;
                     }
                 });
