@@ -958,6 +958,7 @@ UE.plugins['table'] = function () {
      * 移动状态切换
      */
     function toggleDraggableState(editor, draggable, dir, mousePos, cell) {
+        debugger
         try {
             editor.body.style.cursor = dir == "h" ? "col-resize" : dir == "v" ? "row-resize" : "text";
             if (browser.ie) {

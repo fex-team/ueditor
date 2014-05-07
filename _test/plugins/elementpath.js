@@ -49,8 +49,8 @@ test('表格', function () {
     });
     stop();
 });
-test('通过选区路径取range', function () {
-
+test('trace 3995 通过选区路径取range', function () {
+if(ua.browser.ie==11)return;//todo dev1.4.0
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.options.elementPathEnabled = true;
