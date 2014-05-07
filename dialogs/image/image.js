@@ -1028,13 +1028,8 @@
                 url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + _this.encodeToGb2312(key) + type + "&keeporiginname=" + keepOriginName + "&" + +new Date;
 
             $G('searchListUl').innerHTML = lang.searchLoading;
-            ajax.request(url, {
-                'method': 'GET',
-                'data': {
-                    'charset': 'GB18030'
-                },
-                'dataType': 'jsonp',
-                'jsonp': 'callback',
+            ajax.getJsonp(url, {
+                'charset': 'GB18030',
                 'onsuccess':function(json){
                     var list = [];
                     if(json && json.data) {
