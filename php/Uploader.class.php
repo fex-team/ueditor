@@ -113,8 +113,11 @@ class Uploader
             return;
         }
 
+        // 编码成系统编码的字符串
+        $savepath = $this->getGBKPath($filepath);
+
         //移动文件
-        if (!(move_uploaded_file($file["tmp_name"], $filepath) && file_exists($filepath))) { //移动失败
+        if (!(move_uploaded_file($file["tmp_name"], $savepath) && file_exists($savepath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
@@ -154,8 +157,11 @@ class Uploader
             return;
         }
 
+        // 编码成系统编码的字符串
+        $savepath = $this->getGBKPath($filepath);
+
         //移动文件
-        if (!(file_put_contents($filepath, $img) && file_exists($filepath))) { //移动失败
+        if (!(file_put_contents($savepath, $img) && file_exists($savepath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_WRITE_CONTENT");
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
@@ -226,8 +232,11 @@ class Uploader
             return;
         }
 
+        // 编码成系统编码的字符串
+        $savepath = $this->getGBKPath($filepath);
+
         //移动文件
-        if (!(file_put_contents($filepath, $img) && file_exists($filepath))) { //移动失败
+        if (!(file_put_contents($savepath, $img) && file_exists($savepath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_WRITE_CONTENT");
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
@@ -243,6 +252,20 @@ class Uploader
     private function getStateInfo($errCode)
     {
         return !$this->stateMap[$errCode] ? $this->stateMap["ERROR_UNKNOWN"] : $this->stateMap[$errCode];
+    }
+
+    /**
+     * 转码成能正常保存的编码
+     */
+    private function getGBKPath($str)
+    {
+        if ('UTF-8' == mb_detect_encoding ($str)) {
+            $path = @iconv("UTF-8", "GB2312", $str);
+        }
+        if (!isset($savepath) || !$savepath) {
+            $path = $str;
+        }
+        return $path;
     }
 
     /**
