@@ -49,8 +49,7 @@ test('表格', function () {
     });
     stop();
 });
-test('trace 3995 通过选区路径取range', function () {
-if(ua.browser.ie==11)return;//todo dev1.4.0
+test(' 通过选区路径取range', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.options.elementPathEnabled = true;
@@ -233,7 +232,9 @@ test('文本', function () {
     });
 });
 
-test('表格和文本', function () {
+test('trace 3995表格和文本', function () {
+    if(ua.browser.ie==11)return;//todo dev1.4.0
+
     var div = document.body.appendChild(document.createElement('div'));
     var editor = new baidu.editor.Editor({'initialContent': '<p>欢迎使用ueditor</p>', 'elementPathEnabled': true, 'autoFloatEnabled': false});
     editor.render(div);
