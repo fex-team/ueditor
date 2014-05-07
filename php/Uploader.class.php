@@ -16,6 +16,7 @@ class Uploader
     private $oriName; //原始文件名
     private $fileName; //新文件名
     private $fullName; //完整文件名,即从当前配置目录开始的URL
+    private $filePath; //完整文件名,即从当前配置目录开始的URL
     private $fileSize; //文件大小
     private $fileType; //文件类型
     private $stateInfo; //上传状态信息,
@@ -87,10 +88,11 @@ class Uploader
         $this->fileSize = $file['size'];
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
+        $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
 
-        $filepath = $this->getFilePath();
-        $dirname = dirname($filepath);
+        $filepath = dirname($this->filePath);
+        $dirname = dirname($this->filePath);
 
         //检查文件大小是否超出限制
         if (!$this->checkSize()) {
@@ -137,9 +139,10 @@ class Uploader
         $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
+        $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
 
-        $filepath = $this->getFilePath();
+        $filepath = dirname($this->filePath);
         $dirname = dirname($filepath);
 
         //检查文件大小是否超出限制
@@ -212,9 +215,10 @@ class Uploader
         $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
+        $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
 
-        $filepath = $this->getFilePath();
+        $filepath = dirname($this->filePath);
         $dirname = dirname($filepath);
 
         //检查文件大小是否超出限制

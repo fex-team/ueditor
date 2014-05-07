@@ -182,13 +182,9 @@ test('默认插入的占位符', function () {
 });
 
 test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
-    if(ua.browser.ie==11)return;//todo 1.4.0
-    var div = document.body.appendChild(document.createElement('div'));
     var editor = te.obj[0];
-    editor.render(div);
-    editor.ready(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        editor.setContent('<p><br></p>');
+        var range = te.obj[1];
+        editor.setContent('<p><br /></p>');
         setTimeout(function () {
             range.setStart(editor.body.firstChild, 0).collapse(1).select();
             editor.execCommand('pagebreak');
@@ -205,10 +201,8 @@ test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
 //        var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
             ok(editor.getContent().indexOf('_ueditor_page_break_tag_') >= 0, 'pagebreak被解析');
 //        equal( editor.getContent(), '<p>' + br + '</p>_baidu_page_break_tag_<p>' + br + '</p>' );
-            document.body.removeChild(div);
             start();
-        }, 50);
-    });
+        }, 200);
     stop();
 });
 //TODO 1.2.6
