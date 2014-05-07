@@ -12,7 +12,7 @@
     };
     Mask.prototype = {
         getHtmlTpl: function (){
-            return '<div id="##" class="edui-mask %%" onmousedown="return $$._onMouseDown(event, this);"></div>';
+            return '<div id="##" class="edui-mask %%" onclick="return $$._onClick(event, this);" onmousedown="return $$._onMouseDown(event, this);"></div>';
         },
         postRender: function (){
             var me = this;
@@ -38,6 +38,9 @@
         },
         _onMouseDown: function (){
             return false;
+        },
+        _onClick: function (e, target){
+            this.fireEvent('click', e, target);
         },
         _fill: function (){
             var el = this.getDom();
