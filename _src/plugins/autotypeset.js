@@ -268,7 +268,7 @@ UE.plugins['autotypeset'] = function(){
 
         var result = '';
         for (var i = 0; i < str.length; i++) {
-            code = str.charCodeAt(i); //获取当前字符的unicode编码
+            var code = str.charCodeAt(i); //获取当前字符的unicode编码
             if (code >= 65281 && code <= 65373)//在这个unicode编码范围中的是所有的英文字母已经各种字符
             {
                 result += String.fromCharCode(str.charCodeAt(i) - 65248); //把全角字符的unicode编码转换为对应半角字符的unicode码
@@ -286,20 +286,6 @@ UE.plugins['autotypeset'] = function(){
         var tmp = "";
         var mark = "";/*用于判断,如果是html尖括里的标记,则不进行全角的转换*/
         for (var i = 0; i < txtstring.length; i++) {
-            if (txtstring[i] == '<') {
-                mark = "1";
-                tmp += txtstring[i];
-                continue;
-            }
-            if (mark == "1" && txtstring[i] != ">") {
-                tmp += txtstring[i];
-                continue;
-            }
-            if (mark == "1" && txtstring[i] == ">") {
-                mark = "0";
-                tmp += txtstring[i];
-                continue;
-            }
             if (txtstring.charCodeAt(i) == 32) {
                 tmp = tmp + String.fromCharCode(12288);
             }

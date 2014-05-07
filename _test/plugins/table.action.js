@@ -6,7 +6,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-
 //test('', function () {
 //    stop()
 //});
@@ -443,6 +442,7 @@ test('拖拽', function () {
     ua.mousemove(tds[1], {clientX: 199, clientY: 100});
     equal(editor.body.style.cursor, 'col-resize', '检查鼠标显示');
     ua.mousedown(tds[1], {clientX: 199, clientY: 100});
+    setTimeout(function () {
     ua.mousemove(tds[1], {clientX: 299, clientY: 100});
     ua.mouseup(tds[1], {clientX: 299, clientY: 100});
     var p = ua.getMousePosition;
@@ -450,7 +450,8 @@ test('拖拽', function () {
         var width2 = tds[1].width;
         ok(width2 - width1 > 50, '拖拽后单元格宽度改变');
         start();
-    }, 200);
+    }, 50);
+    }, 400);
     stop();
 });
 test('拖拽_row-resize鼠标显示', function () {
@@ -501,12 +502,12 @@ test('拖拽-最右边的单元格', function () {
             var width2 = te.obj[0].body.getElementsByTagName('td')[4].width;
             ok(width1 != width2 , '拖拽后单元格宽度改变');
             start();
-        }, 200);
-    }, 20);
+        }, 50);
+    }, 400);
     stop();
 });
 test('拖拽-最下边的单元格', function () {
-    if (ua.browser.ie ) return;//todo 1.3.0
+//    if (ua.browser.ie ) return;//todo 1.3.0
 
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -517,16 +518,17 @@ test('拖拽-最下边的单元格', function () {
     var height1 = tds[20].height;
     ua.mousemove(tds[24], {clientX: 439, clientY: 512});
     ua.mousedown(tds[24], {clientX: 439, clientY: 512});
+    equal(editor.body.style.cursor, 'row-resize', '检查鼠标显示');
+
     setTimeout(function () {
-        equal(editor.body.style.cursor, 'row-resize', '检查鼠标显示');
         ua.mousemove(tds[24], {clientX: 439, clientY: 562});
         ua.mouseup(tds[24], {clientX: 439, clientY: 562});
         setTimeout(function () {
             var height2 = te.obj[0].body.getElementsByTagName('td')[20].height;
             ok(height2 - height1 > 10, '拖拽后单元格宽度改变');
             start();
-        }, 200);
-    }, 20);
+        }, 50);
+    }, 400);
     stop();
 });
 test('trace 3022 表格名称中backspace、ctrl+z、enter', function () {
@@ -681,7 +683,7 @@ test('trace 3378：拖拽后tab，不影响表格样式', function () {
             equal(tds[1].width, width2, 'tab键不影响单元格宽度');
             start();
         }, 20);
-    }, 20);
+    }, 400);
     stop();
 });
 
