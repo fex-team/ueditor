@@ -79,7 +79,7 @@ UE.plugin.register('snapscreen', function (){
                         }
                     }
                     url = me.getActionUrl(me.getOpt('snapscreenActionName'));
-                    local = getLocation(url);return;
+                    local = getLocation(url);
                     setTimeout(function () {
                         try{
                             res =snapplugin.saveSnapshot(local.hostname, local.path, local.port);
