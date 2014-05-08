@@ -14,12 +14,16 @@ UE.plugin.register('snapscreen', function (){
             params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
 
         a.href = url;
+        if (browser.ie) {
+            a.href = a.href;
+        }
+
+
         search = a.search;
         if (params) {
             search = search ? search + params:'?' + params;
             search = search.replace(/[&]+/ig, '&');
         }
-
         return {
             'port': a.port,
             'hostname': a.hostname,
@@ -75,7 +79,7 @@ UE.plugin.register('snapscreen', function (){
                         }
                     }
                     url = me.getActionUrl(me.getOpt('snapscreenActionName'));
-                    local = getLocation(url);
+                    local = getLocation(url);return;
                     setTimeout(function () {
                         try{
                             res =snapplugin.saveSnapshot(local.hostname, local.path, local.port);
