@@ -50,7 +50,7 @@ UE.ajax = function() {
     }
 
     function doAjax(url, ajaxOptions) {
-        var ajaxRequest = creatAjaxRequest(),
+        var xhr = creatAjaxRequest(),
         //是否超时
             timeIsOut = false,
         //默认参数
@@ -69,7 +69,7 @@ UE.ajax = function() {
             ajaxOptions = url;
             url = ajaxOptions.url;
         }
-        if (!ajaxRequest || !url) return;
+        if (!xhr || !url) return;
         var ajaxOpts = ajaxOptions ? utils.extend(defaultAjaxOptions,ajaxOptions) : defaultAjaxOptions;
 
         var submitStr = json2str(ajaxOpts);  // { name:"Jim",city:"Beijing" } --> "name=Jim&city=Beijing"
@@ -79,30 +79,30 @@ UE.ajax = function() {
         }
         //超时检测
         var timerID = setTimeout(function() {
-            if (ajaxRequest.readyState != 4) {
+            if (xhr.readyState != 4) {
                 timeIsOut = true;
-                ajaxRequest.abort();
+                xhr.abort();
                 clearTimeout(timerID);
             }
         }, ajaxOpts.timeout);
 
         var method = ajaxOpts.method.toUpperCase();
         var str = url + (url.indexOf("?")==-1?"?":"&") + (method=="POST"?"":submitStr+ "&noCache=" + +new Date);
-        ajaxRequest.open(method, str, ajaxOpts.async);
-        ajaxRequest.onreadystatechange = function() {
-            if (ajaxRequest.readyState == 4) {
-                if (!timeIsOut && ajaxRequest.status == 200) {
-                    ajaxOpts.onsuccess(ajaxRequest);
+        xhr.open(method, str, ajaxOpts.async);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                if (!timeIsOut && xhr.status == 200) {
+                    ajaxOpts.onsuccess(xhr);
                 } else {
-                    ajaxOpts.onerror(ajaxRequest);
+                    ajaxOpts.onerror(xhr);
                 }
             }
         };
         if (method == "POST") {
-            ajaxRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            ajaxRequest.send(submitStr);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(submitStr);
         } else {
-            ajaxRequest.send(null);
+            xhr.send(null);
         }
     }
 
