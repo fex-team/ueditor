@@ -1,7 +1,8 @@
 <?php
-//header('Access-Control-Allow-Origin: http://*.baidu.com'); //设置http://*.baidu.com允许跨域访问
+header('Access-Control-Allow-Origin: http://*.webcc.tk'); //设置http://*.baidu.com允许跨域访问
 date_default_timezone_set("Asia/chongqing");
 error_reporting(E_ERROR);
+header("Content-Type: text/html; charset=utf-8");
 
 $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("config.json")), true);
 $action = $_GET['action'];
@@ -45,9 +46,7 @@ switch ($action) {
 
 /* 输出结果 */
 if (isset($_GET["callback"])) {
-    header("Content-Type: text/plain; charset=utf-8");
     echo $_GET["callback"] . '(' . $result . ')';
 } else {
-    header("Content-Type: application/x-javascript; charset=utf-8");
     echo $result;
 }
