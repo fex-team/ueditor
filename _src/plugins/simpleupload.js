@@ -10,10 +10,9 @@ UE.plugin.register('simpleupload', function (){
     function initUploadBtn(container){
         var timestrap = (+new Date()).toString(36),
             doc = container.ownerDocument,
-            wrapper = document.createElement('div'),
-            imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
+            wrapper = document.createElement('div');
 
-        wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + imageActionUrl + '" ' +
+        wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '" ' +
             'style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;">' +
         '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
             'style="background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;">' +
@@ -46,6 +45,8 @@ UE.plugin.register('simpleupload', function (){
             if(!input.value) return;
             var loadingId = 'loading_' + (+new Date()).toString(36);
             var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
+
+            var imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
 
             me.focus();
             me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
