@@ -236,7 +236,7 @@
 #upload .placeholder {
     margin: 10px;
     border: 2px dashed #e6e6e6;
-    _border: 0px dashed #e6e6e6;
+    *border: 0px dashed #e6e6e6;
     height: 172px;
     padding-top: 150px;
     text-align: center;
@@ -820,15 +820,16 @@
     overflow-x: hidden;
     overflow-y: auto;
     zoom: 1;
+    position: relative;
 }
 
 #search .searchList li {
-    position: relative;
     list-style:none;
     float: left;
     display: block;
     width: 115px;
     margin: 5px 10px 5px 20px;
+    *margin: 5px 10px 5px 15px;
     padding:0;
     font-size: 12px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .3);

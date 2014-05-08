@@ -987,6 +987,11 @@ var utils = UE.utils = {
         u = u.replace(/&$/g, '');
         return u;
     },
+    isCrossDomainUrl:function (url) {
+        var a = document.createElement('a');
+        a.href = url;
+        return !(a.host == location.host && a.protocol == location.protocol);
+    },
     clearEmptyAttrs : function(obj){
         for(var p in obj){
             if(obj[p] === ''){

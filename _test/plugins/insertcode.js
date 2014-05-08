@@ -1,7 +1,7 @@
 module('plugins.insertcode');
 //test('',function(){stop();})
 test('trace 3343：插入代码中有空行', function () {
-    if (ua.browser.ie > 8)return;
+//    if (ua.browser.ie > 8)return;
     var editor = te.obj[0];
     var range = te.obj[1];
 //    var div = document.body.appendChild(document.createElement('div'));
@@ -30,11 +30,12 @@ test('trace 3343：插入代码中有空行', function () {
             setTimeout(function () {
                 editor.execCommand('source');
                 var br = ua.browser.ie ? '' : '<br>';
-                if (ua.browser.ie)
+                if (ua.browser.ie&&ua.browser.ie<9)
                     ua.checkSameHtml(editor.body.innerHTML, "<PRE class=brush:Java;toolbar:false>hello<BR>hello<BR></PRE><P>&nbsp;</P>", '样式不变');
+
                 else if (ua.browser.gecko)
                     ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre>', '样式不变');
-                else
+                else if(ua.browser.webkit)
                     ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre><p>' + br + '</p>', '样式不变');
 //                setTimeout(function () {
 //                    UE.delEditor('ue');

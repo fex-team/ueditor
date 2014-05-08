@@ -347,7 +347,7 @@
             // WebUploader实例
                 uploader,
                 actionUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
-                acceptExtensions = editor.getOpt('imageAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
+                acceptExtensions = (editor.getOpt('imageAllowFiles') || []).join('').replace(/\./g, ',').replace(/^[,]/, ''),
                 imageMaxSize = editor.getOpt('imageMaxSize'),
                 imageCompressBorder = editor.getOpt('imageCompressBorder');
 
@@ -835,17 +835,19 @@
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName');
+                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName'),
+                    isJsonp = utils.isCrossDomainUrl(url);
                 ajax.request(url, {
-                    timeout: 100000,
-                    data: utils.extend({
+                    'timeout': 100000,
+                    'dataType': isJsonp ? 'jsonp':'',
+                    'data': utils.extend({
                             start: this.listIndex,
                             size: this.listSize
                         }, editor.queryCommandValue('serverparam')),
-                    method: 'get',
-                    onsuccess: function (r) {
+                    'method': 'get',
+                    'onsuccess': function (r) {
                         try {
-                            var json = eval('(' + r.responseText + ')');
+                            var json = isJsonp ? r:eval('(' + r.responseText + ')');
                             if (json.state == 'SUCCESS') {
                                 _this.pushData(json.list);
                                 _this.listIndex = parseInt(json.start) + parseInt(json.list.length);
@@ -864,7 +866,7 @@
                             }
                         }
                     },
-                    onerror: function () {
+                    'onerror': function () {
                         _this.isLoadingData = false;
                     }
                 });
@@ -1027,28 +1029,29 @@
                 keepOriginName = editor.options.keepOriginName ? "1" : "0",
                 url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + _this.encodeToGb2312(key) + type + "&keeporiginname=" + keepOriginName + "&" + +new Date;
 
-                $G('searchListUl').innerHTML = lang.searchLoading;
-                $.ajax({
-                    url: url,
-                    dataType: 'jsonp',
-                    jsonp: "callback",
-                    data: {},
-                    success:function(json){
-                        var list = [];
-                        if(json && json.data) {
-                            for(var i = 0; i < json.data.length; i++) {
-                                if(json.data[i].objURL) {
-                                    list.push({
-                                        title: json.data[i].fromPageTitleEnc,
-                                        src: json.data[i].objURL,
-                                        url: json.data[i].fromURL
-                                    });
-                                }
+            $G('searchListUl').innerHTML = lang.searchLoading;
+            ajax.request(url, {
+                'dataType': 'jsonp',
+                'charset': 'GB18030',
+                'onsuccess':function(json){
+                    var list = [];
+                    if(json && json.data) {
+                        for(var i = 0; i < json.data.length; i++) {
+                            if(json.data[i].objURL) {
+                                list.push({
+                                    title: json.data[i].fromPageTitleEnc,
+                                    src: json.data[i].objURL,
+                                    url: json.data[i].fromURL
+                                });
                             }
                         }
-                        _this.setList(list);
                     }
-                });
+                    _this.setList(list);
+                },
+                'onerror':function(){
+                    $G('searchListUl').innerHTML = lang.searchRetry;
+                }
+            });
         },
         /* 添加图片到列表界面上 */
         setList: function (list) {
@@ -1101,6 +1104,5 @@
             return list;
         }
     };
-
 
 })();

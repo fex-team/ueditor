@@ -35,6 +35,7 @@
         };
     var modalMask;
     var dragMask;
+    var activeDialog;
     Dialog.prototype = {
         draggable: false,
         uiName: 'dialog',
@@ -47,7 +48,10 @@
             this.initUIBase();
             this.modalMask = (modalMask || (modalMask = new Mask({
                 className: 'edui-dialog-modalmask',
-                theme:theme
+                theme:theme,
+                onclick: function (){
+                    activeDialog && activeDialog.close(false);
+                }
             })));
             this.dragMask = (dragMask || (dragMask = new Mask({
                 className: 'edui-dialog-dragmask',
@@ -377,6 +381,7 @@
                     this.getDom('iframe').focus();
                 } catch(ex){}
             }
+            activeDialog = this;
         },
         _onCloseButtonClick: function (evt, el){
             this.close(false);

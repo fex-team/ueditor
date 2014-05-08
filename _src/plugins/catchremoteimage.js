@@ -56,9 +56,9 @@ UE.plugins['catchremoteimage'] = function () {
         if (remoteImages.length) {
             catchremoteimage(remoteImages, {
                 //成功抓取
-                success: function (xhr) {
+                success: function (r) {
                     try {
-                        var info = eval("(" + xhr.responseText + ")");
+                        var info = r.state !== undefined ? r:eval("(" + r.responseText + ")");
                     } catch (e) {
                         return;
                     }
@@ -91,10 +91,13 @@ UE.plugins['catchremoteimage'] = function () {
         function catchremoteimage(imgs, callbacks) {
             var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '',
                 url = utils.formatUrl(catcherActionUrl + (catcherActionUrl.indexOf('?') == -1 ? '?':'&') + params),
+                isJsonp = utils.isCrossDomainUrl(url),
                 opt = {
-                    timeout: 60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
-                    onsuccess: callbacks["success"],
-                    onerror: callbacks["error"]
+                    'method': 'POST',
+                    'dataType': isJsonp ? 'jsonp':'',
+                    'timeout': 60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
+                    'onsuccess': callbacks["success"],
+                    'onerror': callbacks["error"]
                 };
             opt[catcherFieldName] = imgs;
             ajax.request(url, opt);

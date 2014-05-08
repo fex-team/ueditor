@@ -130,7 +130,7 @@ span.view{display: inline-block;width: 30px;float: right;cursor: pointer;color: 
     margin: 10px;
     margin-right:0;
     border: 2px dashed #e6e6e6;
-    _border: 0px dashed #e6e6e6;
+    *border: 0px dashed #e6e6e6;
     height: 161px;
     padding-top: 150px;
     text-align: center;
