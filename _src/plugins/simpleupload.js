@@ -51,10 +51,10 @@ UE.plugin.register('simpleupload', function (){
             me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
 
             function callback(){
-                var link, json, loader,
-                    body = (iframe.contentDocument || iframe.contentWindow.document).body,
-                    result = body.innerText || body.textContent || '';
                 try{
+                    var link, json, loader,
+                        body = (iframe.contentDocument || iframe.contentWindow.document).body,
+                        result = body.innerText || body.textContent || '';
                     json = (new Function("return " + result))();
                     link = me.options.imageUrlPrefix + json.url;
                     if(json.state == 'SUCCESS' && json.url) {
