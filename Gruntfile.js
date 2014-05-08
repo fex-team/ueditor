@@ -38,10 +38,11 @@ module.exports = function ( grunt ) {
             }
 
         },
+        packageJson = grunt.file.readJSON('package.json'),
         server = grunt.option('server') || 'php',
         encode = grunt.option('encode') || 'utf8',
         disDir = "dist/",
-        banner = '/*!\n * UEditor\n * version: <%= pkg.version %>\n * build: <%= new Date() %>\n */\n\n';
+        banner = '/*!\n * UEditor\n * version: ' + packageJson.name + '\n * build: <%= new Date() %>\n */\n\n';
 
     //init
     ( function () {
@@ -54,7 +55,7 @@ module.exports = function ( grunt ) {
     } )();
 
     grunt.initConfig( {
-        pkg: grunt.file.readJSON('package.json'),
+        pkg: packageJson,
         concat: {
             js: {
                 options: {
@@ -65,7 +66,7 @@ module.exports = function ( grunt ) {
                     }
                 },
                 src: Util.fetchScripts( "_examples/editor_api.js", Util.jsBasePath ),
-                dest: disDir + '<%= pkg.name %>.all.js'
+                dest: disDir + packageJson.name + '.all.js'
             },
             parse: {
                 options: {
@@ -73,7 +74,7 @@ module.exports = function ( grunt ) {
                     footer: '\n\n})()'
                 },
                 src: Util.fetchScripts( "ueditor.parse.js", Util.parseBasePath ),
-                dest: disDir + '<%= pkg.name %>.parse.js'
+                dest: disDir + packageJson.name + '.parse.js'
             },
             css: {
                 src: Util.fetchStyles(),
@@ -93,6 +94,20 @@ module.exports = function ( grunt ) {
             }
         },
         gcc: {
+            dist: {
+                src: (function(){
+                    var s = disDir + packageJson.name + '.all.js';
+                    console.log(s);
+                    return s;
+                })(),
+                dest: (function(){
+                    var s = disDir + packageJson.name + '.all.min.js';
+                    console.log(s);
+                    return s;
+                })()
+            }
+        },
+        closurecompiler: {
             dist: {
                 src: disDir + '<%= pkg.name %>.all.js',
                 dest: disDir + '<%= pkg.name %>.all.min.js'
@@ -176,11 +191,10 @@ module.exports = function ( grunt ) {
                     to: ''
                 },{
                     from: 'editor_api.js',
-                    to: '<%= pkg.name %>.all.min.js'
+                    to: packageJson.name + '.all.min.js'
                 } ]
             },
             gbkasp:{
-
                 src: [ disDir+'asp/*.asp' ],
                 overwrite: true,
                 replacements: [ {
@@ -196,13 +210,13 @@ module.exports = function ( grunt ) {
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-gcc');
+    grunt.loadNpmTasks('grunt-closurecompiler');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'gcc', 'copy:base', 'copy:'+server, 'copy:demo', 'replace:demo' ];
+        var tasks = [ 'concat', 'cssmin', 'closurecompiler', 'copy:base', 'copy:'+server, 'copy:demo', 'replace:demo' ];
 
         if ( encode === 'gbk' ) {
             tasks.push( 'replace:fileEncode' );
