@@ -133,7 +133,7 @@
         if(url && /^\//.test(url)) {
             var a = document.createElement('a');
             a.href = url;
-            url = browser.ie ? (a.protocol + '//' + a.host + a.pathname + a.search + a.hash):a.href;
+            url = browser.ie ? a.href:(a.protocol + '//' + a.host + a.pathname + a.search + a.hash);
         }
 
         if(url || url === '') {
