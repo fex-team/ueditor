@@ -273,7 +273,7 @@
 
             configUrl && UE.ajax.request(configUrl,{
                 'method': 'GET',
-                'dataType': isJsonp ? 'jsonp':null,
+                'dataType': isJsonp ? 'jsonp':'',
                 'onsuccess':function(r){
                     try {
                         var config = isJsonp ? r:eval("("+r.responseText+")");
@@ -289,7 +289,7 @@
                 }
             });
         } catch(e){
-            console && console.log('Get Server Config Error!');
+            console && console.log('获取后台配置项请求出错!');
         }
 
         if(!utils.isEmptyObject(UE.I18N)){

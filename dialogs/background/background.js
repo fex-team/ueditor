@@ -260,7 +260,7 @@
                     isJsonp = utils.isCrossDomainUrl(url);
                 ajax.request(url, {
                     'timeout': 100000,
-                    'dataType': isJsonp ? 'jsonp':null,
+                    'dataType': isJsonp ? 'jsonp':'',
                     'data': utils.extend({
                             start: this.listIndex,
                             size: this.listSize

@@ -38,7 +38,7 @@ switch ($action) {
 
     default:
         $result = json_encode(array(
-            'state'=> 'UNKNOW ACTION'
+            'state'=> '请求地址出错'
         ));
         break;
 }

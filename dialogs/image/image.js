@@ -347,7 +347,7 @@
             // WebUploader实例
                 uploader,
                 actionUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
-                acceptExtensions = editor.getOpt('imageAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
+                acceptExtensions = (editor.getOpt('imageAllowFiles') || []).join('').replace(/\./g, ',').replace(/^[,]/, ''),
                 imageMaxSize = editor.getOpt('imageMaxSize'),
                 imageCompressBorder = editor.getOpt('imageCompressBorder');
 
@@ -839,7 +839,7 @@
                     isJsonp = utils.isCrossDomainUrl(url);
                 ajax.request(url, {
                     'timeout': 100000,
-                    'dataType': isJsonp ? 'jsonp':null,
+                    'dataType': isJsonp ? 'jsonp':'',
                     'data': utils.extend({
                             start: this.listIndex,
                             size: this.listSize
@@ -1030,7 +1030,8 @@
                 url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + _this.encodeToGb2312(key) + type + "&keeporiginname=" + keepOriginName + "&" + +new Date;
 
             $G('searchListUl').innerHTML = lang.searchLoading;
-            ajax.getJsonp(url, {
+            ajax.request(url, {
+                'dataType': 'jsonp',
                 'charset': 'GB18030',
                 'onsuccess':function(json){
                     var list = [];

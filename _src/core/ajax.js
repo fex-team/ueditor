@@ -33,7 +33,9 @@ UE.ajax = function() {
         var strArr = [];
         for (var i in json) {
             //忽略默认的几个参数
-            if(i=="method" || i=="timeout" || i=="async") continue;
+            if(i=="method" || i=="timeout" || i=="async" || i=="dataType" || i=="callback") continue;
+            //忽略控制
+            if(json[i] == undefined || json[i] == null) continue;
             //传递过来的对象和函数不在提交之列
             if (!((typeof json[i]).toLowerCase() == "function" || (typeof json[i]).toLowerCase() == "object")) {
                 strArr.push( encodeURIComponent(i) + "="+encodeURIComponent(json[i]) );
@@ -134,9 +136,12 @@ UE.ajax = function() {
             url += (url.indexOf('?') < 0 ? '?' : '&') + callbackField + '=' + callbackFnName;
         }
 
-        if (options.data) {
-            delete options.data['callback'];
-            var queryStr = json2str(options.data);
+        var queryStr = json2str(opts);  // { name:"Jim",city:"Beijing" } --> "name=Jim&city=Beijing"
+        //如果用户直接通过data参数传递json对象过来，则也要将此json对象转化为字符串
+        if (!utils.isEmptyObject(opts.data)){
+            queryStr += (queryStr? "&":"") + json2str(opts.data);
+        }
+        if (queryStr) {
             url = url.replace(/\?/, '?' + queryStr + '&');
         }
 
@@ -244,7 +249,11 @@ UE.ajax = function() {
                 doAjax(url, opts);
             }
 		},
-        getJsonp:function(url, opts) {
+        getJSONP:function(url, data, fn) {
+            var opts = {
+                'data': data,
+                'oncomplete': fn
+            };
             doJsonp(url, opts);
 		}
 	};
