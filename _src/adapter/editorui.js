@@ -187,6 +187,8 @@
 
     };
 
+    var dependServerConfigBtns = ['searchreplace', 'help', 'spechars', 'webapp','preview'];
+
     for (var p in dialogBtns) {
         (function (type, vals) {
             for (var i = 0, ci; ci = vals[i++];) {
@@ -281,7 +283,7 @@
                     };
                 })(ci.toLowerCase())
             }
-        })(p, dialogBtns[p])
+        })(p, dialogBtns[p]);
     }
 
     editorui.snapscreen = function (editor, iframeUrl, title) {
@@ -832,18 +834,18 @@
                 showText:false
             });
         editorui.buttons[name] = ui;
-        editor.addListener('ready', function(){
+        editor.addListener('ready', function() {
             var b = ui.getDom('body'),
                 iconSpan = b.children[0];
             editor.fireEvent('simpleuploadbtnready', iconSpan);
         });
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             var state = editor.queryCommandState(name);
-            if (state == -1) {
+            if (state == -1) {console.log('disable');
                 ui.setDisabled(true);
                 ui.setChecked(false);
             } else {
-                if (!uiReady) {
+                if (!uiReady) {console.log('enable');
                     ui.setDisabled(false);
                     ui.setChecked(state);
                 }
