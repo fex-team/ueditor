@@ -6,13 +6,13 @@
 
     Set up = new Uploader
     up.MaxSize = config.Item( uploadTemplateName & "MaxSize" )
-    up.AllowType = config.Item( uploadTemplateName & "AllowFiles" )
     up.FileField = config.Item( uploadTemplateName & "FieldName" )
     up.PathFormat = config.Item( uploadTemplateName & "PathFormat" )
 
     If Not IsEmpty( Session.Value("base64Upload") ) Then
         up.UploadBase64( Session.Value("base64Upload") )
     Else
+        up.AllowType = config.Item( uploadTemplateName & "AllowFiles" )
         up.UploadForm()
     End If
 
