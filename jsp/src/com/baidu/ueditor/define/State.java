@@ -11,7 +11,7 @@ public interface State {
 	
 	public void putInfo( String name, String val );
 	
-	public void putInfo ( String name, int val );
+	public void putInfo ( String name, long val );
 	
 	public String toJSONString ();
 

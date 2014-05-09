@@ -16,7 +16,7 @@ public class MultiState implements State {
 
 	private boolean state = false;
 	private String info = null;
-	private Map<String, Integer> intMap = new HashMap<String, Integer>();
+	private Map<String, Long> intMap = new HashMap<String, Long>();
 	private Map<String, String> infoMap = new HashMap<String, String>();
 	private List<String> stateList = new ArrayList<String>();
 	
@@ -103,7 +103,7 @@ public class MultiState implements State {
 	}
 
 	@Override
-	public void putInfo(String name, int val) {
+	public void putInfo(String name, long val) {
 		this.intMap.put( name, val );
 	}
 
