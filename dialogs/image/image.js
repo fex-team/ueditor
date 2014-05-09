@@ -976,7 +976,10 @@
             });
             /* 搜索框回车键搜索 */
             domUtils.on($G('searchTxt'), 'keydown', function(e){
-                $G('searchBtn').click();
+                var keyCode = e.keyCode || e.which;
+                if (keyCode == 13) {
+                    $G('searchBtn').click();
+                }
             });
 
             /* 选中图片 */
