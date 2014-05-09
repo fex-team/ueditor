@@ -5,8 +5,8 @@
 ///commands 粘贴
 ///commandsName  PastePlain
 ///commandsTitle  纯文本粘贴模式
-/*
- ** @description 粘贴
+/**
+ * @description 粘贴
  * @author zhanyi
  */
 UE.plugins['paste'] = function () {

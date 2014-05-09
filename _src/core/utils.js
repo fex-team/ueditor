@@ -676,7 +676,7 @@ var utils = UE.utils = {
         return true;
     },
 
-    /*
+    /**
      * 把rgb格式的颜色值转换成16进制格式
      * @method fixColor
      * @param { String } rgb格式的颜色值
@@ -698,7 +698,7 @@ var utils = UE.utils = {
         }
         return  value;
     },
-    /*
+    /**
      * 只针对border,padding,margin做了处理，因为性能问题
      * @public
      * @function
@@ -878,7 +878,7 @@ var utils = UE.utils = {
         }
     }(),
 
-    /*
+    /**
      * 动态添加css样式
      * @method cssRule
      * @param { String } 节点名称

@@ -25,7 +25,7 @@ UE.ajax = function() {
     var creatAjaxRequest = new Function('return new ' + fnStr);
 
 
-    /*
+    /**
      * 将json参数转化成适合ajax提交的参数列表
      * @param json
      */

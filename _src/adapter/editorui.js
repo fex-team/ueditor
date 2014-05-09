@@ -184,10 +184,7 @@
         noOk:['searchreplace', 'help', 'spechars', 'webapp','preview'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
             'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background', 'charts']
-
     };
-
-    var dependServerConfigBtns = ['searchreplace', 'help', 'spechars', 'webapp','preview'];
 
     for (var p in dialogBtns) {
         (function (type, vals) {
