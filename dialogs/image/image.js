@@ -974,6 +974,10 @@
                     $G('searchTxt').value = '';
                 }
             });
+            /* 搜索框回车键搜索 */
+            domUtils.on($G('searchTxt'), 'keydown', function(e){
+                $G('searchBtn').click();
+            });
 
             /* 选中图片 */
             domUtils.on($G('searchList'), 'click', function(e){
