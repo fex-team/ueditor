@@ -23,7 +23,7 @@ switch ($_GET['action']) {
             "pathFormat" => $CONFIG['scrawlPathFormat'],
             "maxSize" => $CONFIG['scrawlMaxSize'],
             "allowFiles" => $CONFIG['scrawlAllowFiles'],
-            "oriName" => "remote.png"
+            "oriName" => "scrawl.png"
         );
         $fieldName = $CONFIG['scrawlFieldName'];
         $base64 = "base64";
