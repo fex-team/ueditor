@@ -362,7 +362,6 @@
                     mimeTypes: 'image/*'
                 },
                 swf: '../../third-party/webuploader/Uploader.swf',
-                disableGlobalDnd: true,
                 server: actionUrl,
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
@@ -417,6 +416,9 @@
                             case 'http':
                                 text = lang.errorHttp;
                                 break;
+                            case 'not_allow_type':
+                                text = lang.errorFileType;
+                                break;
                             default:
                                 text = lang.errorUploadRetry;
                                 break;
@@ -445,6 +447,12 @@
                     }
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
+
+                    /* 检查文件格式 */
+                    if (acceptExtensions.indexOf(file.ext) == -1) {
+                        showError('not_allow_type');
+                        uploader.removeFile(file);
+                    }
                 }
 
                 file.on('statuschange', function (cur, prev) {
