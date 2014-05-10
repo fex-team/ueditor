@@ -90,6 +90,9 @@ UE.plugin.register('snapscreen', function (){
 
                         onSuccess(res);
                     }, 50);
+                },
+                queryCommandState: function(){
+                    return (navigator.userAgent.indexOf("Windows",0) != -1) ? 0:-1;
                 }
             }
         }
