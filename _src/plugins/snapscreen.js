@@ -69,6 +69,7 @@ UE.plugin.register('snapscreen', function (){
                                 me.execCommand('insertimage', {
                                     src: opt.snapscreenUrlPrefix + rs.url,
                                     _src: opt.snapscreenUrlPrefix + rs.url,
+                                    alt: rs.title || '',
                                     floatStyle: opt.snapscreenImgAlign
                                 });
                             } else {
