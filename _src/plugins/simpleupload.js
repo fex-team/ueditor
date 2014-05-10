@@ -10,7 +10,6 @@ UE.plugin.register('simpleupload', function (){
         containerBtn;
 
     function initUploadBtn(){
-        console.log('initUploadBtn');
         var timestrap = (+new Date()).toString(36),
             doc = containerBtn.ownerDocument,
             wrapper = document.createElement('div');
@@ -109,7 +108,7 @@ UE.plugin.register('simpleupload', function (){
             },
             /* 初始化简单上传按钮 */
             'simpleuploadbtnready': function(type, container) {
-                containerBtn = container; console.log('simpleuploadbtnready');
+                containerBtn = container;
                 me.afterConfigReady(initUploadBtn);
             }
         },
