@@ -838,11 +838,11 @@
         });
         editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
             var state = editor.queryCommandState(name);
-            if (state == -1) {console.log('disable');
+            if (state == -1) {
                 ui.setDisabled(true);
                 ui.setChecked(false);
             } else {
-                if (!uiReady) {console.log('enable');
+                if (!uiReady) {
                     ui.setDisabled(false);
                     ui.setChecked(state);
                 }
