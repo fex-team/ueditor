@@ -58,8 +58,6 @@
 
         me.editor.options.autotypeset = opt;
         setLocalStorage('ueditor_autotypeset', obj2str(opt));
-        console.log(opt);
-        console.log(JSON.parse(obj2str(opt)));
     }
     function setLocalStorage(name,value) {
         if (window.localStorage) {
