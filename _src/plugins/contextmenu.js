@@ -353,7 +353,9 @@ UE.plugins['contextmenu'] = function () {
                     label:lang['copy'],
                     cmdName:'copy',
                     exec:function () {
-                        alert( lang.copymsg );
+                        if (!me.document.execCommand('copy')) {
+                            alert( lang.copymsg );
+                        }
                     },
                     query:function () {
                         return 0;
@@ -363,7 +365,9 @@ UE.plugins['contextmenu'] = function () {
                     label:lang['paste'],
                     cmdName:'paste',
                     exec:function () {
-                        alert( lang.pastemsg );
+                        if (!me.document.execCommand('paste')) {
+                            alert( lang.pastemsg );
+                        }
                     },
                     query:function () {
                         return 0;
