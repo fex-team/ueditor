@@ -17,21 +17,24 @@
 
 UE.plugins['autotypeset'] = function(){
 
-    this.setOpt({'autotypeset':{
-            mergeEmptyline : true,          //合并空行
-            removeClass : true,            //去掉冗余的class
-            removeEmptyline : false,        //去掉空行
-            textAlign : "left",             //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
-            imageBlockLine : 'center',      //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
-            pasteFilter : false,             //根据规则过滤没事粘贴进来的内容
-            clearFontSize : false,           //去掉所有的内嵌字号，使用编辑器默认的字号
-            clearFontFamily : false,         //去掉所有的内嵌字体，使用编辑器默认的字体
-            removeEmptyNode : false,         // 去掉空节点
-            //可以去掉的标签
-            removeTagNames : utils.extend({div:1},dtd.$removeEmpty),
-            indent : false,                  // 行首缩进
-            indentValue : '2em'             //行首缩进的大小
+    this.setOpt({'autotypeset': {
+        mergeEmptyline: true,           //合并空行
+        removeClass: true,              //去掉冗余的class
+        removeEmptyline: false,         //去掉空行
+        textAlign:"left",               //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
+        imageBlockLine: 'center',       //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
+        pasteFilter: false,             //根据规则过滤没事粘贴进来的内容
+        clearFontSize: false,           //去掉所有的内嵌字号，使用编辑器默认的字号
+        clearFontFamily: false,         //去掉所有的内嵌字体，使用编辑器默认的字体
+        removeEmptyNode: false,         // 去掉空节点
+        //可以去掉的标签
+        removeTagNames: utils.extend({div:1},dtd.$removeEmpty),
+        indent: false,                  // 行首缩进
+        indentValue : '2em',            //行首缩进的大小
+        bdc2sb: false,
+        tobdc: false
     }});
+
     var me = this,
         opt = me.options.autotypeset,
         remainClass = {
@@ -54,6 +57,9 @@ UE.plugins['autotypeset'] = function(){
     if(!opt){
         return;
     }
+
+    readLocalOpts();
+
     function isLine(node,notEmpty){
         if(!node || node.nodeType == 3)
             return 0;
@@ -94,7 +100,7 @@ UE.plugins['autotypeset'] = function(){
         }
         var nodes = domUtils.getElementsByTagName(cont,'*');
 
-          // 行首缩进，段落方向，段间距，段内间距
+        // 行首缩进，段落方向，段间距，段内间距
         for(var i=0,ci;ci=nodes[i++];){
 
             if(me.fireEvent('excludeNodeinautotype',ci) === true){
@@ -148,9 +154,8 @@ UE.plugins['autotypeset'] = function(){
                 if(opt.textAlign){
                     ci.style.textAlign = opt.textAlign;
                 }
-//                if(opt.lineHeight)
-//                    ci.style.lineHeight = opt.lineHeight + 'cm';
-
+                // if(opt.lineHeight)
+                //     ci.style.lineHeight = opt.lineHeight + 'cm';
 
             }
 
@@ -196,7 +201,7 @@ UE.plugins['autotypeset'] = function(){
 
 
                             }
-                            domUtils.setStyle(img,'float',opt.imageBlockLine);
+                            domUtils.setStyle(img,'float', opt.imageBlockLine);
                             break;
                         case 'center':
                             if(me.queryCommandValue('imagefloat') != 'center'){
@@ -221,13 +226,11 @@ UE.plugins['autotypeset'] = function(){
 
 
                     }
-                }else{
+                } else {
                     var range = me.selection.getRange();
                     range.selectNode(ci).select();
-                    me.execCommand('imagefloat',opt.imageBlockLine);
+                    me.execCommand('imagefloat', opt.imageBlockLine);
                 }
-
-
 
             }
 
@@ -298,6 +301,23 @@ UE.plugins['autotypeset'] = function(){
         }
         return tmp;
     }
+
+    function readLocalOpts() {
+        var cookieOptStr = getLocalStorage('ueditor_autotypeset');
+        if (cookieOptStr) {
+            var cookieOpt = eval('(' + cookieOptStr + ')');
+            utils.extend(me.options.autotypeset, cookieOpt);
+        }
+    }
+    function getLocalStorage(name) {
+        if (window.localStorage) {
+            return localStorage.getItem(name);
+        } else {
+            var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+            if(arr != null) return unescape(arr[2]); return null;
+        }
+    }
+
     me.commands['autotypeset'] = {
         execCommand:function () {
             me.removeListener('beforepaste',autotype);
