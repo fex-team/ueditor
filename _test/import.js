@@ -9,6 +9,7 @@
 ///import core/Range;
 ///import core/Selection;
 ///import core/Editor;
+///import core/loadconfig;
 ///import core/ajax;
 ///import core/filterword;
 ///import core/node;
