@@ -20,6 +20,7 @@ UE.plugin.register('copy', function () {
             div.appendChild(rng.cloneContents());
             client.setText(div.innerText || div.textContent);
             client.setHtml(div.innerHTML);
+            rng.select();
         });
         // hover事件传递到target
         client.on('mouseover mouseout', function (e) {
