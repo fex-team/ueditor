@@ -990,6 +990,9 @@ var utils = UE.utils = {
     isCrossDomainUrl:function (url) {
         var a = document.createElement('a');
         a.href = url;
+        if (browser.ie) {
+            a.href = a.href;
+        }
         return !(a.host == location.host && a.protocol == location.protocol);
     },
     clearEmptyAttrs : function(obj){
