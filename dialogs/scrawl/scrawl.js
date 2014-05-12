@@ -277,7 +277,7 @@ var scrawl = function (options) {
         _addClearSelectionListenter:function () {
             var doc = document;
             domUtils.on(doc, 'mousemove', function (e) {
-                if (browser.ie)
+                if (browser.ie && browser.version < 11)
                     doc.selection.clear();
                 else
                     window.getSelection().removeAllRanges();
