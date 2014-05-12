@@ -1,6 +1,6 @@
 #UEditor Change List
 
-##1.4.0
+##1.4.1
 ###重构前后端交互功能
 1. 前端上传模块统一改用webuploader
 2. 整体重构了文件上传的配置方式，改为统一在后端配置，前后端自动打通,[详细文档]()
@@ -44,8 +44,9 @@
 3. 添加retainOnlyLabelPasted配置，指定粘贴时是否是只保留标签模式，默认是false
 4. 优化了添加toolbar上各类ui的方式，方便二次开发
 6. 优化有时产出数据会带有 bookmark标签的脏数据问题
-7. 优化自动排版功能，选项保存到localStorage或cookie
-8. 添加右键菜单的复制粘贴的支持，非ie不提供粘贴功能
+7. 添加LocalStorage本地存储工具
+8. 优化自动排版功能，选项保存到localStorage或UserData
+9. 添加右键菜单的复制粘贴的支持，非ie不提供粘贴功能
 
 ##1.3.6
 
