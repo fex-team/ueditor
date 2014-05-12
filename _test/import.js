@@ -54,6 +54,7 @@
 ///import plugins/basestyle;
 ///import plugins/elementpath;
 ///import plugins/undo;
+///import plugins/copy;
 ///import plugins/paste;
 ///import plugins/source;
 ///import plugins/shortcutkeys;
