@@ -1,4 +1,4 @@
-UE.plugin.register('clipboard', function () {
+UE.plugin.register('copy', function () {
 
     var me = this;
 
@@ -59,13 +59,6 @@ UE.plugin.register('clipboard', function () {
             'copy': {
                 execCommand: function (cmd) {
                     if (!me.document.execCommand('copy')) {
-                        alert(me.getLang('copymsg'));
-                    }
-                }
-            },
-            'paste': {
-                execCommand: function (cmd) {
-                    if (!me.document.execCommand('paste')) {
                         alert(me.getLang('copymsg'));
                     }
                 }

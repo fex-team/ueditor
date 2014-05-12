@@ -268,6 +268,7 @@ UE.plugins['paste'] = function () {
             address.endAddress = tmpAddress.startAddress;
         }
     });
+
     me.addListener('ready', function () {
         domUtils.on(me.body, 'cut', function () {
             var range = me.selection.getRange();
@@ -287,5 +288,18 @@ UE.plugins['paste'] = function () {
         });
 
     });
+
+    me.commands['paste'] = {
+        execCommand: function (cmd) {
+            if (browser.ie) {
+                getClipboardData.call(me, function (div) {
+                    filter(div);
+                });
+                me.document.execCommand('paste');
+            } else {
+                alert(me.getLang('copymsg'));
+            }
+        }
+    }
 };
 
