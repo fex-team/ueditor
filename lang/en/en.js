@@ -214,17 +214,19 @@ UE.I18N['en'] = {
     'pasteTextFormat':'Keep Text only',
     'more':'More',
     'autoTypeSet':{
-        mergeLine:"Merge empty line",
-        delLine:"Del empty line",
-        removeFormat:"Remove format",
-        indent:"Indent",
-        alignment:"Alignment",
-        imageFloat:"Image float",
-        removeFontsize:"Remove font size",
-        removeFontFamily:"Remove fontFamily",
-        removeHtml:"Remove redundant HTML code",
-        pasteFilter:"Paste filter",
-        run:"Done"
+        'mergeLine':"Merge empty line",
+        'delLine':"Del empty line",
+        'removeFormat':"Remove format",
+        'indent':"Indent",
+        'alignment':"Alignment",
+        'imageFloat':"Image float",
+        'removeFontsize':"Remove font size",
+        'removeFontFamily':"Remove fontFamily",
+        'removeHtml':"Remove redundant HTML code",
+        'pasteFilter':"Paste filter",
+        'run':"Done",
+        'bdc2sb':'Full-width to Half-width',
+        'tobdc':'Half-width to Full-width'
     },
 
     'background':{
