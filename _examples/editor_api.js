@@ -87,6 +87,7 @@
             'plugins/simpleupload.js',
             'plugins/serverparam.js',
             'plugins/insertfile.js',
+            'plugins/clipboard.js',
             'ui/ui.js',
             'ui/uiutils.js',
             'ui/uibase.js',
