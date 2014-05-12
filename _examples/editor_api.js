@@ -20,6 +20,7 @@
             'core/filternode.js',
             'core/plugin.js',
             'core/keymap.js',
+            'core/localstorage.js',
             'plugins/defaultfilter.js',
             'plugins/inserthtml.js',
             'plugins/autotypeset.js',

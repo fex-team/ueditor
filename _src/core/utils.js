@@ -999,6 +999,44 @@ var utils = UE.utils = {
             }
         }
         return obj;
+    },
+    str2json : function(s){
+        try {
+            if (window.JSON) {
+                var json = JSON.parse(s);
+            } else {
+                var json = (new Function("return " + utils.trim(s)))();
+            }
+            return json;
+        } catch (e) {
+            return {};
+        }
+    },
+    json2str : function(o){
+        var s;
+        if (window.JSON) {
+            s = JSON.stringify(o);
+        } else {
+            var i, a = [];
+            if (utils.isString(o)) {
+                s =  '"' + o + '"';
+            } else if (utils.isObject(o) || utils.isArray(o)) {
+                for (i in o) {
+                    if (o[i] !== undefined) {
+                        a.push('"' + i + '":' + utils.json2str(o[i]));
+                    }
+                }
+                if (utils.isArray(o)) {
+                    s = '[' + a.join(',') + ']';
+                } else {
+                    s = '{' + a.join(',') + '}';
+                }
+            } else if (o !== undefined) {
+                s = o;
+            }
+        }
+
+        return s;
     }
 
 };

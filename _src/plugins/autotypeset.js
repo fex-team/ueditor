@@ -303,19 +303,8 @@ UE.plugins['autotypeset'] = function(){
     }
 
     function readLocalOpts() {
-        var cookieOptStr = getLocalStorage('ueditor_autotypeset');
-        if (cookieOptStr) {
-            var cookieOpt = eval('(' + cookieOptStr + ')');
-            utils.extend(me.options.autotypeset, cookieOpt);
-        }
-    }
-    function getLocalStorage(name) {
-        if (window.localStorage) {
-            return localStorage.getItem(name);
-        } else {
-            var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
-            if(arr != null) return unescape(arr[2]); return null;
-        }
+        var cookieOpt = me.getPreferences('autotypeset');
+        utils.extend(me.options.autotypeset, cookieOpt);
     }
 
     me.commands['autotypeset'] = {

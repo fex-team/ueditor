@@ -57,36 +57,10 @@
         }
 
         me.editor.options.autotypeset = opt;
-        setLocalStorage('ueditor_autotypeset', obj2str(opt));
-    }
-    function setLocalStorage(name,value) {
-        if (window.localStorage) {
-            localStorage.setItem(name, value);
-        } else {
-            var Days = 30; //此 cookie 将被保存 30 天
-            var exp  = new Date();
-            exp.setTime(exp.getTime() + Days*24*60*60*1000);
-            document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-        }
-    }
-    function obj2str(o) {
-        var i, s, a = [];
 
-        if (utils.isString(o)) {
-            s =  '"' + o + '"';
-        } else if (utils.isObject(o) || utils.isArray(o)) {
-            for (i in o) {
-                a.push('"' + i + '":' + obj2str(o[i]));
-            }
-            if (utils.isArray(o)) {
-                s = '[' + a.join(',') + ']';
-            } else {
-                s = '{' + a.join(',') + '}';
-            }
-        } else {
-            s = o;
-        }
-        return s;
+        var cookieOpt = opt;
+        cookieOpt['removeTagNames'] = undefined;
+        me.editor.setPreferences('autotypeset', cookieOpt);
     }
 
     AutoTypeSetButton.prototype = {
@@ -118,7 +92,7 @@
                     popupUI.hide()
                 };
 
-                cont.onclick = function(e){
+                domUtils.on(cont, 'click', function(e) {
                     var target = e.target || e.srcElement,
                         editorId = me.editor.uid;
                     if (target && target.tagName == 'INPUT') {
@@ -147,7 +121,7 @@
 
                         getPara(popupUI);
                     }
-                };
+                });
 
                 flag = 1;
             });
