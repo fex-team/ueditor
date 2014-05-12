@@ -993,7 +993,8 @@ var utils = UE.utils = {
         if (browser.ie) {
             a.href = a.href;
         }
-        return !(a.host == location.host && a.protocol == location.protocol);
+        return !(a.protocol == location.protocol && a.hostname == location.hostname &&
+        (a.port == location.port || (a.port == '80' && location.port == '') || (a.port == '' && location.port == '80')));
     },
     clearEmptyAttrs : function(obj){
         for(var p in obj){
