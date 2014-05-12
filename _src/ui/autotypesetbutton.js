@@ -13,7 +13,8 @@
             this.initAutoTypeSetButton();
         };
     function getPara(me){
-        var opt = me.editor.options.autotypeset,
+
+        var opt = {},
             cont = me.getDom(),
             editorId = me.editor.uid,
             inputType = null,
@@ -56,15 +57,14 @@
             opt[attr] = opt[attr] ? si.value : '';
         }
 
-        me.editor.options.autotypeset = opt;
+        utils.extend(me.editor.options.autotypeset,opt);
 
-        var cookieOpt = opt;
-        cookieOpt['removeTagNames'] = undefined;
-        me.editor.setPreferences('autotypeset', cookieOpt);
+        me.editor.setPreferences('autotypeset', opt);
     }
 
     AutoTypeSetButton.prototype = {
         initAutoTypeSetButton: function (){
+
             var me = this;
             this.popup = new Popup({
                 //传入配置参数
