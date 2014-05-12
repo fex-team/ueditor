@@ -17,6 +17,7 @@
 ///import core/filternode;
 ///import core/plugin;
 ///import core/keymap;
+///import core/localstorage;
 
 ///import plugins/emotion;
 ///import plugins/map;
