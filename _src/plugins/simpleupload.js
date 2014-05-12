@@ -5,41 +5,30 @@
  * @date 2014-03-31
  */
 UE.plugin.register('simpleupload', function (){
-    var me = this;
+    var me = this,
+        isLoaded = false,
+        containerBtn;
 
-    function initUploadBtn(container){
+    function initUploadBtn(){
         var timestrap = (+new Date()).toString(36),
-            doc = container.ownerDocument,
+            doc = containerBtn.ownerDocument,
             wrapper = document.createElement('div');
 
         wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '" ' +
-            'style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;">' +
+        'style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;">' +
         '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
-            'style="background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;">' +
+        'style="background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;">' +
         '</form>' +
         '<iframe id="edui_iframe_' + timestrap + '" name="edui_iframe_' + timestrap + '" ' +
-            'style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>';
+        'style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>';
 
         wrapper.className = 'edui-' + me.options.theme;
         wrapper.id = me.ui.id + '_iframeupload';
-        container.appendChild(wrapper);
+        containerBtn.appendChild(wrapper);
 
         var form = doc.getElementById('edui_form_' + timestrap);
         var input = doc.getElementById('edui_input_' + timestrap);
         var iframe = doc.getElementById('edui_iframe_' + timestrap);
-
-        var stateTimer;
-        me.addListener('selectionchange', function () {
-            clearTimeout(stateTimer);
-            stateTimer = setTimeout(function() {
-                var state = me.queryCommandState('simpleupload');
-                if (state == -1) {
-                    input.disabled = 'disabled';
-                } else {
-                    input.disabled = false;
-                }
-            }, 400);
-        });
 
         domUtils.on(input, 'change', function(){
             if(!input.value) return;
@@ -62,7 +51,8 @@ UE.plugin.register('simpleupload', function (){
                         loader = me.document.getElementById(loadingId);
                         loader.setAttribute('src', link);
                         loader.setAttribute('_src', link);
-                        loader.removeAttribute('title');
+                        loader.setAttribute('title', json.title || '');
+                        loader.setAttribute('alt', json.original || '');
                         loader.removeAttribute('id');
                         domUtils.removeClasses(loader, 'loadingclass');
                     } else {
@@ -87,6 +77,20 @@ UE.plugin.register('simpleupload', function (){
             form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
             form.submit();
         });
+
+        var stateTimer;
+        me.addListener('selectionchange', function () {
+            clearTimeout(stateTimer);
+            stateTimer = setTimeout(function() {
+                var state = me.queryCommandState('simpleupload');
+                if (state == -1) {
+                    input.disabled = 'disabled';
+                } else {
+                    input.disabled = false;
+                }
+            }, 400);
+        });
+        isLoaded = true;
     }
 
     return {
@@ -105,7 +109,8 @@ UE.plugin.register('simpleupload', function (){
             },
             /* 初始化简单上传按钮 */
             'simpleuploadbtnready': function(type, container) {
-                initUploadBtn(container);
+                containerBtn = container;
+                me.afterConfigReady(initUploadBtn);
             }
         },
         outputRule: function(root){
@@ -114,6 +119,13 @@ UE.plugin.register('simpleupload', function (){
                     n.parentNode.removeChild(n);
                 }
             });
+        },
+        commands: {
+            'simpleupload': {
+                queryCommandState: function () {
+                    return isLoaded ? 0:-1;
+                }
+            }
         }
     }
 });

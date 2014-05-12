@@ -2,7 +2,7 @@
 ///commands 为非ie浏览器自动添加a标签
 ///commandsName  AutoLink
 ///commandsTitle  自动增加链接
-/*
+/**
  * @description 为非ie浏览器自动添加a标签
  * @author zhanyi
  */

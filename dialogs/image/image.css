@@ -886,6 +886,7 @@
 }
 
 #search .searchList a:hover {
+    text-decoration: underline;
     color: #333;
 }
 #search .searchList .clearFloat{

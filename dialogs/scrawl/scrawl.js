@@ -642,6 +642,8 @@ function exec(scrawlObj) {
                                 url = editor.options.scrawlUrlPrefix + responseObj.url;
                             imgObj.src = url;
                             imgObj._src = url;
+                            imgObj.alt = responseObj.original || '';
+                            imgObj.title = responseObj.title || '';
                             editor.execCommand("insertImage", imgObj);
                             dialog.close();
                         } else {

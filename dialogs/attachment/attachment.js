@@ -152,10 +152,7 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
-                dnd: '#dndArea',
-                paste: $queue,
                 swf: '../../third-party/webuploader/Uploader.swf',
-                disableGlobalDnd: true,
                 server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
@@ -541,7 +538,7 @@
                 data = this.fileList[i];
                 link = data.url;
                 list.push({
-                    title: link.substr(link.lastIndexOf('/') + 1),
+                    title: data.original || link.substr(link.lastIndexOf('/') + 1),
                     url: prefix + link
                 });
             }
@@ -683,6 +680,9 @@
                     }
                     domUtils.addClass(icon, 'icon');
                     item.setAttribute('data-url', urlPrefix + list[i].url);
+                    if (list[i].original) {
+                        item.setAttribute('data-title', list[i].original);
+                    }
 
                     item.appendChild(preview);
                     item.appendChild(icon);
@@ -723,8 +723,9 @@
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
                     var url = lis[i].getAttribute('data-url');
+                    var title = lis[i].getAttribute('data-title') || url.substr(url.lastIndexOf('/') + 1);
                     list.push({
-                        title: url.substr(url.lastIndexOf('/') + 1),
+                        title: title,
                         url: url
                     });
                 }

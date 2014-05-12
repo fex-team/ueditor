@@ -275,7 +275,7 @@
                     floatStyle: data['align'] || '',
                     vspace: data['vhSpace'] || '',
                     title: data['title'] || '',
-                    alt: data['alt'] || '',
+                    alt: data['title'] || '',
                     style: "width:" + data['width'] + "px;height:" + data['height'] + "px;"
                 }];
             } else {
@@ -362,7 +362,6 @@
                     mimeTypes: 'image/*'
                 },
                 swf: '../../third-party/webuploader/Uploader.swf',
-                disableGlobalDnd: true,
                 server: actionUrl,
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
@@ -417,6 +416,9 @@
                             case 'http':
                                 text = lang.errorHttp;
                                 break;
+                            case 'not_allow_type':
+                                text = lang.errorFileType;
+                                break;
                             default:
                                 text = lang.errorUploadRetry;
                                 break;
@@ -445,6 +447,12 @@
                     }
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
+
+                    /* 检查文件格式 */
+                    if (acceptExtensions.indexOf(file.ext) == -1) {
+                        showError('not_allow_type');
+                        uploader.removeFile(file);
+                    }
                 }
 
                 file.on('statuschange', function (cur, prev) {
@@ -755,8 +763,8 @@
                 list.push({
                     src: prefix + data.url,
                     _src: prefix + data.url,
-                    title: data.original,
-                    alt: data.title,
+                    title: data.title,
+                    alt: data.original,
                     floatStyle: align
                 });
             }
@@ -934,6 +942,7 @@
                     list.push({
                         src: src,
                         _src: src,
+                        alt: src.substr(src.lastIndexOf('/') + 1),
                         floatStyle: align
                     });
                 }
@@ -972,6 +981,13 @@
                 var key = $G('searchTxt').value;
                 if(key && key == lang.searchRemind) {
                     $G('searchTxt').value = '';
+                }
+            });
+            /* 搜索框回车键搜索 */
+            domUtils.on($G('searchTxt'), 'keydown', function(e){
+                var keyCode = e.keyCode || e.which;
+                if (keyCode == 13) {
+                    $G('searchBtn').click();
                 }
             });
 
@@ -1088,15 +1104,18 @@
         },
         getInsertList: function () {
             var child,
+                src,
                 align = getAlign(),
                 list = [],
                 items = $G('searchListUl').children;
             for(var i = 0; i < items.length; i++) {
                 child = items[i].firstChild && items[i].firstChild.firstChild;
                 if(child.tagName && child.tagName.toLowerCase() == 'img' && domUtils.hasClass(items[i], 'selected')) {
+                    src = child.src;
                     list.push({
-                        src: child.src,
-                        _src: child.src,
+                        src: src,
+                        _src: src,
+                        alt: src.substr(src.lastIndexOf('/') + 1),
                         floatStyle: align
                     });
                 }

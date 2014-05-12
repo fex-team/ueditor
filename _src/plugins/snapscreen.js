@@ -69,6 +69,7 @@ UE.plugin.register('snapscreen', function (){
                                 me.execCommand('insertimage', {
                                     src: opt.snapscreenUrlPrefix + rs.url,
                                     _src: opt.snapscreenUrlPrefix + rs.url,
+                                    alt: rs.title || '',
                                     floatStyle: opt.snapscreenImgAlign
                                 });
                             } else {
@@ -79,7 +80,7 @@ UE.plugin.register('snapscreen', function (){
                         }
                     }
                     url = me.getActionUrl(me.getOpt('snapscreenActionName'));
-                    local = getLocation(url);return;
+                    local = getLocation(url);
                     setTimeout(function () {
                         try{
                             res =snapplugin.saveSnapshot(local.hostname, local.path, local.port);
@@ -90,6 +91,9 @@ UE.plugin.register('snapscreen', function (){
 
                         onSuccess(res);
                     }, 50);
+                },
+                queryCommandState: function(){
+                    return (navigator.userAgent.indexOf("Windows",0) != -1) ? 0:-1;
                 }
             }
         }

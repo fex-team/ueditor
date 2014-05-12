@@ -1,6 +1,4 @@
-/*
- *   处理特殊键的兼容性问题
- */
+/* 处理特殊键的兼容性问题 */
 UE.plugins['keystrokes'] = function() {
     var me = this;
     var collapsed = true;

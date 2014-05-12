@@ -1,7 +1,7 @@
 ///import editor.js
 ///import core/dom/dom.js
 ///import core/utils.js
-/*
+/**
  * dtd html语义化的体现类
  * @constructor
  * @namespace dtd
