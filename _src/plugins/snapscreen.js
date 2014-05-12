@@ -1,7 +1,7 @@
 /**
  * 截屏插件，为UEditor提供插入支持
  * @file
- * @since 1.4.0
+ * @since 1.4.1
  */
 UE.plugin.register('snapscreen', function (){
 
