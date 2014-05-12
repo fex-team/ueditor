@@ -297,7 +297,7 @@ UE.plugins['paste'] = function () {
                 });
                 me.document.execCommand('paste');
             } else {
-                alert(me.getLang('copypaste'));
+                alert(me.getLang('pastemsg'));
             }
         }
     }
