@@ -985,6 +985,7 @@ var utils = UE.utils = {
         var u = url.replace(/&&/g, '&');
         u = u.replace(/\?&/g, '?');
         u = u.replace(/&$/g, '');
+        u = u.replace(/&#/g, '#');
         return u;
     },
     isCrossDomainUrl:function (url) {
