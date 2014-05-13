@@ -135,7 +135,7 @@ var LocalStorage = UE.LocalStorage = (function () {
             data[key] = undefined;
             delete data[key]
         }
-        LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
+        data && LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
     };
 
 })();
