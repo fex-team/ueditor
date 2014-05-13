@@ -24,7 +24,7 @@
         "grunt": "~0.4.1",
         "grunt-contrib-concat": "~0.3.0",
         "grunt-contrib-cssmin": "~0.6.0",
-        "grunt-closurecompiler": "~0.9.9",
+        "grunt-contrib-uglify": "~0.4.0",
         "grunt-contrib-copy": "~0.4.0",
         "grunt-transcoding": "~0.1.1",
         "grunt-text-replace": "~0.3.9",

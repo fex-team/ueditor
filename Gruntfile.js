@@ -60,9 +60,10 @@ module.exports = function (grunt) {
             js: {
                 options: {
                     banner: banner + '(function(){\n\n',
-                    footer: '\n\n})()',
-                    process: function (src) {
-                        return src.replace('/_css/', '/css/');
+                    footer: '\n\n})();\n',
+                    process: function (src, s) {
+                        var filename = s.substr(s.indexOf('/') + 1);
+                        return '// ' + filename + '\n' + src.replace('/_css/', '/css/') + '\n';
                     }
                 },
                 src: Util.fetchScripts("_examples/editor_api.js", Util.jsBasePath),
@@ -71,7 +72,7 @@ module.exports = function (grunt) {
             parse: {
                 options: {
                     banner: banner + '(function(){\n\n',
-                    footer: '\n\n})()'
+                    footer: '\n\n})();\n'
                 },
                 src: Util.fetchScripts("ueditor.parse.js", Util.parseBasePath),
                 dest: disDir + packageJson.name + '.parse.js'
@@ -93,18 +94,17 @@ module.exports = function (grunt) {
                 ext: '.min.css'
             }
         },
-        gcc: {
-            dist: {
-                src: (function () {
-                    var s = disDir + packageJson.name + '.all.js';
-                    console.log(s);
-                    return s;
-                })(),
-                dest: (function () {
-                    var s = disDir + packageJson.name + '.all.min.js';
-                    console.log(s);
-                    return s;
-                })()
+        uglify: {
+            options: {
+                banner: banner
+            },
+            dest: {
+                src: disDir + '<%= pkg.name %>.all.js',
+                dest: disDir + '<%= pkg.name %>.all.min.js'
+            },
+            parse: {
+                src: disDir + '<%= pkg.name %>.parse.js',
+                dest: disDir + '<%= pkg.name %>.parse.min.js'
             }
         },
         closurecompiler: {
@@ -211,27 +211,31 @@ module.exports = function (grunt) {
             }
 
         },
-        clean: [
-            disDir + "*/upload",
-            disDir + ".DS_Store",
-            disDir + "**/.DS_Store",
-            disDir + ".git",
-            disDir + "**/.git"
-        ]
+        clean: {
+            build: {
+                src: [
+                    disDir + "*/upload",
+                    disDir + ".DS_Store",
+                    disDir + "**/.DS_Store",
+                    disDir + ".git",
+                    disDir + "**/.git"
+                ]
+            }
+        }
 
     });
 
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-closurecompiler');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'closurecompiler', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
+        var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
 
         if (encode === 'gbk') {
             tasks.push('replace:fileEncode');
