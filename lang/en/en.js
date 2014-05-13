@@ -76,6 +76,7 @@ UE.I18N['en'] = {
     },
     'simpleupload':{
         'exceedSizeError': 'File Size Exceed',
+        'exceedTypeError': 'File Type Not Allow',
         'jsonEncodeError': 'Server Return Format Error',
         'loading':"loading...",
         'loadError':"load error"

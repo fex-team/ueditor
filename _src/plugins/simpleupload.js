@@ -36,6 +36,7 @@ UE.plugin.register('simpleupload', function (){
             var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
 
             var imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
+            var allowFiles = me.getOpt('imageAllowFiles');
 
             me.focus();
             me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
@@ -72,8 +73,16 @@ UE.plugin.register('simpleupload', function (){
                     loader.setAttribute('title', title || '');
                 }
             }
-            domUtils.on(iframe, 'load', callback);
 
+            // 判断文件格式是否错误
+            var filename = input.value,
+                fileext = filename ? filename.substr(filename.lastIndexOf('.')):'';
+            if (allowFiles && (allowFiles.join('') + '.').indexOf(fileext + '.') == -1) {
+                showErrorLoader(me.getLang('simpleupload.exceedTypeError'));
+                return;
+            }
+
+            domUtils.on(iframe, 'load', callback);
             form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
             form.submit();
         });
