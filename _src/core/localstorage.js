@@ -117,7 +117,7 @@ var LocalStorage = UE.LocalStorage = (function () {
         } else {
             data = obj;
         }
-        LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
+        data && LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
     };
 
     UE.Editor.prototype.getPreferences = function(key){
