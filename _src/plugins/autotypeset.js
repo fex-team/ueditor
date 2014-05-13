@@ -268,7 +268,6 @@ UE.plugins['autotypeset'] = function(){
     }
 
     function DBC2SB(str) {
-        debugger
         var result = '';
         for (var i = 0; i < str.length; i++) {
             var code = str.charCodeAt(i); //获取当前字符的unicode编码
