@@ -121,7 +121,6 @@ var LocalStorage = UE.LocalStorage = (function () {
     };
 
     UE.Editor.prototype.getPreferences = function(key){
-
         var data = LocalStorage.getLocalData(ROOTKEY);
         if (data && (data = utils.str2json(data))) {
             return key ? data[key] : data
