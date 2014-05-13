@@ -225,6 +225,7 @@ UE.I18N['en'] = {
         'removeHtml':"Remove redundant HTML code",
         'pasteFilter':"Paste filter",
         'run':"Done",
+        'symbol':'Symbol Conversion',
         'bdc2sb':'Full-width to Half-width',
         'tobdc':'Half-width to Full-width'
     },

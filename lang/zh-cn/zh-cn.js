@@ -224,6 +224,7 @@ UE.I18N['zh-cn'] = {
         'removeHtml':"清除冗余HTML代码",
         'pasteFilter':"粘贴过滤",
         'run':"执行",
+        'symbol':'符号转换',
         'bdc2sb':'全角转半角',
         'tobdc':'半角转全角'
     },
