@@ -268,7 +268,7 @@ UE.plugins['autotypeset'] = function(){
     }
 
     function DBC2SB(str) {
-
+        debugger
         var result = '';
         for (var i = 0; i < str.length; i++) {
             var code = str.charCodeAt(i); //获取当前字符的unicode编码
@@ -285,7 +285,7 @@ UE.plugins['autotypeset'] = function(){
         return result;
     }
     function ToDBC(txtstring) {
-        txtstring = txtstring.replace("&nbsp;", "");
+        txtstring = utils.html(txtstring);
         var tmp = "";
         var mark = "";/*用于判断,如果是html尖括里的标记,则不进行全角的转换*/
         for (var i = 0; i < txtstring.length; i++) {
