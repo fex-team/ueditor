@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ( grunt ) {
+module.exports = function (grunt) {
 
     var fs = require("fs"),
         Util = {
@@ -9,28 +9,28 @@ module.exports = function ( grunt ) {
             parseBasePath: '_parse/',
             cssBasePath: 'themes/default/_css/',
 
-            fetchScripts: function ( readFile, basePath) {
+            fetchScripts: function (readFile, basePath) {
 
-                var sources = fs.readFileSync( readFile );
-                sources = /\[([^\]]+\.js'[^\]]+)\]/.exec( sources );
-                sources = sources[1].replace( /\/\/.*\n/g, '\n' ).replace( /'|"|\n|\t|\s/g, '' );
-                sources = sources.split( "," );
-                sources.forEach( function ( filepath, index ) {
+                var sources = fs.readFileSync(readFile);
+                sources = /\[([^\]]+\.js'[^\]]+)\]/.exec(sources);
+                sources = sources[1].replace(/\/\/.*\n/g, '\n').replace(/'|"|\n|\t|\s/g, '');
+                sources = sources.split(",");
+                sources.forEach(function (filepath, index) {
                     sources[ index ] = basePath + filepath;
-                } );
+                });
 
                 return sources;
             },
 
             fetchStyles: function () {
 
-                var sources = fs.readFileSync( this.cssBasePath + "ueditor.css" ),
+                var sources = fs.readFileSync(this.cssBasePath + "ueditor.css"),
                     filepath = null,
                     pattern = /@import\s+([^;]+)*;/g,
                     src = [];
 
-                while ( filepath = pattern.exec( sources ) ) {
-                    src.push( this.cssBasePath + filepath[ 1 ].replace( /'|"/g, "" ) );
+                while (filepath = pattern.exec(sources)) {
+                    src.push(this.cssBasePath + filepath[ 1 ].replace(/'|"/g, ""));
                 }
 
                 return src;
@@ -45,27 +45,27 @@ module.exports = function ( grunt ) {
         banner = '/*!\n * UEditor\n * version: ' + packageJson.name + '\n * build: <%= new Date() %>\n */\n\n';
 
     //init
-    ( function () {
+    (function () {
 
         server = typeof server === "string" ? server.toLowerCase() : 'php';
         encode = typeof encode === "string" ? encode.toLowerCase() : 'utf8';
 
         disDir = 'dist/' + encode + '-' + server + '/';
 
-    } )();
+    })();
 
-    grunt.initConfig( {
+    grunt.initConfig({
         pkg: packageJson,
         concat: {
             js: {
                 options: {
                     banner: banner + '(function(){\n\n',
                     footer: '\n\n})()',
-                    process: function(src) {
+                    process: function (src) {
                         return src.replace('/_css/', '/css/');
                     }
                 },
-                src: Util.fetchScripts( "_examples/editor_api.js", Util.jsBasePath ),
+                src: Util.fetchScripts("_examples/editor_api.js", Util.jsBasePath),
                 dest: disDir + packageJson.name + '.all.js'
             },
             parse: {
@@ -73,7 +73,7 @@ module.exports = function ( grunt ) {
                     banner: banner + '(function(){\n\n',
                     footer: '\n\n})()'
                 },
-                src: Util.fetchScripts( "ueditor.parse.js", Util.parseBasePath ),
+                src: Util.fetchScripts("ueditor.parse.js", Util.parseBasePath),
                 dest: disDir + packageJson.name + '.parse.js'
             },
             css: {
@@ -95,12 +95,12 @@ module.exports = function ( grunt ) {
         },
         gcc: {
             dist: {
-                src: (function(){
+                src: (function () {
                     var s = disDir + packageJson.name + '.all.js';
                     console.log(s);
                     return s;
                 })(),
-                dest: (function(){
+                dest: (function () {
                     var s = disDir + packageJson.name + '.all.min.js';
                     console.log(s);
                     return s;
@@ -176,36 +176,50 @@ module.exports = function ( grunt ) {
         replace: {
 
             fileEncode: {
-                src: [ disDir+'**/*.html', disDir+'**/*.css', disDir+'**/*.php', disDir+'**/*.jsp', disDir+'**/*.net', disDir+'**/*.asp' ],
+                src: [ disDir + '**/*.html', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.net', disDir + '**/*.asp' ],
                 overwrite: true,
-                replacements: [ {
-                    from: /utf-8/gi,
-                    to: 'gbk'
-                } ]
+                replacements: [
+                    {
+                        from: /utf-8/gi,
+                        to: 'gbk'
+                    }
+                ]
             },
-            demo:{
-                src: disDir+'index.html',
+            demo: {
+                src: disDir + 'index.html',
                 overwrite: true,
-                replacements: [ {
-                    from: /\.\.\//gi,
-                    to: ''
-                },{
-                    from: 'editor_api.js',
-                    to: packageJson.name + '.all.min.js'
-                } ]
+                replacements: [
+                    {
+                        from: /\.\.\//gi,
+                        to: ''
+                    },
+                    {
+                        from: 'editor_api.js',
+                        to: packageJson.name + '.all.min.js'
+                    }
+                ]
             },
-            gbkasp:{
-                src: [ disDir+'asp/*.asp' ],
+            gbkasp: {
+                src: [ disDir + 'asp/*.asp' ],
                 overwrite: true,
-                replacements: [ {
-                    from: /65001/gi,
-                    to: '936'
-                } ]
+                replacements: [
+                    {
+                        from: /65001/gi,
+                        to: '936'
+                    }
+                ]
             }
 
-        }
+        },
+        clean: [
+            disDir + "*/upload",
+            disDir + ".DS_Store",
+            disDir + "**/.DS_Store",
+            disDir + ".git",
+            disDir + "**/.git"
+        ]
 
-    } );
+    });
 
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -213,41 +227,42 @@ module.exports = function ( grunt ) {
     grunt.loadNpmTasks('grunt-closurecompiler');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'closurecompiler', 'copy:base', 'copy:'+server, 'copy:demo', 'replace:demo' ];
+        var tasks = [ 'concat', /*'cssmin', 'closurecompiler', */'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
 
-        if ( encode === 'gbk' ) {
-            tasks.push( 'replace:fileEncode' );
-            if(server === 'asp') {
-                tasks.push( 'replace:gbkasp' );
+        if (encode === 'gbk') {
+            tasks.push('replace:fileEncode');
+            if (server === 'asp') {
+                tasks.push('replace:gbkasp');
             }
         }
 
-        tasks.push( 'transcoding' );
+        tasks.push('transcoding');
 
         //config修改
         updateConfigFile();
 
-        grunt.task.run( tasks );
+        grunt.task.run(tasks);
 
-    } );
+    });
 
 
-    function updateConfigFile () {
+    function updateConfigFile() {
 
         var filename = 'ueditor.config.js',
-            file = grunt.file.read( filename ),
+            file = grunt.file.read(filename),
             path = server + "/",
-            suffix = server === "net" ? ".ashx" : "."+server;
+            suffix = server === "net" ? ".ashx" : "." + server;
 
-        file = file.replace( /php\//ig, path ).replace( /\.php/ig, suffix );
+        file = file.replace(/php\//ig, path).replace(/\.php/ig, suffix);
 
         //写入到dist
-        if ( grunt.file.write( disDir + filename, file ) ) {
+        if (grunt.file.write(disDir + filename, file)) {
 
-            grunt.log.writeln( 'config file update success' );
+            grunt.log.writeln('config file update success');
 
         } else {
             grunt.log.warn('config file update error');
