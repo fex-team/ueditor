@@ -231,7 +231,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', /*'cssmin', 'closurecompiler', */'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
+        var tasks = [ 'concat', 'cssmin', 'closurecompiler', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
 
         if (encode === 'gbk') {
             tasks.push('replace:fileEncode');
