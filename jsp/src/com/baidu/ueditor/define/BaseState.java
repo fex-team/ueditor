@@ -81,7 +81,7 @@ public class BaseState implements State {
 	}
 
 	@Override
-	public void putInfo(String name, int val) {
+	public void putInfo(String name, long val) {
 		this.putInfo(name, val+"");
 	}
 

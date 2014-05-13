@@ -1,7 +1,7 @@
 /**
  * 截屏插件，为UEditor提供插入支持
  * @file
- * @since 1.4.0
+ * @since 1.4.1
  */
 UE.plugin.register('snapscreen', function (){
 
@@ -14,12 +14,16 @@ UE.plugin.register('snapscreen', function (){
             params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
 
         a.href = url;
+        if (browser.ie) {
+            a.href = a.href;
+        }
+
+
         search = a.search;
         if (params) {
             search = search ? search + params:'?' + params;
             search = search.replace(/[&]+/ig, '&');
         }
-
         return {
             'port': a.port,
             'hostname': a.hostname,
@@ -65,6 +69,7 @@ UE.plugin.register('snapscreen', function (){
                                 me.execCommand('insertimage', {
                                     src: opt.snapscreenUrlPrefix + rs.url,
                                     _src: opt.snapscreenUrlPrefix + rs.url,
+                                    alt: rs.title || '',
                                     floatStyle: opt.snapscreenImgAlign
                                 });
                             } else {
@@ -86,6 +91,9 @@ UE.plugin.register('snapscreen', function (){
 
                         onSuccess(res);
                     }, 50);
+                },
+                queryCommandState: function(){
+                    return (navigator.userAgent.indexOf("Windows",0) != -1) ? 0:-1;
                 }
             }
         }

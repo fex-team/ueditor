@@ -26,7 +26,7 @@ public abstract class Handler
             json = JsonConvert.SerializeObject(response);
         if (String.IsNullOrWhiteSpace(jsonpCallback))
         {
-            Response.AddHeader("Content-Type", "application/json");
+            Response.AddHeader("Content-Type", "text/plain");
             Response.Write(json);
         }
         else 

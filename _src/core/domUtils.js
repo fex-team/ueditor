@@ -1115,7 +1115,7 @@ var domUtils = dom.domUtils = {
         remove('lastChild');
     },
 
-    /*
+    /**
      * 合并node节点下相同的子节点
      * @name mergeChild
      * @desc

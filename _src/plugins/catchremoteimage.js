@@ -2,9 +2,8 @@
 ///commands 远程图片抓取
 ///commandsName  catchRemoteImage,catchremoteimageenable
 ///commandsTitle  远程图片抓取
-/*
+/**
  * 远程图片抓取,当开启本插件时所有不符合本地域名的图片都将被抓取成为本地服务器上的图片
- *
  */
 UE.plugins['catchremoteimage'] = function () {
     var me = this,

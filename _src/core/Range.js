@@ -25,7 +25,7 @@
         fillChar = domUtils.fillChar,
         fillData;
 
-    /*
+    /**
      * 更新range的collapse状态
      * @param  {Range}   range    range对象
      */
@@ -204,7 +204,7 @@
         me.collapsed = true;
     };
 
-    /*
+    /**
      * 删除fillData
      * @param doc
      * @param excludeNode
@@ -231,7 +231,7 @@
         }
     }
 
-    /*
+    /**
      * @param node
      * @param dir
      */

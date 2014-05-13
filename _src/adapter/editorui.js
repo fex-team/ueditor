@@ -184,7 +184,6 @@
         noOk:['searchreplace', 'help', 'spechars', 'webapp','preview'],
         ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
             'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background', 'charts']
-
     };
 
     for (var p in dialogBtns) {
@@ -281,7 +280,7 @@
                     };
                 })(ci.toLowerCase())
             }
-        })(p, dialogBtns[p])
+        })(p, dialogBtns[p]);
     }
 
     editorui.snapscreen = function (editor, iframeUrl, title) {
@@ -832,7 +831,7 @@
                 showText:false
             });
         editorui.buttons[name] = ui;
-        editor.addListener('ready', function(){
+        editor.addListener('ready', function() {
             var b = ui.getDom('body'),
                 iconSpan = b.children[0];
             editor.fireEvent('simpleuploadbtnready', iconSpan);

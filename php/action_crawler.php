@@ -12,7 +12,8 @@ include("Uploader.class.php");
 $config = array(
     "pathFormat" => $CONFIG['catcherPathFormat'],
     "maxSize" => $CONFIG['catcherMaxSize'],
-    "allowFiles" => $CONFIG['catcherAllowFiles']
+    "allowFiles" => $CONFIG['catcherAllowFiles'],
+    "oriName" => "remote.png"
 );
 $fieldName = $CONFIG['catcherFieldName'];
 

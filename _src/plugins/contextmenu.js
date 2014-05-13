@@ -2,7 +2,7 @@
 ///commands 右键菜单
 ///commandsName  ContextMenu
 ///commandsTitle  右键菜单
-/*
+/**
  * 右键菜单
  * @function
  * @name baidu.editor.plugins.contextmenu
@@ -351,23 +351,11 @@ UE.plugins['contextmenu'] = function () {
                 },
                 {
                     label:lang['copy'],
-                    cmdName:'copy',
-                    exec:function () {
-                        alert( lang.copymsg );
-                    },
-                    query:function () {
-                        return 0;
-                    }
+                    cmdName:'copy'
                 },
                 {
                     label:lang['paste'],
-                    cmdName:'paste',
-                    exec:function () {
-                        alert( lang.pastemsg );
-                    },
-                    query:function () {
-                        return 0;
-                    }
+                    cmdName:'paste'
                 }
             ];
     if ( !items.length ) {
@@ -489,10 +477,20 @@ UE.plugins['contextmenu'] = function () {
             if ( ieRange.item ) {
                 var range = new dom.Range( me.document );
                 range.selectNode( ieRange.item( 0 ) ).select( true, true );
-
             }
         }
-    } );
+    });
+
+    // 添加复制的flash按钮
+    me.addListener('aftershowcontextmenu', function(type, menu) {
+        if (me.zeroclipboard) {
+            var items = menu.items;
+            for (var key in items) {
+                if (items[key].className == 'edui-for-copy') {
+                    me.zeroclipboard.clip(items[key].getDom());
+                }
+            }
+        }
+    });
+
 };
-
-

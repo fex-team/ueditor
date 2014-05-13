@@ -8,110 +8,9 @@ UE.plugin.register('autosave', function (){
         //auto save key
         saveKey = null;
 
-    //存储媒介封装
-    var LocalStorage = UE.LocalStorage = ( function () {
-
-        var storage = window.localStorage || getUserData() || null,
-            LOCAL_FILE = "localStorage";
-
-        return {
-
-            saveLocalData: function ( key, data ) {
-
-                if ( storage && data) {
-                    storage.setItem( key, data  );
-                    return true;
-                }
-
-                return false;
-
-            },
-
-            getLocalData: function ( key ) {
-
-                if ( storage ) {
-                    return storage.getItem( key );
-                }
-
-                return null;
-
-            },
-
-            removeItem: function ( key ) {
-
-                storage && storage.removeItem( key );
-
-            }
-
-        };
-
-        function getUserData () {
-
-            var container = document.createElement( "div" );
-            container.style.display = "none";
-
-            if( !container.addBehavior ) {
-                return null;
-            }
-
-            container.addBehavior("#default#userdata");
-
-            return {
-
-                getItem: function ( key ) {
-
-                    var result = null;
-
-                    try {
-                        document.body.appendChild( container );
-                        container.load( LOCAL_FILE );
-                        result = container.getAttribute( key );
-                        document.body.removeChild( container );
-                    } catch ( e ) {
-                    }
-
-                    return result;
-
-                },
-
-                setItem: function ( key, value ) {
-
-                    document.body.appendChild( container );
-                    container.setAttribute( key, value );
-                    container.save( LOCAL_FILE );
-                    document.body.removeChild( container );
-
-                },
-//               暂时没有用到
-//                clear: function () {
-//
-//                    var expiresTime = new Date();
-//                    expiresTime.setFullYear( expiresTime.getFullYear() - 1 );
-//                    document.body.appendChild( container );
-//                    container.expires = expiresTime.toUTCString();
-//                    container.save( LOCAL_FILE );
-//                    document.body.removeChild( container );
-//
-//                },
-
-                removeItem: function ( key ) {
-
-                    document.body.appendChild( container );
-                    container.removeAttribute( key );
-                    container.save( LOCAL_FILE );
-                    document.body.removeChild( container );
-
-                }
-
-            };
-
-        }
-
-    } )();
-
     function save ( editor ) {
 
-        var saveData = null;
+        var saveData;
 
         if ( new Date() - lastSaveTime < MIN_TIME ) {
             return;
@@ -119,7 +18,7 @@ UE.plugin.register('autosave', function (){
 
         if ( !editor.hasContents() ) {
             //这里不能调用命令来删除， 会造成事件死循环
-            saveKey && LocalStorage.removeItem( saveKey );
+            saveKey && me.removePreferences( saveKey );
             return;
         }
 
@@ -135,7 +34,7 @@ UE.plugin.register('autosave', function (){
             return;
         }
 
-        LocalStorage.saveLocalData( saveKey, saveData );
+        me.setPreferences( saveKey, saveData );
 
         editor.fireEvent( "afterautosave", {
             content: saveData
@@ -195,8 +94,8 @@ UE.plugin.register('autosave', function (){
         commands:{
             'clearlocaldata':{
                 execCommand:function (cmd, name) {
-                    if ( saveKey && LocalStorage.getLocalData( saveKey ) ) {
-                        LocalStorage.removeItem( saveKey )
+                    if ( saveKey && me.getPreferences( saveKey ) ) {
+                        me.removePreferences( saveKey )
                     }
                 },
                 notNeedUndo: true,
@@ -205,7 +104,7 @@ UE.plugin.register('autosave', function (){
 
             'getlocaldata':{
                 execCommand:function (cmd, name) {
-                    return saveKey ? LocalStorage.getLocalData( saveKey ) || '' : '';
+                    return saveKey ? me.getPreferences( saveKey ) || '' : '';
                 },
                 notNeedUndo: true,
                 ignoreContentChange:true
@@ -214,12 +113,12 @@ UE.plugin.register('autosave', function (){
             'drafts':{
                 execCommand:function (cmd, name) {
                     if ( saveKey ) {
-                        me.body.innerHTML = LocalStorage.getLocalData( saveKey ) || '<p>'+(browser.ie ? '&nbsp;' : '<br/>')+'</p>';
+                        me.body.innerHTML = me.getPreferences( saveKey ) || '<p>'+(browser.ie ? '&nbsp;' : '<br/>')+'</p>';
                         me.focus(true);
                     }
                 },
                 queryCommandState: function () {
-                    return saveKey ? ( LocalStorage.getLocalData( saveKey ) === null ? -1 : 0 ) : -1;
+                    return saveKey ? ( me.getPreferences( saveKey ) === null ? -1 : 0 ) : -1;
                 },
                 notNeedUndo: true,
                 ignoreContentChange:true

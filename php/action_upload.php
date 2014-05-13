@@ -23,7 +23,7 @@ switch ($_GET['action']) {
             "pathFormat" => $CONFIG['scrawlPathFormat'],
             "maxSize" => $CONFIG['scrawlMaxSize'],
             "allowFiles" => $CONFIG['scrawlAllowFiles'],
-            "oriName" => "remote.png"
+            "oriName" => "scrawl.png"
         );
         $fieldName = $CONFIG['scrawlFieldName'];
         $base64 = "base64";
@@ -53,12 +53,12 @@ $up = new Uploader($fieldName, $config, $base64);
 /**
  * 得到上传文件所对应的各个参数,数组结构
  * array(
- *     "originalName" => "",   //原始文件名
- *     "name" => "",           //新文件名
+ *     "state" => "",          //上传状态，上传成功时必须返回"SUCCESS"
  *     "url" => "",            //返回的地址
+ *     "title" => "",          //新文件名
+ *     "original" => "",       //原始文件名
+ *     "type" => ""            //文件类型
  *     "size" => "",           //文件大小
- *     "type" => "" ,          //文件类型
- *     "state" => ""           //上传状态，上传成功时必须返回"SUCCESS"
  * )
  */
 
