@@ -61,7 +61,7 @@ UE.plugin.register('simpleupload', function (){
                 }catch(er){
                     showErrorLoader && showErrorLoader(me.getLang('simpleupload.loadError'));
                 }
-                input.setAttribute('value', null);
+                form.reset();
                 domUtils.un(iframe, 'load', callback);
             }
             function showErrorLoader(title){
