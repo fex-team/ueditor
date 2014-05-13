@@ -254,3 +254,18 @@ test("jsonp请求,有数据,data上有数据,url上有数据", function () {
 
 });
 
+test("通过getJSONP方法发送jsonp请求", function () {
+
+    UE.ajax.getJSONP(ajax_request_baseurl + '?get1=getcontent1&get2=getcontent2', {
+        'datakey1': 'datakeycontent1',
+        'datakey2': 'datakeycontent2'
+    }, function (r) {
+        equal(r.get1, 'getcontent1', 'url上的参数1正常');
+        equal(r.get2, 'getcontent2', 'url上的参数2正常');
+        equal(r.datakey1, 'datakeycontent1', 'data数据上的参数1正常');
+        equal(r.datakey2, 'datakeycontent2', 'data数据上的参数2正常');
+        start();
+    });
+    stop();
+
+});
