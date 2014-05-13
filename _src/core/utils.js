@@ -1068,7 +1068,7 @@ var utils = UE.utils = {
                             if(preComma) {
                                 result.push(',');
                             }
-                            result.push(baidu.json.stringify(item));
+                            result.push(utils.json2str(item));
                             preComma = 1;
                     }
                 }
