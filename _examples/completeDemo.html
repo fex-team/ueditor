@@ -145,10 +145,10 @@
     }
     function disableBtn(str) {
         var div = document.getElementById('btns');
-        var btns = domUtils.getElementsByTagName(div, "button");
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
         for (var i = 0, btn; btn = btns[i++];) {
             if (btn.id == str) {
-                domUtils.removeAttributes(btn, ["disabled"]);
+                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
             } else {
                 btn.setAttribute("disabled", "true");
             }
@@ -156,9 +156,9 @@
     }
     function enableBtn() {
         var div = document.getElementById('btns');
-        var btns = domUtils.getElementsByTagName(div, "button");
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
         for (var i = 0, btn; btn = btns[i++];) {
-            domUtils.removeAttributes(btn, ["disabled"]);
+            UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
         }
     }
 
