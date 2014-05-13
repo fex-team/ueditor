@@ -420,4 +420,46 @@ test( 'transUnitToPx 转换', function () {
     equal(UE.utils.transUnitToPx('0pt'),'0');
 } ) ;
 
+test('RegExp', function () {
+    var reg = new RegExp(".*");
+    equal(ok(utils.isRegExp(reg), 'reg is a RegExp'));
+});
 
+test('isDate', function () {
+    var date = new Date();
+    equal(ok(utils.isDate(date), 'date is a Date'));
+});
+
+test('isCrossDomainUrl', function () {
+
+    var l = location;
+
+    ok(!utils.isCrossDomainUrl(location.href), 'location.href 不跨域');
+
+    if (l.port == '') {
+        ok(!utils.isCrossDomainUrl(l.protocol + '//' + l.hostname + ':80/ueditor/'), '本地没端口,80端口不跨域');
+    }
+
+    if (l.port == '80') {
+        ok(!utils.isCrossDomainUrl(l.protocol + '//' + l.hostname + '/ueditor/'), '本地没80端口,无端口不跨域');
+    }
+
+    if (l.protocol == 'http:') {
+        ok(utils.isCrossDomainUrl('https://' + l.host + '/ueditor/'), '本地http协议,https协议跨域');
+    } else {
+        ok(utils.isCrossDomainUrl('http://' + l.host + '/ueditor/'), '本地不是http协议,http协议跨域');
+    }
+
+    ok(utils.isCrossDomainUrl(l.protocol + '//www.baidu.com' + ':' + l.port), '域名不一致跨域');
+
+});
+
+test('formatUrl', function () {
+
+    var url1 = 'http://localhost/a.html?&key1=value1&&key2=value2&&key3=value3&#hash';
+    var url2 = 'http://localhost/a.html?&key1=value1&&key2=value2&&key3=value3&';
+
+    equal(utils.formatUrl(url1), 'http://localhost/a.html?key1=value1&key2=value2&key3=value3#hash',  '格式化url');
+    equal(utils.formatUrl(url2), 'http://localhost/a.html?key1=value1&key2=value2&key3=value3',  '格式化url');
+
+});

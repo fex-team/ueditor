@@ -6,9 +6,6 @@
  * Time: 上午10:17
  */
 include "Uploader.class.php";
-date_default_timezone_set("Asia/chongqing");
-header("Content-Type: text/plain; charset=utf-8");
-error_reporting(E_ERROR | E_WARNING);
 
 /* 判断类型 */
 switch ($_GET['action']) {

@@ -262,35 +262,7 @@
         });
 
         /* 尝试异步加载后台配置 */
-        try{
-            me.options.imageUrl && me.setOpt('serverUrl', me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2'));
-
-            var configUrl = me.getOpt('serverUrl');
-
-            /* 发出ajax请求 */
-            me._serverConfigLoaded = false;
-            configUrl && UE.ajax.request(configUrl,{
-                'method': 'GET',
-                'data': {
-                    'action': 'config'
-                },
-                'onsuccess':function(xhr){
-                    try {
-                        var config = eval("("+xhr.responseText+")");
-                        utils.extend(me.options, config);
-                        me.fireEvent('serverConfigLoaded');
-                        me._serverConfigLoaded = true;
-                    } catch (e) {
-                        console && console.error('后台配置项返回出错!');
-                    }
-                },
-                'onerror':function(){
-                    console && console.error('获取后台配置项出错!');
-                }
-            });
-        } catch(e){
-            console && console.log('Get Server Config Error!');
-        }
+        me.loadServerConfig();
 
         if(!utils.isEmptyObject(UE.I18N)){
             //修改默认的语言类型

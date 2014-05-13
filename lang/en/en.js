@@ -184,11 +184,12 @@ UE.I18N['en'] = {
         'redandblue':'Blue and red',
         'threecolorgradient':'Three-color gradient',
         'copy':"Copy(Ctrl + c)",
-        'copymsg':"Please use 'Ctrl + c' instead!",
+        'copymsg':"Browser does not support. Please use 'Ctrl + c' instead!",
         'paste':"Paste(Ctrl + v)",
-        'pastemsg':"Please use 'Ctrl + v' instead!"
+        'pastemsg':"Browser does not support. Please use 'Ctrl + v' instead!"
     },
-
+    'copymsg': "Browser does not support. Please use 'Ctrl + c' instead!",
+    'pastemsg': "Browser does not support. Please use 'Ctrl + v' instead!",
     'anthorMsg':"Link",
     'clearColor':'Clear',
     'standardColor':'Standard color',
@@ -213,17 +214,20 @@ UE.I18N['en'] = {
     'pasteTextFormat':'Keep Text only',
     'more':'More',
     'autoTypeSet':{
-        mergeLine:"Merge empty line",
-        delLine:"Del empty line",
-        removeFormat:"Remove format",
-        indent:"Indent",
-        alignment:"Alignment",
-        imageFloat:"Image float",
-        removeFontsize:"Remove font size",
-        removeFontFamily:"Remove fontFamily",
-        removeHtml:"Remove redundant HTML code",
-        pasteFilter:"Paste filter",
-        run:"Done"
+        'mergeLine':"Merge empty line",
+        'delLine':"Del empty line",
+        'removeFormat':"Remove format",
+        'indent':"Indent",
+        'alignment':"Alignment",
+        'imageFloat':"Image float",
+        'removeFontsize':"Remove font size",
+        'removeFontFamily':"Remove fontFamily",
+        'removeHtml':"Remove redundant HTML code",
+        'pasteFilter':"Paste filter",
+        'run':"Done",
+        'symbol':'Symbol Conversion',
+        'bdc2sb':'Full-width to Half-width',
+        'tobdc':'Half-width to Full-width'
     },
 
     'background':{
@@ -285,6 +289,7 @@ UE.I18N['en'] = {
         'updateStatusFinish': 'Total _ pictures (_KB), _  uploaded successfully',
         'updateStatusError': ' and _ upload failed',
         'errorExceedSize':'File Size Exceed',
+        'errorFileType':'File Type Not Allow',
         'errorInterrupt':'File Upload Interrupted',
         'errorUploadRetry':'Upload Error, Please Retry.',
         'errorHttp':'Http Error',

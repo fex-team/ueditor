@@ -676,7 +676,7 @@ var utils = UE.utils = {
         return true;
     },
 
-    /*
+    /**
      * 把rgb格式的颜色值转换成16进制格式
      * @method fixColor
      * @param { String } rgb格式的颜色值
@@ -698,7 +698,7 @@ var utils = UE.utils = {
         }
         return  value;
     },
-    /*
+    /**
      * 只针对border,padding,margin做了处理，因为性能问题
      * @public
      * @function
@@ -878,7 +878,7 @@ var utils = UE.utils = {
         }
     }(),
 
-    /*
+    /**
      * 动态添加css样式
      * @method cssRule
      * @param { String } 节点名称
@@ -985,7 +985,17 @@ var utils = UE.utils = {
         var u = url.replace(/&&/g, '&');
         u = u.replace(/\?&/g, '?');
         u = u.replace(/&$/g, '');
+        u = u.replace(/&#/g, '#');
         return u;
+    },
+    isCrossDomainUrl:function (url) {
+        var a = document.createElement('a');
+        a.href = url;
+        if (browser.ie) {
+            a.href = a.href;
+        }
+        return !(a.protocol == location.protocol && a.hostname == location.hostname &&
+        (a.port == location.port || (a.port == '80' && location.port == '') || (a.port == '' && location.port == '80')));
     },
     clearEmptyAttrs : function(obj){
         for(var p in obj){
@@ -994,7 +1004,142 @@ var utils = UE.utils = {
             }
         }
         return obj;
-    }
+    },
+    str2json : function(s){
+
+        if (window.JSON) {
+            return JSON.parse(s);
+        } else {
+            return (new Function("return " + utils.trim(s)))();
+        }
+
+    },
+    json2str : (function(){
+
+        if (window.JSON) {
+
+            return JSON.stringify;
+
+        } else {
+
+            var escapeMap = {
+                "\b": '\\b',
+                "\t": '\\t',
+                "\n": '\\n',
+                "\f": '\\f',
+                "\r": '\\r',
+                '"' : '\\"',
+                "\\": '\\\\'
+            };
+
+            function encodeString(source) {
+                if (/["\\\x00-\x1f]/.test(source)) {
+                    source = source.replace(
+                        /["\\\x00-\x1f]/g,
+                        function (match) {
+                            var c = escapeMap[match];
+                            if (c) {
+                                return c;
+                            }
+                            c = match.charCodeAt();
+                            return "\\u00"
+                            + Math.floor(c / 16).toString(16)
+                            + (c % 16).toString(16);
+                        });
+                }
+                return '"' + source + '"';
+            }
+
+            function encodeArray(source) {
+                var result = ["["],
+                    l = source.length,
+                    preComma, i, item;
+
+                for (i = 0; i < l; i++) {
+                    item = source[i];
+
+                    switch (typeof item) {
+                        case "undefined":
+                        case "function":
+                        case "unknown":
+                            break;
+                        default:
+                            if(preComma) {
+                                result.push(',');
+                            }
+                            result.push(baidu.json.stringify(item));
+                            preComma = 1;
+                    }
+                }
+                result.push("]");
+                return result.join("");
+            }
+
+            function pad(source) {
+                return source < 10 ? '0' + source : source;
+            }
+
+            function encodeDate(source){
+                return '"' + source.getFullYear() + "-"
+                + pad(source.getMonth() + 1) + "-"
+                + pad(source.getDate()) + "T"
+                + pad(source.getHours()) + ":"
+                + pad(source.getMinutes()) + ":"
+                + pad(source.getSeconds()) + '"';
+            }
+
+            return function (value) {
+                switch (typeof value) {
+                    case 'undefined':
+                        return 'undefined';
+
+                    case 'number':
+                        return isFinite(value) ? String(value) : "null";
+
+                    case 'string':
+                        return encodeString(value);
+
+                    case 'boolean':
+                        return String(value);
+
+                    default:
+                        if (value === null) {
+                            return 'null';
+                        } else if (utils.isArray(value)) {
+                            return encodeArray(value);
+                        } else if (utils.isArray(value)) {
+                            return encodeDate(value);
+                        } else {
+                            var result = ['{'],
+                                encode = utils.json2str,
+                                preComma,
+                                item;
+
+                            for (var key in value) {
+                                if (Object.prototype.hasOwnProperty.call(value, key)) {
+                                    item = value[key];
+                                    switch (typeof item) {
+                                        case 'undefined':
+                                        case 'unknown':
+                                        case 'function':
+                                            break;
+                                        default:
+                                            if (preComma) {
+                                                result.push(',');
+                                            }
+                                            preComma = 1;
+                                            result.push(encode(key) + ':' + encode(item));
+                                    }
+                                }
+                            }
+                            result.push('}');
+                            return result.join('');
+                        }
+                }
+            };
+        }
+
+    })()
 
 };
 /**
@@ -1038,7 +1183,7 @@ var utils = UE.utils = {
  * @param { * } object 需要判断的对象
  * @return { Boolean } 给定的对象是否是普通对象
  */
-utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object'], function (v) {
+utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Date'], function (v) {
     UE.utils['is' + v] = function (obj) {
         return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
     }

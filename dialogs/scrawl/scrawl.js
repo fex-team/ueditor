@@ -277,7 +277,7 @@ var scrawl = function (options) {
         _addClearSelectionListenter:function () {
             var doc = document;
             domUtils.on(doc, 'mousemove', function (e) {
-                if (browser.ie)
+                if (browser.ie && browser.version < 11)
                     doc.selection.clear();
                 else
                     window.getSelection().removeAllRanges();
@@ -642,6 +642,8 @@ function exec(scrawlObj) {
                                 url = editor.options.scrawlUrlPrefix + responseObj.url;
                             imgObj.src = url;
                             imgObj._src = url;
+                            imgObj.alt = responseObj.original || '';
+                            imgObj.title = responseObj.title || '';
                             editor.execCommand("insertImage", imgObj);
                             dialog.close();
                         } else {
@@ -659,7 +661,7 @@ function exec(scrawlObj) {
 
             var actionUrl = editor.getActionUrl(editor.getOpt('scrawlActionName')),
                 params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
-                url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
             ajax.request(url, options);
         }
     } else {

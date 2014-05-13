@@ -7,7 +7,7 @@
 UE.plugins['video'] = function (){
     var me =this;
 
-    /*
+    /**
      * 创建插入视频字符窜
      * @param url 视频地址
      * @param width 视频宽度

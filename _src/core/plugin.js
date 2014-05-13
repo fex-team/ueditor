@@ -1,4 +1,4 @@
-/*
+/**
  * Created with JetBrains PhpStorm.
  * User: campaign
  * Date: 10/8/13

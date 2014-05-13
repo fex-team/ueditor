@@ -5,7 +5,7 @@
 <%
 
 	request.setCharacterEncoding( "UTF-8" );
-	response.setHeader("content-type" , "application/json");
+	response.setHeader("Content-Type" , "text/html");
 	
 	String rootPath = application.getRealPath( "/" );
 	

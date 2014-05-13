@@ -12,13 +12,18 @@ include("Uploader.class.php");
 $config = array(
     "pathFormat" => $CONFIG['catcherPathFormat'],
     "maxSize" => $CONFIG['catcherMaxSize'],
-    "allowFiles" => $CONFIG['catcherAllowFiles']
+    "allowFiles" => $CONFIG['catcherAllowFiles'],
+    "oriName" => "remote.png"
 );
 $fieldName = $CONFIG['catcherFieldName'];
 
 /* 抓取远程图片 */
 $list = array();
-$source = $_POST[$fieldName];
+if (isset($_POST[$fieldName])) {
+    $source = $_POST[$fieldName];
+} else {
+    $source = $_GET[$fieldName];
+}
 foreach ($source as $imgUrl) {
     $item = new Uploader($imgUrl, $config, "remote");
     $info = $item->getFileInfo();
