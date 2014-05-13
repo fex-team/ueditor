@@ -108,13 +108,13 @@
                                     'symbolConver': 'tobdc'
                                 };
 
-                            for (var key in radios) {
+                            for (var i = 0; i < radios.length; i++) {
                                 if (checked) {
-                                    if (radios[key].value == defalutSelect[target.name]) {
-                                        radios[key].checked = 'checked';
+                                    if (radios[i].value == defalutSelect[target.name]) {
+                                        radios[i].checked = 'checked';
                                     }
                                 } else {
-                                    radios[key].checked = false;
+                                    radios[i].checked = false;
                                 }
                             }
                         }
