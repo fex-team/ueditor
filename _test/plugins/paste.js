@@ -51,3 +51,28 @@ test( 'getClipboardData--ctrl+v', function() {
 //    stop();
     equal('','','');
 } );
+
+//需要点击授权弹出框,暂时去除
+//test('检查IE下粘贴命令是否执行正常', function () {
+//
+//    if (browser.ie) {
+//        var editor = te.obj[0];
+//        editor.setContent('<p>hello</p>');
+//        editor.focus();
+//
+//        editor.execCommand('selectall');
+//        editor.body.document.execCommand('copy');
+//        editor.setContent('<p>test</p>');
+//        editor.execCommand('selectall');
+//        editor.execCommand('paste');
+//
+//        setTimeout(function(){
+//            equal(utils.trim(editor.getContent().replace('<p></p>', '').replace('<p>&nbsp;</p>', '')), '<p>hello</p>', '检查html内容,IE下成功粘贴内容');
+//            equal(utils.trim(editor.getContentTxt()), 'hello', '检查text内容,IE下成功粘贴内容');
+//            start();
+//        },100);
+//
+//        stop();
+//    }
+//
+//});

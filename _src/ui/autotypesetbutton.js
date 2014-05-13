@@ -98,14 +98,19 @@
                     if (target && target.tagName == 'INPUT') {
 
                         // 点击图片浮动的checkbox,去除对应的radio
-                        if (target.name == 'imageBlockLine' || target.name == 'textAlign') {
+                        if (target.name == 'imageBlockLine' || target.name == 'textAlign' || target.name == 'symbolConver') {
                             var checked = target.checked,
                                 radioTd = document.getElementById( target.name + 'Value' + editorId),
-                                radios = radioTd.getElementsByTagName('input');
+                                radios = radioTd.getElementsByTagName('input'),
+                                defalutSelect = {
+                                    'imageBlockLine': 'none',
+                                    'textAlign': 'left',
+                                    'symbolConver': 'tobdc'
+                                };
 
                             for (var key in radios) {
                                 if (checked) {
-                                    if (radios[key].value == (target.name == 'imageBlockLine' ? 'none':'left')) {
+                                    if (radios[key].value == defalutSelect[target.name]) {
                                         radios[key].checked = 'checked';
                                     }
                                 } else {
@@ -114,7 +119,7 @@
                             }
                         }
                         // 点击radio,选中对应的checkbox
-                        if (target.name == ('imageBlockLineValue' + editorId) || target.name == ('textAlignValue' + editorId)) {
+                        if (target.name == ('imageBlockLineValue' + editorId) || target.name == ('textAlignValue' + editorId) || target.name == 'bdc') {
                             var checkboxs = target.parentNode.previousSibling.getElementsByTagName('input');
                             checkboxs && (checkboxs[0].checked = true);
                         }

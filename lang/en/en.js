@@ -76,6 +76,7 @@ UE.I18N['en'] = {
     },
     'simpleupload':{
         'exceedSizeError': 'File Size Exceed',
+        'exceedTypeError': 'File Type Not Allow',
         'jsonEncodeError': 'Server Return Format Error',
         'loading':"loading...",
         'loadError':"load error"
@@ -225,6 +226,7 @@ UE.I18N['en'] = {
         'removeHtml':"Remove redundant HTML code",
         'pasteFilter':"Paste filter",
         'run':"Done",
+        'symbol':'Symbol Conversion',
         'bdc2sb':'Full-width to Half-width',
         'tobdc':'Half-width to Full-width'
     },

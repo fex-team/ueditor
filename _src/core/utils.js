@@ -972,7 +972,7 @@ var utils = UE.utils = {
             //传递过来的对象和函数不在提交之列
             if (!((typeof json[i]).toLowerCase() == "function" || (typeof json[i]).toLowerCase() == "object")) {
                 strArr.push( encodeURIComponent(i) + "="+encodeURIComponent(json[i]) );
-            } else if (json[i].constructor === Array) {
+            } else if (utils.isArray(json[i])) {
                 //支持传数组内容
                 for(var j = 0; j < json[i].length; j++) {
                     strArr.push( encodeURIComponent(i) + "[]="+encodeURIComponent(json[i][j]) );
@@ -985,6 +985,8 @@ var utils = UE.utils = {
         var u = url.replace(/&&/g, '&');
         u = u.replace(/\?&/g, '?');
         u = u.replace(/&$/g, '');
+        u = u.replace(/&#/g, '#');
+        u = u.replace(/&+/g, '&');
         return u;
     },
     isCrossDomainUrl:function (url) {
@@ -1066,7 +1068,7 @@ var utils = UE.utils = {
                             if(preComma) {
                                 result.push(',');
                             }
-                            result.push(baidu.json.stringify(item));
+                            result.push(utils.json2str(item));
                             preComma = 1;
                     }
                 }

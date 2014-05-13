@@ -112,20 +112,17 @@ var LocalStorage = UE.LocalStorage = (function () {
             obj = key;
         }
         var data = LocalStorage.getLocalData(ROOTKEY);
-        if (data) {
-            data = utils.str2json(data);
+        if (data && (data = utils.str2json(data))) {
             utils.extend(data, obj);
         } else {
             data = obj;
         }
-        LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
+        data && LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
     };
 
     UE.Editor.prototype.getPreferences = function(key){
-
         var data = LocalStorage.getLocalData(ROOTKEY);
-        if (data) {
-            data = utils.str2json(data);
+        if (data && (data = utils.str2json(data))) {
             return key ? data[key] : data
         }
         return null;
@@ -133,12 +130,11 @@ var LocalStorage = UE.LocalStorage = (function () {
 
     UE.Editor.prototype.removePreferences = function (key) {
         var data = LocalStorage.getLocalData(ROOTKEY);
-        if (data) {
-            data = utils.str2json(data);
+        if (data && (data = utils.str2json(data))) {
             data[key] = undefined;
             delete data[key]
-    }
-        LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
+        }
+        data && LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
     };
 
 })();
