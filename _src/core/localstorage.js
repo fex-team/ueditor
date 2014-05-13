@@ -117,11 +117,10 @@ var LocalStorage = UE.LocalStorage = (function () {
         } else {
             data = obj;
         }
-        LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
+        data && LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
     };
 
     UE.Editor.prototype.getPreferences = function(key){
-
         var data = LocalStorage.getLocalData(ROOTKEY);
         if (data && (data = utils.str2json(data))) {
             return key ? data[key] : data
@@ -135,7 +134,7 @@ var LocalStorage = UE.LocalStorage = (function () {
             data[key] = undefined;
             delete data[key]
         }
-        LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
+        data && LocalStorage.saveLocalData(ROOTKEY, utils.json2str(data));
     };
 
 })();
