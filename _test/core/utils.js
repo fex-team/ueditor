@@ -456,10 +456,54 @@ test('isCrossDomainUrl', function () {
 
 test('formatUrl', function () {
 
-    var url1 = 'http://localhost/a.html?&key1=value1&&key2=value2&&key3=value3&#hash';
-    var url2 = 'http://localhost/a.html?&key1=value1&&key2=value2&&key3=value3&';
+    var url1 = 'http://localhost/a.html?&key1=value1&&key2=value2&&&&&&&&&key3=value3&#hash';
+    var url2 = 'http://localhost/a.html?&key1=value1&&key2=value2&&&&&&&&&key3=value3&';
 
     equal(utils.formatUrl(url1), 'http://localhost/a.html?key1=value1&key2=value2&key3=value3#hash',  '格式化url');
     equal(utils.formatUrl(url2), 'http://localhost/a.html?key1=value1&key2=value2&key3=value3',  '格式化url');
+
+});
+
+test('str2json', function () {
+
+    same(utils.str2json('{"a":11,"b":"22","c":"cc","d":[1,"2","a",{"a":"aa"}],"e":{"k1":1,"k2":"2","k3":"a","k4":{"a":"aa"}}}'),
+        {"a": 11, "b": "22", "c": "cc", "d": [1, "2", "a", {"a": "aa"}], "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}},
+        '字符串转json对象');
+
+});
+
+test('json2str', function () {
+
+    equal(utils.json2str({"a": 11, "b": "22", "c": "cc", "d": [1, "2", "a", {"a": "aa"}], "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}}),
+        '{"a":11,"b":"22","c":"cc","d":[1,"2","a",{"a":"aa"}],"e":{"k1":1,"k2":"2","k3":"a","k4":{"a":"aa"}}}',
+        'json对象转字符串');
+
+});
+
+test('serializeParam', function () {
+
+    equal(utils.serializeParam({
+            key1: 'value1',
+            key2: 'value2',
+            key3: 33,
+            key4: '44',
+            key5: true,
+            key6: null,
+            key7: undefined,
+            key8: [11, 22, '33', 'aa', true, null]
+        }),
+        'key1=value1&' +
+        'key2=value2&' +
+        'key3=33&' +
+        'key4=44&' +
+        'key5=true&' +
+        'key7=undefined&' +
+        'key8[]=11&' +
+        'key8[]=22&' +
+        'key8[]=33&' +
+        'key8[]=aa&' +
+        'key8[]=true&' +
+        'key8[]=null',
+        '序列化obj对象为GET请求字符串');
 
 });
