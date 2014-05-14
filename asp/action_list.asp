@@ -19,7 +19,7 @@
 
     Set fso = Server.CreateObject("Scripting.FileSystemObject")
     If fso.FolderExists(Server.MapPath(path)) = False Then
-        state = "ÕÒ²»µ½Ä¿Â¼£º" + path
+        state = "æ‰¾ä¸åˆ°ç›®å½•ï¼š" + path
     Else
         Set all = ListAllFilesInFolder( fso, path )
         total = all.Count
