@@ -31,8 +31,8 @@
 
         //--自动切换提交地址----
         var doc=document,
-            version=editor_a.options.imageUrl||"php",
-            form=doc.getElementById("form");
+                version = editor_a.options.serverUrl || editor_a.options.imageUrl || "php",
+                form=doc.getElementById("form");
 
         if(version.match(/php/)){
             form.action="./server/getContent.php";

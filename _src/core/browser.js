@@ -164,6 +164,10 @@ var browser = UE.browser = function(){
 
         browser.ie9below = version < 9;
 
+        browser.ie11above = version > 10;
+
+        browser.ie11below = version < 11;
+
     }
 
     // Gecko.

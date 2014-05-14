@@ -449,7 +449,7 @@
                     file.rotation = 0;
 
                     /* 检查文件格式 */
-                    if (acceptExtensions.indexOf(file.ext) == -1) {
+                    if (acceptExtensions.indexOf(file.ext.toLowerCase()) == -1) {
                         showError('not_allow_type');
                         uploader.removeFile(file);
                     }
@@ -707,7 +707,7 @@
                 var $file = $('#' + file.id);
                 try {
                     var responseText = (ret._raw || ret),
-                        json = eval('(' + utils.trim(responseText) + ')');
+                        json = utils.str2json(responseText);
                     if (json.state == 'SUCCESS') {
                         _this.imageList.push(json);
                         $file.append('<span class="success"></span>');

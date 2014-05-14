@@ -1008,10 +1008,11 @@ var utils = UE.utils = {
     },
     str2json : function(s){
 
+        if (!utils.isString(s)) return null;
         if (window.JSON) {
             return JSON.parse(s);
         } else {
-            return (new Function("return " + utils.trim(s)))();
+            return (new Function("return " + utils.trim(s || '')))();
         }
 
     },
@@ -1068,7 +1069,7 @@ var utils = UE.utils = {
                             if(preComma) {
                                 result.push(',');
                             }
-                            result.push(baidu.json.stringify(item));
+                            result.push(utils.json2str(item));
                             preComma = 1;
                     }
                 }

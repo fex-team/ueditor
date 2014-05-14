@@ -190,6 +190,11 @@ UE.commands['insertimage'] = {
         var me = this,
             range = me.selection.getRange(),
             img = range.getClosedNode();
+
+        if(me.fireEvent('beforeinsertimage', opt) === true){
+            return;
+        }
+
         if (img && /img/i.test(img.tagName) && (img.className != "edui-faked-video" || img.className.indexOf("edui-upload-video")!=-1) && !img.getAttribute("word_img")) {
             var first = opt.shift();
             var floatStyle = first['floatStyle'];
@@ -236,5 +241,7 @@ UE.commands['insertimage'] = {
 
             me.execCommand('insertHtml', html.join(''));
         }
+
+        me.fireEvent('afterinsertimage', opt)
     }
 };
