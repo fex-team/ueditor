@@ -11,7 +11,7 @@
         .content table td{vertical-align: middle;}
         #address{width:220px;height:21px;background: #FFF;border:1px solid #d7d7d7; line-height: 21px;}
     </style>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 </head>
 <body>
 <div class="content">
@@ -59,7 +59,7 @@
             dialog.onok = function (){
                 var center = map.getCenter();
                 var point = marker.getPosition();
-                var url = "http://maps.google.com/maps/api/staticmap?center=" + center.lat() + ',' + center.lng() + "&zoom=" + map.zoom + "&size=520x340&maptype=" + map.getMapTypeId() + "&markers=" + point.lat() + ',' + point.lng() + "&sensor=false";
+                var url = "http://maps.googleapis.com/maps/api/staticmap?center=" + center.lat() + ',' + center.lng() + "&zoom=" + map.zoom + "&size=520x340&maptype=" + map.getMapTypeId() + "&markers=" + point.lat() + ',' + point.lng() + "&sensor=false";
                 editor.execCommand('inserthtml', '<img width="520" height="340" src="' + url + '"' + (imgcss ? ' style="' + imgcss + '"' :'') + '/>');
             };
 
@@ -68,7 +68,7 @@
                 return reg.exec(str)[1];
             }
             var img = editor.selection.getRange().getClosedNode();
-            if(img && img.src.indexOf("http://maps.google.com/maps/api/staticmap")!=-1){
+            if(img && img.src.indexOf("http://maps.googleapis.com/maps/api/staticmap")!=-1){
                 var url = img.getAttribute("src");
                 var centers = getPars(url,"center").split(",");
                 point = new google.maps.LatLng(Number(centers[0]),Number(centers[1]));
