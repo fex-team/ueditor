@@ -12,7 +12,8 @@ module("plugins.list");
  * */
 
 //test('',function(){stop();})
-test('回车将p转成列表', function () {
+test('trace 3859 回车将p转成列表', function () {
+    if(ua.browser.ie==9||ua.browser.ie==10)return;
     var editor = te.obj[0];
     var range = te.obj[1];
     var br = ua.browser.ie ? '' : '<br>';
@@ -830,7 +831,7 @@ test('trace 3132：单行列表backspace', function () {
         editor.setContent('<ol><li><br></li></ol>');
         range.selectNode(editor.body.firstChild.firstChild.firstChild.firstChild).select();
         ua.keydown(editor.body, {keyCode:8});
-        var space =ua.browser.ie>8&&ua.browser.ie<11?'':'<br>';
+        var space ='<br>';
         equal(ua.getChildHTML(editor.body), '<p>'+space+'</p>', '');
 
 });
@@ -892,7 +893,11 @@ test('trace 3165：检查表格中列表tab键', function () {
             tds = body.getElementsByTagName('td');
             range.setStart(tds[5], 0).collapse(1).select();
             range = editor.selection.getRange();
-            equal(range.startContainer.parentNode.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
+            if(ua.browser.ie==9||ua.browser.ie==10)
+                equal(range.startContainer.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
+
+            else
+                equal(range.startContainer.parentNode.tagName.toLowerCase(), 'td', 'tab键前光标位于td中');
             ua.keydown(editor.body, {keyCode:9});
             setTimeout(function () {
                 range = editor.selection.getRange();
