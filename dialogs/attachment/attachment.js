@@ -212,7 +212,7 @@
                     $wrap.text(lang.uploadPreview);
                     if ('|png|jpg|jpeg|bmp|gif|'.indexOf('|'+file.ext.toLowerCase()+'|') == -1) {
                         $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext.toLowerCase() + '"></i>' +
-                        '<span class="file-title">' + file.name + '</span>');
+                        '<span class="file-title" title="' + file.name + '">' + file.name + '</span>');
                     } else {
                         if (browser.ie && browser.version <= 7) {
                             $wrap.text(lang.uploadNoPreview);
