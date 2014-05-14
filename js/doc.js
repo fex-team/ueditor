@@ -43,6 +43,7 @@ $(function(){
                     return '<a class="mardwodnlink" href="#' + mdToPath[m] + '"';
                 });
             $('#show').html(html);
+            $('#show').find('a').attr('target', '_blank');
             /* 设置其他markdown的链接 */
             $('#show .mardwodnlink').click(function(){
                 $('#guidebar .nav .nav>li>a[href=' + $(this).attr('href') + ']').trigger('click');
