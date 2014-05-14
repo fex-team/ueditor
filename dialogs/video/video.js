@@ -721,7 +721,7 @@
                 var $file = $('#' + file.id);
                 try {
                     var responseText = (ret._raw || ret),
-                        json = eval('(' + utils.trim(responseText) + ')');
+                        json = utils.str2json(responseText);
                     if (json.state == 'SUCCESS') {
                         uploadVideoList.push({
                             'url': json.url,

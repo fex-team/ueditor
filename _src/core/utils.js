@@ -1008,10 +1008,11 @@ var utils = UE.utils = {
     },
     str2json : function(s){
 
+        if (!utils.isString(s)) return null;
         if (window.JSON) {
             return JSON.parse(s);
         } else {
-            return (new Function("return " + utils.trim(s)))();
+            return (new Function("return " + utils.trim(s || '')))();
         }
 
     },
