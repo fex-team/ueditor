@@ -20,7 +20,7 @@ test( '对代码的行号不处理', function () {
 test( '空td,th,caption', function () {
     var editor = te.obj[0];
     editor.setContent( '<table><caption></caption><tbody><tr><th></th><th></th></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table>' );
-    var br = ua.browser.ie?'':'<br>';
+    var br = ua.browser.ie&&ua.browser.ie<11?'':'<br>';
     var html = '<table><caption>'+br+'</caption><tbody><tr><th>'+br+'</th><th>'+br+'</th></tr><tr><td>'+br+'</td><td>'+br+'</td></tr><tr><td>'+br+'</td><td>'+br+'</td></tr></tbody></table>';
     ua.checkSameHtml(editor.body.innerHTML,html,'空td,th,caption,添加text')
 } );
