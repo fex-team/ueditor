@@ -40,7 +40,7 @@ UEditor是由百度web前端研发部开发所见即所得富文本web编辑器�
 
 如果看到了下面这样的编辑器，恭喜你，初次部署成功！
 
-![部署成功](images/demo.png)
+![部署成功](_doc/images/demo.png)
 
 ### 自定义的参数
 
@@ -51,7 +51,7 @@ var ue = UE.getEditor('container', {
 });
 ```
 
-配置项也可以通过ueditor.config.js文件修改，具体的配置方法请看[1.4 前端配置项说明.md](1.4 前端配置项说明.md)
+配置项也可以通过ueditor.config.js文件修改，具体的配置方法请看[前端配置项说明](http://fex.baidu.com/ueditor/#start-config1.4 前端配置项说明.md)
 
 ### 设置和读取编辑器的内容
 
