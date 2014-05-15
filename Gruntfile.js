@@ -176,7 +176,7 @@ module.exports = function (grunt) {
         replace: {
 
             fileEncode: {
-                src: [ disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.ashx', disDir + '**/*.asp' ],
+                src: [ disDir + '**/*.html', disDir + 'dialogs/*.js', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.ashx', disDir + '**/*.asp' ],
                 overwrite: true,
                 replacements: [
                     {
@@ -262,6 +262,10 @@ module.exports = function (grunt) {
             suffix = server === "net" ? ".ashx" : "." + server;
 
         file = file.replace(/php\//ig, path).replace(/\.php/ig, suffix);
+
+        if (encode == 'gbk') {
+            file = file.replace(/utf-8/gi, 'gbk');
+        }
 
         //写入到dist
         if (grunt.file.write(disDir + filename, file)) {
