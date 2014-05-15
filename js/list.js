@@ -114,17 +114,17 @@ var docList = [
 //                title: '4.7 跨域上传说明'
 //            }
         ]
-    }//,
-//    {
-//        id: 'api',
-//        title: '5 API列表',
-//        list: [
-//        ]
-//    },
-//    {
-//        id: 'qa',
-//        title: '6 常见问题',
-//        list: [
-//        ]
-//    }
+    },
+    {
+        id: 'api',
+        title: '5 常用API列表',
+        list: [
+        ]
+    },
+    {
+        id: 'qa',
+        title: '6 常见问题',
+        list: [
+        ]
+    }
 ];
