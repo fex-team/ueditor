@@ -16,7 +16,7 @@
                 $('#form')[0].submit();
             });
             //--自动切换提交地址----
-            var version = ue.options.serverUrl || editor_a.options.imageUrl ||  "php",
+            var version = ue.options.serverUrl || ue.options.imageUrl ||  "php",
                     form=$('#form')[0];
 
             if(version.match(/php/)){
