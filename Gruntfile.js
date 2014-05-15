@@ -170,13 +170,13 @@ module.exports = function (grunt) {
             options: {
                 charset: encode
             },
-            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.php', disDir + '**/*.asp', disDir + '**/*.ashx', disDir + '**/*.cs']
+            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.json', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.php', disDir + '**/*.asp', disDir + '**/*.ashx', disDir + '**/*.cs']
 
         },
         replace: {
 
             fileEncode: {
-                src: [ disDir + '**/*.html', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.net', disDir + '**/*.asp' ],
+                src: [ disDir + '**/*.html', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.ashx', disDir + '**/*.asp' ],
                 overwrite: true,
                 replacements: [
                     {

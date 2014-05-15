@@ -449,7 +449,7 @@
                     file.rotation = 0;
 
                     /* 检查文件格式 */
-                    if (acceptExtensions.indexOf(file.ext.toLowerCase()) == -1) {
+                    if (!file.ext || acceptExtensions.indexOf(file.ext.toLowerCase()) == -1) {
                         showError('not_allow_type');
                         uploader.removeFile(file);
                     }
@@ -690,8 +690,9 @@
                 }
             });
 
-            uploader.on('uploadBeforeSend', function (file, data) {
+            uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
+                header['X_Requested_With'] = 'XMLHttpRequest';
             });
 
             uploader.on('uploadProgress', function (file, percentage) {

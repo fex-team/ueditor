@@ -30,7 +30,7 @@ public class getContent : IHttpHandler {
               "})"+
             "</script>");
 
-        context.Response.Write("第1个编辑器的值");
+        context.Response.Write("Content of First Editor: ");
         context.Response.Write("<div class='content'>" + context.Server.HtmlDecode(content) + "</div>");
 
     }

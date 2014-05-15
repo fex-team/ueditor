@@ -4,7 +4,7 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%
 
-	request.setCharacterEncoding( "UTF-8" );
+    request.setCharacterEncoding( "utf-8" );
 	response.setHeader("Content-Type" , "text/html");
 	
 	String rootPath = application.getRealPath( "/" );

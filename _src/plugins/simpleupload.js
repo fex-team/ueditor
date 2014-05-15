@@ -77,7 +77,7 @@ UE.plugin.register('simpleupload', function (){
             // 判断文件格式是否错误
             var filename = input.value,
                 fileext = filename ? filename.substr(filename.lastIndexOf('.')):'';
-            if (allowFiles && (allowFiles.join('') + '.').indexOf(fileext.toLowerCase() + '.') == -1) {
+            if (!fileext || (allowFiles && (allowFiles.join('') + '.').indexOf(fileext.toLowerCase() + '.') == -1)) {
                 showErrorLoader(me.getLang('simpleupload.exceedTypeError'));
                 return;
             }
