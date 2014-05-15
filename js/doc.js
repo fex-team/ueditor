@@ -39,7 +39,7 @@ $(function(){
                 .replace(/<code>/g, '<pre>')
                 .replace(/<\/code>/g, '</pre>')
                 .replace(/\<pre\>([^ \s]+)\b/g, '<pre class="prettyprint lang-$1">')
-                .replace(/\<a href=\"([^\.^\"]*)\.md\"/, function(s, m){
+                .replace(/\<a href=\"([^\"]*)\.md\"/, function(s, m){
                     return '<a class="mardwodnlink" href="#' + mdToPath[m] + '"';
                 });
             $('#show').html(html);

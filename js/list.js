@@ -14,11 +14,11 @@ var docList = [
             {
                 id: 'uparse_use',
                 title: '1.3 用uparse正常显示内容'
-            }
-//            {
-//                id: 'config',
-//                title: '1.4 配置项说明'
-//            },
+            },
+            {
+                id: 'config',
+                title: '1.4 前端配置项说明'
+            }//,
 //            {
 //                id: '',
 //                title: '1.5 提交数据说明'

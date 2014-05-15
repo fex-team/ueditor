@@ -1220,6 +1220,12 @@ h1, h2, h3, h4{
 .ue-docs-main #main{
     width: 100%;
 }
+.ue-docs-main{
+    font-size: 16px;
+    font-family: "Myriad Pro", "Hiragino Sans GB","Microsoft YaHei","微软雅黑", Calibri, Helvetica, tahoma,arial,simsun,"宋体", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
 .ue-docs-main pre,
 .ue-docs-main code{
     padding:10px;
@@ -1241,4 +1247,13 @@ h1, h2, h3, h4{
 .ue-docs-main h2{
     padding-bottom: 9px;
     border-bottom: 1px solid #eee;
+}
+
+.ue-docs-main strong{
+    padding: 2px 4px;
+    font-weight: normal;
+    color: #c7254e;
+    white-space: nowrap;
+    background-color: #f9f2f4;
+    border-radius: 4px;
 }
