@@ -176,7 +176,7 @@ module.exports = function (grunt) {
         replace: {
 
             fileEncode: {
-                src: [ disDir + '**/*.html', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.ashx', disDir + '**/*.asp' ],
+                src: [ disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.ashx', disDir + '**/*.asp' ],
                 overwrite: true,
                 replacements: [
                     {
