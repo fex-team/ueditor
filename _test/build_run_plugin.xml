@@ -61,7 +61,7 @@
     <!--</target>-->
 
     <target name="executeplugin" depends="init,coverage">
-        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=plugins&amp;ie8main=plugins,!plugins/t,!plugins/w,!plugins/s,!plugins/a;plugins/source&amp;ie8supp=plugins/a;plugins/t;plugins/w;plugins/s&amp;ie11main=plugins,!plugins/t,!plugins/w,!plugins/s;plugins/source&amp;ie11supp=plugins/t;plugins/w;plugins/s"
+        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=plugins&amp;ie8main=plugins,!plugins/t,!plugins/w,!plugins/s,!plugins/a,!plugins/a;plugins/source&amp;ie8supp=plugins/a;plugins/t;plugins/w;plugins/s&amp;ie11main=plugins,!plugins/t,!plugins/w,!plugins/s;plugins/source&amp;ie11supp=plugins/t;plugins/w;plugins/s"
              dest="/tmp/${git.user}_${git.project}plugin.php"/>
     </target>
     <target name="getreportplugin" depends="init,coverage,executeplugin">
