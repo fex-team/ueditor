@@ -60,8 +60,38 @@ var docList = [
         ]
     },
     {
+        id: 'server',
+        title: '3. 前后端通信',
+        list: [
+            {
+                id:'server_config',
+                title: '3.1 后端请求规范'
+            },
+            {
+                id:'format_filepath',
+                title: '3.2 后端配置项说明'
+            },
+            {
+                id:'server_param',
+                title: '3.3 格式化上传文件名'
+            },
+            {
+                id:'server_param',
+                title: '3.4 自定义请求参数'
+            },
+            {
+                id:'server_param',
+                title: '3.5 ASP支持说明'
+            }//,
+//            {
+//                id:'crossdomain',
+//                title: '4.7 跨域上传说明'
+//            }
+        ]
+    },
+    {
         id: 'dev',
-        title: '3 二次开发',
+        title: '3. 二次开发',
         list: [
             {
                 id: 'developer',
@@ -82,48 +112,14 @@ var docList = [
         ]
     },
     {
-        id: 'server',
-        title: '4 后端开发',
-        list: [
-            {
-                id:'server_config',
-                title: '4.1 前后端配置和通信'
-            },
-            {
-                id:'format_filepath',
-                title: '4.2 格式化上传文件名'
-            },
-            {
-                id:'server_param',
-                title: '4.3 ASP支持说明'
-            }//,
-//            {
-//                id:'request_format',
-//                title: '4.4 请求和返回格式'
-//            },
-//            {
-//                id:'request_path',
-//                title: '4.5 请求路径说明'
-//            },
-//            {
-//                id:'server_param',
-//                title: '4.6 添加自定义请求参数'
-//            },
-//            {
-//                id:'crossdomain',
-//                title: '4.7 跨域上传说明'
-//            }
-        ]
-    },
-    {
         id: 'api',
-        title: '5 常用API列表',
+        title: '5. 常用API列表',
         list: [
         ]
     },
     {
         id: 'qa',
-        title: '6 常见问题',
+        title: '6. 常见问题',
         list: [
         ]
     }
