@@ -13,7 +13,7 @@ var docList = [
             },
             {
                 id: 'uparse_use',
-                title: '1.3 用uparse正常显示内容'
+                title: '1.3 编辑内容展示'
             },
             {
                 id: 'config',
