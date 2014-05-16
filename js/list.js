@@ -91,15 +91,15 @@ var docList = [
     },
     {
         id: 'dev',
-        title: '3. 二次开发',
+        title: '4. 二次开发',
         list: [
             {
                 id: 'developer',
-                title: '3.1 如何进行二次开发'
+                title: '4.1 如何进行二次开发'
             },
             {
                 id: 'bale_width_grunt',
-                title: '3.2 使用grunt打包源代码'
+                title: '4.2 使用grunt打包源代码'
             }//,
 //            {
 //                id: '',
