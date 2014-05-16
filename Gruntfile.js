@@ -170,13 +170,13 @@ module.exports = function (grunt) {
             options: {
                 charset: encode
             },
-            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.json', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.asp', disDir + '**/*.cs']
+            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.json', disDir + '**/*.jsp', disDir + '**/*.asp']
 
         },
         replace: {
 
             fileEncode: {
-                src: [ disDir + '**/*.html', disDir + 'dialogs/**/*.js', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.ashx', disDir + '**/*.asp' ],
+                src: [ disDir + '**/*.html', disDir + 'dialogs/**/*.js', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.ashx', disDir + '**/*.asp' ],
                 overwrite: true,
                 replacements: [
                     {
@@ -214,6 +214,7 @@ module.exports = function (grunt) {
         clean: {
             build: {
                 src: [
+                    disDir + "jsp/src",
                     disDir + "*/upload",
                     disDir + ".DS_Store",
                     disDir + "**/.DS_Store",
