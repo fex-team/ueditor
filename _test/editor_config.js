@@ -225,7 +225,7 @@ var UEDITOR_CONFIG2 = {
     initialStyle: '',                                    //编辑器内部样式
     initialContent: '<span style="color:#ccc">欢迎光临编辑器</span>',  //初始化编辑器的内容
     autoClearinitialContent :true,                       //是否自动清除编辑器初始内容
-    iframeCssUrl :'../../../themes/default/iframe.css',        //要引入css的url
+    iframeCssUrl :'../../../themes/iframe.css',        //要引入css的url
     removeFormatTags : 'b,big,code,del,dfn,em,font,i,ins,kbd,q,samp,small,span,strike,strong,sub,sup,tt,u,var',    //配置格式刷删除的标签
     removeFormatAttributes : 'class,style,lang,width,height,align,hspace,valign',        //配置格式刷删除的属性
     enterTag : 'br',                                      //编辑器回车标签。p或br

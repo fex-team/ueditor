@@ -1116,7 +1116,7 @@ test('applyInlineStyle--双重strong', function () {
 
     div.innerHTML = 'div_text<strong>strong_text</strong>';
     range.setStart(div.firstChild, 3);
-    range.setEnd(div.lastChild.firstChild, 3);
+    range.setEnd(div.firstChild.nextSibling.firstChild, 3);
 
     range.applyInlineStyle('strong');
     equals(ua.getHTML(div), '<div id="test">div<strong>_textstrong_text</strong></div>', '同一个块元素父标签双重加粗');
@@ -1543,7 +1543,7 @@ test('range.createAddress,range.moveAddress', function () {
     rng1.moveToAddress(addr);
     equal(rng1.cloneContents().firstChild.nodeValue, 'bbb');
     div.innerHTML = 'aaaaaabbb<b>sss</b>';
-    addr = rng.setStartAfter(div.lastChild.firstChild).collapse(true).createAddress(false);
+    addr = rng.setStartAfter(div.firstChild.nextSibling.firstChild).collapse(true).createAddress(false);
     rng1.moveToAddress(addr);
     ok(equalRange(rng, rng1))
     div.innerHTML = '';

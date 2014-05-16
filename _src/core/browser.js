@@ -86,7 +86,17 @@ var browser = UE.browser = function(){
     // Internet Explorer 6.0+
     if ( browser.ie ){
 
-        version =  (agent.match(/(msie\s|trident.*rv:)([\w.]+)/)[2] || 0) * 1;
+        var v1 =  agent.match(/(?:msie\s([\w.]+))/);
+        var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
+        if(v1 && v2 && v1[1] && v2[1]){
+            version = Math.max(v1[1]*1,v2[1]*1);
+        }else if(v1 && v1[1]){
+            version = v1[1]*1;
+        }else if(v2 && v2[1]){
+            version = v2[1]*1;
+        }else{
+            version = 0;
+        }
 
         browser.ie11Compat = document.documentMode == 11;
         /**
@@ -153,6 +163,10 @@ var browser = UE.browser = function(){
         browser.ie9above = version > 8;
 
         browser.ie9below = version < 9;
+
+        browser.ie11above = version > 10;
+
+        browser.ie11below = version < 11;
 
     }
 

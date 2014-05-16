@@ -1,7 +1,5 @@
 
 ///import editor;
-
-
 ///import core/browser;
 ///import core/utils;
 ///import core/EventBase;
@@ -11,22 +9,22 @@
 ///import core/Range;
 ///import core/Selection;
 ///import core/Editor;
+///import core/loadconfig;
 ///import core/ajax;
 ///import core/filterword;
 ///import core/node;
 ///import core/htmlparser;
 ///import core/filternode;
 ///import core/plugin;
+///import core/keymap;
+///import core/localstorage;
+
 ///import plugins/emotion;
 ///import plugins/map;
 ///import plugins/scrawl;
-
 ///import plugins/blockquote;
 ///import plugins/wordimage;
-
-
 ///import plugins/autotypeset;
-
 ///import plugins/removeformat;
 ///import plugins/font;
 ///import plugins/justify;
@@ -57,6 +55,7 @@
 ///import plugins/basestyle;
 ///import plugins/elementpath;
 ///import plugins/undo;
+///import plugins/copy;
 ///import plugins/paste;
 ///import plugins/source;
 ///import plugins/shortcutkeys;
@@ -76,6 +75,7 @@
 ///import plugins/table.action;
 ///import plugins/table.sort;
 ///import plugins/contextmenu;
+///import plugins/serverparam;
 ///import plugins/shortcutmenu;
 ///import plugins/pagebreak;
 ///import plugins/catchremoteimage;
@@ -94,6 +94,7 @@
 ///import plugins/autoupload;
 ///import plugins/section;
 ///import plugins/charts;
+
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;
@@ -122,4 +123,6 @@
 ///import ui/autotypesetbutton;
 ///import ui/shortcutmenu;
 
+///import adapter/editor;
+///import adapter/editorui;
 

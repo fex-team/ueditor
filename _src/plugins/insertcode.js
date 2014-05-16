@@ -71,14 +71,14 @@ UE.plugins['insertcode'] = function() {
             }else{
                 var code = '';
                 if(rng.collapsed){
-                    code = browser.ie? (browser.version > 8 ? '' : '&nbsp;'):'<br/>';
+                    code = browser.ie && browser.ie11below ? (browser.version <= 8 ? '&nbsp;':''):'<br/>';
                 }else{
                     var frag = rng.extractContents();
                     var div = me.document.createElement('div');
                     div.appendChild(frag);
 
                     utils.each(UE.filterNode(UE.htmlparser(div.innerHTML.replace(/[\r\t]/g,'')),me.options.filterTxtRules).children,function(node){
-                        if(browser.ie && browser.version > 8){
+                        if(browser.ie && browser.ie11below && browser.version > 8){
 
                             if(node.type =='element'){
                                 if(node.tagName == 'br'){
@@ -106,7 +106,7 @@ UE.plugins['insertcode'] = function() {
                                 code = code.replace(/\n$/,'');
                             }
                         }else{
-                            if(browser.ie){
+                            if(browser.ie && browser.ie11below){
 
                                 if(node.type =='element'){
                                     if(node.tagName == 'br'){
@@ -186,14 +186,14 @@ UE.plugins['insertcode'] = function() {
        utils.each(root.getNodesByTagName('pre'),function(pre){
            var brs = pre.getNodesByTagName('br');
            if(brs.length){
-               browser.ie && browser.version > 8 && utils.each(brs,function(br){
+               browser.ie && browser.ie11below && browser.version > 8 && utils.each(brs,function(br){
                    var txt = UE.uNode.createText('\n');
                    br.parentNode.insertBefore(txt,br);
                    br.parentNode.removeChild(br);
                });
                return;
             }
-           if(browser.ie && browser.version > 8)
+           if(browser.ie && browser.ie11below && browser.version > 8)
                 return;
             var code = pre.innerText().split(/\n/);
             pre.innerHTML('');

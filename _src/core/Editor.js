@@ -261,6 +261,9 @@
             fileNameFormat: '{time}{rand:6}'
         });
 
+        /* 尝试异步加载后台配置 */
+        me.loadServerConfig();
+
         if(!utils.isEmptyObject(UE.I18N)){
             //修改默认的语言类型
             me.options.lang = checkCurLang(UE.I18N);
@@ -282,7 +285,9 @@
         UE.instants['ueditorInstant' + me.uid] = me;
     };
     Editor.prototype = {
-
+         registerCommand : function(name,obj){
+            this.commands[name] = obj;
+         },
         /**
          * 编辑器对外提供的监听ready事件的接口， 通过调用该方法，达到的效果与监听ready事件是一致的
          * @method ready
@@ -339,7 +344,9 @@
             }
             utils.extend(this.options, obj, true);
         },
-
+        getOpt:function(key){
+            return this.options[key]
+        },
         /**
          * 销毁编辑器实例，使用textarea代替
          * @method destroy
@@ -636,6 +643,7 @@
             }
             !notSetHeight && (this.options.minFrameHeight = this.options.initialFrameHeight = height);
             this.body.style.height = height + 'px';
+            !notSetHeight && this.trigger('setHeight')
         },
 
         /**
@@ -1117,10 +1125,11 @@
                 me.__hasEnterExecCommand = true;
                 if (me.queryCommandState.apply(me,arguments) != -1) {
                     me.fireEvent('saveScene');
-                    me.fireEvent('beforeexeccommand', cmdName);
+                    me.fireEvent.apply(me, ['beforeexeccommand', cmdName].concat(arguments));
                     result = this._callCmdFn('execCommand', arguments);
-                    (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
-                    me.fireEvent('afterexeccommand', cmdName);
+                    //保存场景时，做了内容对比，再看是否进行contentchange触发，这里多触发了一次，去掉
+//                    (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
+                    me.fireEvent.apply(me, ['afterexeccommand', cmdName].concat(arguments));
                     me.fireEvent('saveScene');
                 }
                 me.__hasEnterExecCommand = false;
@@ -1246,6 +1255,10 @@
                     me.queryCommandState = me.bkqueryCommandState;
                     delete me.bkqueryCommandState;
                 }
+                if (me.bkqueryCommandValue) {
+                    me.queryCommandValue = me.bkqueryCommandValue;
+                    delete me.bkqueryCommandValue;
+                }
                 me.fireEvent('selectionchange');
             }
         },
@@ -1285,11 +1298,18 @@
                 }
                 me.body.contentEditable = false;
                 me.bkqueryCommandState = me.queryCommandState;
+                me.bkqueryCommandValue = me.queryCommandValue;
                 me.queryCommandState = function (type) {
                     if (utils.indexOf(except, type) != -1) {
                         return me.bkqueryCommandState.apply(me, arguments);
                     }
                     return -1;
+                };
+                me.queryCommandValue = function (type) {
+                    if (utils.indexOf(except, type) != -1) {
+                        return me.bkqueryCommandValue.apply(me, arguments);
+                    }
+                    return null;
                 };
                 me.fireEvent('selectionchange');
             }
@@ -1495,8 +1515,37 @@
             for (var i = 0, ci; ci = this.outputRules[i++];) {
                 ci.call(this, root)
             }
-        }
+        },
 
+        /**
+         * 根据action名称获取请求的路径
+         * @method  getActionUrl
+         * @remind 假如没有设置serverUrl,会根据imageUrl设置默认的controller路径
+         * @param { String } action action名称
+         * @example
+         * ```javascript
+         * editor.getActionUrl('config'); //返回 "/ueditor/php/controller.php?action=config"
+         * editor.getActionUrl('image'); //返回 "/ueditor/php/controller.php?action=uplaodimage"
+         * editor.getActionUrl('scrawl'); //返回 "/ueditor/php/controller.php?action=uplaodscrawl"
+         * editor.getActionUrl('imageManager'); //返回 "/ueditor/php/controller.php?action=listimage"
+         * ```
+         */
+        getActionUrl: function(action){
+            var actionName = this.getOpt(action) || action,
+                imageUrl = this.getOpt('imageUrl'),
+                serverUrl = this.getOpt('serverUrl');
+
+            if(!serverUrl && imageUrl) {
+                serverUrl = imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2');
+            }
+
+            if(serverUrl) {
+                serverUrl = serverUrl + (serverUrl.indexOf('?') ? '?':'&') + 'action=' + actionName;
+                return utils.formatUrl(serverUrl);
+            } else {
+                return '';
+            }
+        }
     };
     utils.inherits(Editor, EventBase);
 })();

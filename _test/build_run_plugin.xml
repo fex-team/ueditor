@@ -6,7 +6,7 @@
     <property name="coverage.path" value="_test/coverage"/>
     <property name="report.file" value="_test/tools/br/report.html"/>
     <property name="svn.project" value="ueditor_svn"/>
-    <property name="git.project" value="ueditor_git"/>
+    <property name="git.project" value="ueditor"/>
 
     <property name="git.user" value=""/>
     <path id="ext.classpath">
@@ -61,7 +61,7 @@
     <!--</target>-->
 
     <target name="executeplugin" depends="init,coverage">
-        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=plugins&amp;ie8main=plugins,!plugins/t,!plugins/w,!plugins/s;plugins/source&amp;ie8supp=plugins/t;plugins/w;plugins/s&amp;ie9main=plugins,!plugins/t,!plugins/w,!plugins/s;plugins/source&amp;ie9supp=plugins/t;plugins/w;plugins/s"
+        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=plugins&amp;ie8main=plugins,!plugins/t,!plugins/w,!plugins/s,!plugins/a,!plugins/a;plugins/source&amp;ie8supp=plugins/a;plugins/t;plugins/w;plugins/s&amp;ie11main=plugins,!plugins/t,!plugins/w,!plugins/s;plugins/source&amp;ie11supp=plugins/t;plugins/w;plugins/s"
              dest="/tmp/${git.user}_${git.project}plugin.php"/>
     </target>
     <target name="getreportplugin" depends="init,coverage,executeplugin">

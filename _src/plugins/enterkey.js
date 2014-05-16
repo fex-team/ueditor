@@ -3,7 +3,7 @@
 ///commands 设置回车标签p或br
 ///commandsName  EnterKey
 ///commandsTitle  设置回车标签p或br
-/*
+/**
  * @description 处理回车
  * @author zhanyi
  */

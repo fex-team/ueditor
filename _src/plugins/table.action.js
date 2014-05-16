@@ -557,9 +557,16 @@ UE.plugins['table'] = function () {
 
         me.addListener("mousedown", mouseDownEvent);
         me.addListener("mouseup", mouseUpEvent);
-        //拖动的时候不出发mouseup
+        //拖动的时候触发mouseup
         domUtils.on( me.body, 'dragstart', function( evt ){
             mouseUpEvent.call( me, 'dragstart', evt );
+        });
+        me.addOutputRule(function(root){
+            utils.each(root.getNodesByTagName('div'),function(n){
+                if (n.getAttr('id') == 'ue_tableDragLine') {
+                    n.parentNode.removeChild(n);
+                }
+            });
         });
 
         var currentRowIndex = 0;
@@ -1289,9 +1296,9 @@ UE.plugins['table'] = function () {
 
         isInResizeBuffer = false;
 
+        startTd = evt.target || evt.srcElement;
         if( !startTd ) return;
-        var state = Math.abs( userActionStatus.x - evt.clientX ) >= Math.abs( userActionStatus.y - evt.clientY ) ? 'h' : 'v';
-//        var state = getRelation(startTd, mouseCoords(evt));
+        var state = getRelation(startTd, mouseCoords(evt));
         if (/\d/.test(state)) {
             state = state.replace(/\d/, '');
             startTd = getUETable(startTd).getPreviewCell(startTd, state == 'v');
@@ -1366,24 +1373,27 @@ UE.plugins['table'] = function () {
             singleClickState = 0;
             dragLine = me.document.getElementById('ue_tableDragLine');
 
-            var dragTdPos = domUtils.getXY(dragTd),
-                dragLinePos = domUtils.getXY(dragLine);
+            // trace 3973
+            if (dragLine) {
+                var dragTdPos = domUtils.getXY(dragTd),
+                    dragLinePos = domUtils.getXY(dragLine);
 
-            switch (onDrag) {
-                case "h":
-                    changeColWidth(dragTd, dragLinePos.x - dragTdPos.x);
-                    break;
-                case "v":
-                    changeRowHeight(dragTd, dragLinePos.y - dragTdPos.y - dragTd.offsetHeight);
-                    break;
-                default:
+                switch (onDrag) {
+                    case "h":
+                        changeColWidth(dragTd, dragLinePos.x - dragTdPos.x);
+                        break;
+                    case "v":
+                        changeRowHeight(dragTd, dragLinePos.y - dragTdPos.y - dragTd.offsetHeight);
+                        break;
+                    default:
+                }
+                onDrag = "";
+                dragTd = null;
+
+                hideDragLine(me);
+                me.fireEvent('saveScene');
+                return;
             }
-            onDrag = "";
-            dragTd = null;
-
-            hideDragLine(me);
-            me.fireEvent('saveScene');
-            return;
         }
         //正常状态下的mouseup
         if (!startTd) {

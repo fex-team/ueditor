@@ -14,9 +14,8 @@
             <span tabSrc="video" class="focus" data-content-id="video"><var id="lang_tab_insertV"></var></span>
             <span tabSrc="upload" data-content-id="upload"><var id="lang_tab_uploadV"></var></span>
         </div>
-        <!--<span tabSrc="video" data-content-id="videoSearch"><var id="lang_tab_searchV"></var></span>-->
         <div id="tabBodys" class="tabbody">
-            <div id="video" class="panel">
+            <div id="video" class="panel focus">
                <table><tr><td><label for="videoUrl" class="url"><var id="lang_video_url"></var></label></td><td><input id="videoUrl" type="text"></td></tr></table>
                <div id="preview"></div>
                <div id="videoInfo">
@@ -33,36 +32,27 @@
                   </fieldset>
                </div>
             </div>
-            <!--
-            <div id="videoSearch" class="panel" style="display: none">
-                <table style="margin-top: 5px;">
-                    <tr>
-                        <td><input id="videoSearchTxt"  type="text" /></td>
-                        <td>
-                            <select id="videoType">
-                                <option value="0"></option>
-                                <option value="29"></option>
-                                <option value="1"></option>
-                                <option value="5"></option>
-                                <option value="15"></option>
-                                <option value="21"></option>
-                                <option value="31"></option>
-                            </select>
-                        </td>
-                        <td><input id="videoSearchBtn" type="button"/></td>
-                        <td><input id="videoSearchReset" type="button" /></td>
-                    </tr>
-                </table>
-                <div id="searchList"></div>
-            </div>
-            -->
-            <div id="upload" class="panel" style="display: none">
+            <div id="upload" class="panel">
                 <div id="upload_left">
-                    <div class="fieldset flash" id="fsUploadProgress"></div>
-                    <div class="controller">
-                        <span id="spanButtonPlaceHolder"></span>
-                        <!--<span id="video_format_advice"><var id="lang_format_advice"></var></span>-->
-                        <span id="startUpload" style="display: none;"></span>
+                    <div id="queueList" class="queueList">
+                        <div class="statusBar element-invisible">
+                            <div class="progress">
+                                <span class="text">0%</span>
+                                <span class="percentage"></span>
+                            </div><div class="info"></div>
+                            <div class="btns">
+                                <div id="filePickerBtn"></div>
+                                <div class="uploadBtn"><var id="lang_start_upload"></var></div>
+                            </div>
+                        </div>
+                        <div id="dndArea" class="placeholder">
+                            <div class="filePickerContainer">
+                                <div id="filePickerReady"></div>
+                            </div>
+                        </div>
+                        <ul class="filelist element-invisible">
+                            <li id="filePickerBlock" class="filePickerBlock"></li>
+                        </ul>
                     </div>
                 </div>
                 <div id="uploadVideoInfo">
@@ -82,14 +72,15 @@
         </div>
     </div>
 </div>
+
+<!-- jquery -->
+<script type="text/javascript" src="../../third-party/jquery-1.10.2.min.js"></script>
+
+<!-- webuploader -->
+<script type="text/javascript" src="../../third-party/webuploader/webuploader.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../third-party/webuploader/webuploader.css">
+
+<!-- video -->
 <script type="text/javascript" src="video.js"></script>
-
-<script type="text/javascript" src="../../third-party/swfupload/swfupload.js"></script>
-<script type="text/javascript" src="../../third-party/swfupload/swfupload.queue.js"></script>
-<script type="text/javascript" src="../../third-party/swfupload/fileprogress.js"></script>
-<script type="text/javascript" src="callbacks.js"></script>
-<script type="text/javascript">
-
-</script>
 </body>
 </html>

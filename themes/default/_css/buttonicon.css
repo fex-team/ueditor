@@ -103,7 +103,7 @@
 }
 
 .edui-default  .edui-for-insertimage .edui-icon {
-    background-position: -380px 0;
+    background-position: -726px -77px;
 }
 
 .edui-default  .edui-for-insertframe .edui-icon {
@@ -187,7 +187,7 @@
 }
 
 .edui-default  .edui-for-source .edui-icon {
-    background-position: -260px -0px;
+    background-position: -261px -0px;
 }
 
 .edui-default  .edui-for-removeformat .edui-icon {
@@ -343,7 +343,7 @@
 }
 
 .edui-default  .edui-for-background .edui-icon {
-    background-position: -678px -40px;
+    background-position: -680px -40px;
 }
 
 .edui-default  .edui-for-music .edui-icon {
@@ -412,4 +412,8 @@
 
 .edui-default  .edui-for-deletetitlecol  .edui-icon {
     background-position: -698px -76px;
+}
+
+.edui-default  .edui-for-simpleupload  .edui-icon {
+    background-position: -380px 0px;
 }

@@ -2,6 +2,8 @@
 .edui-default .edui-popup {
     z-index: 3000;
     background-color: #ffffff;
+    width:auto;
+    height:auto;
 
 }
 
@@ -63,4 +65,9 @@
     height: 7px;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
+}
+
+.edui-popup div{
+    width:auto;
+    height:auto;
 }

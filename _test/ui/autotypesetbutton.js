@@ -28,6 +28,7 @@ test( 'AutoTypeSetButton/AutoTypeSetPicker', function() {
                 equal(AutoPickerBodyInput[i].checked,editor.options.autotypeset[inputName.replace(new RegExp('Value\\d',"g"),'')]==AutoPickerBodyInput[i].value,inputName+":"+editor.options.autotypeset[inputName]);
             }
             else{
+                if(inputName=='bdc')continue;
                 equal(AutoPickerBodyInput[i].checked,editor.options.autotypeset[inputName],inputName+":"+editor.options.autotypeset[inputName]);
             }
         }

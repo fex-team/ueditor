@@ -1,3 +1,3 @@
 var baidu = baidu || {};
 baidu.editor = baidu.editor || {};
-baidu.editor.ui = {};
+UE.ui = baidu.editor.ui = {};

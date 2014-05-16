@@ -116,7 +116,12 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
             }
             elm.attrs = attrs;
         }
-
+        //trace:3970
+//        //如果parent下不能放elm
+//        if(dtd.$inline[parent.tagName] && dtd.$block[elm.tagName] && !dtd[parent.tagName][elm.tagName]){
+//            parent = parent.parentNode;
+//            elm.parentNode = parent;
+//        }
         parent.children.push(elm);
         //如果是自闭合节点返回父亲节点
         return  dtd.$empty[tagName] ? parent : elm

@@ -2,6 +2,11 @@
 .edui-default .edui-dialog {
     z-index: 2000;
     position: absolute;
+
+}
+
+.edui-dialog div{
+    width:auto;
 }
 
 .edui-default .edui-dialog-wrap {
@@ -187,8 +192,8 @@
 
 /*image-dialog*/
 .edui-default .edui-for-insertimage .edui-dialog-content {
-    width: 640px;
-    height: 390px;
+    width: 650px;
+    height: 400px;
     overflow: hidden;
 }
 /*webapp-dialog*/
@@ -215,8 +220,8 @@
 
 /*attachment-dialog*/
 .edui-default .edui-for-attachment .edui-dialog-content {
-    width: 480px;
-    height: 360px;
+    width: 650px;
+    height: 400px;
     overflow: hidden;
 }
 
@@ -286,12 +291,4 @@
 .edui-default .edui-for-music .edui-dialog-content {
     width: 515px;
     height: 360px;
-}
-
-/*preview-dialog*/
-.edui-default .edui-for-preview .edui-dialog-content {
-    width: 620px;
-    height: 500px;
-    *width: 630px;
-    *height: 570px;
 }

@@ -93,7 +93,7 @@
         var start = editor.selection.getStart();
 
         //ff下会选中bookmark
-        if( start && start.id && start.id.indexOf('_baidu_bookmark_start_') === 0 ) {
+        if( start && start.id && start.id.indexOf('_baidu_bookmark_start_') === 0 && start.nextSibling) {
             start = start.nextSibling;
         }
 
