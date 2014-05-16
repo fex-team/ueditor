@@ -87,7 +87,7 @@ public class StorageManager {
 
 		File tmpFile = getTmpFile();
 
-		byte[] dataBuf = new byte[' '];
+		byte[] dataBuf = new byte[ 2048 ];
 		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
 
 		try {

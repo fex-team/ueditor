@@ -25,6 +25,7 @@ public class BinaryUploader {
 	public static final State save(HttpServletRequest request,
 			Map<String, Object> conf) {
 		FileItemStream fileStream = null;
+		boolean isAjaxUpload = request.getHeader( "X_Requested_With" ) != null;
 
 		if (!ServletFileUpload.isMultipartContent(request)) {
 			return new BaseState(false, AppInfo.NOT_MULTIPART_CONTENT);
@@ -32,6 +33,10 @@ public class BinaryUploader {
 
 		ServletFileUpload upload = new ServletFileUpload(
 				new DiskFileItemFactory());
+
+        if ( isAjaxUpload ) {
+            upload.setHeaderEncoding( "UTF-8" );
+        }
 
 		try {
 			FileItemIterator iterator = upload.getItemIterator(request);
