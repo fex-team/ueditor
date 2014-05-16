@@ -97,9 +97,9 @@ public class MultiState implements State {
 		}
 		
 		builder.append( " ]}" );
-		
-		return builder.toString();
-		
+
+		return Encoder.toUnicode( builder.toString() );
+
 	}
 
 	@Override
