@@ -29,8 +29,11 @@ foreach ($source as $imgUrl) {
     $info = $item->getFileInfo();
     array_push($list, array(
         "state" => $info["state"],
+        "source" => $imgUrl,
         "url" => $info["url"],
-        "source" => $imgUrl
+        "title" => $info["title"],
+        "size" => $info["size"],
+        "original" => $info["original"]
     ));
 }
 
