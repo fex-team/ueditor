@@ -123,7 +123,7 @@ var docList = [
         list: [
             {
                 id:'ready',
-                title:'实例创建后为什么直接执行接口报错'
+                title:'6.1 实例创建后为什么直接执行接口报错'
             }
 
         ]
