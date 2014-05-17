@@ -6,9 +6,10 @@ $(function(){
     /* 遍历数据对象，生成导航的目录树 */
     $.each(docList, function(ckey, c){
         var $category = $('<li class="category">'),
-            $item = $('<ul class = "nav">');
+            $item = $('<ul class = "nav">'),
+            $title = $('<a href="javascript:void(0)">' + c.title + '</a>');
 
-        $category.append('<a href="javascript:void(0)">' + c.title + '</a>');
+        $category.append($title);
         $.each(c.list, function(vkey, v){
             var $li = $('<li><a href="#' + c.id + '-' + v.id + '">' + v.title + '</a></li>');
             if (c.id==activeCate && v.id==activeDoc) {
@@ -20,9 +21,9 @@ $(function(){
             mdToPath[v.title] = c.id + '-' + v.id;
         });
         if ($item.find('li')) {
-            var bakHeight;
             $category.append($item);
-            $category.on('click', function () {
+            var bakHeight;
+            $title.on('click', function () {
                 if ($item.css('display') == 'block') {
                     bakHeight = $item.height();
                     $item.hide();
