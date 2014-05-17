@@ -121,6 +121,11 @@ var docList = [
         id: 'qa',
         title: '6. 常见问题',
         list: [
+            {
+                id:'ready',
+                title:'实例创建后为什么直接执行接口报错'
+            }
+
         ]
     }
 ];
