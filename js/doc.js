@@ -5,7 +5,7 @@ $(function(){
 
     /* 遍历数据对象，生成导航的目录树 */
     $.each(docList, function(ckey, c){
-        var $category = $('<li>'),
+        var $category = $('<li class="category">'),
             $item = $('<ul class = "nav">');
 
         $category.append('<a href="javascript:void(0)">' + c.title + '</a>');
@@ -19,7 +19,18 @@ $(function(){
             $item.append($li);
             mdToPath[v.title] = c.id + '-' + v.id;
         });
-        if ($item.find('li')) $category.append($item);
+        if ($item.find('li')) {
+            var bakHeight;
+            $category.append($item);
+            $category.on('click', function () {
+                if ($item.css('display') == 'block') {
+                    bakHeight = $item.height();
+                    $item.hide();
+                } else {
+                    $item.show();
+                }
+            });
+        }
 
         $category.appendTo('#guidebar>ul');
     });
