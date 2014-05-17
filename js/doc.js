@@ -1,7 +1,9 @@
 $(function(){
     var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1], mdToPath = {};
     activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
-    activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id'];
+    activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id']
+
+    var listArr = [];
 
     /* 遍历数据对象，生成导航的目录树 */
     $.each(docList, function(ckey, c){
@@ -11,6 +13,7 @@ $(function(){
 
         $category.append($title);
         $.each(c.list, function(vkey, v){
+            listArr.push(v.title);
             var $li = $('<li><a href="#' + c.id + '-' + v.id + '">' + v.title + '</a></li>');
             if (c.id==activeCate && v.id==activeDoc) {
                 $('#guidebar .nav .nav>li').removeClass('active');
@@ -46,15 +49,23 @@ $(function(){
     /* 拉取md文档，并解析插入到页面上 */
     function updateDocContent(activeMd){
         $.get('doc/' + activeMd + '.md',function(s){
-            var html = markdown.toHTML(s)
-                .replace(/src=\"images\//g, 'src=\"doc/images/')
-                .replace(/<code>/g, '<pre>')
-                .replace(/<\/code>/g, '</pre>')
-                .replace(/\<pre\>([^ \s]+)\b/g, '<pre class="prettyprint lang-$1">')
-                .replace(/\<a href=\"([^\"]*)\.md\"/, function(s, m){
-                    return '<a class="mardwodnlink" href="#' + mdToPath[m] + '"';
-                });
-            $('#show').html(html);
+            var index = $.inArray(activeMd, listArr),
+                pagebar = '<div class="pagebar">' +
+                    (index != 0 ? ('<a class="previous mardwodnlink" href="#'+mdToPath[listArr[index-1]]+'">上一篇: '+listArr[index-1]+'</a>'):'') +
+                    (index != (listArr - 1) ? '<a class="next mardwodnlink" href="#'+mdToPath[listArr[index+1]]+'">下一篇: '+listArr[index+1]+'</a>':'') +
+                    '<span class="clearfloat"></span>' +
+                    '</div>',
+                html = markdown.toHTML(s)
+                    .replace(/src=\"images\//g, 'src=\"doc/images/')
+                    .replace(/<code>/g, '<pre>')
+                    .replace(/<\/code>/g, '</pre>')
+                    .replace(/\<pre\>([^ \s]+)\b/g, '<pre class="prettyprint lang-$1">')
+                    .replace(/\<a href=\"([^\"]*)\.md\"/, function(s, m){
+                        return '<a class="mardwodnlink" href="#' + mdToPath[m] + '"';
+                    });
+
+            $('#show').html(html + pagebar);
+
             /* 设置其他markdown的链接 */
             $('#show .mardwodnlink').click(function(){
                 $('#guidebar .nav .nav>li>a[href=' + $(this).attr('href') + ']').trigger('click');
@@ -69,6 +80,7 @@ $(function(){
                     $(node).html(html)
                 }
             });
+
             prettyPrint();
         });
     };
