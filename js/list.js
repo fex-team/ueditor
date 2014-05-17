@@ -30,12 +30,12 @@ var docList = [
         title: '2. 进阶使用',
         list: [
             {
-                id: 'upload_video',
-                title: '2.1 上传视频'
+                id: 'dir',
+                title: '2.1 目录说明'
             },
             {
-                id: 'dir',
-                title: '2.2 目录说明'
+                id: 'upload_video',
+                title: '2.2 上传视频'
             },
             {
                 id: 'use_patch_file',
