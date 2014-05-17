@@ -64,15 +64,15 @@ var docList = [
         title: '3. 前后端通信',
         list: [
             {
-                id:'server_config',
+                id:'request_specification',
                 title: '3.1 后端请求规范'
             },
             {
-                id:'format_filepath',
+                id:'server_config',
                 title: '3.2 后端配置项说明'
             },
             {
-                id:'server_param',
+                id:'format_filepath',
                 title: '3.3 格式化上传文件名'
             },
             {
@@ -80,7 +80,7 @@ var docList = [
                 title: '3.4 自定义请求参数'
             },
             {
-                id:'server_param',
+                id:'server_asp',
                 title: '3.5 ASP支持说明'
             }//,
 //            {
