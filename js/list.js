@@ -80,13 +80,13 @@ var docList = [
                 title: '3.4 自定义请求参数'
             },
             {
+                id:'crossdomain',
+                title: '3.5 跨域支持说明'
+            },
+            {
                 id:'server_asp',
-                title: '3.5 ASP支持说明'
-            }//,
-//            {
-//                id:'crossdomain',
-//                title: '4.7 跨域上传说明'
-//            }
+                title: '3.6 ASP支持说明'
+            }
         ]
     },
     {
