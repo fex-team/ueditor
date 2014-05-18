@@ -1,7 +1,7 @@
 $(function(){
     var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1], mdToPath = {};
     activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
-    activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id']
+    activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id'];
 
     var listArr = [];
 
@@ -52,7 +52,7 @@ $(function(){
             var index = $.inArray(activeMd, listArr),
                 pagebar = '<div class="pagebar">' +
                     (index != 0 ? ('<a class="previous mardwodnlink" href="#'+mdToPath[listArr[index-1]]+'">上一篇: '+listArr[index-1]+'</a>'):'') +
-                    (index != (listArr - 1) ? '<a class="next mardwodnlink" href="#'+mdToPath[listArr[index+1]]+'">下一篇: '+listArr[index+1]+'</a>':'') +
+                    (index != (listArr.length - 1) ? '<a class="next mardwodnlink" href="#'+mdToPath[listArr[index+1]]+'">下一篇: '+listArr[index+1]+'</a>':'') +
                     '<span class="clearfloat"></span>' +
                     '</div>',
                 html = markdown.toHTML(s)
@@ -69,7 +69,7 @@ $(function(){
             /* 设置其他markdown的链接 */
             $('#show .mardwodnlink').click(function(){
                 $('#guidebar .nav .nav>li>a[href=' + $(this).attr('href') + ']').trigger('click');
-                //window.scrollTo(0, 1);
+                window.scrollTo(0, 1);
             });
             $('#show pre,#show code').addClass("prettyprint");
             $('#show pre,#show code').each(function(index,node){
