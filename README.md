@@ -1,5 +1,5 @@
-Get Started
-===========
+﻿Get Started
+=====
 
 ## ueditor富文本编辑器介绍
 
@@ -81,5 +81,4 @@ ueditor github 地址：[http://github.com/fex-team/ueditor](http://github.com/f
 ## 联系我们 ##
 
 email：[ueditor@baidu.com](mailto://email:ueditor@baidu.com "发邮件给ueditor开发组")
-
 issue：[github issue](http://github.com/fex-team/ueditor/issues "ueditor 论坛")
