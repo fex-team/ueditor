@@ -220,8 +220,12 @@ var scrawl = function (options) {
             });
         },
         _addAddImgListener:function () {
-            var doc = document,
-                file = $G("J_imgTxt");
+            var file = $G("J_imgTxt");
+            if (!window.FileReader) {
+                $G("J_addImg").style.display = 'none';
+                $G("J_removeImg").style.display = 'none';
+                $G("J_sacleBoard").style.display = 'none';
+            }
             domUtils.on(file, "change", function (e) {
                 var frm = file.parentNode;
                 addMaskLayer(lang.backgroundUploading);
@@ -229,7 +233,8 @@ var scrawl = function (options) {
                 var target = e.target || e.srcElement,
                     reader = new FileReader();
                 reader.onload = function(evt){
-                    ue_callback(this.result, 'SUCCESS');
+                    var target = evt.target || evt.srcElement;
+                    ue_callback(target.result, 'SUCCESS');
                 };
                 reader.readAsDataURL(target.files[0]);
                 frm.reset();
@@ -272,7 +277,7 @@ var scrawl = function (options) {
         _addClearSelectionListenter:function () {
             var doc = document;
             domUtils.on(doc, 'mousemove', function (e) {
-                if (browser.ie)
+                if (browser.ie && browser.version < 11)
                     doc.selection.clear();
                 else
                     window.getSelection().removeAllRanges();
@@ -637,6 +642,8 @@ function exec(scrawlObj) {
                                 url = editor.options.scrawlUrlPrefix + responseObj.url;
                             imgObj.src = url;
                             imgObj._src = url;
+                            imgObj.alt = responseObj.original || '';
+                            imgObj.title = responseObj.title || '';
                             editor.execCommand("insertImage", imgObj);
                             dialog.close();
                         } else {
@@ -654,7 +661,7 @@ function exec(scrawlObj) {
 
             var actionUrl = editor.getActionUrl(editor.getOpt('scrawlActionName')),
                 params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
-                url = actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params;
+                url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
             ajax.request(url, options);
         }
     } else {

@@ -16,6 +16,7 @@ class Uploader
     private $oriName; //原始文件名
     private $fileName; //新文件名
     private $fullName; //完整文件名,即从当前配置目录开始的URL
+    private $filePath; //完整文件名,即从当前配置目录开始的URL
     private $fileSize; //文件大小
     private $fileType; //文件类型
     private $stateInfo; //上传状态信息,
@@ -59,6 +60,8 @@ class Uploader
         } else {
             $this->upFile();
         }
+
+        $this->stateMap['ERROR_TYPE_NOT_ALLOWED'] = iconv('unicode', 'utf-8', $this->stateMap['ERROR_TYPE_NOT_ALLOWED']);
     }
 
     /**
@@ -87,10 +90,9 @@ class Uploader
         $this->fileSize = $file['size'];
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
+        $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
-
-        $filepath = $this->getFilePath();
-        $dirname = dirname($filepath);
+        $dirname = dirname($this->filePath);
 
         //检查文件大小是否超出限制
         if (!$this->checkSize()) {
@@ -114,7 +116,7 @@ class Uploader
         }
 
         //移动文件
-        if (!(move_uploaded_file($file["tmp_name"], $filepath) && file_exists($filepath))) { //移动失败
+        if (!(move_uploaded_file($file["tmp_name"], $this->filePath) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
@@ -134,10 +136,9 @@ class Uploader
         $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
+        $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
-
-        $filepath = $this->getFilePath();
-        $dirname = dirname($filepath);
+        $dirname = dirname($this->filePath);
 
         //检查文件大小是否超出限制
         if (!$this->checkSize()) {
@@ -155,7 +156,7 @@ class Uploader
         }
 
         //移动文件
-        if (!(file_put_contents($filepath, $img) && file_exists($filepath))) { //移动失败
+        if (!(file_put_contents($this->filePath, $img) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_WRITE_CONTENT");
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
@@ -206,10 +207,9 @@ class Uploader
         $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
+        $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
-
-        $filepath = $this->getFilePath();
-        $dirname = dirname($filepath);
+        $dirname = dirname($this->filePath);
 
         //检查文件大小是否超出限制
         if (!$this->checkSize()) {
@@ -227,7 +227,7 @@ class Uploader
         }
 
         //移动文件
-        if (!(file_put_contents($filepath, $img) && file_exists($filepath))) { //移动失败
+        if (!(file_put_contents($this->filePath, $img) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_WRITE_CONTENT");
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
@@ -337,12 +337,12 @@ class Uploader
     public function getFileInfo()
     {
         return array(
-            "original" => $this->oriName,
-            "name" => $this->fileName,
+            "state" => $this->stateInfo,
             "url" => $this->fullName,
-            "size" => $this->fileSize,
+            "title" => $this->fileName,
+            "original" => $this->oriName,
             "type" => $this->fileType,
-            "state" => $this->stateInfo
+            "size" => $this->fileSize
         );
     }
 

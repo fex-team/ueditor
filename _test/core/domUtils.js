@@ -1030,13 +1030,14 @@ test( 'mergeSibling--兄弟节点没有孩子', function() {
 } );
 
 
-test( 'unselectable--检查赋值是否成功', function() {
+test( 'trace 3983 unselectable--检查赋值是否成功', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
     div.innerHTML = '<div><p>xxxx<span><b><i>xxx</i></b>xxxx</span></p>dddd<p><img /><a>aaaa</a></p></div>';
+    debugger
     domUtils.unSelectable( div );
-    if ( baidu.editor.browser.gecko || baidu.editor.browser.webkit ) {
-        equal( div.style.MozUserSelect || div.style.KhtmlUserSelect, 'none', 'webkit or gecko unselectable' );
+    if ( UE.browser.gecko || UE.browser.webkit || (UE.browser.ie &&UE.browser.version>8) ) {
+        equal( div.style.MozUserSelect || div.style.KhtmlUserSelect || div.style.MSUserSelect, 'none', 'webkit or gecko unselectable' );
     } else {
         equal( div.unselectable, 'on', '检查unselectable属性' );
         for ( var i = 0,ci; ci = div.all[i++]; ) {

@@ -13,7 +13,8 @@
 
 
 //                , 'ie6' => array( '10.81.58.86@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
-
+//C:\Program Files\Google\Chrome\Application\chrome.exe
+// "C:\Program Files\Mozilla Firefox\firefox.exe"
                 , 'chrome' => array( '10.94.26.95' , "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" )
                 ,
                     'ie8main' => array( '10.94.26.94' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )

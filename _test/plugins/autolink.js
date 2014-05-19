@@ -202,10 +202,10 @@ test('autofloat:false 禁用IE中的自动加超链接功能', function () {
                 setTimeout(function () {
                     ua.keyup(editor.body, {'keyCode': 13});
                     setTimeout(function () {
-                        equal(body.firstChild.getElementsByTagName('a').length, 1, 'a 标签没被去掉');
+                        equal(body.firstChild.getElementsByTagName('a').length, 0, 'a 标签被去掉了');
                         equal(body.childNodes.length, 2, '结果正确');
                         equal(body.firstChild.tagName.toLowerCase(), 'p', '结果正确');
-                        equal(body.firstChild.innerHTML, '<a href="http://www.baidu.com">www.baidu.com</a>', '结果正确');
+                        equal(body.firstChild.innerHTML, 'www.baidu.com', '结果正确');
                         UE.delEditor('ue');
                         te.dom.push(document.getElementById('ue'));
                         start();
@@ -232,10 +232,10 @@ test('autofloat:false 禁用IE中的自动加超链接功能--回车', function 
                 setTimeout(function () {
                     ua.keyup(editor.body, {'keyCode': 13});
                     setTimeout(function () {
-                        equal(body.firstChild.getElementsByTagName('a').length, 1, 'a 标签没被去掉');
+                        equal(body.firstChild.getElementsByTagName('a').length, 0, 'a 标签被去掉了');
                         equal(body.childNodes.length, 2, '结果正确');
                         equal(body.firstChild.tagName.toLowerCase(), 'p', '结果正确');
-                        equal(body.firstChild.innerHTML, '<a href="http://www.baidu.com">www.baidu.com</a>', '结果正确');
+                        equal(body.firstChild.innerHTML, 'www.baidu.com', '结果正确');
                         UE.delEditor('ue');
                         te.dom.push(document.getElementById('ue'));
                         start();
@@ -268,10 +268,10 @@ test('autofloat:false 禁用IE中的自动加超链接功能--空格', function 
 //                }
                 setTimeout(function () {
                     ua.keyup(editor.body, {'keyCode': 32});
-                    equal(body.firstChild.getElementsByTagName('a').length, 1, 'a 标签没被去掉');
+                    equal(body.firstChild.getElementsByTagName('a').length, 0, 'a 标签被去掉了');
                     equal(body.childNodes.length, 1, '结果正确');
                     equal(body.firstChild.tagName.toLowerCase(), 'p', '结果正确');
-                    equal(body.firstChild.innerHTML.toLowerCase(), '<a href="http://www.baidu.com">www.baidu.com</a>'+space+'<img>', '结果正确');
+                    equal(body.firstChild.innerHTML.toLowerCase(), 'www.baidu.com'+space+'<img>', '结果正确');
                     setTimeout(function () {
                         UE.delEditor('ue');
                         te.dom.push(document.getElementById('ue'));

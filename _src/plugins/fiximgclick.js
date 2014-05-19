@@ -61,7 +61,7 @@ UE.plugins['fiximgclick'] = (function () {
                 me.initEvents();
             },
             initStyle: function () {
-                utils.cssRule('imagescale', '.edui-editor-scale{position:absolute;border:1px solid #38B2CE;}' +
+                utils.cssRule('imagescale', '.edui-editor-scale{display:none;position:absolute;border:1px solid #38B2CE;cursor:hand;-webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;}' +
                     '.edui-editor-scale span{position:absolute;width:6px;height:6px;overflow:hidden;font-size:0px;display:block;background-color:#3C9DD0;}'
                     + '.edui-editor-scale .edui-editor-scale-hand0{cursor:nw-resize;top:0;margin-top:-4px;left:0;margin-left:-4px;}'
                     + '.edui-editor-scale .edui-editor-scale-hand1{cursor:n-resize;top:0;margin-top:-4px;left:50%;margin-left:-4px;}'

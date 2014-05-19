@@ -152,10 +152,7 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
-                dnd: '#dndArea',
-                paste: $queue,
                 swf: '../../third-party/webuploader/Uploader.swf',
-                disableGlobalDnd: true,
                 server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
@@ -213,20 +210,31 @@
                     showError(file.statusText);
                 } else {
                     $wrap.text(lang.uploadPreview);
-                    uploader.makeThumb(file, function (error, src) {
-                        if (error || !src) {
-                            $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
-                                '<span class="file-title">' + file.name + '</span>');
+                    if ('|png|jpg|jpeg|bmp|gif|'.indexOf('|'+file.ext.toLowerCase()+'|') == -1) {
+                        $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext.toLowerCase() + '"></i>' +
+                        '<span class="file-title" title="' + file.name + '">' + file.name + '</span>');
+                    } else {
+                        if (browser.ie && browser.version <= 7) {
+                            $wrap.text(lang.uploadNoPreview);
                         } else {
-                            var img = $('<img src="' + src + '">');
-                            $wrap.empty().append(img);
+                            uploader.makeThumb(file, function (error, src) {
+                                if (error || !src) {
+                                    $wrap.text(lang.uploadNoPreview);
+                                } else {
+                                    var $img = $('<img src="' + src + '">');
+                                    $wrap.empty().append($img);
+                                    $img.on('error', function () {
+                                        $wrap.text(lang.uploadNoPreview);
+                                    });
+                                }
+                            }, thumbnailWidth, thumbnailHeight);
                         }
-                    }, thumbnailWidth, thumbnailHeight);
+                    }
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
 
                     /* 检查文件格式 */
-                    if (acceptExtensions.indexOf(file.ext) == -1) {
+                    if (!file.ext || acceptExtensions.indexOf(file.ext.toLowerCase()) == -1) {
                         showError('not_allow_type');
                         uploader.removeFile(file);
                     }
@@ -457,7 +465,7 @@
                     case 'startUpload':
                         /* 添加额外的GET参数 */
                         var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
-                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
+                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + 'encode=utf-8&' + params);
                         uploader.option('server', url);
                         setState('uploading', files);
                         break;
@@ -467,8 +475,9 @@
                 }
             });
 
-            uploader.on('uploadBeforeSend', function (file, data) {
+            uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
+                header['X_Requested_With'] = 'XMLHttpRequest';
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
@@ -484,7 +493,7 @@
                 var $file = $('#' + file.id);
                 try {
                     var responseText = (ret._raw || ret),
-                        json = eval('(' + utils.trim(responseText) + ')');
+                        json = utils.str2json(responseText);
                     if (json.state == 'SUCCESS') {
                         _this.fileList.push(json);
                         $file.append('<span class="success"></span>');
@@ -521,9 +530,10 @@
             updateTotalProgress();
         },
         getQueueCount: function () {
-            var file, i, readyFile = 0, files = this.uploader.getFiles();
+            var file, i, status, readyFile = 0, files = this.uploader.getFiles();
             for (i = 0; file = files[i++]; ) {
-                if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
+                status = file.getStatus();
+                if (status == 'queued' || status == 'uploading' || status == 'progress') readyFile++;
             }
             return readyFile;
         },
@@ -534,7 +544,7 @@
                 data = this.fileList[i];
                 link = data.url;
                 list.push({
-                    title: link.substr(link.lastIndexOf('/') + 1),
+                    title: data.original || link.substr(link.lastIndexOf('/') + 1),
                     url: prefix + link
                 });
             }
@@ -676,6 +686,9 @@
                     }
                     domUtils.addClass(icon, 'icon');
                     item.setAttribute('data-url', urlPrefix + list[i].url);
+                    if (list[i].original) {
+                        item.setAttribute('data-title', list[i].original);
+                    }
 
                     item.appendChild(preview);
                     item.appendChild(icon);
@@ -711,13 +724,13 @@
             }
         },
         getInsertList: function () {
-            var i, lis = this.list.children, list = [],
-                prefix = editor.getOpt('fileManagerUrlPrefix');
+            var i, lis = this.list.children, list = [];
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
                     var url = lis[i].getAttribute('data-url');
+                    var title = lis[i].getAttribute('data-title') || url.substr(url.lastIndexOf('/') + 1);
                     list.push({
-                        title: url.substr(url.lastIndexOf('/') + 1),
+                        title: title,
                         url: url
                     });
                 }

@@ -262,35 +262,7 @@
         });
 
         /* 尝试异步加载后台配置 */
-        try{
-            me.options.imageUrl && me.setOpt('serverUrl', me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2'));
-
-            var configUrl = me.getOpt('serverUrl');
-
-            /* 发出ajax请求 */
-            me._serverConfigLoaded = false;
-            configUrl && UE.ajax.request(configUrl,{
-                'method': 'GET',
-                'data': {
-                    'action': 'config'
-                },
-                'onsuccess':function(xhr){
-                    try {
-                        var config = eval("("+xhr.responseText+")");
-                        utils.extend(me.options, config);
-                        me.fireEvent('serverConfigLoaded');
-                        me._serverConfigLoaded = true;
-                    } catch (e) {
-                        console.error('后台配置项返回出错!');
-                    }
-                },
-                'onerror':function(){
-                    console.error('获取后台配置项出错!');
-                }
-            });
-        } catch(e){
-            console.log('Get Server Config Error!');
-        }
+        me.loadServerConfig();
 
         if(!utils.isEmptyObject(UE.I18N)){
             //修改默认的语言类型
@@ -1153,11 +1125,11 @@
                 me.__hasEnterExecCommand = true;
                 if (me.queryCommandState.apply(me,arguments) != -1) {
                     me.fireEvent('saveScene');
-                    me.fireEvent('beforeexeccommand', cmdName);
+                    me.fireEvent.apply(me, ['beforeexeccommand', cmdName].concat(arguments));
                     result = this._callCmdFn('execCommand', arguments);
                     //保存场景时，做了内容对比，再看是否进行contentchange触发，这里多触发了一次，去掉
 //                    (!cmd.ignoreContentChange && !me._ignoreContentChange) && me.fireEvent('contentchange');
-                    me.fireEvent('afterexeccommand', cmdName);
+                    me.fireEvent.apply(me, ['afterexeccommand', cmdName].concat(arguments));
                     me.fireEvent('saveScene');
                 }
                 me.__hasEnterExecCommand = false;
@@ -1568,7 +1540,7 @@
             }
 
             if(serverUrl) {
-                serverUrl = serverUrl + (serverUrl.indexOf('?') ? '?':'&') + 'action=' + actionName;
+                serverUrl = serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + actionName;
                 return utils.formatUrl(serverUrl);
             } else {
                 return '';

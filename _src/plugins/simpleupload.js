@@ -6,54 +6,54 @@
  */
 UE.plugin.register('simpleupload', function (){
     var me = this,
-        uploadInput;
+        isLoaded = false,
+        containerBtn;
 
     function initUploadBtn(){
-        var container = me.container,
-            wrapper = document.createElement('form'),
-            form = document.createElement('form'),
-            input = uploadInput = document.createElement('input'),
-            iframe = document.createElement('iframe'),
-            iframeId = 'edui_iframe_' + (+new Date()).toString(36),
-            imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
+        var timestrap = (+new Date()).toString(36),
+            doc = containerBtn.ownerDocument,
+            wrapper = document.createElement('div');
 
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.name = me.options.imageFieldName;
-        input.style.cssText = 'display:none;width:0px;height:0px;border:0;margin:0;padding:0;position:absolute;';
-
-        iframe.name = iframe.id = iframeId;
-        iframe.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
-
-        form.target = iframeId;
-        form.method = 'POST';
-        form.enctype = 'multipart/form-data';
-        form.action = imageActionUrl;
-        form.style.cssText = 'display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;';
+        wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '" ' +
+        'style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;">' +
+        '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
+        'style="background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;">' +
+        '</form>' +
+        '<iframe id="edui_iframe_' + timestrap + '" name="edui_iframe_' + timestrap + '" ' +
+        'style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>';
 
         wrapper.className = 'edui-' + me.options.theme;
         wrapper.id = me.ui.id + '_iframeupload';
+        containerBtn.appendChild(wrapper);
 
-        form.appendChild(input);
-        form.appendChild(iframe);
-        wrapper.appendChild(form);
-        container.appendChild(form);
+        var form = doc.getElementById('edui_form_' + timestrap);
+        var input = doc.getElementById('edui_input_' + timestrap);
+        var iframe = doc.getElementById('edui_iframe_' + timestrap);
 
         domUtils.on(input, 'change', function(){
+            if(!input.value) return;
             var loadingId = 'loading_' + (+new Date()).toString(36);
             var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
+
+            var imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
+            var allowFiles = me.getOpt('imageAllowFiles');
+
+            me.focus();
             me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
 
             function callback(){
-                var link, json, loader, body = (iframe.contentDocument || iframe.contentWindow.contentDocument).body, result = body.innerText || body.textContent || '';
                 try{
+                    var link, json, loader,
+                        body = (iframe.contentDocument || iframe.contentWindow.document).body,
+                        result = body.innerText || body.textContent || '';
                     json = (new Function("return " + result))();
                     link = me.options.imageUrlPrefix + json.url;
                     if(json.state == 'SUCCESS' && json.url) {
                         loader = me.document.getElementById(loadingId);
                         loader.setAttribute('src', link);
                         loader.setAttribute('_src', link);
-                        loader.removeAttribute('title');
+                        loader.setAttribute('title', json.title || '');
+                        loader.setAttribute('alt', json.original || '');
                         loader.removeAttribute('id');
                         domUtils.removeClasses(loader, 'loadingclass');
                     } else {
@@ -62,7 +62,7 @@ UE.plugin.register('simpleupload', function (){
                 }catch(er){
                     showErrorLoader && showErrorLoader(me.getLang('simpleupload.loadError'));
                 }
-                input.value = '';
+                form.reset();
                 domUtils.un(iframe, 'load', callback);
             }
             function showErrorLoader(title){
@@ -73,28 +73,53 @@ UE.plugin.register('simpleupload', function (){
                     loader.setAttribute('title', title || '');
                 }
             }
+
+            // 判断文件格式是否错误
+            var filename = input.value,
+                fileext = filename ? filename.substr(filename.lastIndexOf('.')):'';
+            if (!fileext || (allowFiles && (allowFiles.join('') + '.').indexOf(fileext.toLowerCase() + '.') == -1)) {
+                showErrorLoader(me.getLang('simpleupload.exceedTypeError'));
+                return;
+            }
+
             domUtils.on(iframe, 'load', callback);
             form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
             form.submit();
         });
+
+        var stateTimer;
+        me.addListener('selectionchange', function () {
+            clearTimeout(stateTimer);
+            stateTimer = setTimeout(function() {
+                var state = me.queryCommandState('simpleupload');
+                if (state == -1) {
+                    input.disabled = 'disabled';
+                } else {
+                    input.disabled = false;
+                }
+            }, 400);
+        });
+        isLoaded = true;
     }
 
     return {
         bindEvents:{
-            /* 初始化简单上传按钮 */
-            'ready': function(){
+            'ready': function() {
                 //设置loading的样式
                 utils.cssRule('loading',
                     '.loadingclass{display:inline-block;cursor:default;background: url(\''
-                        + this.options.themePath
-                        + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;}\n' +
-                        '.loaderrorclass{display:inline-block;cursor:default;background: url(\''
-                        + this.options.themePath
-                        + this.options.theme +'/images/loaderror.png\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;' +
-                        '}',
+                    + this.options.themePath
+                    + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;}\n' +
+                    '.loaderrorclass{display:inline-block;cursor:default;background: url(\''
+                    + this.options.themePath
+                    + this.options.theme +'/images/loaderror.png\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;' +
+                    '}',
                     this.document);
-
-                initUploadBtn();
+            },
+            /* 初始化简单上传按钮 */
+            'simpleuploadbtnready': function(type, container) {
+                containerBtn = container;
+                me.afterConfigReady(initUploadBtn);
             }
         },
         outputRule: function(root){
@@ -105,9 +130,9 @@ UE.plugin.register('simpleupload', function (){
             });
         },
         commands: {
-            "simpleupload":{
-                execCommand: function(){
-                    uploadInput && uploadInput.click();
+            'simpleupload': {
+                queryCommandState: function () {
+                    return isLoaded ? 0:-1;
                 }
             }
         }

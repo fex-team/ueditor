@@ -50,7 +50,7 @@ test("getMaxCols", function () {
 });
 
 test("ie9 active trace 3728 getSameEndPosCells", function () {
-    if(ua.browser.ie==9)return;
+    if(ua.browser.ie>9)return;
     var table = getTable("<tr><td rowspan='2'>1</td><td>2</td><td>3</td></tr><tr><td>2</td><td>3</td></tr>"),
         ut = new UT(table);
     var cell = table.rows[0].cells[0],

@@ -183,6 +183,10 @@ Class Uploader
     End Function
 
     Private Function CheckExt( fileType )
+        If IsEmpty (cfgAllowType) Then
+            CheckExt = true
+             Exit Function
+        End If
         For Each ext In cfgAllowType
             If UCase(fileType) = UCase(cfgAllowType.Item(ext)) Then 
                 CheckExt = true

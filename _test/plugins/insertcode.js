@@ -1,14 +1,8 @@
 module('plugins.insertcode');
 //test('',function(){stop();})
 test('trace 3343：插入代码中有空行', function () {
-    if (ua.browser.ie > 8)return;
     var editor = te.obj[0];
     var range = te.obj[1];
-//    var div = document.body.appendChild(document.createElement('div'));
-//    div.id = 'ue';
-//    var editor = UE.getEditor('ue');
-//    editor.ready(function () {
-//        var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('hello');
         ua.keydown(editor.body, {'keyCode':65, 'ctrlKey':true});
         editor.execCommand('insertcode', 'Java');
@@ -30,29 +24,21 @@ test('trace 3343：插入代码中有空行', function () {
             setTimeout(function () {
                 editor.execCommand('source');
                 var br = ua.browser.ie ? '' : '<br>';
-                if (ua.browser.ie)
+                if (ua.browser.ie&&ua.browser.ie<9)
                     ua.checkSameHtml(editor.body.innerHTML, "<PRE class=brush:Java;toolbar:false>hello<BR>hello<BR></PRE><P>&nbsp;</P>", '样式不变');
+
                 else if (ua.browser.gecko)
                     ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre>', '样式不变');
-                else
+                else if(ua.browser.webkit)
                     ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre><p>' + br + '</p>', '样式不变');
-//                setTimeout(function () {
-//                    UE.delEditor('ue');
-                    start()
-//                }, 200);
+                    start();
             }, 20);
         }, 20);
-//    });
     stop();
 });
 
 test('trace 3355：不闭合选区插入代码', function () {
     var editor = te.obj[0];
-    var range = te.obj[1];
-//    var div = document.body.appendChild(document.createElement('div'));
-//    div.id = 'ue';
-//    var editor = UE.getEditor('ue');
-//    editor.ready(function () {
         var code = '&lt;div id=&quot;upload&quot; style=&quot;display: none&quot; &gt;&lt;img id=&quot;uploadBtn&quot;&gt;&lt;/div&gt;';
         editor.setContent(code);
         setTimeout(function () {
@@ -63,61 +49,38 @@ test('trace 3355：不闭合选区插入代码', function () {
                 ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre>', '检查插入了html');
             else
                 ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre><p>' + br + '</p>', '检查插入了html');
-//            setTimeout(function () {
-//                UE.delEditor('ue');
-//                document.getElementById('ue')&&te.dom.push(document.getElementById('ue'));
-                start()
-//            }, 500);
+                start();
         }, 50);
-//    });
     stop();
 });
 
 test('trace 3395：插入代码为空时，清空编辑器', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-//    var div = document.body.appendChild(document.createElement('div'));
-//    div.id = 'ue';
-//    var editor = UE.getEditor('ue');
-//    editor.ready(function () {
-//        var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('');
         editor.execCommand('insertcode', 'html');
         var br = ua.browser.ie ? '&nbsp;' : '<br>';
-        if (ua.browser.gecko)
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">' + br + '</pre>', '检查插入了html');
+        if (ua.browser.gecko||ua.browser.ie > 10)
+            ua.checkSameHtml(editor.body.firstChild.outerHTML, '<pre class="brush:html;toolbar:false"><br></pre>', '检查插入了html');
         else if (ua.browser.ie > 8)
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false"></pre><p>' + br + '</p>', '检查插入了html');
+            ua.checkSameHtml(editor.body.firstChild.outerHTML, '<pre class="brush:html;toolbar:false"></pre>', '检查插入了html');
         else
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">' + br + '</pre><p>' + br + '</p>', '检查插入了html');
+            ua.checkSameHtml(editor.body.firstChild.outerHTML, '<pre class="brush:html;toolbar:false">' + br + '</pre>', '检查插入了html');
         range.setStart(editor.body.firstChild, 0).collapse(true).select();
         range.insertNode(editor.document.createTextNode('hello'));//TODO bug修复把此行删除
         ua.keydown(editor.body, {'keyCode':65, 'ctrlKey':true});
         ua.keydown(editor.body, {'keyCode':8});
         br = ua.browser.ie ? '' : '<br>';
         ua.checkSameHtml(editor.body.innerHTML, '<p>' + br + '</p>', '检查编辑器清空');
-//        setTimeout(function () {
-//            UE.delEditor('ue');
-//            document.getElementById('ue')&&te.dom.push(document.getElementById('ue'));
-//            start()
-//        }, 500);
-//    });
-//    stop();
 });
 
 test('trace 3396：多次切换源码，不会产生空行', function () {
-//    if (ua.browser.ie > 8)return;
     var editor = te.obj[0];
-    var range = te.obj[1];
-//    var div = document.body.appendChild(document.createElement('div'));
-//    div.id = 'ue';
-//    var editor = UE.getEditor('ue');
-//    editor.ready(function () {
 
         editor.setContent('<p>&lt;body&gt;</p><p>&lt;/body&gt;</p>');
         ua.keydown(editor.body, {'keyCode':65, 'ctrlKey':true});
         editor.execCommand('insertcode', 'html');
-        var br = ua.browser.ie>8 ? (ua.browser.ie>8?'\n':'') : '<br>';
+        var br = (ua.browser.ie==9||ua.browser.ie==10) ? '\n' : '<br>';
     var p = editor.body.firstChild.outerHTML.toLowerCase();
     var x ='\"';
     if(ua.browser.ie<9&&ua.browser.ie)x='';
@@ -130,8 +93,8 @@ test('trace 3396：多次切换源码，不会产生空行', function () {
             editor.execCommand('source');
             setTimeout(function () {
                 editor.execCommand('source');
-                var end = (ua.browser.ie&&ua.browser.ie>8)?'':'<br>';
-                br =( ua.browser.ie&&ua.browser.ie>8)?'\n':'<br>';
+                var end = (ua.browser.ie==9||ua.browser.ie==10) ?'':'<br>';
+                br =(ua.browser.ie==9||ua.browser.ie==10) ?'\n':'<br>';
                 var Bbr =( ua.browser.ie&&ua.browser.ie<9)?'\n':'';
                 ua.checkSameHtml(editor.body.firstChild.innerHTML, '&lt;body&gt;'+Bbr+br+'&lt;/body&gt;'+end, '切回源码无影响');
 //            setTimeout(function() {//TODO bug修复后去掉注释
@@ -142,14 +105,10 @@ test('trace 3396：多次切换源码，不会产生空行', function () {
 //                setTimeout(function () {
 //                    UE.delEditor('ue');
 //                    document.getElementById('ue')&&te.dom.push(document.getElementById('ue'));
-                    start()
-//                }, 500);
-//                },20);
-//            },20);
+                    start();
             }, 20);
         }, 20);
 
-//    });
     stop();
 });
 
@@ -183,44 +142,37 @@ test('trace 3407：表格中插入代码', function () {
 test('test-beforeInsertHTML', function(){
     var editor = te.obj[0];
     var range = te.obj[1];
-//    var div = document.body.appendChild(document.createElement('div'));
-//    div.id = 'ue';
-//    var editor = UE.getEditor('ue');
-//    editor.ready(function(){
-//        var range = new baidu.editor.dom.Range(editor.document);
         editor.setContent('<pre class="brush:html;toolbar:false"><br/></pre>');
-        //editor.setContent('<pre class="brush:html;toolbar:false"><br/></pre><p><br/></p>');
         //闭合
         range.setStart(editor.body.firstChild,0).collapse(true).select();
         var insert = 'text';
         editor.execCommand('inserthtml', insert);
-        if(ua.browser.ie && ua.browser.ie > 8)
+        if(ua.browser.ie==9||ua.browser.ie==10)
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">'+insert+'</pre>', '插入IE');
         else
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">'+insert+'<br></pre>', '插入chrome/ff');
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">'+insert+'<br></pre>', '插入chrome/ff/ie11+');
         ua.manualDeleteFillData(editor.body);
 
         //插入非br element
         range.setStart(editor.body.firstChild.firstChild,0).collapse(true).select();
         insert='<p>I</p>';
         editor.execCommand('inserthtml', insert);
-        if(ua.browser.ie && ua.browser.ie> 8)
+        if(ua.browser.ie==9||ua.browser.ie==10)
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">Itext</pre>', '插入IE');
         else
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">Itext<br></pre>', '插入chrome/ff');
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">Itext<br></pre>', '插入chrome/ff/ie11+');
         ua.manualDeleteFillData(editor.body);
 
         //插入br element
         range.setStart(editor.body.firstChild.firstChild,1).collapse(true).select();
         insert='<br>br';
         editor.execCommand('inserthtml', insert);
-        if(ua.browser.ie && ua.browser.ie > 8){
-            if(ua.browser.ie<11){
+        if(ua.browser.ie==9||ua.browser.ie==10){
                 ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">\nbrItext</pre>', '插入IE');
-            }else{
-                ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">I\nbrtext</pre>', '插入IE');
-            }
 
+        }
+        else if(ua.browser.ie>10){
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">I\nbrtext<br></pre>', '插入IE11+');
         }
         else{
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">I​<br>brtext<br></pre>', '插入chrome/ff');}
@@ -230,15 +182,18 @@ test('test-beforeInsertHTML', function(){
         range.setStart(editor.body.firstChild,0).collapse(true).select();
         insert='<p>PPP<p>222</p><span>SSS</span><br>BBB</p>';
         editor.execCommand('inserthtml', insert);
-        if(ua.browser.ie && ua.browser.ie > 8){
-            if(ua.browser.ie<11){
+        if(ua.browser.ie==9||ua.browser.ie==10){
+//            if(ua.browser.ie<11){
                 ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS\nBBB\nbrItext</pre>', '插入IE');
-            }else{
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS\nBBBI\nbrtext</pre>', '插入IE');
-            }
+//            }else{
+//            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS\nBBBI\nbrtext</pre>', '插入IE');
+//            }
+        }
+        else if(ua.browser.ie>10){
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS\nBBBI\nbrtext<br></pre>', '插入IE11+');
         }
         else{
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS<br>BBBI<br>brtext<br></pre>', '插入chrome/ff');
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPP222SSS<br>BBBI<br>brtext<br></pre>', '插入chrome/ff/ie11+');
         }
         ua.manualDeleteFillData(editor.body);
 
@@ -247,26 +202,27 @@ test('test-beforeInsertHTML', function(){
         range.setStart(editor.body.firstChild, 0).setEnd(editor.body.firstChild, 4).select();
         insert = 'replace';
         editor.execCommand('inserthtml', insert);
-        if(ua.browser.ie && ua.browser.ie > 8)
+        if(ua.browser.ie==9||ua.browser.ie==10)
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">replace</pre>', '插入IE');
+        else if(ua.browser.ie>10){
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">replace<br></pre>', '插入IE11+');
+
+        }
         else
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">replaceBBBI<br>brtext<br></pre>', '插入chrome/ff');
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">replaceBBBI<br>brtext<br></pre>', '插入chrome/ff/ie11+');
         ua.manualDeleteFillData(editor.body);
         //插入element
         range.setStart(editor.body.firstChild, 0).setEnd(editor.body.firstChild, 0).select();
         insert = '<p>PPP</p>';
         editor.execCommand('inserthtml', insert);
-        if(ua.browser.ie && ua.browser.ie > 8)
+        if(ua.browser.ie==9||ua.browser.ie==10)
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPPreplace</pre>', '插入IE');
+        else if(ua.browser.ie>10){
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPPreplace<br></pre>', '插入IE11+');
+
+        }
         else
-            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPPreplaceBBBI<br>brtext<br></pre>', '插入chrome/ff');
+            ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPPreplaceBBBI<br>brtext<br></pre>', '插入chrome/ff/ie11+');
         ua.manualDeleteFillData(editor.body);
 
-//        setTimeout(function () {
-//            UE.delEditor('ue');
-//            document.getElementById('ue')&&te.dom.push(document.getElementById('ue'));
-//            start()
-//        }, 500);
-//    });
-//    stop();
 });

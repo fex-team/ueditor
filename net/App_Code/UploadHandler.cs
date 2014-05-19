@@ -88,10 +88,6 @@ public class UploadHandler : Handler
 
     private void WriteResult()
     {
-        if (Result.State != UploadState.Success)
-        {
-            Response.StatusCode = 500;
-        }
         this.WriteJson(new
         {
             state = GetStateMessage(Result.State),

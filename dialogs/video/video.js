@@ -25,19 +25,15 @@
         var tabs = $G('tabHeads').children;
         for (var i = 0; i < tabs.length; i++) {
             domUtils.on(tabs[i], "click", function (e) {
-                var target = e.target || e.srcElement;
-                for (var j = 0; j < tabs.length; j++) {
+                var j, bodyId, target = e.target || e.srcElement;
+                for (j = 0; j < tabs.length; j++) {
+                    bodyId = tabs[j].getAttribute('data-content-id');
                     if(tabs[j] == target){
-                        var contentId = tabs[j].getAttribute('data-content-id');
-                        tabs[j].className = "focus";
-                        domUtils.removeClasses($G(tabs[j].getAttribute('data-content-id')), 'element-invisible');
-                        $G(contentId).style.display = "block";
-                        if(contentId == 'upload') {
-                            uploadFile.refresh();
-                        }
+                        domUtils.addClass(tabs[j], 'focus');
+                        domUtils.addClass($G(bodyId), 'focus');
                     }else {
-                        tabs[j].className = "";
-                        domUtils.addClass($G(tabs[j].getAttribute('data-content-id')), 'element-invisible');
+                        domUtils.removeClasses(tabs[j], 'focus');
+                        domUtils.removeClasses($G(bodyId), 'focus');
                     }
                 }
             });
@@ -385,10 +381,7 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
-                dnd: '#dndArea',
-                paste: $queue,
                 swf: '../../third-party/webuploader/Uploader.swf',
-                disableGlobalDnd: true,
                 server: actionUrl,
                 fileVal: editor.getOpt('videoFieldName'),
                 duplicate: true,
@@ -446,25 +439,31 @@
                     showError(file.statusText);
                 } else {
                     $wrap.text(lang.uploadPreview);
-                    if ('|png|jpg|jpeg|bmp|gif|'.indexOf('|'+file.ext+'|') == -1) {
-                        $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
+                    if ('|png|jpg|jpeg|bmp|gif|'.indexOf('|'+file.ext.toLowerCase()+'|') == -1) {
+                        $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext.toLowerCase() + '"></i>' +
                             '<span class="file-title">' + file.name + '</span>');
                     } else {
-                        uploader.makeThumb(file, function (error, src) {
-                            if (error || !src) {
-                                $wrap.empty().addClass('notimage').append('<i class="file-preview file-type-' + file.ext + '"></i>' +
-                                    '<span class="file-title">' + file.name + '</span>');
-                            } else {
-                                var img = $('<img src="' + src + '">');
-                                $wrap.empty().append(img);
-                            }
-                        }, thumbnailWidth, thumbnailHeight);
+                        if (browser.ie && browser.version <= 7) {
+                            $wrap.text(lang.uploadNoPreview);
+                        } else {
+                            uploader.makeThumb(file, function (error, src) {
+                                if (error || !src || (/^data:/.test(src) && browser.ie && browser.version <= 7)) {
+                                    $wrap.text(lang.uploadNoPreview);
+                                } else {
+                                    var $img = $('<img src="' + src + '">');
+                                    $wrap.empty().append($img);
+                                    $img.on('error', function () {
+                                        $wrap.text(lang.uploadNoPreview);
+                                    });
+                                }
+                            }, thumbnailWidth, thumbnailHeight);
+                        }
                     }
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
 
                     /* 检查文件格式 */
-                    if (acceptExtensions.indexOf(file.ext) == -1) {
+                    if (!file.ext || acceptExtensions.indexOf(file.ext.toLowerCase()) == -1) {
                         showError('not_allow_type');
                         uploader.removeFile(file);
                     }
@@ -695,7 +694,7 @@
                     case 'startUpload':
                         /* 添加额外的GET参数 */
                         var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
-                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
+                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + 'encode=utf-8&' + params);
                         uploader.option('server', url);
                         setState('uploading', files);
                         break;
@@ -705,8 +704,9 @@
                 }
             });
 
-            uploader.on('uploadBeforeSend', function (file, data) {
+            uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
+                header['X_Requested_With'] = 'XMLHttpRequest';
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
@@ -722,7 +722,7 @@
                 var $file = $('#' + file.id);
                 try {
                     var responseText = (ret._raw || ret),
-                        json = eval('(' + utils.trim(responseText) + ')');
+                        json = utils.str2json(responseText);
                     if (json.state == 'SUCCESS') {
                         uploadVideoList.push({
                             'url': json.url,
@@ -763,9 +763,10 @@
             updateTotalProgress();
         },
         getQueueCount: function () {
-            var file, i, readyFile = 0, files = this.uploader.getFiles();
+            var file, i, status, readyFile = 0, files = this.uploader.getFiles();
             for (i = 0; file = files[i++]; ) {
-                if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
+                status = file.getStatus();
+                if (status == 'queued' || status == 'uploading' || status == 'progress') readyFile++;
             }
             return readyFile;
         },

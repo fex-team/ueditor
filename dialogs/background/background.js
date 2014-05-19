@@ -133,7 +133,8 @@
         if(url && /^\//.test(url)) {
             var a = document.createElement('a');
             a.href = url;
-            url = a.protocol + '//' + a.hostname + a.pathname + a.search + a.hash
+            browser.ie && (a.href = a.href);
+            url = browser.ie ? a.href:(a.protocol + '//' + a.host + a.pathname + a.search + a.hash);
         }
 
         if(url || url === '') {
@@ -256,17 +257,19 @@
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName');
+                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName'),
+                    isJsonp = utils.isCrossDomainUrl(url);
                 ajax.request(url, {
-                    timeout: 100000,
-                    data: utils.extend({
-                        start: this.listIndex,
-                        size: this.listSize
-                    }, editor.queryCommandValue('serverparam')),
-                    method: 'get',
-                    onsuccess: function (r) {
+                    'timeout': 100000,
+                    'dataType': isJsonp ? 'jsonp':'',
+                    'data': utils.extend({
+                            start: this.listIndex,
+                            size: this.listSize
+                        }, editor.queryCommandValue('serverparam')),
+                    'method': 'get',
+                    'onsuccess': function (r) {
                         try {
-                            var json = eval('(' + r.responseText + ')');
+                            var json = isJsonp ? r:eval('(' + r.responseText + ')');
                             if (json.state == 'SUCCESS') {
                                 _this.pushData(json.list);
                                 _this.listIndex = parseInt(json.start) + parseInt(json.list.length);
@@ -285,7 +288,7 @@
                             }
                         }
                     },
-                    onerror: function () {
+                    'onerror': function () {
                         _this.isLoadingData = false;
                     }
                 });
@@ -293,7 +296,8 @@
         },
         /* 添加图片到列表界面上 */
         pushData: function (list) {
-            var i, item, img, icon, _this = this;
+            var i, item, img, icon, _this = this,
+                urlPrefix = editor.getOpt('imageManagerUrlPrefix');
             for (i = 0; i < list.length; i++) {
                 if(list[i] && list[i].url) {
                     item = document.createElement('li');
@@ -306,8 +310,8 @@
                         }
                     })(img));
                     img.width = 113;
-                    img.setAttribute('src', editor.getOpt('imageManagerUrlPrefix') + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
-                    img.setAttribute('_src', editor.getOpt('imageManagerUrlPrefix') + list[i].url);
+                    img.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=':'&noCache=') + (+new Date()).toString(36) );
+                    img.setAttribute('_src', urlPrefix + list[i].url);
                     domUtils.addClass(icon, 'icon');
 
                     item.appendChild(img);
@@ -368,4 +372,5 @@
     dialog.oncancel = function () {
         editor.execCommand('background', backupStyle);
     };
+
 })();

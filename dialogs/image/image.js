@@ -275,7 +275,7 @@
                     floatStyle: data['align'] || '',
                     vspace: data['vhSpace'] || '',
                     title: data['title'] || '',
-                    alt: data['alt'] || '',
+                    alt: data['title'] || '',
                     style: "width:" + data['width'] + "px;height:" + data['height'] + "px;"
                 }];
             } else {
@@ -347,7 +347,7 @@
             // WebUploader实例
                 uploader,
                 actionUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
-                acceptExtensions = editor.getOpt('imageAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, ''),
+                acceptExtensions = (editor.getOpt('imageAllowFiles') || []).join('').replace(/\./g, ',').replace(/^[,]/, ''),
                 imageMaxSize = editor.getOpt('imageMaxSize'),
                 imageCompressBorder = editor.getOpt('imageCompressBorder');
 
@@ -362,7 +362,6 @@
                     mimeTypes: 'image/*'
                 },
                 swf: '../../third-party/webuploader/Uploader.swf',
-                disableGlobalDnd: true,
                 server: actionUrl,
                 fileVal: editor.getOpt('imageFieldName'),
                 duplicate: true,
@@ -417,6 +416,9 @@
                             case 'http':
                                 text = lang.errorHttp;
                                 break;
+                            case 'not_allow_type':
+                                text = lang.errorFileType;
+                                break;
                             default:
                                 text = lang.errorUploadRetry;
                                 break;
@@ -428,17 +430,29 @@
                     showError(file.statusText);
                 } else {
                     $wrap.text(lang.uploadPreview);
-                    uploader.makeThumb(file, function (error, src) {
-                        if (error || !src) {
-                            $wrap.text(lang.uploadNoPreview);
-                            return;
-                        }
-
-                        var img = $('<img src="' + src + '">');
-                        $wrap.empty().append(img);
-                    }, thumbnailWidth, thumbnailHeight);
+                    if (browser.ie && browser.version <= 7) {
+                        $wrap.text(lang.uploadNoPreview);
+                    } else {
+                        uploader.makeThumb(file, function (error, src) {
+                            if (error || !src) {
+                                $wrap.text(lang.uploadNoPreview);
+                            } else {
+                                var $img = $('<img src="' + src + '">');
+                                $wrap.empty().append($img);
+                                $img.on('error', function () {
+                                    $wrap.text(lang.uploadNoPreview);
+                                });
+                            }
+                        }, thumbnailWidth, thumbnailHeight);
+                    }
                     percentages[ file.id ] = [ file.size, 0 ];
                     file.rotation = 0;
+
+                    /* 检查文件格式 */
+                    if (!file.ext || acceptExtensions.indexOf(file.ext.toLowerCase()) == -1) {
+                        showError('not_allow_type');
+                        uploader.removeFile(file);
+                    }
                 }
 
                 file.on('statuschange', function (cur, prev) {
@@ -666,7 +680,7 @@
                     case 'startUpload':
                         /* 添加额外的GET参数 */
                         var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
-                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
+                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + 'encode=utf-8&' + params);
                         uploader.option('server', url);
                         setState('uploading', files);
                         break;
@@ -676,8 +690,9 @@
                 }
             });
 
-            uploader.on('uploadBeforeSend', function (file, data) {
+            uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
+                header['X_Requested_With'] = 'XMLHttpRequest';
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
@@ -693,7 +708,7 @@
                 var $file = $('#' + file.id);
                 try {
                     var responseText = (ret._raw || ret),
-                        json = eval('(' + utils.trim(responseText) + ')');
+                        json = utils.str2json(responseText);
                     if (json.state == 'SUCCESS') {
                         _this.imageList.push(json);
                         $file.append('<span class="success"></span>');
@@ -730,9 +745,10 @@
             updateTotalProgress();
         },
         getQueueCount: function () {
-            var file, i, readyFile = 0, files = this.uploader.getFiles();
+            var file, i, status, readyFile = 0, files = this.uploader.getFiles();
             for (i = 0; file = files[i++]; ) {
-                if (file.getStatus() == 'queued' || file.getStatus() == 'uploading') readyFile++;
+                status = file.getStatus();
+                if (status == 'queued' || status == 'uploading' || status == 'progress') readyFile++;
             }
             return readyFile;
         },
@@ -748,8 +764,8 @@
                 list.push({
                     src: prefix + data.url,
                     _src: prefix + data.url,
-                    title: data.original,
-                    alt: data.title,
+                    title: data.title,
+                    alt: data.original,
                     floatStyle: align
                 });
             }
@@ -828,17 +844,19 @@
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName');
+                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName'),
+                    isJsonp = utils.isCrossDomainUrl(url);
                 ajax.request(url, {
-                    timeout: 100000,
-                    data: utils.extend({
+                    'timeout': 100000,
+                    'dataType': isJsonp ? 'jsonp':'',
+                    'data': utils.extend({
                             start: this.listIndex,
                             size: this.listSize
                         }, editor.queryCommandValue('serverparam')),
-                    method: 'get',
-                    onsuccess: function (r) {
+                    'method': 'get',
+                    'onsuccess': function (r) {
                         try {
-                            var json = eval('(' + r.responseText + ')');
+                            var json = isJsonp ? r:eval('(' + r.responseText + ')');
                             if (json.state == 'SUCCESS') {
                                 _this.pushData(json.list);
                                 _this.listIndex = parseInt(json.start) + parseInt(json.list.length);
@@ -857,7 +875,7 @@
                             }
                         }
                     },
-                    onerror: function () {
+                    'onerror': function () {
                         _this.isLoadingData = false;
                     }
                 });
@@ -925,6 +943,7 @@
                     list.push({
                         src: src,
                         _src: src,
+                        alt: src.substr(src.lastIndexOf('/') + 1),
                         floatStyle: align
                     });
                 }
@@ -963,6 +982,13 @@
                 var key = $G('searchTxt').value;
                 if(key && key == lang.searchRemind) {
                     $G('searchTxt').value = '';
+                }
+            });
+            /* 搜索框回车键搜索 */
+            domUtils.on($G('searchTxt'), 'keydown', function(e){
+                var keyCode = e.keyCode || e.which;
+                if (keyCode == 13) {
+                    $G('searchBtn').click();
                 }
             });
 
@@ -1020,28 +1046,29 @@
                 keepOriginName = editor.options.keepOriginName ? "1" : "0",
                 url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + _this.encodeToGb2312(key) + type + "&keeporiginname=" + keepOriginName + "&" + +new Date;
 
-                $G('searchListUl').innerHTML = lang.searchLoading;
-                $.ajax({
-                    url: url,
-                    dataType: 'jsonp',
-                    jsonp: "callback",
-                    data: {},
-                    success:function(json){
-                        var list = [];
-                        if(json && json.data) {
-                            for(var i = 0; i < json.data.length; i++) {
-                                if(json.data[i].objURL) {
-                                    list.push({
-                                        title: json.data[i].fromPageTitleEnc,
-                                        src: json.data[i].objURL,
-                                        url: json.data[i].fromURL
-                                    });
-                                }
+            $G('searchListUl').innerHTML = lang.searchLoading;
+            ajax.request(url, {
+                'dataType': 'jsonp',
+                'charset': 'GB18030',
+                'onsuccess':function(json){
+                    var list = [];
+                    if(json && json.data) {
+                        for(var i = 0; i < json.data.length; i++) {
+                            if(json.data[i].objURL) {
+                                list.push({
+                                    title: json.data[i].fromPageTitleEnc,
+                                    src: json.data[i].objURL,
+                                    url: json.data[i].fromURL
+                                });
                             }
                         }
-                        _this.setList(list);
                     }
-                });
+                    _this.setList(list);
+                },
+                'onerror':function(){
+                    $G('searchListUl').innerHTML = lang.searchRetry;
+                }
+            });
         },
         /* 添加图片到列表界面上 */
         setList: function (list) {
@@ -1078,15 +1105,18 @@
         },
         getInsertList: function () {
             var child,
+                src,
                 align = getAlign(),
                 list = [],
                 items = $G('searchListUl').children;
             for(var i = 0; i < items.length; i++) {
                 child = items[i].firstChild && items[i].firstChild.firstChild;
                 if(child.tagName && child.tagName.toLowerCase() == 'img' && domUtils.hasClass(items[i], 'selected')) {
+                    src = child.src;
                     list.push({
-                        src: child.src,
-                        _src: child.src,
+                        src: src,
+                        _src: src,
+                        alt: src.substr(src.lastIndexOf('/') + 1),
                         floatStyle: align
                     });
                 }
@@ -1094,6 +1124,5 @@
             return list;
         }
     };
-
 
 })();

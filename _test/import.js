@@ -9,6 +9,7 @@
 ///import core/Range;
 ///import core/Selection;
 ///import core/Editor;
+///import core/loadconfig;
 ///import core/ajax;
 ///import core/filterword;
 ///import core/node;
@@ -16,6 +17,7 @@
 ///import core/filternode;
 ///import core/plugin;
 ///import core/keymap;
+///import core/localstorage;
 
 ///import plugins/emotion;
 ///import plugins/map;
@@ -53,6 +55,7 @@
 ///import plugins/basestyle;
 ///import plugins/elementpath;
 ///import plugins/undo;
+///import plugins/copy;
 ///import plugins/paste;
 ///import plugins/source;
 ///import plugins/shortcutkeys;

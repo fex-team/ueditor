@@ -1,6 +1,7 @@
 module('plugins.autotypeset');
 
 test('全角半角转换',function(){
+    window.localStorage.clear();
     var editor = te.obj[0];
     editor.setContent('<p>Mayday123,.Ｍａｙｄａｙ１２３，．</p>');
     var text = editor.getContent();

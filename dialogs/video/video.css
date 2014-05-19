@@ -1,8 +1,21 @@
 @charset "utf-8";
 .wrapper{ width: 570px;_width:575px;margin: 10px auto; zoom:1;position: relative}
-.tabbody{height:335px;}
-.panel { position: absolute;width:100%; height:100%;background: #fff;}
-.panel table td{vertical-align: middle;}
+.tabbody{height: 335px;}
+.tabbody .panel {
+    position: absolute;
+    width: 0;
+    height: 0;
+    background: #fff;
+    overflow: hidden;
+    display: none;
+}
+.tabbody .panel.focus {
+    width: 100%;
+    height: 335px;
+    display: block;
+}
+
+.tabbody .panel table td{vertical-align: middle;}
 #videoUrl {
     width: 490px;
     height: 21px;
@@ -71,114 +84,53 @@ span.view{display: inline-block;width: 30px;float: right;cursor: pointer;color: 
 
 
 
+
 /* upload video */
-#fsUploadProgress{float:left;}
+.tabbody #upload.panel {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    background: #fff;
+    display: block;
+}
+.tabbody #upload.panel.focus {
+    width: 100%;
+    height: 335px;
+    display: block;
+    clip: auto;
+}
 #upload_alignment div{cursor:pointer;opacity: 0.5;filter: alpha(opacity = 50);margin:9px;_margin:5px;width:38px;height:36px;float:left;}
 #upload_alignment .focus{opacity: 1;filter: alpha(opacity = 100)}
-#fsUploadProgress{margin-top:15px;}
 #upload_left { width:427px; float:left; }
 #upload_left .controller { height: 30px; clear: both; }
 #uploadVideoInfo{margin-top:10px;float:right;padding-right:8px;}
 
-#divStatus {display:inline-block; width:336px;color: #aaa;font-size: 12px; }
-#video_format_advice{font-size: 12px; color:red;line-height: 24px;}
-#startUpload{cursor: pointer;display: inline-block; width: 100px;height: 30px;float: right;}
-div.fieldset {
-    border:  1px solid #afe14c;
-    padding: 10px 10px;
-    width: 390px;
-    height: 250px;
-    border-color: #CCCCCC;
-    overflow-y: auto;
-    margin-bottom: 8px;
-}
-div.fieldset span.legend{position: relative;top:-20px;}
-.progressWrapper { width: 380px; overflow: hidden; }
-.progressContainer {
-    margin: 0 0px 5px 0;
-    margin-bottom:10px;
-    border: solid 1px #E8E8E8;
-    background-color: #F7F7F7;
-    overflow: hidden;
-}
-.message {
-    margin: 1em 0;
-    padding: 10px 20px;
-    border: solid 1px #FFDD99;
-    background-color: #FFFFCC;
-    overflow: hidden;
-}
-.red {
-    border: solid 1px #B50000;
-    background-color: #FFEBEB;
-}
-.green {
-    border: solid 1px #DDF0DD;
-    background-color: #EBFFEB;
-}
-.blue {
-    border: solid 1px #CEE2F2;
-    background-color: #F0F5FF;
-}
-.progressName {
-    font-size: 10px;
-    color: #555;
-    width: 360px;
-    height: 14px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-}
-.progressBarInProgress,
-.progressBarComplete,
-.progressBarError {
-    font-size: 0;
-    width: 0%;
-    height: 2px;
-    background-color: blue;
-    margin-top: 2px;
-}
-.progressBarComplete {
-    width: 100%;
-    background-color: green;
-    visibility: hidden;
-}
-.progressBarError {
-    width: 100%;
-    background-color: red;
-    visibility: hidden;
-}
-a.progressCancel {
-    font-size: 0;
-    display: block;
-    height: 14px;
-    width: 14px;
-    background: url(../../themes/default/images/cancelbutton.gif) -14px 0 no-repeat ;
-    float: right;
-}
-a.progressCancel:hover { background-position: 0 0; }
-.progressBarStatus { margin-top: 2px; width: 337px; font-size: 7pt; text-align: left; white-space: nowrap; }
-
-
-
-/* upload video */
-#upload_left .queueList {
+#upload .queueList {
     margin: 0;
 }
 
-#upload_left p {
+#upload p {
     margin: 0;
 }
 
 .element-invisible {
+    width: 0 !important;
+    height: 0 !important;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
     position: absolute !important;
     clip: rect(1px, 1px, 1px, 1px);
 }
 
-#upload_left .placeholder {
+#upload .placeholder {
     margin: 10px;
     margin-right:0;
     border: 2px dashed #e6e6e6;
+    *border: 0px dashed #e6e6e6;
     height: 161px;
     padding-top: 150px;
     text-align: center;
@@ -189,9 +141,11 @@ a.progressCancel:hover { background-position: 0 0; }
     font-size: 18px;
     position: relative;
     top:0;
+    *margin-left: 0;
+    *left: 10px;
 }
 
-#upload_left .placeholder .webuploader-pick {
+#upload .placeholder .webuploader-pick {
     font-size: 18px;
     background: #00b7ee;
     border-radius: 3px;
@@ -205,7 +159,7 @@ a.progressCancel:hover { background-position: 0 0; }
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-#upload_left .placeholder .webuploader-pick-hover {
+#upload .placeholder .webuploader-pick-hover {
     background: #00a2d4;
 }
 
@@ -214,7 +168,7 @@ a.progressCancel:hover { background-position: 0 0; }
     text-align: center;
 }
 
-#upload_left .placeholder .flashTip {
+#upload .placeholder .flashTip {
     color: #666666;
     font-size: 12px;
     position: absolute;
@@ -223,29 +177,30 @@ a.progressCancel:hover { background-position: 0 0; }
     bottom: 20px;
 }
 
-#upload_left .placeholder .flashTip a {
+#upload .placeholder .flashTip a {
     color: #0785d1;
     text-decoration: none;
 }
 
-#upload_left .placeholder .flashTip a:hover {
+#upload .placeholder .flashTip a:hover {
     text-decoration: underline;
 }
 
-#upload_left .placeholder.webuploader-dnd-over {
+#upload .placeholder.webuploader-dnd-over {
     border-color: #999999;
 }
 
-#upload_left .filelist {
+#upload .filelist {
     list-style: none;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    position: relative;
     height: 285px;
 }
 
-#upload_left .filelist:after {
+#upload .filelist:after {
     content: '';
     display: block;
     width: 0;
@@ -254,25 +209,26 @@ a.progressCancel:hover { background-position: 0 0; }
     clear: both;
 }
 
-#upload_left .filelist li {
+#upload .filelist li {
     width: 113px;
     height: 113px;
     background: url(./images/bg.png);
     text-align: center;
     margin: 15px 0 0 20px;
+    *margin: 15px 0 0 15px;
     position: relative;
-    display: inline;
+    display: block;
     float: left;
     overflow: hidden;
     font-size: 12px;
 }
 
-#upload_left .filelist li p.log {
+#upload .filelist li p.log {
     position: relative;
     top: -45px;
 }
 
-#upload_left .filelist li p.title {
+#upload .filelist li p.title {
     position: absolute;
     top: 0;
     left: 0;
@@ -285,7 +241,7 @@ a.progressCancel:hover { background-position: 0 0; }
     text-align: left;
 }
 
-#upload_left .filelist li p.progress {
+#upload .filelist li p.progress {
     position: absolute;
     width: 100%;
     bottom: 0;
@@ -299,7 +255,7 @@ a.progressCancel:hover { background-position: 0 0; }
     -webkit-box-shadow: 0 0 0;
 }
 
-#upload_left .filelist li p.progress span {
+#upload .filelist li p.progress span {
     display: none;
     overflow: hidden;
     width: 0;
@@ -348,7 +304,7 @@ a.progressCancel:hover { background-position: 0 0; }
     }
 }
 
-#upload_left .filelist li p.imgWrap {
+#upload .filelist li p.imgWrap {
     position: relative;
     z-index: 2;
     line-height: 113px;
@@ -369,21 +325,21 @@ a.progressCancel:hover { background-position: 0 0; }
     -ms-transition: 200ms ease-out;
     transition: 200ms ease-out;
 }
-#upload_left .filelist li p.imgWrap.notimage {
+#upload .filelist li p.imgWrap.notimage {
     margin-top: 0;
     width: 111px;
     height: 111px;
     border: 1px #eeeeee solid;
 }
-#upload_left .filelist li p.imgWrap.notimage i.file-preview {
+#upload .filelist li p.imgWrap.notimage i.file-preview {
     margin-top: 15px;
 }
 
-#upload_left .filelist li img {
+#upload .filelist li img {
     width: 100%;
 }
 
-#upload_left .filelist li p.error {
+#upload .filelist li p.error {
     background: #f43838;
     color: #fff;
     position: absolute;
@@ -396,7 +352,7 @@ a.progressCancel:hover { background-position: 0 0; }
     display:none;
 }
 
-#upload_left .filelist li .success {
+#upload .filelist li .success {
     display: block;
     position: absolute;
     left: 0;
@@ -405,16 +361,17 @@ a.progressCancel:hover { background-position: 0 0; }
     width: 100%;
     z-index: 200;
     background: url(./images/success.png) no-repeat right bottom;
+    background-image: url(./images/success.gif) \9;
 }
 
-#upload_left .filelist li.filePickerBlock {
+#upload .filelist li.filePickerBlock {
     width: 113px;
     height: 113px;
     background: url(./images/image.png) no-repeat center 12px;
     border: 1px solid #eeeeee;
     border-radius: 0;
 }
-#upload_left .filelist li.filePickerBlock div.webuploader-pick  {
+#upload .filelist li.filePickerBlock div.webuploader-pick  {
     width: 100%;
     height: 100%;
     margin: 0;
@@ -424,7 +381,7 @@ a.progressCancel:hover { background-position: 0 0; }
     font-size: 0;
 }
 
-#upload_left .filelist div.file-panel {
+#upload .filelist div.file-panel {
     position: absolute;
     height: 0;
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#80000000', endColorstr='#80000000') \0;
@@ -436,7 +393,7 @@ a.progressCancel:hover { background-position: 0 0; }
     z-index: 300;
 }
 
-#upload_left .filelist div.file-panel span {
+#upload .filelist div.file-panel span {
     width: 24px;
     height: 24px;
     display: inline;
@@ -444,6 +401,7 @@ a.progressCancel:hover { background-position: 0 0; }
     text-indent: -9999px;
     overflow: hidden;
     background: url(./images/icons.png) no-repeat;
+    background: url(./images/icons.gif) no-repeat \9;
     margin: 5px 1px 1px;
     cursor: pointer;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -453,33 +411,33 @@ a.progressCancel:hover { background-position: 0 0; }
     user-select: none;
 }
 
-#upload_left .filelist div.file-panel span.rotateLeft {
+#upload .filelist div.file-panel span.rotateLeft {
     display:none;
     background-position: 0 -24px;
 }
 
-#upload_left .filelist div.file-panel span.rotateLeft:hover {
+#upload .filelist div.file-panel span.rotateLeft:hover {
     background-position: 0 0;
 }
 
-#upload_left .filelist div.file-panel span.rotateRight {
+#upload .filelist div.file-panel span.rotateRight {
     display:none;
     background-position: -24px -24px;
 }
 
-#upload_left .filelist div.file-panel span.rotateRight:hover {
+#upload .filelist div.file-panel span.rotateRight:hover {
     background-position: -24px 0;
 }
 
-#upload_left .filelist div.file-panel span.cancel {
+#upload .filelist div.file-panel span.cancel {
     background-position: -48px -24px;
 }
 
-#upload_left .filelist div.file-panel span.cancel:hover {
+#upload .filelist div.file-panel span.cancel:hover {
     background-position: -48px 0;
 }
 
-#upload_left .statusBar {
+#upload .statusBar {
     height: 45px;
     border-bottom: 1px solid #dadada;
     margin: 0 10px;
@@ -489,7 +447,7 @@ a.progressCancel:hover { background-position: 0 0; }
     position: relative;
 }
 
-#upload_left .statusBar .progress {
+#upload .statusBar .progress {
     border: 1px solid #1483d8;
     width: 198px;
     background: #fff;
@@ -502,7 +460,7 @@ a.progressCancel:hover { background-position: 0 0; }
     color: #6dbfff;
     margin: 0 10px 0 0;
 }
-#upload_left .statusBar .progress span.percentage {
+#upload .statusBar .progress span.percentage {
     width: 0;
     height: 100%;
     left: 0;
@@ -510,18 +468,18 @@ a.progressCancel:hover { background-position: 0 0; }
     background: #1483d8;
     position: absolute;
 }
-#upload_left .statusBar .progress span.text {
+#upload .statusBar .progress span.text {
     position: relative;
     z-index: 10;
 }
 
-#upload_left .statusBar .info {
+#upload .statusBar .info {
     display: inline-block;
     font-size: 14px;
     color: #666666;
 }
 
-#upload_left .statusBar .btns {
+#upload .statusBar .btns {
     position: absolute;
     top: 7px;
     right: 0;
@@ -532,10 +490,10 @@ a.progressCancel:hover { background-position: 0 0; }
     display: inline-block;
     float: left;
 }
-#upload_left .statusBar .btns .webuploader-pick,
-#upload_left .statusBar .btns .uploadBtn,
-#upload_left .statusBar .btns .uploadBtn.state-uploading,
-#upload_left .statusBar .btns .uploadBtn.state-paused {
+#upload .statusBar .btns .webuploader-pick,
+#upload .statusBar .btns .uploadBtn,
+#upload .statusBar .btns .uploadBtn.state-uploading,
+#upload .statusBar .btns .uploadBtn.state-paused {
     background: #ffffff;
     border: 1px solid #cfcfcf;
     color: #565656;
@@ -551,25 +509,25 @@ a.progressCancel:hover { background-position: 0 0; }
     -ms-user-select: none;
     user-select: none;
 }
-#upload_left .statusBar .btns .webuploader-pick-hover,
-#upload_left .statusBar .btns .uploadBtn:hover,
-#upload_left .statusBar .btns .uploadBtn.state-uploading:hover,
-#upload_left .statusBar .btns .uploadBtn.state-paused:hover {
+#upload .statusBar .btns .webuploader-pick-hover,
+#upload .statusBar .btns .uploadBtn:hover,
+#upload .statusBar .btns .uploadBtn.state-uploading:hover,
+#upload .statusBar .btns .uploadBtn.state-paused:hover {
     background: #f0f0f0;
 }
 
-#upload_left .statusBar .btns .uploadBtn,
-#upload_left .statusBar .btns .uploadBtn.state-paused{
+#upload .statusBar .btns .uploadBtn,
+#upload .statusBar .btns .uploadBtn.state-paused{
     background: #00b7ee;
     color: #fff;
     border-color: transparent;
 }
-#upload_left .statusBar .btns .uploadBtn:hover,
-#upload_left .statusBar .btns .uploadBtn.state-paused:hover{
+#upload .statusBar .btns .uploadBtn:hover,
+#upload .statusBar .btns .uploadBtn.state-paused:hover{
     background: #00a2d4;
 }
 
-#upload_left .statusBar .btns .uploadBtn.disabled {
+#upload .statusBar .btns .uploadBtn.disabled {
     pointer-events: none;
     filter:alpha(opacity=60);
     -moz-opacity:0.6;

@@ -39,7 +39,8 @@ UE.plugin.register('autoupload', function (){
                 if (loader) {
                     loader.setAttribute('src', link);
                     loader.setAttribute('_src', link);
-                    loader.removeAttribute('title');
+                    loader.setAttribute('title', data.title || '');
+                    loader.setAttribute('alt', data.original || '');
                     loader.removeAttribute('id');
                     domUtils.removeClasses(loader, 'loadingclass');
                 }
@@ -72,7 +73,7 @@ UE.plugin.register('autoupload', function (){
         }
         /* 判断文件格式是否超出允许 */
         var fileext = file.name ? file.name.substr(file.name.lastIndexOf('.')):'';
-        if (allowFiles && (allowFiles.join('') + '.').indexOf(fileext + '.') == -1) {
+        if ((fileext && filetype != 'image') || (allowFiles && (allowFiles.join('') + '.').indexOf(fileext.toLowerCase() + '.') == -1)) {
             errorHandler(editor.getLang('autoupload.exceedTypeError'));
             return;
         }
