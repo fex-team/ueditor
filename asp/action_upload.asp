@@ -2,7 +2,7 @@
 <!--#include file="config_loader.asp"-->
 <!--#include file="Uploader.class.asp"-->
 <%
-    uploadTemplateName = Session.Value("uploadTemplateName")
+    uploadTemplateName = Session.Value("ueditor_asp_uploadTemplateName")
 
     Set up = new Uploader
     up.MaxSize = config.Item( uploadTemplateName & "MaxSize" )

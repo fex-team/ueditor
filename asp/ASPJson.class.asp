@@ -174,7 +174,7 @@ Class AspJSON
         If IsEmpty(Request.QueryString("callback")) Then
             Response.Write JSONoutput()
         Else
-            Response.Write Request.Item("callback") & "(" & JSONoutput() & ")"
+            Response.Write Request.QueryString("callback") & "(" & JSONoutput() & ")"
         End If
     End Function
 
