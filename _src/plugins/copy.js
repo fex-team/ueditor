@@ -6,7 +6,7 @@ UE.plugin.register('copy', function () {
 
         ZeroClipboard.config({
             debug: false,
-            moviePath: me.options.UEDITOR_HOME_URL + '/third-party/zeroclipboard/ZeroClipboard.swf'
+            swfPath: me.options.UEDITOR_HOME_URL + '/third-party/zeroclipboard/ZeroClipboard.swf'
         });
 
         var client = me.zeroclipboard = new ZeroClipboard();

@@ -2,7 +2,7 @@
 <!--#include file="config_loader.asp"-->
 
 <%
-    listTemplateName = Session.Value("listTemplateName")
+    listTemplateName = Session.Value("ueditor_asp_listTemplateName")
 
     start = CInt(Request.Item("start"))
     size = CInt(Request.Item("size"))

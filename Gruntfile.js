@@ -170,13 +170,13 @@ module.exports = function (grunt) {
             options: {
                 charset: encode
             },
-            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.json', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.php', disDir + '**/*.asp', disDir + '**/*.ashx', disDir + '**/*.cs']
+            src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.json', disDir + '**/*.jsp', disDir + '**/*.asp']
 
         },
         replace: {
 
             fileEncode: {
-                src: [ disDir + '**/*.html', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.java', disDir + '**/*.ashx', disDir + '**/*.asp' ],
+                src: [ disDir + '**/*.html', disDir + 'dialogs/**/*.js', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.ashx', disDir + '**/*.asp' ],
                 overwrite: true,
                 replacements: [
                     {
@@ -214,6 +214,7 @@ module.exports = function (grunt) {
         clean: {
             build: {
                 src: [
+                    disDir + "jsp/src",
                     disDir + "*/upload",
                     disDir + ".DS_Store",
                     disDir + "**/.DS_Store",
@@ -228,14 +229,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-closurecompiler');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
+        var tasks = [ 'concat', 'cssmin', 'closurecompiler', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
 
         if (encode === 'gbk') {
             tasks.push('replace:fileEncode');
@@ -262,6 +263,10 @@ module.exports = function (grunt) {
             suffix = server === "net" ? ".ashx" : "." + server;
 
         file = file.replace(/php\//ig, path).replace(/\.php/ig, suffix);
+
+        if (encode == 'gbk') {
+            file = file.replace(/utf-8/gi, 'gbk');
+        }
 
         //写入到dist
         if (grunt.file.write(disDir + filename, file)) {
