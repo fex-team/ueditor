@@ -53,7 +53,7 @@ UE.I18N['en'] = {
         'kaiti':'Sim Kai',
         'heiti':'Sim Hei',
         'lishu':'Sim Li',
-        'yahei': 'Microsoft Yahei',
+        'yahei': 'Microsoft YaHei',
         'andaleMono':'Andale Mono',
         'arial': 'Arial',
         'arialBlack':'Arial Black',
