@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.baidu.ueditor.Encoder;
+
 public class BaseState implements State {
 
 	private boolean state = false;
