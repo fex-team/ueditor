@@ -40,15 +40,14 @@ public final class ConfigManager {
 		
 		rootPath = rootPath.replace( "\\", "/" );
 		
-		if ( rootPath.endsWith( contextPath ) ) {
-			this.rootPath = rootPath.substring( 0, rootPath.length() - contextPath.length() );
-		} else if ( rootPath.endsWith( contextPath + "/" ) ) {
-			this.rootPath = rootPath.substring( 0, rootPath.length() - contextPath.length() - 1 );
-		} else {
-			this.rootPath = rootPath;
-		}
+		this.rootPath = rootPath;
 		this.contextPath = contextPath;
-		this.originalPath = this.rootPath + uri;
+		
+		if ( contextPath.length() > 0 ) {
+			this.originalPath = this.rootPath + uri.substring( contextPath.length() );
+		} else {
+			this.originalPath = this.rootPath + uri;
+		}
 		
 		this.initEnv();
 		
