@@ -1733,7 +1733,21 @@ UserAction = {
             return window.getComputedStyle(ele);
         }
     },
-
+    readFile:function (name, f) {
+        var args = {};
+        args['name'] =  name;
+        $.ajax({
+            url:'read.php',
+            type:'post',
+            data:args,
+            success:function (msg) {
+                f(msg);
+            },
+            error:function (xhr, msg) {
+                f(null);
+            }
+        });
+    },
     readTxt:function (name, f) {
         var args = {};
         args['name'] = './txt/' + name;
