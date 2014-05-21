@@ -1,5 +1,9 @@
 #UEditor Change List
 
+##1.4.3
+###bug修复&优化改进
+1. 修复hasContents接口在非ie下只有空格时判断还为真的问题
+
 ##1.4.2
 ###重构前后端交互功能
 1. 前端上传模块统一改用webuploader
