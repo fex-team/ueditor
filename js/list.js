@@ -30,12 +30,12 @@ var docList = [
         title: '2. 进阶使用',
         list: [
             {
-                id: 'upload_video',
-                title: '2.1 上传视频'
+                id: 'dir',
+                title: '2.1 目录说明'
             },
             {
-                id: 'dir',
-                title: '2.2 目录说明'
+                id: 'upload_video',
+                title: '2.2 上传视频'
             },
             {
                 id: 'use_patch_file',
@@ -64,15 +64,15 @@ var docList = [
         title: '3. 前后端通信',
         list: [
             {
-                id:'server_config',
+                id:'request_specification',
                 title: '3.1 后端请求规范'
             },
             {
-                id:'format_filepath',
+                id:'server_config',
                 title: '3.2 后端配置项说明'
             },
             {
-                id:'server_param',
+                id:'format_filepath',
                 title: '3.3 格式化上传文件名'
             },
             {
@@ -80,13 +80,13 @@ var docList = [
                 title: '3.4 自定义请求参数'
             },
             {
-                id:'server_param',
-                title: '3.5 ASP支持说明'
-            }//,
-//            {
-//                id:'crossdomain',
-//                title: '4.7 跨域上传说明'
-//            }
+                id:'crossdomain',
+                title: '3.5 跨域支持说明'
+            },
+            {
+                id:'server_asp',
+                title: '3.6 ASP支持说明'
+            }
         ]
     },
     {

@@ -1257,3 +1257,22 @@ h1, h2, h3, h4{
     background-color: #f9f2f4;
     border-radius: 4px;
 }
+
+.ue-docs-main div.pagebar{
+    margin: 20px 0;
+}
+
+.ue-docs-main .previows{
+    display: block;
+    float: left;
+}
+
+.ue-docs-main .next{
+    display: block;
+    float: right;
+}
+
+.ue-docs-main .clearfloat{
+    display: block;
+    clear: both;
+}
