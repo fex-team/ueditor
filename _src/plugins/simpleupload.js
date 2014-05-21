@@ -15,9 +15,9 @@ UE.plugin.register('simpleupload', function (){
             wrapper = document.createElement('div');
 
         wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '" ' +
-        'style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;">' +
+        'style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;top:0;left:0;">' +
         '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
-        'style="background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;">' +
+        'style="background:red;display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;top:0;left:0;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;">' +
         '</form>' +
         '<iframe id="edui_iframe_' + timestrap + '" name="edui_iframe_' + timestrap + '" ' +
         'style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>';

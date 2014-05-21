@@ -724,8 +724,7 @@
             }
         },
         getInsertList: function () {
-            var i, lis = this.list.children, list = [],
-                prefix = editor.getOpt('fileManagerUrlPrefix');
+            var i, lis = this.list.children, list = [];
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
                     var url = lis[i].getAttribute('data-url');
