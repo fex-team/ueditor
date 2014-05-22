@@ -1,5 +1,5 @@
-$(function(){
-    var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1], mdToPath = {};
+$(function(){debugger
+    var path = location.hash.replace(/\?.*$/, '').slice(1).split('-'), cate = path[0], doc = path[1], mdToPath = {};
     activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
     activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id'];
 
