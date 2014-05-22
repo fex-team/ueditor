@@ -746,8 +746,9 @@
 
                             } else {
                                 holder.parentNode.removeChild(holder);
-                                holder.id && (newDiv.id = holder.id);
+
                             }
+                            holder.id && (newDiv.id = holder.id);
                             holder = newDiv;
                             holder.innerHTML = '';
                         }
