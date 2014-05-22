@@ -38,9 +38,16 @@ public final class ConfigManager {
 	 */
 	private ConfigManager ( String rootPath, String contextPath, String uri ) throws FileNotFoundException, IOException {
 		
-		this.rootPath = rootPath.substring( 0, rootPath.length() - contextPath.length() );
+		rootPath = rootPath.replace( "\\", "/" );
+		
+		this.rootPath = rootPath;
 		this.contextPath = contextPath;
-		this.originalPath = this.rootPath + uri;
+		
+		if ( contextPath.length() > 0 ) {
+			this.originalPath = this.rootPath + uri.substring( contextPath.length() );
+		} else {
+			this.originalPath = this.rootPath + uri;
+		}
 		
 		this.initEnv();
 		
