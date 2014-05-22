@@ -6,7 +6,7 @@
 2. 修复在粘贴word内容时，会误命中cm,pt这样的文本内容变成px的问题
 3. 优化删除编辑器再创建编辑器时，编辑器的容器id发生变化的问题
 4. 提交的xss漏洞
-5. 修复java版本在某些服务器部署环境下找不到配置文件正确位置的bug
+5. 新增jsp后台多种服务器配置下的路径定位
 6. 修复ZeroClipboard的flash地址参数名称错误
 7. 修复getActionUrl的bug
 8. 整理代码中的参数到ueditor.config.js里
