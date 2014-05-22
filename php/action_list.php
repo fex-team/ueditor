@@ -25,8 +25,8 @@ switch ($_GET['action']) {
 $allowFiles = substr(str_replace(".", "|", join("", $allowFiles)), 1);
 
 /* 获取参数 */
-$size = isset($_GET['size']) ? $_GET['size'] : $listSize;
-$start = isset($_GET['start']) ? $_GET['start'] : 0;
+$size = isset($_GET['size']) ? htmlspecialchars($_GET['size']) : $listSize;
+$start = isset($_GET['start']) ? htmlspecialchars($_GET['start']) : 0;
 $end = $start + $size;
 
 /* 获取文件列表 */

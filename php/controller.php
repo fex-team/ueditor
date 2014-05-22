@@ -45,8 +45,8 @@ switch ($action) {
 }
 
 /* 输出结果 */
-if (isset($_GET["callback"])) {
-    echo $_GET["callback"] . '(' . $result . ')';
+if (isset($_GET["callback"]) && preg_match("/^[\w_]+$/", $_GET["callback"])) {
+    echo htmlspecialchars($_GET["callback"]) . '(' . $result . ')';
 } else {
     echo $result;
 }
