@@ -588,7 +588,7 @@ UE.I18N['zh-cn'] = {
             lang_showMsg:"截图功能需要首先安装UEditor截图插件！ ",
             lang_download:"点此下载",
             lang_step1:"第一步，下载UEditor截图插件并运行安装。",
-            lang_step2:"第二不，插件安装完成后即可使用，如不生效，请重启浏览器后再试！"
+            lang_step2:"第二步，插件安装完成后即可使用，如不生效，请重启浏览器后再试！"
         }
     },
     'spechars':{
