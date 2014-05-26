@@ -351,6 +351,11 @@
                 imageMaxSize = editor.getOpt('imageMaxSize'),
                 imageCompressBorder = editor.getOpt('imageCompressBorder');
 
+            if (!WebUploader.Uploader.support()) {
+                $('#filePickerReady').after($('<div>').html(lang.errorNotSupport)).hide();
+                return;
+            }
+
             uploader = _this.uploader = WebUploader.create({
                 pick: {
                     id: '#filePickerReady',

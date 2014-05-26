@@ -376,6 +376,11 @@
                 fileMaxSize = editor.getOpt('videoMaxSize'),
                 acceptExtensions = editor.getOpt('videoAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');;
 
+            if (!WebUploader.Uploader.support()) {
+                $('#filePickerReady').after($('<div>').html(lang.errorNotSupport)).hide();
+                return;
+            }
+
             uploader = _this.uploader = WebUploader.create({
                 pick: {
                     id: '#filePickerReady',
