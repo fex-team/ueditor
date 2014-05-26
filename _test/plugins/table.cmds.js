@@ -904,13 +904,13 @@ test('trace 3222：在合并后的单元格中按tab键', function () {
         trs[1].cells[2].innerHTML = 'asd';
         range.setStart(trs[1].cells[1], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode':9});
-        if (ua.browser.gecko)
+        if (ua.browser.gecko||ua.browser.webkit)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第一次tab键');
         else
             equal(editor.selection.getRange().startContainer.data, 'asd', '第一次tab键');
         range.setStart(trs[1].cells[1], 0).collapse(true).select();
         ua.keydown(editor.body, {'keyCode':9});
-        if (ua.browser.gecko)
+        if (ua.browser.gecko||ua.browser.webkit)
             equal(editor.selection.getRange().startContainer.innerHTML, 'asd', '第二次tab键');
         else
             equal(editor.selection.getRange().startContainer.data, 'asd', '第二次tab键');
