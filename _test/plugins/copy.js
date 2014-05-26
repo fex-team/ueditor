@@ -30,7 +30,7 @@ test('检查非IE下是否正常加载zeroclipboard粘贴板插件', function ()
     if (!browser.ie) {
 
         setTimeout(function(){
-            ok(ZeroClipboard, '是否正常加载zeroclipboard粘贴板插件');
+            ok(window.ZeroClipboard, '是否正常加载zeroclipboard粘贴板插件');
             start();
         }, 300);
 

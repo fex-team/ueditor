@@ -167,35 +167,34 @@ test('粘贴过滤',function(){
 });
 
 test('trace:4018，4012',function(){
-
-     var div = document.body.appendChild(document.createElement('div'));
-     div.id = 'ue2';
-     var editor2 = UE.getEditor('ue2');
-     editor2.ready(function(){
-     editor2.setContent('Mayday123,.Ｍａｙｄａｙ１２３，．');
-     var c = $('#edui18_state div');
-     ua.click(c[4]);
-     ua.click($("input")[19]);
-     var d = $(".edui-autotypesetpicker-body tr ");
-     var e = d[7].getElementsByTagName('input');
-     ua.click(e[0]);
-     var button = $(".edui-autotypesetpicker-body button");
-     ua.click(button[0]);
-         if(ua.browser.ie&&ua.browser.ie==8){
-             equal(editor2.getContent(),"<p style=\"TEXT-ALIGN: left\">Ｍａｙｄａｙ１２３，．Ｍａｙｄａｙ１２３，．</p>","未执行半角转全角");
-         }else{
-                equal(editor2.getContent(),'<p style="text-align: left;">Mayday123,.Ｍａｙｄａｙ１２３，．</p>',"未执行半角转全角");
-         }
-     setTimeout(function () {
-         UE.delEditor('ue2');
-         window.localStorage.clear();
-         start();
-     }, 100);
-     });
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue2';
+    var editor2 = UE.getEditor('ue2');
+    editor2.ready(function(){
+        editor2.setContent('Mayday123,.Ｍａｙｄａｙ１２３，．');
+        var c = $('#edui18_state div');
+        ua.click(c[4]);
+        ua.click($("input")[19]);
+        var d = $(".edui-autotypesetpicker-body tr");
+        var e = d[7].getElementsByTagName('input');
+        ua.click(e[0]);
+        var button = $(".edui-autotypesetpicker-body button");
+        ua.click(button[0]);
+        if(ua.browser.ie&&ua.browser.ie==8){
+            equal(editor2.getContent(),"<p style=\"TEXT-ALIGN: left\">Ｍａｙｄａｙ１２３，．Ｍａｙｄａｙ１２３，．</p>","未执行半角转全角");
+        }else{
+            equal(editor2.getContent(),'<p style="text-align: left;">Mayday123,.Ｍａｙｄａｙ１２３，．</p>',"未执行半角转全角");
+        }
+        setTimeout(function () {
+            UE.delEditor('ue2');
+            window.localStorage.clear();
+            start();
+        }, 100);
+    });
     stop();
- });
+});
 
-test('trace:4011',function(){
+test('trace:3991',function(){
     var editor3 = te.obj[0];
     setTimeout(function(){
         editor3.setContent('');
@@ -208,5 +207,22 @@ test('trace:4011',function(){
         var f = $("#edui538_state")[0];
         start();
     }, 100);
+    stop();
+});
+
+test('trace:3967',function(){
+    var editor = te.obj[0];
+    editor.setContent('123<br/>');
+    editor.execCommand('insertorderedlist','decimal');
+    editor.execCommand('source');
+    setTimeout(function(){
+        editor.execCommand('source');
+        setTimeout(function(){
+            editor.execCommand('source');
+            var x = editor.getContent();
+            ok(x.indexOf('br')== x.lastIndexOf('br'),'只有一个<br/>');
+            start();
+        },50)
+    },50)
     stop();
 });
