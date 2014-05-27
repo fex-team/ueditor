@@ -72,14 +72,16 @@ UE.I18N['en'] = {
         'exceedTypeError': 'File Type Not Allow',
         'jsonEncodeError': 'Server Return Format Error',
         'loading':"loading...",
-        'loadError':"load error"
+        'loadError':"load error",
+        'errorLoadConfig': 'Server config not loaded, upload can not work.',
     },
     'simpleupload':{
         'exceedSizeError': 'File Size Exceed',
         'exceedTypeError': 'File Type Not Allow',
         'jsonEncodeError': 'Server Return Format Error',
         'loading':"loading...",
-        'loadError':"load error"
+        'loadError':"load error",
+        'errorLoadConfig': 'Server config not loaded, upload can not work.',
     },
     'elementPathTip':"Path",
     'wordCountTip':"Word Count",
