@@ -256,7 +256,8 @@ test('unhtml 字符转义', function () {
     str = 'border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;"'
     equal(utils.unhtml(str), 'border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;&quot;', '转义字符成功');
     str = "'";
-    equal(utils.unhtml(str), '&#39;')
+    equal(utils.unhtml('比如&#23567;这个汉字的unicode编码'), '比如&#23567;这个汉字的unicode编码');
+    equal(utils.unhtml('比如&#<23567;这个汉字的unicode编码<>'), '比如&amp;#&lt;23567;这个汉字的unicode编码&lt;&gt;')
 });
 test('html 反转义', function () {
     var utils = te.obj[0];

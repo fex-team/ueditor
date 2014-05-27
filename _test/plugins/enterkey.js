@@ -221,11 +221,11 @@ test( 'chrome删除div', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
-    if(ua.browser.chrome){
+    if(ua.browser.webkit){
         editor.body.innerHTML = '<h1>一级标题</h1><div><br/></div>';
         range.setStart( body.firstChild.firstChild, 4 ).collapse( 1 ).select();
         ua.keydown(editor.body,{'keyCode':13});
-        range.selectNode(body.lastChild).select();
+        range.selectNode(body.lastChild.firstChild).select();
         var index = editor.undoManger.index;
         var br = ua.browser.ie ? '' : '<br>';
         ua.keyup(editor.body,{'keyCode':13});

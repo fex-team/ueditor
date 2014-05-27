@@ -803,10 +803,10 @@ test('2个实例采用2个配置文件', function () {
                     document.getElementById('div1') && te.dom.push(document.getElementById('div1'));
                     document.getElementById('div2') && te.dom.push(document.getElementById('div2'));
                     start();
-                }, 300);
+                }, 500);
             });
         });
-    }, 100);
+    }, 300);
 });
 test('绑定事件', function () {
     document.onmouseup = function (event) {
