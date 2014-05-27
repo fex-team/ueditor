@@ -65,7 +65,7 @@ test(' 通过选区路径取range', function () {
     editor.execCommand('elementpath', '4');
     setTimeout(function () {
         range = editor.selection.getRange();
-        if (ua.browser.gecko) {
+        if (ua.browser.gecko||ua.browser.webkit) {
             ua.checkResult(range, trs[1], trs[1], 1, 2, false, '取range--td');
         } else {
             if (ua.browser.ie)
@@ -77,7 +77,7 @@ test(' 通过选区路径取range', function () {
         editor.execCommand('elementpath', '3');
         setTimeout(function () {
             range = editor.selection.getRange();
-            if (ua.browser.gecko) {
+            if (ua.browser.gecko||ua.browser.webkit) {
                 ua.checkResult(range, tbodys[0], tbodys[0], 1, 2, false, '取range--tr');
             } else {
                 if (ua.browser.ie)
@@ -89,7 +89,7 @@ test(' 通过选区路径取range', function () {
             editor.execCommand('elementpath', '2');
             setTimeout(function () {
                 range = editor.selection.getRange();
-                if (ua.browser.gecko) {
+                if (ua.browser.gecko||ua.browser.webkit) {
                     ua.checkResult(range, table[0], table[0], 0, 1, false, '取range--tbody');
                 } else {
                     if (ua.browser.ie)
@@ -104,7 +104,7 @@ test(' 通过选区路径取range', function () {
                 setTimeout(function () {
                     range = editor.selection.getRange();
                     var p = editor.body.firstChild;
-                    if (ua.browser.gecko) {
+                    if (ua.browser.gecko||ua.browser.webkit) {
                         ua.checkResult(range, editor.body, editor.body, 0, 1, false, '取range--p');
                     } else {
                         ua.checkResult(range, p.firstChild, p.firstChild, 0, 5, false, '取range--p');

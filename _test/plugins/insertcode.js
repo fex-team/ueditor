@@ -15,7 +15,7 @@ test('trace 3343：插入代码中有空行', function () {
         var br = ua.browser.ie ? '' : '<br>';
         if (ua.browser.ie)
             ua.checkSameHtml(editor.body.innerHTML, '<PRE class=brush:Java;toolbar:false>​<BR>hello​​<BR>​​hello</PRE><P></P>', '插入代码');
-        else if (ua.browser.gecko)
+        else if (ua.browser.gecko||ua.browser.webkit)
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello</pre>', '插入代码');
         else
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello</pre><p>' + br + '</p>', '插入代码');
@@ -27,10 +27,8 @@ test('trace 3343：插入代码中有空行', function () {
                 if (ua.browser.ie&&ua.browser.ie<9)
                     ua.checkSameHtml(editor.body.innerHTML, "<PRE class=brush:Java;toolbar:false>hello<BR>hello<BR></PRE><P>&nbsp;</P>", '样式不变');
 
-                else if (ua.browser.gecko)
+                else if (ua.browser.gecko||ua.browser.webkit)
                     ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre>', '样式不变');
-                else if(ua.browser.webkit)
-                    ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre><p>' + br + '</p>', '样式不变');
                     start();
             }, 20);
         }, 20);
@@ -45,7 +43,7 @@ test('trace 3355：不闭合选区插入代码', function () {
             ua.keydown(editor.body, {'keyCode': 65, 'ctrlKey': true});
             editor.execCommand('insertcode', 'html');
             var br = ua.browser.ie ? '' : '<br>';
-            if (ua.browser.gecko || ua.browser.opera )
+            if (ua.browser.gecko || ua.browser.opera ||ua.browser.webkit)
                 ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre>', '检查插入了html');
             else
                 ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre><p>' + br + '</p>', '检查插入了html');

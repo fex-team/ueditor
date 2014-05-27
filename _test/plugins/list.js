@@ -901,7 +901,7 @@ test('trace 3165：检查表格中列表tab键', function () {
             ua.keydown(editor.body, {keyCode:9});
             setTimeout(function () {
                 range = editor.selection.getRange();
-                if (!ua.browser.gecko && !ua.browser.ie)//TODO 1.2.6
+                if (!ua.browser.gecko && !ua.browser.ie && !ua.browser.webkit)//TODO 1.2.6
                     equal(range.startContainer.parentNode.tagName.toLowerCase(), 'li', 'tab键后光标跳到有列表的单元格中');
                 equal(tds[6].firstChild.style['listStyleType'], 'decimal', '检查有序列表的类型不应该被改变');
                 start();
