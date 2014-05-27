@@ -30,7 +30,7 @@ foreach ($source as $imgUrl) {
     array_push($list, array(
         "state" => $info["state"],
         "url" => $info["url"],
-        "source" => $imgUrl
+        "source" => htmlspecialchars($imgUrl)
     ));
 }
 

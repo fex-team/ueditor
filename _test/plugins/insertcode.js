@@ -226,3 +226,60 @@ test('test-beforeInsertHTML', function(){
         ua.manualDeleteFillData(editor.body);
 
 });
+
+test('关于pre中的tabKey',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<pre class="brush:Javascript;toolbar:false">function a(){var a = true;}</pre>');
+    var text = editor.body.firstChild.firstChild;
+    range.setStart(text,13).setEnd(text,16).select();
+    ua.keydown(editor.body,{'shiftKey':false,'keyCode':9});
+    ua.keyup(editor.body,{'shiftKey':false,'keyCode':9});
+    if(ua.browser.ie==8||ua.browser.ie==9){
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>');
+    }else if(ua.browser.ie>9){
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey1');
+    }else{
+        equal(editor.getContent(),'<pre class="brush:Javascript;toolbar:false">&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey1');
+    }
+    editor.setContent('<pre class="brush:Javascript;toolbar:false"><br>function a(){var a = true;}</pre>');
+    var text = editor.body.firstChild.firstChild;
+    range.setStart(text,13).setEnd(text,16).select();
+    ua.keydown(editor.body,{'shiftKey':false,'keyCode':9});
+    ua.keyup(editor.body,{'shiftKey':false,'keyCode':9});
+    if(ua.browser.ie==8||ua.browser.ie==9){
+        var x = '\n';
+        if(ua.browser.ie==9){
+            x = '';
+        }
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">&nbsp;&nbsp;&nbsp;&nbsp;'+x+'function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey2');
+    }else if(ua.browser.ie>9){
+        var x2 = '';
+        var x3 = '&nbsp;&nbsp;&nbsp;&nbsp;';
+        if(ua.browser.ie==11){
+            x2 = '&nbsp;&nbsp;&nbsp;&nbsp;';
+            x3='\n';
+        }
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">'+x3+'function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>'+x2,'验证pre下tabKey2');
+    }else{
+        equal(editor.getContent(),'<pre class="brush:Javascript;toolbar:false">\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey2');
+    }
+    editor.setContent('<pre class="brush:Javascript;toolbar:false">function a(){<br>var a = true;}</pre>');
+    var text = editor.body.firstChild.firstChild;
+    range.setStart(text,13).setEnd(text,16).select();
+    ua.keydown(editor.body,{'shiftKey':false,'keyCode':9});
+    ua.keyup(editor.body,{'shiftKey':false,'keyCode':9});
+    if(ua.browser.ie==8){
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">function&nbsp;a(){&nbsp;&nbsp;&nbsp;&nbsp;\nvar&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey3');
+    }else if(ua.browser.ie>8){
+        var xx = '&nbsp;&nbsp;&nbsp;&nbsp;';
+        var xx2 = '';
+        if(ua.browser.ie==11){
+            xx = '';
+            xx2 = '&nbsp;&nbsp;&nbsp;&nbsp;';
+        }
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">'+xx+'function&nbsp;a(){'+xx2+'\nvar&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey3');
+    }else{
+        equal(editor.getContent(),'<pre class="brush:Javascript;toolbar:false">function&nbsp;a(){&nbsp;&nbsp;&nbsp;&nbsp;\nvar&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey3');
+    }
+});

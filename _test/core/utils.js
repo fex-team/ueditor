@@ -484,7 +484,9 @@ test('json2str', function () {
 test('json2str 不使用原生方法', function () {
     stop();
     var j = window.JSON;
-    ua.readFile("../../../_src/core/utils.js", function (s) {
+    var flag = 0;
+    ua.readFile("../../../_test/coverage/core/utils.js", function (s) {
+        if(s===null)flag = 1;
         window.JSON = null;
         eval(s);
         equal(utils.json2str({"a": 11, "b": "22", "c": "cc", "d": [1, "2", "a", {"a": "aa"}], "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}}),
@@ -492,9 +494,22 @@ test('json2str 不使用原生方法', function () {
             'json对象转字符串');
 
         window.JSON = j;
-        start();
 
     });
+    if(flag){
+        ua.readFile("../../../_src/core/utils.js", function (s) {
+            window.JSON = null;
+            eval(s);
+            equal(utils.json2str({"a": 11, "b": "22", "c": "cc", "d": [1, "2", "a", {"a": "aa"}], "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}}),
+                '{"a":11,"b":"22","c":"cc","d":[1,"2","a",{"a":"aa"}],"e":{"k1":1,"k2":"2","k3":"a","k4":{"a":"aa"}}}',
+                'json对象转字符串');
+
+            window.JSON = j;
+
+        });
+    }
+
+    setTimeout(function(){start();},50);
 });
 
 test('clearEmptyAttrs', function () {
