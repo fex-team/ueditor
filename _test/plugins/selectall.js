@@ -48,7 +48,7 @@ test( 'ctrl+a', function() {
 //        if ( ua.browser.gecko||ua.browser.ie>8 )
 //            ua.checkResult( range, body, body, 0, 2, false, '查看全选后的range' );
 //        else
-           if(ua.browser.gecko){
+           if(ua.browser.gecko||ua.browser.webkit){
                ua.checkResult( range, body, body, 0, 2, false, '查看全选后的range' );
            }else{
             ua.checkResult( range, body.firstChild.firstChild, body.lastChild.firstChild, 0, 6, false, '查看全选后的range' );
