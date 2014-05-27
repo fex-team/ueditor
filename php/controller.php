@@ -9,7 +9,7 @@ $action = $_GET['action'];
 
 switch ($action) {
     case 'config':
-        //$result =  json_encode($CONFIG);
+        $result =  json_encode($CONFIG);
         break;
 
     /* 上传图片 */
