@@ -6,36 +6,40 @@
  * @date 2013-10-14
  */
 UE.plugin.register('autoupload', function (){
-    var me = this;
 
     function sendAndInsertFile(file, editor) {
+        var me  = editor;
         //模拟数据
         var fieldName, urlPrefix, maxSize, allowFiles, actionUrl,
             loadingHtml, errorHandler, successHandler,
             filetype = /image\/\w+/i.test(file.type) ? 'image':'file',
             loadingId = 'loading_' + (+new Date()).toString(36);
 
-        fieldName = editor.getOpt(filetype + 'FieldName');
-        urlPrefix = editor.getOpt(filetype + 'UrlPrefix');
-        maxSize = editor.getOpt(filetype + 'MaxSize');
-        allowFiles = editor.getOpt(filetype + 'AllowFiles');
-        actionUrl = editor.getActionUrl(editor.getOpt(filetype + 'ActionName'));
+        fieldName = me.getOpt(filetype + 'FieldName');
+        urlPrefix = me.getOpt(filetype + 'UrlPrefix');
+        maxSize = me.getOpt(filetype + 'MaxSize');
+        allowFiles = me.getOpt(filetype + 'AllowFiles');
+        actionUrl = me.getActionUrl(me.getOpt(filetype + 'ActionName'));
         errorHandler = function(title) {
-            var loader = editor.document.getElementById(loadingId);
+            var loader = me.document.getElementById(loadingId);
             if (loader) {
-                domUtils.removeClasses(loader, 'loadingclass');
-                domUtils.addClass(loader, 'loaderrorclass');
-                loader.setAttribute('title', title || '');
+                domUtils.remove(loader);
+                me.fireEvent('showmessage', {
+                    'id': loadingId,
+                    'title': title,
+                    'type': 'error',
+                    'timeout': 4000
+                });
             }
         };
 
         if (filetype == 'image') {
             loadingHtml = '<img class="loadingclass" id="' + loadingId + '" src="' +
-                editor.options.themePath + editor.options.theme +
-                '/images/spacer.gif" title="' + (editor.getLang('autoupload.loading') || '') + '" >';
+                me.options.themePath + me.options.theme +
+                '/images/spacer.gif" title="' + (me.getLang('autoupload.loading') || '') + '" >';
             successHandler = function(data) {
                 var link = urlPrefix + data.url,
-                    loader = editor.document.getElementById(loadingId);
+                    loader = me.document.getElementById(loadingId);
                 if (loader) {
                     loader.setAttribute('src', link);
                     loader.setAttribute('_src', link);
@@ -48,33 +52,33 @@ UE.plugin.register('autoupload', function (){
         } else {
             loadingHtml = '<p>' +
                 '<img class="loadingclass" id="' + loadingId + '" src="' +
-                editor.options.themePath + editor.options.theme +
-                '/images/spacer.gif" title="' + (editor.getLang('autoupload.loading') || '') + '" >' +
+                me.options.themePath + me.options.theme +
+                '/images/spacer.gif" title="' + (me.getLang('autoupload.loading') || '') + '" >' +
                 '</p>';
             successHandler = function(data) {
                 var link = urlPrefix + data.url,
-                    loader = editor.document.getElementById(loadingId);
+                    loader = me.document.getElementById(loadingId);
 
-                var rng = editor.selection.getRange(),
+                var rng = me.selection.getRange(),
                     bk = rng.createBookmark();
                 rng.selectNode(loader).select();
-                editor.execCommand('insertfile', {'url': link});
+                me.execCommand('insertfile', {'url': link});
                 rng.moveToBookmark(bk).select();
             };
         }
 
         /* 插入loading的占位符 */
-        editor.execCommand('inserthtml', loadingHtml);
+        me.execCommand('inserthtml', loadingHtml);
 
         /* 判断文件大小是否超出限制 */
         if(file.size > maxSize) {
-            errorHandler(editor.getLang('autoupload.exceedSizeError'));
+            errorHandler(me.getLang('autoupload.exceedSizeError'));
             return;
         }
         /* 判断文件格式是否超出允许 */
         var fileext = file.name ? file.name.substr(file.name.lastIndexOf('.')):'';
         if ((fileext && filetype != 'image') || (allowFiles && (allowFiles.join('') + '.').indexOf(fileext.toLowerCase() + '.') == -1)) {
-            errorHandler(editor.getLang('autoupload.exceedTypeError'));
+            errorHandler(me.getLang('autoupload.exceedTypeError'));
             return;
         }
 
@@ -97,7 +101,7 @@ UE.plugin.register('autoupload', function (){
                     errorHandler(json.state);
                 }
             }catch(er){
-                errorHandler(editor.getLang('autoupload.loadError'));
+                errorHandler(me.getLang('autoupload.loadError'));
             }
         });
         xhr.send(fd);
@@ -126,6 +130,7 @@ UE.plugin.register('autoupload', function (){
         bindEvents:{
             //插入粘贴板的图片，拖放插入图片
             'ready':function(e){
+                var me = this;
                 if(window.FormData && window.FileReader) {
                     domUtils.on(me.body, 'paste drop', function(e){
                         var hasImg = false,

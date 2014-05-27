@@ -28,6 +28,8 @@
 @import "splitbutton.css";
     /*弹出菜单*/
 @import "popup.css";
+    /*提示消息*/
+@import "message.css";
 
 
 /*-------独立按钮样式，按需加载-------*/

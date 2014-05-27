@@ -68,9 +68,13 @@ UE.plugin.register('simpleupload', function (){
             function showErrorLoader(title){
                 if(loadingId) {
                     var loader = me.document.getElementById(loadingId);
-                    domUtils.removeClasses(loader, 'loadingclass');
-                    domUtils.addClass(loader, 'loaderrorclass');
-                    loader.setAttribute('title', title || '');
+                    loader && domUtils.remove(loader);
+                    me.fireEvent('showmessage', {
+                        'id': loadingId,
+                        'title': title,
+                        'type': 'error',
+                        'timeout': 4000
+                    });
                 }
             }
 

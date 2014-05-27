@@ -114,8 +114,10 @@
             'ui/multiMenu.js',
             'ui/shortcutmenu.js',
             'ui/breakline.js',
+            'ui/message.js',
             'adapter/editorui.js',
-            'adapter/editor.js'
+            'adapter/editor.js',
+            'adapter/message.js'
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

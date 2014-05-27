@@ -90,6 +90,9 @@ UE.I18N['en'] = {
     'closeDialog':"closeDialog",
     'tableDrag':"You must import the file uiUtils.js before drag! ",
     'autofloatMsg':"The plugin AutoFloat depends on EditorUI!",
+    'loadconfigError': 'Get server config error.',
+    'loadconfigFormatError': 'Server config format error.',
+    'loadconfigHttpError': 'Get server config http error.',
     'snapScreen_plugin':{
         'browserMsg':"Only IE supported!",
         'callBackErrorMsg':"The callback data is wrong,please check the config!",

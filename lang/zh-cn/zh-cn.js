@@ -69,6 +69,7 @@ UE.I18N['zh-cn'] = {
     },
     'autoupload': {
         'exceedSizeError': '文件大小超出限制',
+        'exceedTypeError': '文件格式不允许',
         'jsonEncodeError': '服务器返回格式错误',
         'loading':"正在上传...",
         'loadError':"上传错误"
@@ -89,6 +90,9 @@ UE.I18N['zh-cn'] = {
     'closeDialog':"关闭对话框",
     'tableDrag':"表格拖动必须引入uiUtils.js文件！",
     'autofloatMsg':"工具栏浮动依赖编辑器UI，您首先需要引入UI文件!",
+    'loadconfigError': '获取后台配置项请求出错!',
+    'loadconfigFormatError': '后台配置项返回格式出错!',
+    'loadconfigHttpError': '请求后台配置项http错误!',
     'snapScreen_plugin':{
         'browserMsg':"仅支持IE浏览器！",
         'callBackErrorMsg':"服务器返回数据有误，请检查配置项之后重试。",
