@@ -8,6 +8,7 @@
 ///import core/Range;
 ///import core/Selection;
 ///import core/Editor;
+///import core/Editor.defaultoptions;
 ///import core/loadconfig;
 ///import core/ajax;
 ///import core/filterword;
@@ -110,7 +111,9 @@
 ///import ui/autotypesetpicker;
 ///import ui/autotypesetbutton;
 ///import ui/shortcutmenu;
+///import ui/message;
 
 ///import adapter/editor;
 ///import adapter/editorui;
-
+///import adapter/message;
+///import adapter/autosave;
