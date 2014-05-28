@@ -87,7 +87,7 @@ UE.plugin.register('simpleupload', function (){
                         loader && domUtils.remove(loader);
                         me.fireEvent('showmessage', {
                             'id': loadingId,
-                            'title': title,
+                            'content': title,
                             'type': 'error',
                             'timeout': 4000
                         });
