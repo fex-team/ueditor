@@ -1,6 +1,5 @@
 UE.registerUI('message', function(editor) {
 
-    var uiUtils = baidu.editor.ui.uiUtils;
     var editorui = baidu.editor.ui;
     var Message = editorui.Message;
     var holder;
@@ -10,6 +9,9 @@ UE.registerUI('message', function(editor) {
     me.addListener('ready', function(){
         holder = document.getElementById(me.ui.id + '_message_holder');
         updateHolderPos();
+        setTimeout(function(){
+            updateHolderPos();
+        }, 500);
     });
 
     me.addListener('showmessage', function(type, opt){
@@ -24,9 +26,7 @@ UE.registerUI('message', function(editor) {
         message.render(holder);
         _messageItems[mid] = message;
         message.reset(opt);
-        setTimeout(function(){
-            updateHolderPos();
-        }, 300);
+        updateHolderPos();
         return mid;
     });
 

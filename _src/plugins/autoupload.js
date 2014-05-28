@@ -22,15 +22,13 @@ UE.plugin.register('autoupload', function (){
         actionUrl = me.getActionUrl(me.getOpt(filetype + 'ActionName'));
         errorHandler = function(title) {
             var loader = me.document.getElementById(loadingId);
-            if (loader) {
-                domUtils.remove(loader);
-                me.fireEvent('showmessage', {
-                    'id': loadingId,
-                    'title': title,
-                    'type': 'error',
-                    'timeout': 4000
-                });
-            }
+            loader && domUtils.remove(loader);
+            me.fireEvent('showmessage', {
+                'id': loadingId,
+                'title': title,
+                'type': 'error',
+                'timeout': 4000
+            });
         };
 
         if (filetype == 'image') {
