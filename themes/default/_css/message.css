@@ -58,7 +58,7 @@
     text-shadow: 0 1px 0 #fff;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
-.edui-default .edui-message .edui-message-title {
+.edui-default .edui-message .edui-message-content {
     font-size: 10pt;
     word-wrap: break-word;
     word-break: normal;

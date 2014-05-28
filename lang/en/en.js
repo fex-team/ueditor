@@ -677,5 +677,8 @@ UE.I18N['en'] = {
             listBackgroundURL:'',
             buttonURL:'button.png'
         }
+    },
+    'autosave': {
+        'success':'Automatically saved successfully'
     }
 };
