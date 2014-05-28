@@ -65,8 +65,10 @@
         },
         hide: function (){
             var dom = this.getDom();
-            dom.style.display = 'none';
-            dom.parentNode && dom.parentNode.removeChild(dom);
+            if (dom) {
+                dom.style.display = 'none';
+                dom.parentNode && dom.parentNode.removeChild(dom);
+            }
         }
     };
 
