@@ -2,7 +2,6 @@
 ///import uicore
 (function () {
     var utils = baidu.editor.utils,
-        uiUtils = baidu.editor.ui.uiUtils,
         domUtils = baidu.editor.dom.domUtils,
         UIBase = baidu.editor.ui.UIBase,
         Message = baidu.editor.ui.Message = function (options){
@@ -65,7 +64,9 @@
             this.getDom().style.display = 'block';
         },
         hide: function (){
-            this.getDom().style.display = 'none';
+            var dom = this.getDom();
+            dom.style.display = 'none';
+            dom.parentNode && dom.parentNode.removeChild(dom);
         }
     };
 

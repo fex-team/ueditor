@@ -10,8 +10,10 @@ UE.plugin.register('simpleupload', function (){
         containerBtn;
 
     function initUploadBtn(){
-        var btnIframe = document.createElement('iframe'),
-            btnStyle = 'display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;top:0;left:0;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;';
+        var w = containerBtn.offsetWidth || 20,
+            h = containerBtn.offsetHeight || 20,
+            btnIframe = document.createElement('iframe'),
+            btnStyle = 'display:block;width:' + w + 'px;height:' + h + 'px;overflow:hidden;border:0;margin:0;padding:0;position:absolute;top:0;left:0;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;cursor:pointer;';
 
         domUtils.on(btnIframe, 'load', function(){
 
@@ -25,7 +27,7 @@ UE.plugin.register('simpleupload', function (){
             wrapper = btnIframeDoc.createElement('div');
 
             wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '" ' +
-            'style="display:block;width:100%;height:100%;border:0;margin:0;padding:0;position:absolute;top:0;left:0;">' +
+            'style="' + btnStyle + '">' +
             '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
             'style="' + btnStyle + '">' +
             '</form>' +
@@ -34,7 +36,11 @@ UE.plugin.register('simpleupload', function (){
             wrapper.className = 'edui-' + me.options.theme;
             wrapper.id = me.ui.id + '_iframeupload';
             btnIframeBody.style.cssText = btnStyle;
+            btnIframeBody.style.width = '20px';
+            btnIframeBody.style.height = '20px';
             btnIframeBody.appendChild(wrapper);
+            btnIframeBody.parentNode.style.width = '20px';
+            btnIframeBody.parentNode.style.height = '20px';
 
             var form = btnIframeDoc.getElementById('edui_form_' + timestrap);
             var input = btnIframeDoc.getElementById('edui_input_' + timestrap);

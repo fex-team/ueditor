@@ -34,11 +34,15 @@ UE.registerUI('message', function(editor) {
     });
 
     me.addListener('updatemessage',function(type, id, opt){
+        opt = utils.isString(opt) ? {
+            'content': opt
+        } : opt;
         var message = _messageItems[id];
+        message.render(holder);
         message && message.reset(opt);
     });
 
-    me.addListener('hidemessage',function(type, id, opt){
+    me.addListener('hidemessage',function(type, id){
         var message = _messageItems[id];
         message && message.hide();
     });
