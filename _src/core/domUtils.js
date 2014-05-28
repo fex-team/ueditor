@@ -2407,6 +2407,7 @@ var domUtils = dom.domUtils = {
             }
         }
         return true;
-    }
+    },
+    fillHtml :  browser.ie11below ? '&nbsp;' : '<br/>'
 };
 var fillCharReg = new RegExp(domUtils.fillChar, 'g');

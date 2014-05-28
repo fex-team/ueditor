@@ -679,6 +679,6 @@ UE.I18N['en'] = {
         }
     },
     'autosave': {
-        'success':'Automatically saved successfully'
+        'success':'Local conservation success'
     }
 };
