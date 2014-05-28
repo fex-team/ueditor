@@ -36,11 +36,14 @@ UE.plugin.register('simpleupload', function (){
             wrapper.className = 'edui-' + me.options.theme;
             wrapper.id = me.ui.id + '_iframeupload';
             btnIframeBody.style.cssText = btnStyle;
-            btnIframeBody.style.width = '20px';
-            btnIframeBody.style.height = '20px';
+            btnIframeBody.style.width = w + 'px';
+            btnIframeBody.style.height = h + 'px';
             btnIframeBody.appendChild(wrapper);
-            btnIframeBody.parentNode.style.width = '20px';
-            btnIframeBody.parentNode.style.height = '20px';
+
+            if (btnIframeBody.parentNode) {
+                btnIframeBody.parentNode.style.width = w + 'px';
+                btnIframeBody.parentNode.style.height = w + 'px';
+            }
 
             var form = btnIframeDoc.getElementById('edui_form_' + timestrap);
             var input = btnIframeDoc.getElementById('edui_input_' + timestrap);
