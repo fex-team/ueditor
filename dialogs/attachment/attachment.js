@@ -164,7 +164,7 @@
                 server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
-                fileSingleSizeLimit: fileMaxSize,    // 默认 2 M
+                fileSingleSizeLimit: fileMaxSize,
                 compress: false
             });
             uploader.addButton({
@@ -515,9 +515,12 @@
 
             uploader.on('uploadError', function (file, code) {
             });
-            uploader.on('Error', function (file, code) {
+            uploader.on('error', function (code, file) {
+                if (code == 'Q_TYPE_DENIED' || code == 'F_EXCEED_SIZE') {
+                    addFile(file);
+                }
             });
-            uploader.on('UploadComplete', function (file, ret) {
+            uploader.on('uploadComplete', function (file, ret) {
             });
 
             $upload.on('click', function () {
