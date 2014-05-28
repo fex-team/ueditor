@@ -33,19 +33,20 @@ test('检查非IE下是否正常加载zeroclipboard粘贴板插件', function ()
     sc.style.height = "100px";
     document.body.appendChild(sc);
     var me = UE.getEditor('sc',{'autoFloatEnabled':true,'topOffset':60,'autoHeightEnabled':true,'scaleEnabled':false});
-    stop();
     me.ready(function(){
-    if (!browser.ie) {
 
+        stop();
         setTimeout(function(){
+            if (!browser.ie) {
             ok(window.ZeroClipboard, '是否正常加载zeroclipboard粘贴板插件');
+            }
             setTimeout(function () {
                 UE.delEditor('sc');
                 document.getElementById('sc')&&document.getElementById('sc').parentNode.removeChild(document.getElementById('sc'));
                 start();
             }, 500);
         }, 300);
-    }
     });
-    stop();
+
+
 });
