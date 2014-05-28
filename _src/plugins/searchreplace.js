@@ -10,6 +10,9 @@
 
 UE.plugin.register('searchreplace',function(){
     var me = this;
+
+    var _blockElm = {'table':1,'tbody':1,'tr':1,'ol':1,'ul':1};
+
     function findTextInString(textContent,opt,currentIndex){
         var str = opt.searchStr;
         if(opt.dir == -1){
@@ -44,6 +47,9 @@ UE.plugin.register('searchreplace',function(){
                 }
             }
             node = domUtils[methodName](node);
+            while(node && _blockElm[node.nodeName.toLowerCase()]){
+                node = domUtils[methodName](node,true);
+            }
             if(node){
                 currentIndex = opt.dir == -1 ? (node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent']).length : 0;
             }
@@ -76,6 +82,7 @@ UE.plugin.register('searchreplace',function(){
                 }
             }
             currentNode = domUtils.getNextDomNode(currentNode);
+
         }
     }
 
@@ -129,10 +136,10 @@ UE.plugin.register('searchreplace',function(){
 
     }
     function replaceText(rng,str){
-        me.fireEvent('saveScene');
+
         str = me.document.createTextNode(str);
         rng.deleteContents().insertNode(str);
-        me.fireEvent('saveScene');
+
     }
     return {
         commands:{
@@ -145,6 +152,7 @@ UE.plugin.register('searchreplace',function(){
                     },true);
                     var num = 0;
                     if(opt.all){
+
                         var rng = me.selection.getRange(),
                             first = me.body.firstChild;
                         if(first && first.nodeType == 1){
@@ -154,13 +162,26 @@ UE.plugin.register('searchreplace',function(){
                             rng.setStartBefore(first)
                         }
                         rng.collapse(true).select(true);
+                        if(opt.replaceStr !== undefined){
+                            me.fireEvent('saveScene');
+                        }
                         while(searchReplace(this,opt)){
                             num++;
                         }
+                        if(num){
+                            me.fireEvent('saveScene');
+                        }
                     }else{
+                        if(opt.replaceStr !== undefined){
+                            me.fireEvent('saveScene');
+                        }
                         if(searchReplace(this,opt)){
                             num++
                         }
+                        if(num){
+                            me.fireEvent('saveScene');
+                        }
+
                     }
 
                     return num;
