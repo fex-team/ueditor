@@ -746,11 +746,16 @@
                                 editor.textarea = holder;
                                 editor.textarea.style.display = 'none';
 
+
                             } else {
                                 holder.parentNode.removeChild(holder);
 
+
                             }
-                            holder.id && (newDiv.id = holder.id);
+                            if(holder.id){
+                                newDiv.id = holder.id;
+                                domUtils.removeAttributes(holder,'id');
+                            }
                             holder = newDiv;
                             holder.innerHTML = '';
                         }

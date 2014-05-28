@@ -80,11 +80,14 @@ UE.plugin.register('searchreplace',function(){
     }
 
     function searchReplace(me,opt){
+
         var rng = me.selection.getRange(),
             startBlockNode,
             searchStr = opt.searchStr,
             span = me.document.createElement('span');
         span.innerHTML = '$$ueditor_searchreplace_key$$';
+
+        rng.shrinkBoundary(true);
 
         //判断是不是第一次选中
         if(!rng.collapsed){
@@ -145,7 +148,8 @@ UE.plugin.register('searchreplace',function(){
                         var rng = me.selection.getRange(),
                             first = me.body.firstChild;
                         if(first && first.nodeType == 1){
-                            rng.setStart(first,0)
+                            rng.setStart(first,0);
+                            rng.shrinkBoundary(true);
                         }else if(first.nodeType == 3){
                             rng.setStartBefore(first)
                         }

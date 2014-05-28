@@ -113,7 +113,7 @@ UE.plugin.register('autosave', function (){
             'drafts':{
                 execCommand:function (cmd, name) {
                     if ( saveKey ) {
-                        me.body.innerHTML = me.getPreferences( saveKey ) || '<p>'+(browser.ie ? '&nbsp;' : '<br/>')+'</p>';
+                        me.body.innerHTML = me.getPreferences( saveKey ) || '<p>'+domUtils.fillHtml+'</p>';
                         me.focus(true);
                     }
                 },

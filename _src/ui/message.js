@@ -2,7 +2,6 @@
 ///import uicore
 (function () {
     var utils = baidu.editor.utils,
-        uiUtils = baidu.editor.ui.uiUtils,
         domUtils = baidu.editor.dom.domUtils,
         UIBase = baidu.editor.ui.UIBase,
         Message = baidu.editor.ui.Message = function (options){
@@ -20,7 +19,7 @@
             ' <div id="##_body" class="edui-message-body edui-message-type-info">' +
             ' <iframe style="position:absolute;z-index:-1;left:0;top:0;background-color: transparent;" frameborder="0" width="100%" height="100%" src="about:blank"></iframe>' +
             ' <div class="edui-shadow"></div>' +
-            ' <div id="##_title" class="edui-message-title">' +
+            ' <div id="##_content" class="edui-message-content">' +
             '  </div>' +
             ' </div>' +
             '</div>';
@@ -34,7 +33,7 @@
                 }, opt.timeout || 4000);
             }
 
-            opt.title !== undefined && me.setTitle(opt.title);
+            opt.content !== undefined && me.setContent(opt.content);
             opt.type !== undefined && me.setType(opt.type);
 
             me.show();
@@ -46,16 +45,16 @@
                 me.hide();
             });
         },
-        setTitle: function(title){
-            this.getDom('title').innerHTML = title;
+        setContent: function(content){
+            this.getDom('content').innerHTML = content;
         },
         setType: function(type){
             type = type || 'info';
             var body = this.getDom('body');
             body.className = body.className.replace(/edui-message-type-[\w-]+/, 'edui-message-type-' + type);
         },
-        getTitle: function(){
-            return this.getDom('title').innerHTML;
+        getContent: function(){
+            return this.getDom('content').innerHTML;
         },
         getType: function(){
             var arr = this.getDom('body').match(/edui-message-type-([\w-]+)/);
@@ -65,7 +64,11 @@
             this.getDom().style.display = 'block';
         },
         hide: function (){
-            this.getDom().style.display = 'none';
+            var dom = this.getDom();
+            if (dom) {
+                dom.style.display = 'none';
+                dom.parentNode && dom.parentNode.removeChild(dom);
+            }
         }
     };
 

@@ -37,8 +37,9 @@
             uiUtils.makeUnselectable(box);
         },
         _onMouseDown: function (e){
-            var target = e.target || e.srcElement;
-            if (!(target && target.tagName && (target.tagName.toLowerCase() == 'input' || target.tagName.toLowerCase() == 'object'))) {
+            var target = e.target || e.srcElement,
+                tagName = target && target.tagName && target.tagName.toLowerCase();
+            if (tagName == 'input' || tagName == 'object' || tagName == 'object') {
                 return false;
             }
         }
