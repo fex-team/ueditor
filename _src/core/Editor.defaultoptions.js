@@ -1,12 +1,13 @@
 //维护编辑器一下默认的不在插件中的配置项
 UE.Editor.defaultOptions = function(editor){
 
+    var _url = editor.options.UEDITOR_HOME_URL;
     return {
         isShow: true,
         initialContent: '',
         initialStyle:'',
         autoClearinitialContent: false,
-        iframeCssUrl: editor.options.UEDITOR_HOME_URL + 'themes/iframe.css',
+        iframeCssUrl: _url + 'themes/iframe.css',
         textarea: 'editorValue',
         focus: false,
         focusInEnd: true,
@@ -18,9 +19,9 @@ UE.Editor.defaultOptions = function(editor){
         enterTag: 'p',
         customDomain: false,
         lang: 'zh-cn',
-        langPath: editor.options.UEDITOR_HOME_URL + 'lang/',
+        langPath: _url + 'lang/',
         theme: 'default',
-        themePath: editor.options.UEDITOR_HOME_URL + 'themes/',
+        themePath: _url + 'themes/',
         allHtmlEnabled: false,
         scaleEnabled: false,
         tableNativeEditInFF: false,
