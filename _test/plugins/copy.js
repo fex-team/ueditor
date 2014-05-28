@@ -26,16 +26,26 @@ module('plugins.copy');
 //});
 
 test('检查非IE下是否正常加载zeroclipboard粘贴板插件', function () {
-
+    te.dom[0].parentNode.removeChild(te.dom[0]);
+    var sc = document.createElement("script");
+    sc.id="sc";
+    sc.type = "text/plain";
+    sc.style.height = "100px";
+    document.body.appendChild(sc);
+    var me = UE.getEditor('sc',{'autoFloatEnabled':true,'topOffset':60,'autoHeightEnabled':true,'scaleEnabled':false});
+    stop();
+    me.ready(function(){
     if (!browser.ie) {
 
         setTimeout(function(){
             ok(window.ZeroClipboard, '是否正常加载zeroclipboard粘贴板插件');
-            start();
+            setTimeout(function () {
+                UE.delEditor('sc');
+                document.getElementById('sc')&&document.getElementById('sc').parentNode.removeChild(document.getElementById('sc'));
+                start();
+            }, 500);
         }, 300);
-
-        stop();
-
     }
-
+    });
+    stop();
 });
