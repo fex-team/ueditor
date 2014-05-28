@@ -17,7 +17,7 @@
 //                    }
 //                }
 //            }
-            return domUtils.filterNodeList(editor.selection.getStartElementPath(),function(n){return n.getAttribute('dir')});
+            return domUtils.filterNodeList(editor.selection.getStartElementPath(),function(n){return n && n.nodeType == 1 && n.getAttribute('dir')});
 
         },
         doDirectionality = function(range,editor,forward){
