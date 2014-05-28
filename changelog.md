@@ -17,6 +17,7 @@
 13. 修复单图上传按钮和jqueryValidate不兼容的问题
 14. 简化了与jqueryValidate的结合操作，具体看_examples/jqueryValidateDemo.html
 15. 修复在删除编辑器后，再次创建时丢失原有id的问题
+16. 修复查找替换在一些块节点中会导致替换错误
 
 ##1.4.2
 ###重构前后端交互功能
