@@ -18,9 +18,11 @@ test('snapscreen', function () {
     stop();
     editor.ready(function () {
             setTimeout(function () {
+                debugger
                 editor.execCommand('snapscreen');
-                editor.container.removeChild(editor.container.lastChild);
+//                editor.container.removeChild(editor.container.lastChild);
                 setTimeout(function () {
+                    debugger
                     ok($('.edui-dialog .edui-for-snapscreen')[0] != null, '');
                     $EDITORUI[$('.edui-dialog .edui-for-snapscreen')[0].parentNode.id].close();
                     setTimeout(function () {
@@ -28,7 +30,7 @@ test('snapscreen', function () {
                         UE.delEditor('ue');
                         te.dom.push(document.getElementById('ue'));
                         start();
-                    }, 500);
+                    }, 1000);
                 }, 300);
 
 
