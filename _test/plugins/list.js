@@ -47,7 +47,8 @@ test('p转成列表', function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
     var editor = UE.getEditor('ue',{autoTransWordToList:true});
-    var br = ua.browser.ie ? '&nbsp;' : '<br>';
+//    var br = ua.browser.ie ? '&nbsp;' : '';
+    var br = '';
     editor.ready(function () {
         setTimeout(function(){
             editor.setContent('<p class="MsoListParagraph">1.a</p><ol><li>b</li></ol>');
