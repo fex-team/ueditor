@@ -15,10 +15,13 @@ UE.registerUI('message', function(editor) {
     });
 
     me.addListener('showmessage', function(type, opt){
+        opt = utils.isString(opt) ? {
+            'content': opt
+        } : opt;
         var message = new Message({
                 'timeout': opt.timeout,
-                'type': opt.info,
-                'title': opt.title,
+                'type': opt.type,
+                'content': opt.content,
                 'keepshow': opt.keepshow,
                 'editor': me
             }),

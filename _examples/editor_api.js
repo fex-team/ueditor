@@ -117,7 +117,9 @@
             'ui/message.js',
             'adapter/editorui.js',
             'adapter/editor.js',
-            'adapter/message.js'
+            'adapter/message.js',
+            'adapter/autosave.js'
+
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

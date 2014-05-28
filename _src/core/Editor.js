@@ -51,6 +51,7 @@
             //不要产生多个textarea
             editor.textarea = textarea;
         }
+        !textarea.getAttribute('name') && textarea.setAttribute('name', editor.options.textarea );
         textarea.value = editor.hasContents() ?
             (editor.options.allHtmlEnabled ? editor.getAllHtml() : editor.getContent(null, null, true)) :
             ''
