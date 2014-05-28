@@ -663,6 +663,7 @@ UE.I18N['zh-cn'] = {
         'flashI18n':{} //留空默认中文
     },
     'autosave': {
-        'success':'自动保存成功'
+        'saving':'保存中...',
+        'success':'本地保存成功'
     }
 };
