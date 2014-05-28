@@ -1109,7 +1109,7 @@ var utils = UE.utils = {
                             return 'null';
                         } else if (utils.isArray(value)) {
                             return encodeArray(value);
-                        } else if (utils.isArray(value)) {
+                        } else if (utils.isDate(value)) {
                             return encodeDate(value);
                         } else {
                             var result = ['{'],
