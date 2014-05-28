@@ -235,32 +235,7 @@
         me.inputRules = [];
         me.outputRules = [];
         //设置默认的常用属性
-        me.setOpt({
-            isShow: true,
-            initialContent: '',
-            initialStyle:'',
-            autoClearinitialContent: false,
-            iframeCssUrl: me.options.UEDITOR_HOME_URL + 'themes/iframe.css',
-            textarea: 'editorValue',
-            focus: false,
-            focusInEnd: true,
-            autoClearEmptyNode: true,
-            fullscreen: false,
-            readonly: false,
-            zIndex: 999,
-            imagePopup: true,
-            enterTag: 'p',
-            customDomain: false,
-            lang: 'zh-cn',
-            langPath: me.options.UEDITOR_HOME_URL + 'lang/',
-            theme: 'default',
-            themePath: me.options.UEDITOR_HOME_URL + 'themes/',
-            allHtmlEnabled: false,
-            scaleEnabled: false,
-            tableNativeEditInFF: false,
-            autoSyncData : true,
-            fileNameFormat: '{time}{rand:6}'
-        });
+        me.setOpt(Editor.defaultOptions(me));
 
         /* 尝试异步加载后台配置 */
         me.loadServerConfig();

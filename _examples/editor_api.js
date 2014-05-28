@@ -12,6 +12,7 @@
             'core/Range.js',
             'core/Selection.js',
             'core/Editor.js',
+            'core/Editor.defaultoptions.js',
             'core/loadconfig.js',
             'core/ajax.js',
             'core/filterword.js',

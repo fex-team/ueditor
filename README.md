@@ -40,7 +40,7 @@ UEditor是由百度web前端研发部开发所见即所得富文本web编辑器�
 
 如果看到了下面这样的编辑器，恭喜你，初次部署成功！
 
-![部署成功](_doc/images/demo.png)
+![部署成功](http://fex.baidu.com/ueditor/doc/images/demo.png)
 
 ### 自定义的参数
 
@@ -80,7 +80,7 @@ ueditor github 地址：[http://github.com/fex-team/ueditor](http://github.com/f
 
 ## 详细文档
 
-ueditor 文档：[http://fex.baidu.com/ueditor/](http://fex.baidu.com/ueditor/")
+ueditor 文档：[http://fex.baidu.com/ueditor/](http://fex.baidu.com/ueditor/)
 
 
 
