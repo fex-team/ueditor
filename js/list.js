@@ -119,6 +119,10 @@ var docList = [
         id: 'api',
         title: '5. 常用API列表',
         list: [
+            {
+                id: 'common',
+                title: '5.1 常用API'
+            }
         ]
     },
     {

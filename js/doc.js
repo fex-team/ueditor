@@ -76,12 +76,12 @@ $(function(){
 
                 var lang = $(node).attr('class').match(/(javascript|js|css|html)/);
                 if(lang &&lang[0]){
-                    var html = beautify($(node).html(),lang[0])
+                    var html = beautify($(node).html(),lang[0]);
                     $(node).html(html)
                 }
             });
 
             prettyPrint();
         });
-    };
+    }
 });
