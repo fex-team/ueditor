@@ -34,8 +34,6 @@ test('检查非IE下是否正常加载zeroclipboard粘贴板插件', function ()
     document.body.appendChild(sc);
     var me = UE.getEditor('sc',{'autoFloatEnabled':true,'topOffset':60,'autoHeightEnabled':true,'scaleEnabled':false});
     me.ready(function(){
-
-        stop();
         setTimeout(function(){
             if (!browser.ie) {
             ok(window.ZeroClipboard, '是否正常加载zeroclipboard粘贴板插件');
@@ -47,6 +45,6 @@ test('检查非IE下是否正常加载zeroclipboard粘贴板插件', function ()
             }, 500);
         }, 300);
     });
-
+    stop();
 
 });

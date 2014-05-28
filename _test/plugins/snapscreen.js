@@ -28,7 +28,7 @@ test('snapscreen', function () {
                         UE.delEditor('ue');
                         te.dom.push(document.getElementById('ue'));
                         start();
-                    }, 500);
+                    }, 1000);
                 }, 300);
 
 
