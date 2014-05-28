@@ -35,6 +35,7 @@ UE.registerUI('message', function(editor) {
 
     me.addListener('updatemessage',function(type, id, opt){
         var message = _messageItems[id];
+        message.render(holder);
         message && message.reset(opt);
     });
 
