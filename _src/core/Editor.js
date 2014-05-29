@@ -1540,7 +1540,7 @@
             }
 
             if(serverUrl) {
-                serverUrl = serverUrl + (serverUrl.indexOf('?') ? '&':'?') + 'action=' + actionName;
+                serverUrl = serverUrl + (serverUrl.indexOf('?')>0 ? '&':'?') + 'action=' + actionName;
                 return utils.formatUrl(serverUrl);
             } else {
                 return '';
