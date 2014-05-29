@@ -1,7 +1,3 @@
-/*
- * 图表parse插件
- */
-
 UE.parse.register('charts',function( utils ){
 
     utils.cssRule('chartsContainerHeight','.edui-chart-container { height:'+(this.chartContainerHeight||300)+'px}');
@@ -186,7 +182,7 @@ UE.parse.register('charts',function( utils ){
 
     }
 
-    /*
+    /**
      * 渲染图表
      * @param container 图表容器节点对象
      * @param typeConfig 图表类型配置
@@ -243,7 +239,7 @@ UE.parse.register('charts',function( utils ){
 
     }
 
-    /*
+    /**
      * 创建图表的容器
      * 新创建的容器会替换掉对应的table对象
      * */

@@ -11,7 +11,7 @@ UE.plugin.register('anchor', function (){
                 utils.cssRule('anchor',
                     '.anchorclass{background: url(\''
                         + this.options.themePath
-                        + this.options.theme +'/images/anchor.gif\') no-repeat scroll left center transparent;border: 1px dotted #0000FF;cursor: auto;display: inline-block;height: 16px;width: 15px;}',
+                        + this.options.theme +'/images/anchor.gif\') no-repeat scroll left center transparent;cursor: auto;display: inline-block;height: 16px;width: 15px;}',
                     this.document);
             }
         },

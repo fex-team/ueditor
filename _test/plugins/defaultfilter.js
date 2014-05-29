@@ -20,7 +20,7 @@ test( '对代码的行号不处理', function () {
 test( '空td,th,caption', function () {
     var editor = te.obj[0];
     editor.setContent( '<table><caption></caption><tbody><tr><th></th><th></th></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table>' );
-    var br = ua.browser.ie?'':'<br>';
+    var br = ua.browser.ie&&ua.browser.ie<11?'':'<br>';
     var html = '<table><caption>'+br+'</caption><tbody><tr><th>'+br+'</th><th>'+br+'</th></tr><tr><td>'+br+'</td><td>'+br+'</td></tr><tr><td>'+br+'</td><td>'+br+'</td></tr></tbody></table>';
     ua.checkSameHtml(editor.body.innerHTML,html,'空td,th,caption,添加text')
 } );
@@ -227,6 +227,8 @@ test( 'img出编辑器转换', function () {
     var str = ua.browser.ie? '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px currentColor;"/></p>':'<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px"/></p>' ;
     if(ua.browser.ie==8)
         str ='<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style=\"BORDER-BOTTOM: 0px; BORDER-LEFT: 0px; BORDER-TOP: 0px; BORDER-RIGHT: 0px\"/></p>';
+    if(ua.browser.ie==11)
+        str = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px currentColor;border-image: none;"/></p>';
     var html = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" _src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" /></p>';
     editor.body.innerHTML = html;
     editor.execCommand( 'source' );

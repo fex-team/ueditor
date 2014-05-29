@@ -3,7 +3,11 @@
 ###############
 .idea
 log
-upload
+jsp/upload
+php/upload
+net/upload
+asp/upload
+node/upload
 
 
 ###############
@@ -164,7 +168,7 @@ Desktop.ini
 dist
 eggs
 parts
-bin
+# bin
 var
 sdist
 develop-eggs

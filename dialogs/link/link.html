@@ -72,7 +72,7 @@
     function handleDialogOk(){
         var href =$G('href').value.replace(/^\s+|\s+$/g, '');
         if(href){
-            if(!hrefStartWith(href,["http","/","ftp://"])) {
+            if(!hrefStartWith(href,["http","/","ftp://",'#'])) {
                 href  = "http://" + href;
             }
             var obj = {
@@ -103,7 +103,7 @@
         }
     };
     $G('href').onblur = function(){
-        if(!hrefStartWith(this.value,["http","/","ftp://"])){
+        if(!hrefStartWith(this.value,["http","/","ftp://",'#'])){
             $G("msg").innerHTML = "<span style='color: red'>"+lang.httpPrompt+"</span>";
         }else{
             $G("msg").innerHTML = "";

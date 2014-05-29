@@ -9,25 +9,24 @@
     <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
     <script>
         $(function(){
-            UE.getEditor('myEditor');
+            var ue = UE.getEditor('myEditor');
             $('#btn').click(function(){
                 //手动提交需要手动同步编辑器数据
-                UE.getEditor('myEditor').sync();
+                ue.sync();
                 $('#form')[0].submit();
-            })
+            });
             //--自动切换提交地址----
-            var version = UE.getEditor('myEditor').options.imageUrl||"php",
+            var version = ue.options.serverUrl || ue.options.imageUrl ||  "php",
                     form=$('#form')[0];
 
-
             if(version.match(/php/)){
-                form.action="../php/getContent.php";
+                form.action="./server/getContent.php";
             }else if(version.match(/net/)){
-                form.action="../net/getContent.ashx";
+                form.action="./server/getContent.ashx";
             }else if(version.match(/jsp/)){
-                form.action="../jsp/getContent.jsp";
+                form.action="./server/getContent.jsp";
             }else if(version.match(/asp/)){
-                form.action="../asp/getContent.asp";
+                form.action="./server/getContent.asp";
             }
 
         })
@@ -38,7 +37,7 @@
     <script type="text/plain" id="myEditor" name="myEditor">
         <p>欢迎使用UEditor！</p>
     </script>
-    <input type="button" id="btn" value="提交数据">
+     <input type="button" id="btn" value="提交数据">
 </form>
 </body>
 </html>

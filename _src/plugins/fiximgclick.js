@@ -6,6 +6,7 @@
 
 UE.plugins['fiximgclick'] = (function () {
 
+    var elementUpdated = false;
     function Scale() {
         this.editor = null;
         this.resizer = null;
@@ -60,7 +61,7 @@ UE.plugins['fiximgclick'] = (function () {
                 me.initEvents();
             },
             initStyle: function () {
-                utils.cssRule('imagescale', '.edui-editor-scale{position:absolute;border:1px solid #38B2CE;}' +
+                utils.cssRule('imagescale', '.edui-editor-scale{display:none;position:absolute;border:1px solid #38B2CE;cursor:hand;-webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;}' +
                     '.edui-editor-scale span{position:absolute;width:6px;height:6px;overflow:hidden;font-size:0px;display:block;background-color:#3C9DD0;}'
                     + '.edui-editor-scale .edui-editor-scale-hand0{cursor:nw-resize;top:0;margin-top:-4px;left:0;margin-left:-4px;}'
                     + '.edui-editor-scale .edui-editor-scale-hand1{cursor:n-resize;top:0;margin-top:-4px;left:50%;margin-left:-4px;}'
@@ -94,6 +95,7 @@ UE.plugins['fiximgclick'] = (function () {
                             me.updateContainerStyle(me.dragId, {x: e.clientX - me.prePos.x, y: e.clientY - me.prePos.y});
                             me.prePos.x = e.clientX;
                             me.prePos.y = e.clientY;
+                            elementUpdated = true;
                             me.updateTargetElement();
 
                         }
@@ -106,19 +108,25 @@ UE.plugins['fiximgclick'] = (function () {
                             me.dragId = -1;
                         }
                         domUtils.un(me.doc,'mousemove', me.proxy(me._eventHandler, me));
-                        me.editor.fireEvent('contentchange');
+                        //修复只是点击挪动点，但没有改变大小，不应该触发contentchange
+                        if(elementUpdated){
+                            elementUpdated = false;
+                            me.editor.fireEvent('contentchange');
+                        }
+
                         break;
                     default:
                         break;
                 }
             },
             updateTargetElement: function () {
-                var me = this,
-                    targetPos;
+                var me = this;
                 domUtils.setStyles(me.target, {
                     'width': me.resizer.style.width,
                     'height': me.resizer.style.height
                 });
+                me.target.width = parseInt(me.resizer.style.width);
+                me.target.height = parseInt(me.resizer.style.height);
                 me.attachTo(me.target);
             },
             updateContainerStyle: function (dir, offset) {
@@ -232,6 +240,12 @@ UE.plugins['fiximgclick'] = (function () {
                     img = range.getClosedNode();
 
                 if (img && img.tagName == 'IMG' && me.body.contentEditable!="false") {
+
+                    if (img.className.indexOf("edui-faked-music") != -1 ||
+                        img.getAttribute("anchorname") ||
+                        domUtils.hasClass(img, 'loadingclass') ||
+                        domUtils.hasClass(img, 'loaderrorclass')) { return }
+
                     if (!imageScale) {
                         imageScale = new Scale();
                         imageScale.init(me);

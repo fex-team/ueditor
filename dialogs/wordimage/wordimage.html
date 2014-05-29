@@ -29,28 +29,35 @@
             </div>
           </div>
     </div>
-    <script type="text/javascript" src="../tangram.js"></script>
+    <script type="text/javascript" src="tangram.js"></script>
     <script type="text/javascript" src="wordimage.js"></script>
     <script type="text/javascript">
-            //全局变量
-        var imageUrls = [],          //用于保存从服务器返回的图片信息数组
-            selectedImageCount = 0,  //当前已选择的但未上传的图片数量
-            params = baidu.json.stringify({
-                "fileNameFormat":editor.options.fileNameFormat
-            });
-
         editor.setOpt({
             wordImageFieldName:"upfile",
             compressSide:0,
             maxImageSideLength:900
         });
+
+            //全局变量
+        var imageUrls = [],          //用于保存从服务器返回的图片信息数组
+            selectedImageCount = 0,  //当前已选择的但未上传的图片数量
+            optImageUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
+            optImageFieldName = editor.getOpt('imageFieldName'),
+            optImageCompressBorder = editor.getOpt('imageCompressEnable') ? editor.getOpt('imageCompressBorder'):null,
+            maxSize = editor.getOpt('imageMaxSize') / 1024,
+            extension = editor.getOpt('imageAllowFiles').join(';').replace(/\./g, '*.');
+
+        /* 添加额外的GET参数 */
+        var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+            urlWidthParams = optImageUrl + (optImageUrl.indexOf('?') == -1 ? '?':'&') + params;
+
         utils.domReady(function(){
             //创建Flash相关的参数集合
             var flashOptions = {
                 container:"flashContainer",                                                    //flash容器id
-                url:editor.options.wordImageUrl,                                           // 上传处理页面的url地址
-                ext:params,                                 //可向服务器提交的自定义参数列表
-                fileType:'{"description":"'+lang.fileType+'", "extension":"*.gif;*.jpeg;*.png;*.jpg"}',     //上传文件格式限制
+                url:urlWidthParams,                                           // 上传处理页面的url地址
+                ext:editor.queryCommandValue('serverParam') || {},                                 //可向服务器提交的自定义参数列表
+                fileType:'{"description":"'+lang.fileType+'", "extension":"' + extension + '"}',     //上传文件格式限制
                 flashUrl:'imageUploader.swf',                                                  //上传用的flash组件地址
                 width:600,          //flash的宽度
                 height:272,         //flash的高度
@@ -58,13 +65,13 @@
                 gridHeight:120,    // 每一个预览图片所占的高度
                 picWidth:100,      // 单张预览图片的宽度
                 picHeight:100,     // 单张预览图片的高度
-                uploadDataFieldName:editor.options.wordImageFieldName,    // POST请求中图片数据的key
+                uploadDataFieldName: optImageFieldName,    // POST请求中图片数据的key
                 picDescFieldName:'pictitle',      // POST请求中图片描述的key
-                maxSize:2,                         // 文件的最大体积,单位M
+                maxSize: maxSize,                         // 文件的最大体积,单位M
                 compressSize:1,                   // 上传前如果图片体积超过该值，会先压缩,单位M
                 maxNum:32,                         // 单次最大可上传多少个文件
-                compressSide:editor.options.compressSide,                 //等比压缩的基准，0为按照最长边，1为按照宽度，2为按照高度
-                compressLength:editor.options.maxImageSideLength        //能接受的最大边长，超过该值Flash会自动等比压缩
+                compressSide: 0,                 //等比压缩的基准，0为按照最长边，1为按照宽度，2为按照高度
+                compressLength: optImageCompressBorder        //能接受的最大边长，超过该值Flash会自动等比压缩
             };
             //回调函数集合，支持传递函数名的字符串、函数句柄以及函数本身三种类型
             var callbacks={

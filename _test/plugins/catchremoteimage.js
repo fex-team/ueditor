@@ -15,7 +15,7 @@ test( '成功远程图片抓取', function () {
 
         editor.ready(function(){
             var body = editor.body;
-            editor.setContent( '<p><img src="http://www.baidu.com/img/baidu_sylogo1.gif"><img src="http://news.baidu.com/resource/img/logo_news_137_46.png"></p>' );
+            editor.setContent( '<p><img src="http://img0.bdstatic.com/static/common/widget/search_box_search/logo/logo_3b6de4c.png"><img src="http://news.baidu.com/resource/img/logo_news_137_46.png"></p>' );
             editor.fireEvent( "catchRemoteImage" );
             var count = 0;
             var handler = setInterval( function () {

@@ -101,7 +101,7 @@ test('trace 870:加粗文本前面去加粗', function () {
     /*插入一个文本节点*/
     ua.manualDeleteFillData(editor.body);
     /*ie下插入节点后会自动移动光标到节点后面，而其他浏览器不会*/
-    if (ua.browser.chrome || ua.browser.safari || (ua.browser.ie && ua.browser.ie > 8))// ie9,10改range
+    if (ua.browser.chrome || ua.browser.safari || (ua.browser.ie && ua.browser.ie > 8 && ua.browser.ie<11))// ie9,10改range
         equal(editor.getContent(), '<p>hello2<strong>hello</strong><br/></p>');
     else
         equal(editor.getContent(), '<p><strong>hello</strong>hello2<br/></p>');

@@ -2,7 +2,7 @@
 ///commands 当输入内容超过编辑器高度时，编辑器自动增高
 ///commandsName  AutoHeight,autoHeightEnabled
 ///commandsTitle  自动增高
-/*
+/**
  * @description 自动伸展
  * @author zhanyi
  */
@@ -35,7 +35,10 @@ UE.plugins['autoheight'] = function () {
                     node.style.clear = 'both';
                     currentHeight = Math.max(domUtils.getXY(node).y + node.offsetHeight + 25 ,Math.max(options.minFrameHeight, options.initialFrameHeight)) ;
                     if (currentHeight != lastHeight) {
-                        me.setHeight(currentHeight,true);
+                        if (currentHeight !== parseInt(me.iframe.parentNode.style.height)) {
+                            me.iframe.parentNode.style.height = currentHeight + 'px';
+                        }
+                        me.body.style.height = currentHeight + 'px';
                         lastHeight = currentHeight;
                     }
                     domUtils.removeStyle(node,'clear');
@@ -79,6 +82,10 @@ UE.plugins['autoheight'] = function () {
         me.autoHeightEnabled = false;
         me.fireEvent('autoheightchanged', me.autoHeightEnabled);
     };
+
+    me.on('setHeight',function(){
+        me.disableAutoHeight()
+    });
     me.addListener('ready', function () {
         me.enableAutoHeight();
         //trace:1764
@@ -91,6 +98,16 @@ UE.plugins['autoheight'] = function () {
             }, 100);
 
         });
+        //修复内容过多时，回到顶部，顶部内容被工具栏遮挡问题
+        var lastScrollY;
+        window.onscroll = function(){
+            if(lastScrollY === null){
+                lastScrollY = this.scrollY
+            }else if(this.scrollY == 0 && lastScrollY != 0){
+                me.window.scrollTo(0,0);
+                lastScrollY = null;
+            }
+        }
     });
 
 

@@ -3,8 +3,9 @@ module( 'core.domUtils' );
 test( 'isBoundaryNode--node是firstChild',function(){
 
     if(ua.browser.ie){
-        var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
-        var div = body.appendChild(document.createElement('div'));
+//        var body =  te.dom[1].contentDocument.appendChild(document.createElement('body'));
+//        var div = body.appendChild(document.createElement('div'));
+        var div = te.dom[2];
     }else{
         var div = te.dom[1].contentWindow.document.firstChild.lastChild.appendChild(document.createElement('div'));
     }
@@ -13,9 +14,13 @@ test( 'isBoundaryNode--node是firstChild',function(){
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
     equal( domUtils.isBoundaryNode(node, "lastChild"), 0 );
     node = div.firstChild.firstChild;
-    equal( domUtils.isBoundaryNode(node, "firstChild"), 1 );
+    if(ua.browser.ie){
+        equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
+    }else{
+        equal( domUtils.isBoundaryNode(node, "firstChild"), 1 );
+    }
     equal( domUtils.isBoundaryNode(node, "lastChild"), 0 );
-    node = div.lastChild.lastChild;
+    node = div.firstChild.nextSibling.nextSibling;
     equal( domUtils.isBoundaryNode(node, "firstChild"), 0 );
     equal( domUtils.isBoundaryNode(node, "lastChild"), 1 );
 } );
@@ -1025,13 +1030,14 @@ test( 'mergeSibling--兄弟节点没有孩子', function() {
 } );
 
 
-test( 'unselectable--检查赋值是否成功', function() {
+test( 'trace 3983 unselectable--检查赋值是否成功', function() {
     var div = te.dom[2];
     var domUtils = baidu.editor.dom.domUtils;
     div.innerHTML = '<div><p>xxxx<span><b><i>xxx</i></b>xxxx</span></p>dddd<p><img /><a>aaaa</a></p></div>';
+    debugger
     domUtils.unSelectable( div );
-    if ( baidu.editor.browser.gecko || baidu.editor.browser.webkit ) {
-        equal( div.style.MozUserSelect || div.style.KhtmlUserSelect, 'none', 'webkit or gecko unselectable' );
+    if ( UE.browser.gecko || UE.browser.webkit || (UE.browser.ie &&UE.browser.version>8) ) {
+        equal( div.style.MozUserSelect || div.style.KhtmlUserSelect || div.style.MSUserSelect, 'none', 'webkit or gecko unselectable' );
     } else {
         equal( div.unselectable, 'on', '检查unselectable属性' );
         for ( var i = 0,ci; ci = div.all[i++]; ) {

@@ -113,7 +113,7 @@ if ( $b != 'all' ) {
     $browsers = array_key_exists( 'browserSet' , $_GET )?Config::getBrowserSet($_GET[ 'browserSet' ]):Config::$BROWSERS;
     foreach ( $browsers as $b => $i ) {
         run( $b );
-        sleep(60);
+        sleep(40);
     }
 }
 ?>

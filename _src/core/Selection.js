@@ -78,7 +78,7 @@
         return  {container:child, offset:position > 0 ? -distance : child.nodeValue.length + distance}
     }
 
-    /*
+    /**
      * 将ieRange转换为Range对象
      * @param {Range}   ieRange    ieRange对象
      * @param {Range}   range      Range对象
@@ -98,7 +98,7 @@
         return range;
     }
 
-    /*
+    /**
      * 获得ieRange
      * @param {Selection} sel    Selection对象
      * @return {ieRange}    得到ieRange

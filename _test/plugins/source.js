@@ -158,9 +158,10 @@ test(' trace 3739 trace 1734 range的更新/特殊符号的转换', function () 
 //            range.setStart(editor.body.firstChild,0).collapse(1).select();
             setTimeout(function () {
 //                var label = ua.browser.gecko ? 'html' : 'body';
-                var label = 'html';
+//                var label = 'html';
                 ua.manualDeleteFillData(editor.body);
-                equal(editor.selection.getRange().startContainer.parentNode.parentNode.tagName.toLowerCase(), label, 'range的更新');
+                var sc = (ua.browser.ie==11)?editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase():editor.selection.getRange().startContainer.parentNode.parentNode.tagName.toLowerCase();
+                equal(sc, 'html', 'range的更新');
                 editor.execCommand('source');
                 setTimeout(function () {
                     editor.execCommand('source');
@@ -181,18 +182,14 @@ test('默认插入的占位符', function () {
 });
 
 test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
-    var div = document.body.appendChild(document.createElement('div'));
     var editor = te.obj[0];
-    editor.render(div);
-    setTimeout(function () {
-        var range = new baidu.editor.dom.Range(editor.document);
-        var body = editor.body;
-        editor.setContent('<p><br></p>');
+        var range = te.obj[1];
+        editor.setContent('<p><br /></p>');
         setTimeout(function () {
-            range.setStart(body.firstChild, 0).collapse(1).select();
+            range.setStart(editor.body.firstChild, 0).collapse(1).select();
             editor.execCommand('pagebreak');
             ua.manualDeleteFillData(editor.body);
-            var pagebreak = body.getElementsByTagName('hr')[0];
+            var pagebreak = editor.body.getElementsByTagName('hr')[0];
 
             if (typeof pagebreak.attributes['class'] == "undefined") {
                 equal(pagebreak.getAttribute('class'), 'pagebreak', 'pagebreak');
@@ -204,10 +201,8 @@ test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
 //        var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
             ok(editor.getContent().indexOf('_ueditor_page_break_tag_') >= 0, 'pagebreak被解析');
 //        equal( editor.getContent(), '<p>' + br + '</p>_baidu_page_break_tag_<p>' + br + '</p>' );
-            document.body.removeChild(div);
             start();
-        }, 50);
-    }, 50);
+        }, 200);
     stop();
 });
 //TODO 1.2.6

@@ -10,6 +10,16 @@
         UIBase = baidu.editor.ui.UIBase,
         Button = baidu.editor.ui.Button,
         Dialog = baidu.editor.ui.Dialog = function (options){
+            if(options.name){
+                var name = options.name;
+                var cssRules = options.cssRules;
+                if(!options.className){
+                    options.className =  'edui-for-' + name;
+                }
+                if(cssRules){
+                    options.cssRules = '.edui-default .edui-for-'+ name +' .edui-dialog-content  {'+ cssRules +'}'
+                }
+            }
             this.initOptions(utils.extend({
                 autoReset: true,
                 draggable: true,
@@ -25,16 +35,23 @@
         };
     var modalMask;
     var dragMask;
+    var activeDialog;
     Dialog.prototype = {
         draggable: false,
         uiName: 'dialog',
         initDialog: function (){
             var me = this,
                 theme=this.editor.options.theme;
+            if(this.cssRules){
+                utils.cssRule('edui-customize-'+this.name+'-style',this.cssRules);
+            }
             this.initUIBase();
             this.modalMask = (modalMask || (modalMask = new Mask({
                 className: 'edui-dialog-modalmask',
-                theme:theme
+                theme:theme,
+                onclick: function (){
+                    activeDialog && activeDialog.close(false);
+                }
             })));
             this.dragMask = (dragMask || (dragMask = new Mask({
                 className: 'edui-dialog-dragmask',
@@ -54,7 +71,9 @@
             if (this.buttons) {
                 for (var i=0; i<this.buttons.length; i++) {
                     if (!(this.buttons[i] instanceof Button)) {
-                        this.buttons[i] = new Button(this.buttons[i]);
+                        this.buttons[i] = new Button(utils.extend(this.buttons[i],{
+                            editor : this.editor
+                        },true));
                     }
                 }
             }
@@ -245,42 +264,42 @@
             });
 
             //hold住scroll事件，防止dialog的滚动影响页面
-            if( this.holdScroll ) {
-
-                if( !me.iframeUrl ) {
-                    domUtils.on( document.getElementById( me.id + "_iframe"), !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
-                        domUtils.preventDefault(e);
-                    } );
-                } else {
-                    me.addListener('dialogafterreset', function(){
-                        window.setTimeout(function(){
-                            var iframeWindow = document.getElementById( me.id + "_iframe").contentWindow;
-
-                            if( browser.ie ) {
-
-                                var timer = window.setInterval(function(){
-
-                                    if( iframeWindow.document && iframeWindow.document.body ) {
-                                        window.clearInterval( timer );
-                                        timer = null;
-                                        domUtils.on( iframeWindow.document.body, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
-                                            domUtils.preventDefault(e);
-                                        } );
-                                    }
-
-                                }, 100);
-
-                            } else {
-                                domUtils.on( iframeWindow, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
-                                    domUtils.preventDefault(e);
-                                } );
-                            }
-
-                        }, 1);
-                    });
-                }
-
-            }
+//            if( this.holdScroll ) {
+//
+//                if( !me.iframeUrl ) {
+//                    domUtils.on( document.getElementById( me.id + "_iframe"), !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+//                        domUtils.preventDefault(e);
+//                    } );
+//                } else {
+//                    me.addListener('dialogafterreset', function(){
+//                        window.setTimeout(function(){
+//                            var iframeWindow = document.getElementById( me.id + "_iframe").contentWindow;
+//
+//                            if( browser.ie ) {
+//
+//                                var timer = window.setInterval(function(){
+//
+//                                    if( iframeWindow.document && iframeWindow.document.body ) {
+//                                        window.clearInterval( timer );
+//                                        timer = null;
+//                                        domUtils.on( iframeWindow.document.body, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+//                                            domUtils.preventDefault(e);
+//                                        } );
+//                                    }
+//
+//                                }, 100);
+//
+//                            } else {
+//                                domUtils.on( iframeWindow, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+//                                    domUtils.preventDefault(e);
+//                                } );
+//                            }
+//
+//                        }, 1);
+//                    });
+//                }
+//
+//            }
             this._hide();
         },
         mesureSize: function (){
@@ -362,6 +381,7 @@
                     this.getDom('iframe').focus();
                 } catch(ex){}
             }
+            activeDialog = this;
         },
         _onCloseButtonClick: function (evt, el){
             this.close(false);
@@ -379,6 +399,15 @@
 
                 }
                 this._hide();
+
+                //销毁content
+                var content = this.getDom('content');
+                var iframe = this.getDom('iframe');
+                if (content && iframe) {
+                    var doc = iframe.contentDocument || iframe.contentWindow.document;
+                    doc && (doc.body.innerHTML = '');
+                    domUtils.remove(content);
+                }
             }
         }
     };

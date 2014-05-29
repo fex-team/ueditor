@@ -46,7 +46,8 @@ UE.plugins['list'] = function () {
         },
         listDefaultPaddingLeft : '30',
         listiconpath : 'http://bs.baidu.com/listicon/',
-        maxListLevel : -1//-1不限制
+        maxListLevel : -1,//-1不限制
+        disablePInList:false
     } );
     function listToArray(list){
         var arr = [];
@@ -197,6 +198,33 @@ UE.plugins['list'] = function () {
         }
 
         html.html = root.toHtml();
+    });
+    //导出时，去掉p标签
+    me.getOpt('disablePInList') === true && me.addOutputRule(function(root){
+        utils.each(root.getNodesByTagName('li'),function(li){
+            var newChildrens = [],index=0;
+            utils.each(li.children,function(n){
+                if(n.tagName == 'p'){
+                    var tmpNode;
+                    while(tmpNode = n.children.pop()) {
+                        newChildrens.splice(index,0,tmpNode);
+                        tmpNode.parentNode = li;
+                        lastNode = tmpNode;
+                    }
+                    tmpNode = newChildrens[newChildrens.length-1];
+                    if(!tmpNode || tmpNode.type != 'element' || tmpNode.tagName != 'br'){
+                        var br = UE.uNode.createElement('br');
+                        br.parentNode = li;
+                        newChildrens.push(br);
+                    }
+
+                    index = newChildrens.length;
+                }
+            });
+            if(newChildrens.length){
+                li.children = newChildrens;
+            }
+        });
     });
     //进入编辑器的li要套p标签
     me.addInputRule(function(root){
@@ -861,7 +889,7 @@ UE.plugins['list'] = function () {
      * @param { String } style 插入的有序列表类型，值为：decimal,lower-alpha,lower-roman,upper-alpha,upper-roman,cn,cn1,cn2,num,num1,num2
      * @example
      * ```javascript
-     * editor.execCommand( 'insertunorderedlist','decimal');
+     * editor.execCommand( 'insertorderedlist','decimal');
      * ```
      */
     /**

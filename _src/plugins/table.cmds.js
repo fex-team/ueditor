@@ -32,9 +32,9 @@
                     rowsNum = opt.numRows,
                     colsNum = opt.numCols;
                 for (var r = 0; r < rowsNum; r++) {
-                    html.push('<tr>');
+                    html.push('<tr' + (r == 0 ? ' class="firstRow"':'') + '>');
                     for (var c = 0; c < colsNum; c++) {
-                        html.push('<td width="' + tdWidth + '"  vAlign="' + opt.tdvalign + '" >' + (browser.ie ? domUtils.fillChar : '<br/>') + '</td>')
+                        html.push('<td width="' + tdWidth + '"  vAlign="' + opt.tdvalign + '" >' + (browser.ie && browser.version < 11 ? domUtils.fillChar : '<br/>') + '</td>')
                     }
                     html.push('</tr>')
                 }
@@ -256,16 +256,24 @@
 
     UE.commands["mergeright"] = {
         queryCommandState: function (cmd) {
-            var tableItems = getTableItemsByRange(this);
-            if (!tableItems.cell) return -1;
-            var ut = getUETable(tableItems.table);
+            var tableItems = getTableItemsByRange(this),
+                table = tableItems.table,
+                cell = tableItems.cell;
+
+            if (!table || !cell) return -1;
+            var ut = getUETable(table);
             if (ut.selectedTds.length) return -1;
-            var cellInfo = ut.getCellInfo(tableItems.cell),
+
+            var cellInfo = ut.getCellInfo(cell),
                 rightColIndex = cellInfo.colIndex + cellInfo.colSpan;
-            if (rightColIndex >= ut.colsNum) return -1;
-            var rightCellInfo = ut.indexTable[cellInfo.rowIndex][rightColIndex];
-            return (rightCellInfo.rowIndex == cellInfo.rowIndex
-                && rightCellInfo.rowSpan == cellInfo.rowSpan) ? 0 : -1;
+            if (rightColIndex >= ut.colsNum) return -1; // 如果处于最右边则不能向右合并
+
+            var rightCellInfo = ut.indexTable[cellInfo.rowIndex][rightColIndex],
+                rightCell = table.rows[rightCellInfo.rowIndex].cells[rightCellInfo.cellIndex];
+            if (!rightCell || cell.tagName != rightCell.tagName) return -1; // TH和TD不能相互合并
+
+            // 当且仅当两个Cell的开始列号和结束列号一致时能进行合并
+            return (rightCellInfo.rowIndex == cellInfo.rowIndex && rightCellInfo.rowSpan == cellInfo.rowSpan) ? 0 : -1;
         },
         execCommand: function (cmd) {
             var rng = this.selection.getRange(),
@@ -279,18 +287,23 @@
     UE.commands["mergedown"] = {
         queryCommandState: function (cmd) {
             var tableItems = getTableItemsByRange(this),
+                table = tableItems.table,
                 cell = tableItems.cell;
-            if (!cell || cell.tagName == "TH") return -1;
-            var ut = getUETable(tableItems.table);
+
+            if (!table || !cell) return -1;
+            var ut = getUETable(table);
             if (ut.selectedTds.length)return -1;
-            var cellInfo = ut.getCellInfo(tableItems.cell),
+
+            var cellInfo = ut.getCellInfo(cell),
                 downRowIndex = cellInfo.rowIndex + cellInfo.rowSpan;
-            // 如果处于最下边则不能f向右合并
-            if (downRowIndex >= ut.rowsNum) return -1;
-            var downCellInfo = ut.indexTable[downRowIndex][cellInfo.colIndex];
+            if (downRowIndex >= ut.rowsNum) return -1; // 如果处于最下边则不能向下合并
+
+            var downCellInfo = ut.indexTable[downRowIndex][cellInfo.colIndex],
+                downCell = table.rows[downCellInfo.rowIndex].cells[downCellInfo.cellIndex];
+            if (!downCell || cell.tagName != downCell.tagName) return -1; // TH和TD不能相互合并
+
             // 当且仅当两个Cell的开始列号和结束列号一致时能进行合并
-            return (downCellInfo.colIndex == cellInfo.colIndex
-                && downCellInfo.colSpan == cellInfo.colSpan) && tableItems.cell.tagName !== 'TH' ? 0 : -1;
+            return (downCellInfo.colIndex == cellInfo.colIndex && downCellInfo.colSpan == cellInfo.colSpan) ? 0 : -1;
         },
         execCommand: function () {
             var rng = this.selection.getRange(),
@@ -381,9 +394,7 @@
     UE.commands["deleterow"] = {
         queryCommandState: function () {
             var tableItems = getTableItemsByRange(this);
-            if (!tableItems.cell) {
-                return -1;
-            }
+            return tableItems.cell ? 0 : -1;
         },
         execCommand: function () {
             var cell = getTableItemsByRange(this).cell,
@@ -473,7 +484,7 @@
     UE.commands["deletecol"] = {
         queryCommandState: function () {
             var tableItems = getTableItemsByRange(this);
-            if (!tableItems.cell) return -1;
+            return tableItems.cell ? 0 : -1;
         },
         execCommand: function () {
             var cell = getTableItemsByRange(this).cell,
