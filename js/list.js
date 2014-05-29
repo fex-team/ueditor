@@ -132,8 +132,11 @@ var docList = [
             {
                 id:'ready',
                 title:'6.1 实例创建后为什么直接执行接口报错'
+            },
+            {
+                id:'customurl',
+                title:'6.2 如何自定义请求地址'
             }
-
         ]
     }
 ];
