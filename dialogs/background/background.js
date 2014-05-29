@@ -257,7 +257,7 @@
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName'),
+                var url = editor.getActionUrl(editor.getOpt('imageManagerActionName')),
                     isJsonp = utils.isCrossDomainUrl(url);
                 ajax.request(url, {
                     'timeout': 100000,
