@@ -1,5 +1,24 @@
 #UEditor Change List
 
+##1.4.3
+###bug修复&优化改进
+1. 修复hasContents接口在非ie下只有空格时判断还为真的问题
+2. 修复在粘贴word内容时，会误命中cm,pt这样的文本内容变成px的问题
+3. 优化删除编辑器再创建编辑器时，编辑器的容器id发生变化的问题
+4. 修复提交jsonp请求时，callback参数的xss漏洞
+5. 新增jsp后台多种服务器配置下的路径定位
+6. 修复ZeroClipboard的flash地址参数名称错误
+7. 修复getActionUrl的bug
+8. 整理配置参数，把遗漏在代码中的配置项整理到ueditor.config.js里
+9. 修复图片拉伸工具和编辑拉伸长高器的样式冲突
+10. 修复文字的unicode编码会被错误再次解析问题
+11. 添加消息提示功能，冒泡提示信息
+12. 优化上传功能提示，当后端配置项没正常加载，禁用上传功能
+13. 修复单图上传按钮和jqueryValidate不兼容的问题
+14. 简化了与jqueryValidate的结合操作，具体看_examples/jqueryValidateDemo.html
+15. 修复在删除编辑器后，再次创建时丢失原有id的问题
+16. 修复查找替换在一些块节点中会导致替换错误
+
 ##1.4.2
 ###重构前后端交互功能
 1. 前端上传模块统一改用webuploader

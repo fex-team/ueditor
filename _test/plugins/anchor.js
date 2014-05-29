@@ -27,7 +27,7 @@ test( '插入锚点后切换源码', function() {
             ua.checkHTMLSameStyle( '<img anchorname="hello" class="anchorclass">' + br, editor.document, body.firstChild, '检查锚点html' );
             setTimeout( function() {
                 start();
-            }, 50 );
+            }, 500 );
         }, 200);
     }, 20 );
 } );

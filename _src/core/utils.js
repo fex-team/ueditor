@@ -459,7 +459,7 @@ var utils = UE.utils = {
      * ```
      */
     unhtml:function (str, reg) {
-        return str ? str.replace(reg || /[&<">'](?:(amp|lt|quot|gt|#39|nbsp);)?/g, function (a, b) {
+        return str ? str.replace(reg || /[&<">'](?:(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g, function (a, b) {
             if (b) {
                 return a;
             } else {
@@ -1109,7 +1109,7 @@ var utils = UE.utils = {
                             return 'null';
                         } else if (utils.isArray(value)) {
                             return encodeArray(value);
-                        } else if (utils.isArray(value)) {
+                        } else if (utils.isDate(value)) {
                             return encodeDate(value);
                         } else {
                             var result = ['{'],

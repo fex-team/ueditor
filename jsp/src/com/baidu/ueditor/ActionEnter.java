@@ -35,6 +35,24 @@ public class ActionEnter {
 	
 	public String exec () {
 		
+		String callbackName = this.request.getParameter("callback");
+		
+		if ( callbackName != null ) {
+
+			if ( !validCallbackName( callbackName ) ) {
+				return new BaseState( false, AppInfo.ILLEGAL ).toJSONString();
+			}
+			
+			return callbackName+"("+this.invoke()+");";
+			
+		} else {
+			return this.invoke();
+		}
+
+	}
+	
+	public String invoke() {
+		
 		if ( actionType == null || !ActionMap.mapping.containsKey( actionType ) ) {
 			return new BaseState( false, AppInfo.INVALID_ACTION ).toJSONString();
 		}
@@ -90,6 +108,19 @@ public class ActionEnter {
 		} catch ( Exception e ) {
 			return 0;
 		}
+		
+	}
+	
+	/**
+	 * callback参数验证
+	 */
+	public boolean validCallbackName ( String name ) {
+		
+		if ( name.matches( "^[a-zA-Z_]+[\\w0-9_]*$" ) ) {
+			return true;
+		}
+		
+		return false;
 		
 	}
 	

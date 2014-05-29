@@ -165,3 +165,64 @@ test('粘贴过滤',function(){
     txt='<p style="text-align:center;">hello1<img src="http://img.baidu.com/hi/jx2/j_0001.gif" style="float: none;">hello2</p>';
     ua.checkHTMLSameStyle(txt, editor.document, editor.body, '文字居中，表情居左');
 });
+
+test('trace:4018，4012',function(){
+    var div = document.body.appendChild(document.createElement('div'));
+    div.id = 'ue2';
+    var editor2 = UE.getEditor('ue2');
+    editor2.ready(function(){
+        editor2.setContent('Mayday123,.Ｍａｙｄａｙ１２３，．');
+        var c = $('#edui18_state div');
+        ua.click(c[4]);
+        ua.click($("input")[19]);
+        var d = $(".edui-autotypesetpicker-body tr");
+        var e = d[7].getElementsByTagName('input');
+        ua.click(e[0]);
+        var button = $(".edui-autotypesetpicker-body button");
+        ua.click(button[0]);
+        if(ua.browser.ie&&ua.browser.ie==8){
+            equal(editor2.getContent(),"<p style=\"TEXT-ALIGN: left\">Ｍａｙｄａｙ１２３，．Ｍａｙｄａｙ１２３，．</p>","未执行半角转全角");
+        }else{
+            equal(editor2.getContent(),'<p style="text-align: left;">Mayday123,.Ｍａｙｄａｙ１２３，．</p>',"未执行半角转全角");
+        }
+        setTimeout(function () {
+            UE.delEditor('ue2');
+            window.localStorage.clear();
+            start();
+        }, 100);
+    });
+    stop();
+});
+
+test('trace:3991',function(){
+    var editor3 = te.obj[0];
+    setTimeout(function(){
+        editor3.setContent('');
+        editor3.execCommand('inserttable', {numCols: 3, numRows: 3});
+        var text =editor3.body.getElementsByTagName('td')[0];
+        var range = new baidu.editor.dom.Range(editor3.document);
+        range.setStart(text,0).collapse(1).select();
+        editor3.execCommand("inserttitlecol");
+        equal(editor3.queryCommandState("inserttitlecol"),-1,'标题列不能向右合并');
+        var f = $("#edui538_state")[0];
+        start();
+    }, 100);
+    stop();
+});
+
+test('trace:3967',function(){
+    var editor = te.obj[0];
+    editor.setContent('123<br/>');
+    editor.execCommand('insertorderedlist','decimal');
+    editor.execCommand('source');
+    setTimeout(function(){
+        editor.execCommand('source');
+        setTimeout(function(){
+            editor.execCommand('source');
+            var x = editor.getContent();
+            ok(x.indexOf('br')== x.lastIndexOf('br'),'只有一个<br/>');
+            start();
+        },50)
+    },50)
+    stop();
+});

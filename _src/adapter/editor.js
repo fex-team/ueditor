@@ -401,8 +401,10 @@
                 '<div id="##_toolbarmsg_label" class="%%-toolbarmsg-label"></div>' +
                 '<div style="height:0;overflow:hidden;clear:both;"></div>' +
                 '</div>' +
+                '<div id="##_message_holder" class="%%-messageholder"></div>' +
                 '</div>' +
-                '<div id="##_iframeholder" class="%%-iframeholder"></div>' +
+                '<div id="##_iframeholder" class="%%-iframeholder">' +
+                '</div>' +
                 //modify wdcount by matao
                 '<div id="##_bottombar" class="%%-bottomContainer"><table><tr>' +
                 '<td id="##_elementpath" class="%%-bottombar"></td>' +
@@ -744,9 +746,15 @@
                                 editor.textarea = holder;
                                 editor.textarea.style.display = 'none';
 
+
                             } else {
                                 holder.parentNode.removeChild(holder);
-                                holder.id && (newDiv.id = holder.id);
+
+
+                            }
+                            if(holder.id){
+                                newDiv.id = holder.id;
+                                domUtils.removeAttributes(holder,'id');
                             }
                             holder = newDiv;
                             holder.innerHTML = '';

@@ -145,7 +145,15 @@
                 uploader,
                 actionUrl = editor.getActionUrl(editor.getOpt('fileActionName')),
                 fileMaxSize = editor.getOpt('fileMaxSize'),
-                acceptExtensions = editor.getOpt('fileAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');;
+                acceptExtensions = (editor.getOpt('fileAllowFiles') || []).join('').replace(/\./g, ',').replace(/^[,]/, '');;
+
+            if (!WebUploader.Uploader.support()) {
+                $('#filePickerReady').after($('<div>').html(lang.errorNotSupport)).hide();
+                return;
+            } else if (!editor.getOpt('fileActionName')) {
+                $('#filePickerReady').after($('<div>').html(lang.errorLoadConfig)).hide();
+                return;
+            }
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {
@@ -156,7 +164,7 @@
                 server: actionUrl,
                 fileVal: editor.getOpt('fileFieldName'),
                 duplicate: true,
-                fileSingleSizeLimit: fileMaxSize,    // 默认 2 M
+                fileSingleSizeLimit: fileMaxSize,
                 compress: false
             });
             uploader.addButton({
@@ -507,9 +515,12 @@
 
             uploader.on('uploadError', function (file, code) {
             });
-            uploader.on('Error', function (file, code) {
+            uploader.on('error', function (code, file) {
+                if (code == 'Q_TYPE_DENIED' || code == 'F_EXCEED_SIZE') {
+                    addFile(file);
+                }
             });
-            uploader.on('UploadComplete', function (file, ret) {
+            uploader.on('uploadComplete', function (file, ret) {
             });
 
             $upload.on('click', function () {
@@ -724,8 +735,7 @@
             }
         },
         getInsertList: function () {
-            var i, lis = this.list.children, list = [],
-                prefix = editor.getOpt('fileManagerUrlPrefix');
+            var i, lis = this.list.children, list = [];
             for (i = 0; i < lis.length; i++) {
                 if (domUtils.hasClass(lis[i], 'selected')) {
                     var url = lis[i].getAttribute('data-url');

@@ -15,7 +15,7 @@ test('trace 3343：插入代码中有空行', function () {
         var br = ua.browser.ie ? '' : '<br>';
         if (ua.browser.ie)
             ua.checkSameHtml(editor.body.innerHTML, '<PRE class=brush:Java;toolbar:false>​<BR>hello​​<BR>​​hello</PRE><P></P>', '插入代码');
-        else if (ua.browser.gecko)
+        else if (ua.browser.gecko||ua.browser.webkit)
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello</pre>', '插入代码');
         else
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello</pre><p>' + br + '</p>', '插入代码');
@@ -27,10 +27,8 @@ test('trace 3343：插入代码中有空行', function () {
                 if (ua.browser.ie&&ua.browser.ie<9)
                     ua.checkSameHtml(editor.body.innerHTML, "<PRE class=brush:Java;toolbar:false>hello<BR>hello<BR></PRE><P>&nbsp;</P>", '样式不变');
 
-                else if (ua.browser.gecko)
+                else if (ua.browser.gecko||ua.browser.webkit)
                     ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre>', '样式不变');
-                else if(ua.browser.webkit)
-                    ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:Java;toolbar:false">hello<br><br>hello<br></pre><p>' + br + '</p>', '样式不变');
                     start();
             }, 20);
         }, 20);
@@ -45,7 +43,7 @@ test('trace 3355：不闭合选区插入代码', function () {
             ua.keydown(editor.body, {'keyCode': 65, 'ctrlKey': true});
             editor.execCommand('insertcode', 'html');
             var br = ua.browser.ie ? '' : '<br>';
-            if (ua.browser.gecko || ua.browser.opera )
+            if (ua.browser.gecko || ua.browser.opera ||ua.browser.webkit)
                 ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre>', '检查插入了html');
             else
                 ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">&lt;div id=\"upload\" style=\"display: none\" &gt;&lt;img id=\"uploadBtn\"&gt;&lt;/div&gt;</pre><p>' + br + '</p>', '检查插入了html');
@@ -225,4 +223,61 @@ test('test-beforeInsertHTML', function(){
             ua.checkSameHtml(editor.body.innerHTML, '<pre class="brush:html;toolbar:false">PPPreplaceBBBI<br>brtext<br></pre>', '插入chrome/ff/ie11+');
         ua.manualDeleteFillData(editor.body);
 
+});
+
+test('关于pre中的tabKey',function(){
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    editor.setContent('<pre class="brush:Javascript;toolbar:false">function a(){var a = true;}</pre>');
+    var text = editor.body.firstChild.firstChild;
+    range.setStart(text,13).setEnd(text,16).select();
+    ua.keydown(editor.body,{'shiftKey':false,'keyCode':9});
+    ua.keyup(editor.body,{'shiftKey':false,'keyCode':9});
+    if(ua.browser.ie==8||ua.browser.ie==9){
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>');
+    }else if(ua.browser.ie>9){
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey1');
+    }else{
+        equal(editor.getContent(),'<pre class="brush:Javascript;toolbar:false">&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey1');
+    }
+    editor.setContent('<pre class="brush:Javascript;toolbar:false"><br>function a(){var a = true;}</pre>');
+    var text = editor.body.firstChild.firstChild;
+    range.setStart(text,13).setEnd(text,16).select();
+    ua.keydown(editor.body,{'shiftKey':false,'keyCode':9});
+    ua.keyup(editor.body,{'shiftKey':false,'keyCode':9});
+    if(ua.browser.ie==8||ua.browser.ie==9){
+        var x = '\n';
+        if(ua.browser.ie==9){
+            x = '';
+        }
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">&nbsp;&nbsp;&nbsp;&nbsp;'+x+'function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey2');
+    }else if(ua.browser.ie>9){
+        var x2 = '';
+        var x3 = '&nbsp;&nbsp;&nbsp;&nbsp;';
+        if(ua.browser.ie==11){
+            x2 = '&nbsp;&nbsp;&nbsp;&nbsp;';
+            x3='\n';
+        }
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">'+x3+'function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>'+x2,'验证pre下tabKey2');
+    }else{
+        equal(editor.getContent(),'<pre class="brush:Javascript;toolbar:false">\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;a(){var&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey2');
+    }
+    editor.setContent('<pre class="brush:Javascript;toolbar:false">function a(){<br>var a = true;}</pre>');
+    var text = editor.body.firstChild.firstChild;
+    range.setStart(text,13).setEnd(text,16).select();
+    ua.keydown(editor.body,{'shiftKey':false,'keyCode':9});
+    ua.keyup(editor.body,{'shiftKey':false,'keyCode':9});
+    if(ua.browser.ie==8){
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">function&nbsp;a(){&nbsp;&nbsp;&nbsp;&nbsp;\nvar&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey3');
+    }else if(ua.browser.ie>8){
+        var xx = '&nbsp;&nbsp;&nbsp;&nbsp;';
+        var xx2 = '';
+        if(ua.browser.ie==11){
+            xx = '';
+            xx2 = '&nbsp;&nbsp;&nbsp;&nbsp;';
+        }
+        equal(editor.getContent(),'<pre class=\"brush:Javascript;toolbar:false\">'+xx+'function&nbsp;a(){'+xx2+'\nvar&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey3');
+    }else{
+        equal(editor.getContent(),'<pre class="brush:Javascript;toolbar:false">function&nbsp;a(){&nbsp;&nbsp;&nbsp;&nbsp;\nvar&nbsp;a&nbsp;=&nbsp;true;}</pre>','验证pre下tabKey3');
+    }
 });

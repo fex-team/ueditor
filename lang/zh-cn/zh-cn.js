@@ -69,16 +69,19 @@ UE.I18N['zh-cn'] = {
     },
     'autoupload': {
         'exceedSizeError': '文件大小超出限制',
+        'exceedTypeError': '文件格式不允许',
         'jsonEncodeError': '服务器返回格式错误',
         'loading':"正在上传...",
-        'loadError':"上传错误"
+        'loadError':"上传错误",
+        'errorLoadConfig': '后端配置项没有正常加载，上传插件不能正常使用！'
     },
     'simpleupload':{
         'exceedSizeError': '文件大小超出限制',
         'exceedTypeError': '文件格式不允许',
         'jsonEncodeError': '服务器返回格式错误',
         'loading':"正在上传...",
-        'loadError':"上传错误"
+        'loadError':"上传错误",
+        'errorLoadConfig': '后端配置项没有正常加载，上传插件不能正常使用！'
     },
     'elementPathTip':"元素路径",
     'wordCountTip':"字数统计",
@@ -89,36 +92,39 @@ UE.I18N['zh-cn'] = {
     'closeDialog':"关闭对话框",
     'tableDrag':"表格拖动必须引入uiUtils.js文件！",
     'autofloatMsg':"工具栏浮动依赖编辑器UI，您首先需要引入UI文件!",
+    'loadconfigError': '获取后台配置项请求出错，上传功能将不能正常使用！',
+    'loadconfigFormatError': '后台配置项返回格式出错，上传功能将不能正常使用！',
+    'loadconfigHttpError': '请求后台配置项http错误，上传功能将不能正常使用！',
     'snapScreen_plugin':{
         'browserMsg':"仅支持IE浏览器！",
         'callBackErrorMsg':"服务器返回数据有误，请检查配置项之后重试。",
         'uploadErrorMsg':"截图上传失败，请检查服务器端环境! "
     },
     'insertcode':{
-        'as3':'ActionScript3',
+        'as3':'ActionScript 3',
         'bash':'Bash/Shell',
         'cpp':'C/C++',
-        'css':'Css',
-        'cf':'CodeFunction',
+        'css':'CSS',
+        'cf':'ColdFusion',
         'c#':'C#',
         'delphi':'Delphi',
         'diff':'Diff',
         'erlang':'Erlang',
         'groovy':'Groovy',
-        'html':'Html',
+        'html':'HTML',
         'java':'Java',
-        'jfx':'JavaFx',
-        'js':'Javascript',
+        'jfx':'JavaFX',
+        'js':'JavaScript',
         'pl':'Perl',
-        'php':'Php',
+        'php':'PHP',
         'plain':'Plain Text',
         'ps':'PowerShell',
         'python':'Python',
         'ruby':'Ruby',
         'scala':'Scala',
-        'sql':'Sql',
-        'vb':'Vb',
-        'xml':'Xml'
+        'sql':'SQL',
+        'vb':'Visual Basic',
+        'xml':'XML'
     },
     'confirmClear':"确定清空当前文档么？",
     'contextMenu':{
@@ -288,6 +294,8 @@ UE.I18N['zh-cn'] = {
         'updateStatusConfirm': '已成功上传_张照片，_张照片上传失败',
         'updateStatusFinish': '共_张（_KB），_张上传成功',
         'updateStatusError': '，_张上传失败。',
+        'errorNotSupport': 'WebUploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器。',
+        'errorLoadConfig': '后端配置项没有正常加载，上传插件不能正常使用！',
         'errorExceedSize':'文件大小超出',
         'errorFileType':'文件格式不允许',
         'errorInterrupt':'文件传输中断',
@@ -323,6 +331,8 @@ UE.I18N['zh-cn'] = {
         'updateStatusConfirm': '已成功上传_个文件，_个文件上传失败',
         'updateStatusFinish': '共_个（_KB），_个上传成功',
         'updateStatusError': '，_张上传失败。',
+        'errorNotSupport': 'WebUploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器。',
+        'errorLoadConfig': '后端配置项没有正常加载，上传插件不能正常使用！',
         'errorExceedSize':'文件大小超出',
         'errorFileType':'文件格式不允许',
         'errorInterrupt':'文件传输中断',
@@ -407,6 +417,8 @@ UE.I18N['zh-cn'] = {
         'updateStatusConfirm': '成功上传_个，_个失败',
         'updateStatusFinish': '共_个(_KB)，_个成功上传',
         'updateStatusError': '，_张上传失败。',
+        'errorNotSupport': 'WebUploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器。',
+        'errorLoadConfig': '后端配置项没有正常加载，上传插件不能正常使用！',
         'errorExceedSize':'文件大小超出',
         'errorFileType':'文件格式不允许',
         'errorInterrupt':'文件传输中断',
@@ -588,7 +600,7 @@ UE.I18N['zh-cn'] = {
             lang_showMsg:"截图功能需要首先安装UEditor截图插件！ ",
             lang_download:"点此下载",
             lang_step1:"第一步，下载UEditor截图插件并运行安装。",
-            lang_step2:"第二不，插件安装完成后即可使用，如不生效，请重启浏览器后再试！"
+            lang_step2:"第二步，插件安装完成后即可使用，如不生效，请重启浏览器后再试！"
         }
     },
     'spechars':{
@@ -649,5 +661,9 @@ UE.I18N['zh-cn'] = {
         'netError':"网络连接错误，请重试！",
         'copySuccess':"图片地址已经复制！",
         'flashI18n':{} //留空默认中文
+    },
+    'autosave': {
+        'saving':'保存中...',
+        'success':'本地保存成功'
     }
 };

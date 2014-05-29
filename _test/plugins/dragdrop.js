@@ -32,6 +32,6 @@ test( 'trace 3385：拖拽图像不会把p切开', function () {
         equal(body.firstChild.tagName.toLowerCase(),'p','img在p里面');
         equal(body.firstChild.childNodes[1].tagName.toLowerCase(),'img','img在p里面');
             start();
-        },30);
-    },30);
+        },300);
+    },100);
 } );

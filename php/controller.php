@@ -1,5 +1,6 @@
 <?php
-//header('Access-Control-Allow-Origin: http://*.baidu.com'); //设置http://*.baidu.com允许跨域访问
+//header('Access-Control-Allow-Origin: http://www.baidu.com'); //设置http://www.baidu.com允许跨域访问
+//header('Access-Control-Allow-Headers: X-Requested-With,X_Requested_With'); //设置允许的跨域header
 date_default_timezone_set("Asia/chongqing");
 error_reporting(E_ERROR);
 header("Content-Type: text/html; charset=utf-8");
@@ -46,7 +47,13 @@ switch ($action) {
 
 /* 输出结果 */
 if (isset($_GET["callback"])) {
-    echo $_GET["callback"] . '(' . $result . ')';
+    if (preg_match("/^[\w_]+$/", $_GET["callback"])) {
+        echo htmlspecialchars($_GET["callback"]) . '(' . $result . ')';
+    } else {
+        echo json_encode(array(
+            'state'=> 'callback参数不合法'
+        ));
+    }
 } else {
     echo $result;
 }
