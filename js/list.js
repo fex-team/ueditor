@@ -86,6 +86,10 @@ var docList = [
             {
                 id:'server_asp',
                 title: '3.6 ASP支持说明'
+            },
+            {
+                id:'server_net',
+                title: '3.7 ASP.NET 使用说明'
             }
         ]
     },
@@ -115,6 +119,10 @@ var docList = [
         id: 'api',
         title: '5. 常用API列表',
         list: [
+            {
+                id: 'common',
+                title: '5.1 常用API'
+            }
         ]
     },
     {

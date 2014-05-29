@@ -1,5 +1,5 @@
 $(function(){
-    var path = location.hash.slice(1).split('-'), cate = path[0], doc = path[1], mdToPath = {};
+    var path = location.hash.replace(/\?.*$/, '').slice(1).split('-'), cate = path[0], doc = path[1], mdToPath = {};
     activeCate = path.length >= 2 ? path[0]:docList[0]['id'];
     activeDoc = path.length >= 2 ? path[1]:docList[0]['list'][0]['id'];
 
@@ -76,12 +76,12 @@ $(function(){
 
                 var lang = $(node).attr('class').match(/(javascript|js|css|html)/);
                 if(lang &&lang[0]){
-                    var html = beautify($(node).html(),lang[0])
+                    var html = beautify($(node).html(),lang[0]);
                     $(node).html(html)
                 }
             });
 
             prettyPrint();
         });
-    };
+    }
 });
