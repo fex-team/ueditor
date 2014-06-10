@@ -45,6 +45,7 @@ UE.plugin.register('autoupload', function (){
                     loader.setAttribute('alt', data.original || '');
                     loader.removeAttribute('id');
                     domUtils.removeClasses(loader, 'loadingclass');
+                    me.trigger('contentchange',loader);
                 }
             };
         } else {
@@ -54,6 +55,7 @@ UE.plugin.register('autoupload', function (){
                 '/images/spacer.gif" title="' + (me.getLang('autoupload.loading') || '') + '" >' +
                 '</p>';
             successHandler = function(data) {
+
                 var link = urlPrefix + data.url,
                     loader = me.document.getElementById(loadingId);
 
@@ -67,7 +69,6 @@ UE.plugin.register('autoupload', function (){
 
         /* 插入loading的占位符 */
         me.execCommand('inserthtml', loadingHtml);
-
         /* 判断后端配置是否没有加载成功 */
         if (!me.getOpt(filetype + 'ActionName')) {
             errorHandler(me.getLang('autoupload.errorLoadConfig'));
