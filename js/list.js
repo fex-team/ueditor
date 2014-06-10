@@ -136,7 +136,12 @@ var docList = [
             {
                 id:'customurl',
                 title:'6.2 如何自定义请求地址'
+            },
+            {
+                id:'allowDivToP',
+                title:'6.3 如何阻止div变成p标签'
             }
+
         ]
     }
 ];
