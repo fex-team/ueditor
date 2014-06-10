@@ -13,7 +13,7 @@
 'IIS 7
     '打开IIS控制台，选择 ASP，在限制属性里有一个“最大请求实体主题限制”，设置需要的值
 
-CURRENT_ENCODING = "gb2312"
+CURRENT_ENCODING = "utf-8"
 
 Class Uploader
 
@@ -206,9 +206,11 @@ Class Uploader
         parts = Split( path, "\" )
         path = ""
         For Each part in parts
-            path = path + part + "\"
-            If fs.FolderExists( path ) = False Then
-                fs.CreateFolder( path )
+            If part <> "" Then
+                path = path + part + "\"
+                If fs.FolderExists( path ) = False Then
+                    fs.CreateFolder( path )
+                End If
             End If
         Next
     End Function
