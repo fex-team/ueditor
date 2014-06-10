@@ -132,11 +132,16 @@ UE.plugin.register('autoupload', function (){
             });
         },
         bindEvents:{
+            defaultOptions: {
+                //默认间隔时间
+                enableDragUpload: true,
+                enablePasteUpload: true
+            },
             //插入粘贴板的图片，拖放插入图片
             'ready':function(e){
                 var me = this;
                 if(window.FormData && window.FileReader) {
-                    domUtils.on(me.body, 'paste drop', function(e){
+                    var handler = function(e){
                         var hasImg = false,
                             items;
                         //获取粘贴板文件列表或者拖放文件列表
@@ -155,13 +160,20 @@ UE.plugin.register('autoupload', function (){
                             hasImg && e.preventDefault();
                         }
 
-                    });
-                    //取消拖放图片时出现的文字光标位置提示
-                    domUtils.on(me.body, 'dragover', function (e) {
-                        if(e.dataTransfer.types[0] == 'Files') {
-                            e.preventDefault();
-                        }
-                    });
+                    };
+
+                    if (me.getOpt('enablePasteUpload')) {
+                        domUtils.on(me.body, 'paste ', handler);
+                    }
+                    if (me.getOpt('enableDragUpload')) {
+                        domUtils.on(me.body, 'drop', handler);
+                        //取消拖放图片时出现的文字光标位置提示
+                        domUtils.on(me.body, 'dragover', function (e) {
+                            if(e.dataTransfer.types[0] == 'Files') {
+                                e.preventDefault();
+                            }
+                        });
+                    }
 
                     //设置loading的样式
                     utils.cssRule('loading',
