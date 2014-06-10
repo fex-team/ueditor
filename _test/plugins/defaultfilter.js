@@ -10,6 +10,14 @@ module( 'plugins.defaultfilter' );
 //test('',function(){
 //   stop();
 //});
+test( 'p标签禁止嵌套', function () {
+    var editor = te.obj[0];
+    editor.setContent( '<p align ="center" ><p>123</p><p>456</p></p><dl><dd></dd></dl>' );
+    var br = ua.browser.ie?'&nbsp;':'<br>';
+    console.log(editor.getContent());
+    var html = '<p style=\"text-align:center;\">'+br+'</p><p>123</p><p>456</p><ul class=" list-paddingleft-2"><li><p>'+br+'</p></li></ul>';
+    ua.checkSameHtml(editor.body.innerHTML,html, 'p标签禁止嵌套');
+} );
 test( '对代码的行号不处理', function () {
     var editor = te.obj[0];
     editor.setContent( '<td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td>');
