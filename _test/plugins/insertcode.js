@@ -70,6 +70,20 @@ test('trace 3395：插入代码为空时，清空编辑器', function () {
         ua.keydown(editor.body, {'keyCode':8});
         br = ua.browser.ie ? '' : '<br>';
         ua.checkSameHtml(editor.body.innerHTML, '<p>' + br + '</p>', '检查编辑器清空');
+
+        if(!ua.browser.ie){
+        editor.setContent('<pre class="brush:html;toolbar:false"></pre>');
+        editor.fireEvent('delkeydown',{});
+        ua.checkSameHtml(editor.body.innerHTML, '<p>' + br + '</p>', '检查编辑器清空');
+        }
+        editor.setContent('<pre class="brush:html;toolbar:false"></pre>');
+        ua.keydown(editor.body, {'keyCode':40});
+
+        if(ua.browser.ie==8||ua.browser.ie==11)
+            br = '<br>'
+        if(ua.browser.ie==8)return;
+        ua.checkSameHtml(editor.body.innerHTML,'<pre class="brush:html;toolbar:false">'+br+'</pre>','方向键处理');
+
 });
 
 test('trace 3396：多次切换源码，不会产生空行', function () {
