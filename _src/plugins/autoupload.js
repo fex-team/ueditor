@@ -172,6 +172,14 @@ UE.plugin.register('autoupload', function (){
                                 e.preventDefault();
                             }
                         });
+                    } else {
+                        if (browser.gecko) {
+                            domUtils.on(me.body, 'drop', function(e){
+                                if (getDropImage(e)) {
+                                    e.preventDefault();
+                                }
+                            });
+                        }
                     }
 
                     //设置loading的样式
