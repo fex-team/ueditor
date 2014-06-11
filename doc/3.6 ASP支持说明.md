@@ -19,8 +19,9 @@
 ## 部署指南 ##
 Classic ASP 一般在 IIS 上运行。其它 ASP 服务器不介绍部署方式，请自行研究。
 
-### ueditor.config.js 配置 ###
-最简单的方法，就是把文件中的 php 都替换成 asp。要修改的配置包括：
+### 配置 ###
+
+对于 v1.4.0 之前的版本，需要修改 `ueditor.config.js`。最简单的方法，就是把文件中的 php 都替换成 asp。要修改的配置包括：
 
 ```javascript
 {
@@ -41,6 +42,30 @@ Classic ASP 一般在 IIS 上运行。其它 ASP 服务器不介绍部署方式�
     ,getMovieUrl:URL+"asp/getMovie.asp"
 }
 ```
+
+UEditor v1.4.0 后进行了后端的统一配置，后端相关的配置文件是 `config.json`，在具体的后台目录下。需要注意以下两个类型的配置：
+
+
+```javascript
+{
+    "{tpl}UrlPrefix": "/ueditor/asp/",
+    "{tpl}PathFormat": "upload/{tpl}/{yyyy}{mm}{dd}/{time}{rand:6}"
+}
+```
+
+`{tpl}PathFormat` 是资源（图片、涂鸦、文件等）保存的位置以及文件名格式，这个路径在 ASP 中是相对运行目录的。
+
+`{tpl}UrlPrefix` 是资源定位的基本路径，在 ASP 后台中一般设置成 ASP 的目录。
+
+比如，IIS 中运行的 UEditor ASP 的目录为 C:\iis_pub\wwwroot\mysite\ueditor\asp，而网站的访问地址为 http://localhost/mysite/，那么你可以这样修改这两类配置项：
+
+```javascript
+{
+    "{tpl}UrlPrefix": "/mysite/ueditor/asp/",
+    "{tpl}PathFormat": "upload/{tpl}/{yyyy}{mm}{dd}/{time}{rand:6}"
+}
+```
+
 
 ### 在 IIS 6.X 中部署
 IIS 的安装在这里不介绍，请自行查阅相关资料。
