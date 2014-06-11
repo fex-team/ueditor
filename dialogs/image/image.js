@@ -274,7 +274,6 @@
                     border: data['border'] || '',
                     floatStyle: data['align'] || '',
                     vspace: data['vhSpace'] || '',
-                    title: data['title'] || '',
                     alt: data['title'] || '',
                     style: "width:" + data['width'] + "px;height:" + data['height'] + "px;"
                 }];
@@ -775,7 +774,6 @@
                 list.push({
                     src: prefix + data.url,
                     _src: prefix + data.url,
-                    title: data.title,
                     alt: data.original,
                     floatStyle: align
                 });
