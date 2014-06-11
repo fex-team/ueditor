@@ -102,9 +102,9 @@
         //,saveInterval: 500
 
         //启用拖放上传
-        //,enableDragUpload: false
+        //,enableDragUpload: true
         //启用粘贴上传
-        //,enablePasteUpload: false
+        //,enablePasteUpload: true
 
         //,fullscreen : false //是否开启初始化时即全屏，默认关闭
 
