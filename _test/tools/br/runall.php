@@ -22,17 +22,17 @@ function run( $b , $debug = false )
             : $browser[ 1 ];
     $browserSet = array_key_exists( 'browserSet' , $_GET )?"^&browserSet=".$_GET[ 'browserSet' ]:'';
 
-    $url = "http://" . $_SERVER[ 'SERVER_ADDR' ] . ( $debug ? "" : ":8089" )
-           . substr( $_SERVER[ 'PHP_SELF' ] , 0 , -11 ) . "/list.php?batchrun=true^&browser=$b".$browserSet;
+    $url = "http://" . $_SERVER[ 'SERVER_ADDR' ] . ( $debug ? "" : ":8080" )
+           . substr( $_SERVER[ 'PHP_SELF' ] , 0 , -11 ) . "/list.php?batchrun=true--_--browser=$b".$browserSet;
     if ( !array_key_exists( "ci" , $_GET ) )
-        $url .= "^&mail=true";
+        $url .= "--_--mail=true";
 
     if(array_key_exists(  "filter" , $_GET  )){
         $filterR = array_key_exists( $b , $_GET )?$_GET[$b]:$_GET['filter'];
         if(strstr($b,'main')||strstr($b,'supp')){
-            $url .= "^&filterRun={$filterR}^&filter={$_GET['filter']}";
+            $url .= "--_--filterRun={$filterR}^&filter={$_GET['filter']}";
         }else {
-            $url .= "^&filterRun={$_GET['filter']}^&filter={$_GET['filter']}";
+            $url .= "--_--filterRun={$_GET['filter']}^&filter={$_GET['filter']}";
 
         }
     }
