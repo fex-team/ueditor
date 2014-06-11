@@ -18,7 +18,11 @@ var docList = [
             {
                 id: 'config',
                 title: '1.4 前端配置项说明'
-            }//,
+            },
+            {
+                id: 'dir',
+                title: '1.5 目录说明'
+            }
 //            {
 //                id: '',
 //                title: '1.5 提交数据说明'
@@ -29,10 +33,6 @@ var docList = [
         id: 'advance',
         title: '2. 进阶使用',
         list: [
-            {
-                id: 'dir',
-                title: '2.1 目录说明'
-            },
             {
                 id: 'upload_video',
                 title: '2.2 上传视频'
