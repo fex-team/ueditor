@@ -61,7 +61,7 @@ UEditor v1.4.0 后进行了后端的统一配置，后端相关的配置文件�
 
 `{tpl}UrlPrefix` 是资源定位的基本路径，在 ASP 后台中一般设置成 ASP 的目录。
 
-比如，IIS 中运行的 UEditor ASP 的目录为 C:\iis_pub\wwwroot\mysite\ueditor\asp，而网站的访问地址为 http://localhost/mysite/，那么你可以这样修改这两类配置项：
+比如，IIS 中运行的 UEditor ASP 的目录为 `C:\iis_pub\wwwroot\mysite\ueditor\asp`，而网站的访问地址为 `http://localhost/mysite/`，那么你可以这样修改这两类配置项：
 
 ```javascript
 {
@@ -72,6 +72,7 @@ UEditor v1.4.0 后进行了后端的统一配置，后端相关的配置文件�
 
 
 ### 在 IIS 6.X 中部署
+
 IIS 的安装在这里不介绍，请自行查阅相关资料。
 
 1. 启用 ASP 拓展
@@ -105,13 +106,14 @@ IIS 的安装在这里不介绍，请自行查阅相关资料。
 	> ASP 文件中也有上传文件大小的限制，不过先验证的限制是 IIS 中设置的，所以如果 IIS 中设置最大 256K，那么就算 ASP 中设置了最大 10M，那么超过 256K 的文件也无法上传，而且 ASP 没法给出错误信息。
 
 ### 在 IIS 7.X 中部署
+
 IIS7 默认不安装 ASP，需要手动添加进去。添加方法请读者自行查阅。
 
 1. 配置脚本执行身份
 	* 选中网站或者应用程序
 	* 双击 IIS 中的*身份验证*
 	* 双击匿名身份验证
-	* 填写*administrator*的用户名和密码，确定
+	* 填写 *administrator* 的用户名和密码（或者你清楚的其他具有目录访问权限的账户），确定
 
 2. 设置最大 HTTP 请求大小限制
     * 打开 IIS 控制台
