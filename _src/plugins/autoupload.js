@@ -162,10 +162,10 @@ UE.plugin.register('autoupload', function (){
 
                     };
 
-                    if (me.getOpt('enablePasteUpload')) {
+                    if (me.getOpt('enablePasteUpload') !== false) {
                         domUtils.on(me.body, 'paste ', handler);
                     }
-                    if (me.getOpt('enableDragUpload')) {
+                    if (me.getOpt('enableDragUpload') !== false) {
                         domUtils.on(me.body, 'drop', handler);
                         //取消拖放图片时出现的文字光标位置提示
                         domUtils.on(me.body, 'dragover', function (e) {
