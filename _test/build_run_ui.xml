@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="getreport" basedir="../"
          xmlns:jsl="antlib:com.googlecode.jslint4java"> <!-- 配置信息 10.48.31.90:8089-->
-    <property name="serverip" value="10.48.31.90:8089"/>
+    <property name="serverip" value="172.22.65.34:8080"/>
     <property name="report.path" value="_test/tools/br/report_ui"/>
     <property name="coverage.path" value="_test/coverage"/>
     <property name="report.file" value="_test/tools/br/report.html"/>
-    <property name="svn.project" value="ueditor_svn"/>
+    <property name="svn.project" value="ueditor_wang"/>
     <property name="git.project" value="ueditor"/>
     <property name="git.user" value=""/>
     <path id="ext.classpath">
