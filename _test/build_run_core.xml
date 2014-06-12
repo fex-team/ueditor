@@ -61,7 +61,7 @@
 
     <target name="executecore" depends="init,coverage">
         <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=core"
-             dest="/tmp/${git.user}_${git.project}core.php"/>
+             dest="C:/Program Files (x86)/Jenkins/tmp/${git.user}_${git.project}core.php"/>
     </target>
     <target name="getreportcore" depends="init,coverage,executecore">
         <waitfor maxwait="3000" maxwaitunit="second">

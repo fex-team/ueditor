@@ -61,7 +61,7 @@
 
     <target name="executeui" depends="init,coverage">
         <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=ui"
-             dest="/tmp/${git.user}_${git.project}ui.php"/>
+             dest="C:/Program Files (x86)/Jenkins/tmp/${git.user}_${git.project}ui.php"/>
     </target>
     <target name="getreportui" depends="init,coverage,executeui">
         <waitfor maxwait="3000" maxwaitunit="second">
