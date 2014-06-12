@@ -61,7 +61,7 @@
     <!--</target>-->
 
     <target name="executeAll" depends="init,coverage">
-        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true"
+        <get src="http://${serverip}/jenkins_workspace/_test/tools/br/runall.php?ci=true&amp;cov=true"
              dest="C:/Program Files (x86)/Jenkins/tmp/${git.user}_${git.project}.php"/>
     </target>
     <target name="getreportAll" depends="init,coverage,executeAll">
@@ -74,7 +74,7 @@
     </target>
 
     <target name="executeIE" depends="init,coverage">
-        <get src="http://${serverip}/${git.project}IE/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;browserSet=ie6_ie7_ie8_ie9"
+        <get src="http://${serverip}/jenkins_workspaceIE/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;browserSet=ie6_ie7_ie8_ie9"
              dest="C:/Program Files (x86)/Jenkins/tmp/${git.user}_${git.project}IE.php"/>
     </target>
     <target name="getreportIE" depends="init,coverage,executeIE">

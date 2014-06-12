@@ -60,7 +60,7 @@
     <!--</target>-->
 
     <target name="executeui" depends="init,coverage">
-        <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=ui"
+        <get src="http://${serverip}/jenkins_workspace/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=ui"
              dest="C:/Program Files (x86)/Jenkins/tmp/${git.user}_${git.project}ui.php"/>
     </target>
     <target name="getreportui" depends="init,coverage,executeui">
