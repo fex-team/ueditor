@@ -6,7 +6,7 @@
     <property name="coverage.path" value="_test/coverage"/>
     <property name="report.file" value="_test/tools/br/report.html"/>
     <property name="svn.project" value="ueditor_wang"/>
-    <property name="git.project" value="ueditor"/>
+    <property name="git.project" value="ueditor_wang"/>
 
     <property name="git.user" value=""/>
     <path id="ext.classpath">
@@ -24,7 +24,7 @@
 
     <target name="coverage">
         <delete dir="${coverage.path}"/>
-        <exec executable="/home/ueditor/jscoverage/bin/jscoverage">
+        <exec executable="C:/Windows/System32/jscoverage.exe">
             <arg value="--encoding=UTF-8"/>
             <arg value="_src"/>
             <arg value="${coverage.path}"/>
