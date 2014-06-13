@@ -96,7 +96,7 @@ $(function(){
             $('#guidebar .nav .nav>li>a[href=' + hash + ']').parent().addClass('active').parent().parent().addClass('active');
             updateDocContent(pathToMd[location.hash.substr(1)]);
         };
-        updateDocContent(pathToMd[location.hash.substr(1)]);
+        updateDocContent(pathToMd[location.hash.substr(1) || 'start-start']);
     } else {
         /* 设置点击连接，更新导航菜单的active状态 */
         $('#guidebar .nav .nav>li>a').click(function(){
