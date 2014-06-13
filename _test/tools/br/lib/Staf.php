@@ -25,6 +25,7 @@ class Staf{
 		if($wait){
 			$cmd.=" wait returnstdout returnstderr";
 		}
+        echo $cmd;
 		return self::process($cmd, $host);
 	}
 

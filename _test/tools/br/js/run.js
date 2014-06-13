@@ -115,6 +115,7 @@ function run( kiss, runnext ) {
         var locsearch = location.search.split('--_--').join('&');
     var url = 'run.php?case=' + kiss + '&time=' + new Date().getTime() + "&"
         + locsearch.substring( 1 );
+    console.log(url);
     // + (location.search.length > 0 ? '&' + location.search.substring(1)
     // : '');
 

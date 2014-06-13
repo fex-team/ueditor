@@ -22,7 +22,7 @@ function run( $b , $debug = false )
             : $browser[ 1 ];
     $browserSet = array_key_exists( 'browserSet' , $_GET )?"^&browserSet=".$_GET[ 'browserSet' ]:'';
 
-    $url = "http://" . $_SERVER[ 'SERVER_ADDR' ] . ( $debug ? "" : ":8080" )
+    $url = "http://" . $_SERVER[ 'SERVER_ADDR' ] . ( $debug ? "" : ":80" )
            . substr( $_SERVER[ 'PHP_SELF' ] , 0 , -11 ) . "/list.php?batchrun=true--_--browser=$b".$browserSet;
     if ( !array_key_exists( "ci" , $_GET ) )
         $url .= "--_--mail=true";
@@ -50,6 +50,7 @@ print $url;
 
     require_once 'lib/Staf.php';
     $result = Staf::process_start( $path , $url , $host );
+    echo $path.$url.$host;
     return $result;
 }
 
@@ -80,6 +81,9 @@ $reportfile = "report_{$_GET['filter']}";
 if ( file_exists( $reportfile ) ) {
     //	rmdir('report');
     $reports = scandir( $reportfile );
+    $basedir = dirname(__FILE__);
+    echo $reportfile;
+
     /*自己和父节点*/
     print 'on batch run, please waiting : ' . ( sizeof( $reports ) - 2 );
     return;
