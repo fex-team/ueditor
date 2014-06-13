@@ -1219,6 +1219,7 @@ h1, h2, h3, h4{
 }
 .ue-docs-main #main{
     width: 100%;
+    min-height: 500px;
 }
 .ue-docs-main{
     font-size: 16px;
