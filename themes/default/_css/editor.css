@@ -75,6 +75,7 @@
     height: 0;
     overflow: hidden;
     border-spacing: 0;
+    margin: 0;
 }
 
 .edui-default .edui-editor-bottomContainer td {
@@ -83,6 +84,7 @@
     line-height: 20px;
     font-size: 12px;
     font-family: Arial, Helvetica, Tahoma, Verdana, Sans-Serif;
+    padding: 0;
 }
 
 .edui-default .edui-editor-wordcount {
