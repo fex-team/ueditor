@@ -8,6 +8,8 @@ UE.plugin.register('autosave', function (){
         //auto save key
         saveKey = null;
 
+    me.setOpt('enableAutoSave', false);
+
     function save ( editor ) {
 
         var saveData;
@@ -65,6 +67,10 @@ UE.plugin.register('autosave', function (){
             },
 
             'contentchange': function () {
+
+                if (me.getOpt('enableAutoSave') === false) {
+                    return;
+                }
 
                 if ( !saveKey ) {
                     return;

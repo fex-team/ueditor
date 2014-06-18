@@ -97,6 +97,9 @@
 
         //,autoClearEmptyNode : true //getContent时，是否删除空的inlineElement节点（包括嵌套的情况）
 
+        //启用消息提示的冒泡
+        //,enableMessageShow: true
+
         //启用自动保存
         //,enableAutoSave: true
         //自动保存间隔时间， 单位ms

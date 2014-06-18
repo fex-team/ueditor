@@ -6,6 +6,11 @@ UE.registerUI('message', function(editor) {
     var _messageItems = [];
     var me = editor;
 
+    me.getOpt('enableMessageShow', true);
+    if (me.getOpt('enableMessageShow') === false) {
+        return;
+    }
+
     me.addListener('ready', function(){
         holder = document.getElementById(me.ui.id + '_message_holder');
         updateHolderPos();
