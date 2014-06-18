@@ -6,7 +6,7 @@ UE.registerUI('message', function(editor) {
     var _messageItems = [];
     var me = editor;
 
-    me.getOpt('enableMessageShow', true);
+    me.setOpt('enableMessageShow', true);
     if (me.getOpt('enableMessageShow') === false) {
         return;
     }

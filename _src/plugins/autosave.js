@@ -8,7 +8,7 @@ UE.plugin.register('autosave', function (){
         //auto save key
         saveKey = null;
 
-    me.setOpt('enableAutoSave', false);
+    me.setOpt('enableAutoSave', true);
 
     function save ( editor ) {
 
