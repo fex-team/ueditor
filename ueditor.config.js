@@ -101,6 +101,11 @@
         //自动保存间隔时间， 单位ms
         //,saveInterval: 500
 
+        //启用拖放上传
+        //,enableDragUpload: true
+        //启用粘贴上传
+        //,enablePasteUpload: true
+
         //,fullscreen : false //是否开启初始化时即全屏，默认关闭
 
         //,imagePopup:true      //图片操作的浮层开关，默认打开
