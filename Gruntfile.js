@@ -42,7 +42,7 @@ module.exports = function (grunt) {
         server = grunt.option('server') || 'php',
         encode = grunt.option('encode') || 'utf8',
         disDir = "dist/",
-        banner = '/*!\n * UEditor\n * version: ' + packageJson.name + '\n * build: <%= new Date() %>\n */\n\n';
+        banner = '/*!\n * ' + packageJson.name + '\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */\n\n';
 
     //init
     (function () {
