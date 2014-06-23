@@ -298,6 +298,9 @@
         //编辑器底部距离工具栏高度(如果参数大于等于编辑器高度，则设置无效)
         //,toolbarTopOffset:400
 
+        //设置远程图片是否抓取到本地保存
+        //,catchRemoteImageEnable: true //设置是否抓取远程图片
+
         //pageBreakTag
         //分页标识符,默认是_ueditor_page_break_tag_
         //,pageBreakTag:'_ueditor_page_break_tag_'
