@@ -95,6 +95,7 @@ $(function(){
             $('#guidebar .nav li').removeClass('active');
             $('#guidebar .nav .nav>li>a[href=' + hash + ']').parent().addClass('active').parent().parent().addClass('active');
             updateDocContent(pathToMd[location.hash.substr(1)]);
+            window.scrollTo(0, 1);
         };
         updateDocContent(pathToMd[location.hash.substr(1) || 'start-start']);
     } else {
@@ -103,6 +104,7 @@ $(function(){
             $('#guidebar .nav li').removeClass('active');
             $(this).parent().addClass('active').parent().parent().addClass('active');
             updateDocContent($(this).text());
+            window.scrollTo(0, 1);
         });
     }
 });
