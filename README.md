@@ -73,17 +73,13 @@ ueditor的更多API请看[API 文档](http://ueditor.baidu.com/doc "ueditor API 
 
 ## 2 详细文档
 
-ueditor 文档：[http://fex.baidu.com/ueditor/](http://fex.baidu.com/ueditor/)
-
-## 3 相关链接
-
 ueditor 官网：[http://ueditor.baidu.com](http://ueditor.baidu.com "ueditor 官网")
 
 ueditor API 文档：[http://ueditor.baidu.com/doc](http://ueditor.baidu.com/doc "ueditor API 文档")
 
 ueditor github 地址：[http://github.com/fex-team/ueditor](http://github.com/fex-team/ueditor "ueditor github 地址")
 
-## 4 联系我们
+## 3 联系我们
 
 email：[ueditor@baidu.com](mailto://email:ueditor@baidu.com "发邮件给ueditor开发组")
 
