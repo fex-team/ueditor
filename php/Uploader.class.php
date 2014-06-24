@@ -284,7 +284,11 @@ class Uploader
             $format = preg_replace("/\{rand\:[\d]*\}/i", substr($randNum, 0, $matches[1]), $format);
         }
 
-        $ext = $this->getFileExt();
+        if($this->fileType){
+            $ext = $this->fileType;
+        } else {
+            $ext = $this->getFileExt();
+        }
         return $format . $ext;
     }
 
