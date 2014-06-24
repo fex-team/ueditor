@@ -179,14 +179,14 @@ class Uploader
             return;
         }
         //获取请求头并检测死链
-        $heads = get_headers($imgUrl);
+        $heads = get_headers($imgUrl, 1);
         if (!(stristr($heads[0], "200") && stristr($heads[0], "OK"))) {
             $this->stateInfo = $this->getStateInfo("ERROR_DEAD_LINK");
             return;
         }
         //格式验证(扩展名验证和Content-Type验证)
         $fileType = strtolower(strrchr($imgUrl, '.'));
-        if (!in_array($fileType, $this->config['allowFiles']) || stristr($heads['Content-Type'], "image")) {
+        if (!in_array($fileType, $this->config['allowFiles']) || !stristr($heads['Content-Type'], "image")) {
             $this->stateInfo = $this->getStateInfo("ERROR_HTTP_CONTENTTYPE");
             return;
         }
