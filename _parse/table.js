@@ -19,7 +19,7 @@ UE.parse.register('table', function (utils) {
                 selector + ' table tr.firstRow th{border-top:2px solid #BBB;background:#F7F7F7;}' +
                 selector + ' tr.ue-table-interlace-color-single td{ background: #fcfcfc; }' +
                 selector + ' tr.ue-table-interlace-color-double td{ background: #f7faff; }' +
-                selector + ' td p{margin:0;padding:0;}',
+                selector + ' td p{margin:0;padding:0;width:auto;height:auto;}',
             document);
         //填充空的单元格
 
