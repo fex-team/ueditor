@@ -34,7 +34,7 @@ UE.parse.register('list',function(utils){
         customCss.push(selector +' .list-paddingleft-1{padding-left:0}');
         customCss.push(selector +' .list-paddingleft-2{padding-left:'+ this.listDefaultPaddingLeft+'px}');
         customCss.push(selector +' .list-paddingleft-3{padding-left:'+ this.listDefaultPaddingLeft*2+'px}');
-        
+
         utils.cssRule('list', selector +' ol,'+selector +' ul{margin:0;padding:0;}\n' + selector + ' li{clear:both;}\n'+customCss.join('\n'), document);
     }
     function applyStyle(nodes){
