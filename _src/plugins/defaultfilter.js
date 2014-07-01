@@ -208,6 +208,7 @@ UE.plugins['defaultfilter'] = function () {
                         if(val && /^_baidu_bookmark_/i.test(val)){
                             node.parentNode.removeChild(node)
                         }
+                        //将color的rgb格式转换为#16进制格式
                         var cssStyle = node.getAttr('style');
                         if(cssStyle){
                             node.setAttr('style',cssStyle.replace(/rgba?\(([\d,\s]+)\)/g,function(a,value){
