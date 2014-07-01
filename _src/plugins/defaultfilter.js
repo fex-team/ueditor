@@ -208,6 +208,21 @@ UE.plugins['defaultfilter'] = function () {
                         if(val && /^_baidu_bookmark_/i.test(val)){
                             node.parentNode.removeChild(node)
                         }
+                        var cssStyle = node.getAttr('style');
+                        if(cssStyle){
+                            node.setAttr('style',cssStyle.replace(/rgba?\(([\d,\s]+)\)/g,function(a,value){
+                                var array = value.split(",");
+                                if (array.length > 3)
+                                    return "";
+                                value = "#";
+                                for (var i = 0, color; color = array[i++];) {
+                                    color = parseInt(color.replace(/[^\d]/gi, ''), 10).toString(16);
+                                    value += color.length == 1 ? "0" + color : color;
+                                }
+                                return value.toUpperCase();
+
+                            }))
+                        }
                         break;
                     case 'img':
                         if (val = node.getAttr('_src')) {
