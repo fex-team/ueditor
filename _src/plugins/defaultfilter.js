@@ -6,7 +6,7 @@ UE.plugins['defaultfilter'] = function () {
     me.setOpt({
         'allowDivTransToP':true,
         'disabledTableInTable':true,
-        'rgb2hex':true
+        'rgb2Hex':true
     });
     //默认的过滤处理
     //进入编辑器的内容处理
@@ -210,7 +210,7 @@ UE.plugins['defaultfilter'] = function () {
                             node.parentNode.removeChild(node)
                         }
                         //将color的rgb格式转换为#16进制格式
-                        if(me.getOpt('rgb2hex')){
+                        if(me.getOpt('rgb2Hex')){
                             var cssStyle = node.getAttr('style');
                             if(cssStyle){
                                 node.setAttr('style',cssStyle.replace(/rgba?\(([\d,\s]+)\)/g,function(a,value){

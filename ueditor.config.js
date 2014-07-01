@@ -326,7 +326,7 @@
         //表格是否可以拖拽
         //,tableDragable: true
 
-        //,disabledTableInTable:true  //禁止表格嵌套
+
 
         //sourceEditor
         //源码的查看方式,codemirror 是代码高亮，textarea是文本框,默认是codemirror
@@ -348,6 +348,11 @@
 
         //webAppKey 百度应用的APIkey，每个站长必须首先去百度官网注册一个key后方能正常使用app功能，注册介绍，http://app.baidu.com/static/cms/getapikey.html
         //, webAppKey: ""
+
+        //默认过滤规则相关配置项目
+        //,disabledTableInTable:true  //禁止表格嵌套
+        //,allowDivTransToP:true      //允许进入编辑器的div标签自动变成p标签
+        //,rgb2Hex:true               //默认产出的数据中的color自动从rgb格式变成16进制格式
     };
 
     function getUEBasePath(docUrl, confUrl) {
