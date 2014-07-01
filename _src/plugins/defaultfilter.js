@@ -5,7 +5,8 @@ UE.plugins['defaultfilter'] = function () {
     var me = this;
     me.setOpt({
         'allowDivTransToP':true,
-        'disabledTableInTable':true
+        'disabledTableInTable':true,
+        'rgb2hex':true
     });
     //默认的过滤处理
     //进入编辑器的内容处理
@@ -209,20 +210,22 @@ UE.plugins['defaultfilter'] = function () {
                             node.parentNode.removeChild(node)
                         }
                         //将color的rgb格式转换为#16进制格式
-                        var cssStyle = node.getAttr('style');
-                        if(cssStyle){
-                            node.setAttr('style',cssStyle.replace(/rgba?\(([\d,\s]+)\)/g,function(a,value){
-                                var array = value.split(",");
-                                if (array.length > 3)
-                                    return "";
-                                value = "#";
-                                for (var i = 0, color; color = array[i++];) {
-                                    color = parseInt(color.replace(/[^\d]/gi, ''), 10).toString(16);
-                                    value += color.length == 1 ? "0" + color : color;
-                                }
-                                return value.toUpperCase();
+                        if(me.getOpt('rgb2hex')){
+                            var cssStyle = node.getAttr('style');
+                            if(cssStyle){
+                                node.setAttr('style',cssStyle.replace(/rgba?\(([\d,\s]+)\)/g,function(a,value){
+                                    var array = value.split(",");
+                                    if (array.length > 3)
+                                        return "";
+                                    value = "#";
+                                    for (var i = 0, color; color = array[i++];) {
+                                        color = parseInt(color.replace(/[^\d]/gi, ''), 10).toString(16);
+                                        value += color.length == 1 ? "0" + color : color;
+                                    }
+                                    return value.toUpperCase();
 
-                            }))
+                                }))
+                            }
                         }
                         break;
                     case 'img':
