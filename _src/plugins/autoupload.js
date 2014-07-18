@@ -33,8 +33,7 @@ UE.plugin.register('autoupload', function (){
 
         if (filetype == 'image') {
             loadingHtml = '<img class="loadingclass" id="' + loadingId + '" src="' +
-                me.options.themePath + me.options.theme +
-                '/images/spacer.gif" title="' + (me.getLang('autoupload.loading') || '') + '" >';
+                me.options.themePath + me.options.theme + '/images/spacer.gif">';
             successHandler = function(data) {
                 var link = urlPrefix + data.url,
                     loader = me.document.getElementById(loadingId);
@@ -50,8 +49,7 @@ UE.plugin.register('autoupload', function (){
         } else {
             loadingHtml = '<p>' +
                 '<img class="loadingclass" id="' + loadingId + '" src="' +
-                me.options.themePath + me.options.theme +
-                '/images/spacer.gif" title="' + (me.getLang('autoupload.loading') || '') + '" >' +
+                me.options.themePath + me.options.theme + '/images/spacer.gif">' +
                 '</p>';
             successHandler = function(data) {
 
