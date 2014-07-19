@@ -69,11 +69,11 @@ UE.plugin.register('simpleupload', function (){
                         link = me.options.imageUrlPrefix + json.url;
                         if(json.state == 'SUCCESS' && json.url) {
                             loader = me.document.getElementById(loadingId);
+                            domUtils.removeClasses(loader, 'loadingclass');
                             loader.setAttribute('src', link);
                             loader.setAttribute('_src', link);
                             loader.setAttribute('alt', json.original || '');
                             loader.removeAttribute('id');
-                            domUtils.removeClasses(loader, 'loadingclass');
                         } else {
                             showErrorLoader && showErrorLoader(json.state);
                         }

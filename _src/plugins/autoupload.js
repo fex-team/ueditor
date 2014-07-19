@@ -38,11 +38,11 @@ UE.plugin.register('autoupload', function (){
                 var link = urlPrefix + data.url,
                     loader = me.document.getElementById(loadingId);
                 if (loader) {
+                    domUtils.removeClasses(loader, 'loadingclass');
                     loader.setAttribute('src', link);
                     loader.setAttribute('_src', link);
                     loader.setAttribute('alt', data.original || '');
                     loader.removeAttribute('id');
-                    domUtils.removeClasses(loader, 'loadingclass');
                     me.trigger('contentchange',loader);
                 }
             };
