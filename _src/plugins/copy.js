@@ -35,6 +35,10 @@ UE.plugin.register('copy', function () {
         client.on('wrongflash noflash', function () {
             ZeroClipboard.destroy();
         });
+
+        // 触发事件
+        me.fire('zeroclipboardready');
+
     }
 
     return {
