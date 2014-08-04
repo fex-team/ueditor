@@ -37,7 +37,7 @@ UE.plugin.register('copy', function () {
         });
 
         // 触发事件
-        me.fire('zeroclipboardready');
+        me.fireEvent('zeroclipboardready');
 
     }
 
