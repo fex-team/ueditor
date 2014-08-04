@@ -102,17 +102,13 @@
         //自动保存间隔时间， 单位ms
         //,saveInterval: 500
 
+        //启用拖放上传
+        //,enableDragUpload: true
+        //启用粘贴上传
+        //,enablePasteUpload: true
 
-        //启用拖放上传
-        //,enableDragUpload: true
-        //启用粘贴上传
-        //,enablePasteUpload: true
-        
-        
-        //启用拖放上传
-        //,enableDragUpload: true
-        //启用粘贴上传
-        //,enablePasteUpload: true
+        //启用图片拉伸缩放
+        //,imageScaleEnabled: true
 
         //,fullscreen : false //是否开启初始化时即全屏，默认关闭
 
