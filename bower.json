@@ -1,0 +1,26 @@
+{
+  "name": "ueditor",
+  "version": "1.4.3",
+  "homepage": "https://github.com/GeorgeXu/ueditor",
+  "authors": [
+    "GeorgeXu <xuge123@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "_*",
+    "asp",
+    "dialogs",
+    "jsp",
+    "net",
+    "php",
+    "themes",
+    "third-party"
+    "lang"
+  ]
+}
