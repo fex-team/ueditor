@@ -53,6 +53,7 @@ UE.registerUI('message', function(editor) {
     });
 
     function updateHolderPos(){
+        if (holder || me.ui) return;
         var toolbarbox = me.ui.getDom('toolbarbox');
         if (toolbarbox) {
             holder.style.top = toolbarbox.offsetHeight + 3 + 'px';
