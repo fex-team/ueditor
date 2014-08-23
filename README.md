@@ -79,9 +79,9 @@ ueditor API 文档：[http://ueditor.baidu.com/doc](http://ueditor.baidu.com/doc
 
 ueditor github 地址：[http://github.com/fex-team/ueditor](http://github.com/fex-team/ueditor "ueditor github 地址")
 
-## 3 第三方
+## 3 第三方贡献
 
-nodejs 参考[https://github.com/netpi/ueditor](https://github.com/netpi/ueditor)
+ueditor for nodejs 参考[https://github.com/netpi/ueditor](https://github.com/netpi/ueditor)
 
 ## 4 联系我们
 
