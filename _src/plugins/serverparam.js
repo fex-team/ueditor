@@ -93,9 +93,9 @@ UE.plugin.register('serverparam', function (){
                             serverParam[key] = value;
                         }
                     } else if (utils.isObject(key)) { //传入对象,覆盖列表项
-                        utils.extend(serverParam, key, true);
+                        utils.extend(serverParam, key, false);
                     } else if (utils.isFunction(key)){ //传入函数,添加列表项
-                        utils.extend(serverParam, key(), true);
+                        utils.extend(serverParam, key(), false);
                     }
                 },
                 queryCommandValue: function(){
