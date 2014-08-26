@@ -24,7 +24,7 @@
 
     <target name="coverage">
         <delete dir="${coverage.path}"/>
-        <exec executable="C:/Windows/System32/jscoverage.exe">
+        <exec executable="/home/ueditor/jscoverage/bin/jscoverage">
             <arg value="--encoding=UTF-8"/>
             <arg value="_src"/>
             <arg value="${coverage.path}"/>
