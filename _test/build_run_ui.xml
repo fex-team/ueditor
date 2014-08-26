@@ -5,8 +5,8 @@
     <property name="report.path" value="_test/tools/br/report_ui"/>
     <property name="coverage.path" value="_test/coverage"/>
     <property name="report.file" value="_test/tools/br/report.html"/>
-    <property name="svn.project" value="ueditor_wang"/>
-    <property name="git.project" value="ueditor_wang"/>
+    <property name="svn.project" value="ueditor_svn"/>
+    <property name="git.project" value="ueditor"/>
     <property name="git.user" value=""/>
     <path id="ext.classpath">
         <fileset dir="_test/tools/lib">
