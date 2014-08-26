@@ -18,39 +18,38 @@ function run( $b , $debug = false )
     $browser = Config::$BROWSERS[ $b ];
     $host = $debug ? 'localhost' : $browser[ 0 ];
     $path = $debug
-            ? 'C:\\Documents and Settings\\shenlixia01\\Local Settings\\Application Data\\Google\Chrome\\Application\\chrome.exe'
-            : $browser[ 1 ];
+        ? 'C:\\Documents and Settings\\shenlixia01\\Local Settings\\Application Data\\Google\Chrome\\Application\\chrome.exe'
+        : $browser[ 1 ];
     $browserSet = array_key_exists( 'browserSet' , $_GET )?"^&browserSet=".$_GET[ 'browserSet' ]:'';
 
-    $url = "http://" . $_SERVER[ 'SERVER_ADDR' ] . ( $debug ? "" : ":80" )
-           . substr( $_SERVER[ 'PHP_SELF' ] , 0 , -11 ) . "/list.php?batchrun=true--_--browser=$b".$browserSet;
+    $url = "http://" . $_SERVER[ 'SERVER_ADDR' ] . ( $debug ? "" : ":8089" )
+        . substr( $_SERVER[ 'PHP_SELF' ] , 0 , -11 ) . "/list.php?batchrun=true^&browser=$b".$browserSet;
     if ( !array_key_exists( "ci" , $_GET ) )
-        $url .= "--_--mail=true";
+        $url .= "^&mail=true";
 
     if(array_key_exists(  "filter" , $_GET  )){
         $filterR = array_key_exists( $b , $_GET )?$_GET[$b]:$_GET['filter'];
         if(strstr($b,'main')||strstr($b,'supp')){
-            $url .= "--_--filterRun={$filterR}^&filter={$_GET['filter']}";
+            $url .= "^&filterRun={$filterR}^&filter={$_GET['filter']}";
         }else {
-            $url .= "--_--filterRun={$_GET['filter']}^&filter={$_GET['filter']}";
+            $url .= "^&filterRun={$_GET['filter']}^&filter={$_GET['filter']}";
 
         }
     }
 
 //    if( $b!='ie6') {
-        if ( array_key_exists( 'cov' , $_GET ) )
-            $url .= "^&cov={$_GET['cov']}";
+    if ( array_key_exists( 'cov' , $_GET ) )
+        $url .= "^&cov={$_GET['cov']}";
 //    }
     //	else
     //	$url .= "^&cov=true";
-print $url;
+    print $url;
     if ( $b == 'baidu' ) {
         $url = "--'$url'";
     }
 
     require_once 'lib/Staf.php';
     $result = Staf::process_start( $path , $url , $host );
-    echo $path.$url.$host;
     return $result;
 }
 
@@ -81,9 +80,6 @@ $reportfile = "report_{$_GET['filter']}";
 if ( file_exists( $reportfile ) ) {
     //	rmdir('report');
     $reports = scandir( $reportfile );
-    $basedir = dirname(__FILE__);
-    echo $reportfile;
-
     /*自己和父节点*/
     print 'on batch run, please waiting : ' . ( sizeof( $reports ) - 2 );
     return;

@@ -112,10 +112,8 @@ function run( kiss, runnext ) {
     /**
      * 初始化执行区并通过嵌入iframe启动用例执行
      */
-        var locsearch = location.search.split('--_--').join('&');
     var url = 'run.php?case=' + kiss + '&time=' + new Date().getTime() + "&"
-        + locsearch.substring( 1 );
-    console.log(url);
+        + location.search.substring( 1 );
     // + (location.search.length > 0 ? '&' + location.search.substring(1)
     // : '');
 
@@ -259,7 +257,7 @@ function covcalc() {
                 (recordCovForBrowser==null)?(recordCovForBrowser='0'):(recordCovForBrowser +=',0');
                 missing.push( lineNumber );
             } else {
-                 (recordCovForBrowser==null)?(recordCovForBrowser='1'):(recordCovForBrowser +=',1');
+                (recordCovForBrowser==null)?(recordCovForBrowser='1'):(recordCovForBrowser +=',1');
                 num_executed++;
             }
             num_statements++;
