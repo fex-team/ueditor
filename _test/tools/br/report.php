@@ -59,14 +59,13 @@ function report()
     $suite = $dom->appendChild($dom->createElement('testsuite'));
     $cfg = preg_split('/[&=]/', $_POST['config']);
     $config = array();
-    for ($i = 0; $i < sizeof($cfg); $i++) {
+    for ($i = 0; $i < sizeof($cfg); $i += 2) {
         //	echo "{$cfg[$i]} {$cfg[$i+1]}\r\n<br />";
-        $info = explode("=" , $cfg[$i]);
-        $config[$info[0]] = $info[1];
+        $config[$cfg[$i]] = $cfg[$i + 1];
         $p = $suite->appendChild($dom->createElement("property"));
 
-        $p->setAttribute('name', $cfg[0]);
-        $p->setAttribute('value', $cfg[1]);
+        $p->setAttribute('name', $cfg[$i]);
+        $p->setAttribute('value', $cfg[$i + 1]);
 
     }
     $suite->setAttribute("name", $config['browser']);

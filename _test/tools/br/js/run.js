@@ -257,7 +257,7 @@ function covcalc() {
                 (recordCovForBrowser==null)?(recordCovForBrowser='0'):(recordCovForBrowser +=',0');
                 missing.push( lineNumber );
             } else {
-                (recordCovForBrowser==null)?(recordCovForBrowser='1'):(recordCovForBrowser +=',1');
+                 (recordCovForBrowser==null)?(recordCovForBrowser='1'):(recordCovForBrowser +=',1');
                 num_executed++;
             }
             num_statements++;

@@ -18,12 +18,12 @@ function run( $b , $debug = false )
     $browser = Config::$BROWSERS[ $b ];
     $host = $debug ? 'localhost' : $browser[ 0 ];
     $path = $debug
-        ? 'C:\\Documents and Settings\\shenlixia01\\Local Settings\\Application Data\\Google\Chrome\\Application\\chrome.exe'
-        : $browser[ 1 ];
+            ? 'C:\\Documents and Settings\\shenlixia01\\Local Settings\\Application Data\\Google\Chrome\\Application\\chrome.exe'
+            : $browser[ 1 ];
     $browserSet = array_key_exists( 'browserSet' , $_GET )?"^&browserSet=".$_GET[ 'browserSet' ]:'';
 
     $url = "http://" . $_SERVER[ 'SERVER_ADDR' ] . ( $debug ? "" : ":8089" )
-        . substr( $_SERVER[ 'PHP_SELF' ] , 0 , -11 ) . "/list.php?batchrun=true^&browser=$b".$browserSet;
+           . substr( $_SERVER[ 'PHP_SELF' ] , 0 , -11 ) . "/list.php?batchrun=true^&browser=$b".$browserSet;
     if ( !array_key_exists( "ci" , $_GET ) )
         $url .= "^&mail=true";
 
@@ -38,12 +38,12 @@ function run( $b , $debug = false )
     }
 
 //    if( $b!='ie6') {
-    if ( array_key_exists( 'cov' , $_GET ) )
-        $url .= "^&cov={$_GET['cov']}";
+        if ( array_key_exists( 'cov' , $_GET ) )
+            $url .= "^&cov={$_GET['cov']}";
 //    }
     //	else
     //	$url .= "^&cov=true";
-    print $url;
+print $url;
     if ( $b == 'baidu' ) {
         $url = "--'$url'";
     }

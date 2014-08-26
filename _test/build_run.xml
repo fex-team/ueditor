@@ -86,16 +86,16 @@
         </waitfor>
     </target>
 
-    <!--    <target name="executeExceptIE6" depends="init,coverage">
-            <get src="http://${serverip}/${svn.project}ExceptIE6/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;browserSet=chrome_firefox_opera_360ie7_360ie8_safari"
-                 dest="/tmp/${git.user}_${svn.project}ExceptIE6.php"/>
-        </target>
-        <target name="getreportExceptIE6" depends="init,coverage,executeExceptIE6">
-            <waitfor maxwait="3000" maxwaitunit="second">
-                <available file="${report.file}"/>
-            </waitfor>
-            <waitfor maxwait="10" maxwaitunit="second">
-                <istrue value="false"/>
-            </waitfor>
-        </target>-->
+<!--    <target name="executeExceptIE6" depends="init,coverage">
+        <get src="http://${serverip}/${svn.project}ExceptIE6/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;browserSet=chrome_firefox_opera_360ie7_360ie8_safari"
+             dest="/tmp/${git.user}_${svn.project}ExceptIE6.php"/>
+    </target>
+    <target name="getreportExceptIE6" depends="init,coverage,executeExceptIE6">
+        <waitfor maxwait="3000" maxwaitunit="second">
+            <available file="${report.file}"/>
+        </waitfor>
+        <waitfor maxwait="10" maxwaitunit="second">
+            <istrue value="false"/>
+        </waitfor>
+    </target>-->
 </project>
