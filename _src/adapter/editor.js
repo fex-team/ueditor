@@ -752,10 +752,6 @@
 
 
                             }
-                            if(holder.id){
-                                newDiv.id = holder.id;
-                                domUtils.removeAttributes(holder,'id');
-                            }
                             holder = newDiv;
                             holder.innerHTML = '';
                         }
