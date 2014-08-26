@@ -23,6 +23,7 @@
 //                , 'ie7' => array( '10.81.58.87@8500' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
 //                , 'opera' => array( '10.81.58.64@8500' , "C:\\Program Files\\Opera\\opera.exe" )
 //                , 'safari' => array( '10.81.58.63@8500' , "C:\\Program Files\\Safari\\Safari.exe" )
+                
                 );
 
                 public static $DEBUG = false;
