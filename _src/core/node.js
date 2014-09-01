@@ -31,7 +31,7 @@
      *     type:'element',
      *     tagName:'span',
      *     attrs:{style:'font-size:14px;'}
-     * }
+     * })
      * ```
      */
     var uNode = UE.uNode = function (obj) {
