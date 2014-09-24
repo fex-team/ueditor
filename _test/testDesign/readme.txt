@@ -1,1 +1,0 @@
-用例统一维护在: https://github.com/yancend/testDesign/
