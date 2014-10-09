@@ -303,7 +303,7 @@
         //,toolbarTopOffset:400
 
         //设置远程图片是否抓取到本地保存
-        //,catchRemoteImageEnable: true //设置是否抓取远程图片
+        ,catchRemoteImageEnable: false //设置是否抓取远程图片
 
         //pageBreakTag
         //分页标识符,默认是_ueditor_page_break_tag_
