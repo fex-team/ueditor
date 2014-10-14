@@ -42,7 +42,7 @@ public final class ConfigManager {
 		
 		this.contextPath = contextPath;
 		
-		if ( contextPath.length() > 0 ) {
+		if ( contextPath.length() > 0 && rootPath.endsWith(contextPath)) {
 			this.rootPath = rootPath.substring( 0, rootPath.length() - contextPath.length() );
 		} else {
 			this.rootPath = rootPath;
