@@ -407,7 +407,6 @@ class Uploader
 		imagejpeg($target_image,$source_path);
 		imagedestroy($source_image);
 		imagedestroy($target_image);
-		imagedestroy($cropped_image);
 	}
 
 }
