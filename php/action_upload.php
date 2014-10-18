@@ -14,7 +14,9 @@ switch (htmlspecialchars($_GET['action'])) {
         $config = array(
             "pathFormat" => $CONFIG['imagePathFormat'],
             "maxSize" => $CONFIG['imageMaxSize'],
-            "allowFiles" => $CONFIG['imageAllowFiles']
+            "allowFiles" => $CONFIG['imageAllowFiles'],
+            "imageSimpleUploadMaxWidth" => $CONFIG['imageSimpleUploadMaxWidth'],
+            "imageSimpleUploadMaxHeight" => $CONFIG['imageSimpleUploadMaxHeight']
         );
         $fieldName = $CONFIG['imageFieldName'];
         break;
