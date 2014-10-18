@@ -350,5 +350,64 @@ class Uploader
             "size" => $this->fileSize
         );
     }
+    /**
+     * 基于GD库的图片缩放
+     * imagecropper
+     * 2014-10-18
+     * xinghl
+     * Uploader
+     */
+	public function imagecropper($source_path, $target_width, $target_height)
+	{
+		$source_info   = getimagesize($source_path);
+		$source_width  = $source_info[0];
+		$source_height = $source_info[1];
+		$source_mime   = $source_info['mime'];
+	
+		if($source_width > $target_width){
+			$target_height=$target_width*$source_height/$source_width;
+			$source_x=0;
+			$source_y=($target_width-$target_height)/2;
+		}elseif($source_height > $target_height){
+			$target_width=$source_width/$source_height*$target_height;
+			$source_x=($target_height-$target_width)/2;
+			$source_y=0;
+		}else{
+			$target_width  = $source_width;
+			$target_height = $source_height;
+			$source_x = 0;
+			$source_y = 0;
+		}
+		
+		
+		switch ($source_mime)
+		{
+			case 'image/gif':
+				$source_image = imagecreatefromgif($source_path);
+				break;
+	
+			case 'image/jpeg':
+				$source_image = imagecreatefromjpeg($source_path);
+				break;
+	
+			case 'image/png':
+				$source_image = imagecreatefrompng($source_path);
+				break;
+	
+			default:
+				return false;
+				break;
+		}
+	
+		$target_image  = imagecreatetruecolor($target_width, $target_height);
+	
+		// 缩放
+		imagecopyresampled($target_image, $source_image, 0, 0, 0, 0, $target_width, $target_height, $source_width, $source_height);
+	
+		imagejpeg($target_image,$source_path);
+		imagedestroy($source_image);
+		imagedestroy($target_image);
+		imagedestroy($cropped_image);
+	}
 
 }
