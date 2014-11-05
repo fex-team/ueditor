@@ -120,8 +120,8 @@ var domUtils = dom.domUtils = {
      * ```
      */
     getPosition:function (nodeA, nodeB) {
-        if (node1 && node1.compareDocumentPosition) {
-            return node1.compareDocumentPosition(node2);
+        if (nodeA && nodeA.compareDocumentPosition) {
+            return nodeA.compareDocumentPosition(nodeB);
         }
         // 如果两个节点是同一个节点
         if (nodeA === nodeB) {
