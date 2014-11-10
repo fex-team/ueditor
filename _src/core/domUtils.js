@@ -201,11 +201,11 @@ var domUtils = dom.domUtils = {
      *
      * ```
      */
-    getNodeIndex:function (node, ignoreTextNode) {
+    getNodeIndex:function (node, mergeTextNode) {
         var preNode = node,
             i = 0;
         while (preNode = preNode.previousSibling) {
-            if (ignoreTextNode && preNode.nodeType == 3) {
+            if (mergeTextNode && preNode.nodeType == 3) {
                 if(preNode.nodeType != preNode.nextSibling.nodeType ){
                     i++;
                 }
