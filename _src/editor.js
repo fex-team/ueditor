@@ -4,7 +4,7 @@ var baidu = window.baidu || {};
 
 window.baidu = baidu;
 
-window.UE = baidu.editor =  window.UE || {
+window.UE = baidu.editor = {
     plugins:{},
     commands:{},
     instants:{},
@@ -12,5 +12,4 @@ window.UE = baidu.editor =  window.UE || {
     _customizeUI:{},
     version:'1.5.0'
 };
-
 var dom = UE.dom = {};
