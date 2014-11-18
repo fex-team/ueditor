@@ -6,6 +6,7 @@ class Staf{
 		$_cmd = "staf $host $src $cmd";
 
 		//print $_cmd;
+        echo $_cmd;
 		exec($_cmd, $back);
 		return StafResult::parse($back);
 	}
