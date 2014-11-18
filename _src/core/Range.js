@@ -1281,6 +1281,12 @@
                         domUtils.setAttributes(elm, attrs);
                     }
                     elm.appendChild(frag);
+                    //针对嵌套span的全局样式指定，做容错处理
+                    if(elm.tagName == 'SPAN' && attrs && attrs.style){
+                        utils.each(elm.getElementsByTagName('span'),function(s){
+                            s.style.cssText = s.style.cssText + ';' + attrs.style;
+                        })
+                    }
                     range.insertNode(list ? top : elm);
                     //处理下滑线在a上的情况
                     var aNode;
