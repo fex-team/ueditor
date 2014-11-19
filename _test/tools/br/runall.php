@@ -43,7 +43,7 @@ function run( $b , $debug = false )
 //    }
     //	else
     //	$url .= "^&cov=true";
-print $url;
+print "wangnew--".$url;
     if ( $b == 'baidu' ) {
         $url = "--'$url'";
     }
