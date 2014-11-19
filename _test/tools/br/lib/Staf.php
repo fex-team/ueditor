@@ -3,12 +3,13 @@ include 'StafResult.php';
 
 class Staf{
 	public static function handle($src, $cmd, $host='local'){
-		$_cmd = "staf $host $src $cmd";
+		$_cmd = "/usr/local/staf/bin/"."staf $host $src $cmd";
 
 		//print $_cmd;
         echo "wangnew2---".$_cmd."\n";
         echo "wangold2---".$back."\n";
 		exec($_cmd, $back);
+        echo $back;
 		return StafResult::parse($back);
 	}
 
