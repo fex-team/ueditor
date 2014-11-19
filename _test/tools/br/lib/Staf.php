@@ -9,7 +9,7 @@ class Staf{
         echo "wangnew2---".$_cmd."\n";
         echo "wangold2---".$back."\n";
 		exec($_cmd, $back);
-        echo $back;
+        echo "+-".$back."-+";
         var_dump($back);
 		return StafResult::parse($back);
 	}
