@@ -9,7 +9,7 @@ class Staf{
         echo "wangnew2---".$_cmd."\n";
         echo "wangold2---".$back."\n";
 		$wand = exec($_cmd, $back);
-        exec("STAF 10.94.26.95 PROCESS START COMMAND notepad");
+//        exec("/usr/local/staf/bin/STAF 10.94.26.95 PROCESS START COMMAND notepad");
         echo "+-".$back."-+";
         var_dump($back);
         echo $wand."\n";
