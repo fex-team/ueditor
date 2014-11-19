@@ -8,9 +8,10 @@ class Staf{
 		//print $_cmd;
         echo "wangnew2---".$_cmd."\n";
         echo "wangold2---".$back."\n";
-		exec($_cmd, $back);
+		$wand = exec($_cmd, $back);
         echo "+-".$back."-+";
         var_dump($back);
+        echo $wand."\n";
 		return StafResult::parse($back);
 	}
 
