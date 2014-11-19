@@ -10,6 +10,7 @@ class Staf{
         echo "wangold2---".$back."\n";
 		exec($_cmd, $back);
         echo $back;
+        var_dump($back);
 		return StafResult::parse($back);
 	}
 
