@@ -70,6 +70,14 @@ function delDirAndFile( $dirName )
     }
 }
 
+$filewang = fopen('wangruilog.txt', 'a+');
+fwrite($filewang, "wangrui1" . "\n");
+
+fclose($filewang);
+unset($filewang);
+
+
+
 if ( array_key_exists( 'clear' , $_GET ) ) {
     print 'debug - clear report';
     //Config::StopAll();

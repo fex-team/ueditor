@@ -3,9 +3,10 @@
         {
                 public static $BROWSERS = array(
                     'ie8supp' => array( '10.94.26.94' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
-//                , 'ie11main' => array( '10.81.96.68' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
-
                 ,
+//                    'ie11main' => array( '10.81.96.68' , "C:\\Program Files\\Internet Explorer\\iexplore.exe" )
+
+//                ,
                     'firefox' => array( '10.94.26.95' , "C:\\Program Files\\mozilla firefox\\firefox.exe" )
 //                    'firefox' => array( '10.81.96.46@8500' , "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" )
 //                , '360ie8' => array('10.81.58.64@8500',"C:\\Program Files\\360\\360se\\360SE.exe")
