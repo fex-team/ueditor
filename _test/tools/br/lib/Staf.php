@@ -23,7 +23,7 @@ class Staf{
 	 * @param $host
 	 */
 	public static function process_start($path, $params, $host='local', $wait=false){
-		$cmd = "start shell command \\\"\"$path\"\\\" parms \\\"\"$params\"\\\"";
+		$cmd = "start command \\\"\"$path\"\\\" parms \\\"\"$params\"\\\"";
 		if($wait){
 			$cmd.=" wait returnstdout returnstderr";
 		}
