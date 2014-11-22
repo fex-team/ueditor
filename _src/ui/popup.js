@@ -81,11 +81,12 @@
                     _top = uiUtils.getClientRect( this.combox.getDom() ).top,
                     content = this.getDom('content'),
                     ifr = this.getDom('body').getElementsByTagName('iframe'),
-                    me = this;
+                    me = this,
+                    scrollTop = document.getElementsByTagName('body')[0].scrollTop;
 
                 ifr.length && ( ifr = ifr[0] );
-
-                while( _top + _height > winHeight ) {
+                
+                while( _top + _height > winHeight + scrollTop) { 
                     _height -= 30;
                 }
                 content.style.height = _height + 'px';
