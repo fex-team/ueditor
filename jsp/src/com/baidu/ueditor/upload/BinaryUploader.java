@@ -77,7 +77,13 @@ public class BinaryUploader {
 			is.close();
 
 			if (storageState.isSuccess()) {
-				storageState.putInfo("url", PathFormat.format(savePath));
+				String contextPath = request.getContextPath();
+				if (contextPath.length() > 0) {
+					storageState.putInfo("url", contextPath + PathFormat.format(savePath));
+				} else {
+					storageState.putInfo("url", PathFormat.format(savePath));
+				}
+				//storageState.putInfo("url", PathFormat.format(savePath));
 				storageState.putInfo("type", suffix);
 				storageState.putInfo("original", originFileName + suffix);
 			}
