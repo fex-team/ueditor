@@ -46,7 +46,7 @@ class Uploader
      * 构造函数
      * @param string $fileField 表单名称
      * @param array $config 配置项
-     * @param bool $base64 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
+	 * @param string $type	处理文件上传的方式
      */
     public function __construct($fileField, $config, $type = "upload")
     {
