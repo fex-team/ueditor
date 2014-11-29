@@ -74,6 +74,7 @@ UE.plugin.register('simpleupload', function (){
                             loader.setAttribute('_src', link);
                             loader.setAttribute('alt', json.original || '');
                             loader.removeAttribute('id');
+                            me.fireEvent('contentChange');
                         } else {
                             showErrorLoader && showErrorLoader(json.state);
                         }
