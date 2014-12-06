@@ -17,16 +17,17 @@ public class FileManager {
 
 	private String dir = null;
 	private String rootPath = null;
+	private String contextPath = null;
 	private String[] allowFiles = null;
 	private int count = 0;
 	
 	public FileManager ( Map<String, Object> conf ) {
 
 		this.rootPath = (String)conf.get( "rootPath" );
+		this.contextPath = (String)conf.get("contextPath");
 		this.dir = this.rootPath + (String)conf.get( "dir" );
 		this.allowFiles = this.getAllowFiles( conf.get("allowFiles") );
-		this.count = (Integer)conf.get( "count" );
-		
+		this.count = (Integer)conf.get( "count" );		
 	}
 	
 	public State listFile ( int index ) {
@@ -81,10 +82,16 @@ public class FileManager {
 	
 	private String getPath ( File file ) {
 		
-		String path = PathFormat.format( file.getAbsolutePath() );
-		
-		return path.replace( this.rootPath, "/" );
-		
+		String path = file.getAbsolutePath();
+		//FIXME:兼容tomcat与jetty
+		//application.getRealPath( "/" )，两者获取的不一致，
+		//tomcat后面带多带一个字符：/
+		String temp = this.rootPath;
+		if(this.rootPath.endsWith(File.separator)){
+			temp = this.rootPath.substring(0, this.rootPath.length()-1);
+		}
+		String getPath = path.replace(temp, this.contextPath);
+		return getPath;
 	}
 	
 	private String[] getAllowFiles ( Object fileExt ) {

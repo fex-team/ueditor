@@ -6,6 +6,7 @@ import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.FileType;
 import com.baidu.ueditor.define.State;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -70,14 +71,19 @@ public class BinaryUploader {
 			savePath = PathFormat.parse(savePath, originFileName);
 
 			String physicalPath = (String) conf.get("rootPath") + savePath;
-
+			
 			InputStream is = fileStream.openStream();
 			State storageState = StorageManager.saveFileByInputStream(is,
 					physicalPath, maxSize);
 			is.close();
 
 			if (storageState.isSuccess()) {
-				storageState.putInfo("url", PathFormat.format(savePath));
+				String path = PathFormat.format(savePath);
+				if(path.charAt(0)=='/'){
+					//FIXME:´¦ÀíÂ·¾¶
+					path = (String)conf.get("contextPath") + path;
+				}
+				storageState.putInfo("url", path);
 				storageState.putInfo("type", suffix);
 				storageState.putInfo("original", originFileName + suffix);
 			}

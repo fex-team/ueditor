@@ -33,7 +33,7 @@ public class ActionEnter {
 		
 	}
 	
-	public String exec () {
+	public String exec () throws Exception {
 		
 		String callbackName = this.request.getParameter("callback");
 		
@@ -51,7 +51,7 @@ public class ActionEnter {
 
 	}
 	
-	public String invoke() {
+	public String invoke() throws Exception {
 		
 		if ( actionType == null || !ActionMap.mapping.containsKey( actionType ) ) {
 			return new BaseState( false, AppInfo.INVALID_ACTION ).toJSONString();
