@@ -207,17 +207,16 @@
             for(var i= 0,ci;ci=root.children[i];){
                 nodeTraversal(ci,fn);
                 //ci被替换的情况，这里就不再走 fn了
-                if(ci.parentNode ){
-                    if(ci.children && ci.children.length){
-                        fn(ci)
-                    }
-                    if(ci.parentNode) i++
-                }
+                // if(ci.parentNode ){
+                //     if(ci.children && ci.children.length){
+                //         fn(ci)
+                //     }
+                //     if(ci.parentNode) i++  // 节点被删除就死循环了
+                // }
             }
-        }else{
-            fn(root)
         }
-
+        // 简化逻辑，只是为了遍历
+        fn(root);
     }
     uNode.prototype = {
 
@@ -393,12 +392,13 @@
          */
         previousSibling : function(){
             var parent = this.parentNode;
-            for (var i = 0, ci; ci = parent.children[i]; i++) {
-                if (ci === this) {
-                   return i == 0 ? null : parent.children[i-1];
-                }
+            if(parent) {
+                for (var i = 0, ci; ci = parent.children[i]; i++) {
+                    if (ci === this) {
+                       return i == 0 ? null : parent.children[i-1];
+                    }
+                }   
             }
-
         },
 
         /**
@@ -411,10 +411,12 @@
          * ```
          */
         nextSibling : function(){
-            var parent = this.parentNode;
-            for (var i = 0, ci; ci = parent.children[i++];) {
-                if (ci === this) {
-                    return parent.children[i];
+            var parent = this.parentNode; // 删除的节点没有parent
+            if(parent) {
+                for (var i = 0, ci; ci = parent.children[i++];) {
+                    if (ci === this) {
+                        return parent.children[i];
+                    }
                 }
             }
         },
