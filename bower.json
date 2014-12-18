@@ -5,7 +5,7 @@
   "authors": [
     "GeorgeXu <xuge123@gmail.com>"
   ],
-  "main": ["./dist/utf8-php/themes/default/css/ueditor.css","./dist/utf8-php/lang/zh-cn/zh-cn.js","./dist/utf8-php/ueditor.all.js","./dist/utf8-php/ueditor.config.js"],
+  "main": ["./dist/utf8-php/themes/default/css/ueditor.css","./dist/utf8-php/ueditor.config.js","./dist/utf8-php/ueditor.all.js","./dist/utf8-php/lang/zh-cn/zh-cn.js"],
   "license": "MIT",
   "private": true,
   "ignore": [
