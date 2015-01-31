@@ -172,7 +172,12 @@ public final class ConfigManager {
 	}
 	
 	private String getConfigPath () {
-		return this.parentPath + File.separator + ConfigManager.configFileName;
+        String path = this.getClass().getResource("/").getPath() + ConfigManager.configFileName;
+        if (new File(path).exists()) {
+          return path;
+        }else {          
+          return this.parentPath + File.separator + ConfigManager.configFileName;
+        }
 	}
 
 	private String[] getArray ( String key ) {

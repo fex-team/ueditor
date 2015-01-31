@@ -69,7 +69,15 @@ public class BinaryUploader {
 
 			savePath = PathFormat.parse(savePath, originFileName);
 
-			String physicalPath = (String) conf.get("rootPath") + savePath;
+			//modified by Ternence
+            String physicalPath = null;
+            Object rootPath = request.getAttribute("rootPath"); //get variable "rootPath" from request
+            if (rootPath !=null) {
+            	physicalPath = request.getAttribute("rootPath") + "/" + savePath;
+			}else {
+				physicalPath = conf.get("rootPath") + savePath;				
+			}
+            
 
 			InputStream is = fileStream.openStream();
 			State storageState = StorageManager.saveFileByInputStream(is,
