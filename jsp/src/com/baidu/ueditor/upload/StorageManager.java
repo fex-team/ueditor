@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 
@@ -112,6 +115,22 @@ public class StorageManager {
 		}
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}
+	
+	/**
+	 * Get rootPath from request,if not,find it from conf map.
+	 * @param request
+	 * @param conf
+	 * @return
+	 * @create 2015年1月31日
+	 */
+    public static String getRootPath(HttpServletRequest request, Map<String, Object> conf) {
+        Object rootPath = request.getAttribute("rootPath");
+        if (rootPath != null) {
+            return rootPath + "" + File.separatorChar;
+        } else {
+            return conf.get("rootPath") + "";
+        }
+    }
 
 	private static File getTmpFile() {
 		File tmpDir = FileUtils.getTempDirectory();
