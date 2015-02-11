@@ -90,6 +90,7 @@
             'plugins/simpleupload.js',
             'plugins/serverparam.js',
             'plugins/insertfile.js',
+            'plugins/linkconverter.js',
             'ui/ui.js',
             'ui/uiutils.js',
             'ui/uibase.js',
