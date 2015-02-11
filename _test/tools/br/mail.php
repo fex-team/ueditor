@@ -94,7 +94,7 @@ class Mail {
 
         $mail->MsgHTML($body);
 
-        $address = "xxxx@baidu.com";
+        $address = "xxxxxx@baidu.com";
         $mail->AddAddress($address, "John Doe");
         if(!$mail->Send()) {
           echo "Mailer Error: " . $mail->ErrorInfo;
