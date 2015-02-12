@@ -16,24 +16,28 @@ UE.plugin.register('linkconverter', function () {
         32: 'space'
     };
 
-    var blockElem, bookmark;
-
     /**
      * 替换字符串中的链接为 <a> 标签
      * @param {String} str: 目标字符串
-     * @return {String}: 替换后的字符串
+     * @return {String | undefined}: 替换后的字符串
      */
     var replaceLink = function (str) {
         if (!str) {
             return '';
         }
+        var hasLink;
         str = str.replace(/&nbsp;/g, ' '); // 替换 &nbsp;
         var result = str.replace(PATTERN, function (url) {
+            hasLink = true;
             if (/^www/.test(url)) {
                 url = 'http://' + url;
             }
             return '<a href="$url" title="$url" target="_blank">$url</a>'.replace(/\$url/g, url);
         });
+
+        if (!hasLink) {
+            return;
+        }
 
         return result.replace(/  /g, ' &nbsp;'); // 还原 &nbsp;
     };
@@ -42,13 +46,14 @@ UE.plugin.register('linkconverter', function () {
      * 用一个 <span> 标签包裹文本节点
      * @param {textNode} textNode: 目标文本节点
      */
-    var wrapTextNode = function(textNode) {
-        var span = document.createElement('span');
-        span.innerHTML = replaceLink(textNode.data);
+    var wrapTextNode = function (textNode) {
+        var span = document.createElement('span'),
+            newValue = replaceLink(textNode.data);
 
-        if (span.innerHTML === textNode.nodeValue) {
+        if (!newValue) {
             return;
         }
+        span.innerHTML = newValue;
         textNode.parentNode.replaceChild(span, textNode);
     }
 
@@ -86,8 +91,9 @@ UE.plugin.register('linkconverter', function () {
     /**
      * 替换节点内容
      * @param {uNode | Node} node: 目标节点
+     * @param {UE Bookmark} [bookmark]: UE 节点标签
      */
-    var converter = function (node) {
+    var converter = function (node, bookmark) {
         if (node instanceof UE.uNode) {
             // uNode
             var html = node.toHtml(),
@@ -95,6 +101,10 @@ UE.plugin.register('linkconverter', function () {
 
             div.innerHTML = html;
             iterateNode(div);
+
+            if (div.innerHTML === html) {
+                return;
+            }
 
             var container = uNode.createElement(
                 node.children.length > 1 ? 'div' : 'span'
@@ -104,8 +114,8 @@ UE.plugin.register('linkconverter', function () {
 
             // 替换 uNode 所有子节点
             node.children = undefined;
-            node.appendChild(container)
-        } else {
+            node.appendChild(container);
+        } else if (bookmark) {
             // Node
             iterateNode(node);
             var range = this.selection.getRange();
@@ -144,14 +154,14 @@ UE.plugin.register('linkconverter', function () {
                     return;
                 }
 
-                bookmark = range.createBookmark(true);
-                blockElem = getCloestBlockElement(node);
-                var bmID = bookmark.start;
+                var blockElem = getCloestBlockElement(node),
+                    bookmark = range.createBookmark(true),
+                    bmID = bookmark.start;
 
-                converter.call(this, blockElem);
+                converter.call(this, blockElem, bookmark);
             }
         },
-        inputRule: function(root) {
+        inputRule: function (root) {
             converter(root);
         }
     }
