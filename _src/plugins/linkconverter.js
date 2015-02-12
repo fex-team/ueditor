@@ -2,6 +2,7 @@
  * @date     2015/2/11
  * @author   Dolphin<dolphin.w.e@gmail.com>
  * UEditor 对粘贴或键入的文本中的链接自动转换
+ * todo: 过多插入 bookmark
  */
 
 UE.plugin.register('linkconverter', function () {
@@ -82,17 +83,28 @@ UE.plugin.register('linkconverter', function () {
     return {
         bindEvents: {
             keydown: function (type, event) {
-                var keyCode = event.keyCode || event.which;
+                var me = this,
+                    keyCode = event.keyCode || event.which;
 
                 if (!keyMap[keyCode]) {
                     return;
                 }
 
-                var range = this.selection.getRange(),
+                var range = me.selection.getRange(),
                     node = range.getCommonAncestor();
+
                 bookmark = range.createBookmark(true);
                 blockElem = getCloestBlockElement(node);
+                var bmID = bookmark.start;
+
                 replaceUrl.call(this, blockElem.uNode);
+
+                setTimeout(function () {
+                    var bmElem = me.document.getElementById(bmID);
+                    if (bmElem) {
+                        bmElem.remove();
+                    }
+                }, 1000);
             }
         },
         inputRule: replaceUrl
