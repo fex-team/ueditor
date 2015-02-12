@@ -8,7 +8,7 @@
 UE.plugin.register('linkconverter', function () {
     var utils = UE.utils,
         domUtils = UE.dom.domUtils,
-        PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/)[\w@:%.\+~#=]+(\w+)\b([-\w@:%\+.~#?&//=()]*)/ig;
+        PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.)[^\s|&nbsp;]*/ig;
 
     var keyMap = {
         9: 'tab',
@@ -25,7 +25,7 @@ UE.plugin.register('linkconverter', function () {
     var replaceUrl = function (uNode) {
         var me = this;
         if (uNode.type !== 'text' && uNode.tagName !== 'a' && uNode.children) {
-            return utils.each(uNode.children, function(childNode) {
+            return utils.each(uNode.children, function (childNode) {
                 replaceUrl.call(me, childNode);
             });
         }
@@ -34,6 +34,8 @@ UE.plugin.register('linkconverter', function () {
         if (!str) {
             return;
         }
+
+        str.replace(/&nbsp;/g, ' '); // 替换 &nbsp;
 
         var hasLink,
             result = str.replace(PATTERN, function (url) {
@@ -47,6 +49,8 @@ UE.plugin.register('linkconverter', function () {
         if (!hasLink) {
             return;
         }
+
+        result.replace(/  /g, ' &nbsp;'); // 还原 &nbsp;
 
         if (uNode.type !== 'element') {
             uNode.type = 'element';
