@@ -25,8 +25,10 @@ UE.plugin.register('linkconverter', function () {
         if (!str) {
             return '';
         }
-        var hasLink;
+
         str = str.replace(/&nbsp;/g, ' '); // 替换 &nbsp;
+
+        var hasLink;
         var result = str.replace(PATTERN, function (url) {
             hasLink = true;
             if (/^www/.test(url)) {
@@ -96,6 +98,7 @@ UE.plugin.register('linkconverter', function () {
     var converter = function (node, bookmark) {
         if (node instanceof UE.uNode) {
             // uNode
+
             var html = node.toHtml(),
                 div = document.createElement('div');
 
@@ -150,7 +153,7 @@ UE.plugin.register('linkconverter', function () {
                 var range = me.selection.getRange(),
                     node = range.startContainer;
 
-                if (domUtils.findParentByTagName(node, 'a')) {
+                if (domUtils.findParentByTagName(node, 'a'), true) {
                     return;
                 }
 
@@ -162,7 +165,14 @@ UE.plugin.register('linkconverter', function () {
             }
         },
         inputRule: function (root) {
-            converter(root);
+            var range = this.selection.getRange(),
+                node = range.startContainer;
+
+            if (domUtils.findParentByTagName(node, 'a', true)) {
+                return;
+            }
+
+            converter.call(this, root);
         }
     }
 });
