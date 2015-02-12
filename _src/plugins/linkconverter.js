@@ -8,7 +8,7 @@
 UE.plugin.register('linkconverter', function () {
     var utils = UE.utils,
         domUtils = UE.dom.domUtils,
-        PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.)([^&nbsp;][^\s])*/ig;
+        PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.)[^\s|&nbsp;]*/ig
 
     var keyMap = {
         9: 'tab',
