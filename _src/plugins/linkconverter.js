@@ -2,13 +2,13 @@
  * @date     2015/2/11
  * @author   Dolphin<dolphin.w.e@gmail.com>
  * UEditor 对粘贴或键入的文本中的链接自动转换
- * todo: 过多插入 bookmark
  */
 
 UE.plugin.register('linkconverter', function () {
-    var utils = UE.utils,
+    var uNode = UE.uNode,
+        utils = UE.utils,
         domUtils = UE.dom.domUtils,
-        PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.)[^\s|&nbsp;]*/ig;
+        PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.)[^\s]*/ig;
 
     var keyMap = {
         9: 'tab',
@@ -19,66 +19,109 @@ UE.plugin.register('linkconverter', function () {
     var blockElem, bookmark;
 
     /**
-     * 粘贴或键入文本时，替换其中的链接文本为 <a> 标签
-     * @param {UE Node} uNode
+     * 替换字符串中的链接为 <a> 标签
+     * @param {String} str: 目标字符串
+     * @return {String}: 替换后的字符串
      */
-    var replaceUrl = function (uNode) {
-        var me = this;
-        if (uNode.type !== 'text' && uNode.tagName !== 'a' && uNode.children) {
-            return utils.each(uNode.children, function (childNode) {
-                replaceUrl.call(me, childNode);
-            });
-        }
-
-        var str = uNode.data;
+    var replaceLink = function (str) {
         if (!str) {
+            return '';
+        }
+        str = str.replace(/&nbsp;/g, ' '); // 替换 &nbsp;
+        var result = str.replace(PATTERN, function (url) {
+            if (/^www/.test(url)) {
+                url = 'http://' + url;
+            }
+            return '<a href="$url" title="$url" target="_blank">$url</a>'.replace(/\$url/g, url);
+        });
+
+        return result.replace(/  /g, ' &nbsp;'); // 还原 &nbsp;
+    };
+
+    /**
+     * 用一个 <span> 标签包裹文本节点
+     * @param {textNode} textNode: 目标文本节点
+     */
+    var wrapTextNode = function(textNode) {
+        var span = document.createElement('span');
+        span.innerHTML = replaceLink(textNode.data);
+
+        if (span.innerHTML === textNode.nodeValue) {
             return;
         }
+        textNode.parentNode.replaceChild(span, textNode);
+    }
 
-        str.replace(/&nbsp;/g, ' '); // 替换 &nbsp;
-
-        var hasLink,
-            result = str.replace(PATTERN, function (url) {
-                hasLink = true;
-                if (/^www/.test(url)) {
-                    url = 'http://' + url;
-                }
-                return '<a href="$url" title="$url" target="_blank">$url</a>'.replace(/\$url/g, url);
-            });
-
-        if (!hasLink) {
-            return;
+    /**
+     * 迭代所有子节点
+     * @param {Node} node: 目标节点
+     * @param {NodeList} children
+     */
+    var iterateNode = function (node, children /* internal */) {
+        if (node.nodeType === 3) {
+            return wrapTextNode(node);
         }
 
-        result.replace(/  /g, ' &nbsp;'); // 还原 &nbsp;
+        children = (children || node).childNodes;
 
-        if (uNode.type !== 'element') {
-            uNode.type = 'element';
-            uNode.tagName = 'span';
+        var i, max, child, content;
+
+        for (i = 0, max = children.length; i < max; i++) {
+            child = children[i];
+            if (child.nodeName === 'A') {
+                // 跳过 <a> 元素
+                continue;
+            }
+            if (child.nodeType === 1) {
+                // element
+                iterateNode(node, child);
+            }
+            if (child.nodeType === 3) {
+                // textNode
+                wrapTextNode(child);
+            }
         }
-        uNode.innerHTML(result);
+    };
 
-        if (blockElem) {
-            blockElem.elem.innerHTML = blockElem.uNode.toHtml();
-            var range = me.selection.getRange();
+    /**
+     * 替换节点内容
+     * @param {uNode | Node} node: 目标节点
+     */
+    var converter = function (node) {
+        if (node instanceof UE.uNode) {
+            // uNode
+            var html = node.toHtml(),
+                div = document.createElement('div');
+
+            div.innerHTML = html;
+            iterateNode(div);
+
+            var container = uNode.createElement(
+                node.children.length > 1 ? 'div' : 'span'
+            );
+
+            container.innerHTML(div.innerHTML);
+
+            // 替换 uNode 所有子节点
+            node.children = undefined;
+            node.appendChild(container)
+        } else {
+            // Node
+            iterateNode(node);
+            var range = this.selection.getRange();
             range.moveToBookmark(bookmark).select();
-            blockElem = null;
         }
     };
 
     /**
      * 获得当前节点最近的块级元素
      * @param {Node} node
-     * @return {Obejct} 最近块级元素及其 uNode 化对象
+     * @return {Node} 最近块级元素及其 uNode 化对象
      */
     var getCloestBlockElement = function (node) {
         while (node) {
             if (domUtils.isBlockElm(node)) {
-                var uNode = UE.uNode.createElement(node.innerHTML);
-                return {
-                    uNode: uNode.parentNode,
-                    elem: node
-                };
+                return node;
             }
             node = node.parentNode;
         }
@@ -95,22 +138,21 @@ UE.plugin.register('linkconverter', function () {
                 }
 
                 var range = me.selection.getRange(),
-                    node = range.getCommonAncestor();
+                    node = range.startContainer;
+
+                if (domUtils.findParentByTagName(node, 'a')) {
+                    return;
+                }
 
                 bookmark = range.createBookmark(true);
                 blockElem = getCloestBlockElement(node);
                 var bmID = bookmark.start;
 
-                replaceUrl.call(this, blockElem.uNode);
-
-                setTimeout(function () {
-                    var bmElem = me.document.getElementById(bmID);
-                    if (bmElem) {
-                        bmElem.remove();
-                    }
-                }, 1000);
+                converter.call(this, blockElem);
             }
         },
-        inputRule: replaceUrl
+        inputRule: function(root) {
+            converter(root);
+        }
     }
 });
