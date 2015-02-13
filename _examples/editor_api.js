@@ -62,7 +62,7 @@
             'plugins/enterkey.js',
             'plugins/keystrokes.js',
             'plugins/fiximgclick.js',
-            'plugins/autolink.js',
+            // 'plugins/autolink.js',
             'plugins/autoheight.js',
             'plugins/autofloat.js',
             'plugins/video.js',

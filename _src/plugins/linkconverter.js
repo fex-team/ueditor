@@ -75,8 +75,9 @@ UE.plugin.register('linkconverter', function () {
 
         for (i = 0, max = children.length; i < max; i++) {
             child = children[i];
-            if (child.nodeName === 'A') {
-                // 跳过 <a> 元素
+
+            if (child.nodeName === 'A' || child._hasMovedLink) {
+                // 跳过 <a> 元素和已经去除链接的节点
                 continue;
             }
             if (child.nodeType === 1) {
@@ -143,6 +144,9 @@ UE.plugin.register('linkconverter', function () {
     return {
         bindEvents: {
             keydown: function (type, event) {
+                if (UE.browser.ie && !UE.browser.ie9above) {
+                    return;
+                };
                 var me = this,
                     keyCode = event.keyCode || event.which;
 
