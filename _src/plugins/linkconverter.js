@@ -153,7 +153,7 @@ UE.plugin.register('linkconverter', function () {
                 var range = me.selection.getRange(),
                     node = range.startContainer;
 
-                if (domUtils.findParentByTagName(node, 'a'), true) {
+                if (domUtils.findParentByTagName(node, 'a', true)) {
                     return;
                 }
 
