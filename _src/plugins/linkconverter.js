@@ -9,14 +9,14 @@ UE.plugin.register('linkconverter', function () {
     var uNode = UE.uNode,
         utils = UE.utils,
         domUtils = UE.dom.domUtils,
-        PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.)[^\s]*/ig;
+        PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.)[^\s]*/ig,
+        getText = browser.ie9below ? 'innerText' : 'textContent';
 
     var keyMap = {
         9: 'tab',
         13: 'enter',
         32: 'space'
     };
-
 
     /**
      * 拆分 textNode
@@ -35,7 +35,7 @@ UE.plugin.register('linkconverter', function () {
                 a = document.createElement('a');
 
             textNode = link.splitText(len);
-            a.textContent = url;
+            a[getText] = url;
 
             lastPos = len + pos;
 
@@ -61,7 +61,7 @@ UE.plugin.register('linkconverter', function () {
      * @param {Boolean} uNodeMode: 是否 uNode 模式
      * @param {NodeList} children
      */
-    var iterateNode = function (node, uNodeMode, children /* internal */) {
+    var iterateNode = function (node, uNodeMode, children /* internal */ ) {
         if (node.nodeType === 3) {
             return splitTextNode(node);
         }
@@ -143,7 +143,7 @@ UE.plugin.register('linkconverter', function () {
         }
     };
 
-    if (!browser.ie || browser.ie9above) {
+    if (!browser.ie) {
         // IE8 下支持很糟糕
         this.addListener('keydown', function (type, event) {
             var keyCode = event.keyCode || event.which;
@@ -167,16 +167,16 @@ UE.plugin.register('linkconverter', function () {
 
             converter.call(this, blockElem);
         });
+
+        this.addInputRule(function (root) {
+            var range = this.selection.getRange(),
+                node = range.startContainer;
+
+            if (domUtils.findParentByTagName(node, 'a', true)) {
+                return;
+            }
+
+            converter.call(editor, root);
+        });
     }
-
-    this.addInputRule(function (root) {
-        var range = this.selection.getRange(),
-            node = range.startContainer;
-
-        if (domUtils.findParentByTagName(node, 'a', true)) {
-            return;
-        }
-
-        converter.call(editor, root);
-    });
 });
