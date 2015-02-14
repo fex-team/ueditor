@@ -129,14 +129,14 @@ UE.plugin.register('linkconverter', function () {
         }
     };
 
-    /**
-     * 获得当前节点最近的块级元素
+     /**
+     * 获得当前节点最近的元素
      * @param {Node} node
-     * @return {Node} 最近块级元素及其 uNode 化对象
+     * @return {Node} 最近的元素
      */
-    var getCloestBlockElement = function (node) {
+    var getCloestElement = function (node) {
         while (node) {
-            if (domUtils.isBlockElm(node)) {
+            if (node.nodeType === 1) {
                 return node;
             }
             node = node.parentNode;
@@ -160,12 +160,12 @@ UE.plugin.register('linkconverter', function () {
             }
 
             // 创建一个新的空白文本节点，避免之后的文本也被圈入链接
-            var blockElem = getCloestBlockElement(node),
+            var elem = getCloestElement(node),
                 textNode = document.createTextNode('');
 
             range.insertNode(textNode);
 
-            converter.call(this, blockElem);
+            converter.call(this, elem);
         });
 
         this.addInputRule(function (root) {
