@@ -159,7 +159,11 @@ UE.plugin.register('linkconverter', function () {
                 return;
             }
 
-            var blockElem = getCloestBlockElement(node);
+            // 创建一个新的空白文本节点，避免之后的文本也被圈入链接
+            var blockElem = getCloestBlockElement(node),
+                textNode = document.createTextNode('');
+
+            range.insertNode(textNode);
 
             converter.call(this, blockElem);
         });
