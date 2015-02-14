@@ -1,7 +1,8 @@
 /**
  * @date     2015/2/11
  * @author   Dolphin<dolphin.w.e@gmail.com>
- * UEditor 对粘贴或键入的文本中的链接自动转换
+ * UEditor 对粘贴的文本中的链接自动转换
+ * todo: URL 键入识别
  */
 
 UE.plugin.register('linkconverter', function () {
@@ -16,57 +17,53 @@ UE.plugin.register('linkconverter', function () {
         32: 'space'
     };
 
+
     /**
-     * 替换字符串中的链接为 <a> 标签
-     * @param {String} str: 目标字符串
-     * @return {String | undefined}: 替换后的字符串
+     * 拆分 textNode
+     * @param {textNode} textNode: 目标文字节点
+     * @param {Boolean} uNodeMode: 是否 uNode 模式
      */
-    var replaceLink = function (str) {
-        if (!str) {
-            return '';
-        }
+    var splitTextNode = function (textNode, uNodeMode) {
+        var str = textNode.nodeValue,
+            parentNode = textNode.parentNode,
+            lastPos = 0;
 
-        str = str.replace(/&nbsp;/g, ' '); // 替换 &nbsp;
+        // 利用 replace 来迭代替换链接文本
+        str.replace(PATTERN, function (url, pos) {
+            var len = url.length,
+                link = textNode.splitText(pos - lastPos),
+                a = document.createElement('a');
 
-        var hasLink;
-        var result = str.replace(PATTERN, function (url) {
-            hasLink = true;
-            if (/^www/.test(url)) {
-                url = 'http://' + url;
+            textNode = link.splitText(len);
+            a.textContent = url;
+
+            lastPos = len + pos;
+
+            domUtils.setAttributes(a, {
+                href: /^www/.test(url) ? 'http://' + url : url,
+                title: url,
+                target: '_blank'
+            });
+
+            if (!uNodeMode) {
+                a.id = 'new-link';
             }
-            return '<a href="$url" title="$url" target="_blank">$url</a>'.replace(/\$url/g, url);
+
+            parentNode.replaceChild(a, link);
+
+            return '';
         });
-
-        if (!hasLink) {
-            return;
-        }
-
-        return result.replace(/  /g, ' &nbsp;'); // 还原 &nbsp;
     };
-
-    /**
-     * 用一个 <span> 标签包裹文本节点
-     * @param {textNode} textNode: 目标文本节点
-     */
-    var wrapTextNode = function (textNode) {
-        var span = document.createElement('span'),
-            newValue = replaceLink(textNode.data);
-
-        if (!newValue) {
-            return;
-        }
-        span.innerHTML = newValue;
-        textNode.parentNode.replaceChild(span, textNode);
-    }
 
     /**
      * 迭代所有子节点
      * @param {Node} node: 目标节点
+     * @param {Boolean} uNodeMode: 是否 uNode 模式
      * @param {NodeList} children
      */
-    var iterateNode = function (node, children /* internal */) {
+    var iterateNode = function (node, uNodeMode, children /* internal */) {
         if (node.nodeType === 3) {
-            return wrapTextNode(node);
+            return splitTextNode(node);
         }
 
         children = (children || node).childNodes;
@@ -75,18 +72,17 @@ UE.plugin.register('linkconverter', function () {
 
         for (i = 0, max = children.length; i < max; i++) {
             child = children[i];
-
             if (child.nodeName === 'A' || child._hasMovedLink) {
-                // 跳过 <a> 元素和已经去除链接的节点
+                // 跳过 <a> 元素
                 continue;
             }
             if (child.nodeType === 1) {
                 // element
-                iterateNode(node, child);
+                iterateNode(node, uNodeMode, child);
             }
             if (child.nodeType === 3) {
                 // textNode
-                wrapTextNode(child);
+                splitTextNode(child, uNodeMode);
             }
         }
     };
@@ -104,14 +100,14 @@ UE.plugin.register('linkconverter', function () {
                 div = document.createElement('div');
 
             div.innerHTML = html;
-            iterateNode(div);
+            iterateNode(div, true);
 
             if (div.innerHTML === html) {
                 return;
             }
 
             var container = uNode.createElement(
-                node.children.length > 1 ? 'div' : 'span'
+                node.children.length > 1 ? 'p' : 'span'
             );
 
             container.innerHTML(div.innerHTML);
@@ -119,11 +115,17 @@ UE.plugin.register('linkconverter', function () {
             // 替换 uNode 所有子节点
             node.children = undefined;
             node.appendChild(container);
-        } else if (bookmark) {
+            node.removeChild(container, true);
+        } else {
             // Node
             iterateNode(node);
-            var range = this.selection.getRange();
-            range.moveToBookmark(bookmark).select();
+            var a = this.document.getElementById('new-link');
+            if (a) {
+                a.removeAttribute('id');
+
+                var range = this.selection.getRange();
+                range.setEndAfter(a).collapse().select();
+            }
         }
     };
 
@@ -141,34 +143,15 @@ UE.plugin.register('linkconverter', function () {
         }
     };
 
-    return {
-        bindEvents: {
-            keydown: function (type, event) {
-                if (UE.browser.ie && !UE.browser.ie9above) {
-                    return;
-                };
-                var me = this,
-                    keyCode = event.keyCode || event.which;
+    if (!browser.ie || browser.ie9above) {
+        // IE8 下支持很糟糕
+        this.addListener('keydown', function (type, event) {
+            var keyCode = event.keyCode || event.which;
 
-                if (!keyMap[keyCode]) {
-                    return;
-                }
-
-                var range = me.selection.getRange(),
-                    node = range.startContainer;
-
-                if (domUtils.findParentByTagName(node, 'a', true)) {
-                    return;
-                }
-
-                var blockElem = getCloestBlockElement(node),
-                    bookmark = range.createBookmark(true),
-                    bmID = bookmark.start;
-
-                converter.call(this, blockElem, bookmark);
+            if (!keyMap[keyCode]) {
+                return;
             }
-        },
-        inputRule: function (root) {
+
             var range = this.selection.getRange(),
                 node = range.startContainer;
 
@@ -176,7 +159,20 @@ UE.plugin.register('linkconverter', function () {
                 return;
             }
 
-            converter.call(this, root);
-        }
+            var blockElem = getCloestBlockElement(node);
+
+            converter.call(this, blockElem);
+        });
     }
+
+    this.addInputRule(function (root) {
+        var range = this.selection.getRange(),
+            node = range.startContainer;
+
+        if (domUtils.findParentByTagName(node, 'a', true)) {
+            return;
+        }
+
+        converter.call(editor, root);
+    });
 });
