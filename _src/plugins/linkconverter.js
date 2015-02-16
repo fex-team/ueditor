@@ -2,7 +2,6 @@
  * @date     2015/2/11
  * @author   Dolphin<dolphin.w.e@gmail.com>
  * UEditor 对粘贴的文本中的链接自动转换
- * todo: URL 键入识别
  */
 
 UE.plugin.register('linkconverter', function () {
@@ -106,9 +105,7 @@ UE.plugin.register('linkconverter', function () {
                 return;
             }
 
-            var container = uNode.createElement(
-                node.children.length > 1 ? 'p' : 'span'
-            );
+            var container = uNode.createElement('div');
 
             container.innerHTML(div.innerHTML);
 
@@ -144,7 +141,7 @@ UE.plugin.register('linkconverter', function () {
     };
 
     if (!browser.ie) {
-        // IE8 下支持很糟糕
+        // IE 自带转换
         this.addListener('keydown', function (type, event) {
             var keyCode = event.keyCode || event.which;
 
