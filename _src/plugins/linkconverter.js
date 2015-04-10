@@ -5,7 +5,9 @@
  */
 
 UE.plugin.register('linkconverter', function () {
-    var uNode = UE.uNode,
+    if (browser.ie) return;
+    var me = this,
+        uNode = UE.uNode,
         utils = UE.utils,
         domUtils = UE.dom.domUtils,
         PATTERN = /(?:https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.)[^\s]*/ig,
@@ -49,8 +51,6 @@ UE.plugin.register('linkconverter', function () {
             }
 
             parentNode.replaceChild(a, link);
-
-            return '';
         });
     };
 
@@ -58,40 +58,41 @@ UE.plugin.register('linkconverter', function () {
      * 迭代所有子节点
      * @param {Node} node: 目标节点
      * @param {Boolean} uNodeMode: 是否 uNode 模式
-     * @param {NodeList} children
      */
-    var iterateNode = function (node, uNodeMode, children /* internal */ ) {
+    var iterateNode = function (node, uNodeMode) {
         if (node.nodeType === 3) {
-            return splitTextNode(node);
+            return splitTextNode(node, uNodeMode);
         }
 
-        children = (children || node).childNodes;
+        (function it(children) {
+            var i, max, child, nodeType;
 
-        var i, max, child, content;
+            for (i = 0, max = children.length; i < max; i++) {
+                child = children[i];
+                nodeType = child.nodeType;
 
-        for (i = 0, max = children.length; i < max; i++) {
-            child = children[i];
-            if (child.nodeName === 'A' || child._hasMovedLink) {
-                // 跳过 <a> 元素
-                continue;
+                if (child.nodeName === 'A' || child._hasMovedLink) {
+                    // 跳过 <a> 元素和取消链接的元素
+                    continue;
+                }
+
+                if (nodeType === 1) {
+                    // element
+                    it(child.childNodes);
+                }
+                if (nodeType === 3) {
+                    // textNode
+                    splitTextNode(child, uNodeMode);
+                }
             }
-            if (child.nodeType === 1) {
-                // element
-                iterateNode(node, uNodeMode, child);
-            }
-            if (child.nodeType === 3) {
-                // textNode
-                splitTextNode(child, uNodeMode);
-            }
-        }
+        })(node.childNodes);
     };
 
     /**
      * 替换节点内容
-     * @param {uNode | Node} node: 目标节点
-     * @param {UE Bookmark} [bookmark]: UE 节点标签
+     * @param {uNode | Element} node: 目标节点
      */
-    var converter = function (node, bookmark) {
+    var converter = function (node) {
         if (node instanceof UE.uNode) {
             // uNode
 
@@ -114,66 +115,46 @@ UE.plugin.register('linkconverter', function () {
             node.appendChild(container);
             node.removeChild(container, true);
         } else {
-            // Node
-            iterateNode(node);
-            var a = this.document.getElementById('new-link');
+            // Element
+            iterateNode(node, false);
+            var a = me.document.getElementById('new-link');
             if (a) {
                 a.removeAttribute('id');
 
-                var range = this.selection.getRange();
+                var range = me.selection.getRange();
                 range.setEndAfter(a).collapse().select();
             }
         }
     };
 
-     /**
-     * 获得当前节点最近的元素
-     * @param {Node} node
-     * @return {Node} 最近的元素
-     */
-    var getCloestElement = function (node) {
-        while (node) {
-            if (node.nodeType === 1) {
-                return node;
-            }
-            node = node.parentNode;
+    me.addListener('keydown', function (type, event) {
+        var keyCode = event.keyCode || event.which;
+
+        if (!keyMap[keyCode]) {
+            return;
         }
-    };
 
-    if (!browser.ie) {
-        // IE 自带转换
-        this.addListener('keydown', function (type, event) {
-            var keyCode = event.keyCode || event.which;
+        var range = this.selection.getRange(),
+            node = range.startContainer;
 
-            if (!keyMap[keyCode]) {
-                return;
-            }
+        if (domUtils.findParentByTagName(node, 'a', true)) {
+            return;
+        }
 
-            var range = this.selection.getRange(),
-                node = range.startContainer;
+        // 创建一个新的空白文本节点，避免之后的文本也被圈入链接
+        range.insertNode(document.createTextNode(''));
 
-            if (domUtils.findParentByTagName(node, 'a', true)) {
-                return;
-            }
+        converter(node);
+    });
 
-            // 创建一个新的空白文本节点，避免之后的文本也被圈入链接
-            var elem = getCloestElement(node),
-                textNode = document.createTextNode('');
+    me.addInputRule(function (root) {
+        var range = me.selection.getRange(),
+            node = range.startContainer;
 
-            range.insertNode(textNode);
+        if (domUtils.findParentByTagName(node, 'a', true)) {
+            return;
+        }
 
-            converter.call(this, elem);
-        });
-
-        this.addInputRule(function (root) {
-            var range = this.selection.getRange(),
-                node = range.startContainer;
-
-            if (domUtils.findParentByTagName(node, 'a', true)) {
-                return;
-            }
-
-            converter.call(editor, root);
-        });
-    }
+        converter(root);
+    });
 });
