@@ -19,12 +19,14 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 
 public class BinaryUploader {
 
 	public static final State save(HttpServletRequest request,
 			Map<String, Object> conf) {
 		FileItemStream fileStream = null;
+		InputStream is = null;
 		boolean isAjaxUpload = request.getHeader( "X_Requested_With" ) != null;
 
 		if (!ServletFileUpload.isMultipartContent(request)) {
@@ -71,7 +73,7 @@ public class BinaryUploader {
 
 			String physicalPath = (String) conf.get("rootPath") + savePath;
 
-			InputStream is = fileStream.openStream();
+			is = fileStream.openStream();
 			State storageState = StorageManager.saveFileByInputStream(is,
 					physicalPath, maxSize);
 			is.close();
@@ -86,6 +88,8 @@ public class BinaryUploader {
 		} catch (FileUploadException e) {
 			return new BaseState(false, AppInfo.PARSE_REQUEST_ERROR);
 		} catch (IOException e) {
+		} finally {
+			IOUtils.closeQuietly(is);
 		}
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}

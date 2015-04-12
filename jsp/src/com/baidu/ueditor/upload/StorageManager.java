@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 public class StorageManager {
 	public static final int BUFFER_SIZE = 8192;
@@ -27,15 +28,16 @@ public class StorageManager {
 		if (!state.isSuccess()) {
 			return state;
 		}
-
+		BufferedOutputStream bos = null;
 		try {
-			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(file));
+			bos = new BufferedOutputStream(new FileOutputStream(file));
 			bos.write(data);
 			bos.flush();
 			bos.close();
 		} catch (IOException ioe) {
 			return new BaseState(false, AppInfo.IO_ERROR);
+		} finally {
+			IOUtils.closeQuietly(bos);
 		}
 
 		state = new BaseState(true, file.getAbsolutePath());
@@ -52,10 +54,10 @@ public class StorageManager {
 
 		byte[] dataBuf = new byte[ 2048 ];
 		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
-
+		BufferedOutputStream bos = null;
 		try {
-			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE);
+			bos = new BufferedOutputStream(new FileOutputStream(tmpFile), 
+					StorageManager.BUFFER_SIZE);
 
 			int count = 0;
 			while ((count = bis.read(dataBuf)) != -1) {
@@ -78,6 +80,8 @@ public class StorageManager {
 			return state;
 			
 		} catch (IOException e) {
+		} finally {
+			IOUtils.closeQuietly(bos);
 		}
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}
@@ -89,10 +93,10 @@ public class StorageManager {
 
 		byte[] dataBuf = new byte[ 2048 ];
 		BufferedInputStream bis = new BufferedInputStream(is, StorageManager.BUFFER_SIZE);
-
+		BufferedOutputStream bos = null;
 		try {
-			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(tmpFile), StorageManager.BUFFER_SIZE);
+			bos = new BufferedOutputStream(new FileOutputStream(tmpFile), 
+					StorageManager.BUFFER_SIZE);
 
 			int count = 0;
 			while ((count = bis.read(dataBuf)) != -1) {
@@ -109,7 +113,10 @@ public class StorageManager {
 
 			return state;
 		} catch (IOException e) {
+		} finally {
+			IOUtils.closeQuietly(bos);
 		}
+		
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}
 

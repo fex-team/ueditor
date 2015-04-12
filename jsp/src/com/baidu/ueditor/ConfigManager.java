@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -192,10 +193,11 @@ public final class ConfigManager {
 		
 		StringBuilder builder = new StringBuilder();
 		
+		BufferedReader bfReader = null;
 		try {
 			
 			InputStreamReader reader = new InputStreamReader( new FileInputStream( path ), "UTF-8" );
-			BufferedReader bfReader = new BufferedReader( reader );
+			bfReader = new BufferedReader( reader );
 			
 			String tmpContent = null;
 			
@@ -207,6 +209,8 @@ public final class ConfigManager {
 			
 		} catch ( UnsupportedEncodingException e ) {
 			// 忽略
+		} finally {
+			IOUtils.closeQuietly(bfReader);
 		}
 		
 		return this.filter( builder.toString() );

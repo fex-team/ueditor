@@ -98,6 +98,10 @@ public class ImageHunter {
 			
 		} catch ( Exception e ) {
 			return new BaseState( false, AppInfo.REMOTE_FAIL );
+		} finally {
+			if ( connection != null ) {
+				connection.disconnect();
+			}
 		}
 		
 	}
