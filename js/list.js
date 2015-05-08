@@ -69,10 +69,10 @@ var docList = [
                 id:'jsp',
                 title: '2.5 JSP 使用说明'
             },
-            {
-                id: 'django',
-                title: '2.6 Python Django 使用说明'
-            },
+            // {
+            //     id: 'django',
+            //     title: '2.6 Python Django 使用说明'
+            // },
             {
                 id:'config',
                 title: '2.7 后端配置项说明'
