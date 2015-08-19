@@ -181,12 +181,13 @@ class Uploader
             return;
         }
 
-        preg_match('/(^https*:\/\/[^\/]+)/', $imgUrl, $matches);
+        preg_match('/(^https*:\/\/[^:\/]+)/', $imgUrl, $matches);
         $host_with_protocol = count($matches) > 1 ? $matches[1] : '';
 
         // 判断是否是合法 url
         if (!filter_var($host_with_protocol, FILTER_VALIDATE_URL)) {
             $this->stateInfo = $this->getStateInfo("INVALID_URL");
+            return;
         }
 
         preg_match('/^https*:\/\/(.+)/', $host_with_protocol, $matches);
@@ -197,10 +198,11 @@ class Uploader
         // 判断是否是私有 ip
         if(!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE)) {
             $this->stateInfo = $this->getStateInfo("INVALID_IP");
+            return;
         }
 
         //获取请求头并检测死链
-        $heads = get_headers($imgUrl);
+        $heads = get_headers($imgUrl, 1);
         if (!(stristr($heads[0], "200") && stristr($heads[0], "OK"))) {
             $this->stateInfo = $this->getStateInfo("ERROR_DEAD_LINK");
             return;
