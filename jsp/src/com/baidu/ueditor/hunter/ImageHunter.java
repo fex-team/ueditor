@@ -115,7 +115,6 @@ public class ImageHunter {
 			InetAddress ip = InetAddress.getByName(hostname);
 			
 			if (ip.isSiteLocalAddress()) {
-				System.out.println("内部地址");
 				return false;
 			}
 		} catch (UnknownHostException e) {
