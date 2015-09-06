@@ -141,13 +141,28 @@ UE.plugins['fiximgclick'] = (function () {
                     tmp = parseInt(dom.style.top) + offset.y;
                     dom.style.top = me._validScaledProp('top', tmp) + 'px';
                 }
-                if (rect[dir][2] != 0) {
-                    tmp = dom.clientWidth + rect[dir][2] * offset.x;
-                    dom.style.width = me._validScaledProp('width', tmp) + 'px';
-                }
-                if (rect[dir][3] != 0) {
-                    tmp = dom.clientHeight + rect[dir][3] * offset.y;
-                    dom.style.height = me._validScaledProp('height', tmp) + 'px';
+                if(rect[dir][2] != 0 &&rect[dir][3] != 0){
+                    var percentage=dom.clientWidth/dom.clientHeight;
+
+                    if(offset.x>offset.y){
+                        tmp = dom.clientWidth + rect[dir][2] * offset.x;
+                        dom.style.width= me._validScaledProp('width', tmp) + 'px';
+                        dom.style.height = me._validScaledProp('height', tmp/percentage) + 'px';
+                    }else{
+                        tmp = dom.clientHeight + rect[dir][3] * offset.y;
+                        dom.style.height = me._validScaledProp('height', tmp) + 'px';
+                        dom.style.width= me._validScaledProp('width', tmp*percentage) + 'px';
+                    }
+
+                }else{
+                    if (rect[dir][2] != 0) {
+                        tmp = dom.clientWidth + rect[dir][2] * offset.x;
+                        dom.style.width = me._validScaledProp('width', tmp) + 'px';
+                    }
+                    if (rect[dir][3] != 0) {
+                        tmp = dom.clientHeight + rect[dir][3] * offset.y;
+                        dom.style.height = me._validScaledProp('height', tmp) + 'px';
+                    }
                 }
             },
             _validScaledProp: function (prop, value) {
