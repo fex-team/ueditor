@@ -103,7 +103,7 @@ UE.plugins['formatmatch'] = function(){
                 return;
             }
 
-
+            me.focus();
               
             var range = me.selection.getRange();
             img = range.getClosedNode();
