@@ -273,7 +273,7 @@ class Uploader
         $format = str_replace("{ss}", $d[6], $format);
         $format = str_replace("{time}", $t, $format);
 
-        //过滤文件名的非法自负,并替换文件名
+        //过滤文件名的非法字符,并替换文件名
         $oriName = substr($this->oriName, 0, strrpos($this->oriName, '.'));
         $oriName = preg_replace("/[\|\?\"\<\>\/\*\\\\]+/", '', $oriName);
         $format = str_replace("{filename}", $oriName, $format);
