@@ -11,7 +11,9 @@
 
 UE.plugins['contextmenu'] = function () {
     var me = this;
-    me.setOpt('enableContextMenu',true);
+    
+    me.setOpt('enableContextMenu', me.getOpt('enableContextMenu') || true);
+    
     if(me.getOpt('enableContextMenu') === false){
         return;
     }
