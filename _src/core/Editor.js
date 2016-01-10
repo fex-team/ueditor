@@ -30,8 +30,8 @@
      */
     function setValue(form, editor) {
         var textarea;
-        if (editor.textarea) {
-            if (utils.isString(editor.textarea)) {
+        if (editor.options.textarea) {
+            if (utils.isString(editor.options.textarea)) {
                 for (var i = 0, ti, tis = domUtils.getElementsByTagName(form, 'textarea'); ti = tis[i++];) {
                     if (ti.id == 'ueditor_textarea_' + editor.options.textarea) {
                         textarea = ti;
