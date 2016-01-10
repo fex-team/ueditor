@@ -58,7 +58,7 @@ UE.plugins['paragraph'] = function() {
                         } );
                     }
                     tmpRange.setEndAfter( tmpNode );
-                    
+
                     para = range.document.createElement( style );
                     if(attrs){
                         domUtils.setAttributes(para,attrs);
@@ -70,7 +70,7 @@ UE.plugins['paragraph'] = function() {
                     //需要内容占位
                     if(domUtils.isEmptyNode(para)){
                         domUtils.fillChar(range.document,para);
-                        
+
                     }
 
                     tmpRange.insertNode( para );
@@ -165,6 +165,10 @@ UE.plugins['paragraph'] = function() {
         queryCommandValue : function() {
             var node = domUtils.filterNodeList(this.selection.getStartElementPath(),'p h1 h2 h3 h4 h5 h6');
             return node ? node.tagName.toLowerCase() : '';
+        },
+        queryCommandState:function(){
+            var node = this.selection.getRange().getClosedNode();
+
         }
     };
 };

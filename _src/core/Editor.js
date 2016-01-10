@@ -1136,7 +1136,45 @@
          * @see COMMAND.LIST
          */
         queryCommandState: function (cmdName) {
-            return this._callCmdFn('queryCommandState', arguments);
+
+            //移动选区冲突,直接执行
+            var selectMove=['movesection']
+            if(selectMove.indexOf(cmdName)!=-1){
+                return this._callCmdFn('queryCommandState', arguments);
+            }
+            //如果不存在选取，直接走原来的逻辑
+            if(typeof this.selection ==='undefined'){
+                return this._callCmdFn('queryCommandState', arguments);
+            }
+            //兼容百科的一级目录不能生成链接
+            var cmdWhiteList=['h1','h2'];
+            var range=this.selection.getRange()
+            var node=range.startContainer;
+            var head=false;
+            var headTagNames=['h2','h3'];
+            for(var i= 0;i<headTagNames.length;i++){
+                var tagName=headTagNames[i];
+                head= UE.dom.domUtils.filterNodeList(this.selection.getStartElementPath(),tagName);
+                if(head){
+                    break;
+                }
+            }
+            //如果选区是目录，开始判断，否则，按照原来的逻辑走
+            if(head){
+                //不再白名单中
+                if(cmdWhiteList.indexOf(cmdName.toLowerCase())==-1){
+                    return -1;
+                }
+                //h1命令，但是二级目录
+                if(cmdName=='h1'&&head.tagName.toLowerCase()=='h3'){
+                    return -1;
+                }
+                if(cmdName=='h2'&&head.tagName.toLowerCase()=='h2'){
+                    return -1;
+                }
+            }
+
+
         },
 
         /**

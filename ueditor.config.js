@@ -98,9 +98,9 @@
         //,autoClearEmptyNode : true //getContent时，是否删除空的inlineElement节点（包括嵌套的情况）
 
         //启用自动保存
-        //,enableAutoSave: true
+        ,enableAutoSave: true
         //自动保存间隔时间， 单位ms
-        //,saveInterval: 500
+        ,saveInterval: 2500
 
         //启用拖放上传
         //,enableDragUpload: true

@@ -1,1 +1,53 @@
 /*可以在这里添加你自己的css*/
+.view{
+    padding: 10px;
+    font-size: 14px;
+    /* background: #FCFCFC; */
+    margin: 0;
+}
+h2{
+    border-bottom: 1px solid #C8C8C8;
+    line-height: 1.7em;
+    /* padding-left: 5px; */
+    font-size: 1.2em;
+    margin: 15px 0px 15px;
+    padding: 0px 0px 5px;
+    text-indent: 0;
+}
+hr{
+    /* color: red; */
+
+    border: 1px solid #DFDFDF;
+}
+
+h3 {
+    margin: 1.5em 0px 0.8em;
+    padding: 0px;
+    clear: both;
+    font-size: 1.125em;
+    line-height: 1.5em;
+    white-space: normal;
+    text-indent: 0;
+}
+a{
+    color: #36C;
+}
+p{
+    text-indent: 1em;
+    margin-bottom: 0.5em;
+    word-wrap: break-word;
+    line-height: 1.625em;
+}
+.view img{
+    margin:15px;
+    border: 1px solid #C3C3C3;
+    border-radius: 2px;
+}
+
+video.edui-faked-video {
+    background-color: #000;
+    border: 1px solid #333;
+    margin: 15px 5%;
+    width: 90%;
+    height: auto;
+}
