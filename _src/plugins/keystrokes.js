@@ -156,6 +156,14 @@ UE.plugins['keystrokes'] = function() {
                 }
             }
         }
+
+        /* 修复在编辑区域快捷键 (Mac:meta+alt+I; Win:ctrl+shift+I) 打不开 chrome 控制台的问题 */
+        browser.chrome && me.on('keydown', function(type, e){
+            var keyCode = e.keyCode || e.which;
+            if (((e.metaKey && e.altKey) || (e.ctrlKey && e.shiftKey)) && keyCode == 73) {
+                return true;
+            }
+        });
     });
     me.addListener('keyup', function(type, evt) {
         var keyCode = evt.keyCode || evt.which,
