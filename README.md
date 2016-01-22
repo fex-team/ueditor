@@ -57,7 +57,7 @@ var ue = UE.getEditor('container', {
 
 通getContent和setContent方法可以设置和读取编辑器的内容
 ```javascript
-var ue = UE.getContent();
+var ue = UE.getEditor();
 //对编辑器的操作最好在编辑器ready之后再做
 ue.ready(function(){
     //设置编辑器的内容
