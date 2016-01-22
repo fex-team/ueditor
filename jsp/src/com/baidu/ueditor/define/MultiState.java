@@ -63,30 +63,18 @@ public class MultiState implements State {
 		builder.append( "{\"state\": \"" + stateVal + "\"" );
 		
 		// 数字转换
-		Iterator<String> iterator = this.intMap.keySet().iterator();
-		
-		while ( iterator.hasNext() ) {
-			
-			stateVal = iterator.next();
-			
-			builder.append( ",\""+ stateVal +"\": " + this.intMap.get( stateVal ) );
-			
+		for (Map.Entry<String, Long> entry : intMap.entrySet()) {
+			builder.append( ",\""+ entry.getKey() +"\": " + entry.getValue() );
 		}
 		
-		iterator = this.infoMap.keySet().iterator();
-		
-		while ( iterator.hasNext() ) {
-			
-			stateVal = iterator.next();
-			
-			builder.append( ",\""+ stateVal +"\": \"" + this.infoMap.get( stateVal ) + "\"" );
-			
+		for (Map.Entry<String, String> entry : infoMap.entrySet()) {
+			builder.append( ",\""+ entry.getKey() +"\": \"" + entry.getValue() + "\"" );
 		}
 		
 		builder.append( ", list: [" );
 		
 		
-		iterator = this.stateList.iterator();
+		Iterator<String> iterator = this.stateList.iterator();
 		
 		while ( iterator.hasNext() ) {
 			
@@ -94,7 +82,7 @@ public class MultiState implements State {
 			
 		}
 		
-		if ( this.stateList.size() > 0 ) {
+		if ( !this.stateList.isEmpty() ) {
 			builder.deleteCharAt( builder.length() - 1 );
 		}
 		

@@ -1,6 +1,7 @@
 package com.baidu.ueditor.define;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class FileType {
@@ -24,7 +25,7 @@ public class FileType {
 	 */
 	public static String getSuffixByFilename ( String filename ) {
 		
-		return filename.substring( filename.lastIndexOf( "." ) ).toLowerCase();
+		return filename.substring( filename.lastIndexOf( "." ) ).toLowerCase(Locale.US);
 		
 	}
 	

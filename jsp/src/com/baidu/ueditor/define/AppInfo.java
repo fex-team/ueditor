@@ -27,7 +27,7 @@ public final class AppInfo {
 	
 	public static final int ILLEGAL = 401;
 
-	public static Map<Integer, String> info = new HashMap<Integer, String>(){{
+	private static Map<Integer, String> info = new HashMap<Integer, String>(){{
 		
 		put( AppInfo.SUCCESS, "SUCCESS" );
 		
