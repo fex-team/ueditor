@@ -131,8 +131,17 @@ UE.plugins['fiximgclick'] = (function () {
             },
             updateContainerStyle: function (dir, offset) {
                 var me = this,
-                    dom = me.resizer, tmp;
+                    dom = me.resizer, tmp,isBoundary=false;
+                var wrap = this.editor.document.documentElement;
+                var maxWith=wrap.clientWidth-20;
+                var percentage=dom.clientWidth/dom.clientHeight;
 
+                var newWidth=dom.clientWidth + rect[dir][2] * offset.x;
+                var newHeight=dom.clientHeight + rect[dir][3] * offset.y;
+                //如果宽度超过编辑器 不执行
+                if(dom.offsetLeft+newWidth  >maxWith ||dom.offsetLeft+newHeight*percentage>maxWith){
+                    isBoundary= true;
+                }
                 if (rect[dir][0] != 0) {
                     tmp = parseInt(dom.style.left) + offset.x;
                     dom.style.left = me._validScaledProp('left', tmp) + 'px';
@@ -141,23 +150,49 @@ UE.plugins['fiximgclick'] = (function () {
                     tmp = parseInt(dom.style.top) + offset.y;
                     dom.style.top = me._validScaledProp('top', tmp) + 'px';
                 }
-                if (rect[dir][2] != 0) {
-                    tmp = dom.clientWidth + rect[dir][2] * offset.x;
-                    dom.style.width = me._validScaledProp('width', tmp) + 'px';
-                }
-                if (rect[dir][3] != 0) {
-                    tmp = dom.clientHeight + rect[dir][3] * offset.y;
-                    dom.style.height = me._validScaledProp('height', tmp) + 'px';
+                //对角线操作
+                if(rect[dir][2] != 0 &&rect[dir][3] != 0){
+
+                    //移动值比较大的执行相应的操作
+                    if(Math.abs(offset.x)>Math.abs(offset.y)){
+                        if(rect[dir][2] * offset.x>0&&isBoundary){
+                            return false;
+                        }
+                        dom.style.width= me._validScaledProp('width', newWidth) + 'px';
+                        dom.style.height = me._validScaledProp('height', newWidth/percentage) + 'px';
+                    }else{
+                        if(rect[dir][3] * offset.y>0&&isBoundary){
+                            return false;
+                        }
+                        dom.style.height = me._validScaledProp('height', newHeight) + 'px';
+                        dom.style.width= me._validScaledProp('width', newHeight*percentage) + 'px';
+                    }
+
+                }else{
+                    //普通中间线节点
+                    if (rect[dir][2] != 0) {
+                        if(rect[dir][2] * offset.x>0&&isBoundary){
+                            return false;
+                        }
+                        dom.style.width = me._validScaledProp('width', newWidth) + 'px';
+                    }
+                    if (rect[dir][3] != 0) {
+                        if(rect[dir][3] * offset.y>0&&isBoundary){
+                            return false;
+                        }
+                        dom.style.height = me._validScaledProp('height', newHeight) + 'px';
+                    }
                 }
             },
             _validScaledProp: function (prop, value) {
                 var ele = this.resizer,
                     wrap = document;
+                    //wrap = this.editor.document.documentElement;
 
                 value = isNaN(value) ? 0 : value;
                 switch (prop) {
                     case 'left':
-                        return value < 0 ? 0 : (value + ele.clientWidth) > wrap.clientWidth ? wrap.clientWidth - ele.clientWidth : value;
+                        return value < 0 ? 0 :  (value + ele.clientWidth) > wrap.clientWidth? wrap.clientWidth - ele.clientWidth : value;
                     case 'top':
                         return value < 0 ? 0 : (value + ele.clientHeight) > wrap.clientHeight ? wrap.clientHeight - ele.clientHeight : value;
                     case 'width':
@@ -237,9 +272,11 @@ UE.plugins['fiximgclick'] = (function () {
             me.addListener('click', function (type, e) {
 
                 var range = me.selection.getRange(),
-                    img = range.getClosedNode();
+                    img = range.getClosedNode(),
+                    pageX= e.pageX,pageY= e.pageY
+                    ;
 
-                if (img && img.tagName == 'IMG' && me.body.contentEditable!="false") {
+                if (img && img.tagName == 'IMG' && pageX>img.offsetLeft && pageX<img.offsetLeft+img.width && pageY>img.offsetTop &&  pageY<(img.offsetTop+img.height) && me.body.contentEditable!="false") {
 
                     if (img.className.indexOf("edui-faked-music") != -1 ||
                         img.getAttribute("anchorname") ||

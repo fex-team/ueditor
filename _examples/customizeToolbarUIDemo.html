@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>完整demo</title>
+    <title>二次开发组件demo</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script type="text/javascript" charset="utf-8" src="../ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="editor_api.js"> </script>
@@ -11,10 +11,10 @@
     <!--添加按钮-->
     <script type="text/javascript" charset="utf-8" src="addCustomizeButton.js"></script>
     <!--添加下拉菜单-->
-    <script type="text/javascript" charset="utf-8" src="addCustomizeCombox.js"></script>
-    <!--添加弹出层-->
-    <script type="text/javascript" charset="utf-8" src="addCustomizeDialog.js"></script>
-
+    <!--<script type="text/javascript" charset="utf-8" src="addCustomizeCombox.js"></script>-->
+    <!--&lt;!&ndash;添加弹出层&ndash;&gt;-->
+    <!--<script type="text/javascript" charset="utf-8" src="addCustomizeDialog.js"></script>-->
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <style type="text/css">
         .clear {
             clear: both;
@@ -22,10 +22,20 @@
         div{
             width:100%;
         }
+        .edui-for-h1 .edui-label{
+            font-size: small;
+            vertical-align: middle;
+            padding: 0 5px!important;
+        }
+        .edui-for-h2 .edui-label{
+            font-size: small;
+            vertical-align: middle;
+            padding: 0 5px!important;
+        }
     </style>
 </head>
 <body>
-<div>
+<div style="width:1000px;margin:auto">
     <h1>二次开发demo</h1>
     <script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
 </div>
@@ -34,9 +44,21 @@
 
     //实例化编辑器
     //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-    UE.getEditor('editor',{
+    var  editor=UE.getEditor('editor',{
         //清空了工具栏
-        toolbars:[['combox','bold','button','dialog']]
+        toolbars:[['h1','h2','myblockquote','mylink',
+            '|','bold', 'link','unLink','italic', 'underline', 'forecolor', 'backcolor','fontborder', 'strikethrough','removeformat',
+//            '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify',
+//            '|', 'touppercase', 'tolowercase',
+            '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter','insertimage','insertvideo',
+            '|','insertorderedlist', 'insertunorderedlist',
+            'insertTable','horizontal','template',
+
+            '|', 'undo', 'redo',
+
+        ]],
+    elementPathEnabled:false,
+        wordCount:false
     });
 
 </script>

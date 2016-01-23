@@ -986,7 +986,7 @@
             domUtils.on($G('searchReset'), 'click', function(){
                 $G('searchTxt').value = lang.searchRemind;
                 $G('searchListUl').innerHTML = '';
-                $G('searchType').selectedIndex = 0;
+                //$G('searchType').selectedIndex = 0;
             });
             /* 搜索框聚焦 */
             domUtils.on($G('searchTxt'), 'focus', function(){
@@ -1035,7 +1035,8 @@
         getImageData: function(){
             var _this = this,
                 key = $G('searchTxt').value,
-                type = $G('searchType').value,
+                //type = $G('searchType').value,
+                type='&s=1&z=19';
                 keepOriginName = editor.options.keepOriginName ? "1" : "0",
                 url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + key + type + "&ie=utf-8&oe=utf-8&keeporiginname=" + keepOriginName + "&" + +new Date;
 

@@ -1,4 +1,4 @@
-/*UI工具栏、编辑区域、底部*/
+/*UIå·¥å…·æ ã€ç¼–è¾‘åŒºåŸŸã€åº•éƒ¨*/
 .edui-default .edui-editor {
     border: 1px solid #d4d4d4;
     background-color: white;
@@ -15,31 +15,32 @@
 .edui-default .edui-editor-toolbarbox {
     position: relative;
     zoom: 1;
-    -webkit-box-shadow:0 1px 4px rgba(204, 204, 204, 0.6);
+    /* -webkit-box-shadow:0 1px 4px rgba(204, 204, 204, 0.6); */
     -moz-box-shadow:0 1px 4px rgba(204, 204, 204, 0.6);
-    box-shadow:0 1px 4px rgba(204, 204, 204, 0.6);
-    border-top-left-radius:2px;
-    border-top-right-radius:2px;
+    /* box-shadow:0 1px 4px rgba(204, 204, 204, 0.6); */
+    /* border-top-left-radius:2px; */
+    /* border-top-right-radius:2px; */
+    /* border: 1px solid #EFEFEF; */
 }
 
 .edui-default .edui-editor-toolbarboxouter {
     border-bottom: 1px solid #d4d4d4;
-    background-color: #fafafa;
+    background-color: #F4F4F4;
     background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
-    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+    /* background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2)); */
+    /* background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2); */
     background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    /* background-image: linear-gradient(to bottom, #ffffff, #f2f2f2); */
     background-repeat: repeat-x;
     /*border: 1px solid #d4d4d4;*/
-    -webkit-border-radius: 4px 4px 0 0;
+    /* -webkit-border-radius: 4px 4px 0 0; */
     -moz-border-radius: 4px 4px 0 0;
-    border-radius: 4px 4px 0 0;
+    border-radius: 3px 3px 2px 2px;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
     *zoom: 1;
-    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    /* -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065); */
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065); */
 }
 
 .edui-default .edui-editor-toolbarboxinner {
@@ -120,7 +121,7 @@
     background-color: #fff6d9;
     padding: 5px;
     font-size: 10pt;
-    font-family: "宋体";
+    font-family: "å®‹ä½“";
 }
 
 .edui-default .edui-bubble .edui-shadow {
