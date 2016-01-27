@@ -10,6 +10,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -146,7 +148,24 @@ public final class ConfigManager {
 		
 	}
 	
-	private void initEnv () throws FileNotFoundException, IOException {
+	/**
+     * Get rootPath from request,if not,find it from conf map.
+     * @param request
+     * @param conf
+     * @return
+     * @author Ternence
+     * @create 2015年1月31日
+     */
+    public static String getRootPath(HttpServletRequest request, Map<String, Object> conf) {
+        Object rootPath = request.getAttribute("rootPath");
+        if (rootPath != null) {
+            return rootPath + "" + File.separatorChar;
+        } else {
+            return conf.get("rootPath") + "";
+        }
+    }
+
+    private void initEnv () throws FileNotFoundException, IOException {
 		
 		File file = new File( this.originalPath );
 		
@@ -168,7 +187,12 @@ public final class ConfigManager {
 	}
 	
 	private String getConfigPath () {
-		return this.parentPath + File.separator + ConfigManager.configFileName;
+        String path = this.getClass().getResource("/").getPath() + ConfigManager.configFileName;
+        if (new File(path).exists()) {
+          return path;
+        }else {          
+          return this.parentPath + File.separator + ConfigManager.configFileName;
+        }
 	}
 
 	private String[] getArray ( String key ) {
