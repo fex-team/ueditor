@@ -79,7 +79,7 @@ ueditor API 文档：[http://ueditor.baidu.com/doc](http://ueditor.baidu.com/doc
 
 ueditor github 地址：[http://github.com/fex-team/ueditor](http://github.com/fex-team/ueditor "ueditor github 地址")
 
-ueditor 第三方插件贡献 wiki : [第三方插件贡献规范](https://github.com/fex-team/ueditor/wiki/%E8%B4%A1%E7%8C%AE%E7%AC%AC%E4%B8%89%E6%96%B9%E6%8F%92%E4%BB%B6%E9%A1%B9%E7%9B%AE%E8%AF%B4%E6%98%8E)
+ueditor 第三方插件贡献 wiki : [第三方插件贡献规范](http://ueditor.baidu.com/website/thirdproject.html)
 
 ## 3 第三方贡献
 
