@@ -7,7 +7,8 @@
 UE.plugin.register('simpleupload', function (){
     var me = this,
         isLoaded = false,
-        containerBtn;
+        containerBtn,
+        uiUtils = baidu.editor.ui.uiUtils;
 
     function initUploadBtn(){
         var w = containerBtn.offsetWidth || 20,
@@ -30,8 +31,7 @@ UE.plugin.register('simpleupload', function (){
             'style="' + btnStyle + '">' +
             '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
             'style="' + btnStyle + '">' +
-            '</form>' +
-            '<iframe id="edui_iframe_' + timestrap + '" name="edui_iframe_' + timestrap + '" style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>';
+            '</form>';
 
             wrapper.className = 'edui-' + me.options.theme;
             wrapper.id = me.ui.id + '_iframeupload';
@@ -47,16 +47,19 @@ UE.plugin.register('simpleupload', function (){
 
             var form = btnIframeDoc.getElementById('edui_form_' + timestrap);
             var input = btnIframeDoc.getElementById('edui_input_' + timestrap);
-            var iframe = btnIframeDoc.getElementById('edui_iframe_' + timestrap);
 
             domUtils.on(input, 'change', function(){
                 if(!input.value) return;
                 var loadingId = 'loading_' + (+new Date()).toString(36);
+                var iframeId = 'edui_iframe_'+ (+new Date()).toString(36);
+                var iframe = uiUtils.createElementByHtml('<iframe id="' + iframeId + '" name="' + iframeId + '" style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>');
                 var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
 
                 var imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
                 var allowFiles = me.getOpt('imageAllowFiles');
 
+                wrapper.appendChild(iframe);
+                form.setAttribute('target', iframeId);
                 me.focus();
                 me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif">');
 
@@ -74,6 +77,7 @@ UE.plugin.register('simpleupload', function (){
                             loader.setAttribute('_src', link);
                             loader.setAttribute('alt', json.original || '');
                             loader.removeAttribute('id');
+                            wrapper.removeChild(iframe);
                         } else {
                             showErrorLoader && showErrorLoader(json.state);
                         }
