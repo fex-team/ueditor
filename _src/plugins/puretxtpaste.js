@@ -12,6 +12,9 @@ UE.plugins['pasteplain'] = function(){
             function transP(node){
                 node.tagName = 'p';
                 node.setStyle();
+                //xhl 20160309 删除p标签内的样式 start
+                node.setAttr('style','');
+                //xhl 20160309 删除p标签内的样式 end
             }
             function removeNode(node){
                 node.parentNode.removeChild(node,true)
