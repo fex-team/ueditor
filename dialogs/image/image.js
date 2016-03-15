@@ -719,6 +719,7 @@
                     var responseText = (ret._raw || ret),
                         json = utils.str2json(responseText);
                     if (json.state == 'SUCCESS') {
+                        json.index = file.id.match(/\d+/);
                         _this.imageList.push(json);
                         $file.append('<span class="success"></span>');
                     } else {
@@ -771,6 +772,11 @@
             var i, data, list = [],
                 align = getAlign(),
                 prefix = editor.getOpt('imageUrlPrefix');
+
+            this.imageList.sort(function(x, y) {
+                if(x.index <= y.index) return -1;
+                return 1;
+            });
             for (i = 0; i < this.imageList.length; i++) {
                 data = this.imageList[i];
                 list.push({
