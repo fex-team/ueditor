@@ -468,6 +468,11 @@
                     } else if (prev === 'queued') {
                         $li.off('mouseenter mouseleave');
                         $btns.remove();
+                    }  else if (prev === 'invalid') {
+                        if (cur === 'cancelled') {
+                            fileCount++;
+                            fileSize += file.size;
+                        }
                     }
                     // 成功
                     if (cur === 'error' || cur === 'invalid') {
