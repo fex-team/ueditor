@@ -128,6 +128,7 @@ UE.plugins['fiximgclick'] = (function () {
                 me.target.width = parseInt(me.resizer.style.width);
                 me.target.height = parseInt(me.resizer.style.height);
                 me.attachTo(me.target);
+                me.editor.fireEvent('contentchange');
             },
             updateContainerStyle: function (dir, offset) {
                 var me = this,
