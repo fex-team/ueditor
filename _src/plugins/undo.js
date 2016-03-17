@@ -227,7 +227,7 @@ UE.plugins['undo'] = function () {
         });
         domUtils.on(this.body, 'compositionend', function () {
             inputType = false;
-        })
+        });
     });
     //快捷键
     me.addshortcutkey({
@@ -240,7 +240,7 @@ UE.plugins['undo'] = function () {
 
         var me = this;
         var keyCode = evt.keyCode || evt.which;
-        if (!keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey && !evt.altKey) {
+        if (!keys[keyCode] && !evt.ctrlKey && !evt.metaKey && !evt.altKey) {
             if (inputType)
                 return;
 
