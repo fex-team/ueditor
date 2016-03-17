@@ -8,8 +8,8 @@
         Popup = baidu.editor.ui.Popup,
         TablePicker = baidu.editor.ui.TablePicker,
         SplitButton = baidu.editor.ui.SplitButton,
-        TableButton = baidu.editor.ui.TableButton = function (options){
-            this.initOptions(options);
+        TableButton = baidu.editor.ui.TableButton = function (options, ed){
+            this.initOptions(options, ed);
             this.initTableButton();
         };
     TableButton.prototype = {
@@ -23,7 +23,7 @@
                     }
                 }),
                 'editor':me.editor
-            });
+            }, me.editor);
             this.initSplitButton();
         },
         _onPickTable: function (numCols, numRows){

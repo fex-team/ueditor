@@ -8,8 +8,8 @@
         Popup = baidu.editor.ui.Popup,
         AutoTypeSetPicker = baidu.editor.ui.AutoTypeSetPicker,
         SplitButton = baidu.editor.ui.SplitButton,
-        AutoTypeSetButton = baidu.editor.ui.AutoTypeSetButton = function (options){
-            this.initOptions(options);
+        AutoTypeSetButton = baidu.editor.ui.AutoTypeSetButton = function (options, ed){
+            this.initOptions(options, ed);
             this.initAutoTypeSetButton();
         };
     function getPara(me){

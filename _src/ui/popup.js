@@ -5,8 +5,8 @@
         uiUtils = baidu.editor.ui.uiUtils,
         domUtils = baidu.editor.dom.domUtils,
         UIBase = baidu.editor.ui.UIBase,
-        Popup = baidu.editor.ui.Popup = function (options){
-            this.initOptions(options);
+        Popup = baidu.editor.ui.Popup = function (options, ed){
+            this.initOptions(options, ed);
             this.initPopup();
         };
 
@@ -40,6 +40,10 @@
         initPopup: function (){
             this.initUIBase();
             allPopups.push( this );
+        },
+        dispose: function(){
+            UE.utils.removeItem(allPopups, this);
+            UIBase.prototype.dispose.call(this);
         },
         getHtmlTpl: function (){
             return '<div id="##" class="edui-popup %%" onmousedown="return false;">' +
@@ -245,7 +249,7 @@
         }
     };
     utils.inherits(Popup, UIBase);
-    
+
     domUtils.on( document, 'mousedown', function ( evt ) {
         var el = evt.target || evt.srcElement;
         closeAllPopup( evt,el );

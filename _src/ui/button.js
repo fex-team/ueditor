@@ -5,7 +5,7 @@
     var utils = baidu.editor.utils,
         UIBase = baidu.editor.ui.UIBase,
         Stateful = baidu.editor.ui.Stateful,
-        Button = baidu.editor.ui.Button = function (options){
+        Button = baidu.editor.ui.Button = function (options, ed){
             if(options.name){
                 var btnName = options.name;
                 var cssRules = options.cssRules;
@@ -14,7 +14,7 @@
                 }
                 options.cssRules = '.edui-' + (options.theme || 'default') + ' .edui-toolbar .edui-button.edui-for-'+ btnName +' .edui-icon {'+ cssRules +'}'
             }
-            this.initOptions(options);
+            this.initOptions(options, ed);
             this.initButton();
         };
     Button.prototype = {

@@ -2,8 +2,8 @@
     var utils = baidu.editor.utils,
         uiUtils = baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase,
-        Toolbar = baidu.editor.ui.Toolbar = function (options){
-            this.initOptions(options);
+        Toolbar = baidu.editor.ui.Toolbar = function (options, ed){
+            this.initOptions(options, ed);
             this.initToolbar();
         };
     Toolbar.prototype = {

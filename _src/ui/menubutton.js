@@ -6,8 +6,8 @@
     var utils = baidu.editor.utils,
         Menu = baidu.editor.ui.Menu,
         SplitButton = baidu.editor.ui.SplitButton,
-        MenuButton = baidu.editor.ui.MenuButton = function (options){
-            this.initOptions(options);
+        MenuButton = baidu.editor.ui.MenuButton = function (options, ed){
+            this.initOptions(options, ed);
             this.initMenuButton();
         };
     MenuButton.prototype = {
@@ -34,7 +34,7 @@
         setValue : function(value){
             this._value = value;
         }
-        
+
     };
     utils.inherits(MenuButton, SplitButton);
 })();

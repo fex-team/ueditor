@@ -9,8 +9,8 @@
         ColorPicker = baidu.editor.ui.ColorPicker,
         Popup = baidu.editor.ui.Popup,
         SplitButton = baidu.editor.ui.SplitButton,
-        ColorButton = baidu.editor.ui.ColorButton = function (options){
-            this.initOptions(options);
+        ColorButton = baidu.editor.ui.ColorButton = function (options, ed){
+            this.initOptions(options, ed);
             this.initColorButton();
         };
     ColorButton.prototype = {

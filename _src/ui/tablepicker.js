@@ -4,9 +4,9 @@
     var utils = baidu.editor.utils,
         uiUtils = baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase;
-    
-    var TablePicker = baidu.editor.ui.TablePicker = function (options){
-        this.initOptions(options);
+
+    var TablePicker = baidu.editor.ui.TablePicker = function (options, ed){
+        this.initOptions(options, ed);
         this.initTablePicker();
     };
     TablePicker.prototype = {

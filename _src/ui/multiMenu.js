@@ -5,8 +5,8 @@
     var utils = baidu.editor.utils,
         Popup = baidu.editor.ui.Popup,
         SplitButton = baidu.editor.ui.SplitButton,
-        MultiMenuPop = baidu.editor.ui.MultiMenuPop = function(options){
-            this.initOptions(options);
+        MultiMenuPop = baidu.editor.ui.MultiMenuPop = function(options, ed){
+            this.initOptions(options, ed);
             this.initMultiMenu();
         };
 

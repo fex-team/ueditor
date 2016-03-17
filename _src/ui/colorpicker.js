@@ -3,8 +3,8 @@
 (function (){
     var utils = baidu.editor.utils,
         UIBase = baidu.editor.ui.UIBase,
-        ColorPicker = baidu.editor.ui.ColorPicker = function (options){
-            this.initOptions(options);
+        ColorPicker = baidu.editor.ui.ColorPicker = function (options, ed){
+            this.initOptions(options, ed);
             this.noColorText = this.noColorText || this.editor.getLang("clearColor");
             this.initUIBase();
         };

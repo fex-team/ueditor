@@ -6,8 +6,8 @@
         uiUtils = baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase;
 
-    var PastePicker = baidu.editor.ui.PastePicker = function (options) {
-        this.initOptions(options);
+    var PastePicker = baidu.editor.ui.PastePicker = function (options, ed) {
+        this.initOptions(options, ed);
         this.initPastePicker();
     };
     PastePicker.prototype = {

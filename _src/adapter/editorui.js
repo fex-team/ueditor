@@ -7,10 +7,9 @@
     var _Dialog = editorui.Dialog;
     editorui.buttons = {};
 
-    editorui.Dialog = function (options) {
-        var dialog = new _Dialog(options);
-        dialog.addListener('hide', function () {
-
+    editorui.Dialog = function (options, ed) {
+        var dialog = new _Dialog(options, ed);
+        var onHideHandler = function () {
             if (dialog.editor) {
                 var editor = dialog.editor;
                 try {
@@ -27,6 +26,10 @@
                 } catch (ex) {
                 }
             }
+        };
+        dialog.addListener('hide', onHideHandler);
+        dialog.editor.addListener('destroy', function () {
+          domUtils.un(dialog, "hide", onHideHandler);
         });
         return dialog;
     };
@@ -77,7 +80,8 @@
                         editor.execCommand(cmd);
                     },
                     theme:editor.options.theme,
-                    showText:false
+                    showText:false,
+                    editor: editor
                 });
                 editorui.buttons[cmd] = ui;
                 editor.addListener('selectionchange', function (type, causeByUi, uiReady) {
@@ -195,6 +199,9 @@
                 }
                 (function (cmd) {
                     editorui[cmd] = function (editor, iframeUrl, title) {
+                      if (!UE.utils.isString(iframeUrl)) {
+                        iframeUrl = null;
+                      }
                         iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})[cmd] || iframeUrlMap[cmd];
                         title = editor.options.labelMap[cmd] || editor.getLang("labelMap." + cmd) || '';
 
@@ -228,7 +235,7 @@
                                         }
                                     }
                                 ]
-                            } : {}));
+                            } : {}), editor);
 
                             editor.ui._dialogs[cmd + "Dialog"] = dialog;
                         }
@@ -261,7 +268,7 @@
                             },
                             theme:editor.options.theme,
                             disabled:(cmd == 'scrawl' && editor.queryCommandState("scrawl") == -1) || ( cmd == 'charts' )
-                        });
+                        }, editor);
                         editorui.buttons[cmd] = ui;
                         editor.addListener('selectionchange', function () {
                             //只存在于右键菜单而无工具栏按钮的ui不需要检测状态
@@ -293,7 +300,7 @@
             },
             theme:editor.options.theme
 
-        });
+        }, editor);
         editorui.buttons['snapscreen'] = ui;
         iframeUrl = iframeUrl || (editor.options.iframeUrlMap || {})["snapscreen"] || iframeUrlMap["snapscreen"];
         if (iframeUrl) {
@@ -321,7 +328,7 @@
                     }
                 ]
 
-            });
+            }, editor);
             dialog.render();
             editor.ui._dialogs["snapscreenDialog"] = dialog;
         }
@@ -829,7 +836,7 @@
                 onclick:function () {},
                 theme:editor.options.theme,
                 showText:false
-            });
+            }, editor);
         editorui.buttons[name] = ui;
         editor.addListener('ready', function() {
             var b = ui.getDom('body'),

@@ -9,7 +9,7 @@
         Mask = baidu.editor.ui.Mask,
         UIBase = baidu.editor.ui.UIBase,
         Button = baidu.editor.ui.Button,
-        Dialog = baidu.editor.ui.Dialog = function (options){
+        Dialog = baidu.editor.ui.Dialog = function (options, ed){
             if(options.name){
                 var name = options.name;
                 var cssRules = options.cssRules;
@@ -30,7 +30,7 @@
                 },
                 //是否控制dialog中的scroll事件， 默认为不阻止
                 holdScroll: false
-            },options));
+            },options), ed);
             this.initDialog();
         };
     var modalMask;
@@ -52,11 +52,11 @@
                 onclick: function (){
                     activeDialog && activeDialog.close(false);
                 }
-            })));
+            }, this.editor)));
             this.dragMask = (dragMask || (dragMask = new Mask({
                 className: 'edui-dialog-dragmask',
                 theme:theme
-            })));
+            }, this.editor)));
             this.closeButton = new Button({
                 className: 'edui-dialog-closebutton',
                 title: me.closeDialog,
@@ -64,7 +64,7 @@
                 onclick: function (){
                     me.close(false);
                 }
-            });
+            }, this.editor);
 
             this.fullscreen && this.initResizeEvent();
 
@@ -73,7 +73,7 @@
                     if (!(this.buttons[i] instanceof Button)) {
                         this.buttons[i] = new Button(utils.extend(this.buttons[i],{
                             editor : this.editor
-                        },true));
+                        },true), this.editor);
                     }
                 }
             }

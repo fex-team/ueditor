@@ -9,8 +9,8 @@
         domUtils = baidu.editor.dom.domUtils;
     var nodeStack = [];
 
-    function EditorUI(options) {
-        this.initOptions(options);
+    function EditorUI(options, ed) {
+        this.initOptions(options, ed);
         this.initEditorUI();
     }
 
@@ -226,7 +226,7 @@
                     }
                     return baidu.editor.ui.Popup.prototype.queryAutoHide.call(this, el);
                 }
-            });
+            }, editor);
             popup.render();
             if (editor.options.imagePopup) {
                 editor.addListener('mouseover', function (t, evt) {
@@ -331,7 +331,7 @@
             var extraUIs = [];
             for (var i = 0; i < toolbars.length; i++) {
                 var toolbar = toolbars[i];
-                var toolbarUi = new baidu.editor.ui.Toolbar({theme:editor.options.theme});
+                var toolbarUi = new baidu.editor.ui.Toolbar({theme:editor.options.theme}, editor);
                 for (var j = 0; j < toolbar.length; j++) {
                     var toolbarItem = toolbar[j];
                     var toolbarItemUi = null;
@@ -346,7 +346,7 @@
                         var ui = baidu.editor.ui[toolbarItem];
                         if (ui) {
                             if(utils.isFunction(ui)){
-                                toolbarItemUi = new baidu.editor.ui[toolbarItem](editor);
+                                toolbarItemUi = new baidu.editor.ui[toolbarItem](editor, editor);
                             }else{
                                 if(ui.id && ui.id != editor.key){
                                     continue;
@@ -676,7 +676,12 @@
             me.addListener('destroy', function () {
                 domUtils.un(window, 'resize', updateFullScreenTime);
                 clearTimeout(timerId);
-            })
+            });
+
+            this.editor.addListener('destroy', function () {
+              domUtils.un(window, 'resize', updateFullScreenTime);
+              clearTimeout(timerId);
+            });
         },
         showToolbarMsg:function (msg, flag) {
             this.getDom('toolbarmsg_label').innerHTML = msg;
@@ -730,7 +735,7 @@
                     editor.setOpt({
                         labelMap:editor.options.labelMap || editor.getLang('labelMap')
                     });
-                    new EditorUI(editor.options);
+                    new EditorUI(editor.options, editor);
                     if (holder) {
                         if (holder.constructor === String) {
                             holder = document.getElementById(holder);
@@ -843,8 +848,15 @@
     UE.delEditor = function (id) {
         var editor;
         if (editor = instances[id]) {
-            editor.key && editor.destroy();
-            delete instances[id]
+          var key = null;
+          for (var k in UE.instants) {
+            if (UE.instants[k].key === editor.key) {
+              delete UE.instants[k]
+              break;
+            }
+          }
+          editor.key && editor.destroy();
+          delete instances[id]
         }
     };
 

@@ -11,8 +11,8 @@
         Stateful = baidu.editor.ui.Stateful,
         CellAlignPicker = baidu.editor.ui.CellAlignPicker,
 
-        Menu = baidu.editor.ui.Menu = function (options) {
-            this.initOptions(options);
+        Menu = baidu.editor.ui.Menu = function (options, ed) {
+            this.initOptions(options, ed);
             this.initMenu();
         };
 
@@ -124,8 +124,8 @@
      * @update 2013/04/03 hancong03 新增一个参数menu, 该参数存储了menuItem所对应的menu引用
      * @type {Function}
      */
-    var MenuItem = baidu.editor.ui.MenuItem = function (options) {
-        this.initOptions(options);
+    var MenuItem = baidu.editor.ui.MenuItem = function (options, ed) {
+        this.initOptions(options, ed);
         this.initUIBase();
         this.Stateful_init();
         if (this.subMenu && !(this.subMenu instanceof Menu)) {

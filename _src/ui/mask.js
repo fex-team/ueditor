@@ -5,9 +5,9 @@
         domUtils = baidu.editor.dom.domUtils,
         UIBase = baidu.editor.ui.UIBase,
         uiUtils = baidu.editor.ui.uiUtils;
-    
-    var Mask = baidu.editor.ui.Mask = function (options){
-        this.initOptions(options);
+
+    var Mask = baidu.editor.ui.Mask = function (options, ed){
+        this.initOptions(options, ed);
         this.initUIBase();
     };
     Mask.prototype = {

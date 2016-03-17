@@ -7,8 +7,8 @@
         domUtils = baidu.editor.dom.domUtils,
         UIBase = baidu.editor.ui.UIBase,
         Stateful = baidu.editor.ui.Stateful,
-        SplitButton = baidu.editor.ui.SplitButton = function (options){
-            this.initOptions(options);
+        SplitButton = baidu.editor.ui.SplitButton = function (options, ed){
+            this.initOptions(options, ed);
             this.initSplitButton();
         };
     SplitButton.prototype = {

@@ -4,8 +4,8 @@
     var utils = baidu.editor.utils,
         domUtils = baidu.editor.dom.domUtils,
         UIBase = baidu.editor.ui.UIBase,
-        Message = baidu.editor.ui.Message = function (options){
-            this.initOptions(options);
+        Message = baidu.editor.ui.Message = function (options, ed){
+            this.initOptions(options, ed);
             this.initMessage();
         };
 

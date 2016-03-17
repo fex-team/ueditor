@@ -4,8 +4,8 @@
     var utils = baidu.editor.utils,
         UIBase = baidu.editor.ui.UIBase;
 
-    var AutoTypeSetPicker = baidu.editor.ui.AutoTypeSetPicker = function (options) {
-        this.initOptions(options);
+    var AutoTypeSetPicker = baidu.editor.ui.AutoTypeSetPicker = function (options, ed) {
+        this.initOptions(options, ed);
         this.initAutoTypeSetPicker();
     };
     AutoTypeSetPicker.prototype = {

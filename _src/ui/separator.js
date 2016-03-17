@@ -1,8 +1,8 @@
 (function (){
     var utils = baidu.editor.utils,
         UIBase = baidu.editor.ui.UIBase,
-        Separator = baidu.editor.ui.Separator = function (options){
-            this.initOptions(options);
+        Separator = baidu.editor.ui.Separator = function (options, ed){
+            this.initOptions(options, ed);
             this.initSeparator();
         };
     Separator.prototype = {

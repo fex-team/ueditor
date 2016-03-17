@@ -1074,7 +1074,8 @@
         _callCmdFn: function (fnName, args) {
             var cmdName = args[0].toLowerCase(),
                 cmd, cmdFn;
-            cmd = this.commands[cmdName] || UE.commands[cmdName];
+            var cmds = this.cmmands || {};
+            cmd = cmds[cmdName] || UE.commands[cmdName];
             cmdFn = cmd && cmd[fnName];
             //没有querycommandstate或者没有command的都默认返回0
             if ((!cmd || !cmdFn) && fnName == 'queryCommandState') {
@@ -1386,7 +1387,8 @@
          * ```
          */
         getLang: function (path) {
-            var lang = UE.I18N[this.options.lang];
+          var opt = this.options || {};
+            var lang = UE.I18N[opt.lang];
             if (!lang) {
                 throw Error("not import language file");
             }

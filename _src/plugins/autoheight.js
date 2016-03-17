@@ -26,7 +26,9 @@ UE.plugins['autoheight'] = function () {
         if(isFullscreen)return;
         if (!me.queryCommandState || me.queryCommandState && me.queryCommandState('source') != 1) {
             timer = setTimeout(function(){
-
+              if (!me.body) {
+                return;
+              }
                 var node = me.body.lastChild;
                 while(node && node.nodeType != 1){
                     node = node.previousSibling;

@@ -8,8 +8,8 @@
         uiUtils = baidu.editor.ui.uiUtils,
         Menu = baidu.editor.ui.Menu,
         SplitButton = baidu.editor.ui.SplitButton,
-        Combox = baidu.editor.ui.Combox = function (options){
-            this.initOptions(options);
+        Combox = baidu.editor.ui.Combox = function (options, ed){
+            this.initOptions(options, ed);
             this.initCombox();
         };
     Combox.prototype = {

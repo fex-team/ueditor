@@ -8,15 +8,27 @@
     UIBase.prototype = {
         className:'',
         uiName:'',
-        initOptions:function (options) {
+        initOptions:function (options, ed) {
             var me = this;
             for (var k in options) {
                 me[k] = options[k];
             }
             this.id = this.id || 'edui' + uiUtils.uid();
+            this.editor = options.editor || ed;
         },
         initUIBase:function () {
             this._globalKey = utils.unhtml(uiUtils.setGlobal(this.id, this));
+            var me = this;
+            if (this.editor) {
+              this.editor.on('destroy', function (){
+                setTimeout(function(){
+                  me.dispose();
+
+                }, 0);
+              });
+            }else{
+              console.log(this);
+            }
         },
         render:function (holder) {
             var html = this.renderHtml();
@@ -77,6 +89,8 @@
             var box = this.getDom();
             if (box) baidu.editor.dom.domUtils.remove(box);
             uiUtils.unsetGlobal(this.id);
+            this.ui = null;
+            this.editor = null;
         }
     };
     utils.inherits(UIBase, EventBase);

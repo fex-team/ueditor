@@ -11,8 +11,8 @@
      * 对齐状态为： 竖直居上，水平居中; 其中 align的取值为：'center', 'left', 'right'; valign的取值为: 'top', 'middle', 'bottom'
      * @update 2013/4/2 hancong03@baidu.com
      */
-    var CellAlignPicker = baidu.editor.ui.CellAlignPicker = function (options) {
-        this.initOptions(options);
+    var CellAlignPicker = baidu.editor.ui.CellAlignPicker = function (options, ed) {
+        this.initOptions(options, ed);
         this.initSelected();
         this.initCellAlignPicker();
     };

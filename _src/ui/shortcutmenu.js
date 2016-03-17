@@ -9,8 +9,8 @@
         timeID,
         isSubMenuShow = false;//是否有子pop显示
 
-    var ShortCutMenu = UI.ShortCutMenu = function (options) {
-        this.initOptions (options);
+    var ShortCutMenu = UI.ShortCutMenu = function (options, ed) {
+        this.initOptions (options, ed);
         this.initShortCutMenu ();
     };
 
