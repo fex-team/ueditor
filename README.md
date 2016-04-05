@@ -9,7 +9,9 @@ UEditor是由百度web前端研发部开发所见即所得富文本web编辑器�
 
 ### 1.1 下载编辑器
 
-到官网下载ueditor最新版：[[官网地址]](http://ueditor.baidu.com/website/download.html#ueditor "官网下载地址")
+1. `git clone ` 仓库
+2. `npm install` 安装依赖（如果没有安装 grunt , 请先在全局安装 grunt）
+3. 在终端执行 `grunt default`
 
 ### 1.2 创建demo文件
 解压下载的包，在解压后的目录创建demo.html文件，填入下面的html代码
