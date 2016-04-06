@@ -83,6 +83,8 @@ ueditor github 地址：[http://github.com/fex-team/ueditor](http://github.com/f
 
 ueditor 第三方插件贡献 wiki : [第三方插件贡献规范](http://ueditor.baidu.com/website/thirdproject.html)
 
+ueditor 贡献代码规范（javascript）： [javascript规范](https://github.com/fex-team/styleguide/blob/master/javascript.md)
+
 ## 3 第三方贡献
 
 ueditor for nodejs 参考[https://github.com/netpi/ueditor](https://github.com/netpi/ueditor)
