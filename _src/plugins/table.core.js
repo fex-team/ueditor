@@ -767,6 +767,7 @@
             var numCols = this.colsNum,
                 table = this.table,
                 row = table.insertRow(rowIndex), cell,
+                thead = null,
                 isInsertTitle = typeof sourceCell == 'string' && sourceCell.toUpperCase() == 'TH';
 
             function replaceTdToTh(colIndex, cell, tableRow) {
@@ -797,6 +798,11 @@
                     cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     row.appendChild(cell);
                     if(!isInsertTitle) replaceTdToTh(colIndex, cell, row);
+                }
+                
+                if(isInsertTitle) {
+                    thead = table.createTHead();
+                    thead.insertBefore(row, thead.firstChild);
                 }
             } else {
                 var infoRow = this.indexTable[rowIndex],
