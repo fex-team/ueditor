@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.baidu.ueditor.define.ActionMap;
@@ -37,18 +38,17 @@ public final class ConfigManager {
 	 * 通过一个给定的路径构建一个配置管理器， 该管理器要求地址路径所在目录下必须存在config.properties文件
 	 */
 	private ConfigManager ( String rootPath, String contextPath, String uri ) throws FileNotFoundException, IOException {
+		//FIXME:处理路径
+		rootPath = rootPath.replace( "\\", File.separator );
 		
-		rootPath = rootPath.replace( "\\", "/" );
-		
+		this.rootPath = rootPath;
 		this.contextPath = contextPath;
 		
 		if ( contextPath.length() > 0 ) {
-			this.rootPath = rootPath.substring( 0, rootPath.length() - contextPath.length() );
+			this.originalPath = this.rootPath + uri.substring( contextPath.length() );
 		} else {
-			this.rootPath = rootPath;
+			this.originalPath = this.rootPath + uri;
 		}
-		
-		this.originalPath = this.rootPath + uri;
 		
 		this.initEnv();
 		
@@ -82,7 +82,7 @@ public final class ConfigManager {
 		
 	}
 	
-	public Map<String, Object> getConfig ( int type ) {
+	public Map<String, Object> getConfig ( int type ) throws Exception {
 		
 		Map<String, Object> conf = new HashMap<String, Object>();
 		String savePath = null;
@@ -143,9 +143,11 @@ public final class ConfigManager {
 				
 		}
 		
+		//FIXME:添加相对路径contextPath
 		conf.put( "savePath", savePath );
 		conf.put( "rootPath", this.rootPath );
-		
+		conf.put( "contextPath", this.contextPath );
+
 		return conf;
 		
 	}
@@ -175,7 +177,7 @@ public final class ConfigManager {
 		return this.parentPath + File.separator + ConfigManager.configFileName;
 	}
 
-	private String[] getArray ( String key ) {
+	private String[] getArray ( String key ) throws Exception {
 		
 		JSONArray jsonArray = this.jsonConfig.getJSONArray( key );
 		String[] result = new String[ jsonArray.length() ];
