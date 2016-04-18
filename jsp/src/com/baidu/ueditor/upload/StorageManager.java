@@ -112,7 +112,7 @@ public class StorageManager {
 		}
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}
-
+	
 	private static File getTmpFile() {
 		File tmpDir = FileUtils.getTempDirectory();
 		String tmpFileName = (Math.random() * 10000 + "").replace(".", "");

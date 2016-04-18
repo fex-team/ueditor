@@ -20,7 +20,7 @@ var dtd = dom.dtd = (function() {
         D = X( {iframe:1}, C ),
         E = _({hr:1,ul:1,menu:1,div:1,blockquote:1,noscript:1,table:1,center:1,address:1,dir:1,pre:1,h5:1,dl:1,h4:1,noframes:1,h6:1,ol:1,h1:1,h3:1,h2:1}),
         F = _({ins:1,del:1,script:1,style:1}),
-        G = X( _({b:1,acronym:1,bdo:1,'var':1,'#':1,abbr:1,code:1,br:1,i:1,cite:1,kbd:1,u:1,strike:1,s:1,tt:1,strong:1,q:1,samp:1,em:1,dfn:1,span:1}), F ),
+        G = X( _({mark:1,b:1,acronym:1,bdo:1,'var':1,'#':1,abbr:1,code:1,br:1,i:1,cite:1,kbd:1,u:1,strike:1,s:1,tt:1,strong:1,q:1,samp:1,em:1,dfn:1,span:1}), F ),
         H = X( _({sub:1,img:1,embed:1,object:1,sup:1,basefont:1,map:1,applet:1,font:1,big:1,small:1}), G ),
         I = X( _({p:1}), H ),
         J = X( _({iframe:1}), H, B ),
@@ -174,6 +174,7 @@ var dtd = dom.dtd = (function() {
         pre : X( G, C ),
         p : X(_({'a':1}),L),
         em :L,
-        dfn : L
+        dfn : L,
+        mark:L
     });
 })();

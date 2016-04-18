@@ -25,16 +25,22 @@ UE.plugin.register('copy', function () {
         // hover事件传递到target
         client.on('mouseover mouseout', function (e) {
             var target = e.target;
-            if (e.type == 'mouseover') {
-                domUtils.addClass(target, 'edui-state-hover');
-            } else if (e.type == 'mouseout') {
-                domUtils.removeClasses(target, 'edui-state-hover');
+            if (target) {
+                if (e.type == 'mouseover') {
+                    domUtils.addClass(target, 'edui-state-hover');
+                } else if (e.type == 'mouseout') {
+                    domUtils.removeClasses(target, 'edui-state-hover');
+                }
             }
         });
         // flash加载不成功
         client.on('wrongflash noflash', function () {
             ZeroClipboard.destroy();
         });
+
+        // 触发事件
+        me.fireEvent('zeroclipboardready', client);
+
     }
 
     return {

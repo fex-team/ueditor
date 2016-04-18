@@ -19,6 +19,7 @@
     <target name="init">
         <delete dir="${report.path}"/>
         <delete file="${report.file}"/>
+        <echo message="wang_init" />
     </target>
 
     <target name="coverage">
@@ -28,6 +29,7 @@
             <arg value="_src"/>
             <arg value="${coverage.path}"/>
         </exec>
+        <echo message="wang_cov" />
     </target>
 
     <!--<target name="jslint" description="Run the JSLint tool on JS files">-->
@@ -51,6 +53,7 @@
             <!-- 通过指定 fileset 设置要进行检测的 JavaScript 文件集 -->
             <fileset dir="_src" includes="**/*.js"/>
         </jsl:jslint>
+        <echo message="wang_js" />
     </target>
     <!--<target name="jslint">-->
     <!--<formatter type="plain" destfile="_test/tools/br/jslint.out"/>-->
@@ -62,6 +65,7 @@
     <target name="executecore" depends="init,coverage">
         <get src="http://${serverip}/${git.project}/_test/tools/br/runall.php?ci=true&amp;cov=true&amp;filter=core"
              dest="/tmp/${git.user}_${git.project}core.php"/>
+        <echo message="wang_core" />
     </target>
     <target name="getreportcore" depends="init,coverage,executecore">
         <waitfor maxwait="3000" maxwaitunit="second">

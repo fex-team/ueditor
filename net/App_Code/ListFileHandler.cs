@@ -52,9 +52,10 @@ public class ListFileManager : Handler
             var localPath = Server.MapPath(PathToList);
             buildingList.AddRange(Directory.GetFiles(localPath, "*", SearchOption.AllDirectories)
                 .Where(x => SearchExtensions.Contains(Path.GetExtension(x).ToLower()))
+                .Reverse()
                 .Select(x => PathToList + x.Substring(localPath.Length).Replace("\\", "/")));
             Total = buildingList.Count;
-            FileList = buildingList.OrderBy(x => x).Skip(Start).Take(Size).ToArray();
+            FileList = buildingList.Skip(Start).Take(Size).ToArray();
         }
         catch (UnauthorizedAccessException)
         {

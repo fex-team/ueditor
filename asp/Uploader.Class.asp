@@ -13,7 +13,7 @@
 'IIS 7
     '打开IIS控制台，选择 ASP，在限制属性里有一个“最大请求实体主题限制”，设置需要的值
 
-CURRENT_ENCODING = "gb2312"
+CURRENT_ENCODING = "utf-8"
 
 Class Uploader
 
@@ -37,6 +37,7 @@ Class Uploader
         Set stateString = Server.CreateObject("Scripting.Dictionary")
         stateString.Add "SIZE_LIMIT_EXCCEED", "File size exceeded!"
         stateString.Add "TYPE_NOW_ALLOW", "File type not allowed!"
+        stateString.Add "IO_AUTH_ERROR", "Server IO authorization error!"
     End Sub
 
     Public Property Let MaxSize(ByVal size)
@@ -137,11 +138,16 @@ Class Uploader
         rsFilePath = formatter.format( cfgPathFormat, filename )
         
         savePath = Server.MapPath(rsFilePath)
-        CheckOrCreatePath(  GetDirectoryName(savePath) )
 
-        stream.SaveToFile savePath
+        If CheckOrCreatePath(  GetDirectoryName(savePath) ) Then
+            stream.SaveToFile savePath
+            rsState = "SUCCESS"
+        Else
+            rsState = stateString.Item( "IO_AUTH_ERROR" )
+        End If
+        
         stream.Close
-        rsState = "SUCCESS"
+        Set stream = Nothing
     End Function
 
     Private Function GetDirectoryName(path)
@@ -200,17 +206,32 @@ Class Uploader
         GetExt = Right( file, Len(file) - InStrRev(file, ".") + 1 )
     End Function
 
-    Private Function CheckOrCreatePath( ByVal path )
+    Private Function CheckOrCreatePath( ByVal fullPath )
+        Dim basePath, checkPath, path, parts, fs, delimiter
+
         Set fs = Server.CreateObject("Scripting.FileSystemObject")
-        Dim parts
-        parts = Split( path, "\" )
-        path = ""
+        
+        basePath = Server.MapPath("/")
+        
+        If InStr(basePath, "\") >= 0 Then
+            delimiter = "\"
+        Else
+            delimiter = "/"
+        End If
+
+        checkPath = Mid(fullPath, Len(basePath) + 2)
+
+        parts = Split( checkPath, delimiter )
+        path = basePath
         For Each part in parts
-            path = path + part + "\"
-            If fs.FolderExists( path ) = False Then
-                fs.CreateFolder( path )
+            If part <> "" Then
+                path = path + delimiter + part
+                If fs.FolderExists( path ) = False Then
+                    fs.CreateFolder( path )
+                End If
             End If
         Next
+        CheckOrCreatePath = fs.FolderExists(fullPath)
     End Function
 End Class
 
