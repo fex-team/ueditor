@@ -328,6 +328,7 @@
             var editor = this.editor;
             var toolbars = this.toolbars || [];
             var toolbarUis = [];
+            var extraUIs = [];
             for (var i = 0; i < toolbars.length; i++) {
                 var toolbar = toolbars[i];
                 var toolbarUi = new baidu.editor.ui.Toolbar({theme:editor.options.theme});
@@ -342,10 +343,28 @@
                         if(toolbarItem == '||'){
                             toolbarItem = 'Breakline';
                         }
-                        if (baidu.editor.ui[toolbarItem]) {
-                            toolbarItemUi = new baidu.editor.ui[toolbarItem](editor);
+                        var ui = baidu.editor.ui[toolbarItem];
+                        if (ui) {
+                            if(utils.isFunction(ui)){
+                                toolbarItemUi = new baidu.editor.ui[toolbarItem](editor);
+                            }else{
+                                if(ui.id && ui.id != editor.key){
+                                    continue;
+                                }
+                                var itemUI = ui.execFn.call(editor,editor,toolbarItem);
+                                if(itemUI){
+                                    if(ui.index === undefined){
+                                        toolbarUi.add(itemUI);
+                                        continue;
+                                    }else{
+                                        extraUIs.push({
+                                            index:ui.index,
+                                            itemUI:itemUI
+                                        })
+                                    }
+                                }
+                            }
                         }
-
                         //fullscreen这里单独处理一下，放到首行去
                         if (toolbarItem == 'fullscreen') {
                             if (toolbarUis && toolbarUis[0]) {
@@ -353,10 +372,7 @@
                             } else {
                                 toolbarItemUi && toolbarUi.items.splice(0, 0, toolbarItemUi);
                             }
-
                             continue;
-
-
                         }
                     } else {
                         toolbarItemUi = toolbarItem;
@@ -371,21 +387,9 @@
 
             //接受外部定制的UI
 
-            utils.each(UE._customizeUI,function(obj,key){
-                var itemUI,index;
-                if(obj.id && obj.id != editor.key){
-                   return false;
-                }
-                itemUI = obj.execFn.call(editor,editor,key);
-                if(itemUI){
-                    index = obj.index;
-                    if(index === undefined){
-                        index = toolbarUi.items.length;
-                    }
-                    toolbarUi.add(itemUI,index)
-                }
+            utils.each(extraUIs,function(obj){
+                toolbarUi.add(obj.itemUI,obj.index)
             });
-
             this.toolbars = toolbarUis;
         },
         getHtmlTpl:function () {
@@ -846,7 +850,7 @@
 
     UE.registerUI = function(uiName,fn,index,editorId){
         utils.each(uiName.split(/\s+/), function (name) {
-            UE._customizeUI[name] = {
+           baidu.editor.ui[name] = {
                 id : editorId,
                 execFn:fn,
                 index:index

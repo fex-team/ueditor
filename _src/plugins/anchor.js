@@ -32,6 +32,12 @@ UE.plugin.register('anchor', function (){
            utils.each(root.getNodesByTagName('a'),function(a){
                var val;
                if((val = a.getAttr('name')) && !a.getAttr('href')){
+                   //过滤掉word冗余标签
+                   //_Toc\d+有可能勿命中
+                   if(/^\_Toc\d+$/.test(val)){
+                       a.parentNode.removeChild(a);
+                       return;
+                   }
                    a.tagName = 'img';
                    a.setAttr({
                        anchorname :a.getAttr('name'),

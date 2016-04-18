@@ -23,7 +23,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        ie		:  /(msie\s|trident.*rv:)([\w.]+)/.test(agent),
+        ie		:  /(msie\s|trident.*rv:)([\w.]+)/i.test(agent),
 
         /**
          * @property {boolean} opera 检测当前浏览器是否为Opera
