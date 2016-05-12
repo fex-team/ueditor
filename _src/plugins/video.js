@@ -17,6 +17,14 @@ UE.plugins['video'] = function (){
      * @param addParagraph  是否需要添加P 标签
      */
     function creatInsertStr(url,width,height,id,align,classname,type){
+
+        url = utils.unhtmlForUrl(url);
+        align = utils.unhtml(align);
+        classname = utils.unhtml(classname);
+
+        width = parseInt(width, 10) || 0;
+        height = parseInt(height, 10) || 0;
+
         var str;
         switch (type){
             case 'image':
