@@ -90,6 +90,7 @@
             'plugins/simpleupload.js',
             'plugins/serverparam.js',
             'plugins/insertfile.js',
+            'plugins/xssFilter.js',
             'ui/ui.js',
             'ui/uiutils.js',
             'ui/uibase.js',
@@ -120,7 +121,6 @@
             'adapter/editor.js',
             'adapter/message.js',
             'adapter/autosave.js'
-
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {
