@@ -82,8 +82,7 @@
 
         //如果自定义，最好给p标签如下的行高，要不输入中文时，会有跳动感
         //,initialStyle:'p{line-height:1em}'//编辑器层级的基数,可以用来改变字体等
-
-        //,iframeJsUrl: '' //给编辑区域的iframe引入一个js文件
+        
         //,iframeCssUrl: URL + '/themes/iframe.css' //给编辑区域的iframe引入一个css文件
 
         //indentValue
@@ -101,14 +100,6 @@
         //,enableAutoSave: true
         //自动保存间隔时间， 单位ms
         //,saveInterval: 500
-
-        //启用拖放上传
-        //,enableDragUpload: true
-        //启用粘贴上传
-        //,enablePasteUpload: true
-
-        //启用图片拉伸缩放
-        //,imageScaleEnabled: true
 
         //,fullscreen : false //是否开启初始化时即全屏，默认关闭
 
