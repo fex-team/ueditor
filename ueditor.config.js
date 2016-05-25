@@ -409,7 +409,7 @@
 			header: [],
 			hr:     [],
 			i:      [],
-			img:    ['src', 'alt', 'title', 'width', 'height'],
+			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass'],
 			ins:    ['datetime'],
 			li:     [],
 			mark:   [],
