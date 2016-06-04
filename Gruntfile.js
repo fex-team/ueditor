@@ -107,16 +107,6 @@ module.exports = function (grunt) {
                 dest: disDir + '<%= pkg.name %>.parse.min.js'
             }
         },
-        closurecompiler: {
-            dist: {
-                src: disDir + '<%= pkg.name %>.all.js',
-                dest: disDir + '<%= pkg.name %>.all.min.js'
-            },
-            parse: {
-                src: disDir + '<%= pkg.name %>.parse.js',
-                dest: disDir + '<%= pkg.name %>.parse.min.js'
-            }
-        },
         copy: {
             base: {
                 files: [
@@ -229,14 +219,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-closurecompiler');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'closurecompiler', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
+        var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
 
         if (encode === 'gbk') {
             tasks.push('replace:fileEncode');
