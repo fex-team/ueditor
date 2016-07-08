@@ -12,7 +12,7 @@
                 if(!options.className){
                     options.className =  'edui-for-' + btnName;
                 }
-                options.cssRules = '.edui-default  .edui-for-'+ btnName +' .edui-icon {'+ cssRules +'}'
+                options.cssRules = '.edui-' + (options.theme || 'default') + ' .edui-toolbar .edui-button.edui-for-'+ btnName +' .edui-icon {'+ cssRules +'}'
             }
             this.initOptions(options);
             this.initButton();
