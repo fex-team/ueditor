@@ -1,0 +1,15 @@
+branches:
+  only:
+  - gh-pages
+env:
+  global:
+  - GH_REF: git.duapp.com/appidenoe6p61ew/
+  - secure: MkIf0zkhg7roffeXJ+EL0aqkehfQs+i6EXcfdfoBpkst4TGEZtnQlONjmUIAK32pYgozHvUBx71m4yQPTK9Jc9ZxUS//vwthZkI3g/WsHftsH8O9ImUCGLhQSO2hZ9Ztpz1hltMMlrXJYBgxp3sod2rFmBSgoE3F/MbjJSqkVeE=
+  - secure: CXEMqAPyqbQiKe9o7Gsnw4mOQwDXWXb62nxBbB6bzsuvkLA5gxy1nydqe7Twv9pS82kC+zvcv8GFyOG5R9KX6nS2aY3XRSgbERP9YIw7Wij59TPGUi32QPWWPAljSmiAK9Aom8Y5qL/JO41t4L+Y4y/uQh/+lD/3C3XWLTLBSKM=
+language: ruby
+rvm:
+- 2.1.7
+script:
+- sh build.sh
+after_script:
+- sh pub.sh|grep -v "${GIT_TOKEN}"
