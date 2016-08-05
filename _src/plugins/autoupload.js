@@ -41,7 +41,6 @@ UE.plugin.register('autoupload', function (){
                 if (loader) {
                     loader.setAttribute('src', link);
                     loader.setAttribute('_src', link);
-                    loader.setAttribute('title', data.title || '');
                     loader.setAttribute('alt', data.original || '');
                     loader.removeAttribute('id');
                     domUtils.removeClasses(loader, 'loadingclass');
@@ -132,11 +131,16 @@ UE.plugin.register('autoupload', function (){
             });
         },
         bindEvents:{
+            defaultOptions: {
+                //默认间隔时间
+                enableDragUpload: true,
+                enablePasteUpload: true
+            },
             //插入粘贴板的图片，拖放插入图片
             'ready':function(e){
                 var me = this;
                 if(window.FormData && window.FileReader) {
-                    domUtils.on(me.body, 'paste drop', function(e){
+                    var handler = function(e){
                         var hasImg = false,
                             items;
                         //获取粘贴板文件列表或者拖放文件列表
@@ -155,13 +159,28 @@ UE.plugin.register('autoupload', function (){
                             hasImg && e.preventDefault();
                         }
 
-                    });
-                    //取消拖放图片时出现的文字光标位置提示
-                    domUtils.on(me.body, 'dragover', function (e) {
-                        if(e.dataTransfer.types[0] == 'Files') {
-                            e.preventDefault();
+                    };
+
+                    if (me.getOpt('enablePasteUpload') !== false) {
+                        domUtils.on(me.body, 'paste ', handler);
+                    }
+                    if (me.getOpt('enableDragUpload') !== false) {
+                        domUtils.on(me.body, 'drop', handler);
+                        //取消拖放图片时出现的文字光标位置提示
+                        domUtils.on(me.body, 'dragover', function (e) {
+                            if(e.dataTransfer.types[0] == 'Files') {
+                                e.preventDefault();
+                            }
+                        });
+                    } else {
+                        if (browser.gecko) {
+                            domUtils.on(me.body, 'drop', function(e){
+                                if (getDropImage(e)) {
+                                    e.preventDefault();
+                                }
+                            });
                         }
-                    });
+                    }
 
                     //设置loading的样式
                     utils.cssRule('loading',
