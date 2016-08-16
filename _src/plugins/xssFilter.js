@@ -21,7 +21,7 @@ UE.plugins.xssFilter = function() {
 
 		UE.utils.each(attrs, function (val, key) {
 
-			if (whitList[tagName].indexOf(key) === -1) {
+			if (UE.utils.indexOf(whitList[tagName], key) === -1) {
 				node.setAttr(key);
 			}
 		});
