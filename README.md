@@ -1,6 +1,8 @@
 Get Started
 =====
 
+> 鉴于目前 ISSUE 较多而维护时间较少，更为重要的是有很多重复的问题，因此特意整理了一份常见问题的 [FAQ Wiki](https://github.com/fex-team/ueditor/wiki/FAQ)。
+
 ## ueditor富文本编辑器介绍
 
 UEditor是由百度web前端研发部开发所见即所得富文本web编辑器，具有轻量，可定制，注重用户体验等特点，开源基于MIT协议，允许自由使用和修改代码。
