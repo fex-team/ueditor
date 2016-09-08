@@ -553,6 +553,7 @@
             var doc = document,
                 editor = this.editor,
                 editorHolder = editor.container,
+                frameHolder = editor.ui.getDom('iframeholder'),
                 editorDocument = editor.document,
                 toolbarBox = this.getDom("toolbarbox"),
                 bottombar = this.getDom("bottombar"),
@@ -622,6 +623,12 @@
                     isMouseMove = false;
                     editor.ui._actualFrameWidth = scalelayer.offsetWidth - 2;
                     editorHolder.style.width = editor.ui._actualFrameWidth + 'px';
+
+                    if(toolbarBox.style.position == 'fixed')
+                    {
+                        toolbarBox.style.width=editor.ui._actualFrameWidth + 'px';
+                    }
+                    frameHolder.style.width = editor.ui._actualFrameWidth + 'px';
 
                     editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2,true);
                 }

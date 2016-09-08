@@ -624,7 +624,8 @@
                 this.iframe.parentNode.style.height = height + 'px';
             }
             !notSetHeight && (this.options.minFrameHeight = this.options.initialFrameHeight = height);
-            this.body.style.height = height + 'px';
+            /*iframe中的view设有8px的margin，在重置高度时，body高度应比iframeholder高度小16px，否则会出现滚动条*/
+            this.body.style.height = (height - 16) + 'px';
             !notSetHeight && this.trigger('setHeight')
         },
 
