@@ -70,11 +70,13 @@ UE.plugin.register('simpleupload', function (){
                         if(json.state == 'SUCCESS' && json.url) {
                             loader = me.document.getElementById(loadingId);
                             domUtils.removeClasses(loader, 'loadingclass');
+                            domUtils.on(loader,'load',function(){
+                              me.fireEvent('contentchange');
+                            });
                             loader.setAttribute('src', link);
                             loader.setAttribute('_src', link);
                             loader.setAttribute('alt', json.original || '');
                             loader.removeAttribute('id');
-                            me.fireEvent('contentchange');
                         } else {
                             showErrorLoader && showErrorLoader(json.state);
                         }
