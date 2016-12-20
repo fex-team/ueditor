@@ -1,0 +1,2 @@
+language: java
+script: echo 0
