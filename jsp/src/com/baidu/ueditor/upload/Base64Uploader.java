@@ -9,16 +9,13 @@ import com.baidu.ueditor.define.State;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.codec.binary.Base64;
 
 public final class Base64Uploader {
 
-	public static State save(HttpServletRequest request, Map<String, Object> conf) {
-	    String filedName = (String) conf.get("fieldName");
-		String fileName = request.getParameter(filedName);
-		byte[] data = decode(fileName);
+	public static State save(String content, Map<String, Object> conf) {
+		
+		byte[] data = decode(content);
 
 		long maxSize = ((Long) conf.get("maxSize")).longValue();
 
@@ -32,13 +29,12 @@ public final class Base64Uploader {
 				(String) conf.get("filename"));
 		
 		savePath = savePath + suffix;
-		String rootPath = ConfigManager.getRootPath(request,conf);
-		String physicalPath = rootPath + savePath;
+		String physicalPath = (String) conf.get("rootPath") + savePath;
 
 		State storageState = StorageManager.saveBinaryFile(data, physicalPath);
 
 		if (storageState.isSuccess()) {
-			storageState.putInfo("url", PathFormat.format(savePath));
+			storageState.putInfo("url", PathFormat.format(ConfigManager.getAccessUrlRoot()+savePath));
 			storageState.putInfo("type", suffix);
 			storageState.putInfo("original", "");
 		}

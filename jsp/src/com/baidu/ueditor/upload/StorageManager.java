@@ -35,6 +35,7 @@ public class StorageManager {
 			bos.flush();
 			bos.close();
 		} catch (IOException ioe) {
+			ioe.printStackTrace();
 			return new BaseState(false, AppInfo.IO_ERROR);
 		}
 
@@ -78,6 +79,7 @@ public class StorageManager {
 			return state;
 			
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}
@@ -109,10 +111,11 @@ public class StorageManager {
 
 			return state;
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}
-	
+
 	private static File getTmpFile() {
 		File tmpDir = FileUtils.getTempDirectory();
 		String tmpFileName = (Math.random() * 10000 + "").replace(".", "");
@@ -129,6 +132,7 @@ public class StorageManager {
 		try {
 			FileUtils.moveFile(tmpFile, targetFile);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return new BaseState(false, AppInfo.IO_ERROR);
 		}
 
