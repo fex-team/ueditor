@@ -122,7 +122,7 @@
 
         //,pasteplain:false  //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
         //纯文本粘贴模式下的过滤规则
-        //'filterTxtRules' : function(){
+        //,'filterTxtRules' : function(){
         //    function transP(node){
         //        node.tagName = 'p';
         //        node.setStyle();
