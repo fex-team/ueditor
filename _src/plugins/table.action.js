@@ -1215,7 +1215,7 @@ UE.plugins['table'] = function () {
         startTd = getTargetTd(me, evt);
         if( !startTd ) return;
         var table = domUtils.findParentByTagName(startTd, "table", true);
-        ut = getUETable(table);
+        var ut = getUETable(table);
         ut && ut.clearSelected();
 
         //判断当前鼠标状态
