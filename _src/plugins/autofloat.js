@@ -90,6 +90,11 @@ UE.plugins['autofloat'] = function() {
     me.addListener('destroy',function(){
         domUtils.un(window, ['scroll','resize'], updateFloating);
         me.removeListener('keydown', defer_updateFloating);
+
+        //适用于在DIV scrollbox中滚动，但页面不滚动的浮动toolbar
+        var scrollBox = document.getElementById("scrollBox");
+        domUtils.un(scrollBox, ['scroll','resize'], updateFloating);
+
     });
 
     me.addListener('ready', function(){
@@ -108,6 +113,10 @@ UE.plugins['autofloat'] = function() {
             }
             domUtils.on(window, ['scroll','resize'], updateFloating);
             me.addListener('keydown', defer_updateFloating);
+
+            //适用于在DIV scrollbox中滚动，但页面不滚动的浮动toolbar
+            var scrollBox = document.getElementById("scrollBox");
+            domUtils.on(scrollBox, ['scroll','resize'], updateFloating);
 
             me.addListener('beforefullscreenchange', function (t, enabled){
                 if (enabled) {
