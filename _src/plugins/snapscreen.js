@@ -21,7 +21,7 @@ UE.plugin.register('snapscreen', function (){
 
         search = a.search;
         if (params) {
-            search = search ? search + params:'?' + params;
+            search = search + (search.indexOf('?') == -1 ? '?':'&')+ params;
             search = search.replace(/[&]+/ig, '&');
         }
         return {

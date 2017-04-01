@@ -12,6 +12,7 @@
             'core/Range.js',
             'core/Selection.js',
             'core/Editor.js',
+            'core/Editor.defaultoptions.js',
             'core/loadconfig.js',
             'core/ajax.js',
             'core/filterword.js',
@@ -114,8 +115,12 @@
             'ui/multiMenu.js',
             'ui/shortcutmenu.js',
             'ui/breakline.js',
+            'ui/message.js',
             'adapter/editorui.js',
-            'adapter/editor.js'
+            'adapter/editor.js',
+            'adapter/message.js',
+            'adapter/autosave.js'
+
         ],
         baseURL = '../_src/';
     for (var i=0,pi;pi = paths[i++];) {

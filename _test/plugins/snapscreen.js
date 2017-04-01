@@ -28,8 +28,8 @@ test('snapscreen', function () {
                         UE.delEditor('ue');
                         te.dom.push(document.getElementById('ue'));
                         start();
-                    }, 100);
-                }, 100);
+                    }, 1000);
+                }, 300);
 
 
             }, 100);

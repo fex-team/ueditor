@@ -1,23 +1,33 @@
 #UEditor Change List
 
 ##1.4.3
-### bug修复&优化
-1. 修复jsonp提交的xss漏洞
-2. 修复java版本在某些服务器部署环境下找不到配置文件正确位置的bug
-3. 修复ZeroClipboard的flash地址参数名称错误
-4. 修复getActionUrl的bug
-5. 整理代码中的参数到ueditor.config.js里
-6. 修复图片拉伸工具和编辑拉伸长高器的样式冲突
+###bug修复&优化改进
+1. 修复hasContents接口在非ie下只有空格时判断还为真的问题
+2. 修复在粘贴word内容时，会误命中cm,pt这样的文本内容变成px的问题
+3. 优化删除编辑器再创建编辑器时，编辑器的容器id发生变化的问题
+4. 修复提交jsonp请求时，callback参数的xss漏洞
+5. 新增jsp后台多种服务器配置下的路径定位
+6. 修复ZeroClipboard的flash地址参数名称错误
+7. 修复getActionUrl的bug
+8. 整理配置参数，把遗漏在代码中的配置项整理到ueditor.config.js里
+9. 修复图片拉伸工具和编辑拉伸长高器的样式冲突
+10. 修复文字的unicode编码会被错误再次解析问题
+11. 添加消息提示功能，冒泡提示信息
+12. 优化上传功能提示，当后端配置项没正常加载，禁用上传功能
+13. 修复单图上传按钮和jqueryValidate不兼容的问题
+14. 简化了与jqueryValidate的结合操作，具体看_examples/jqueryValidateDemo.html
+15. 修复在删除编辑器后，再次创建时丢失原有id的问题
+16. 修复查找替换在一些块节点中会导致替换错误
 
 ##1.4.2
 ###重构前后端交互功能
 1. 前端上传模块统一改用webuploader
-2. 整体重构了文件上传的配置方式，改为统一在后端配置，前后端自动打通，[详细文档](http://fex.baidu.com/ueditor/#server-server_config)
-3. 统一各上传模块的提交地址，各模块通过action参数区分类型，[详细文档](http://fex.baidu.com/ueditor/#server-request_specification)
-4. 提供serverparam命令，可在提交时追加任意参数，[详细文档](http://fex.baidu.com/ueditor/#server-server_param)
+2. 整体重构了文件上传的配置方式，改为统一在后端配置，前后端自动打通，[详细文档]()
+3. 统一各上传模块的提交地址，各模块通过action参数区分类型，[详细文档]()
+4. 提供serverparam命令，可在提交时追加任意参数，[详细文档]()
 5. 统一了前端各上传模块的布局样式
 6. 支持了在线附件预览和插入
-7. 统一了后端返回数据格式，[详细文档](http://fex.baidu.com/ueditor/#server-request_specification)
+7. 统一了后端返回数据格式，[详细文档]()
 8. 各在线预览列表模块支持分组加载
 9. 增加点击直接选择文件上传图片插件
 10. 优化了粘贴图片的功能，上传时有loading和出错的提示

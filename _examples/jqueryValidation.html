@@ -11,11 +11,8 @@
     <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
     <script>
         $(function(){
-            UE.getEditor('content').addListener('contentchange',function(){
-                this.sync();
-                //1.2.4+以后可以直接给textarea的id名字就行了
-                $('textarea').valid();
-            });
+            UE.getEditor('content');
+
             var validator = $("#myform").submit(function() {
                 UE.getEditor('content').sync();
             }).validate({

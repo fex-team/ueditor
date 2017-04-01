@@ -78,6 +78,9 @@ var filterWord = UE.filterWord = function () {
                         s = style.replace( /^\s+|\s+$/, '' )
                             .replace(/&#39;/g,'\'')
                             .replace( /&quot;/gi, "'" )
+                            .replace(/[\d.]+(cm|pt)/g,function(str){
+                                return utils.transUnitToPx(str)
+                            })
                             .split( /;\s*/g );
 
                     for ( var i = 0,v; v = s[i];i++ ) {
@@ -176,9 +179,7 @@ var filterWord = UE.filterWord = function () {
                     }
                     return tag + (n.length ? ' style="' + n.join( ';').replace(/;{2,}/g,';') + '"' : '');
                 })
-            .replace(/[\d.]+(cm|pt)/g,function(str){
-                return utils.transUnitToPx(str)
-            })
+
 
     }
 
