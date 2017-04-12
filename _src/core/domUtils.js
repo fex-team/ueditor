@@ -2080,7 +2080,8 @@ var domUtils = dom.domUtils = {
     isEmptyBlock:function (node,reg) {
         if(node.nodeType != 1)
             return 0;
-        reg = reg || new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
+        reg = reg || new RegExp('[ \xa0\t\r\n' + domUtils.fillChar + ']', 'g');
+
         if (node[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length > 0) {
             return 0;
         }
@@ -2406,6 +2407,7 @@ var domUtils = dom.domUtils = {
             }
         }
         return true;
-    }
+    },
+    fillHtml :  browser.ie11below ? '&nbsp;' : '<br/>'
 };
 var fillCharReg = new RegExp(domUtils.fillChar, 'g');

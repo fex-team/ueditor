@@ -10,21 +10,40 @@
 
 UE.plugin.register('searchreplace',function(){
     var me = this;
+
+    var _blockElm = {'table':1,'tbody':1,'tr':1,'ol':1,'ul':1};
+
+    var lastRng = null;
+
+    function getText(node){
+        var text = node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent'];
+        return text.replace(domUtils.fillChar,'')
+    }
+
     function findTextInString(textContent,opt,currentIndex){
         var str = opt.searchStr;
+
+        var reg = new RegExp(str,'g' + (opt.casesensitive ? '' : 'i')),
+            match;
+
         if(opt.dir == -1){
+
+            textContent = textContent.substr(0,currentIndex);
             textContent = textContent.split('').reverse().join('');
             str = str.split('').reverse().join('');
-            currentIndex = textContent.length - currentIndex;
+            match = reg.exec(textContent);
+            if(match){
+                return currentIndex - match.index - str.length;
+            }
 
-        }
-        var reg = new RegExp(str,'g' + (opt.casesensitive ? '' : 'i')),match;
-
-        while(match = reg.exec(textContent)){
-            if(match.index >= currentIndex){
-                return opt.dir == -1 ? textContent.length - match.index - opt.searchStr.length : match.index;
+        }else{
+            textContent = textContent.substr(currentIndex);
+            match = reg.exec(textContent);
+            if(match){
+                return match.index + currentIndex;
             }
         }
+
         return  -1
     }
     function findTextBlockElm(node,currentIndex,opt){
@@ -34,7 +53,7 @@ UE.plugin.register('searchreplace',function(){
         }
         var first = 1;
         while(node){
-            textContent = node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent'];
+            textContent = getText(node);
             index = findTextInString(textContent,opt,currentIndex );
             first = 0;
             if(index!=-1){
@@ -44,8 +63,11 @@ UE.plugin.register('searchreplace',function(){
                 }
             }
             node = domUtils[methodName](node);
+            while(node && _blockElm[node.nodeName.toLowerCase()]){
+                node = domUtils[methodName](node,true);
+            }
             if(node){
-                currentIndex = opt.dir == -1 ? (node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent']).length : 0;
+                currentIndex = opt.dir == -1 ? getText(node).length : 0;
             }
 
         }
@@ -57,7 +79,7 @@ UE.plugin.register('searchreplace',function(){
             result;
         while(currentNode){
             if(currentNode.nodeType == 3){
-                currentNodeLength = currentNode.nodeValue.replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length;
+                currentNodeLength = getText(currentNode).replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length;
                 currentIndex += currentNodeLength;
                 if(currentIndex >= index){
                     return {
@@ -66,7 +88,7 @@ UE.plugin.register('searchreplace',function(){
                     }
                 }
             }else if(!dtd.$empty[currentNode.tagName]){
-                currentNodeLength = currentNode[browser.ie ? 'innerText' : 'textContent'].replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length
+                currentNodeLength = getText(currentNode).replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length;
                 currentIndex += currentNodeLength;
                 if(currentIndex >= index){
                     result = findNTextInBlockElm(currentNode,currentNodeLength - (currentIndex - index),str);
@@ -76,15 +98,19 @@ UE.plugin.register('searchreplace',function(){
                 }
             }
             currentNode = domUtils.getNextDomNode(currentNode);
+
         }
     }
 
     function searchReplace(me,opt){
-        var rng = me.selection.getRange(),
+
+        var rng = lastRng || me.selection.getRange(),
             startBlockNode,
             searchStr = opt.searchStr,
             span = me.document.createElement('span');
         span.innerHTML = '$$ueditor_searchreplace_key$$';
+
+        rng.shrinkBoundary(true);
 
         //判断是不是第一次选中
         if(!rng.collapsed){
@@ -106,7 +132,7 @@ UE.plugin.register('searchreplace',function(){
         rng.insertNode(span);
         rng.enlargeToBlockElm(true);
         startBlockNode = rng.startContainer;
-        var currentIndex = startBlockNode[browser.ie ? 'innerText' : 'textContent'].indexOf('$$ueditor_searchreplace_key$$');
+        var currentIndex = getText(startBlockNode).indexOf('$$ueditor_searchreplace_key$$');
         rng.setStartBefore(span);
         domUtils.remove(span);
         var result = findTextBlockElm(startBlockNode,currentIndex,opt);
@@ -126,10 +152,10 @@ UE.plugin.register('searchreplace',function(){
 
     }
     function replaceText(rng,str){
-        me.fireEvent('saveScene');
+
         str = me.document.createTextNode(str);
         rng.deleteContents().insertNode(str);
-        me.fireEvent('saveScene');
+
     }
     return {
         commands:{
@@ -142,26 +168,50 @@ UE.plugin.register('searchreplace',function(){
                     },true);
                     var num = 0;
                     if(opt.all){
+                        lastRng = null;
                         var rng = me.selection.getRange(),
                             first = me.body.firstChild;
                         if(first && first.nodeType == 1){
-                            rng.setStart(first,0)
+                            rng.setStart(first,0);
+                            rng.shrinkBoundary(true);
                         }else if(first.nodeType == 3){
                             rng.setStartBefore(first)
                         }
                         rng.collapse(true).select(true);
+                        if(opt.replaceStr !== undefined){
+                            me.fireEvent('saveScene');
+                        }
                         while(searchReplace(this,opt)){
                             num++;
+                            lastRng = me.selection.getRange();
+                            lastRng.collapse(opt.dir == -1)
+                        }
+                        if(num){
+                            me.fireEvent('saveScene');
                         }
                     }else{
-                        if(searchReplace(this,opt)){
-                            num++
+                        if(opt.replaceStr !== undefined){
+                            me.fireEvent('saveScene');
                         }
+                        if(searchReplace(this,opt)){
+                            num++;
+                            lastRng = me.selection.getRange();
+                            lastRng.collapse(opt.dir == -1)
+                        }
+                        if(num){
+                            me.fireEvent('saveScene');
+                        }
+
                     }
 
                     return num;
                 },
                 notNeedUndo:1
+            }
+        },
+        bindEvents:{
+            clearlastSearchResult:function(){
+                lastRng = null;
             }
         }
     }

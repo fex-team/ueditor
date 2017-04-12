@@ -8,6 +8,7 @@
 ///import core/Range;
 ///import core/Selection;
 ///import core/Editor;
+///import core/Editor.defaultoptions;
 ///import core/loadconfig;
 ///import core/ajax;
 ///import core/filterword;
@@ -19,6 +20,7 @@
 ///import core/localstorage;
 ///import plugins/defaultfilter;
 ///import plugins/inserthtml;
+///import plugins/insertfile;
 ///import plugins/autotypeset;
 ///import plugins/background;
 ///import plugins/image;
@@ -58,6 +60,7 @@
 ///import plugins/autolink;
 ///import plugins/autoheight;
 ///import plugins/autofloat;
+///import plugins/autosubmit;
 ///import plugins/video;
 ///import plugins/table.core;
 ///import plugins/table.cmds;
@@ -110,7 +113,9 @@
 ///import ui/autotypesetpicker;
 ///import ui/autotypesetbutton;
 ///import ui/shortcutmenu;
+///import ui/message;
 
 ///import adapter/editor;
 ///import adapter/editorui;
-
+///import adapter/message;
+///import adapter/autosave;

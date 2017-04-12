@@ -30,8 +30,8 @@
      */
     function setValue(form, editor) {
         var textarea;
-        if (editor.textarea) {
-            if (utils.isString(editor.textarea)) {
+        if (editor.options.textarea) {
+            if (utils.isString(editor.options.textarea)) {
                 for (var i = 0, ti, tis = domUtils.getElementsByTagName(form, 'textarea'); ti = tis[i++];) {
                     if (ti.id == 'ueditor_textarea_' + editor.options.textarea) {
                         textarea = ti;
@@ -51,6 +51,7 @@
             //不要产生多个textarea
             editor.textarea = textarea;
         }
+        !textarea.getAttribute('name') && textarea.setAttribute('name', editor.options.textarea );
         textarea.value = editor.hasContents() ?
             (editor.options.allHtmlEnabled ? editor.getAllHtml() : editor.getContent(null, null, true)) :
             ''
@@ -234,32 +235,7 @@
         me.inputRules = [];
         me.outputRules = [];
         //设置默认的常用属性
-        me.setOpt({
-            isShow: true,
-            initialContent: '',
-            initialStyle:'',
-            autoClearinitialContent: false,
-            iframeCssUrl: me.options.UEDITOR_HOME_URL + 'themes/iframe.css',
-            textarea: 'editorValue',
-            focus: false,
-            focusInEnd: true,
-            autoClearEmptyNode: true,
-            fullscreen: false,
-            readonly: false,
-            zIndex: 999,
-            imagePopup: true,
-            enterTag: 'p',
-            customDomain: false,
-            lang: 'zh-cn',
-            langPath: me.options.UEDITOR_HOME_URL + 'lang/',
-            theme: 'default',
-            themePath: me.options.UEDITOR_HOME_URL + 'themes/',
-            allHtmlEnabled: false,
-            scaleEnabled: false,
-            tableNativeEditInFF: false,
-            autoSyncData : true,
-            fileNameFormat: '{time}{rand:6}'
-        });
+        me.setOpt(Editor.defaultOptions(me));
 
         /* 尝试异步加载后台配置 */
         me.loadServerConfig();
@@ -428,7 +404,8 @@
                 container.style.zIndex = options.zIndex;
 
                 var html = ( ie && browser.version < 9  ? '' : '<!DOCTYPE html>') +
-                    '<html xmlns=\'http://www.w3.org/1999/xhtml\' class=\'view\' ><head>' +
+                    '<html xmlns=\'http://www.w3.org/1999/xhtml\' class=\'view\' >' +
+                    '<head>' +
                     '<style type=\'text/css\'>' +
                     //设置四周的留边
                     '.view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n' +
@@ -437,12 +414,17 @@
                     'body{margin:8px;font-family:sans-serif;font-size:16px;}' +
                     //设置段落间距
                     'p{margin:5px 0;}</style>' +
-                    ( options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
+                    (options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
                     (options.initialStyle ? '<style>' + options.initialStyle + '</style>' : '') +
-                    '</head><body class=\'view\' ></body>' +
+                    '</head>' +
+                    '<body class=\'view\' ></body>' +
                     '<script type=\'text/javascript\' ' + (ie ? 'defer=\'defer\'' : '' ) +' id=\'_initialScript\'>' +
                     'setTimeout(function(){editor = window.parent.UE.instants[\'ueditorInstant' + me.uid + '\'];editor._setup(document);},0);' +
-                    'var _tmpScript = document.getElementById(\'_initialScript\');_tmpScript.parentNode.removeChild(_tmpScript);</script></html>';
+                    'var _tmpScript = document.getElementById(\'_initialScript\');_tmpScript.parentNode.removeChild(_tmpScript);' +
+                    '</script>' +
+                    (options.iframeJsUrl ? ('<script type=\'text/javascript\' src=\'' + utils.unhtml(options.iframeJsUrl) + '\'></script>'):'') +
+                    '</html>';
+
                 container.appendChild(domUtils.createElement(document, 'iframe', {
                     id: 'ueditor_' + me.uid,
                     width: "100%",
@@ -1540,7 +1522,7 @@
             }
 
             if(serverUrl) {
-                serverUrl = serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + actionName;
+                serverUrl = serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + (actionName || '');
                 return utils.formatUrl(serverUrl);
             } else {
                 return '';

@@ -173,7 +173,7 @@ test('contextMenu 按ASCII字符排序', function () {
             lang = editor.getLang("contextMenu");
             ua.click(menutable.childNodes[AsciiIndex+1]);//ASCII降
             ua.manualDeleteFillData(editor.body);
-            ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td class=\" selecttdclass \">ackson</td><td>4</td><td>承祜</td></tr><tr><td class=\" selecttdclass\">{}</td><td>2</td><td>胤礼</td></tr><tr><td class=\" selecttdclass\">&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '表格内容逆序-选区不闭合');
+            ua.checkSameHtml(editor.body.innerHTML,'<table><tbody><tr><td class=\" selecttdclass \">ackson</td><td>4</td><td>承祜</td></tr><tr><td class=\" selecttdclass\">&amp;*</td><td>3</td><td>襄嫔</td></tr><tr><td class=\" selecttdclass\">{}</td><td>2</td><td>胤礼</td></tr><tr><td>Michael</td><td>1</td><td>康熙</td></tr></tbody></table>', '表格内容逆序-选区不闭合');
             setTimeout(function () {
                 document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                 te.dom.push(editor.container);

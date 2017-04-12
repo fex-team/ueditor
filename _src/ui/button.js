@@ -12,7 +12,7 @@
                 if(!options.className){
                     options.className =  'edui-for-' + btnName;
                 }
-                options.cssRules = '.edui-default  .edui-for-'+ btnName +' .edui-icon {'+ cssRules +'}'
+                options.cssRules = '.edui-' + (options.theme || 'default') + ' .edui-toolbar .edui-button.edui-for-'+ btnName +' .edui-icon {'+ cssRules +'}'
             }
             this.initOptions(options);
             this.initButton();
@@ -47,8 +47,9 @@
             this.setDisabled(this.disabled)
         },
         _onMouseDown: function (e){
-            var target = e.target || e.srcElement;
-            if (!(target && target.tagName && (target.tagName.toLowerCase() == 'input' || target.tagName.toLowerCase() == 'object'))) {
+            var target = e.target || e.srcElement,
+                tagName = target && target.tagName && target.tagName.toLowerCase();
+            if (tagName == 'input' || tagName == 'object' || tagName == 'object') {
                 return false;
             }
         },

@@ -29,7 +29,7 @@ public class ActionEnter {
 		this.rootPath = rootPath;
 		this.actionType = request.getParameter( "action" );
 		this.contextPath = request.getContextPath();
-		this.configManager = ConfigManager.getInstance( this.rootPath, this.contextPath, request.getRequestURI() );
+		this.configManager = ConfigManager.getInstance( this.rootPath, this.contextPath, request.getRequestURI().replace(request.getContextPath(),"") );
 		
 	}
 	

@@ -6,7 +6,7 @@ UE.plugin.register('copy', function () {
 
         ZeroClipboard.config({
             debug: false,
-            swfPath: me.options.UEDITOR_HOME_URL + '/third-party/zeroclipboard/ZeroClipboard.swf'
+            swfPath: me.options.UEDITOR_HOME_URL + 'third-party/zeroclipboard/ZeroClipboard.swf'
         });
 
         var client = me.zeroclipboard = new ZeroClipboard();
@@ -25,16 +25,22 @@ UE.plugin.register('copy', function () {
         // hover事件传递到target
         client.on('mouseover mouseout', function (e) {
             var target = e.target;
-            if (e.type == 'mouseover') {
-                domUtils.addClass(target, 'edui-state-hover');
-            } else if (e.type == 'mouseout') {
-                domUtils.removeClasses(target, 'edui-state-hover');
+            if (target) {
+                if (e.type == 'mouseover') {
+                    domUtils.addClass(target, 'edui-state-hover');
+                } else if (e.type == 'mouseout') {
+                    domUtils.removeClasses(target, 'edui-state-hover');
+                }
             }
         });
         // flash加载不成功
         client.on('wrongflash noflash', function () {
             ZeroClipboard.destroy();
         });
+
+        // 触发事件
+        me.fireEvent('zeroclipboardready', client);
+
     }
 
     return {
@@ -45,7 +51,7 @@ UE.plugin.register('copy', function () {
                         initZeroClipboard();
                     } else {
                         utils.loadFile(document, {
-                            src: me.options.UEDITOR_HOME_URL + "/third-party/zeroclipboard/ZeroClipboard.js",
+                            src: me.options.UEDITOR_HOME_URL + "third-party/zeroclipboard/ZeroClipboard.js",
                             tag: "script",
                             type: "text/javascript",
                             defer: "defer"

@@ -22,17 +22,25 @@
                             me.fireEvent('serverConfigLoaded');
                             me._serverConfigLoaded = true;
                         } catch (e) {
-                            console && console.error('后台配置项返回出错!');
+                            showErrorMsg(me.getLang('loadconfigFormatError'));
                         }
                     },
                     'onerror':function(){
-                        console && console.error('获取后台配置项出错!');
+                        showErrorMsg(me.getLang('loadconfigHttpError'));
                     }
                 });
             } catch(e){
-                console && console.log('获取后台配置项请求出错!');
+                showErrorMsg(me.getLang('loadconfigError'));
             }
         });
+
+        function showErrorMsg(msg) {
+            console && console.error(msg);
+            //me.fireEvent('showMessage', {
+            //    'title': msg,
+            //    'type': 'error'
+            //});
+        }
     };
 
     UE.Editor.prototype.isServerConfigLoaded = function(){

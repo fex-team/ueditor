@@ -374,7 +374,15 @@
                 uploader,
                 actionUrl = editor.getActionUrl(editor.getOpt('videoActionName')),
                 fileMaxSize = editor.getOpt('videoMaxSize'),
-                acceptExtensions = editor.getOpt('videoAllowFiles').join('').replace(/\./g, ',').replace(/^[,]/, '');;
+                acceptExtensions = (editor.getOpt('videoAllowFiles') || []).join('').replace(/\./g, ',').replace(/^[,]/, '');;
+
+            if (!WebUploader.Uploader.support()) {
+                $('#filePickerReady').after($('<div>').html(lang.errorNotSupport)).hide();
+                return;
+            } else if (!editor.getOpt('videoActionName')) {
+                $('#filePickerReady').after($('<div>').html(lang.errorLoadConfig)).hide();
+                return;
+            }
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {
@@ -385,7 +393,7 @@
                 server: actionUrl,
                 fileVal: editor.getOpt('videoFieldName'),
                 duplicate: true,
-                fileSingleSizeLimit: fileMaxSize,    // 默认 2 M
+                fileSingleSizeLimit: fileMaxSize,
                 compress: false
             });
             uploader.addButton({
@@ -706,7 +714,9 @@
 
             uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
-                header['X_Requested_With'] = 'XMLHttpRequest';
+                if (actionUrl.toLowerCase().indexOf('jsp') != -1) {
+                    header['X_Requested_With'] = 'XMLHttpRequest';
+                }
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
@@ -740,9 +750,12 @@
 
             uploader.on('uploadError', function (file, code) {
             });
-            uploader.on('Error', function (file, code) {
+            uploader.on('error', function (code, file) {
+                if (code == 'Q_TYPE_DENIED' || code == 'F_EXCEED_SIZE') {
+                    addFile(file);
+                }
             });
-            uploader.on('UploadComplete', function (file, ret) {
+            uploader.on('uploadComplete', function (file, ret) {
             });
 
             $upload.on('click', function () {

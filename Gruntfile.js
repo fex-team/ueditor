@@ -42,7 +42,7 @@ module.exports = function (grunt) {
         server = grunt.option('server') || 'php',
         encode = grunt.option('encode') || 'utf8',
         disDir = "dist/",
-        banner = '/*!\n * UEditor\n * version: ' + packageJson.name + '\n * build: <%= new Date() %>\n */\n\n';
+        banner = '/*!\n * ' + packageJson.name + '\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */\n\n';
 
     //init
     (function () {
@@ -59,7 +59,8 @@ module.exports = function (grunt) {
         concat: {
             js: {
                 options: {
-                    banner: banner + '(function(){\n\n',
+                    banner: '/*!\n * ' + packageJson.name + '\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */\n\n' +
+                        '(function(){\n\n',
                     footer: '\n\n})();\n',
                     process: function (src, s) {
                         var filename = s.substr(s.indexOf('/') + 1);
@@ -71,7 +72,8 @@ module.exports = function (grunt) {
             },
             parse: {
                 options: {
-                    banner: banner + '(function(){\n\n',
+                    banner: '/*!\n * ' + packageJson.name + ' parse\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */\n\n' +
+                        '(function(){\n\n',
                     footer: '\n\n})();\n'
                 },
                 src: Util.fetchScripts("ueditor.parse.js", Util.parseBasePath),
@@ -95,24 +97,17 @@ module.exports = function (grunt) {
             }
         },
         uglify: {
-            options: {
-                banner: banner
-            },
-            dest: {
-                src: disDir + '<%= pkg.name %>.all.js',
-                dest: disDir + '<%= pkg.name %>.all.min.js'
-            },
-            parse: {
-                src: disDir + '<%= pkg.name %>.parse.js',
-                dest: disDir + '<%= pkg.name %>.parse.min.js'
-            }
-        },
-        closurecompiler: {
             dist: {
+                options: {
+                    banner: '/*!\n * ' + packageJson.name + '\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */'
+                },
                 src: disDir + '<%= pkg.name %>.all.js',
                 dest: disDir + '<%= pkg.name %>.all.min.js'
             },
             parse: {
+                options: {
+                    banner: '/*!\n * ' + packageJson.name + ' parse\n * version: ' + packageJson.version + '\n * build: <%= new Date() %>\n */'
+                },
                 src: disDir + '<%= pkg.name %>.parse.js',
                 dest: disDir + '<%= pkg.name %>.parse.min.js'
             }
@@ -229,14 +224,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-closurecompiler');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-transcoding');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('default', 'UEditor build', function () {
 
-        var tasks = [ 'concat', 'cssmin', 'closurecompiler', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
+        var tasks = [ 'concat', 'cssmin', 'uglify', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean' ];
 
         if (encode === 'gbk') {
             tasks.push('replace:fileEncode');
