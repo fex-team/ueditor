@@ -13,7 +13,7 @@ UE.parse.register('list',function(utils){
 
 
     utils.extend(this,{
-        liiconpath : 'http://bs.baidu.com/listicon/',
+        liiconpath : utils.removeLastbs(this.rootPath) + '/themes/ueditor-list/',
         listDefaultPaddingLeft : '20'
     });
 
