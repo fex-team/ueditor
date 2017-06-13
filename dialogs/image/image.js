@@ -177,22 +177,22 @@
             domUtils.on($G("title"), 'keyup', updatePreview);
 
             domUtils.on($G("width"), 'keyup', function(){
-                updatePreview();
                 if(locker.checked) {
                     var proportion =locker.getAttribute('data-proportion');
                     $G('height').value = Math.round(this.value / proportion);
                 } else {
                     _this.updateLocker();
                 }
+                updatePreview();
             });
             domUtils.on($G("height"), 'keyup', function(){
-                updatePreview();
                 if(locker.checked) {
                     var proportion =locker.getAttribute('data-proportion');
                     $G('width').value = Math.round(this.value * proportion);
                 } else {
                     _this.updateLocker();
                 }
+                updatePreview();
             });
             domUtils.on($G("lock"), 'change', function(){
                 var proportion = parseInt($G("width").value) /parseInt($G("height").value);
