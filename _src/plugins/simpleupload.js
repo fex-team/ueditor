@@ -26,10 +26,11 @@ UE.plugin.register('simpleupload', function (){
             btnIframeBody = btnIframeDoc.body;
             wrapper = btnIframeDoc.createElement('div');
 
+            // 将input改为multiple， 同时增加一个taskId， 上传时同时提交到服务器
             wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '" ' +
             'style="' + btnStyle + '">' +
-            '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
-            'style="' + btnStyle + '">' +
+            '<input id="edui_input_' + timestrap + '" type="file" multiple="true" accept="image/*" name="' + me.options.imageFieldName + '" ' + 'style="' + btnStyle + '">' +
+            '<input id="task_' + timestrap + '" type="hidden" name="taskId" value="">' +
             '</form>' +
             '<iframe id="edui_iframe_' + timestrap + '" name="edui_iframe_' + timestrap + '" style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>';
 
@@ -48,33 +49,78 @@ UE.plugin.register('simpleupload', function (){
             var form = btnIframeDoc.getElementById('edui_form_' + timestrap);
             var input = btnIframeDoc.getElementById('edui_input_' + timestrap);
             var iframe = btnIframeDoc.getElementById('edui_iframe_' + timestrap);
+            var task = btnIframeDoc.getElementById('task_' + timestrap);
 
             domUtils.on(input, 'change', function(){
                 if(!input.value) return;
-                var loadingId = 'loading_' + (+new Date()).toString(36);
+                
+                var now =  (+new Date()).toString(36);
+                var taskId = "task_" + now;
+                task.value=taskId;
+                
                 var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
-
                 var imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));
                 var allowFiles = me.getOpt('imageAllowFiles');
+                
+                var files = input.files;
+                var loadingId = 'loading_' + now;
 
                 me.focus();
-                me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif">');
+                
+                for(var i=0; i<files.length; i++){
+                    var html = '<img class="loadingclass" id="' + loadingId + '_' + i + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >';
+                    me.execCommand('inserthtml', html);
+                }
+
+                var serverUrl = me.getOpt('serverUrl');
+                var taskUrl = utils.formatUrl(serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + '&action=query&taskId=' + taskId) ;
+
+                // 查询上传进度： 服务器需要支持 serverUrl?action=query&taskId=xxx , 返回已成功上传的结果， 样例如下:
+                // {"0":"http://example.com/xxx0.jpg", "1":"http://example.com/xxx1.jpg"}
+                // 当返回的结果size与上传时选定的文件size相等， 表示上传结束
+                function uploading(){
+                    UE.ajax.request(taskUrl, {
+                        'method': 'GET',
+                        'async' : 'true',
+                        'onsuccess':function(r){
+                            try {
+                                var data = eval("("+r.responseText+")");
+                                var cnt = 0;
+                                for(var idx in data){
+                                    cnt ++;
+                                    var link = data[idx];
+                                    var loader = me.document.getElementById(loadingId + '_' + idx);
+                                    if(loader){
+                                        loader.setAttribute('src', link);
+                                        loader.setAttribute('_src', link);
+                                        loader.removeAttribute('id');
+                                        domUtils.removeClasses(loader, 'loadingclass');
+                                    }
+                                }
+
+                                // 只要文件未上传完，则每隔1秒调用一次
+                                if(cnt<files.length){
+                                    setTimeout(function(){
+                                        uploading();
+                                    }, 1000);
+                                }
+                            } catch (e) {
+                                showErrorLoader && showErrorLoader(me.getLang('simpleupload.loadError'));
+                            }
+                        },
+                        'onerror':function(){
+                            showErrorLoader && showErrorLoader(me.getLang('simpleupload.loadError'));
+                        }
+                    });
+                }
 
                 function callback(){
                     try{
-                        var link, json, loader,
+                        var  json,
                             body = (iframe.contentDocument || iframe.contentWindow.document).body,
                             result = body.innerText || body.textContent || '';
                         json = (new Function("return " + result))();
-                        link = me.options.imageUrlPrefix + json.url;
-                        if(json.state == 'SUCCESS' && json.url) {
-                            loader = me.document.getElementById(loadingId);
-                            domUtils.removeClasses(loader, 'loadingclass');
-                            loader.setAttribute('src', link);
-                            loader.setAttribute('_src', link);
-                            loader.setAttribute('alt', json.original || '');
-                            loader.removeAttribute('id');
-                            me.fireEvent('contentchange');
+                        if(json.state == 'SUCCESS') {
                         } else {
                             showErrorLoader && showErrorLoader(json.state);
                         }
@@ -84,6 +130,7 @@ UE.plugin.register('simpleupload', function (){
                     form.reset();
                     domUtils.un(iframe, 'load', callback);
                 }
+
                 function showErrorLoader(title){
                     if(loadingId) {
                         var loader = me.document.getElementById(loadingId);
@@ -102,17 +149,25 @@ UE.plugin.register('simpleupload', function (){
                     errorHandler(me.getLang('autoupload.errorLoadConfig'));
                     return;
                 }
+                
                 // 判断文件格式是否错误
-                var filename = input.value,
-                    fileext = filename ? filename.substr(filename.lastIndexOf('.')):'';
-                if (!fileext || (allowFiles && (allowFiles.join('') + '.').indexOf(fileext.toLowerCase() + '.') == -1)) {
-                    showErrorLoader(me.getLang('simpleupload.exceedTypeError'));
-                    return;
+                for(var i=0;i<files.length; i++){
+                    var filename = files[i].name,
+                        fileext = filename ? filename.substr(filename.lastIndexOf('.')):'';
+                    if (!fileext || (allowFiles && (allowFiles.join('') + '.').indexOf(fileext.toLowerCase() + '.') == -1)) {
+                        showErrorLoader(me.getLang('simpleupload.exceedTypeError'));
+                        return;
+                    }
                 }
 
                 domUtils.on(iframe, 'load', callback);
                 form.action = utils.formatUrl(imageActionUrl + (imageActionUrl.indexOf('?') == -1 ? '?':'&') + params);
                 form.submit();
+                
+                setTimeout(function(){
+                    uploading();
+                }, 1000);
+                
             });
 
             var stateTimer;
