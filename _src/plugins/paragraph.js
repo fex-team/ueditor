@@ -90,12 +90,12 @@ UE.plugins['paragraph'] = function() {
                         }
 
                         //trace:1706 选择的就是h1-6要删除
-                        if(attrs && /h\d/i.test(parent.tagName) && !/h\d/i.test(para.tagName) ){
+                        if( attrs && /h\d/i.test(parent.tagName) && !/h\d/i.test(para.tagName) ){
                             domUtils.setAttributes(parent,attrs);
                             if(sourceCmdName && sourceCmdName == 'customstyle' && attrs.style){
                                 parent.style.cssText = attrs.style;
                             }
-                            domUtils.remove(para,true);
+                            domUtils.remove(para.parentNode,true);
                             para = parent;
                         }else{
                             domUtils.remove( para.parentNode, true );

@@ -53,6 +53,7 @@ UE.plugins['autoheight'] = function () {
         isFullscreen = f
     });
     me.addListener('destroy', function () {
+        domUtils.un(me.window, "scroll", fixedScrollTop);
         me.removeListener('contentchange afterinserthtml keyup mouseup',adjustHeight)
     });
     me.enableAutoHeight = function () {
@@ -99,17 +100,20 @@ UE.plugins['autoheight'] = function () {
 
         });
         //修复内容过多时，回到顶部，顶部内容被工具栏遮挡问题
-        var lastScrollY;
-        window.onscroll = function(){
-            if(lastScrollY === null){
-                lastScrollY = this.scrollY
-            }else if(this.scrollY == 0 && lastScrollY != 0){
-                me.window.scrollTo(0,0);
-                lastScrollY = null;
-            }
-        }
+        domUtils.on(me.window, "scroll", fixedScrollTop);
     });
 
+    var lastScrollY;
+    
+    function fixedScrollTop() {
+        if(!me.window) return;
+        if(lastScrollY === null){
+            lastScrollY = me.window.scrollY
+        }else if(me.window.scrollY == 0 && lastScrollY != 0){
+            me.window.scrollTo(0,0);
+            lastScrollY = null;
+        }
+    }
 
 };
 

@@ -17,7 +17,7 @@
                     options.className =  'edui-for-' + name;
                 }
                 if(cssRules){
-                    options.cssRules = '.edui-default .edui-for-'+ name +' .edui-dialog-content  {'+ cssRules +'}'
+                    options.cssRules = '.edui-for-'+ name +' .edui-dialog-content  {'+ cssRules +'}'
                 }
             }
             this.initOptions(utils.extend({
@@ -43,6 +43,7 @@
             var me = this,
                 theme=this.editor.options.theme;
             if(this.cssRules){
+                this.cssRules = '.edui-' + theme + ' ' + this.cssRules;
                 utils.cssRule('edui-customize-'+this.name+'-style',this.cssRules);
             }
             this.initUIBase();

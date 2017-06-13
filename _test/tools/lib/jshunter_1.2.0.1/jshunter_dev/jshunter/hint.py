@@ -325,7 +325,7 @@ def usage():
 	print "./hint outpath.html folderToCheck\t\t检查folderToCheck这个目录内的所有js文件和html文件（递归检查）"
 	print "./hint outpath.html folderToCheck/*.js\t\t检查folderToCheck一级目录下的所有js文件和html文件（忽略目录）"
 	print "[Notice]使用时请确保当前目录中包含jshint.js文件，建议cd到jshunter的目录中执行./hint.py"
-	print "[Contact] pankai01@baidu.com liulanying01@baidu.com"
+	print "[Contact] xxxxxxx@baidu.com xxxx@baidu.com"
 	print "===================================================================================================================="
 
 def doJsHint(_path):

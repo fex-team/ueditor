@@ -58,7 +58,7 @@ UE.plugin.register('simpleupload', function (){
                 var allowFiles = me.getOpt('imageAllowFiles');
 
                 me.focus();
-                me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
+                me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif">');
 
                 function callback(){
                     try{
@@ -69,12 +69,12 @@ UE.plugin.register('simpleupload', function (){
                         link = me.options.imageUrlPrefix + json.url;
                         if(json.state == 'SUCCESS' && json.url) {
                             loader = me.document.getElementById(loadingId);
+                            domUtils.removeClasses(loader, 'loadingclass');
                             loader.setAttribute('src', link);
                             loader.setAttribute('_src', link);
-                            loader.setAttribute('title', json.title || '');
                             loader.setAttribute('alt', json.original || '');
                             loader.removeAttribute('id');
-                            domUtils.removeClasses(loader, 'loadingclass');
+                            me.fireEvent('contentchange');
                         } else {
                             showErrorLoader && showErrorLoader(json.state);
                         }

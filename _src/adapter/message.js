@@ -6,6 +6,11 @@ UE.registerUI('message', function(editor) {
     var _messageItems = [];
     var me = editor;
 
+    me.setOpt('enableMessageShow', true);
+    if (me.getOpt('enableMessageShow') === false) {
+        return;
+    }
+
     me.addListener('ready', function(){
         holder = document.getElementById(me.ui.id + '_message_holder');
         updateHolderPos();
@@ -48,6 +53,7 @@ UE.registerUI('message', function(editor) {
     });
 
     function updateHolderPos(){
+        if (!holder || !me.ui) return;
         var toolbarbox = me.ui.getDom('toolbarbox');
         if (toolbarbox) {
             holder.style.top = toolbarbox.offsetHeight + 3 + 'px';

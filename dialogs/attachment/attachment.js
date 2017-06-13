@@ -439,8 +439,10 @@
             }
 
             uploader.on('fileQueued', function (file) {
-                fileCount++;
-                fileSize += file.size;
+                if (file.ext && acceptExtensions.indexOf(file.ext.toLowerCase()) != -1 && file.size <= fileMaxSize) {
+                    fileCount++;
+                    fileSize += file.size;
+                }
 
                 if (fileCount === 1) {
                     $placeHolder.addClass('element-invisible');
@@ -451,8 +453,10 @@
             });
 
             uploader.on('fileDequeued', function (file) {
-                fileCount--;
-                fileSize -= file.size;
+                if (file.ext && acceptExtensions.indexOf(file.ext.toLowerCase()) != -1 && file.size <= fileMaxSize) {
+                    fileCount--;
+                    fileSize -= file.size;
+                }
 
                 removeFile(file);
                 updateTotalProgress();
@@ -485,7 +489,9 @@
 
             uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
-                header['X_Requested_With'] = 'XMLHttpRequest';
+                if (actionUrl.toLowerCase().indexOf('jsp') != -1) {
+                    header['X_Requested_With'] = 'XMLHttpRequest';
+                }
             });
 
             uploader.on('uploadProgress', function (file, percentage) {

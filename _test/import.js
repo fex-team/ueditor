@@ -20,6 +20,7 @@
 ///import core/localstorage;
 ///import plugins/defaultfilter;
 ///import plugins/inserthtml;
+///import plugins/insertfile;
 ///import plugins/autotypeset;
 ///import plugins/background;
 ///import plugins/image;
@@ -59,6 +60,7 @@
 ///import plugins/autolink;
 ///import plugins/autoheight;
 ///import plugins/autofloat;
+///import plugins/autosubmit;
 ///import plugins/video;
 ///import plugins/table.core;
 ///import plugins/table.cmds;

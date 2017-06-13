@@ -100,8 +100,8 @@
         //在table或者td边缘有可能存在选中tr的情况
         var cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
             tr = cell && cell.parentNode,
-            caption = start && domUtils.findParentByTagName(start, 'caption', true),
-            table = caption ? caption.parentNode : tr && tr.parentNode.parentNode;
+            table = tr && domUtils.findParentByTagName(tr, ["table"]),
+            caption = table && table.getElementsByTagName('caption')[0];
 
         return {
             cell:cell,
@@ -767,6 +767,7 @@
             var numCols = this.colsNum,
                 table = this.table,
                 row = table.insertRow(rowIndex), cell,
+                thead = null,
                 isInsertTitle = typeof sourceCell == 'string' && sourceCell.toUpperCase() == 'TH';
 
             function replaceTdToTh(colIndex, cell, tableRow) {
@@ -797,6 +798,11 @@
                     cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     row.appendChild(cell);
                     if(!isInsertTitle) replaceTdToTh(colIndex, cell, row);
+                }
+                
+                if(isInsertTitle) {
+                    thead = table.createTHead();
+                    thead.insertBefore(row, thead.firstChild);
                 }
             } else {
                 var infoRow = this.indexTable[rowIndex],
