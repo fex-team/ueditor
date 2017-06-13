@@ -79,6 +79,7 @@ test('trace 3985 向下合并-拆分成行', function () {
 });
 
 test('完全拆分单元格', function () {
+    if (ua.browser.ie&&ua.browser.ie >8)return;//todo ie9,10改range bug trace 单元格不能框选
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<p></p>');
