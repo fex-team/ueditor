@@ -58,13 +58,19 @@ UE.plugins['link'] = function(){
     UE.commands['unlink'] = {
         execCommand : function() {
             var range = this.selection.getRange(),
-                bookmark;
-            if(range.collapsed && !domUtils.findParentByTagName( range.startContainer, 'a', true )){
+                target = domUtils.findParentByTagName( range.startContainer, 'a', true );
+
+            if(!target){
                 return;
             }
-            bookmark = range.createBookmark();
-            optimize( range );
-            range.removeInlineStyle( 'a' ).moveToBookmark( bookmark ).select();
+
+            var textNode = target.childNodes[0];
+            target.parentNode.replaceChild( textNode, target );
+            range.setEndAfter( textNode ).collapse().select();
+            try {
+                // IE8 不支持向 textNode 添加属性
+                textNode._hasMovedLink = true; // 避免自动转换链接时再次加上链接
+            } catch (e) {};
         },
         queryCommandState : function(){
             return !this.highlight && this.queryCommandValue('link') ?  0 : -1;
