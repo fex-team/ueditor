@@ -120,6 +120,9 @@ var domUtils = dom.domUtils = {
      * ```
      */
     getPosition:function (nodeA, nodeB) {
+        if (nodeA && nodeA.compareDocumentPosition) {
+            return nodeA.compareDocumentPosition(nodeB);
+        }
         // 如果两个节点是同一个节点
         if (nodeA === nodeB) {
             // domUtils.POSITION_IDENTICAL
@@ -198,11 +201,11 @@ var domUtils = dom.domUtils = {
      *
      * ```
      */
-    getNodeIndex:function (node, ignoreTextNode) {
+    getNodeIndex:function (node, mergeTextNode) {
         var preNode = node,
             i = 0;
         while (preNode = preNode.previousSibling) {
-            if (ignoreTextNode && preNode.nodeType == 3) {
+            if (mergeTextNode && preNode.nodeType == 3) {
                 if(preNode.nodeType != preNode.nextSibling.nodeType ){
                     i++;
                 }
