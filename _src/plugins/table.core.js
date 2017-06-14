@@ -857,7 +857,7 @@
         );
 
       // 这段关于行表头或者列表头的特殊处理会导致表头合并范围错误
-      // 为什么有这段代码的原因未明，暂且注释掉
+      // 为什么有这段代码的原因未明，暂且注释掉，希望原作者看到后出面说明下
       // if (
       //   leftTopCell.tagName == "TH" &&
       //   range.endRowIndex !== range.beginRowIndex
