@@ -185,7 +185,14 @@ UE.plugins["font"] = function() {
     if (needSetChild[cmdName]) {
       rng.adjustmentBoundary();
       if (!rng.collapsed && rng.startContainer.nodeType == 1) {
-        var start = rng.startContainer.childNodes[rng.startOffset];
+        rng.traversal(function(node){
+          var start;
+          if(domUtils.isTagNode(node,'span')){
+            start = node;
+          }else{
+            start = domUtils.getElementsByTagName(node,'span')[0];
+          }
+        });
         if (start && domUtils.isTagNode(start, "span")) {
           var bk = rng.createBookmark();
           utils.each(domUtils.getElementsByTagName(start, "span"), function(
