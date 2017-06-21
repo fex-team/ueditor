@@ -1,12 +1,12 @@
 (function() {
   var paths = [
-    "parse.js",
-    "insertcode.js",
-    "table.js",
-    "charts.js",
-    "background.js",
-    "list.js",
-    "video.js"
+    'parse.js',
+    'insertcode.js',
+    'table.js',
+    'charts.js',
+    'background.js',
+    'list.js',
+    'video.js'
   ];
 
   function getUEBasePath(docUrl, confUrl) {
