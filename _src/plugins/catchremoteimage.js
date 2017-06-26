@@ -26,7 +26,8 @@ UE.plugins["catchremoteimage"] = function() {
       catcherFieldName = me.getOpt("catcherFieldName");
 
     var remoteImages = [],
-      imgs = domUtils.getElementsByTagName(me.document, "img"),
+      loadingIMG =  me.options.themePath + me.options.theme + '/images/spacer.gif',
+      imgs = me.document.querySelectorAll('[style*="url"],img'),
       test = function(src, urls) {
         if (src.indexOf(location.host) != -1 || /(^\.)|(^\/)/.test(src)) {
           return true;
@@ -45,9 +46,27 @@ UE.plugins["catchremoteimage"] = function() {
       if (ci.getAttribute("word_img")) {
         continue;
       }
-      var src = ci.getAttribute("_src") || ci.src || "";
-      if (/^(https?|ftp):/i.test(src) && !test(src, catcherLocalDomain)) {
-        remoteImages.push(src);
+      if(ci.nodeName == "IMG"){
+        var src = ci.getAttribute("_src") || ci.src || "";
+        if (/^(https?|ftp):/i.test(src) && !test(src, catcherLocalDomain)) {
+          remoteImages.push(src);
+          // 添加上传时的uploading动画
+          domUtils.setAttributes(ci, {
+            class: "loadingclass",
+            _src: src,
+            src: loadingIMG
+          })
+        }
+      } else {
+        // 获取背景图片url
+        var backgroundImageurl = ci.style.cssText.replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '');
+        if (/^(https?|ftp):/i.test(backgroundImageurl) && !test(backgroundImageurl, catcherLocalDomain)) {
+          remoteImages.push(backgroundImageurl);
+          ci.style.cssText = ci.style.cssText.replace(backgroundImageurl, loadingIMG);
+          domUtils.setAttributes(ci, {
+            "data-background": backgroundImageurl
+          })
+        }
       }
     }
 
@@ -72,21 +91,61 @@ UE.plugins["catchremoteimage"] = function() {
             newSrc,
             list = info.list;
 
-          for (i = 0; (ci = imgs[i++]); ) {
+          /* 抓取失败统计 */
+          var catchFailList = [];
+          /* 抓取成功统计 */
+          var catchSuccessList = [];
+          /* 抓取失败时显示的图片 */
+          var failIMG = me.options.themePath + me.options.theme + '/images/img-cracked.png';
+
+          for (i = 0; ci = imgs[i++];) {
             oldSrc = ci.getAttribute("_src") || ci.src || "";
-            for (j = 0; (cj = list[j++]); ) {
+            oldBgIMG = ci.getAttribute("data-background") || "";
+            for (j = 0; cj = list[j++];) {
               if (oldSrc == cj.source && cj.state == "SUCCESS") {
-                //抓取失败时不做替换处理
                 newSrc = catcherUrlPrefix + cj.url;
+                // 上传成功是删除uploading动画
+                domUtils.removeClasses( ci, "loadingclass" );
                 domUtils.setAttributes(ci, {
-                  src: newSrc,
-                  _src: newSrc
+                    "src": newSrc,
+                    "_src": newSrc,
+                    "data-catchResult":"img_catchSuccess"   // 添加catch成功标记
                 });
+                catchSuccessList.push(ci);
+                break;
+              } else if (oldSrc == cj.source && cj.state == "FAIL") {
+                // 替换成统一的失败图片
+                domUtils.removeClasses( ci, "loadingclass" );
+                domUtils.setAttributes(ci, {
+                    "src": failIMG,
+                    "_src": cj.source,
+                    "data-catchResult":"img_catchFail" // 添加catch失败标记
+                });
+                catchFailList.push(ci);
+                break;
+              } else if (oldBgIMG == cj.source && cj.state == "SUCCESS") {
+                newBgIMG = catcherUrlPrefix + cj.url;
+                ci.style.cssText = ci.style.cssText.replace(loadingIMG, newBgIMG);
+                domUtils.removeAttributes(ci,"data-background");
+                domUtils.setAttributes(ci, {
+                    "data-catchResult":"img_catchSuccess"   // 添加catch成功标记
+                });
+                catchSuccessList.push(ci);
+                break;
+              } else if (oldBgIMG == cj.source && cj.state == "FAIL"){
+                ci.style.cssText = ci.style.cssText.replace(loadingIMG, failIMG);
+                domUtils.removeAttributes(ci,"data-background");
+                domUtils.setAttributes(ci, {
+                    "data-catchResult":"img_catchFail"   // 添加catch失败标记
+                });
+                catchFailList.push(ci);
                 break;
               }
             }
+
           }
-          me.fireEvent("catchremotesuccess");
+          // 监听事件添加成功抓取和抓取失败的dom列表参数
+          me.fireEvent('catchremotesuccess',catchSuccessList,catchFailList);
         },
         //回调失败，本次请求超时
         error: function() {
