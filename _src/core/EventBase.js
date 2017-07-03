@@ -28,11 +28,10 @@
  * UE.EventBase.call(editor);
  * ```
  */
-var EventBase = UE.EventBase = function () {};
+var EventBase = (UE.EventBase = function() {});
 
 EventBase.prototype = {
-
-    /**
+  /**
      * 注册事件监听器
      * @method addListener
      * @param { String } types 监听的事件名称，同时监听多个事件使用空格分隔
@@ -54,23 +53,23 @@ EventBase.prototype = {
      * ```
      * @see UE.EventBase:fireEvent(String)
      */
-    addListener:function (types, listener) {
-        types = utils.trim(types).split(/\s+/);
-        for (var i = 0, ti; ti = types[i++];) {
-            getListener(this, ti, true).push(listener);
-        }
-    },
+  addListener: function(types, listener) {
+    types = utils.trim(types).split(/\s+/);
+    for (var i = 0, ti; (ti = types[i++]); ) {
+      getListener(this, ti, true).push(listener);
+    }
+  },
 
-    on : function(types, listener){
-      return this.addListener(types,listener);
-    },
-    off : function(types, listener){
-        return this.removeListener(types, listener)
-    },
-    trigger:function(){
-        return this.fireEvent.apply(this,arguments);
-    },
-    /**
+  on: function(types, listener) {
+    return this.addListener(types, listener);
+  },
+  off: function(types, listener) {
+    return this.removeListener(types, listener);
+  },
+  trigger: function() {
+    return this.fireEvent.apply(this, arguments);
+  },
+  /**
      * 移除事件监听器
      * @method removeListener
      * @param { String } types 移除的事件名称，同时移除多个事件使用空格分隔
@@ -81,14 +80,14 @@ EventBase.prototype = {
      * editor.removeListener("selectionchange",changeCallback);
      * ```
      */
-    removeListener:function (types, listener) {
-        types = utils.trim(types).split(/\s+/);
-        for (var i = 0, ti; ti = types[i++];) {
-            utils.removeItem(getListener(this, ti) || [], listener);
-        }
-    },
+  removeListener: function(types, listener) {
+    types = utils.trim(types).split(/\s+/);
+    for (var i = 0, ti; (ti = types[i++]); ) {
+      utils.removeItem(getListener(this, ti) || [], listener);
+    }
+  },
 
-    /**
+  /**
      * 触发事件
      * @method fireEvent
      * @param { String } types 触发的事件名称，同时触发多个事件使用空格分隔
@@ -100,7 +99,7 @@ EventBase.prototype = {
      * ```
      */
 
-    /**
+  /**
      * 触发事件
      * @method fireEvent
      * @param { String } types 触发的事件名称，同时触发多个事件使用空格分隔
@@ -120,31 +119,33 @@ EventBase.prototype = {
      * editor.fireEvent("selectionchange", "Hello", "World");
      * ```
      */
-    fireEvent:function () {
-        var types = arguments[0];
-        types = utils.trim(types).split(' ');
-        for (var i = 0, ti; ti = types[i++];) {
-            var listeners = getListener(this, ti),
-                r, t, k;
-            if (listeners) {
-                k = listeners.length;
-                while (k--) {
-                    if(!listeners[k])continue;
-                    t = listeners[k].apply(this, arguments);
-                    if(t === true){
-                        return t;
-                    }
-                    if (t !== undefined) {
-                        r = t;
-                    }
-                }
-            }
-            if (t = this['on' + ti.toLowerCase()]) {
-                r = t.apply(this, arguments);
-            }
+  fireEvent: function() {
+    var types = arguments[0];
+    types = utils.trim(types).split(" ");
+    for (var i = 0, ti; (ti = types[i++]); ) {
+      var listeners = getListener(this, ti),
+        r,
+        t,
+        k;
+      if (listeners) {
+        k = listeners.length;
+        while (k--) {
+          if (!listeners[k]) continue;
+          t = listeners[k].apply(this, arguments);
+          if (t === true) {
+            return t;
+          }
+          if (t !== undefined) {
+            r = t;
+          }
         }
-        return r;
+      }
+      if ((t = this["on" + ti.toLowerCase()])) {
+        r = t.apply(this, arguments);
+      }
     }
+    return r;
+  }
 };
 /**
  * 获得对象所拥有监听类型的所有监听器
@@ -159,9 +160,11 @@ EventBase.prototype = {
  * @return { Array } 监听器数组
  */
 function getListener(obj, type, force) {
-    var allListeners;
-    type = type.toLowerCase();
-    return ( ( allListeners = ( obj.__allListeners || force && ( obj.__allListeners = {} ) ) )
-        && ( allListeners[type] || force && ( allListeners[type] = [] ) ) );
+  var allListeners;
+  type = type.toLowerCase();
+  return (
+    (allListeners =
+      obj.__allListeners || (force && (obj.__allListeners = {}))) &&
+    (allListeners[type] || (force && (allListeners[type] = [])))
+  );
 }
-

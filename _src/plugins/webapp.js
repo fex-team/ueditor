@@ -4,7 +4,6 @@
  * @since 1.2.6.1
  */
 
-
 /**
  * 插入百度应用
  * @command webapp
@@ -71,61 +70,86 @@
 //    };
 //};
 
-UE.plugin.register('webapp', function (){
-    var me = this;
-    function createInsertStr(obj,toEmbed){
-        return  !toEmbed ?
-            '<img title="'+obj.title+'" width="' + obj.width + '" height="' + obj.height + '"' +
-                ' src="' + me.options.UEDITOR_HOME_URL + 'themes/default/images/spacer.gif" _logo_url="'+obj.logo+'" style="background:url(' + obj.logo
-                +') no-repeat center center; border:1px solid gray;" class="edui-faked-webapp" _url="' + obj.url + '" ' +
-                (obj.align && !obj.cssfloat? 'align="' + obj.align + '"' : '') +
-                (obj.cssfloat ? 'style="float:' + obj.cssfloat + '"' : '') +
-                '/>'
-            :
-            '<iframe class="edui-faked-webapp" title="'+obj.title+'" ' +
-                (obj.align && !obj.cssfloat? 'align="' + obj.align + '"' : '') +
-                (obj.cssfloat ? 'style="float:' + obj.cssfloat + '"' : '') +
-                'width="' + obj.width + '" height="' + obj.height + '"  scrolling="no" frameborder="0" src="' + obj.url + '" logo_url = "'+obj.logo+'"></iframe>'
-
-    }
-    return {
-        outputRule: function(root){
-            utils.each(root.getNodesByTagName('img'),function(node){
-                var html;
-                if(node.getAttr('class') == 'edui-faked-webapp'){
-                    html =  createInsertStr({
-                        title:node.getAttr('title'),
-                        'width':node.getAttr('width'),
-                        'height':node.getAttr('height'),
-                        'align':node.getAttr('align'),
-                        'cssfloat':node.getStyle('float'),
-                        'url':node.getAttr("_url"),
-                        'logo':node.getAttr('_logo_url')
-                    },true);
-                    var embed = UE.uNode.createElement(html);
-                    node.parentNode.replaceChild(embed,node);
-                }
+UE.plugin.register("webapp", function() {
+  var me = this;
+  function createInsertStr(obj, toEmbed) {
+    return !toEmbed
+      ? '<img title="' +
+          obj.title +
+          '" width="' +
+          obj.width +
+          '" height="' +
+          obj.height +
+          '"' +
+          ' src="' +
+          me.options.UEDITOR_HOME_URL +
+          'themes/default/images/spacer.gif" _logo_url="' +
+          obj.logo +
+          '" style="background:url(' +
+          obj.logo +
+          ') no-repeat center center; border:1px solid gray;" class="edui-faked-webapp" _url="' +
+          obj.url +
+          '" ' +
+          (obj.align && !obj.cssfloat ? 'align="' + obj.align + '"' : "") +
+          (obj.cssfloat ? 'style="float:' + obj.cssfloat + '"' : "") +
+          "/>"
+      : '<iframe class="edui-faked-webapp" title="' +
+          obj.title +
+          '" ' +
+          (obj.align && !obj.cssfloat ? 'align="' + obj.align + '"' : "") +
+          (obj.cssfloat ? 'style="float:' + obj.cssfloat + '"' : "") +
+          'width="' +
+          obj.width +
+          '" height="' +
+          obj.height +
+          '"  scrolling="no" frameborder="0" src="' +
+          obj.url +
+          '" logo_url = "' +
+          obj.logo +
+          '"></iframe>';
+  }
+  return {
+    outputRule: function(root) {
+      utils.each(root.getNodesByTagName("img"), function(node) {
+        var html;
+        if (node.getAttr("class") == "edui-faked-webapp") {
+          html = createInsertStr(
+            {
+              title: node.getAttr("title"),
+              width: node.getAttr("width"),
+              height: node.getAttr("height"),
+              align: node.getAttr("align"),
+              cssfloat: node.getStyle("float"),
+              url: node.getAttr("_url"),
+              logo: node.getAttr("_logo_url")
+            },
+            true
+          );
+          var embed = UE.uNode.createElement(html);
+          node.parentNode.replaceChild(embed, node);
+        }
+      });
+    },
+    inputRule: function(root) {
+      utils.each(root.getNodesByTagName("iframe"), function(node) {
+        if (node.getAttr("class") == "edui-faked-webapp") {
+          var img = UE.uNode.createElement(
+            createInsertStr({
+              title: node.getAttr("title"),
+              width: node.getAttr("width"),
+              height: node.getAttr("height"),
+              align: node.getAttr("align"),
+              cssfloat: node.getStyle("float"),
+              url: node.getAttr("src"),
+              logo: node.getAttr("logo_url")
             })
-        },
-        inputRule:function(root){
-            utils.each(root.getNodesByTagName('iframe'),function(node){
-                if(node.getAttr('class') == 'edui-faked-webapp'){
-                    var img = UE.uNode.createElement(createInsertStr({
-                        title:node.getAttr('title'),
-                        'width':node.getAttr('width'),
-                        'height':node.getAttr('height'),
-                        'align':node.getAttr('align'),
-                        'cssfloat':node.getStyle('float'),
-                        'url':node.getAttr("src"),
-                        'logo':node.getAttr('logo_url')
-                    }));
-                    node.parentNode.replaceChild(img,node);
-                }
-            })
-
-        },
-        commands:{
-            /**
+          );
+          node.parentNode.replaceChild(img, node);
+        }
+      });
+    },
+    commands: {
+      /**
              * 插入百度应用
              * @command webapp
              * @method execCommand
@@ -146,22 +170,24 @@ UE.plugin.register('webapp', function (){
              * } );
              * ```
              */
-            'webapp':{
-                execCommand:function (cmd, obj) {
-
-                    var me = this,
-                        str = createInsertStr(utils.extend(obj,{
-                            align:'none'
-                        }), false);
-                    me.execCommand("inserthtml",str);
-                },
-                queryCommandState:function () {
-                    var me = this,
-                        img = me.selection.getRange().getClosedNode(),
-                        flag = img && (img.className == "edui-faked-webapp");
-                    return flag ? 1 : 0;
-                }
-            }
+      webapp: {
+        execCommand: function(cmd, obj) {
+          var me = this,
+            str = createInsertStr(
+              utils.extend(obj, {
+                align: "none"
+              }),
+              false
+            );
+          me.execCommand("inserthtml", str);
+        },
+        queryCommandState: function() {
+          var me = this,
+            img = me.selection.getRange().getClosedNode(),
+            flag = img && img.className == "edui-faked-webapp";
+          return flag ? 1 : 0;
         }
+      }
     }
+  };
 });
