@@ -179,7 +179,7 @@ class Uploader
             return;
         }
         //获取请求头并检测死链
-        $heads = get_headers($imgUrl, 1);
+        $heads = @get_headers($imgUrl, 1);
         if (!(stristr($heads[0], "200") && stristr($heads[0], "OK"))) {
             $this->stateInfo = $this->getStateInfo("ERROR_DEAD_LINK");
             return;
