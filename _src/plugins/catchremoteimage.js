@@ -118,7 +118,7 @@ UE.plugins["catchremoteimage"] = function() {
                 domUtils.removeClasses( ci, "loadingclass" );
                 domUtils.setAttributes(ci, {
                     "src": failIMG,
-                    "_src": cj.source,
+                    "_src": failIMG,
                     "data-catchResult":"img_catchFail" // 添加catch失败标记
                 });
                 catchFailList.push(ci);
