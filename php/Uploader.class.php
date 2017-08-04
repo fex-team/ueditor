@@ -219,6 +219,7 @@ class Uploader
 
         //检查文件内容是否真的是图片
         if (substr(mime_content_type($this->filePath), 0, 5) != 'image') {
+            $this->stateInfo = $this->getStateInfo("ERROR_TYPE_NOT_ALLOWED");
             return;
         }
 
