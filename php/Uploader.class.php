@@ -217,6 +217,11 @@ class Uploader
             return;
         }
 
+        //检查文件内容是否真的是图片
+        if (substr(mime_content_type($this->filePath), 0, 5) != 'image') {
+            return;
+        }
+
         //创建目录失败
         if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
