@@ -185,8 +185,9 @@ class Uploader
             return;
         }
         //格式验证(扩展名验证和Content-Type验证)
-        $fileType = strtolower(strrchr($imgUrl, '.'));
-        if (!in_array($fileType, $this->config['allowFiles']) || !isset($heads['Content-Type']) || !stristr($heads['Content-Type'], "image")) {
+        $fileType    = strtolower(strrchr($imgUrl, '.'));
+	$fileTypeArr = explode('?',$fileType);
+        if (!in_array($fileTypeArr[0], $this->config['allowFiles']) || !isset($heads['Content-Type']) || !stristr($heads['Content-Type'], "image")) {
             $this->stateInfo = $this->getStateInfo("ERROR_HTTP_CONTENTTYPE");
             return;
         }
