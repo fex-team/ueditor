@@ -172,6 +172,10 @@ class Uploader
     {
         $imgUrl = htmlspecialchars($this->fileField);
         $imgUrl = str_replace("&amp;", "&", $imgUrl);
+	    
+        //获取带有GET参数的真实图片url路径
+        $queryString = strrchr($imgUrl, '?');
+        $imgUrl      = str_replace($queryString, '', $imgUrl);
 
         //http开头验证
         if (strpos($imgUrl, "http") !== 0) {
