@@ -256,6 +256,7 @@ var dtd = (dom.dtd = (function() {
       img: 1,
       embed: 1,
       input: 1,
+      textarea: 1,
       link: 1,
       meta: 1,
       param: 1,
