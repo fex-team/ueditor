@@ -39,7 +39,9 @@ class Uploader
         "ERROR_UNKNOWN" => "未知错误",
         "ERROR_DEAD_LINK" => "链接不可用",
         "ERROR_HTTP_LINK" => "链接不是http链接",
-        "ERROR_HTTP_CONTENTTYPE" => "链接contentType不正确"
+        "ERROR_HTTP_CONTENTTYPE" => "链接contentType不正确",
+        "INVALID_URL" => "非法 URL",
+        "INVALID_IP" => "非法 IP"
     );
 
     /**
@@ -178,15 +180,36 @@ class Uploader
             $this->stateInfo = $this->getStateInfo("ERROR_HTTP_LINK");
             return;
         }
+
+        preg_match('/(^https*:\/\/[^:\/]+)/', $imgUrl, $matches);
+        $host_with_protocol = count($matches) > 1 ? $matches[1] : '';
+
+        // 判断是否是合法 url
+        if (!filter_var($host_with_protocol, FILTER_VALIDATE_URL)) {
+            $this->stateInfo = $this->getStateInfo("INVALID_URL");
+            return;
+        }
+
+        preg_match('/^https*:\/\/(.+)/', $host_with_protocol, $matches);
+        $host_without_protocol = count($matches) > 1 ? $matches[1] : '';
+
+        // 此时提取出来的可能是 ip 也有可能是域名，先获取 ip
+        $ip = gethostbyname($host_without_protocol);
+        // 判断是否是私有 ip
+        if(!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE)) {
+            $this->stateInfo = $this->getStateInfo("INVALID_IP");
+            return;
+        }
+
         //获取请求头并检测死链
-        $heads = get_headers($imgUrl);
+        $heads = get_headers($imgUrl, 1);
         if (!(stristr($heads[0], "200") && stristr($heads[0], "OK"))) {
             $this->stateInfo = $this->getStateInfo("ERROR_DEAD_LINK");
             return;
         }
         //格式验证(扩展名验证和Content-Type验证)
         $fileType = strtolower(strrchr($imgUrl, '.'));
-        if (!in_array($fileType, $this->config['allowFiles']) || stristr($heads['Content-Type'], "image")) {
+        if (!in_array($fileType, $this->config['allowFiles']) || !isset($heads['Content-Type']) || !stristr($heads['Content-Type'], "image")) {
             $this->stateInfo = $this->getStateInfo("ERROR_HTTP_CONTENTTYPE");
             return;
         }

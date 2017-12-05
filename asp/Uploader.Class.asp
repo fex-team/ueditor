@@ -104,8 +104,53 @@ Class Uploader
         DoUpload stream, filename
     End Function
 
+    Private Function RegExpTest(patrn, str) 
+        Dim regEx, Match, Matches
+        Set regEx = New RegExp
+        regEx.Pattern = patrn 
+        regEx.IgnoreCase = False
+        regEx.Global = True 
+        Set Matches = regEx.Execute(str)
+        For Each Match in Matches
+        RetStr = RetStr & Match.value &" "
+        RetStr = RetStr & vbCRLF 
+        Next 
+        RegExpTest = RetStr 
+    End Function
+
+    Private Function IpToNumber( ip )
+        arr=split(ip,".")
+        IpToNumber=256*256*256*clng(arr(0))+256*256*clng(arr(1))+256*clng(arr(2))+clng(arr(3))
+    End Function
+
+    Private Function IsPrivateIp( url )
+        Dim ip
+        ip = RegExpTest("\d+\.\d+\.\d+\.\d*", url)
+
+        If ip = "" Then
+            If RegExpTest("([\w-]+\.)+[\w-]+", url) <> "" Then
+                IsPrivateIp = False:Exit Function
+            End If
+        IsPrivateIp = True:Exit Function
+        End If
+
+        If instr(ip,"127.")=1 Then
+        IsPrivateIp = true:Exit Function
+        End If
+        ABegin = IpToNumber("10.0.0.0"):AEnd = IpToNumber("10.255.255.255")
+        BBegin = IpToNumber("172.16.0.0"):BEnd = IpToNumber("172.31.255.255")
+        CBegin = IpToNumber("192.168.0.0"):CEnd = IpToNumber("192.168.255.255")
+        IpNum = IpToNumber(ip)
+        IsPrivateIp = (ABegin <= IpNum and IpNum <= AEnd) or (BBegin <= IpNum and IpNum <= BEnd) or (CBegin <= IpNum and IpNum <= CEnd)
+    End Function
+
     Public Function UploadRemote( url )
         Dim stream, filename
+
+        If IsPrivateIp(url) Then
+        rsState = "Failed":Exit Function
+        End If
+
         filename = Right( url, Len(url) - InStrRev(url, "/") )
 
         Set stream = CrawlImage( url )
