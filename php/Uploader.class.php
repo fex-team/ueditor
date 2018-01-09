@@ -190,8 +190,10 @@ class Uploader
             return;
         }
         //格式验证(扩展名验证和Content-Type验证)
-        $fileType = strtolower(strrchr($imgUrl, '.'));
-        if (!in_array($fileType, $this->config['allowFiles']) || !isset($heads['Content-Type']) || !stristr($heads['Content-Type'], "image")) {
+        $fileType     = strtolower(strrchr($imgUrl, '.'));
+        $ctTypeArr    = explode('/', isset($heads['Content-Type']) ? $heads['Content-Type'] : '/');
+        $headFileType = isset($ctTypeArr[1]) ? strtolower('.' . $ctTypeArr[1]) : '';
+        if ((!in_array($fileType, $this->config['allowFiles']) && !in_array($headFileType, $this->config['allowFiles'])) || !isset($heads['Content-Type']) || !stristr($heads['Content-Type'], "image")) {
             $this->stateInfo = $this->getStateInfo("ERROR_HTTP_CONTENTTYPE");
             return;
         }
@@ -210,7 +212,7 @@ class Uploader
 
         $this->oriName = $m ? $m[1]:"";
         $this->fileSize = strlen($img);
-        $this->fileType = $this->getFileExt();
+        $this->fileType = $headFileType ? $headFileType : $this->getFileExt();
         $this->fullName = $this->getFullName();
         $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
