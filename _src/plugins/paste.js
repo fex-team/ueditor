@@ -338,6 +338,7 @@ UE.plugins["paste"] = function() {
 
   me.commands["paste"] = {
     execCommand: function(cmd) {
+
       if (browser.ie) {
         getClipboardData.call(me, function(div) {
           filter(div);

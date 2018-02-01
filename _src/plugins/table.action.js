@@ -430,6 +430,9 @@ UE.plugins["table"] = function() {
           utils.each(tables, function(table) {
             removeStyleSize(table, true);
             domUtils.removeAttributes(table, ["style", "border"]);
+            domUtils.setAttributes(table, {
+              style: 'margin: 0 auto'
+            });
             utils.each(domUtils.getElementsByTagName(table, "td"), function(
               td
             ) {

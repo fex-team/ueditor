@@ -9,32 +9,18 @@ UE.plugin.register("autoupload", function() {
   function sendAndInsertFile(file, editor) {
     var me = editor;
     //模拟数据
-    var fieldName,
-      urlPrefix,
+    var urlPrefix,
       maxSize,
       allowFiles,
-      actionUrl,
       loadingHtml,
       errorHandler,
       successHandler,
       filetype = /image\/\w+/i.test(file.type) ? "image" : "file",
       loadingId = "loading_" + (+new Date()).toString(36);
 
-    fieldName = me.getOpt(filetype + "FieldName");
     urlPrefix = me.getOpt(filetype + "UrlPrefix");
     maxSize = me.getOpt(filetype + "MaxSize");
     allowFiles = me.getOpt(filetype + "AllowFiles");
-    actionUrl = me.getActionUrl(me.getOpt(filetype + "ActionName"));
-    errorHandler = function(title) {
-      var loader = me.document.getElementById(loadingId);
-      loader && domUtils.remove(loader);
-      me.fireEvent("showmessage", {
-        id: loadingId,
-        content: title,
-        type: "error",
-        timeout: 4000
-      });
-    };
 
     if (filetype == "image") {
       loadingHtml =
@@ -43,18 +29,33 @@ UE.plugin.register("autoupload", function() {
         '" src="' +
         me.options.themePath +
         me.options.theme +
-        '/images/spacer.gif">';
+        '/images/spacer.png">';
       successHandler = function(data) {
-        var link = urlPrefix + data.url,
-          loader = me.document.getElementById(loadingId);
+        var imgUrlPrefix = 'api/material/image/view/';
+        var link = imgUrlPrefix + data.added.id;
+        var loader = me.document.getElementById(loadingId);
         if (loader) {
           domUtils.removeClasses(loader, "loadingclass");
           loader.setAttribute("src", link);
           loader.setAttribute("_src", link);
-          loader.setAttribute("alt", data.original || "");
+          loader.removeAttribute("id");
+          loader.setAttribute("class", "nfw-cms-img");
+          loader.setAttribute("img-id", "" + data.added.id);
+          me.trigger("contentchange", loader);
+        }
+      };
+      errorHandler = function() {
+        var loader = me.document.getElementById(loadingId);
+        var failIMG = me.options.themePath + me.options.theme + '/images/img-cracked.png';
+        if (loader) {
+          domUtils.removeClasses(loader, "loadingclass");
+          loader.setAttribute("src", failIMG);
+          loader.setAttribute("_src", link);
+          loader.setAttribute("img_catchFail", 'img_catchFail');
           loader.removeAttribute("id");
           me.trigger("contentchange", loader);
         }
+        window.injection.notify.normalNotify({tpl: 'warn', text: '自动转存图片失败'});
       };
     } else {
       loadingHtml =
@@ -76,15 +77,20 @@ UE.plugin.register("autoupload", function() {
         me.execCommand("insertfile", { url: link });
         rng.moveToBookmark(bk).select();
       };
+      errorHandler = function(title) {
+        var loader = me.document.getElementById(loadingId);
+        loader && domUtils.remove(loader);
+        me.fireEvent("showmessage", {
+          id: loadingId,
+          content: title,
+          type: "error",
+          timeout: 4000
+        });
+      };
     }
 
     /* 插入loading的占位符 */
     me.execCommand("inserthtml", loadingHtml);
-    /* 判断后端配置是否没有加载成功 */
-    if (!me.getOpt(filetype + "ActionName")) {
-      errorHandler(me.getLang("autoupload.errorLoadConfig"));
-      return;
-    }
     /* 判断文件大小是否超出限制 */
     if (file.size > maxSize) {
       errorHandler(me.getLang("autoupload.exceedSizeError"));
@@ -101,35 +107,30 @@ UE.plugin.register("autoupload", function() {
       return;
     }
 
-    /* 创建Ajax并提交 */
-    var xhr = new XMLHttpRequest(),
-      fd = new FormData(),
-      params = utils.serializeParam(me.queryCommandValue("serverparam")) || "",
-      url = utils.formatUrl(
-        actionUrl + (actionUrl.indexOf("?") == -1 ? "?" : "&") + params
-      );
-
-    fd.append(
-      fieldName,
-      file,
-      file.name || "blob." + file.type.substr("image/".length)
-    );
-    fd.append("type", "ajax");
-    xhr.open("post", url, true);
-    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xhr.addEventListener("load", function(e) {
+    window.injection.api('/material/collection/list').then(function(data){
       try {
-        var json = new Function("return " + utils.trim(e.target.response))();
-        if (json.state == "SUCCESS" && json.url) {
-          successHandler(json);
+        var collectionId = data.collections.private[0].id;
+        if (collectionId) {
+          var fd = new FormData();
+          fd.append('image', file)
+          fd.append('name', '自动转存图片')
+          fd.append('collection', collectionId)
+
+          window.injection.api('/material/image/uploadFile', fd).then(function(data){
+              successHandler(data)
+          }, function(err){
+              errorHandler();
+          });
+
         } else {
-          errorHandler(json.state);
+          errorHandler();
         }
       } catch (er) {
-        errorHandler(me.getLang("autoupload.loadError"));
+        errorHandler();
       }
+    }, function(err){
+        errorHandler();
     });
-    xhr.send(fd);
   }
 
   function getPasteImage(e) {
@@ -177,7 +178,9 @@ UE.plugin.register("autoupload", function() {
                 file;
               while (len--) {
                 file = items[len];
-                if (file.getAsFile) file = file.getAsFile();
+                if (file.getAsFile) {
+                  file = file.getAsFile();
+                }
                 if (file && file.size > 0) {
                   sendAndInsertFile(file, me);
                   hasImg = true;
@@ -214,7 +217,7 @@ UE.plugin.register("autoupload", function() {
             ".loadingclass{display:inline-block;cursor:default;background: url('" +
               this.options.themePath +
               this.options.theme +
-              "/images/loading.gif') no-repeat center center transparent;border:1px solid #cccccc;margin-left:1px;height: 22px;width: 22px;}\n" +
+              "/images/loading.gif') no-repeat center center transparent;border:1px solid #cccccc;margin:0 atuo;width: 200px;}\n" +
               ".loaderrorclass{display:inline-block;cursor:default;background: url('" +
               this.options.themePath +
               this.options.theme +

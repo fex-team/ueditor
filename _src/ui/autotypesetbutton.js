@@ -63,6 +63,7 @@
 
     utils.extend(me.editor.options.autotypeset, opt);
 
+    // get by readLocalOpts
     me.editor.setPreferences("autotypeset", opt);
   }
 

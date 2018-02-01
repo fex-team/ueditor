@@ -246,7 +246,7 @@
     me.setOpt(Editor.defaultOptions(me));
 
     /* 尝试异步加载后台配置 */
-    me.loadServerConfig();
+    // me.loadServerConfig();
 
     if (!utils.isEmptyObject(UE.I18N)) {
       //修改默认的语言类型

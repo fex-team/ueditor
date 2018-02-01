@@ -75,7 +75,7 @@ UE.plugins["link"] = function() {
   };
   function doLink(range, opt, me) {
     var rngClone = range.cloneRange(),
-      link = me.queryCommandValue("link");
+    link = me.queryCommandValue("link");
     optimize((range = range.adjustmentBoundary()));
     var start = range.startContainer;
     if (start.nodeType == 1 && link) {
@@ -108,6 +108,7 @@ UE.plugins["link"] = function() {
         text = utils.html(opt.href);
       }
       domUtils.setAttributes(a, opt);
+
       start = domUtils.findParentByTagName(rngClone.startContainer, "a", true);
       if (start && domUtils.isInNodeEndBoundary(rngClone, start)) {
         range.setStartAfter(start).collapse(true);

@@ -45,6 +45,18 @@
         ">" +
         lang.indent +
         "</td></tr>" +
+
+        "<tr>" +
+        '<td nowrap><input type="checkbox" name="clearTable" ' +
+        (opt["clearTable"] ? "checked" : "") +
+        ">" +
+        lang.clearTable +
+        '</td><td colspan="2"><input type="checkbox" name="clearList" ' +
+        (opt["clearList"] ? "checked" : "") +
+        ">" +
+        lang.clearList +
+        "</td></tr>" +
+
         "<tr>" +
         '<td nowrap><input type="checkbox" name="textAlign" ' +
         (opt["textAlign"] ? "checked" : "") +

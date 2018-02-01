@@ -31,109 +31,129 @@
     serverUrl: URL + "php/controller.php",
 
     //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
+    // toolbars: [
+    //   [
+    //     "fullscreen",
+    //     "source",
+    //     "|",
+    //     "undo",
+    //     "redo",
+    //     "|",
+    //     "bold",
+    //     "italic",
+    //     "underline",
+    //     "fontborder",
+    //     "strikethrough",
+    //     "superscript",
+    //     "subscript",
+    //     "removeformat",
+    //     "formatmatch",
+    //     "autotypeset",
+    //     "blockquote",
+    //     "pasteplain",
+    //     "|",
+    //     "forecolor",
+    //     "backcolor",
+    //     "insertorderedlist",
+    //     "insertunorderedlist",
+    //     "selectall",
+    //     "cleardoc",
+    //     "|",
+    //     "rowspacingtop",
+    //     "rowspacingbottom",
+    //     "lineheight",
+    //     "|",
+    //     "customstyle",
+    //     "paragraph",
+    //     "fontfamily",
+    //     "fontsize",
+    //     "|",
+    //     "directionalityltr",
+    //     "directionalityrtl",
+    //     "indent",
+    //     "|",
+    //     "justifyleft",
+    //     "justifycenter",
+    //     "justifyright",
+    //     "justifyjustify",
+    //     "|",
+    //     "touppercase",
+    //     "tolowercase",
+    //     "|",
+    //     "link",
+    //     "unlink",
+    //     "anchor",
+    //     "|",
+    //     "imagenone",
+    //     "imageleft",
+    //     "imageright",
+    //     "imagecenter",
+    //     "|",
+    //     "simpleupload",
+    //     "insertimage",
+    //     "emotion",
+    //     "scrawl",
+    //     "insertvideo",
+    //     "music",
+    //     "attachment",
+    //     "map",
+    //     "gmap",
+    //     "insertframe",
+    //     "insertcode",
+    //     "webapp",
+    //     "pagebreak",
+    //     "template",
+    //     "background",
+    //     "|",
+    //     "horizontal",
+    //     "date",
+    //     "time",
+    //     "spechars",
+    //     "snapscreen",
+    //     "wordimage",
+    //     "|",
+    //     "inserttable",
+    //     "deletetable",
+    //     "insertparagraphbeforetable",
+    //     "insertrow",
+    //     "deleterow",
+    //     "insertcol",
+    //     "deletecol",
+    //     "mergecells",
+    //     "mergeright",
+    //     "mergedown",
+    //     "splittocells",
+    //     "splittorows",
+    //     "splittocols",
+    //     "charts",
+    //     "|",
+    //     "print",
+    //     "preview",
+    //     "searchreplace",
+    //     "drafts",
+    //     "help"
+    //   ]
+    // ]
+
     toolbars: [
       [
-        "fullscreen",
-        "source",
-        "|",
-        "undo",
-        "redo",
-        "|",
-        "bold",
-        "italic",
-        "underline",
-        "fontborder",
-        "strikethrough",
-        "superscript",
-        "subscript",
-        "removeformat",
-        "formatmatch",
-        "autotypeset",
-        "blockquote",
-        "pasteplain",
-        "|",
-        "forecolor",
-        "backcolor",
-        "insertorderedlist",
-        "insertunorderedlist",
-        "selectall",
-        "cleardoc",
-        "|",
-        "rowspacingtop",
-        "rowspacingbottom",
-        "lineheight",
-        "|",
-        "customstyle",
-        "paragraph",
-        "fontfamily",
-        "fontsize",
-        "|",
-        "directionalityltr",
-        "directionalityrtl",
-        "indent",
-        "|",
-        "justifyleft",
-        "justifycenter",
-        "justifyright",
-        "justifyjustify",
-        "|",
-        "touppercase",
-        "tolowercase",
-        "|",
-        "link",
-        "unlink",
-        "anchor",
-        "|",
-        "imagenone",
-        "imageleft",
-        "imageright",
-        "imagecenter",
-        "|",
-        "simpleupload",
-        "insertimage",
-        "emotion",
-        "scrawl",
-        "insertvideo",
-        "music",
-        "attachment",
-        "map",
-        "gmap",
-        "insertframe",
-        "insertcode",
-        "webapp",
-        "pagebreak",
-        "template",
-        "background",
-        "|",
-        "horizontal",
-        "date",
-        "time",
-        "spechars",
-        "snapscreen",
-        "wordimage",
-        "|",
-        "inserttable",
-        "deletetable",
-        "insertparagraphbeforetable",
-        "insertrow",
-        "deleterow",
-        "insertcol",
-        "deletecol",
-        "mergecells",
-        "mergeright",
-        "mergedown",
-        "splittocells",
-        "splittorows",
-        "splittocols",
-        "charts",
-        "|",
-        "print",
-        "preview",
-        "searchreplace",
-        "drafts",
-        "help"
+          'link','unlink','undo','|', 'paragraph', 'fontfamily', 'fontsize','|',  
+          'removeformat', 'autotypeset', 'blockquote', 'pasteplain', '|',  
+          'insertorderedlist', 'insertunorderedlist', '|', 
+          'indent', 'rowspacingtop', 'rowspacingbottom', 'lineheight'
+      ],
+      [
+          'bold', 'italic', 'underline', 'fontborder', 'strikethrough', '|', 
+          'forecolor', 'backcolor', '|', 
+          'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+          'simpleupload', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+          'inserttable', 'deletetable', '|',
+          'selectall', 'cleardoc'
       ]
     ]
+
+
+
     //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
     //,labelMap:{
     //    'anchor':'', 'undo':''
@@ -149,7 +169,7 @@
     //,theme:'default'
     //,themePath:URL +"themes/"
 
-    //,zIndex : 900     //编辑器层级的基数,默认是900
+    ,zIndex : 99900     //编辑器层级的基数,默认是900
 
     //针对getAllHtml方法，会在对应的head标签中增加该编码设置。
     //,charset:"utf-8"
@@ -239,23 +259,17 @@
 
     //,allHtmlEnabled:false //提交到后台的数据是否包含整个html字符串
 
-    //insertorderedlist
-    //有序列表的下拉配置,值留空时支持多语言自动识别，若配置值，则以此值为准
-    //,'insertorderedlist':{
-    //      //自定的样式
-    //        'num':'1,2,3...',
-    //        'num1':'1),2),3)...',
-    //        'num2':'(1),(2),(3)...',
-    //        'cn':'一,二,三....',
-    //        'cn1':'一),二),三)....',
-    //        'cn2':'(一),(二),(三)....',
-    //     //系统自带
-    //     'decimal' : '' ,         //'1,2,3...'
-    //     'lower-alpha' : '' ,    // 'a,b,c...'
-    //     'lower-roman' : '' ,    //'i,ii,iii...'
-    //     'upper-alpha' : '' , lang   //'A,B,C'
-    //     'upper-roman' : ''      //'I,II,III...'
-    //}
+    // insertorderedlist
+    // 有序列表的下拉配置,值留空时支持多语言自动识别，若配置值，则以此值为准
+    ,'insertorderedlist':{
+
+        //系统自带
+        'decimal' : '' ,         //'1,2,3...'
+        'lower-alpha' : '' ,    // 'a,b,c...'
+        'lower-roman' : '' ,    //'i,ii,iii...'
+        'upper-alpha' : '' ,    //'A,B,C'
+        'upper-roman' : ''      //'I,II,III...'
+    }
 
     //insertunorderedlist
     //无序列表的下拉配置，值留空时支持多语言自动识别，若配置值，则以此值为准
@@ -374,7 +388,7 @@
 
     //autoHeightEnabled
     // 是否自动长高,默认true
-    //,autoHeightEnabled:true
+    ,autoHeightEnabled:false
 
     //scaleEnabled
     //是否可以拉伸长高,默认true(当开启时，自动长高失效)

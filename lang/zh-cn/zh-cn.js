@@ -232,7 +232,9 @@ UE.I18N['zh-cn'] = {
         'run':"执行",
         'symbol':'符号转换',
         'bdc2sb':'全角转半角',
-        'tobdc':'半角转全角'
+        'tobdc':'半角转全角',
+        'clearTable':'清除表格',
+        'clearList':'清除列表'
     },
 
     'background':{

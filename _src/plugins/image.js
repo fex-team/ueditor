@@ -213,6 +213,8 @@ UE.commands["insertimage"] = {
     if (!opt.length) {
       return;
     }
+    console.log('insertimage')
+    console.log(opt)
     var me = this,
       range = me.selection.getRange(),
       img = range.getClosedNode();

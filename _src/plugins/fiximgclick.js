@@ -28,6 +28,8 @@ UE.plugins["fiximgclick"] = (function() {
       [0, 0, 1, 1]
     ];
 
+    var imageEditTarget;
+
     Scale.prototype = {
       init: function(editor) {
         var me = this;
@@ -53,6 +55,9 @@ UE.plugins["fiximgclick"] = (function() {
             '<span class="edui-editor-imagescale-hand' + i + '"></span>'
           );
         }
+          hands.push(
+            '<div class="edui-editor-imageedit-hand">编辑图片</div>'
+          );
         resizer.id = me.editor.ui.id + "_imagescale";
         resizer.className = "edui-editor-imagescale";
         resizer.innerHTML = hands.join("");
@@ -66,6 +71,8 @@ UE.plugins["fiximgclick"] = (function() {
 
         me.initStyle();
         me.initEvents();
+
+        imageEditTarget = me.debounce(me.editImage, 100);
       },
       initStyle: function() {
         utils.cssRule(
@@ -79,7 +86,8 @@ UE.plugins["fiximgclick"] = (function() {
             ".edui-editor-imagescale .edui-editor-imagescale-hand4{cursor:e-resize;top:50%;margin-top:-4px;left:100%;margin-left:-3px;}" +
             ".edui-editor-imagescale .edui-editor-imagescale-hand5{cursor:sw-resize;top:100%;margin-top:-3px;left:0;margin-left:-4px;}" +
             ".edui-editor-imagescale .edui-editor-imagescale-hand6{cursor:s-resize;top:100%;margin-top:-3px;left:50%;margin-left:-4px;}" +
-            ".edui-editor-imagescale .edui-editor-imagescale-hand7{cursor:se-resize;top:100%;margin-top:-3px;left:100%;margin-left:-3px;}"
+            ".edui-editor-imagescale .edui-editor-imagescale-hand7{cursor:se-resize;top:100%;margin-top:-3px;left:100%;margin-left:-3px;}" + 
+            ".edui-editor-imageedit-hand{position:absolute;top:3px;right:3px; width:48px;height:18px;line-height:18px;padding:3px 6px;color:#fff;background-color:rgba(0,0,0,.5);font-size:12px;cursor:pointer;}"
         );
       },
       initEvents: function() {
@@ -88,54 +96,91 @@ UE.plugins["fiximgclick"] = (function() {
         me.startPos.x = me.startPos.y = 0;
         me.isDraging = false;
       },
+      debounce: function(func, wait, immediate) {
+        var timeout, args, context, timestamp, result;
+
+        var later = function() {
+          // 据上一次触发时间间隔
+          var last = new Date().getTime() - timestamp;
+
+          // 上次被包装函数被调用时间间隔last小于设定时间间隔wait
+          if (last < wait && last > 0) {
+            timeout = setTimeout(later, wait - last);
+          } else {
+            timeout = null;
+            // 如果设定为immediate===true，因为开始边界已经调用过了此处无需调用
+            if (!immediate) {
+              result = func.apply(context, args);
+              if (!timeout) context = args = null;
+            }
+          }
+        };
+
+        return function() {
+          context = this;
+          args = arguments;
+          timestamp = new Date().getTime();
+          var callNow = immediate && !timeout;
+          // 如果延时不存在，重新设定延时
+          if (!timeout) timeout = setTimeout(later, wait);
+          if (callNow) {
+            result = func.apply(context, args);
+            context = args = null;
+          }
+
+          return result;
+        };
+      },
       _eventHandler: function(e) {
         var me = this;
-        switch (e.type) {
-          case "mousedown":
-            var hand = e.target || e.srcElement,
-              hand;
-            if (
-              hand.className.indexOf("edui-editor-imagescale-hand") != -1 &&
-              me.dragId == -1
-            ) {
-              me.dragId = hand.className.slice(-1);
-              me.startPos.x = me.prePos.x = e.clientX;
-              me.startPos.y = me.prePos.y = e.clientY;
-              domUtils.on(me.doc, "mousemove", me.proxy(me._eventHandler, me));
-            }
-            break;
-          case "mousemove":
-            if (me.dragId != -1) {
-              me.updateContainerStyle(me.dragId, {
-                x: e.clientX - me.prePos.x,
-                y: e.clientY - me.prePos.y
-              });
-              me.prePos.x = e.clientX;
-              me.prePos.y = e.clientY;
-              elementUpdated = true;
-              me.updateTargetElement();
-            }
-            break;
-          case "mouseup":
-            if (me.dragId != -1) {
-              me.updateContainerStyle(me.dragId, {
-                x: e.clientX - me.prePos.x,
-                y: e.clientY - me.prePos.y
-              });
-              me.updateTargetElement();
-              if (me.target.parentNode) me.attachTo(me.target);
-              me.dragId = -1;
-            }
-            domUtils.un(me.doc, "mousemove", me.proxy(me._eventHandler, me));
-            //修复只是点击挪动点，但没有改变大小，不应该触发contentchange
-            if (elementUpdated) {
-              elementUpdated = false;
-              me.editor.fireEvent("contentchange");
-            }
-
-            break;
-          default:
-            break;
+        var hand = e.target || e.srcElement;
+        if (hand.className.indexOf("edui-editor-imageedit-hand") != -1) {
+            imageEditTarget(me.target);
+        } else {
+            switch (e.type) {
+            case "mousedown":
+              if (
+                hand.className.indexOf("edui-editor-imagescale-hand") != -1 &&
+                me.dragId == -1
+              ) {
+                me.dragId = hand.className.slice(-1);
+                me.startPos.x = me.prePos.x = e.clientX;
+                me.startPos.y = me.prePos.y = e.clientY;
+                domUtils.on(me.doc, "mousemove", me.proxy(me._eventHandler, me));
+              }
+              break;
+            case "mousemove":
+              if (me.dragId != -1) {
+                me.updateContainerStyle(me.dragId, {
+                  x: e.clientX - me.prePos.x,
+                  y: e.clientY - me.prePos.y
+                });
+                me.prePos.x = e.clientX;
+                me.prePos.y = e.clientY;
+                elementUpdated = true;
+                me.updateTargetElement();
+              }
+              break;
+            case "mouseup":
+              if (me.dragId != -1) {
+                me.updateContainerStyle(me.dragId, {
+                  x: e.clientX - me.prePos.x,
+                  y: e.clientY - me.prePos.y
+                });
+                me.updateTargetElement();
+                if (me.target.parentNode) me.attachTo(me.target);
+                me.dragId = -1;
+              }
+              domUtils.un(me.doc, "mousemove", me.proxy(me._eventHandler, me));
+              //修复只是点击挪动点，但没有改变大小，不应该触发contentchange
+              if (elementUpdated) {
+                elementUpdated = false;
+                me.editor.fireEvent("contentchange");
+              }
+              break;
+            default:
+              break;
+          }
         }
       },
       updateTargetElement: function() {
@@ -217,6 +262,59 @@ UE.plugins["fiximgclick"] = (function() {
           left: iframePos.x - editorPos.x + "px",
           position: "absolute",
           display: ""
+        });
+      },
+      editImage: function(target) {
+        var url = target.src;
+        var id = target.getAttribute('img-id');
+        var imgUrlPrefix = 'api/material/image/view/';
+        window.injection.modal.imageCutter({
+            url: url,
+            okCallback: function (blob, fn) {
+                // 当前页面已经编辑过的图片不再重复上传，而是直接修改编辑过的图片
+                if (target.modified) {
+                    window.injection.api('/material/image/uploadModify', {
+                        id: id,
+                        image: blob
+                    }).then(function(d) {
+                        target.src = imgUrlPrefix + d.modified.id;
+                        fn(true);
+                    }, function(e) {
+                        fn(false);
+                        window.injection.alias.error(e.errmessage);
+                    })
+                } else {
+                    // 当前页面第一次编辑图片时，将编辑后的图片作为一张新图片上传
+                    window.injection.api('/material/collection/list').then(function(data){
+                      try {
+                        var collectionId = data.collections.private[0].id;
+                        if (collectionId) {
+                            var fd = new FormData();
+                            fd.append('image', blob)
+                            fd.append('name', '已编辑图片')
+                            fd.append('collection', collectionId)
+                            window.injection.api('/material/image/uploadFile', fd).then(function(data){
+                                var link = imgUrlPrefix + data.added.id;
+                                target.setAttribute("src", link);
+                                target.setAttribute("_src", link);
+                                target.setAttribute("img-id", "" + data.added.id);
+                                target.modified = 1;
+                                fn(true);
+                            }, function(err){
+                                fn(false);
+                                window.injection.alias.error(err.errmessage);
+                            });
+                        } else {
+                          window.injection.alias.error('编辑失败');
+                        }
+                      } catch (er) {
+                        window.injection.alias.error(er.errmessage);
+                      }
+                    }, function(err){
+                        window.injection.alias.error(err.errmessage);
+                    });
+                }
+            }
         });
       },
       show: function(targetObj) {

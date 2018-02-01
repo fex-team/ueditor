@@ -189,7 +189,7 @@ UE.plugin.register("simpleupload", function() {
           ".loadingclass{display:inline-block;cursor:default;background: url('" +
             this.options.themePath +
             this.options.theme +
-            "/images/loading.gif') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;}\n" +
+            "/images/loading.png') no-repeat center center transparent;border:1px solid #cccccc;margin:0 auto;width: 200px;}\n" +
             ".loaderrorclass{display:inline-block;cursor:default;background: url('" +
             this.options.themePath +
             this.options.theme +

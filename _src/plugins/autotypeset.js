@@ -32,7 +32,9 @@ UE.plugins["autotypeset"] = function() {
       indent: false, // 行首缩进
       indentValue: "2em", //行首缩进的大小
       bdc2sb: false,
-      tobdc: false
+      tobdc: false,
+      clearTable: true,
+      clearList: true
     }
   });
 
@@ -60,6 +62,22 @@ UE.plugins["autotypeset"] = function() {
       h6: 1,
       span: 1
     },
+    tableTags = {
+      table: 1,
+      tbody: 1,
+      thead: 1,
+      th: 1,
+      tr: 1,
+      td: 1
+    },
+    listTags = {
+      ul: 1, 
+      ol: 1, 
+      dl: 1,
+      dd: 1, 
+      dt: 1, 
+      li: 1
+    },
     highlightCont;
   //升级了版本，但配置项目里没有autotypeset
   if (!opt) {
@@ -67,6 +85,20 @@ UE.plugins["autotypeset"] = function() {
   }
 
   readLocalOpts();
+
+  function isTableElem(node) {
+    if (node && node.parentNode && tableTags[node.tagName.toLowerCase()]) {
+        return 1;
+    }
+    return 0;
+  }
+
+  function isListElem(node) {
+    if (node && node.parentNode && listTags[node.tagName.toLowerCase()]) {
+        return 1;
+    }
+    return 0;
+  }
 
   function isLine(node, notEmpty) {
     if (!node || node.nodeType == 3) return 0;
@@ -130,6 +162,23 @@ UE.plugins["autotypeset"] = function() {
         removeNotAttributeSpan(ci);
       }
 
+      if (opt.clearTable && isTableElem(ci)) {
+        if (ci.tagName.toLowerCase() == 'td' && ci.firstChild) {
+          if (domUtils.isBr(ci.firstChild)) {
+            domUtils.remove(ci.firstChild);
+          } else {
+            var tmpP = me.document.createElement('p');
+            ci.parentNode.insertBefore(tmpP, ci);
+            tmpP.appendChild(ci.firstChild);
+          }
+        }
+        domUtils.remove(ci, true);
+      }
+
+      if (opt.clearList && isListElem(ci)) {
+        domUtils.remove(ci, true);
+      }
+
       if (isLine(ci)) {
         //合并空行
         if (opt.mergeEmptyline) {
@@ -176,7 +225,8 @@ UE.plugins["autotypeset"] = function() {
       if (
         opt.removeClass &&
         ci.className &&
-        !remainClass[ci.className.toLowerCase()]
+        !remainClass[ci.className.toLowerCase()] && 
+        ci.tagName.toLowerCase() !== 'img'
       ) {
         if (highlightCont && highlightCont.contains(ci)) {
           continue;

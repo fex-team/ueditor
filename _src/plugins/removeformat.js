@@ -128,6 +128,11 @@ UE.plugins["removeformat"] = function() {
                   domUtils.remove(current, true);
                 }
               } else {
+
+                if (dtd.$list[current.tagName] || dtd.$listItem[current.tagName]) {
+                  domUtils.remove(current, true);
+                }
+
                 //trace:939  不能把list上的样式去掉
                 if (
                   !dtd.$tableContent[current.tagName] &&

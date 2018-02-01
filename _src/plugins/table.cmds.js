@@ -47,7 +47,7 @@
           html.push("</tr>");
         }
         //禁止指定table-width
-        return "<table><tbody>" + html.join("") + "</tbody></table>";
+        return '<table style="margin: 0 auto;"><tbody>' + html.join('') + '</tbody></table>'
       }
 
       if (!opt) {

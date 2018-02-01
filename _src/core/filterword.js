@@ -224,3 +224,4 @@ var filterWord = (UE.filterWord = (function() {
     return isWordDocument(html) ? filterPasteWord(html) : html;
   };
 })());
+
