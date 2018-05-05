@@ -64,6 +64,8 @@ public final class ConfigManager {
 		try {
 			return new ConfigManager(rootPath, contextPath, uri);
 		} catch ( Exception e ) {
+			// 不要吞异常，否则别人调试起来很麻烦
+			e.printStackTrace();
 			return null;
 		}
 		
