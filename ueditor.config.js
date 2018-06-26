@@ -137,16 +137,16 @@
 
     toolbars: [
       [
-          'link','unlink','undo','|', 'paragraph', 'fontfamily', 'fontsize','|',  
-          'removeformat', 'autotypeset', 'blockquote', 'pasteplain', '|',  
-          'insertorderedlist', 'insertunorderedlist', '|', 
+          'fullscreen','source', 'link','unlink', 'undo','|', 'paragraph', 'fontfamily', 'fontsize','|',
+          'removeformat', 'autotypeset', 'blockquote', 'pasteplain', '|',
+          'insertorderedlist', 'insertunorderedlist', '|',
           'indent', 'rowspacingtop', 'rowspacingbottom', 'lineheight'
       ],
       [
-          'bold', 'italic', 'underline', 'fontborder', 'strikethrough', '|', 
-          'forecolor', 'backcolor', '|', 
+          'bold', 'italic', 'underline', 'fontborder', 'strikethrough', '|',
+          'forecolor', 'backcolor', '|',
           'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
-          'simpleupload', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+          'selectimage', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
           'inserttable', 'deletetable', '|',
           'selectall', 'cleardoc'
       ]
@@ -358,13 +358,13 @@
 
     //elementPathEnabled
     //是否启用元素路径，默认是显示
-    //,elementPathEnabled : true
+    ,elementPathEnabled : false
 
     //wordCount
     //,wordCount:true          //是否开启字数统计
-    //,maximumWords:10000       //允许的最大字符数
+    ,maximumWords:1000000       //允许的最大字符数
     //字数统计提示，{#count}代表当前字数，{#leave}代表还可以输入多少字符数,留空支持多语言自动切换，否则按此配置显示
-    //,wordCountMsg:''   //当前已输入 {#count} 个字符，您还可以输入{#leave} 个字符
+    ,wordCountMsg:'当前已输入 {#count} 个字符'   //当前已输入 {#count} 个字符，您还可以输入{#leave} 个字符
     //超出字数限制提示  留空支持多语言自动切换，否则按此配置显示
     //,wordOverFlowMsg:''    //<span style="color:red;">你输入的字符个数已经超出最大允许值，服务器可能会拒绝保存！</span>
 
@@ -420,8 +420,7 @@
     //    textAlign:"left",               //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
     //    imageBlockLine: 'center',       //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
     //    pasteFilter: false,             //根据规则过滤没事粘贴进来的内容
-    //    clearFontSize: false,           //去掉所有的内嵌字号，使用编辑器默认的字号
-    //    clearFontFamily: false,         //去掉所有的内嵌字体，使用编辑器默认的字体
+    //    clearStyle: false,           //去掉所有的内嵌样式，使用编辑器默认的样式
     //    removeEmptyNode: false,         // 去掉空节点
     //    //可以去掉的标签
     //    removeTagNames: {标签名字:1},

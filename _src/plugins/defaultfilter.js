@@ -47,7 +47,8 @@ UE.plugins["defaultfilter"] = function() {
             node.setAttr({
               cdata_tag: node.tagName,
               cdata_data: node.innerHTML() || "",
-              _ue_custom_node_: "true"
+              _ue_custom_node_: "true",
+              type: ''
             });
             node.tagName = "div";
             node.innerHTML("");

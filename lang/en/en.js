@@ -228,6 +228,7 @@ UE.I18N['en'] = {
         'imageFloat':"Image float",
         'removeFontsize':"Remove font size",
         'removeFontFamily':"Remove fontFamily",
+        'removeStyle':"Remove style",
         'removeHtml':"Remove redundant HTML code",
         'pasteFilter':"Paste filter",
         'run':"Done",

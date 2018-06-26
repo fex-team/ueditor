@@ -24,8 +24,9 @@ UE.plugins["autotypeset"] = function() {
       textAlign: "left", //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
       imageBlockLine: "center", //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
       pasteFilter: false, //根据规则过滤没事粘贴进来的内容
-      clearFontSize: false, //去掉所有的内嵌字号，使用编辑器默认的字号
-      clearFontFamily: false, //去掉所有的内嵌字体，使用编辑器默认的字体
+    //   clearFontSize: false, //去掉所有的内嵌字号，使用编辑器默认的字号
+    //   clearFontFamily: false, //去掉所有的内嵌字体，使用编辑器默认的字体
+      clearStyle: false,
       removeEmptyNode: false, // 去掉空节点
       //可以去掉的标签
       removeTagNames: utils.extend({ div: 1 }, dtd.$removeEmpty),
@@ -71,11 +72,11 @@ UE.plugins["autotypeset"] = function() {
       td: 1
     },
     listTags = {
-      ul: 1, 
-      ol: 1, 
+      ul: 1,
+      ol: 1,
       dl: 1,
-      dd: 1, 
-      dt: 1, 
+      dd: 1,
+      dt: 1,
       li: 1
     },
     highlightCont;
@@ -151,14 +152,25 @@ UE.plugins["autotypeset"] = function() {
         continue;
       }
       //font-size
-      if (opt.clearFontSize && ci.style.fontSize) {
-        domUtils.removeStyle(ci, "font-size");
+      if (opt.clearStyle) {
+        var fontWeight, textAlign;
 
-        removeNotAttributeSpan(ci);
-      }
-      //font-family
-      if (opt.clearFontFamily && ci.style.fontFamily) {
-        domUtils.removeStyle(ci, "font-family");
+        if (ci.style.fontWeight) {
+            fontWeight = domUtils.getStyle(ci, "font-weight");
+        }
+        if (ci.style.textAlign) {
+            textAlign = domUtils.getStyle(ci, "text-align");
+        }
+
+        domUtils.removeAttributes(ci, ["style"]);
+
+        if (fontWeight) {
+            domUtils.setStyle(ci, "font-weight", fontWeight);
+        }
+        if (textAlign) {
+            domUtils.setStyle(ci, "text-align", textAlign);
+        }
+
         removeNotAttributeSpan(ci);
       }
 
@@ -225,7 +237,7 @@ UE.plugins["autotypeset"] = function() {
       if (
         opt.removeClass &&
         ci.className &&
-        !remainClass[ci.className.toLowerCase()] && 
+        !remainClass[ci.className.toLowerCase()] &&
         ci.tagName.toLowerCase() !== 'img'
       ) {
         if (highlightCont && highlightCont.contains(ci)) {

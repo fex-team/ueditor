@@ -129,15 +129,11 @@
         me.getLang("justifyright") +
         "</td>" +
         "</tr>" +
-        '<tr><td nowrap><input type="checkbox" name="clearFontSize" ' +
-        (opt["clearFontSize"] ? "checked" : "") +
+        '<tr><td nowrap><input type="checkbox" name="clearStyle" ' +
+        (opt["clearStyle"] ? "checked" : "") +
         ">" +
-        lang.removeFontsize +
-        '</td><td colspan="2"><input type="checkbox" name="clearFontFamily" ' +
-        (opt["clearFontFamily"] ? "checked" : "") +
-        ">" +
-        lang.removeFontFamily +
-        "</td></tr>" +
+        lang.removeStyle +
+        '</td></tr>' +
         '<tr><td nowrap colspan="3"><input type="checkbox" name="removeEmptyNode" ' +
         (opt["removeEmptyNode"] ? "checked" : "") +
         ">" +

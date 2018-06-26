@@ -2493,12 +2493,16 @@ var domUtils = (dom.domUtils = {
     if (!utils.isFunction(filter)) {
       var str = filter;
       filter = function(n) {
-        return (
-          utils.indexOf(
-            utils.isArray(str) ? str : str.split(" "),
-            n.tagName.toLowerCase()
-          ) != -1
-        );
+        if (n && n.tagName) {
+          return (
+            utils.indexOf(
+              utils.isArray(str) ? str : str.split(" "),
+              n.tagName.toLowerCase()
+            ) != -1
+          );
+        } else {
+          return false;
+        }
       };
     }
     utils.each(nodelist, function(n) {

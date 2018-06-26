@@ -86,7 +86,7 @@ UE.plugins["fiximgclick"] = (function() {
             ".edui-editor-imagescale .edui-editor-imagescale-hand4{cursor:e-resize;top:50%;margin-top:-4px;left:100%;margin-left:-3px;}" +
             ".edui-editor-imagescale .edui-editor-imagescale-hand5{cursor:sw-resize;top:100%;margin-top:-3px;left:0;margin-left:-4px;}" +
             ".edui-editor-imagescale .edui-editor-imagescale-hand6{cursor:s-resize;top:100%;margin-top:-3px;left:50%;margin-left:-4px;}" +
-            ".edui-editor-imagescale .edui-editor-imagescale-hand7{cursor:se-resize;top:100%;margin-top:-3px;left:100%;margin-left:-3px;}" + 
+            ".edui-editor-imagescale .edui-editor-imagescale-hand7{cursor:se-resize;top:100%;margin-top:-3px;left:100%;margin-left:-3px;}" +
             ".edui-editor-imageedit-hand{position:absolute;top:3px;right:3px; width:48px;height:18px;line-height:18px;padding:3px 6px;color:#fff;background-color:rgba(0,0,0,.5);font-size:12px;cursor:pointer;}"
         );
       },
@@ -357,14 +357,14 @@ UE.plugins["fiximgclick"] = (function() {
           left:
             iframePos.x +
               imgPos.x -
-              me.editor.document.body.scrollLeft -
+              me.editor.window.scrollX -
               editorPos.x -
               parseInt(resizer.style.borderLeftWidth) +
               "px",
           top:
             iframePos.y +
               imgPos.y -
-              me.editor.document.body.scrollTop -
+              me.editor.window.scrollY -
               editorPos.y -
               parseInt(resizer.style.borderTopWidth) +
               "px"

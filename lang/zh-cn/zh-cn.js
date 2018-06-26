@@ -227,6 +227,7 @@ UE.I18N['zh-cn'] = {
         'imageFloat':"图片浮动",
         'removeFontsize':"清除字号",
         'removeFontFamily':"清除字体",
+        'removeStyle':"清除样式",
         'removeHtml':"清除冗余HTML代码",
         'pasteFilter':"粘贴过滤",
         'run':"执行",
