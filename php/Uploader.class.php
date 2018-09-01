@@ -290,7 +290,7 @@ class Uploader
         $format = str_replace("{filename}", $oriName, $format);
 
         //替换随机字符串
-        $randNum = rand(1, 10000000000) . rand(1, 10000000000);
+        $randNum = rand(1, PHP_INT_MAX) . rand(1, PHP_INT_MAX);
         if (preg_match("/\{rand\:([\d]*)\}/i", $format, $matches)) {
             $format = preg_replace("/\{rand\:[\d]*\}/i", substr($randNum, 0, $matches[1]), $format);
         }
