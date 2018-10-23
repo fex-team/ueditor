@@ -80,6 +80,12 @@ ue.ready(function(){
 
 ueditor的更多API请看[API 文档](http://ueditor.baidu.com/doc "ueditor API 文档")
 
+### 1.6 dev-1.5.0 版本二次开发自定义插件注意事项
+
+dev-1.5.0版对于插件的加载逻辑进行了调整，但官网对应的[二次开发功能文档](http://fex.baidu.com/ueditor/#dev-developer)未对相应调整做出开发细节说明，现补充如下：
+
+除进行原有配置外，还需在实例化ueditor编辑器时在 toolbars 参数数组中，加入自定义插件的 uiname，并且注意uiname必须小写，方可正确加载自定义插件。 
+
 ## 2 详细文档
 
 ueditor 官网：[http://ueditor.baidu.com](http://ueditor.baidu.com "ueditor 官网")
