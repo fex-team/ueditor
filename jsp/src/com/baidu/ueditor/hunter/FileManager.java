@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
+import com.baidu.ueditor.ConfigManager;
 import com.baidu.ueditor.PathFormat;
 import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
@@ -16,20 +17,22 @@ import com.baidu.ueditor.define.State;
 public class FileManager {
 
 	private String dir = null;
-	private String rootPath = null;
+	private File rootPath = null;
 	private String[] allowFiles = null;
 	private int count = 0;
+	private String accessUrlRoot = null;
 	
 	public FileManager ( Map<String, Object> conf ) {
 
-		this.rootPath = (String)conf.get( "rootPath" );
+		this.rootPath = new File((String)conf.get( "rootPath" ));
 		this.dir = this.rootPath + (String)conf.get( "dir" );
 		this.allowFiles = this.getAllowFiles( conf.get("allowFiles") );
+		this.accessUrlRoot = ConfigManager.getAccessUrlRoot();
 		this.count = (Integer)conf.get( "count" );
 		
 	}
 	
-	public State listFile ( int index ) {
+	public State listFile ( int startIndex ) {
 		
 		File dir = new File( this.dir );
 		State state = null;
@@ -44,14 +47,14 @@ public class FileManager {
 		
 		Collection<File> list = FileUtils.listFiles( dir, this.allowFiles, true );
 		
-		if ( index < 0 || index > list.size() ) {
+		if ( startIndex < 0 || startIndex > list.size() ) {
 			state = new MultiState( true );
 		} else {
-			Object[] fileList = Arrays.copyOfRange( list.toArray(), index, index + this.count );
+			Object[] fileList = Arrays.copyOfRange( list.toArray(), startIndex, startIndex + this.count );
 			state = this.getState( fileList );
 		}
 		
-		state.putInfo( "start", index );
+		state.putInfo( "start", startIndex );
 		state.putInfo( "total", list.size() );
 		
 		return state;
@@ -80,11 +83,9 @@ public class FileManager {
 	}
 	
 	private String getPath ( File file ) {
-		
-		String path = PathFormat.format( file.getAbsolutePath() );
-		
-		return path.replace( this.rootPath, "/" );
-		
+		String path = file.getAbsolutePath();
+		String url =  path.replace( this.rootPath.getAbsolutePath(), accessUrlRoot );
+		return url;
 	}
 	
 	private String[] getAllowFiles ( Object fileExt ) {

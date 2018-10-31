@@ -1,7 +1,9 @@
 package com.baidu.ueditor.hunter;
 
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +99,7 @@ public class ImageHunter {
 			return state;
 			
 		} catch ( Exception e ) {
+			e.printStackTrace();
 			return new BaseState( false, AppInfo.REMOTE_FAIL );
 		}
 		
@@ -109,6 +112,16 @@ public class ImageHunter {
 	}
 	
 	private boolean validHost ( String hostname ) {
+		try {
+			InetAddress ip = InetAddress.getByName(hostname);
+			
+			if (ip.isSiteLocalAddress()) {
+				return false;
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			return false;
+		}
 		
 		return !filters.contains( hostname );
 		

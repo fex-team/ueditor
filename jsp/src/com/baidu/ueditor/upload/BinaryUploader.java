@@ -70,10 +70,7 @@ public class BinaryUploader {
 
 			savePath = PathFormat.parse(savePath, originFileName);
 
-			//modified by Ternence
-            String rootPath = ConfigManager.getRootPath(request,conf);
-            String physicalPath = rootPath + savePath;
-            
+			String physicalPath = (String) conf.get("rootPath") + savePath;
 
 			InputStream is = fileStream.openStream();
 			State storageState = StorageManager.saveFileByInputStream(is,
@@ -81,15 +78,17 @@ public class BinaryUploader {
 			is.close();
 
 			if (storageState.isSuccess()) {
-				storageState.putInfo("url", PathFormat.format(savePath));
+				storageState.putInfo("url", PathFormat.format(ConfigManager.getAccessUrlRoot()+ savePath));
 				storageState.putInfo("type", suffix);
 				storageState.putInfo("original", originFileName + suffix);
 			}
 
 			return storageState;
 		} catch (FileUploadException e) {
+			e.printStackTrace();
 			return new BaseState(false, AppInfo.PARSE_REQUEST_ERROR);
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return new BaseState(false, AppInfo.IO_ERROR);
 	}

@@ -14,22 +14,17 @@ import com.baidu.ueditor.upload.Uploader;
 
 public class ActionEnter {
 	
-	private HttpServletRequest request = null;
-	
-	private String rootPath = null;
-	private String contextPath = null;
-	
+	private HttpServletRequest request = null; 
+	  
 	private String actionType = null;
 	
 	private ConfigManager configManager = null;
 
 	public ActionEnter ( HttpServletRequest request, String rootPath ) {
 		
-		this.request = request;
-		this.rootPath = rootPath;
-		this.actionType = request.getParameter( "action" );
-		this.contextPath = request.getContextPath();
-		this.configManager = ConfigManager.getInstance( this.rootPath, this.contextPath, request.getRequestURI().replace(request.getContextPath(),"") );
+		this.request = request; 
+		this.actionType = request.getParameter( "action" ); 
+		this.configManager = ConfigManager.getInstance();
 		
 	}
 	
@@ -106,6 +101,7 @@ public class ActionEnter {
 		try {
 			return Integer.parseInt( start );
 		} catch ( Exception e ) {
+			e.printStackTrace();
 			return 0;
 		}
 		

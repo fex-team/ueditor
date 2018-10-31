@@ -10,8 +10,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,33 +22,46 @@ import com.baidu.ueditor.define.ActionMap;
  */
 public final class ConfigManager {
 
-	private final String rootPath;
-	private final String originalPath;
-	private final String contextPath;
+	private final String rootPath; 
 	private static final String configFileName = "config.json";
-	private String parentPath = null;
+	//private String parentPath = null;
 	private JSONObject jsonConfig = null;
 	// 涂鸦上传filename定义
 	private final static String SCRAWL_FILE_NAME = "scrawl";
 	// 远程图片抓取filename定义
 	private final static String REMOTE_FILE_NAME = "remote";
 	
+	/**
+	 * 上传和扫码文件的根路径
+	 * @return
+	 */
+	public static String getLocalFilePath(){
+		//accessUrl=/eshop/images
+		//localFilePath=/data/eshopdata/eshop/images
+		//TODO 修改为读取 项目配置文件
+		return "D:\\CCViews\\gitStore\\baidueditor\\baidueditor\\WebContent/ueditor/jsp/upload";
+	}
+	
+	/**
+	 * url访问文件的http根
+	*/
+	public static String getAccessUrlRoot(){
+		//TODO 修改为读取 项目配置文件
+		return "http://localhost:8080/baidueditor/ueditor/jsp/upload/";
+	}
+	
 	/*
 	 * 通过一个给定的路径构建一个配置管理器， 该管理器要求地址路径所在目录下必须存在config.properties文件
 	 */
-	private ConfigManager ( String rootPath, String contextPath, String uri ) throws FileNotFoundException, IOException {
+	private ConfigManager () throws FileNotFoundException, IOException {
 		
-		rootPath = rootPath.replace( "\\", "/" );
-		
-		this.contextPath = contextPath;
-		
-		this.rootPath = rootPath;
-		
-		this.originalPath = this.rootPath + uri;
+		rootPath =getLocalFilePath(); 
 		
 		this.initEnv();
 		
 	}
+	
+	private static ConfigManager manager = null;
 	
 	/**
 	 * 配置管理器构造工厂
@@ -59,11 +70,16 @@ public final class ConfigManager {
 	 * @param uri 当前访问的uri
 	 * @return 配置管理器实例或者null
 	 */
-	public static ConfigManager getInstance ( String rootPath, String contextPath, String uri ) {
+	public static ConfigManager getInstance () {
 		
 		try {
-			return new ConfigManager(rootPath, contextPath, uri);
+			if(manager == null){
+				manager = new ConfigManager();
+			}
+			
+			return manager;
 		} catch ( Exception e ) {
+			e.printStackTrace();
 			return null;
 		}
 		
@@ -148,53 +164,20 @@ public final class ConfigManager {
 		
 	}
 	
-	/**
-     * Get rootPath from request,if not,find it from conf map.
-     * @param request
-     * @param conf
-     * @return
-     * @author Ternence
-     * @create 2015年1月31日
-     */
-    public static String getRootPath(HttpServletRequest request, Map<String, Object> conf) {
-        Object rootPath = request.getAttribute("rootPath");
-        if (rootPath != null) {
-            return rootPath + "" + File.separatorChar;
-        } else {
-            return conf.get("rootPath") + "";
-        }
-    }
-
-    private void initEnv () throws FileNotFoundException, IOException {
-		
-		File file = new File( this.originalPath );
-		
-		if ( !file.isAbsolute() ) {
-			file = new File( file.getAbsolutePath() );
-		}
-		
-		this.parentPath = file.getParent();
-		
-		String configContent = this.readFile( this.getConfigPath() );
+	private void initEnv () throws FileNotFoundException, IOException {
+		 
+		String configContent = this.readConfileFile();
 		
 		try{
 			JSONObject jsonConfig = new JSONObject( configContent );
 			this.jsonConfig = jsonConfig;
 		} catch ( Exception e ) {
+			e.printStackTrace();
 			this.jsonConfig = null;
 		}
 		
 	}
-	
-	private String getConfigPath () {
-        String path = this.getClass().getResource("/").getPath() + ConfigManager.configFileName;
-        if (new File(path).exists()) {
-          return path;
-        }else {          
-          return this.parentPath + File.separator + ConfigManager.configFileName;
-        }
-	}
-
+	 
 	private String[] getArray ( String key ) {
 		
 		JSONArray jsonArray = this.jsonConfig.getJSONArray( key );
@@ -208,13 +191,13 @@ public final class ConfigManager {
 		
 	}
 	
-	private String readFile ( String path ) throws IOException {
+	private String readConfileFile () throws IOException {
 		
 		StringBuilder builder = new StringBuilder();
 		
-		try {
-			
-			InputStreamReader reader = new InputStreamReader( new FileInputStream( path ), "UTF-8" );
+		try {			
+			String path = this.getClass().getResource("").getFile();			 
+			InputStreamReader reader = new InputStreamReader( new FileInputStream( path + File.separatorChar+ ConfigManager.configFileName ), "UTF-8" );
 			BufferedReader bfReader = new BufferedReader( reader );
 			
 			String tmpContent = null;
@@ -226,6 +209,7 @@ public final class ConfigManager {
 			bfReader.close();
 			
 		} catch ( UnsupportedEncodingException e ) {
+			e.printStackTrace();
 			// 忽略
 		}
 		
