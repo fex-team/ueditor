@@ -22,7 +22,6 @@ switch (htmlspecialchars($_GET['action'])) {
         $config = array(
             "pathFormat" => $CONFIG['scrawlPathFormat'],
             "maxSize" => $CONFIG['scrawlMaxSize'],
-            "allowFiles" => $CONFIG['scrawlAllowFiles'],
             "oriName" => "scrawl.png"
         );
         $fieldName = $CONFIG['scrawlFieldName'];
