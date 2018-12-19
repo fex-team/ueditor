@@ -10,11 +10,12 @@ UE.parse.register("list", function(utils) {
       dash: "dash",
       dot: "dot"
     };
+  var sourcePath = utils.removeLastbs(this.rootPath);
 
   utils.extend(this, {
-    liiconpath: "http://bs.baidu.com/listicon/",
+    liiconpath: sourcePath + "/themes/default/listicon/",
     listDefaultPaddingLeft: "20"
-  });
+  },true);
 
   var root = this.root,
     ols = root.getElementsByTagName("ol"),
