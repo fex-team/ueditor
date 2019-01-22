@@ -36,13 +36,19 @@
         </tr>
     </table>
 <script type="text/javascript">
+
+    editor.setOpt('allowLinkProtocols', ['http:', 'https:', '#', '/', 'ftp:', 'mailto:', 'tel:']);
+    var allowLinkProtocols = editor.getOpt('allowLinkProtocols');
+
     var range = editor.selection.getRange(),
         link = range.collapsed ? editor.queryCommandValue( "link" ) : editor.selection.getStart(),
         url,
         text = $G('text'),
         rangeLink = domUtils.findParentByTagName(range.getCommonAncestor(),'a',true),
         orgText;
+
     link = domUtils.findParentByTagName( link, "a", true );
+
     if(link){
         url = utils.html(link.getAttribute( '_href' ) || link.getAttribute( 'href', 2 ));
 
@@ -72,7 +78,7 @@
     function handleDialogOk(){
         var href =$G('href').value.replace(/^\s+|\s+$/g, '');
         if(href){
-            if(!hrefStartWith(href,["http","/","ftp://",'#'])) {
+            if(!hrefStartWith(href, allowLinkProtocols)) {
                 href  = "http://" + href;
             }
             var obj = {
@@ -103,7 +109,7 @@
         }
     };
     $G('href').onblur = function(){
-        if(!hrefStartWith(this.value,["http","/","ftp://",'#'])){
+        if(!hrefStartWith(this.value, allowLinkProtocols)){
             $G("msg").innerHTML = "<span style='color: red'>"+lang.httpPrompt+"</span>";
         }else{
             $G("msg").innerHTML = "";

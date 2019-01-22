@@ -4,7 +4,9 @@
     background-color: #ffffff;
     width:auto;
     height:auto;
-
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
 }
 
 .edui-default .edui-popup .edui-shadow {

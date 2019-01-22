@@ -43,7 +43,7 @@ function run( $b , $debug = false )
 //    }
     //	else
     //	$url .= "^&cov=true";
-print $url;
+print "wangnew--".$url;
     if ( $b == 'baidu' ) {
         $url = "--'$url'";
     }
@@ -70,6 +70,14 @@ function delDirAndFile( $dirName )
     }
 }
 
+//$filewang = fopen('wangruilog.txt', 'a+');
+//fwrite($filewang, "wangrui1" . "\n");
+//
+//fclose($filewang);
+//unset($filewang);
+
+echo "wang";
+
 if ( array_key_exists( 'clear' , $_GET ) ) {
     print 'debug - clear report';
     //Config::StopAll();
@@ -86,18 +94,20 @@ if ( file_exists( $reportfile ) ) {
 } else {
     mkdir( $reportfile );
 }
-
+echo "wang2";
 if ( file_exists( "./coverage/source.js" ) ) {
     if ( unlink( "./coverage/source.js" ) ) echo "成功删除文件：source.js";
 }
 source();
-
+echo "wang3";
 if ( file_exists( "covreport.html" ) ) {
     if ( unlink( "covreport.html" ) ) echo "成功删除覆盖率报告文件： covreport.html<br />\n";
 }
+echo "wang4";
 if ( file_exists( "jshintReport.html" ) ) {
     if ( unlink( "jshintReport.html" ) ) echo "成功删除: jshintReport.html<br />\n";
 }
+echo "wang5";
 exec("python ../lib/jshunter_1.2.0.1/jshunter_dev/jshunter/hint.py jshintReport.html ../../../_src", $back);
 echo "jshint: ".$back."<br />\n";
 /*记录运行时信息*/

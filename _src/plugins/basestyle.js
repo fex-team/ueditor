@@ -4,9 +4,8 @@
  * @since 1.2.6.1
  */
 
-UE.plugins['basestyle'] = function(){
-
-    /**
+UE.plugins["basestyle"] = function() {
+  /**
      * 字体加粗
      * @command bold
      * @param { String } cmd 命令字符串
@@ -24,8 +23,7 @@ UE.plugins['basestyle'] = function(){
      * ```
      */
 
-
-    /**
+  /**
      * 字体倾斜
      * @command italic
      * @method execCommand
@@ -43,7 +41,7 @@ UE.plugins['basestyle'] = function(){
      * ```
      */
 
-    /**
+  /**
      * 下标文本，与“superscript”命令互斥
      * @command subscript
      * @method execCommand
@@ -61,7 +59,7 @@ UE.plugins['basestyle'] = function(){
      * ```
      */
 
-    /**
+  /**
      * 上标文本，与“subscript”命令互斥
      * @command superscript
      * @method execCommand
@@ -78,71 +76,77 @@ UE.plugins['basestyle'] = function(){
      * editor.execCommand( 'superscript' );
      * ```
      */
-    var basestyles = {
-            'bold':['strong','b'],
-            'italic':['em','i'],
-            'subscript':['sub'],
-            'superscript':['sup']
-        },
-        getObj = function(editor,tagNames){
-            return domUtils.filterNodeList(editor.selection.getStartElementPath(),tagNames);
-        },
-        me = this;
-    //添加快捷键
-    me.addshortcutkey({
-        "Bold" : "ctrl+66",//^B
-        "Italic" : "ctrl+73", //^I
-        "Underline" : "ctrl+85"//^U
+  var basestyles = {
+    bold: ["strong", "b"],
+    italic: ["em", "i"],
+    subscript: ["sub"],
+    superscript: ["sup"]
+  },
+    getObj = function(editor, tagNames) {
+      return domUtils.filterNodeList(
+        editor.selection.getStartElementPath(),
+        tagNames
+      );
+    },
+    me = this;
+  //添加快捷键
+  me.addshortcutkey({
+    Bold: "ctrl+66", //^B
+    Italic: "ctrl+73", //^I
+    Underline: "ctrl+85" //^U
+  });
+  me.addInputRule(function(root) {
+    utils.each(root.getNodesByTagName("b i"), function(node) {
+      switch (node.tagName) {
+        case "b":
+          node.tagName = "strong";
+          break;
+        case "i":
+          node.tagName = "em";
+      }
     });
-    me.addInputRule(function(root){
-        utils.each(root.getNodesByTagName('b i'),function(node){
-            switch (node.tagName){
-                case 'b':
-                    node.tagName = 'strong';
-                    break;
-                case 'i':
-                    node.tagName = 'em';
+  });
+  for (var style in basestyles) {
+    (function(cmd, tagNames) {
+      me.commands[cmd] = {
+        execCommand: function(cmdName) {
+          var range = me.selection.getRange(),
+            obj = getObj(this, tagNames);
+          if (range.collapsed) {
+            if (obj) {
+              var tmpText = me.document.createTextNode("");
+              range.insertNode(tmpText).removeInlineStyle(tagNames);
+              range.setStartBefore(tmpText);
+              domUtils.remove(tmpText);
+            } else {
+              var tmpNode = range.document.createElement(tagNames[0]);
+              if (cmdName == "superscript" || cmdName == "subscript") {
+                tmpText = me.document.createTextNode("");
+                range
+                  .insertNode(tmpText)
+                  .removeInlineStyle(["sub", "sup"])
+                  .setStartBefore(tmpText)
+                  .collapse(true);
+              }
+              range.insertNode(tmpNode).setStart(tmpNode, 0);
             }
-        });
-    });
-    for ( var style in basestyles ) {
-        (function( cmd, tagNames ) {
-            me.commands[cmd] = {
-                execCommand : function( cmdName ) {
-                    var range = me.selection.getRange(),obj = getObj(this,tagNames);
-                    if ( range.collapsed ) {
-                        if ( obj ) {
-                            var tmpText =  me.document.createTextNode('');
-                            range.insertNode( tmpText ).removeInlineStyle( tagNames );
-                            range.setStartBefore(tmpText);
-                            domUtils.remove(tmpText);
-                        } else {
-                            var tmpNode = range.document.createElement( tagNames[0] );
-                            if(cmdName == 'superscript' || cmdName == 'subscript'){
-                                tmpText = me.document.createTextNode('');
-                                range.insertNode(tmpText)
-                                    .removeInlineStyle(['sub','sup'])
-                                    .setStartBefore(tmpText)
-                                    .collapse(true);
-                            }
-                            range.insertNode( tmpNode ).setStart( tmpNode, 0 );
-                        }
-                        range.collapse( true );
-                    } else {
-                        if(cmdName == 'superscript' || cmdName == 'subscript'){
-                            if(!obj || obj.tagName.toLowerCase() != cmdName){
-                                range.removeInlineStyle(['sub','sup']);
-                            }
-                        }
-                        obj ? range.removeInlineStyle( tagNames ) : range.applyInlineStyle( tagNames[0] );
-                    }
-                    range.select();
-                },
-                queryCommandState : function() {
-                   return getObj(this,tagNames) ? 1 : 0;
-                }
-            };
-        })( style, basestyles[style] );
-    }
+            range.collapse(true);
+          } else {
+            if (cmdName == "superscript" || cmdName == "subscript") {
+              if (!obj || obj.tagName.toLowerCase() != cmdName) {
+                range.removeInlineStyle(["sub", "sup"]);
+              }
+            }
+            obj
+              ? range.removeInlineStyle(tagNames)
+              : range.applyInlineStyle(tagNames[0]);
+          }
+          range.select();
+        },
+        queryCommandState: function() {
+          return getObj(this, tagNames) ? 1 : 0;
+        }
+      };
+    })(style, basestyles[style]);
+  }
 };
-
