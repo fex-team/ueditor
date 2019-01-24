@@ -1622,14 +1622,18 @@ var domUtils = (dom.domUtils = {
     try {
       var value =
         domUtils.getStyle(element, styleName) ||
-        (window.getComputedStyle
+        browser.webkit && styleName === 'text-decoration'
           ? domUtils
               .getWindow(element)
-              .getComputedStyle(element, "")
-              .getPropertyValue(styleName)
-          : (element.currentStyle || element.style)[
-              utils.cssStyleToDomStyle(styleName)
-            ]);
+              .getComputedStyle(element)['webkitTextDecorationsInEffect']
+          : (window.getComputedStyle
+              ? domUtils
+                  .getWindow(element)
+                  .getComputedStyle(element, "")
+                  .getPropertyValue(styleName)
+              : (element.currentStyle || element.style)[
+                  utils.cssStyleToDomStyle(styleName)
+                ]);
     } catch (e) {
       return "";
     }
