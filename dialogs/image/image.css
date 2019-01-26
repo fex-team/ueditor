@@ -106,7 +106,7 @@
 #remote .left{
     display: block;
     float: left;
-    width: 300px;
+    width: 320px;
     height:10px;
 }
 #remote .right{
@@ -161,7 +161,7 @@
 }
 #remote #width,
 #remote #height{
-    width: 20px;
+    width: 40px;
     margin-left: 2px;
     margin-right: 2px;
 }
