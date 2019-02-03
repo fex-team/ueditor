@@ -301,6 +301,38 @@
       }
     },
 
+      /**
+       * 该方法用于设置placeholder
+       * @method setPlaceholder
+       * @param { String } placeholder 编辑器的placeholder文案
+       * @example
+       * ```javascript
+       * editor.setPlaceholder('请输入内容');
+       * ```
+       */
+      setPlaceholder: function(){
+
+          function contentChange(){
+              var localHtml = this.getPlainTxt();
+              if(!localHtml.trim()){
+                  UE.dom.domUtils.addClass( this.body, 'empty' );
+              }else{
+                  UE.dom.domUtils.removeClasses( this.body, 'empty' );
+              }
+          }
+
+          return function(placeholder){
+              var _editor = this;
+
+              _editor.ready(function () {
+                  contentChange.call(_editor);
+                  _editor.body.setAttribute('placeholder', placeholder);
+              });
+              _editor.removeListener('keyup contentchange', contentChange);
+              _editor.addListener('keyup contentchange', contentChange);
+          }
+      }(),
+
     /**
          * 该方法是提供给插件里面使用，设置配置项默认值
          * @method setOpt
@@ -437,7 +469,10 @@
           ".view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n" +
           //设置默认字体和字号
           //font-family不能呢随便改，在safari下fillchar会有解析问题
+
           "body{margin:8px;font-family:sans-serif;font-size:16px;}" +
+          //设置placeholder
+          "body.empty:before{content:attr(placeholder);position:absolute;color:#999;}"+
           //设置段落间距
           "p{margin:5px 0;}</style>" +
           (options.iframeCssUrl
