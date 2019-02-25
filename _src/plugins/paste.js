@@ -314,7 +314,10 @@ UE.plugins["paste"] = function() {
     domUtils.on(me.body, "cut", function() {
       var range = me.selection.getRange();
       if (!range.collapsed && me.undoManger) {
-        me.undoManger.save();
+        if (me.undoManger.list.length < 1) me.undoManger.save();
+        setTimeout(function() {
+            me.undoManger.save();
+        });
       }
     });
 
