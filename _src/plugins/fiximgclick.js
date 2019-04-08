@@ -89,7 +89,8 @@ UE.plugins["fiximgclick"] = (function() {
         me.isDraging = false;
       },
       _eventHandler: function(e) {
-        var me = this;
+        var me = this,
+            pressMouseLeft = e.buttons === undefined ? e.which === 1 : e.buttons === 1;
         switch (e.type) {
           case "mousedown":
             var hand = e.target || e.srcElement,
@@ -105,7 +106,7 @@ UE.plugins["fiximgclick"] = (function() {
             }
             break;
           case "mousemove":
-            if (me.dragId != -1) {
+            if (me.dragId != -1 && pressMouseLeft) {
               me.updateContainerStyle(me.dragId, {
                 x: e.clientX - me.prePos.x,
                 y: e.clientY - me.prePos.y
