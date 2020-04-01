@@ -6,10 +6,10 @@
 
 /**
  * 提交表单
- * @command autosubmit
- * @method execCommand
- * @param { String } cmd 命令字符串
- * @example
+ * command autosubmit
+ * method execCommand
+ * param { String } cmd 命令字符串
+ * example
  * ```javascript
  * editor.execCommand( 'autosubmit' );
  * ```

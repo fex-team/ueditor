@@ -24,7 +24,7 @@
             var editor = this.editor,
                 me = this;
 
-            editor.addListener('ready', function () {
+            editor.addListener('ready', function ADXL() {
                 //提供getDialog方法
                 editor.getDialog = function (name) {
                     return editor.ui._dialogs[name + "Dialog"];
@@ -44,7 +44,7 @@
                 if (editor.options.wordCount) {
                     function countFn() {
                         setCount(editor,me);
-                        domUtils.un(editor.document, "click", arguments.callee);
+                        domUtils.un(editor.document, "click", ADXL);
                     }
                     domUtils.on(editor.document, "click", countFn);
                     editor.ui.getDom('wordcount').innerHTML = editor.getLang("wordCountTip");
