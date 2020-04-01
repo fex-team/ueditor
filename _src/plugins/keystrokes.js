@@ -112,7 +112,17 @@ UE.plugins['keystrokes'] = function() {
             var span = me.document.createElement('span');
             span.innerHTML = txt + domUtils.fillChar;
             if (range.collapsed) {
-                range.insertNode(span.cloneNode(true).firstChild).setCursor(true);
+                // change by ading 2020年4月1日11:16:25 单行`Tab`快捷键增加支持 `shift+Tab`反向操作
+                if(evt.shiftKey){
+                    var bookmark = range.createBookmark();
+                    range.enlarge(true);
+                    var bookmark2 = range.createBookmark(),
+                        current = domUtils.getNextDomNode(bookmark2.start, false, filterFn);
+                    domUtils.deleteTabspace(current, tabSize);
+                    range.moveToBookmark(bookmark2).moveToBookmark(bookmark).select();
+                } else {
+                    range.insertNode(span.cloneNode(true).firstChild).setCursor(true);
+                }
             } else {
                 var filterFn = function(node) {
                     return domUtils.isBlockElm(node) && !excludeTagNameForTabKey[node.tagName.toLowerCase()]
@@ -130,8 +140,15 @@ UE.plugins['keystrokes'] = function() {
                     var bookmark2 = range.createBookmark(),
                         current = domUtils.getNextDomNode(bookmark2.start, false, filterFn);
                     while (current && !(domUtils.getPosition(current, bookmark2.end) & domUtils.POSITION_FOLLOWING)) {
-                        current.insertBefore(span.cloneNode(true).firstChild, current.firstChild);
-                        current = domUtils.getNextDomNode(current, false, filterFn);
+                        // change by ading 2020年4月1日11:18:52 多行`Tab`快捷键增加支持 `shift+Tab`反向操作
+                        if(evt.shiftKey){
+                            var nextN = domUtils.getNextDomNode(current, false, filterFn);
+                            domUtils.deleteTabspace(current, tabSize);
+                            current = nextN;
+                        }else{
+                            current.insertBefore(span.cloneNode(true).firstChild, current.firstChild);
+                            current = domUtils.getNextDomNode(current, false, filterFn);
+                        }
                     }
                     range.moveToBookmark(bookmark2).moveToBookmark(bookmark).select();
                 }
