@@ -63,7 +63,7 @@
                     head.removeChild(node)
                 }
             },
-            domReady : function (onready) {
+            domReady : function ADXL(onready) {
                 var doc = window.document;
                 if (doc.readyState === "complete") {
                     onready();
@@ -74,7 +74,7 @@
                             try {
                                 doc.documentElement.doScroll("left");
                             } catch (error) {
-                                setTimeout(arguments.callee, 0);
+                                setTimeout(ADXL, 0);
                                 return;
                             }
                             onready();
@@ -84,7 +84,7 @@
                         });
                     } else {
                         doc.addEventListener("DOMContentLoaded", function () {
-                            doc.removeEventListener("DOMContentLoaded", arguments.callee, false);
+                            doc.removeEventListener("DOMContentLoaded", ADXL, false);
                             onready();
                         }, false);
                         window.addEventListener('load', function(){onready()}, false);

@@ -842,7 +842,7 @@ var utils = UE.utils = {
             }
         }
 
-        return function (onready, win) {
+        return function ADXL(onready, win) {
             win = win || window;
             var doc = win.document;
             onready && fnArr.push(onready);
@@ -856,7 +856,7 @@ var utils = UE.utils = {
                         try {
                             doc.documentElement.doScroll("left");
                         } catch (error) {
-                            setTimeout(arguments.callee, 0);
+                            setTimeout(ADXL, 0);
                             return;
                         }
                         doReady(doc);
@@ -866,7 +866,7 @@ var utils = UE.utils = {
                     });
                 } else {
                     doc.addEventListener("DOMContentLoaded", function () {
-                        doc.removeEventListener("DOMContentLoaded", arguments.callee, false);
+                        doc.removeEventListener("DOMContentLoaded", ADXL, false);
                         doReady(doc);
                     }, false);
                     win.addEventListener('load', function () {
@@ -1146,44 +1146,44 @@ var utils = UE.utils = {
 };
 /**
  * 判断给定的对象是否是字符串
- * @method isString
- * @param { * } object 需要判断的对象
- * @return { Boolean } 给定的对象是否是字符串
+ * method isString
+ * param { * } object 需要判断的对象
+ * return { Boolean } 给定的对象是否是字符串
  */
 
 /**
  * 判断给定的对象是否是数组
- * @method isArray
- * @param { * } object 需要判断的对象
- * @return { Boolean } 给定的对象是否是数组
+ * method isArray
+ * param { * } object 需要判断的对象
+ * return { Boolean } 给定的对象是否是数组
  */
 
 /**
  * 判断给定的对象是否是一个Function
- * @method isFunction
- * @param { * } object 需要判断的对象
- * @return { Boolean } 给定的对象是否是Function
+ * method isFunction
+ * param { * } object 需要判断的对象
+ * return { Boolean } 给定的对象是否是Function
  */
 
 /**
  * 判断给定的对象是否是Number
- * @method isNumber
- * @param { * } object 需要判断的对象
- * @return { Boolean } 给定的对象是否是Number
+ * method isNumber
+ * param { * } object 需要判断的对象
+ * return { Boolean } 给定的对象是否是Number
  */
 
 /**
  * 判断给定的对象是否是一个正则表达式
- * @method isRegExp
- * @param { * } object 需要判断的对象
- * @return { Boolean } 给定的对象是否是正则表达式
+ * method isRegExp
+ * param { * } object 需要判断的对象
+ * return { Boolean } 给定的对象是否是正则表达式
  */
 
 /**
  * 判断给定的对象是否是一个普通对象
- * @method isObject
- * @param { * } object 需要判断的对象
- * @return { Boolean } 给定的对象是否是普通对象
+ * method isObject
+ * param { * } object 需要判断的对象
+ * return { Boolean } 给定的对象是否是普通对象
  */
 utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Date'], function (v) {
     UE.utils['is' + v] = function (obj) {
