@@ -65,7 +65,10 @@ UE.I18N['zh-cn'] = {
         'tc':'标题居中',
         'tl':'标题居左',
         'im':'强调',
-        'hi':'明显强调'
+        'hi':'明显强调',
+        'tagcode': '高亮代码code',
+        'tagkbd': '高亮代码kbd',
+        'tagpre': '高亮代码pre'
     },
     'autoupload': {
         'exceedSizeError': '文件大小超出限制',
