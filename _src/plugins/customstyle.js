@@ -55,7 +55,7 @@ UE.plugins["customstyle"] = function() {
           "color:#fff;background-color:#333;font-size:90%;padding:2px 4px;border-radius:3px;font-family:Menlo,Monaco,Consolas,\"Courier New\",monospace;"
       },
       {
-        tag: "pre",
+        tag: "p",
         name: "tagpre",
         style:
           "display:block;padding:9.5px;margin:0 0 10px;font-size:13px;line-height:1.43;color:#333;word-break:break-all;word-wrap:break-word;background-color:#f5f5f5;border:1px solid #ccc;border-radius:4px;font-family:Menlo,Monaco,Consolas,\"Courier New\",monospace;"
