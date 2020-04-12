@@ -35,6 +35,7 @@
       [
         "fullscreen",
         "source",
+        "insertacecode",
         "|",
         "undo",
         "redo",

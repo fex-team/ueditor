@@ -292,3 +292,10 @@
     width: 515px;
     height: 360px;
 }
+
+/*insertacecode-dialog*/
+.edui-default .edui-for-insertacecode .edui-dialog-content {
+    width: 1000px;
+    height: 450px;
+    overflow: hidden;
+}
