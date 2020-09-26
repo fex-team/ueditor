@@ -417,3 +417,7 @@
 .edui-default  .edui-for-simpleupload  .edui-icon {
     background-position: -380px 0px;
 }
+
+.edui-default  .edui-for-insertacecode  .edui-icon {
+    background: url(../images/icon_code.png) no-repeat 2px 3px!important;
+}

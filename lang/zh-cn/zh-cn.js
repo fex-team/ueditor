@@ -25,7 +25,7 @@ UE.I18N['zh-cn'] = {
         'imageleft':'左浮动', 'imageright':'右浮动', 'attachment':'附件', 'imagecenter':'居中', 'wordimage':'图片转存',
         'lineheight':'行间距','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版',
         'webapp':'百度应用','touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦',
-        'music':'音乐','inserttable':'插入表格','drafts': '从草稿箱加载', 'charts': '图表'
+        'music':'音乐','inserttable':'插入表格','drafts': '从草稿箱加载', 'charts': '图表','insertacecode':'插入ace格式代码'
     },
     'insertorderedlist':{
         'num':'1,2,3...',
@@ -65,7 +65,10 @@ UE.I18N['zh-cn'] = {
         'tc':'标题居中',
         'tl':'标题居左',
         'im':'强调',
-        'hi':'明显强调'
+        'hi':'明显强调',
+        'tagcode': '高亮代码code',
+        'tagkbd': '高亮代码kbd',
+        'tagpre': '高亮代码pre'
     },
     'autoupload': {
         'exceedSizeError': '文件大小超出限制',
@@ -665,5 +668,11 @@ UE.I18N['zh-cn'] = {
     'autosave': {
         'saving':'保存中...',
         'success':'本地保存成功'
+    },
+    'insertacecode':{
+        'static':{
+            'lang_insertacecode_selectlang': '选择语言',
+            'lang_insertacecode_selecttheme': '选择主题'
+        }
     }
 };

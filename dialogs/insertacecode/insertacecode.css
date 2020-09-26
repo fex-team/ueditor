@@ -1,0 +1,41 @@
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+}
+/*左侧选择框滚动条默认样式*/
+.select-items ::-webkit-scrollbar {
+width: 6px;
+}
+
+
+.select-items {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 5px 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #d3d6da;
+    margin-right: 4px;
+    box-sizing: border-box;
+}
+.select-langs {
+    height: 60%;
+    margin-bottom: 6%;
+}
+.select-themes {
+    height: 37%;
+}
+.select-items > div {
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.langiterm {
+    padding: 2px;
+}
+
+#aceeditor {
+    min-height: 23px;
+}
