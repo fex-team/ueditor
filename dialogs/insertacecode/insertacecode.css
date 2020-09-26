@@ -35,3 +35,7 @@ width: 6px;
 .langiterm {
     padding: 2px;
 }
+
+#aceeditor {
+    min-height: 23px;
+}
