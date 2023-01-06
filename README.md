@@ -1,6 +1,13 @@
 Get Started
 =====
 
+> 鉴于目前 ISSUE 较多而维护时间较少，且在进行后续的版本更新，目前暂时关闭 ISSUE，若社区有人跟进，欢迎和我们联系。重复的问题，请参阅常见问题的 [FAQ Wiki](https://github.com/fex-team/ueditor/wiki/FAQ)。
+
+## 重要安全通告：
+
+1. commons-fileupload-1.3.1.jar 存在漏洞可能会导致 ddos，源代码中已经修改，使用老版本的用户，强烈推荐升级 commons-fileupload.jar 至最新版本。（2018-04-09）.
+2. UEditor 所提供的所有后端代码都仅为 DEMO 作用，切不可直接使用到生产环境中，目前已知 php 的代码会存在 ssrf 及文件包含漏洞，因此不再提供。
+
 ## ueditor富文本编辑器介绍
 
 UEditor是由百度web前端研发部开发所见即所得富文本web编辑器，具有轻量，可定制，注重用户体验等特点，开源基于MIT协议，允许自由使用和修改代码。
@@ -72,6 +79,12 @@ ue.ready(function(){
 ```
 
 ueditor的更多API请看[API 文档](http://ueditor.baidu.com/doc "ueditor API 文档")
+
+### 1.6 dev-1.5.0 版本二次开发自定义插件注意事项
+
+dev-1.5.0版对于插件的加载逻辑进行了调整，但官网对应的[二次开发功能文档](http://fex.baidu.com/ueditor/#dev-developer)未对相应调整做出开发细节说明，现补充如下：
+
+除进行原有配置外，还需在实例化ueditor编辑器时在 toolbars 参数数组中，加入自定义插件的 uiname，并且注意uiname必须小写，方可正确加载自定义插件。 
 
 ## 2 详细文档
 
