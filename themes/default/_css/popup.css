@@ -40,7 +40,7 @@
 }
 
 .edui-default .edui-menu .edui-bordereraser {
-    height: 3px;
+    height: 0 !important;
 }
 
 .edui-default .edui-anchor-topleft .edui-bordereraser {
