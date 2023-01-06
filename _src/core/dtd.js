@@ -162,7 +162,7 @@ var dtd = (dom.dtd = (function() {
     Q = _({ li: 1, ol: 1, ul: 1 }),
     R = _({ style: 1, script: 1 }),
     S = _({ base: 1, link: 1, meta: 1, title: 1 }),
-    T = X(S, R),
+    T = X({}, S, R),
     U = _({ head: 1, body: 1 }),
     V = _({ html: 1 });
 
@@ -217,7 +217,7 @@ var dtd = (dom.dtd = (function() {
     // $ 表示自定的属性
 
     // body外的元素列表.
-    $nonBodyContent: X(V, U, S),
+    $nonBodyContent: X({}, V, U, S),
 
     //块结构元素列表
     $block: block,
