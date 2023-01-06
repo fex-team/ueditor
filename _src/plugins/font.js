@@ -185,28 +185,35 @@ UE.plugins["font"] = function() {
     if (needSetChild[cmdName]) {
       rng.adjustmentBoundary();
       if (!rng.collapsed && rng.startContainer.nodeType == 1) {
-        var start = rng.startContainer.childNodes[rng.startOffset];
-        if (start && domUtils.isTagNode(start, "span")) {
-          var bk = rng.createBookmark();
-          utils.each(domUtils.getElementsByTagName(start, "span"), function(
-            span
-          ) {
-            if (!span.parentNode || domUtils.isBookmarkNode(span)) return;
-            if (
-              cmdName == "backcolor" &&
-              domUtils
-                .getComputedStyle(span, "background-color")
-                .toLowerCase() === value
+        rng.traversal(function(node){
+          var start;
+          if(domUtils.isTagNode(node,'span')){
+            start = node;
+          }else{
+            start = domUtils.getElementsByTagName(node,'span')[0];
+          }
+          if (start && domUtils.isTagNode(start, "span")) {
+            var bk = rng.createBookmark();
+            utils.each(domUtils.getElementsByTagName(start, "span"), function(
+              span
             ) {
-              return;
-            }
-            domUtils.removeStyle(span, needSetChild[cmdName]);
-            if (span.style.cssText.replace(/^\s+$/, "").length == 0) {
-              domUtils.remove(span, true);
-            }
-          });
-          rng.moveToBookmark(bk);
+              if (!span.parentNode || domUtils.isBookmarkNode(span)) return;
+              if (
+                cmdName == "backcolor" &&
+                domUtils
+                  .getComputedStyle(span, "background-color")
+                  .toLowerCase() === value
+              ) {
+                return;
+              }
+              domUtils.removeStyle(span, needSetChild[cmdName]);
+              if (span.style.cssText.replace(/^\s+$/, "").length == 0) {
+                domUtils.remove(span, true);
+              }
+            });
+            rng.moveToBookmark(bk);
         }
+        });
       }
     }
   }
