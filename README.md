@@ -6,7 +6,7 @@ Get Started
 ## 重要安全通告：
 
 1. commons-fileupload-1.3.1.jar 存在漏洞可能会导致 ddos，源代码中已经修改，使用老版本的用户，强烈推荐升级 commons-fileupload.jar 至最新版本。（2018-04-09）.
-2. UEditor 所提供的所有后端代码都仅为 DEMO 作用，切不可直接使用到生产环境中，目前已知 php 的代码会存在 ssrf 的安全漏洞。修复方式：使用最新的 Uploader.class [code](https://github.com/fex-team/ueditor/blob/dev-1.5.0/php/Uploader.class.php) .
+2. UEditor 所提供的所有后端代码都仅为 DEMO 作用，切不可直接使用到生产环境中，目前已知 php 的代码会存在 ssrf 及文件包含漏洞，因此不再提供。
 
 ## ueditor富文本编辑器介绍
 
