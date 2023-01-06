@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="insertacecode.css">
+    <script type="text/javascript" charset="utf-8" src="../../third-party/jquery-1.10.2.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="../../third-party/ace/ace.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="../../third-party/ace/ext-modelist.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="../../third-party/ace/ext-themelist.js"> </script>
+    <script type="text/javascript" src="../internal.js"></script>
+    <style type="text/css">
+    </style>
+</head>
+
+<body>
+    <div style="flex-grow: 1; padding: 5px; display: flex;">
+        <div style="width: 180px; display: flex; flex-direction: column;">
+            <div class="select-items select-langs">
+                <legend><var id="lang_insertacecode_selectlang"></var></legend>
+                <div class="pre" id="langitem"></div>
+            </div>
+            <div class="select-items select-themes">
+                <legend><var id="lang_insertacecode_selecttheme"></var></legend>
+                <div class="pre" id="themeitem"></div>
+            </div>
+        </div>
+        <fieldset style="flex-grow: 1; overflow-y: auto;">
+            <div class="editor" id="aceeditor"></div>
+        </fieldset>
+    </div>
+</body>
+<script type="text/javascript" src="config.js"></script>
+<script type="module" src="insertacecode.js"></script>
+</html>

@@ -2543,6 +2543,38 @@ var domUtils = (dom.domUtils = {
     }
     return true;
   },
-  fillHtml: browser.ie11below ? "&nbsp;" : "<br/>"
+  fillHtml: browser.ie11below ? "&nbsp;" : "<br/>",
+    
+  /**
+   * add by ading 2020年4月1日10:20:17
+   * 删除节点前部的Tab键产生的空格，即tab键的shift+tab反向效果
+   * @method deleteTabspace
+   * @param { Node } delNode 需要删除tab空格的节点
+   * @param { Number } spaceCount 需要查询位置关系的节点B
+   * @return { Boolean } 是否有删除
+   * @example
+   */
+  deleteTabspace: function(delNode, spaceCount){
+    var bearkFlag = false; 
+    var reg1 = new RegExp('^[ , ]','g');    //创建正则RegExp对象 
+    var reg2 = new RegExp('^​','g');     //创建正则RegExp对象 
+    // 循环所有子元素寻找第一个不为空的子元素进行删除tab空格
+    this.getChildCount( delNode, function ( node ) {
+      if(!bearkFlag) {
+        if(!(node.id && node.id.indexOf('baidu_bookmark')>0)){
+          if((node.textContent && node.textContent.length>0) || (node.data && node.data.length>0)){
+            if(node.data && node.data.length>0){
+              var newData = node.data;
+              for( i = 0; i < spaceCount; i++ ) newData = newData.replace(reg1, '');
+              newData = newData.replace(reg2,'');
+              node.replaceWith(newData);
+            }
+            bearkFlag = true;
+          }
+        }
+      }
+    });
+    return bearkFlag;
+  }
 });
 var fillCharReg = new RegExp(domUtils.fillChar, "g");

@@ -41,6 +41,24 @@ UE.plugins["customstyle"] = function() {
         name: "hi",
         style:
           "font-size:16px;font-style:italic;font-weight:bold;color:rgb(51, 153, 204);line-height:18px;"
+      },
+      {
+        tag: "code",
+        name: "tagcode",
+        style:
+          "color:#c7254e;background-color:#f9f2f4;font-size:90%;padding:2px 4px;border-radius:4px;font-family:Menlo,Monaco,Consolas,\"Courier New\",monospace;"
+      },
+      {
+        tag: "kbd",
+        name: "tagkbd",
+        style:
+          "color:#fff;background-color:#333;font-size:90%;padding:2px 4px;border-radius:3px;font-family:Menlo,Monaco,Consolas,\"Courier New\",monospace;"
+      },
+      {
+        tag: "p",
+        name: "tagpre",
+        style:
+          "display:block;padding:9.5px;margin:0 0 10px;font-size:13px;line-height:1.43;color:#333;word-break:break-all;word-wrap:break-word;background-color:#f5f5f5;border:1px solid #ccc;border-radius:4px;font-family:Menlo,Monaco,Consolas,\"Courier New\",monospace;"
       }
     ]
   });
