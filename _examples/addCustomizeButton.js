@@ -36,3 +36,37 @@ UE.registerUI('button',function(editor,uiName){
     //因为你是添加button,所以需要返回这个button
     return btn;
 }/*index 指定添加到工具栏上的那个位置，默认时追加到最后,editorId 指定这个UI是那个编辑器实例上的，默认是页面上所有的编辑器都会添加这个按钮*/);
+
+//自定义引用样式例子
+UE.registerUI('myblockquote',function(editor,uiName){
+    editor.registerCommand(uiName,{
+        execCommand:function(){
+            this.execCommand('blockquote',{
+                "style":"border-left: 3px solid #E5E6E1; margin-left: 0px; padding-left: 5px; line-height:36px;"
+            });
+        }
+    });
+
+    var btn = new UE.ui.Button({
+        name:uiName,
+        title:'自定义引用',
+        cssRules :"background-position: -220px 0;",
+        onclick:function () {
+           editor.execCommand(uiName);
+        }
+    });
+
+    editor.addListener('selectionchange', function () {
+        console.log(this);
+        var state = editor.queryCommandState('blockquote');
+        if (state == -1) {
+            btn.setDisabled(true);
+            btn.setChecked(false);
+        } else {
+            btn.setDisabled(false);
+            btn.setChecked(state);
+        }
+    });
+
+    return btn;
+});

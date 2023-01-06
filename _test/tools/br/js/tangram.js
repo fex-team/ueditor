@@ -10887,7 +10887,7 @@
 	 * @param {string} property Flash的方法或者属性名称，用来检测Flash是否初始化好了.
 	 * @param {Function} loadedHandler 初始化之后的回调函数.
 	 * @remark Flash对应的DOM元素必须已经存在, 否则抛错. 可以使用baidu.swf.create预先创建Flash对应的DOM元素.
-	 * @author liyubei@baidu.com (leeight)
+	 * @author xxxxxx@baidu.com (leeight)
 	 */
 	baidu.swf.Proxy = function(id, property, loadedHandler) {
 	    /**
